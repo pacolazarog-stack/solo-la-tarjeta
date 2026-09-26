@@ -30,7 +30,7 @@ main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 31vh}
 .wave-rainbow{position:absolute;inset:0;z-index:5;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;filter:blur(2.4px) saturate(1.16)}.two-days-white{z-index:6;background:#fff;opacity:var(--white,0)}.two-days-aftertone{z-index:7;background:var(--paper-paris);opacity:var(--aftertone,0)}.time-pulse{z-index:8;left:8%;right:8%;top:63%;height:1px;inset:auto 8%;opacity:var(--pulse,0);transform:scaleX(var(--pulse-scale,.2));transform-origin:center;background:linear-gradient(90deg,transparent,rgba(65,94,104,.20) 22%,rgba(65,94,104,.42) 50%,rgba(65,94,104,.20) 78%,transparent)}.time-pulse::after{content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;border-radius:50%;background:rgba(65,94,104,.36);transform:translate(-50%,-50%) scale(var(--pulse-dot,.45))}
 .paris-section{position:relative;margin:0 0 8.5em;padding:30vh 0 5.2em;background:transparent}.tower-photo{margin:3.6em auto 4.6em;width:min(78vw,520px)}.tower-frame{overflow:hidden;box-shadow:0 30px 90px rgba(16,25,38,.18);background:#142a48}.tower-photo img{transform:scale(1.015);transition:transform 8s cubic-bezier(.2,.65,.2,1)}.tower-photo.visible img{transform:scale(1)}.chance-end{margin-bottom:17vh}.closing-section{margin-top:0;padding-top:13vh;position:relative}.closing-section::before{content:"";position:absolute;top:0;left:50%;width:34px;height:1px;background:rgba(30,28,25,.22);transform:translateX(-50%)}.hinge{margin-top:2.2em;margin-bottom:4.4em;font-size:1.065em}.pre-final{margin-top:15.75em;margin-bottom:31.5em;color:#6f7478;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:.8em;font-weight:400;letter-spacing:.19em;text-transform:uppercase;line-height:1.35}.final-line{margin:0;padding:0 0 30vh;font-size:clamp(1.85rem,4.4vw,2.8rem);line-height:1.15;letter-spacing:.008em}
 @keyframes heroIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(-2vh)}}@keyframes breathe{0%,100%{opacity:.22;transform:translateY(0) rotate(45deg)}50%{opacity:.72;transform:translateY(8px) rotate(45deg)}}
-@media(max-width:620px){.progress{display:none}main{width:min(calc(100% - 30px),var(--reading));padding-bottom:24vh}article{line-height:1.66}.hero{min-height:92svh}.opening-section p{margin-bottom:1.58em}.opening-section .opening-first{margin-bottom:2.25em}.opening-section .opening-breath{margin-bottom:3.05em}.opening-section .opening-machine{margin-bottom:2.35em}.opening-section .opening-man{margin-top:2.5em}.electronic-zone{margin:4.3em 0 5em;padding:3em 0 3.6em}.rebeca-name{margin-top:2.1em;margin-bottom:4.6em}.electronic-zone::before{inset:-1em -30px;opacity:.22}.electronic-zone .overflow-line{margin-top:5.6em;margin-bottom:3.9em;font-size:.92em}.age-mirror{grid-template-columns:1fr;gap:10px;margin:2.5em 0 3em;min-height:0}.age-left,.age-right{text-align:left}.age-axis{order:2;width:44px;height:1px!important;margin:4px 0}.age-right{order:3}.card-photo{width:min(76vw,320px)}.two-days-passage{height:520vh;margin:12vh 0 0}.wave-rainbow{filter:blur(1.5px) saturate(1.12)}.paris-section{margin:0 0 6.6em;padding:26vh 0 4em}.tower-photo{width:min(88vw,460px)}.chance-end{margin-bottom:14vh}.closing-section{padding-top:11vh}.pre-final{margin-top:12.75em;margin-bottom:25.5em}.final-line{padding-bottom:26vh}}
+@media(max-width:620px){.progress{display:none}main{width:min(calc(100% - 30px),var(--reading));padding-bottom:24vh}article{line-height:1.66}.hero{min-height:92svh}.opening-section p{margin-bottom:1.58em}.opening-section .opening-first{margin-bottom:2.25em}.opening-section .opening-breath{margin-bottom:3.05em}.opening-section .opening-machine{margin-bottom:2.35em}.opening-section .opening-man{margin-top:2.5em}.electronic-zone{margin:4.3em 0 5em;padding:3em 0 3.6em}.rebeca-name{margin-top:2.1em;margin-bottom:4.6em}.electronic-zone::before{inset:-1em -30px;opacity:.22}.electronic-zone .overflow-line{margin-top:5.6em;margin-bottom:3.9em;font-size:.92em}.age-mirror{grid-template-columns:1fr;gap:10px;margin:2.5em 0 3em;min-height:0}.age-left,.age-right{text-align:left}.age-axis{order:2;width:44px;height:1px!important;margin:4px 0}.age-right{order:3}.card-photo{width:min(76vw,320px)}.two-days-passage{height:680vh;margin:14vh 0 0}.wave-rainbow{filter:blur(.9px) saturate(1.22) contrast(1.12)}.paris-section{margin:0 0 6.6em;padding:26vh 0 4em}.tower-photo{width:min(88vw,460px)}.chance-end{margin-bottom:14vh}.closing-section{padding-top:11vh}.pre-final{margin-top:12.75em;margin-bottom:25.5em}.final-line{padding-bottom:26vh}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none;filter:none}.age-axis{height:82px}.tower-photo img{transform:none}}
 @media print{body{background:#fff!important}.world,.progress,.scroll-cue,.entry-gate,#soundtrack,.two-days-passage{display:none}.hero{min-height:auto;padding:1.5cm 0 2cm}main{width:100%;padding:0}.reveal{opacity:1;transform:none;filter:none}article{font-size:12.5pt;line-height:1.55}.paris-section,.closing-section{margin-left:0;margin-right:0;padding-top:1.5cm}.photo-layer{break-inside:avoid}.final-line{padding-bottom:0}}
   </style>
@@ -476,13 +476,13 @@ main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 31vh}
       ctx.save();
       ctx.globalCompositeOperation='screen';
 
-      const kP=6.8;
-      const kRStart=10.6;
-      const kR=lerp(kRStart,kP,state.harmony);
-      const phaseGap=Math.PI*1.08*(1-state.harmony);
       const mobileVisual=innerWidth<=620;
-      const separation=h*(mobileVisual?.105:.085)*(1-state.lock);
-      const waveAmp=h*(mobileVisual?.043:.037);
+      const kP=mobileVisual?6.6:6.8;
+      const kRStart=mobileVisual?13.2:10.6;
+      const kR=lerp(kRStart,kP,state.harmony);
+      const phaseGap=Math.PI*(mobileVisual?1.34:1.08)*(1-state.harmony);
+      const separation=h*(mobileVisual?.135:.085)*(1-state.lock);
+      const waveAmp=h*(mobileVisual?.056:.037);
 
       const drawWave=kind=>{
         ctx.beginPath();
@@ -496,11 +496,15 @@ main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 31vh}
           if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
         }
         const lockEmphasis=.34+.66*state.lock;
-        const alpha=state.waves*(mobileVisual?(.50+.38*lockEmphasis):(.34+.34*lockEmphasis));
-        ctx.lineWidth=mobileVisual?(1.9+state.lock*1.05):(1.25+state.lock*.85);
-        ctx.strokeStyle=kind==='p'?`rgba(174,215,236,${alpha})`:`rgba(249,215,188,${alpha})`;
-        ctx.shadowBlur=state.lock*10;
-        ctx.shadowColor=kind==='p'?'rgba(174,215,236,.28)':'rgba(249,215,188,.24)';
+        const alpha=Math.min(.96,state.waves*(mobileVisual?(.66+.28*lockEmphasis):(.34+.34*lockEmphasis)));
+        ctx.lineWidth=mobileVisual?(2.45+state.lock*1.25):(1.25+state.lock*.85);
+        ctx.strokeStyle=kind==='p'
+          ?(mobileVisual?`rgba(142,214,255,${alpha})`:`rgba(174,215,236,${alpha})`)
+          :(mobileVisual?`rgba(255,187,138,${alpha})`:`rgba(249,215,188,${alpha})`);
+        ctx.shadowBlur=mobileVisual?(12+state.lock*14):state.lock*10;
+        ctx.shadowColor=kind==='p'
+          ?(mobileVisual?'rgba(120,205,255,.62)':'rgba(174,215,236,.28)')
+          :(mobileVisual?'rgba(255,176,120,.58)':'rgba(249,215,188,.24)');
         ctx.stroke();
         ctx.shadowBlur=0;
       };
@@ -601,38 +605,38 @@ main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 31vh}
 
       const mobile=innerWidth<=620;
 
-      // Escritorio conserva su cadencia. En móvil el ciclo ocupa más scroll y
-      // las fases se separan para que puedan leerse: noche, acoplamiento,
-      // entrada en fase, big bang, blanco y nacimiento del color posterior.
-      const blackIn=smooth(clamp((p-(mobile?.01:.02))/(mobile?.18:.16)));
+      // En móvil la secuencia se vuelve deliberadamente contemplativa:
+      // primero cae la noche, luego las dos ondas bailan largo tiempo sin acuerdo,
+      // después convergen, entran en fase y sólo entonces llega el big bang.
+      const blackIn=smooth(clamp((p-(mobile?.01:.02))/(mobile?.20:.16)));
 
-      const wavesIn=smooth(clamp((p-(mobile?.16:.18))/(mobile?.10:.08)));
-      const harmony=smooth(clamp((p-(mobile?.24:.28))/(mobile?.38:.34)));
-      const lockIn=smooth(clamp((p-(mobile?.57:.56))/(mobile?.09:.075)));
-      const lockOut=1-smooth(clamp((p-(mobile?.76:.735))/(mobile?.045:.035)));
+      const wavesIn=smooth(clamp((p-(mobile?.11:.18))/(mobile?.11:.08)));
+      const harmony=smooth(clamp((p-(mobile?.26:.28))/(mobile?.43:.34)));
+      const lockIn=smooth(clamp((p-(mobile?.69:.56))/(mobile?.10:.075)));
+      const lockOut=1-smooth(clamp((p-(mobile?.84:.735))/(mobile?.05:.035)));
       const lock=Math.max(0,lockIn*lockOut);
 
-      // BIG BANG: en móvil llega más tarde, después de un acoplamiento claramente sostenido.
-      const burstIn=smooth(clamp((p-(mobile?.77:.735))/(mobile?.012:.009)));
-      const burstOut=1-smooth(clamp((p-(mobile?.84:.805))/(mobile?.03:.025)));
+      // BIG BANG: consecuencia tardía del acoplamiento, nunca un tránsito prematuro.
+      const burstIn=smooth(clamp((p-(mobile?.85:.735))/(mobile?.012:.009)));
+      const burstOut=1-smooth(clamp((p-(mobile?.92:.805))/(mobile?.03:.025)));
       const burst=Math.max(0,burstIn*burstOut);
       const spectrum=burst;
 
-      const blackOut=1-smooth(clamp((p-(mobile?.79:.755))/(mobile?.065:.055)));
+      const blackOut=1-smooth(clamp((p-(mobile?.87:.755))/(mobile?.06:.055)));
       const black=Math.max(0,blackIn*blackOut);
 
-      // Blanco sostenido y salida pausada hacia París.
-      const whiteIn=smooth(clamp((p-(mobile?.83:.795))/(mobile?.045:.035)));
-      const whiteOut=1-smooth(clamp((p-(mobile?.94:.915))/(mobile?.06:.075)));
+      // El blanco tiene tiempo real antes de ceder al color posterior.
+      const whiteIn=smooth(clamp((p-(mobile?.89:.795))/(mobile?.045:.035)));
+      const whiteOut=1-smooth(clamp((p-(mobile?.97:.915))/(mobile?.04:.075)));
       const white=Math.max(0,whiteIn*whiteOut);
 
-      const aftertone=smooth(clamp((p-(mobile?.925:.90))/(mobile?.075:.10)));
-      const wavesOut=1-smooth(clamp((p-(mobile?.755:.725))/(mobile?.035:.025)));
-      const pulse=smooth(clamp((p-(mobile?.965:.96))/(mobile?.035:.04)));
+      const aftertone=smooth(clamp((p-(mobile?.955:.90))/(mobile?.045:.10)));
+      const wavesOut=1-smooth(clamp((p-(mobile?.83:.725))/(mobile?.04:.025)));
+      const pulse=smooth(clamp((p-(mobile?.975:.96))/(mobile?.025:.04)));
 
-      // El firmamento vive durante todo el acoplamiento y desaparece al estallar.
-      const cosmicIn=smooth(clamp((p-(mobile?.10:.12))/(mobile?.10:.09)));
-      const cosmicCut=1-smooth(clamp((p-(mobile?.77:.735))/(mobile?.02:.018)));
+      // El firmamento acompaña casi todo el baile y se extingue al producirse la explosión.
+      const cosmicIn=smooth(clamp((p-(mobile?.08:.12))/(mobile?.12:.09)));
+      const cosmicCut=1-smooth(clamp((p-(mobile?.85:.735))/(mobile?.02:.018)));
       const stars=Math.max(0,cosmicIn*blackIn*cosmicCut*(.46+.20*harmony+.14*lock));
       const moon=Math.max(0,cosmicIn*blackIn*cosmicCut*(.62+.10*harmony+.12*lock));
       const starsFlicker=Math.max(0,stars*(.10+.16*harmony+.24*lock));
