@@ -131,6 +131,83 @@
                  filter .92s ease;
     }
     .reveal.visible { opacity:1; transform:none; filter:none; }
+    .electronic-zone {
+      position:relative;
+      margin:4.8em 0 5.2em;
+      padding:3.2em 0 3.6em;
+      isolation:isolate;
+    }
+    .electronic-zone::before {
+      content:"";
+      position:absolute;
+      z-index:-1;
+      inset:-1.2em -14vw -1em;
+      opacity:.17;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 11% 28%, rgba(40,88,96,.48) 0 2px, transparent 2.5px),
+        radial-gradient(circle at 28% 68%, rgba(40,88,96,.36) 0 1.5px, transparent 2px),
+        radial-gradient(circle at 73% 34%, rgba(40,88,96,.42) 0 2px, transparent 2.5px),
+        radial-gradient(circle at 88% 72%, rgba(40,88,96,.34) 0 1.6px, transparent 2px),
+        linear-gradient(90deg, transparent 0 9%, rgba(40,88,96,.22) 9% 9.15%, transparent 9.15% 29%, rgba(40,88,96,.16) 29% 29.12%, transparent 29.12% 71%, rgba(40,88,96,.18) 71% 71.12%, transparent 71.12%),
+        linear-gradient(0deg, transparent 0 21%, rgba(40,88,96,.16) 21% 21.15%, transparent 21.15% 63%, rgba(40,88,96,.18) 63% 63.13%, transparent 63.13%),
+        linear-gradient(135deg, transparent 0 44%, rgba(40,88,96,.12) 44% 44.18%, transparent 44.18% 100%);
+      mask-image:linear-gradient(to bottom,transparent,black 14%,black 84%,transparent);
+      -webkit-mask-image:linear-gradient(to bottom,transparent,black 14%,black 84%,transparent);
+      transition:opacity 1.4s ease;
+    }
+    .electronic-zone::after {
+      content:"";
+      position:absolute;
+      z-index:-1;
+      left:-8vw;
+      right:-8vw;
+      top:52%;
+      height:28px;
+      opacity:.18;
+      background:
+        linear-gradient(90deg,
+          transparent 0 6%,
+          rgba(40,88,96,.22) 6% 7%,
+          transparent 7% 12%,
+          rgba(40,88,96,.34) 12% 12.25%,
+          transparent 12.25% 18%,
+          rgba(40,88,96,.2) 18% 22%,
+          transparent 22% 34%,
+          rgba(40,88,96,.32) 34% 34.18%,
+          transparent 34.18% 48%,
+          rgba(40,88,96,.2) 48% 56%,
+          transparent 56% 70%,
+          rgba(40,88,96,.34) 70% 70.2%,
+          transparent 70.2% 84%,
+          rgba(40,88,96,.18) 84% 91%,
+          transparent 91%);
+      transform:scaleX(.94);
+      transform-origin:center;
+      transition:opacity 1.3s ease, transform 1.8s cubic-bezier(.2,.75,.2,1);
+    }
+    .electronic-zone.signal-visible::after {
+      opacity:.28;
+      transform:scaleX(1);
+    }
+    .electronic-zone .overflow-line {
+      position:relative;
+      margin-top:3.4em;
+    }
+    .electronic-zone .overflow-line::after {
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-1.35em;
+      width:0;
+      height:1px;
+      background:linear-gradient(90deg,rgba(40,88,96,.38),transparent);
+      transition:width 1.6s .2s ease;
+    }
+    .electronic-zone.signal-visible .overflow-line::after {
+      width:46%;
+    }
+
     .age-mirror {
       margin:2.9em auto 3.15em; display:grid;
       grid-template-columns:1fr 1px 1fr; align-items:center;
@@ -268,6 +345,9 @@
       main { width:min(calc(100% - 30px),var(--reading)); padding-bottom:24vh; }
       article { line-height:1.66; }
       .hero { min-height:92svh; }
+      .electronic-zone { margin:4em 0 4.4em; padding:2.6em 0 3em; }
+      .electronic-zone::before { inset:-.5em -30px; opacity:.13; }
+      .electronic-zone::after { left:-24px; right:-24px; opacity:.13; }
       .age-mirror { grid-template-columns:1fr; gap:10px; margin:2.5em 0 3em; min-height:0; }
       .age-left,.age-right { text-align:left; }
       .age-axis { order:2; width:44px; height:1px!important; margin:4px 0; }
@@ -415,6 +495,7 @@
       <p class="reveal">Paco se sentó en la misma fila, al otro lado del pasillo.</p>
       <p class="reveal">No inmediatamente al lado.</p>
       <p class="reveal">La gratitud también tiene normas de urbanidad.</p>
+      <section class="electronic-zone" data-electronic>
       <p class="reveal">Se llamaba Rebeca.</p>
       <p class="reveal">Tenía veintiséis años, había nacido en Brasil, estudiaba Ingeniería Electrónica, trabajaba por internet y viajaba con una amiga.</p>
       <p class="reveal">Esos eran los datos.</p>
@@ -430,7 +511,8 @@
       <p class="reveal">Estudios.</p>
       <p class="reveal">Profesión.</p>
       <p class="reveal">Nacionalidad.</p>
-      <p class="reveal">Pero Rebeca no cabía.</p>
+      <p class="reveal overflow-line">Pero Rebeca no cabía.</p>
+      </section>
       <p class="reveal">Era muy hermosa.</p>
       <p class="reveal">Morena. Una cara limpia de artificio. Una manera tranquila de estar allí.</p>
       <p class="reveal">Y los ojos.</p>
@@ -606,6 +688,19 @@
         }
       },{rootMargin:'0px 0px -8% 0px',threshold:.08});
       items.forEach(el=>io.observe(el));
+
+      const electronic=document.querySelector('[data-electronic]');
+      if(electronic){
+        const eio=new IntersectionObserver(entries=>{
+          for(const entry of entries){
+            if(entry.isIntersecting){
+              entry.target.classList.add('signal-visible');
+              eio.unobserve(entry.target);
+            }
+          }
+        },{threshold:.18});
+        eio.observe(electronic);
+      }
 
       const tones=[...document.querySelectorAll('[data-tone]')];
       const tio=new IntersectionObserver(entries=>{
