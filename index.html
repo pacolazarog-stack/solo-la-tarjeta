@@ -29,7 +29,7 @@
       font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia,"Times New Roman",serif;
       -webkit-font-smoothing:antialiased;
       text-rendering:optimizeLegibility;
-      transition:background-color 1.5s ease;
+      transition:background-color 2.8s cubic-bezier(.22,.61,.36,1);
       overflow-x:hidden;
     }
     body:not(.entered) { overflow:hidden; }
@@ -495,8 +495,48 @@
     }
     .tower-photo.visible img { transform:scale(1); }
 
+    .chance-end {
+      margin-bottom:4.8em;
+    }
+    .closing-bridge {
+      position:relative;
+      left:50%;
+      width:100vw;
+      height:52vh;
+      margin-left:calc(50% - 50vw);
+      overflow:hidden;
+      pointer-events:none;
+    }
+    .closing-bridge::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(
+          to bottom,
+          var(--paper) 0%,
+          #f2efe9 22%,
+          #f4f1ec 48%,
+          #f6f3ee 72%,
+          var(--paper-closing) 100%
+        );
+    }
+    .closing-bridge::after {
+      content:"";
+      position:absolute;
+      left:50%;
+      top:16%;
+      width:min(72vw,900px);
+      height:58%;
+      transform:translateX(-50%);
+      background:radial-gradient(ellipse at center,rgba(255,255,255,.34),transparent 72%);
+      filter:blur(18px);
+      opacity:.72;
+    }
     .closing-section {
-      margin-top:7.7em; padding-top:4.2em; position:relative;
+      margin-top:0;
+      padding-top:6.2em;
+      position:relative;
     }
     .closing-section::before {
       content:""; position:absolute; top:0; left:50%; width:34px; height:1px;
@@ -587,7 +627,9 @@
       }
       .paris-section::after { inset:0 -30px; }
       .tower-photo { width:min(88vw,460px); }
-      .closing-section { margin-top:6em; padding-top:3.6em; }
+      .chance-end { margin-bottom:4.2em; }
+      .closing-bridge { height:42vh; }
+      .closing-section { margin-top:0; padding-top:5em; }
       .pre-final { margin-top:12.75em; margin-bottom:25.5em; }
       .final-line { padding-bottom:26vh; }
     }
@@ -861,8 +903,9 @@
       <p class="reveal">—¿Tienes Bizum?</p>
       <p class="reveal">Ahora estaba en París y llevaba su tarjeta de crédito en el bolso.</p>
       <p class="reveal">Ese era el gran defecto de las casualidades:</p>
-      <p class="reveal">no tenían ninguna obligación de repetirse.</p>
+      <p class="reveal chance-end">no tenían ninguna obligación de repetirse.</p>
       </section>
+      <div class="closing-bridge" aria-hidden="true"></div>
       <section class="closing-section" data-tone="closing">
       <p class="reveal">Habían quedado en verse a su regreso.</p>
       <p class="reveal">Un trámite.</p>
