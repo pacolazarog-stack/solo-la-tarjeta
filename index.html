@@ -326,7 +326,7 @@
 
     .two-days-passage {
       position:relative;
-      height:260vh;
+      height:340vh;
       margin:8em 0 0;
     }
     .two-days-sky {
@@ -360,7 +360,7 @@
       z-index:3;
       width:100%;
       height:100%;
-      opacity:var(--rainbow,0);
+      opacity:1;
       pointer-events:none;
       mix-blend-mode:screen;
       filter:blur(3px) saturate(.96);
@@ -526,7 +526,7 @@
       .age-axis { order:2; width:44px; height:1px!important; margin:4px 0; }
       .age-right { order:3; }
       .card-photo { width:min(76vw,320px); }
-      .two-days-passage { height:220vh; margin:7em 0 0; }
+      .two-days-passage { height:290vh; margin:7em 0 0; }
       .two-days-sky {
         width:100vw;
         margin-left:calc(50% - 50vw);
@@ -921,6 +921,8 @@
         let phase=0;
         let currentRainbow=0;
         let currentHarmony=0;
+        let currentPhaseLock=0;
+        let currentWavesVisible=0;
 
         const resizeRainbow=()=>{
           const dpr=Math.min(2,Math.max(1,window.devicePixelRatio||1));
@@ -932,7 +934,7 @@
 
         const rgba=(rgb,a)=>`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${a})`;
 
-        const drawRainbow=(intensity,harmony)=>{
+        const drawRainbow=(intensity,harmony,phaseLock,wavesVisible)=>{
           const w=rainbowCanvas.clientWidth;
           const h=rainbowCanvas.clientHeight;
           if(!w||!h) return;
@@ -950,84 +952,108 @@
             [111,96,188]
           ];
 
-          // Paco: onda algo más lenta. Rebeca: onda inicialmente más rápida.
-          // A medida que harmony crece, frecuencia y fase convergen.
-          const kP=7.8;
-          const kR=10.6-(10.6-kP)*harmony;
-          const phaseGap=(1-harmony)*Math.PI*.92;
+          // Paco conserva una frecuencia estable.
+          // Rebeca parte de otra frecuencia y, durante el tránsito, converge con la de Paco.
+          const kP=7.6;
+          const kRStart=10.8;
+          const kR=kRStart-(kRStart-kP)*harmony;
+
+          // También converge la fase: el desfase termina siendo cero.
+          const phaseGapStart=Math.PI*1.05;
+          const phaseGap=phaseGapStart*(1-harmony);
+
           const baseY=h*.16;
           const bandGap=h*.105;
           const bandThickness=Math.max(18,h*.055);
 
-          for(let i=0;i<colors.length;i++){
-            const top=[];
-            const bottom=[];
-            let localLightSum=0;
-            let samples=0;
+          // Las bandas de color nacen sólo cuando la sincronía ya es comprensible.
+          if(intensity>.002){
+            for(let i=0;i<colors.length;i++){
+              const top=[];
+              const bottom=[];
+              let localLightSum=0;
+              let samples=0;
 
-            for(let x=0;x<=w;x+=7){
-              const t=x/w;
-              const pWave=Math.sin(t*kP*Math.PI*2 + phase + i*.08);
-              const rWave=Math.sin(t*kR*Math.PI*2 + phase - phaseGap + i*.08);
+              for(let x=0;x<=w;x+=7){
+                const t=x/w;
+                const pWave=Math.sin(t*kP*Math.PI*2 + phase + i*.08);
+                const rWave=Math.sin(t*kR*Math.PI*2 + phase - phaseGap + i*.08);
 
-              // La coincidencia no dibuja una tercera onda: transforma la luz.
-              const constructive=(1+pWave*rWave)/2;
-              const yShift=((pWave+rWave)/2)*(6+12*(1-harmony));
-              const y0=baseY+i*bandGap+yShift;
+                // La coincidencia transforma luminancia y estabilidad de la banda.
+                const constructive=(1+pWave*rWave)/2;
+                const residualMotion=(1-phaseLock)*((pWave+rWave)/2)*(4+10*(1-harmony));
+                const y0=baseY+i*bandGap+residualMotion;
 
-              top.push([x,y0]);
-              bottom.push([x,y0+bandThickness]);
-              localLightSum+=constructive;
-              samples++;
+                top.push([x,y0]);
+                bottom.push([x,y0+bandThickness]);
+                localLightSum+=constructive;
+                samples++;
+              }
+
+              const localLight=samples?localLightSum/samples:.5;
+              const lockLight=.35+.65*phaseLock;
+              const lightGain=.30+.70*(localLight*.35+harmony*.25+phaseLock*.40);
+              const alpha=intensity*(.06+.22*lightGain*lockLight);
+
+              ctx.beginPath();
+              top.forEach(([x,y],idx)=>idx?ctx.lineTo(x,y):ctx.moveTo(x,y));
+              for(let j=bottom.length-1;j>=0;j--) ctx.lineTo(bottom[j][0],bottom[j][1]);
+              ctx.closePath();
+
+              const g=ctx.createLinearGradient(0,baseY,w,baseY);
+              g.addColorStop(0,rgba(colors[i],alpha*.56));
+              g.addColorStop(.18,rgba(colors[i],alpha*.82));
+              g.addColorStop(.5,rgba(colors[i],alpha*(.92+.38*phaseLock)));
+              g.addColorStop(.82,rgba(colors[i],alpha*.82));
+              g.addColorStop(1,rgba(colors[i],alpha*.56));
+              ctx.fillStyle=g;
+              ctx.fill();
             }
-
-            const localLight=samples?localLightSum/samples:.5;
-            const lightGain=.42+.58*(harmony*.72+localLight*.28);
-            const alpha=intensity*(.10+.19*lightGain);
-
-            ctx.beginPath();
-            top.forEach(([x,y],idx)=>idx?ctx.lineTo(x,y):ctx.moveTo(x,y));
-            for(let j=bottom.length-1;j>=0;j--) ctx.lineTo(bottom[j][0],bottom[j][1]);
-            ctx.closePath();
-
-            const g=ctx.createLinearGradient(0,baseY,w,baseY);
-            g.addColorStop(0,rgba(colors[i],alpha*.58));
-            g.addColorStop(.18,rgba(colors[i],alpha*.84));
-            g.addColorStop(.5,rgba(colors[i],alpha*(.9+.35*harmony)));
-            g.addColorStop(.82,rgba(colors[i],alpha*.84));
-            g.addColorStop(1,rgba(colors[i],alpha*.58));
-            ctx.fillStyle=g;
-            ctx.fill();
           }
 
-          // Las dos ondas son visibles mientras se buscan y desaparecen en la luz al armonizar.
-          const lineOpacity=intensity*(1-harmony)*.42;
+          // Las dos ondas se ven claramente mientras se buscan.
+          // Al entrar en fase, su separación vertical desaparece y quedan superpuestas.
+          const lineOpacity=wavesVisible*(.28+.30*(1-phaseLock)+.30*phaseLock);
           if(lineOpacity>.003){
-            const drawWave=(kind)=>{
+            const drawWave=kind=>{
               ctx.beginPath();
-              for(let x=0;x<=w;x+=5){
+
+              for(let x=0;x<=w;x+=4){
                 const t=x/w;
                 const pWave=Math.sin(t*kP*Math.PI*2 + phase);
                 const rWave=Math.sin(t*kR*Math.PI*2 + phase - phaseGap);
                 const wave=kind==='p'?pWave:rWave;
-                const y=h*.51+wave*h*.035;
-                x?ctx.lineTo(x,y):ctx.moveTo(x,y);
+
+                const yBase=h*.50;
+                const preLockSeparation=h*.028*(1-phaseLock);
+                const yOffset=kind==='p' ? -preLockSeparation : preLockSeparation;
+                const y=yBase+yOffset+wave*h*.038;
+
+                if(x===0) ctx.moveTo(x,y);
+                else ctx.lineTo(x,y);
               }
-              ctx.lineWidth=1;
+
+              ctx.lineWidth=phaseLock>.25 ? 1.65 : 1.2;
               ctx.strokeStyle=kind==='p'
-                ? `rgba(205,218,226,${lineOpacity})`
-                : `rgba(244,229,214,${lineOpacity})`;
+                ? `rgba(188,215,230,${lineOpacity})`
+                : `rgba(247,222,201,${lineOpacity})`;
               ctx.stroke();
             };
+
             drawWave('p');
             drawWave('r');
           }
 
-          // Cuando armonizan, la interferencia se convierte en luminancia, no en otra línea.
-          if(harmony>.15 && intensity>.05){
-            const glow=ctx.createRadialGradient(w*.5,h*.5,0,w*.5,h*.5,Math.max(w,h)*.64);
-            glow.addColorStop(0,`rgba(255,255,255,${intensity*harmony*.22})`);
-            glow.addColorStop(.5,`rgba(244,246,247,${intensity*harmony*.08})`);
+          // La fase conseguida se sostiene: dos curvas prácticamente iguales permanecen juntas.
+          // La luz central empieza a crecer antes de que aparezca plenamente el espectro.
+          if(phaseLock>.05){
+            const glowStrength=phaseLock*(.10+intensity*.18);
+            const glow=ctx.createRadialGradient(
+              w*.5,h*.5,0,
+              w*.5,h*.5,Math.max(w,h)*.48
+            );
+            glow.addColorStop(0,`rgba(255,255,255,${glowStrength})`);
+            glow.addColorStop(.38,`rgba(246,247,248,${glowStrength*.42})`);
             glow.addColorStop(1,'rgba(255,255,255,0)');
             ctx.fillStyle=glow;
             ctx.fillRect(0,0,w,h);
@@ -1042,45 +1068,63 @@
           const travel=Math.max(1,r.height-vh);
           const p=clamp((-r.top)/travel);
 
-          // El café se pierde lentamente en negro.
-          const black=smooth(clamp((p-.015)/.46));
+          // 1. "Un café quizá." se pierde lentamente en negro.
+          const black=smooth(clamp((p-.015)/.32));
 
-          // Las ondas empiezan separadas, se aproximan y entran en fase.
-          const harmony=smooth(clamp((p-.39)/.30));
+          // 2. Las dos ondas aparecen claramente antes de empezar a sincronizarse.
+          const wavesIn=smooth(clamp((p-.16)/.10));
+          const wavesOut=1-smooth(clamp((p-.82)/.10));
+          const wavesVisible=Math.max(0,wavesIn*wavesOut);
 
-          // El espectro nace de esa armonización y después se entrega al blanco.
-          const rainbowIn=smooth(clamp((p-.37)/.14));
-          const rainbowOut=1-smooth(clamp((p-.72)/.15));
+          // 3. Convergencia larga: frecuencia y fase se acercan durante casi un tercio del tránsito.
+          const harmony=smooth(clamp((p-.27)/.30));
+
+          // 4. Entrada en fase explícita y sostenida.
+          //    No desaparece enseguida: hay tiempo para ver las dos ondas convertidas en una misma forma.
+          const phaseLockIn=smooth(clamp((p-.54)/.08));
+          const phaseLockOut=1-smooth(clamp((p-.75)/.09));
+          const phaseLock=Math.max(0,phaseLockIn*phaseLockOut);
+
+          // 5. El espectro sólo nace cuando la fase ya está conseguida.
+          const rainbowIn=smooth(clamp((p-.64)/.09));
+          const rainbowOut=1-smooth(clamp((p-.83)/.10));
           const rainbow=Math.max(0,rainbowIn*rainbowOut);
 
-          const blackRetreat=1-smooth(clamp((p-.66)/.19));
+          // 6. El negro empieza a retirarse cuando la armonía ya ha comenzado a producir luz.
+          const blackRetreat=1-smooth(clamp((p-.61)/.18));
           const blackFinal=black*blackRetreat;
 
-          const whiteIn=smooth(clamp((p-.70)/.15));
-          const whiteOut=1-smooth(clamp((p-.90)/.17));
+          // 7. El espectro desemboca en blanco.
+          const whiteIn=smooth(clamp((p-.79)/.09));
+          const whiteOut=1-smooth(clamp((p-.92)/.10));
           const white=Math.max(0,whiteIn*whiteOut);
 
-          // Tras el blanco, la luz se acompasa poco a poco con el tono de París.
-          const aftertone=Math.pow(smooth(clamp((p-.82)/.18)),.9);
-          const pulse=smooth(clamp((p-.93)/.07));
+          // 8. El blanco se enfría paulatinamente hasta el tono de París.
+          const aftertone=Math.pow(smooth(clamp((p-.88)/.12)),.9);
 
-          currentRainbow=rainbow*.96;
+          // 9. La vibración llega sólo al final del nuevo día.
+          const pulse=smooth(clamp((p-.955)/.045));
+
+          currentWavesVisible=wavesVisible;
           currentHarmony=harmony;
+          currentPhaseLock=phaseLock;
+          currentRainbow=rainbow*.98;
 
           twoDays.style.setProperty('--black',blackFinal.toFixed(3));
-          twoDays.style.setProperty('--rainbow',currentRainbow.toFixed(3));
           twoDays.style.setProperty('--white',white.toFixed(3));
           twoDays.style.setProperty('--aftertone',aftertone.toFixed(3));
           twoDays.style.setProperty('--pulse',(pulse*.48).toFixed(3));
           twoDays.style.setProperty('--pulse-scale',(0.22+pulse*.78).toFixed(3));
           twoDays.style.setProperty('--pulse-dot',(0.45+pulse*.75).toFixed(3));
 
-          drawRainbow(currentRainbow,currentHarmony);
+          drawRainbow(currentRainbow,currentHarmony,currentPhaseLock,currentWavesVisible);
         };
 
         const animate=()=>{
-          phase+=.008;
-          if(currentRainbow>.002) drawRainbow(currentRainbow,currentHarmony);
+          phase+=.006;
+          if(currentWavesVisible>.002 || currentRainbow>.002 || currentPhaseLock>.002){
+            drawRainbow(currentRainbow,currentHarmony,currentPhaseLock,currentWavesVisible);
+          }
           requestAnimationFrame(animate);
         };
 
