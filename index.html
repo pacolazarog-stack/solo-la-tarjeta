@@ -21,10 +21,10 @@ main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 31vh}
 .electronic-zone{position:relative;margin:5.5em 0 6.2em;padding:4.2em 0 4.6em;isolation:isolate}.rebeca-name{margin-top:2.5em;margin-bottom:5.6em}.electronic-zone::before{content:"";position:absolute;z-index:-1;inset:-3em -18vw -2em;opacity:.30;pointer-events:none;background:radial-gradient(circle at 10% 25%,rgba(39,92,101,.65) 0 2.4px,transparent 3px),radial-gradient(circle at 25% 72%,rgba(39,92,101,.48) 0 2px,transparent 2.6px),radial-gradient(circle at 70% 31%,rgba(39,92,101,.60) 0 2.4px,transparent 3px),radial-gradient(circle at 89% 70%,rgba(39,92,101,.46) 0 2px,transparent 2.6px),linear-gradient(90deg,transparent 0 9%,rgba(39,92,101,.24) 9% 9.16%,transparent 9.16% 29%,rgba(39,92,101,.18) 29% 29.13%,transparent 29.13% 70%,rgba(39,92,101,.20) 70% 70.14%,transparent 70.14%),linear-gradient(0deg,transparent 0 20%,rgba(39,92,101,.18) 20% 20.14%,transparent 20.14% 63%,rgba(39,92,101,.20) 63% 63.14%,transparent 63.14%);mask-image:linear-gradient(to bottom,transparent,black 10%,black 88%,transparent);-webkit-mask-image:linear-gradient(to bottom,transparent,black 10%,black 88%,transparent)}.electronic-zone::after{content:"";position:absolute;z-index:-1;left:-12vw;right:-12vw;top:53%;height:32px;opacity:.18;background:linear-gradient(90deg,transparent 0 6%,rgba(39,92,101,.24) 6% 8%,transparent 8% 14%,rgba(39,92,101,.38) 14% 14.25%,transparent 14.25% 43%,rgba(39,92,101,.34) 43% 43.2%,transparent 43.2% 78%,rgba(39,92,101,.34) 78% 78.2%,transparent 78.2% 100%);transform:scaleX(.9);transform-origin:center;transition:opacity 1.4s ease,transform 1.9s cubic-bezier(.2,.75,.2,1)}.electronic-zone.signal-visible::after{opacity:.42;transform:scaleX(1)}
 .age-mirror{margin:3em auto 3.2em;display:grid;grid-template-columns:1fr 1px 1fr;align-items:center;gap:clamp(20px,5vw,44px);min-height:104px}.age{display:block;font-size:clamp(1.22rem,2.5vw,1.48rem);line-height:1.35;white-space:nowrap}.age-left{text-align:right}.age-right{text-align:left}.age-axis{width:1px;height:0;background:rgba(30,28,25,.25);transition:height 1.3s .15s cubic-bezier(.2,.8,.2,1)}.age-mirror.visible .age-axis{height:82px}.electronic-zone .overflow-line{position:relative;margin-top:6.5em;margin-bottom:4.5em;max-width:28ch;font-size:.96em;line-height:1.5;font-weight:500;letter-spacing:.012em}.electronic-zone .overflow-line::after{content:"";position:absolute;left:0;bottom:-1.55em;width:0;height:1.5px;background:linear-gradient(90deg,rgba(39,92,101,.62),rgba(39,92,101,.20) 76%,transparent);transition:width 1.65s .2s ease}.electronic-zone.signal-visible .overflow-line::after{width:76%}
 .photo-layer{margin:5.6em auto 6.2em;padding:0}.photo-layer img{display:block;width:100%;height:auto;user-select:none}.card-photo{position:relative;width:min(62vw,330px);margin-left:auto;margin-right:auto;isolation:isolate}.card-photo::before{content:"";position:absolute;z-index:-1;left:8%;right:8%;top:18%;bottom:7%;border-radius:50%;background:radial-gradient(ellipse at 50% 58%,rgba(183,133,103,.14) 0%,rgba(183,133,103,.07) 42%,transparent 73%);filter:blur(24px);opacity:0;transform:scale(.92);transition:opacity 1.35s ease,transform 1.55s cubic-bezier(.2,.75,.2,1)}.card-photo.visible::before{opacity:1;transform:scale(1)}.card-photo.reveal{transform:translateY(18px) scale(.985);transition-duration:1.18s}.card-photo.reveal.visible{transform:none}.card-photo .photo-frame{width:100%;margin:0;padding:0;background:transparent;border-radius:20px;overflow:hidden;box-shadow:0 24px 72px rgba(32,27,22,.11);transform:translateY(5px) scale(.988);transition:transform 1.6s cubic-bezier(.2,.75,.2,1),box-shadow 1.6s ease}.card-photo.visible .photo-frame{transform:none;box-shadow:0 28px 84px rgba(32,27,22,.13)}.card-photo img{border-radius:20px}
-.two-days-passage{position:relative;height:360vh;margin:12vh 0 0}.two-days-sky{position:sticky;top:0;left:50%;width:100vw;height:100svh;margin-left:calc(50% - 50vw);overflow:hidden;pointer-events:none;isolation:isolate;background:transparent}.two-days-black,.two-days-white,.two-days-aftertone,.time-pulse{position:absolute;inset:0;pointer-events:none}.two-days-black{z-index:2;background:#000;opacity:var(--black,0)}.wave-rainbow{position:absolute;inset:0;z-index:3;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;filter:blur(2.4px) saturate(.98)}.two-days-white{z-index:4;background:#fff;opacity:var(--white,0)}.two-days-aftertone{z-index:5;background:var(--paper-paris);opacity:var(--aftertone,0)}.time-pulse{z-index:6;left:8%;right:8%;top:63%;height:1px;inset:auto 8%;opacity:var(--pulse,0);transform:scaleX(var(--pulse-scale,.2));transform-origin:center;background:linear-gradient(90deg,transparent,rgba(65,94,104,.20) 22%,rgba(65,94,104,.42) 50%,rgba(65,94,104,.20) 78%,transparent)}.time-pulse::after{content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;border-radius:50%;background:rgba(65,94,104,.36);transform:translate(-50%,-50%) scale(var(--pulse-dot,.45))}
+.two-days-passage{position:relative;height:430vh;margin:12vh 0 0}.two-days-sky{position:sticky;top:0;left:50%;width:100vw;height:100svh;margin-left:calc(50% - 50vw);overflow:hidden;pointer-events:none;isolation:isolate;background:transparent}.two-days-black,.two-days-white,.two-days-aftertone,.time-pulse{position:absolute;inset:0;pointer-events:none}.two-days-black{z-index:2;background:#000;opacity:var(--black,0)}.wave-rainbow{position:absolute;inset:0;z-index:3;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;filter:blur(2.4px) saturate(1.16)}.two-days-white{z-index:4;background:#fff;opacity:var(--white,0)}.two-days-aftertone{z-index:5;background:var(--paper-paris);opacity:var(--aftertone,0)}.time-pulse{z-index:6;left:8%;right:8%;top:63%;height:1px;inset:auto 8%;opacity:var(--pulse,0);transform:scaleX(var(--pulse-scale,.2));transform-origin:center;background:linear-gradient(90deg,transparent,rgba(65,94,104,.20) 22%,rgba(65,94,104,.42) 50%,rgba(65,94,104,.20) 78%,transparent)}.time-pulse::after{content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;border-radius:50%;background:rgba(65,94,104,.36);transform:translate(-50%,-50%) scale(var(--pulse-dot,.45))}
 .paris-section{position:relative;margin:0 0 8.5em;padding:30vh 0 5.2em;background:transparent}.tower-photo{margin:3.6em auto 4.6em;width:min(78vw,520px)}.tower-frame{overflow:hidden;box-shadow:0 30px 90px rgba(16,25,38,.18);background:#142a48}.tower-photo img{transform:scale(1.015);transition:transform 8s cubic-bezier(.2,.65,.2,1)}.tower-photo.visible img{transform:scale(1)}.chance-end{margin-bottom:17vh}.closing-section{margin-top:0;padding-top:13vh;position:relative}.closing-section::before{content:"";position:absolute;top:0;left:50%;width:34px;height:1px;background:rgba(30,28,25,.22);transform:translateX(-50%)}.hinge{margin-top:2.2em;margin-bottom:4.4em;font-size:1.065em}.pre-final{margin-top:15.75em;margin-bottom:31.5em;color:#6f7478;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:.8em;font-weight:400;letter-spacing:.19em;text-transform:uppercase;line-height:1.35}.final-line{margin:0;padding:0 0 30vh;font-size:clamp(1.85rem,4.4vw,2.8rem);line-height:1.15;letter-spacing:.008em}
 @keyframes heroIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(-2vh)}}@keyframes breathe{0%,100%{opacity:.22;transform:translateY(0) rotate(45deg)}50%{opacity:.72;transform:translateY(8px) rotate(45deg)}}
-@media(max-width:620px){.progress{display:none}main{width:min(calc(100% - 30px),var(--reading));padding-bottom:24vh}article{line-height:1.66}.hero{min-height:92svh}.opening-section p{margin-bottom:1.58em}.opening-section .opening-first{margin-bottom:2.25em}.opening-section .opening-breath{margin-bottom:3.05em}.opening-section .opening-machine{margin-bottom:2.35em}.opening-section .opening-man{margin-top:2.5em}.electronic-zone{margin:4.3em 0 5em;padding:3em 0 3.6em}.rebeca-name{margin-top:2.1em;margin-bottom:4.6em}.electronic-zone::before{inset:-1em -30px;opacity:.22}.electronic-zone .overflow-line{margin-top:5.6em;margin-bottom:3.9em;font-size:.92em}.age-mirror{grid-template-columns:1fr;gap:10px;margin:2.5em 0 3em;min-height:0}.age-left,.age-right{text-align:left}.age-axis{order:2;width:44px;height:1px!important;margin:4px 0}.age-right{order:3}.card-photo{width:min(76vw,320px)}.two-days-passage{height:310vh;margin:10vh 0 0}.wave-rainbow{filter:blur(3px) saturate(.96)}.paris-section{margin:0 0 6.6em;padding:26vh 0 4em}.tower-photo{width:min(88vw,460px)}.chance-end{margin-bottom:14vh}.closing-section{padding-top:11vh}.pre-final{margin-top:12.75em;margin-bottom:25.5em}.final-line{padding-bottom:26vh}}
+@media(max-width:620px){.progress{display:none}main{width:min(calc(100% - 30px),var(--reading));padding-bottom:24vh}article{line-height:1.66}.hero{min-height:92svh}.opening-section p{margin-bottom:1.58em}.opening-section .opening-first{margin-bottom:2.25em}.opening-section .opening-breath{margin-bottom:3.05em}.opening-section .opening-machine{margin-bottom:2.35em}.opening-section .opening-man{margin-top:2.5em}.electronic-zone{margin:4.3em 0 5em;padding:3em 0 3.6em}.rebeca-name{margin-top:2.1em;margin-bottom:4.6em}.electronic-zone::before{inset:-1em -30px;opacity:.22}.electronic-zone .overflow-line{margin-top:5.6em;margin-bottom:3.9em;font-size:.92em}.age-mirror{grid-template-columns:1fr;gap:10px;margin:2.5em 0 3em;min-height:0}.age-left,.age-right{text-align:left}.age-axis{order:2;width:44px;height:1px!important;margin:4px 0}.age-right{order:3}.card-photo{width:min(76vw,320px)}.two-days-passage{height:370vh;margin:10vh 0 0}.wave-rainbow{filter:blur(3px) saturate(.96)}.paris-section{margin:0 0 6.6em;padding:26vh 0 4em}.tower-photo{width:min(88vw,460px)}.chance-end{margin-bottom:14vh}.closing-section{padding-top:11vh}.pre-final{margin-top:12.75em;margin-bottom:25.5em}.final-line{padding-bottom:26vh}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none;filter:none}.age-axis{height:82px}.tower-photo img{transform:none}}
 @media print{body{background:#fff!important}.world,.progress,.scroll-cue,.entry-gate,#soundtrack,.two-days-passage{display:none}.hero{min-height:auto;padding:1.5cm 0 2cm}main{width:100%;padding:0}.reveal{opacity:1;transform:none;filter:none}article{font-size:12.5pt;line-height:1.55}.paris-section,.closing-section{margin-left:0;margin-right:0;padding-top:1.5cm}.photo-layer{break-inside:avoid}.final-line{padding-bottom:0}}
   </style>
@@ -442,7 +442,7 @@ main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 31vh}
   if(twoDays&&canvas){
     const ctx=canvas.getContext('2d');
     let phase=0;
-    const state={active:false,waves:0,harmony:0,lock:0,spectrum:0};
+    const state={active:false,waves:0,harmony:0,lock:0,spectrum:0,burst:0};
 
     const resizeCanvas=()=>{
       const dpr=Math.min(2,Math.max(1,window.devicePixelRatio||1));
@@ -506,6 +506,39 @@ main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 31vh}
         ctx.fillRect(0,0,w,h);
       }
 
+      if(state.burst>.002){
+        const burstColors=[[207,67,73],[231,126,58],[226,190,74],[92,164,108],[73,134,209],[111,96,188]];
+        const cx=w*.5,cy=h*.5;
+        const radius=Math.hypot(w,h)*(.20+.48*state.burst);
+        const core=ctx.createRadialGradient(cx,cy,0,cx,cy,radius);
+        core.addColorStop(0,`rgba(255,255,255,${state.burst*.72})`);
+        core.addColorStop(.12,`rgba(255,255,255,${state.burst*.34})`);
+        core.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.fillStyle=core;
+        ctx.fillRect(0,0,w,h);
+
+        ctx.save();
+        ctx.translate(cx,cy);
+        ctx.rotate(phase*.055);
+        const rays=30;
+        for(let i=0;i<rays;i++){
+          const angle=(Math.PI*2*i)/rays;
+          const color=burstColors[i%burstColors.length];
+          const reach=radius*(.72+.28*((i%5)/4));
+          const inner=12+state.burst*22;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(angle)*inner,Math.sin(angle)*inner);
+          ctx.lineTo(Math.cos(angle)*reach,Math.sin(angle)*reach);
+          ctx.lineWidth=1.4+state.burst*4.8;
+          ctx.strokeStyle=rgba(color,state.burst*(.34+.42*((i%3)/2)));
+          ctx.shadowBlur=10+state.burst*22;
+          ctx.shadowColor=rgba(color,state.burst*.55);
+          ctx.stroke();
+        }
+        ctx.restore();
+        ctx.shadowBlur=0;
+      }
+
       if(state.spectrum>.002){
         const colors=[[207,67,73],[231,126,58],[226,190,74],[92,164,108],[73,134,209],[111,96,188]];
         const baseY=h*.13,gap=h*.112,thickness=Math.max(20,h*.058);
@@ -552,28 +585,42 @@ main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 31vh}
 
       state.active=rect.bottom>0&&rect.top<vh;
 
-      const blackIn=smooth(clamp((p-.03)/.21));
-      const wavesIn=smooth(clamp((p-.17)/.10));
-      const harmony=smooth(clamp((p-.30)/.28));
-      const lockIn=smooth(clamp((p-.55)/.055));
-      const lockOut=1-smooth(clamp((p-.75)/.075));
+      // 1. El color anterior se extingue por completo en un fundido lento a negro.
+      const blackIn=smooth(clamp((p-.02)/.16));
+
+      // 2. El negro se sostiene. Dentro de él nace un acoplamiento largo:
+      //    las dos ondas aparecen, se buscan, convergen y finalmente entran en fase.
+      const wavesIn=smooth(clamp((p-.18)/.08));
+      const harmony=smooth(clamp((p-.28)/.34));
+      const lockIn=smooth(clamp((p-.56)/.075));
+      const lockOut=1-smooth(clamp((p-.735)/.035));
       const lock=Math.max(0,lockIn*lockOut);
-      const spectrumIn=smooth(clamp((p-.64)/.075));
-      const spectrumOut=1-smooth(clamp((p-.84)/.085));
-      const spectrum=Math.max(0,spectrumIn*spectrumOut);
-      const blackOut=1-smooth(clamp((p-.65)/.17));
+
+      // 3. BIG BANG MULTICOLOR: irrupción súbita, breve e inequívoca.
+      const burstIn=smooth(clamp((p-.735)/.009));
+      const burstOut=1-smooth(clamp((p-.805)/.025));
+      const burst=Math.max(0,burstIn*burstOut);
+      const spectrum=burst;
+
+      // 4. El negro solo comienza a retirarse cuando el estallido ya ha ocurrido.
+      const blackOut=1-smooth(clamp((p-.755)/.055));
       const black=Math.max(0,blackIn*blackOut);
-      const whiteIn=smooth(clamp((p-.78)/.10));
-      const whiteOut=1-smooth(clamp((p-.92)/.09));
+
+      // 5. El big bang desemboca en blanco absoluto, que permanece antes de transformarse.
+      const whiteIn=smooth(clamp((p-.795)/.035));
+      const whiteOut=1-smooth(clamp((p-.915)/.075));
       const white=Math.max(0,whiteIn*whiteOut);
-      const aftertone=smooth(clamp((p-.88)/.12));
-      const wavesOut=1-smooth(clamp((p-.80)/.09));
-      const pulse=smooth(clamp((p-.955)/.04));
+
+      // 6. El blanco se contamina lentamente del color posterior: París nace desde él.
+      const aftertone=smooth(clamp((p-.90)/.10));
+      const wavesOut=1-smooth(clamp((p-.725)/.025));
+      const pulse=smooth(clamp((p-.96)/.04));
 
       state.waves=Math.max(0,wavesIn*wavesOut);
       state.harmony=harmony;
       state.lock=lock;
       state.spectrum=spectrum;
+      state.burst=burst;
 
       twoDays.style.setProperty('--black',black.toFixed(3));
       twoDays.style.setProperty('--white',white.toFixed(3));
