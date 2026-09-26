@@ -4,109 +4,390 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="theme-color" content="#f4f0e8">
+  <meta name="theme-color" content="#f2eee6">
   <meta property="og:title" content="SOLO LA TARJETA">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="es_ES">
   <title>SOLO LA TARJETA</title>
   <style>
-    :root { color-scheme: light; --paper:#f4f0e8; --ink:#1c1b19; --muted:#777168; --line:#d8d0c4; }
-    * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body { margin:0; background:var(--paper); color:var(--ink); font-family:Georgia,"Times New Roman",serif; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
-    main { width:min(100% - 38px,760px); margin:0 auto; padding:clamp(72px,11vw,132px) 0 110px; }
-    header { margin-bottom:clamp(58px,9vw,94px); text-align:center; }
-    h1 { margin:0; font-size:clamp(2.25rem,7vw,4.35rem); line-height:.96; font-weight:500; letter-spacing:.08em; }
-    .rule { width:46px; height:1px; background:var(--ink); opacity:.42; margin:34px auto 0; }
-    article { font-size:clamp(1.12rem,2.25vw,1.32rem); line-height:1.68; hyphens:none; }
-    p { margin:0 0 1.12em; hanging-punctuation:first last; }
-    footer { margin-top:84px; padding-top:28px; border-top:1px solid var(--line); text-align:right; color:var(--muted); font-size:1rem; font-style:italic; }
-    ::selection { background:#d9d0c1; }
-    @media (max-width:520px){ main{width:min(100% - 30px,760px);padding-top:58px;} header{margin-bottom:54px;} article{line-height:1.62;} }
-    @media print { body{background:white;} main{width:100%;padding:0;} header{margin-bottom:2.2cm;} article{font-size:12.5pt;line-height:1.55;} footer{margin-top:2cm;} }
+    :root{
+      --paper:#f2eee6;
+      --paper-paris:#eeeef0;
+      --paper-closing:#f7f5f0;
+      --ink:#1e1c19;
+      --muted:#746e65;
+      --hair:#cfc7bb;
+      --reading:760px;
+      color-scheme:light;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--ink);
+      background:var(--paper);
+      font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia,"Times New Roman",serif;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      transition:background-color 1.6s ease;
+      overflow-x:hidden;
+    }
+    body.tone-paris{background:var(--paper-paris)}
+    body.tone-closing{background:var(--paper-closing)}
+    .ambient{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-1;
+      opacity:.55;
+      background:
+        radial-gradient(80% 46% at 50% 8%,rgba(255,255,255,.72),transparent 72%),
+        linear-gradient(to bottom,rgba(255,255,255,.12),transparent 42%);
+      transition:opacity 1.4s ease;
+    }
+    .progress{
+      position:fixed;
+      right:14px;
+      top:12vh;
+      width:1px;
+      height:76vh;
+      background:rgba(30,28,25,.10);
+      z-index:20;
+      pointer-events:none;
+    }
+    .progress > i{
+      display:block;
+      width:1px;
+      height:0;
+      background:rgba(30,28,25,.42);
+      transition:height .08s linear;
+    }
+    .hero{
+      min-height:96svh;
+      display:grid;
+      place-items:center;
+      padding:8vh 24px 11vh;
+      text-align:center;
+    }
+    .hero-inner{
+      transform:translateY(-2vh);
+      animation:heroIn 1.5s cubic-bezier(.2,.8,.2,1) both;
+    }
+    h1{
+      margin:0;
+      font-weight:500;
+      font-size:clamp(2.65rem,8vw,5.7rem);
+      line-height:.92;
+      letter-spacing:.105em;
+    }
+    .hairline{
+      width:52px;
+      height:1px;
+      background:currentColor;
+      opacity:.34;
+      margin:38px auto 0;
+    }
+    .scroll-cue{
+      width:9px;
+      height:9px;
+      border-right:1px solid rgba(30,28,25,.42);
+      border-bottom:1px solid rgba(30,28,25,.42);
+      transform:rotate(45deg);
+      margin:42px auto 0;
+      animation:breathe 2.8s ease-in-out infinite;
+    }
+    main{
+      width:min(calc(100% - 40px),var(--reading));
+      margin:0 auto;
+      padding:0 0 28vh;
+    }
+    article{
+      font-size:clamp(1.13rem,2.15vw,1.34rem);
+      line-height:1.72;
+      letter-spacing:.002em;
+      hyphens:none;
+    }
+    p{
+      margin:0 0 1.16em;
+      hanging-punctuation:first last;
+    }
+    .reveal{
+      opacity:0;
+      transform:translateY(14px);
+      filter:blur(1.5px);
+      transition:
+        opacity .92s cubic-bezier(.2,.7,.2,1),
+        transform .92s cubic-bezier(.2,.7,.2,1),
+        filter .92s ease;
+    }
+    .reveal.visible{
+      opacity:1;
+      transform:none;
+      filter:none;
+    }
+    .age-mirror{
+      margin:2.9em auto 3.15em;
+      display:grid;
+      grid-template-columns:1fr 1px 1fr;
+      align-items:center;
+      gap:clamp(20px,5vw,44px);
+      min-height:104px;
+    }
+    .age{
+      display:block;
+      font-size:clamp(1.22rem,2.5vw,1.48rem);
+      line-height:1.35;
+      white-space:nowrap;
+    }
+    .age-left{text-align:right}
+    .age-right{text-align:left}
+    .age-axis{
+      width:1px;
+      height:0;
+      background:rgba(30,28,25,.25);
+      transition:height 1.3s .15s cubic-bezier(.2,.8,.2,1);
+    }
+    .age-mirror.visible .age-axis{height:82px}
+    .paris-section{
+      position:relative;
+      margin:7.2em -4vw 6.5em;
+      padding:5.2em 4vw 4.2em;
+    }
+    .paris-section::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:0;
+      width:1px;
+      height:72px;
+      background:linear-gradient(to bottom,transparent,rgba(30,28,25,.18));
+      transform:translateX(-.5px);
+    }
+    .paris-section::after{
+      content:"";
+      position:absolute;
+      inset:0 -16vw;
+      z-index:-1;
+      background:
+        linear-gradient(to bottom,transparent 0%,rgba(255,255,255,.18) 16%,rgba(255,255,255,.18) 84%,transparent 100%);
+      pointer-events:none;
+    }
+    .closing-section{
+      margin-top:7.5em;
+      padding-top:4em;
+      position:relative;
+    }
+    .closing-section::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:50%;
+      width:34px;
+      height:1px;
+      background:rgba(30,28,25,.22);
+      transform:translateX(-50%);
+    }
+    .hinge{
+      margin-top:2.1em;
+      margin-bottom:4em;
+      font-size:1.06em;
+    }
+    .pre-final{
+      margin-top:10em;
+      margin-bottom:2.7em;
+      color:var(--muted);
+    }
+    .final-line{
+      margin:0;
+      padding:0 0 26vh;
+      font-size:clamp(1.7rem,4vw,2.55rem);
+      line-height:1.2;
+      letter-spacing:.01em;
+    }
+    @keyframes heroIn{
+      from{opacity:0;transform:translateY(10px)}
+      to{opacity:1;transform:translateY(-2vh)}
+    }
+    @keyframes breathe{
+      0%,100%{opacity:.22;transform:translateY(0) rotate(45deg)}
+      50%{opacity:.72;transform:translateY(8px) rotate(45deg)}
+    }
+    @media(max-width:620px){
+      .progress{display:none}
+      main{width:min(calc(100% - 30px),var(--reading));padding-bottom:22vh}
+      article{line-height:1.66}
+      .hero{min-height:92svh}
+      .age-mirror{
+        grid-template-columns:1fr;
+        gap:10px;
+        margin:2.5em 0 3em;
+        min-height:0;
+      }
+      .age-left,.age-right{text-align:left}
+      .age-axis{
+        order:2;
+        width:44px;
+        height:1px !important;
+        margin:4px 0;
+      }
+      .age-right{order:3}
+      .paris-section{margin:6em 0 5.5em;padding:4.6em 0 3.2em}
+      .paris-section::after{inset:0 -30px}
+      .closing-section{margin-top:6em;padding-top:3.6em}
+      .pre-final{margin-top:8em}
+      .final-line{padding-bottom:22vh}
+    }
+    @media(prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      *,*::before,*::after{animation:none!important;transition:none!important}
+      .reveal{opacity:1;transform:none;filter:none}
+      .age-axis{height:82px}
+    }
+    @media print{
+      body{background:#fff!important}
+      .ambient,.progress,.scroll-cue{display:none}
+      .hero{min-height:auto;padding:1.5cm 0 2cm}
+      main{width:100%;padding:0}
+      .reveal{opacity:1;transform:none;filter:none}
+      article{font-size:12.5pt;line-height:1.55}
+      .paris-section,.closing-section{margin-left:0;margin-right:0}
+      .final-line{padding-bottom:0}
+    }
   </style>
 </head>
 <body>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="progress" aria-hidden="true"><i></i></div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <h1>SOLO LA TARJETA</h1>
+      <div class="hairline" aria-hidden="true"></div>
+      <div class="scroll-cue" aria-hidden="true"></div>
+    </div>
+  </header>
+
   <main>
-    <header><h1>SOLO LA TARJETA</h1><div class="rule" aria-hidden="true"></div></header>
     <article>
-      <p>Paco Olmo de Males bajó del metro con una misión sencilla: coger un autobús, llegar a otra localidad y recoger un coche.</p>
-      <p>Las misiones sencillas eran las que más miedo le daban.</p>
-      <p>Las difíciles traían instrucciones.</p>
-      <p>Las sencillas dependían de uno.</p>
-      <p>En la estación encontró una máquina expendedora. Tenía pantalla, teclado, ranura, lector, flechas de distintos colores y un cartel que prometía que comprar un billete era fácil.</p>
-      <p>Paco se acercó.</p>
-      <p>Un hombre de aspecto descuidado se acercó también.</p>
-      <p>No parecía empleado de la estación. Tampoco parecía viajero. Llevaba la ropa vencida, el pelo sin acuerdo conocido con el peine y esa clase de presencia que consigue que el ciudadano responsable compruebe instintivamente dónde lleva la cartera.</p>
-      <p>—¿Adónde vas?</p>
-      <p>Paco se lo dijo.</p>
-      <p>—Dame.</p>
-      <p>No pidió el dinero.</p>
-      <p>Pidió la máquina.</p>
-      <p>Se puso delante y empezó a manejarla con una velocidad prodigiosa.</p>
-      <p>Pantalla.</p><p>Destino.</p><p>Horario.</p><p>Otra pantalla.</p><p>Atrás.</p><p>Tarifa.</p><p>Aceptar.</p><p>Cancelar.</p><p>Otra ruta.</p>
-      <p>El hombre tocaba el teclado como quien hubiera estudiado durante años Ingeniería Superior de Máquinas Expendedoras de Billetes y hubiera acabado trabajando, por razones que la Universidad desconocía, fuera del sistema.</p>
-      <p>—Este no.</p><p>Volvió atrás.</p><p>—Espera.</p><p>Dos pulsaciones más.</p><p>—Este tampoco.</p>
-      <p>Paco miró el reloj.</p><p>El hombre miró el reloj.</p><p>La máquina continuó pensando.</p>
-      <p>—No llegas.</p><p>—¿Cómo que no llego?</p><p>—Que ya no te deja sacarlo. Cómpralo en el autobús.</p>
-      <p>Y se apartó.</p><p>Eso fue todo.</p><p>No pidió una moneda.</p><p>No pidió tabaco.</p><p>No pidió nada.</p>
-      <p>Paco quiso darle las gracias, pero el hombre ya estaba pendiente de otra persona que discutía con otra máquina.</p>
-      <p>Durante unos segundos tuvo la impresión de haber sido atendido por un funcionario clandestino.</p>
-      <p>Fue hacia los andenes.</p>
-      <p>Preguntó a varios conductores reunidos junto a unos autobuses.</p>
-      <p>—Perdone, ¿el que va a…?</p><p>Uno señaló vagamente.</p><p>—Busca el del aeropuerto.</p><p>—¿Pero sale de aquí?</p><p>Otro conductor intervino:</p><p>—Del aeropuerto.</p><p>—Sí. Pero ¿dónde está?</p><p>—Por allí.</p>
-      <p>«Por allí» era una unidad oficial de distancia.</p>
-      <p>Paco echó a andar.</p>
-      <p>Encontró el autobús cuando prácticamente había llegado la hora de salida. Subió el escalón, dijo el destino y sacó la tarjeta.</p>
-      <p>El conductor negó con la cabeza.</p><p>—Solo efectivo.</p>
-      <p>Paco miró la tarjeta.</p><p>Miró al conductor.</p><p>Volvió a mirar la tarjeta por si durante los dos segundos anteriores se hubiera convertido en un billete de veinte euros.</p>
-      <p>—¿No se puede pagar con tarjeta?</p><p>—No.</p><p>—¿Y con el móvil?</p><p>—No.</p><p>—¿Bizum?</p>
-      <p>El conductor lo miró.</p><p>Aquello ya era una provocación tecnológica.</p><p>—Efectivo.</p>
-      <p>Paco se apartó para dejar subir a los demás.</p>
-      <p>Había conseguido llegar hasta el autobús exacto, a la hora exacta, con dinero suficiente, una tarjeta perfectamente válida, un teléfono inteligente, una cuenta bancaria operativa y voluntad inequívoca de pagar.</p>
-      <p>No podía viajar.</p><p>El sistema funcionaba.</p>
-      <p>Entonces oyó una voz detrás.</p><p>—¿Tienes Bizum?</p>
-      <p>Se volvió.</p><p>Era una muchacha.</p><p>—Sí.</p><p>—Pues yo te lo pago y me haces un Bizum.</p>
-      <p>Paco tardó un segundo en procesar el procedimiento.</p><p>—¿De verdad?</p><p>—Claro.</p>
-      <p>La muchacha entregó el dinero al conductor.</p><p>El conductor entregó el billete.</p><p>Paco recibió el billete.</p><p>La economía mundial siguió funcionando.</p>
-      <p>—Dime cuánto.</p><p>Ella se lo dijo.</p><p>Paco abrió Bizum.</p><p>—¿Tu teléfono?</p><p>Se lo dio.</p><p>Hizo la transferencia.</p>
-      <p>El autobús arrancó.</p><p>Ella viajaba con una amiga.</p><p>Paco se sentó en la misma fila, al otro lado del pasillo.</p><p>No inmediatamente al lado.</p><p>La gratitud también tiene normas de urbanidad.</p>
-      <p>Se llamaba Rebeca.</p>
-      <p>Tenía veintiséis años, había nacido en Brasil, estudiaba Ingeniería Electrónica, trabajaba por internet y viajaba con una amiga.</p>
-      <p>Esos eran los datos.</p><p>Paco era un hombre acostumbrado a los datos.</p><p>Los datos tranquilizan porque caben en una casilla.</p>
-      <p>Nombre.</p><p>Edad.</p><p>Veintiséis.</p><p>Paco tenía sesenta y dos.</p><p>Estudios.</p><p>Profesión.</p><p>Nacionalidad.</p>
-      <p>Pero Rebeca no cabía.</p>
-      <p>Era muy hermosa.</p><p>Morena. Una cara limpia de artificio. Una manera tranquila de estar allí.</p>
-      <p>Y los ojos.</p><p>Había en ellos algo que Paco no supo nombrar.</p><p>No eran grandes ni pequeños, claros ni oscuros de una manera que pudiera anotarse.</p><p>Le parecieron exactos.</p><p>Como si alguien hubiera tenido una sola oportunidad de hacerlos.</p><p>Ojos de estatua.</p><p>No por inmóviles.</p><p>Todo lo contrario.</p><p>Por esa perfección de algunas esculturas antiguas en las que la piedra parece a punto de mirar.</p>
-      <p>Hablaron durante el viaje.</p><p>Paco procuró no mirarla demasiado.</p><p>A cierta edad uno aprende que mirar también puede resultar una forma de torpeza.</p>
-      <p>La amiga intervenía alguna vez.</p><p>Rebeca reía.</p><p>Hablaron de estudios, trabajos, ciudades y viajes.</p>
-      <p>Cuando Paco hablaba, Rebeca lo miraba.</p><p>No consultaba el teléfono.</p><p>No buscaba con los ojos una conversación mejor.</p><p>Lo escuchaba.</p>
-      <p>Cuando llegó la parada de Paco, se levantó.</p><p>—Bueno, muchísimas gracias otra vez.</p><p>—Nada.</p><p>Se despidió también de la amiga.</p><p>—Que tengáis buen viaje.</p>
-      <p>Bajó.</p><p>El autobús continuó.</p><p>Paco fue a recoger el vehículo por el que había hecho todo aquel trayecto.</p><p>Pensó que ahí terminaba la historia.</p><p>Era lo normal.</p>
-      <p>Poco después sonó el teléfono.</p><p>Número desconocido.</p><p>—¿Sí?</p><p>—Hola. Soy Rebeca.</p>
-      <p>Paco sonrió antes de saber por qué llamaba.</p><p>—¿Rebeca?</p><p>—La del autobús.</p><p>La del autobús.</p><p>Como si fuera posible confundirla.</p>
-      <p>—Te has dejado una tarjeta.</p><p>Paco buscó la cartera.</p><p>La abrió.</p><p>Faltaba.</p><p>—La encontré donde estabas sentado. La tengo yo.</p>
-      <p>Paco volvió a mirar dentro de la cartera.</p><p>No estaba.</p><p>Anularla.</p><p>Pedir otra.</p><p>Esperar.</p><p>Activarla.</p><p>Cambiar algunos pagos.</p>
-      <p>O dejarla en manos de una desconocida que ya tenía su número de teléfono y su tarjeta de crédito.</p>
-      <p>—Eres mi ángel de la guarda.</p><p>Rebeca se rio.</p><p>—Guárdamela, por favor. Cuando vuelva quedamos y me la das.</p><p>—Vale.</p>
-      <p>Antes de llamar, Rebeca ya le había escrito por WhatsApp.</p><p>Paco miró el número.</p><p>El Bizum.</p>
-      <p>Quedaron en verse cuando regresara.</p><p>Nada más.</p><p>Una devolución.</p><p>Una tarjeta.</p><p>Un café quizá.</p>
-      <p>Dos días después vibró el teléfono.</p><p>Era un mensaje de Rebeca.</p><p>Paco lo abrió.</p><p>Un par de frases sueltas y una fotografía.</p><p>La Torre Eiffel.</p><p>Nada más.</p><p>Ni rastro de ella en la imagen.</p>
-      <p>Paco estudió la foto.</p><p>La amplió con los dedos buscando un reflejo, un detalle.</p><p>Nada.</p>
-      <p>Contestó con cortesía, esperando que lo estuvieran pasando bien.</p><p>Rebeca respondió.</p><p>Se contestaron un par de veces más.</p>
-      <p>Paco escribió un mensaje más largo.</p><p>Lo borró.</p><p>Escribió otro distinto.</p><p>También lo borró.</p>
-      <p>Dejó el aparato sobre la mesa, boca abajo.</p><p>A los pocos segundos volvió a darle la vuelta.</p><p>La estructura de hierro seguía allí.</p><p>Rebeca no.</p>
-      <p>Recordó de golpe sus ojos.</p><p>Los ojos de estatua.</p>
-      <p>Pocos días antes aquella mujer no existía en su mapa.</p><p>Luego había preguntado:</p><p>—¿Tienes Bizum?</p>
-      <p>Ahora estaba en París y llevaba su tarjeta de crédito en el bolso.</p>
-      <p>Ese era el gran defecto de las casualidades:</p><p>no tenían ninguna obligación de repetirse.</p>
-      <p>Habían quedado en verse a su regreso.</p><p>Un trámite.</p><p>Ella le devolvería el plástico.</p><p>Probablemente tomarían un café por compromiso.</p><p>Hablarían un rato de cosas previsibles.</p><p>Después cada uno retomaría su biografía intacta.</p><p>Era lo razonable.</p>
-      <p>Paco miró la pantalla iluminada.</p><p>Hasta esa tarde su única preocupación había sido recuperar la tarjeta.</p><p>Ahora le inquietaba recuperar solamente la tarjeta.</p>
-      <p>Anticipó el encuentro.</p><p>Rebeca abriendo el bolso.</p><p>Buscando en un compartimento.</p><p>—Toma.</p><p>—Muchísimas gracias.</p>
-      <p>Un rato de charla.</p><p>Una taza vacía sobre la mesa.</p><p>El teléfono de Rebeca vibraría.</p><p>Ella miraría la pantalla.</p><p>—Bueno, me tengo que ir.</p><p>Y ya está.</p>
-      <p>Paco bloqueó el teléfono.</p><p>Esta vez tardó algo más en volver a cogerlo.</p><p>No escribió.</p><p>La torre seguía allí.</p><p>Los ojos no.</p>
+      <p class="reveal">Paco Olmo de Males bajó del metro con una misión sencilla: coger un autobús, llegar a otra localidad y recoger un coche.</p>
+      <p class="reveal">Las misiones sencillas eran las que más miedo le daban.</p>
+      <p class="reveal">Las difíciles traían instrucciones.</p>
+      <p class="reveal">Las sencillas dependían de uno.</p>
+      <p class="reveal">En la estación encontró una máquina expendedora. Tenía pantalla, teclado, ranura, lector, flechas de distintos colores y un cartel que prometía que comprar un billete era fácil.</p>
+      <p class="reveal">Paco se acercó.</p>
+      <p class="reveal">Un hombre de aspecto descuidado se acercó también.</p>
+      <p class="reveal">No parecía empleado de la estación. Tampoco parecía viajero. Llevaba la ropa vencida, el pelo sin acuerdo conocido con el peine y esa clase de presencia que consigue que el ciudadano responsable compruebe instintivamente dónde lleva la cartera.</p>
+      <p class="reveal">—¿Adónde vas?</p>
+      <p class="reveal">Paco se lo dijo.</p>
+      <p class="reveal">—Dame.</p>
+      <p class="reveal">No pidió el dinero.</p>
+      <p class="reveal">Pidió la máquina.</p>
+      <p class="reveal">Se puso delante y empezó a manejarla con una velocidad prodigiosa.</p>
+      <p class="reveal">Pantalla.</p><p class="reveal">Destino.</p><p class="reveal">Horario.</p><p class="reveal">Otra pantalla.</p><p class="reveal">Atrás.</p><p class="reveal">Tarifa.</p><p class="reveal">Aceptar.</p><p class="reveal">Cancelar.</p><p class="reveal">Otra ruta.</p>
+      <p class="reveal">El hombre tocaba el teclado como quien hubiera estudiado durante años Ingeniería Superior de Máquinas Expendedoras de Billetes y hubiera acabado trabajando, por razones que la Universidad desconocía, fuera del sistema.</p>
+      <p class="reveal">—Este no.</p><p class="reveal">Volvió atrás.</p><p class="reveal">—Espera.</p><p class="reveal">Dos pulsaciones más.</p><p class="reveal">—Este tampoco.</p>
+      <p class="reveal">Paco miró el reloj.</p><p class="reveal">El hombre miró el reloj.</p><p class="reveal">La máquina continuó pensando.</p>
+      <p class="reveal">—No llegas.</p><p class="reveal">—¿Cómo que no llego?</p><p class="reveal">—Que ya no te deja sacarlo. Cómpralo en el autobús.</p>
+      <p class="reveal">Y se apartó.</p><p class="reveal">Eso fue todo.</p><p class="reveal">No pidió una moneda.</p><p class="reveal">No pidió tabaco.</p><p class="reveal">No pidió nada.</p>
+      <p class="reveal">Paco quiso darle las gracias, pero el hombre ya estaba pendiente de otra persona que discutía con otra máquina.</p>
+      <p class="reveal">Durante unos segundos tuvo la impresión de haber sido atendido por un funcionario clandestino.</p>
+      <p class="reveal">Fue hacia los andenes.</p>
+      <p class="reveal">Preguntó a varios conductores reunidos junto a unos autobuses.</p>
+      <p class="reveal">—Perdone, ¿el que va a…?</p><p class="reveal">Uno señaló vagamente.</p><p class="reveal">—Busca el del aeropuerto.</p><p class="reveal">—¿Pero sale de aquí?</p><p class="reveal">Otro conductor intervino:</p><p class="reveal">—Del aeropuerto.</p><p class="reveal">—Sí. Pero ¿dónde está?</p><p class="reveal">—Por allí.</p>
+      <p class="reveal">«Por allí» era una unidad oficial de distancia.</p>
+      <p class="reveal">Paco echó a andar.</p>
+      <p class="reveal">Encontró el autobús cuando prácticamente había llegado la hora de salida. Subió el escalón, dijo el destino y sacó la tarjeta.</p>
+      <p class="reveal">El conductor negó con la cabeza.</p><p class="reveal">—Solo efectivo.</p>
+      <p class="reveal">Paco miró la tarjeta.</p><p class="reveal">Miró al conductor.</p><p class="reveal">Volvió a mirar la tarjeta por si durante los dos segundos anteriores se hubiera convertido en un billete de veinte euros.</p>
+      <p class="reveal">—¿No se puede pagar con tarjeta?</p><p class="reveal">—No.</p><p class="reveal">—¿Y con el móvil?</p><p class="reveal">—No.</p><p class="reveal">—¿Bizum?</p>
+      <p class="reveal">El conductor lo miró.</p><p class="reveal">Aquello ya era una provocación tecnológica.</p><p class="reveal">—Efectivo.</p>
+      <p class="reveal">Paco se apartó para dejar subir a los demás.</p>
+      <p class="reveal">Había conseguido llegar hasta el autobús exacto, a la hora exacta, con dinero suficiente, una tarjeta perfectamente válida, un teléfono inteligente, una cuenta bancaria operativa y voluntad inequívoca de pagar.</p>
+      <p class="reveal">No podía viajar.</p><p class="reveal">El sistema funcionaba.</p>
+      <p class="reveal">Entonces oyó una voz detrás.</p><p class="reveal">—¿Tienes Bizum?</p>
+      <p class="reveal">Se volvió.</p><p class="reveal">Era una muchacha.</p><p class="reveal">—Sí.</p><p class="reveal">—Pues yo te lo pago y me haces un Bizum.</p>
+      <p class="reveal">Paco tardó un segundo en procesar el procedimiento.</p><p class="reveal">—¿De verdad?</p><p class="reveal">—Claro.</p>
+      <p class="reveal">La muchacha entregó el dinero al conductor.</p><p class="reveal">El conductor entregó el billete.</p><p class="reveal">Paco recibió el billete.</p><p class="reveal">La economía mundial siguió funcionando.</p>
+      <p class="reveal">—Dime cuánto.</p><p class="reveal">Ella se lo dijo.</p><p class="reveal">Paco abrió Bizum.</p><p class="reveal">—¿Tu teléfono?</p><p class="reveal">Se lo dio.</p><p class="reveal">Hizo la transferencia.</p>
+      <p class="reveal">El autobús arrancó.</p><p class="reveal">Ella viajaba con una amiga.</p><p class="reveal">Paco se sentó en la misma fila, al otro lado del pasillo.</p><p class="reveal">No inmediatamente al lado.</p><p class="reveal">La gratitud también tiene normas de urbanidad.</p>
+      <p class="reveal">Se llamaba Rebeca.</p>
+      <p class="reveal">Tenía veintiséis años, había nacido en Brasil, estudiaba Ingeniería Electrónica, trabajaba por internet y viajaba con una amiga.</p>
+      <p class="reveal">Esos eran los datos.</p><p class="reveal">Paco era un hombre acostumbrado a los datos.</p><p class="reveal">Los datos tranquilizan porque caben en una casilla.</p>
+      <p class="reveal">Nombre.</p><p class="reveal">Edad.</p><div class="age-mirror reveal" aria-label="Veintiséis. Paco tenía sesenta y dos.">
+        <span class="age age-left">Veintiséis.</span>
+        <span class="age-axis" aria-hidden="true"></span>
+        <span class="age age-right">Paco tenía sesenta y dos.</span>
+      </div><p class="reveal">Estudios.</p><p class="reveal">Profesión.</p><p class="reveal">Nacionalidad.</p>
+      <p class="reveal">Pero Rebeca no cabía.</p>
+      <p class="reveal">Era muy hermosa.</p><p class="reveal">Morena. Una cara limpia de artificio. Una manera tranquila de estar allí.</p>
+      <p class="reveal">Y los ojos.</p><p class="reveal">Había en ellos algo que Paco no supo nombrar.</p><p class="reveal">No eran grandes ni pequeños, claros ni oscuros de una manera que pudiera anotarse.</p><p class="reveal">Le parecieron exactos.</p><p class="reveal">Como si alguien hubiera tenido una sola oportunidad de hacerlos.</p><p class="reveal">Ojos de estatua.</p><p class="reveal">No por inmóviles.</p><p class="reveal">Todo lo contrario.</p><p class="reveal">Por esa perfección de algunas esculturas antiguas en las que la piedra parece a punto de mirar.</p>
+      <p class="reveal">Hablaron durante el viaje.</p><p class="reveal">Paco procuró no mirarla demasiado.</p><p class="reveal">A cierta edad uno aprende que mirar también puede resultar una forma de torpeza.</p>
+      <p class="reveal">La amiga intervenía alguna vez.</p><p class="reveal">Rebeca reía.</p><p class="reveal">Hablaron de estudios, trabajos, ciudades y viajes.</p>
+      <p class="reveal">Cuando Paco hablaba, Rebeca lo miraba.</p><p class="reveal">No consultaba el teléfono.</p><p class="reveal">No buscaba con los ojos una conversación mejor.</p><p class="reveal">Lo escuchaba.</p>
+      <p class="reveal">Cuando llegó la parada de Paco, se levantó.</p><p class="reveal">—Bueno, muchísimas gracias otra vez.</p><p class="reveal">—Nada.</p><p class="reveal">Se despidió también de la amiga.</p><p class="reveal">—Que tengáis buen viaje.</p>
+      <p class="reveal">Bajó.</p><p class="reveal">El autobús continuó.</p><p class="reveal">Paco fue a recoger el vehículo por el que había hecho todo aquel trayecto.</p><p class="reveal">Pensó que ahí terminaba la historia.</p><p class="reveal">Era lo normal.</p>
+      <p class="reveal">Poco después sonó el teléfono.</p><p class="reveal">Número desconocido.</p><p class="reveal">—¿Sí?</p><p class="reveal">—Hola. Soy Rebeca.</p>
+      <p class="reveal">Paco sonrió antes de saber por qué llamaba.</p><p class="reveal">—¿Rebeca?</p><p class="reveal">—La del autobús.</p><p class="reveal">La del autobús.</p><p class="reveal">Como si fuera posible confundirla.</p>
+      <p class="reveal">—Te has dejado una tarjeta.</p><p class="reveal">Paco buscó la cartera.</p><p class="reveal">La abrió.</p><p class="reveal">Faltaba.</p><p class="reveal">—La encontré donde estabas sentado. La tengo yo.</p>
+      <p class="reveal">Paco volvió a mirar dentro de la cartera.</p><p class="reveal">No estaba.</p><p class="reveal">Anularla.</p><p class="reveal">Pedir otra.</p><p class="reveal">Esperar.</p><p class="reveal">Activarla.</p><p class="reveal">Cambiar algunos pagos.</p>
+      <p class="reveal">O dejarla en manos de una desconocida que ya tenía su número de teléfono y su tarjeta de crédito.</p>
+      <p class="reveal">—Eres mi ángel de la guarda.</p><p class="reveal">Rebeca se rio.</p><p class="reveal">—Guárdamela, por favor. Cuando vuelva quedamos y me la das.</p><p class="reveal">—Vale.</p>
+      <p class="reveal">Antes de llamar, Rebeca ya le había escrito por WhatsApp.</p><p class="reveal">Paco miró el número.</p><p class="reveal">El Bizum.</p>
+      <p class="reveal">Quedaron en verse cuando regresara.</p><p class="reveal">Nada más.</p><p class="reveal">Una devolución.</p><p class="reveal">Una tarjeta.</p><p class="reveal">Un café quizá.</p>
+      <section class="paris-section" data-tone="paris">
+      <p class="reveal">Dos días después vibró el teléfono.</p><p class="reveal">Era un mensaje de Rebeca.</p><p class="reveal">Paco lo abrió.</p><p class="reveal">Un par de frases sueltas y una fotografía.</p><p class="reveal">La Torre Eiffel.</p><p class="reveal">Nada más.</p><p class="reveal">Ni rastro de ella en la imagen.</p>
+      <p class="reveal">Paco estudió la foto.</p><p class="reveal">La amplió con los dedos buscando un reflejo, un detalle.</p><p class="reveal">Nada.</p>
+      <p class="reveal">Contestó con cortesía, esperando que lo estuvieran pasando bien.</p><p class="reveal">Rebeca respondió.</p><p class="reveal">Se contestaron un par de veces más.</p>
+      <p class="reveal">Paco escribió un mensaje más largo.</p><p class="reveal">Lo borró.</p><p class="reveal">Escribió otro distinto.</p><p class="reveal">También lo borró.</p>
+      <p class="reveal">Dejó el aparato sobre la mesa, boca abajo.</p><p class="reveal">A los pocos segundos volvió a darle la vuelta.</p><p class="reveal">La estructura de hierro seguía allí.</p><p class="reveal">Rebeca no.</p>
+      <p class="reveal">Recordó de golpe sus ojos.</p><p class="reveal">Los ojos de estatua.</p>
+      <p class="reveal">Pocos días antes aquella mujer no existía en su mapa.</p><p class="reveal">Luego había preguntado:</p><p class="reveal">—¿Tienes Bizum?</p>
+      <p class="reveal">Ahora estaba en París y llevaba su tarjeta de crédito en el bolso.</p>
+      <p class="reveal">Ese era el gran defecto de las casualidades:</p><p class="reveal">no tenían ninguna obligación de repetirse.</p>
+      </section>
+      <section class="closing-section" data-tone="closing">
+      <p class="reveal">Habían quedado en verse a su regreso.</p><p class="reveal">Un trámite.</p><p class="reveal">Ella le devolvería el plástico.</p><p class="reveal">Probablemente tomarían un café por compromiso.</p><p class="reveal">Hablarían un rato de cosas previsibles.</p><p class="reveal">Después cada uno retomaría su biografía intacta.</p><p class="reveal">Era lo razonable.</p>
+      <p class="reveal">Paco miró la pantalla iluminada.</p><p class="reveal">Hasta esa tarde su única preocupación había sido recuperar la tarjeta.</p><p class="reveal hinge">Ahora le inquietaba recuperar solamente la tarjeta.</p>
+      <p class="reveal">Anticipó el encuentro.</p><p class="reveal">Rebeca abriendo el bolso.</p><p class="reveal">Buscando en un compartimento.</p><p class="reveal">—Toma.</p><p class="reveal">—Muchísimas gracias.</p>
+      <p class="reveal">Un rato de charla.</p><p class="reveal">Una taza vacía sobre la mesa.</p><p class="reveal">El teléfono de Rebeca vibraría.</p><p class="reveal">Ella miraría la pantalla.</p><p class="reveal">—Bueno, me tengo que ir.</p><p class="reveal">Y ya está.</p>
+      <p class="reveal">Paco bloqueó el teléfono.</p><p class="reveal">Esta vez tardó algo más en volver a cogerlo.</p><p class="reveal">No escribió.</p><p class="reveal pre-final">La torre seguía allí.</p><p class="reveal final-line">Los ojos no.</p>
+      </section>
     </article>
-    <footer>Paco</footer>
   </main>
+
+  <script>
+    (() => {
+      const items = [...document.querySelectorAll('.reveal')];
+      const io = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            io.unobserve(entry.target);
+          }
+        }
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+      items.forEach(el => io.observe(el));
+
+      const toneSections = [...document.querySelectorAll('[data-tone]')];
+      const toneObserver = new IntersectionObserver(entries => {
+        const visible = entries
+          .filter(e => e.isIntersecting)
+          .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+        document.body.classList.remove('tone-paris','tone-closing');
+        if (visible) document.body.classList.add('tone-' + visible.target.dataset.tone);
+      }, { threshold:[0.18,0.45,0.7] });
+      toneSections.forEach(el => toneObserver.observe(el));
+
+      const bar = document.querySelector('.progress i');
+      const updateProgress = () => {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        const ratio = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+        bar.style.height = (ratio * 100) + '%';
+      };
+      addEventListener('scroll', updateProgress, { passive:true });
+      addEventListener('resize', updateProgress);
+      updateProgress();
+    })();
+  </script>
 </body>
 </html>
