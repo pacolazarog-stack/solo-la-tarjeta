@@ -477,26 +477,32 @@ main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 31vh}
       ctx.globalCompositeOperation='screen';
 
       const mobileVisual=innerWidth<=620;
-      const kP=mobileVisual?6.6:6.8;
-      const kRStart=mobileVisual?13.2:10.6;
-      const kR=lerp(kRStart,kP,state.harmony);
-      const phaseGap=Math.PI*(mobileVisual?1.34:1.08)*(1-state.harmony);
-      const separation=h*(mobileVisual?.135:.085)*(1-state.lock);
+      const k=mobileVisual?6.6:6.8;
+
+      // Es la misma onda en dos presencias: idéntica frecuencia y amplitud.
+      // Antes del acoplamiento se distingue por el desfase y la separación,
+      // que oscilan con suavidad; al final ambas coinciden exactamente.
+      const preCoupling=1-state.harmony;
+      const phaseDance=Math.sin(phase*.72)*Math.PI*(mobileVisual?.22:.14)*preCoupling;
+      const phaseGap=(Math.PI*(mobileVisual?1.18:1.02)*preCoupling)+phaseDance;
+      const separationBase=h*(mobileVisual?.135:.085)*(1-state.lock);
+      const separationDance=Math.sin(phase*.46)*h*(mobileVisual?.016:.010)*preCoupling;
+      const separation=Math.max(0,separationBase+separationDance);
       const waveAmp=h*(mobileVisual?.056:.037);
 
       const drawWave=kind=>{
         ctx.beginPath();
         for(let x=0;x<=w;x+=4){
           const t=x/w;
-          const pWave=Math.sin(t*kP*Math.PI*2+phase);
-          const rWave=Math.sin(t*kR*Math.PI*2+phase-phaseGap);
+          const pWave=Math.sin(t*k*Math.PI*2+phase);
+          const rWave=Math.sin(t*k*Math.PI*2+phase-phaseGap);
           const wave=kind==='p'?pWave:rWave;
           const y0=h*.50+(kind==='p'?-separation:separation);
           const y=y0+wave*waveAmp;
           if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
         }
         const lockEmphasis=.34+.66*state.lock;
-        const alpha=Math.min(.96,state.waves*(mobileVisual?(.66+.28*lockEmphasis):(.34+.34*lockEmphasis)));
+        const alpha=Math.min(.98,state.waves*(mobileVisual?(.74+.22*lockEmphasis):(.46+.28*lockEmphasis)));
         ctx.lineWidth=mobileVisual?(2.45+state.lock*1.25):(1.25+state.lock*.85);
         ctx.strokeStyle=kind==='p'
           ?(mobileVisual?`rgba(142,214,255,${alpha})`:`rgba(174,215,236,${alpha})`)
@@ -566,8 +572,8 @@ main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 31vh}
           let constructiveSum=0,samples=0;
           for(let x=0;x<=w;x+=6){
             const t=x/w;
-            const pWave=Math.sin(t*kP*Math.PI*2+phase+i*.05);
-            const rWave=Math.sin(t*kR*Math.PI*2+phase-phaseGap+i*.05);
+            const pWave=Math.sin(t*k*Math.PI*2+phase+i*.05);
+            const rWave=Math.sin(t*k*Math.PI*2+phase-phaseGap+i*.05);
             const constructive=(1+pWave*rWave)/2;
             const residual=(1-state.lock)*(pWave+rWave)*h*.010;
             const y=baseY+i*gap+residual;
@@ -610,8 +616,10 @@ main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 31vh}
       // después convergen, entran en fase y sólo entonces llega el big bang.
       const blackIn=smooth(clamp((p-(mobile?.01:.02))/(mobile?.20:.16)));
 
-      const wavesIn=smooth(clamp((p-(mobile?.11:.18))/(mobile?.11:.08)));
-      const harmony=smooth(clamp((p-(mobile?.26:.28))/(mobile?.43:.34)));
+      // La onda doble está presente desde el primer instante perceptible del tránsito.
+      // No aparece tarde: nace con la caída al negro y permanece hasta la implosión.
+      const wavesIn=smooth(clamp((p-(mobile?.015:.03))/(mobile?.055:.06)));
+      const harmony=smooth(clamp((p-(mobile?.30:.28))/(mobile?.39:.34)));
       const lockIn=smooth(clamp((p-(mobile?.69:.56))/(mobile?.10:.075)));
       const lockOut=1-smooth(clamp((p-(mobile?.84:.735))/(mobile?.05:.035)));
       const lock=Math.max(0,lockIn*lockOut);
@@ -631,7 +639,11 @@ main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 31vh}
       const white=Math.max(0,whiteIn*whiteOut);
 
       const aftertone=smooth(clamp((p-(mobile?.955:.90))/(mobile?.045:.10)));
-      const wavesOut=1-smooth(clamp((p-(mobile?.83:.725))/(mobile?.04:.025)));
+
+      // Las ondas no se desvanecen antes del acontecimiento:
+      // continúan visibles hasta la implosión y desaparecen prácticamente de golpe.
+      const implodeAt=mobile?.848:.733;
+      const wavesOut=1-smooth(clamp((p-implodeAt)/(mobile?.010:.012)));
       const pulse=smooth(clamp((p-(mobile?.975:.96))/(mobile?.025:.04)));
 
       // El firmamento acompaña casi todo el baile y se extingue al producirse la explosión.
