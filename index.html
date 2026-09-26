@@ -77,20 +77,23 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
 .opening-section p{margin-bottom:1.76em}
 .opening-ramp{margin:0 0 18vh;max-width:36rem}
 .opening-ramp p{margin:0!important}
-.opening-name{display:flex;align-items:flex-end;max-width:20ch;font-weight:500;line-height:1.08;letter-spacing:.012em;transform-origin:left bottom}
-.opening-name-1{min-height:34svh;font-size:clamp(1.55rem,3.4vw,2.15rem);letter-spacing:.026em}
-.opening-name-2{min-height:24svh;font-size:clamp(1.85rem,4.1vw,2.62rem);letter-spacing:.018em}
-.opening-name-3{min-height:38svh;font-size:clamp(2.18rem,5.15vw,3.35rem);line-height:1.04;letter-spacing:.006em}
+.opening-name-evolution{height:148svh;position:relative}
+.opening-name-line{position:sticky;top:43vh;max-width:23ch;font-size:clamp(1.78rem,4.1vw,2.7rem);font-weight:500;line-height:1.08;letter-spacing:.008em;white-space:nowrap}
+.name-paco{opacity:1}
+.name-olmo,.name-males{display:inline-block;opacity:var(--name-opacity,0);filter:blur(var(--name-blur,5px));transform:translateX(var(--name-shift,8px));transition:none}
+.name-olmo{opacity:var(--name-olmo,0);filter:blur(var(--name-olmo-blur,5px));transform:translateX(var(--name-olmo-shift,8px))}
+.name-males{opacity:var(--name-males,0);filter:blur(var(--name-males-blur,5px));transform:translateX(var(--name-males-shift,8px))}
+.name-period{display:inline-block;opacity:var(--name-period,.18)}
 .opening-phrase{max-width:27ch;font-size:clamp(1.18rem,2.35vw,1.46rem);line-height:1.46;letter-spacing:.003em}
-.opening-phrase-1{min-height:30svh;display:flex;align-items:flex-end}
-.opening-phrase-2{min-height:26svh;display:flex;align-items:center;color:rgba(30,28,25,.80);font-style:italic}
-.opening-tasks{margin-top:4vh;padding-left:clamp(1.1rem,3vw,2.2rem);max-width:29ch;border-left:1px solid rgba(30,28,25,.12)}
+.opening-phrase-1{min-height:34svh;display:flex;align-items:flex-end}
+.opening-phrase-2{min-height:30svh;display:flex;align-items:center;color:rgba(30,28,25,.80);font-style:italic}
+.opening-tasks{margin-top:5vh;padding-left:clamp(1.1rem,3vw,2.2rem);max-width:29ch;border-left:1px solid rgba(30,28,25,.10)}
 .opening-task-line{font-size:clamp(1.08rem,2.05vw,1.31rem);line-height:1.45;letter-spacing:.002em;color:rgba(30,28,25,.90)}
-.opening-task-1{min-height:19svh}
-.opening-task-2{min-height:22svh;padding-left:clamp(.3rem,1.4vw,.85rem)}
-.opening-task-3{min-height:28svh;padding-left:clamp(.7rem,2.4vw,1.5rem)}
-.opening-name.reveal,.opening-phrase.reveal,.opening-task-line.reveal{transform:translateY(16px);filter:blur(1.45px);transition:opacity 1.45s cubic-bezier(.2,.72,.2,1),transform 1.45s cubic-bezier(.2,.72,.2,1),filter 1.45s ease}
-.opening-name.reveal.visible,.opening-phrase.reveal.visible,.opening-task-line.reveal.visible{transform:none;filter:none}
+.opening-task-1{min-height:20svh}
+.opening-task-2{min-height:23svh;padding-left:clamp(.3rem,1.4vw,.85rem)}
+.opening-task-3{min-height:29svh;padding-left:clamp(.7rem,2.4vw,1.5rem)}
+.opening-phrase.reveal,.opening-task-line.reveal{transform:translateY(14px);filter:blur(1.25px);transition:opacity 1.45s cubic-bezier(.2,.72,.2,1),transform 1.45s cubic-bezier(.2,.72,.2,1),filter 1.45s ease}
+.opening-phrase.reveal.visible,.opening-task-line.reveal.visible{transform:none;filter:none}
 .opening-after-ramp{margin-top:12vh!important;margin-bottom:2.5em!important}
 .opening-section .opening-breath{margin-bottom:3.45em}
 .opening-section .opening-machine{margin-top:.35em;margin-bottom:2.65em}
@@ -150,17 +153,16 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   .hero-inner{top:150svh;width:min(calc(100% - 30px),900px)}
   .opening-section p{margin-bottom:1.58em}
   .opening-ramp{margin-bottom:18vh;max-width:100%}
-  .opening-name-1{min-height:36svh;font-size:clamp(1.65rem,7vw,2.15rem)}
-  .opening-name-2{min-height:26svh;font-size:clamp(1.95rem,7.8vw,2.55rem)}
-  .opening-name-3{min-height:42svh;font-size:clamp(2.18rem,9vw,3rem);max-width:12ch}
+  .opening-name-evolution{height:168svh}
+  .opening-name-line{top:42vh;font-size:clamp(1.72rem,7.4vw,2.42rem);max-width:none;white-space:normal}
   .opening-phrase{font-size:clamp(1.13rem,5.05vw,1.36rem)}
-  .opening-phrase-1{min-height:32svh}
-  .opening-phrase-2{min-height:28svh}
-  .opening-tasks{margin-top:5vh;padding-left:1rem;max-width:25ch}
+  .opening-phrase-1{min-height:36svh}
+  .opening-phrase-2{min-height:32svh}
+  .opening-tasks{margin-top:6vh;padding-left:1rem;max-width:25ch}
   .opening-task-line{font-size:clamp(1.08rem,4.75vw,1.28rem)}
-  .opening-task-1{min-height:21svh}
-  .opening-task-2{min-height:24svh;padding-left:.35rem}
-  .opening-task-3{min-height:30svh;padding-left:.8rem}
+  .opening-task-1{min-height:22svh}
+  .opening-task-2{min-height:25svh;padding-left:.35rem}
+  .opening-task-3{min-height:31svh;padding-left:.8rem}
   .opening-after-ramp{margin-top:13vh!important;margin-bottom:2.25em!important}
   .opening-section .opening-breath{margin-bottom:3.05em}
   .opening-section .opening-machine{margin-bottom:2.35em}
@@ -258,9 +260,11 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     <article>
       <section class="opening-section">
       <div class="opening-ramp" aria-label="Entrada de Paco Olmo de Males">
-        <p class="reveal opening-name opening-name-1">Paco.</p>
-        <p class="reveal opening-name opening-name-2">Paco Olmo.</p>
-        <p class="reveal opening-name opening-name-3">Paco Olmo de Males.</p>
+        <div class="opening-name-evolution" data-opening-name>
+          <p class="opening-name-line">
+            <span class="name-paco">Paco</span><span class="name-olmo"> Olmo</span><span class="name-males"> de Males</span><span class="name-period">.</span>
+          </p>
+        </div>
 
         <p class="reveal opening-phrase opening-phrase-1">Bajó del metro.</p>
         <p class="reveal opening-phrase opening-phrase-2">Con una misión sencilla.</p>
@@ -594,6 +598,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   }
 
   const hero=document.querySelector('.hero');
+  const openingName=document.querySelector('[data-opening-name]');
   const twoDays=document.querySelector('[data-two-days]');
   const paris=document.querySelector('.paris-section');
   const closing=document.querySelector('.closing-section');
@@ -774,6 +779,22 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     ctx.restore();
   };
 
+  const updateOpeningName=()=>{
+    if(!openingName) return;
+    const p=localProgress(openingName);
+    const olmo=smoother(clamp((p-.16)/.30));
+    const males=smoother(clamp((p-.50)/.34));
+    const period=smoother(clamp((p-.78)/.18));
+
+    openingName.style.setProperty('--name-olmo',olmo.toFixed(3));
+    openingName.style.setProperty('--name-olmo-blur',(5*(1-olmo)).toFixed(2)+'px');
+    openingName.style.setProperty('--name-olmo-shift',(8*(1-olmo)).toFixed(2)+'px');
+    openingName.style.setProperty('--name-males',males.toFixed(3));
+    openingName.style.setProperty('--name-males-blur',(5*(1-males)).toFixed(2)+'px');
+    openingName.style.setProperty('--name-males-shift',(8*(1-males)).toFixed(2)+'px');
+    openingName.style.setProperty('--name-period',(.18+.82*period).toFixed(3));
+  };
+
   const setVisualState=()=>{
     const hp=localProgress(hero);
     const cp=localProgress(twoDays);
@@ -872,6 +893,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     ticking=false;
     applyBaseWorld();
     updateProgress();
+    updateOpeningName();
     setVisualState();
   };
   const requestUpdate=()=>{
