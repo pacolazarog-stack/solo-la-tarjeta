@@ -32,7 +32,59 @@
       transition:background-color 1.5s ease;
       overflow-x:hidden;
     }
+    body:not(.entered) { overflow:hidden; }
     body.tone-paris { background:var(--paper-paris); }
+
+    .entry-gate {
+      position:fixed;
+      inset:0;
+      z-index:999;
+      display:grid;
+      place-items:center;
+      background:var(--paper);
+      opacity:1;
+      visibility:visible;
+      transition:opacity 1.25s ease, visibility 1.25s ease;
+    }
+    body.entered .entry-gate {
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+    .entry-button {
+      appearance:none;
+      border:0;
+      background:transparent;
+      color:var(--ink);
+      font:inherit;
+      font-size:clamp(1rem,2vw,1.14rem);
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      padding:18px 22px;
+      cursor:pointer;
+      position:relative;
+    }
+    .entry-button::after {
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:8px;
+      width:28px;
+      height:1px;
+      background:currentColor;
+      opacity:.34;
+      transform:translateX(-50%) scaleX(.45);
+      transition:transform .45s ease, opacity .45s ease;
+    }
+    .entry-button:hover::after,
+    .entry-button:focus-visible::after {
+      transform:translateX(-50%) scaleX(1);
+      opacity:.62;
+    }
+    .entry-button:focus-visible {
+      outline:1px solid rgba(30,28,25,.28);
+      outline-offset:8px;
+    }
     body.tone-closing { background:var(--paper-closing); }
     .ambient {
       position:fixed; inset:0; pointer-events:none; z-index:-2; opacity:.5;
@@ -237,7 +289,7 @@
     }
     @media print {
       body { background:#fff!important; }
-      .ambient,.progress,.scroll-cue { display:none; }
+      .ambient,.progress,.scroll-cue,.entry-gate,#soundtrack { display:none; }
       .hero { min-height:auto; padding:1.5cm 0 2cm; }
       main { width:100%; padding:0; }
       .reveal { opacity:1; transform:none; filter:none; }
@@ -249,6 +301,11 @@
   </style>
 </head>
 <body>
+  <div class="entry-gate" id="entryGate">
+    <button class="entry-button" id="enterButton" type="button" aria-label="Entrar en SOLO LA TARJETA">Entrar</button>
+  </div>
+  <audio id="soundtrack" preload="auto" src="solo-la-tarjeta-fondo.mp3"></audio>
+
   <div class="ambient" aria-hidden="true"></div>
   <div class="progress" aria-hidden="true"><i></i></div>
 
@@ -513,6 +570,32 @@
 
   <script>
     (() => {
+      const enterButton=document.getElementById('enterButton');
+      const soundtrack=document.getElementById('soundtrack');
+
+      const enter=async()=> {
+        enterButton.disabled=true;
+        soundtrack.currentTime=0;
+        soundtrack.volume=0;
+        try {
+          await soundtrack.play();
+          const target=.14;
+          const steps=36;
+          let step=0;
+          const fade=setInterval(()=>{
+            step++;
+            soundtrack.volume=Math.min(target,target*(step/steps));
+            if(step>=steps) clearInterval(fade);
+          },80);
+        } catch (_) {
+          /* La lectura debe abrirse aunque el navegador rechace el audio. */
+        }
+        document.body.classList.add('entered');
+        setTimeout(()=>document.getElementById('entryGate')?.remove(),1500);
+      };
+
+      enterButton.addEventListener('click',enter);
+
       const items=[...document.querySelectorAll('.reveal')];
       const io=new IntersectionObserver(entries=>{
         for(const entry of entries){
