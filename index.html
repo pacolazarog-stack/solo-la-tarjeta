@@ -423,7 +423,17 @@
     }
 
     .paris-section {
-      position:relative; margin:7.5em -4vw 6.7em; padding:5.2em 4vw 4.6em;
+      position:relative;
+      margin:0 -4vw 6.7em;
+      padding:28vh 4vw 4.6em;
+      background:
+        linear-gradient(
+          to bottom,
+          #e3e8ed 0%,
+          #e8ebec 24%,
+          #eeece8 46%,
+          var(--paper) 72%
+        );
     }
     .paris-section::before {
       content:""; position:absolute; left:50%; top:0; width:1px; height:72px;
@@ -518,7 +528,18 @@
       .two-days-rainbow {
         filter:blur(12px) saturate(.9);
       }
-      .paris-section { margin:6em 0 5.8em; padding:4.6em 0 3.5em; }
+      .paris-section {
+        margin:0 0 5.8em;
+        padding:24vh 0 3.5em;
+        background:
+          linear-gradient(
+            to bottom,
+            #e3e8ed 0%,
+            #e8ebec 26%,
+            #eeece8 48%,
+            var(--paper) 74%
+          );
+      }
       .paris-section::after { inset:0 -30px; }
       .tower-photo { width:min(88vw,460px); }
       .closing-section { margin-top:6em; padding-top:3.6em; }
@@ -905,11 +926,11 @@
 
           // Blanco máximo: el día de recibir noticias.
           const whiteIn=smooth(clamp((p-.72)/.14));
-          const whiteOut=1-smooth(clamp((p-.86)/.12));
+          const whiteOut=1-smooth(clamp((p-.90)/.16));
           const white=Math.max(0,whiteIn*whiteOut);
 
-          // Tras el blanco, transición paulatina al tono exacto de la sección siguiente.
-          const aftertone=smooth(clamp((p-.84)/.16));
+          // Tras el blanco, el día se enfría poco a poco hasta acompasarse con París.
+          const aftertone=Math.pow(smooth(clamp((p-.80)/.20)),.9);
 
           // Pulsación muy tardía, justo antes de la noticia.
           const pulse=smooth(clamp((p-.92)/.08));
