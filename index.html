@@ -15,6 +15,10 @@
   --paper:#f1ede5;--paper-paris:#e9edf2;--paper-closing:#f7f5f0;
   --ink:#1e1c19;--muted:#746e65;--reading:760px;
   --world-r:241;--world-g:237;--world-b:229;--world-glow:.46;
+  --dawn-dark:1;--dawn-glow:0;--night:0;--stars:0;--moon:0;--venus:0;
+  --sunset:0;--white:0;
+  --moon-x:0px;--moon-y:0px;--moon-size:86px;
+  --moon-cut-r:6;--moon-cut-g:13;--moon-cut-b:26;
   color-scheme:light
 }
 *{box-sizing:border-box}
@@ -22,9 +26,21 @@ html{scroll-behavior:smooth;background:var(--paper)}
 body{margin:0;color:var(--ink);background:var(--paper);font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia,"Times New Roman",serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 body:not(.entered){overflow:hidden}
 
-.world{position:fixed;inset:0;z-index:0;pointer-events:none;background:rgb(var(--world-r) var(--world-g) var(--world-b));overflow:hidden}
-.world-glow{position:absolute;inset:-12%;opacity:var(--world-glow);background:radial-gradient(72% 44% at 50% 8%,rgba(255,255,255,.82),transparent 72%),radial-gradient(42% 36% at 18% 78%,rgba(255,255,255,.16),transparent 72%),radial-gradient(46% 38% at 82% 74%,rgba(210,222,228,.12),transparent 76%);filter:blur(18px)}
-.world-vignette{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,.06),transparent 34%),radial-gradient(120% 90% at 50% 46%,transparent 54%,rgba(34,31,27,.025) 100%)}
+/* === ÚNICO SISTEMA VISUAL GLOBAL === */
+.world{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:rgb(var(--world-r) var(--world-g) var(--world-b));isolation:isolate}
+.world-dawn-dark,.world-dawn-glow,.world-sunset,.world-night,.world-stars,.world-white,.world-glow,.world-vignette{position:absolute;inset:0}
+.world-dawn-dark{z-index:1;opacity:var(--dawn-dark);background:radial-gradient(92% 54% at 50% 100%,rgba(117,94,119,.34),transparent 64%),linear-gradient(to bottom,#081222 0%,#17273e 42%,#465970 72%,#837986 100%)}
+.world-dawn-glow{z-index:2;opacity:var(--dawn-glow);background:radial-gradient(118% 62% at 50% 108%,rgba(255,221,171,.78) 0%,rgba(249,190,151,.36) 29%,rgba(232,174,157,.12) 51%,transparent 70%),linear-gradient(to bottom,rgba(137,167,188,.22),rgba(216,192,184,.20) 63%,rgba(247,226,191,.38))}
+.world-sunset{z-index:3;opacity:var(--sunset);background:radial-gradient(124% 64% at 50% 108%,rgba(255,191,127,.65) 0%,rgba(246,157,118,.34) 25%,transparent 52%),radial-gradient(90% 52% at 50% 18%,rgba(171,124,153,.24) 0%,transparent 72%),linear-gradient(to bottom,#eee7e2 0%,#dec9cc 25%,#cfa4ac 51%,#aa7a87 76%,#715568 100%)}
+.world-night{z-index:4;opacity:var(--night);background:radial-gradient(105% 58% at 50% 104%,rgba(65,48,81,.30) 0%,transparent 54%),linear-gradient(to bottom,#060d1a 0%,#09152a 39%,#14213b 69%,#29233d 100%)}
+.world-stars{z-index:5;opacity:var(--stars);background:radial-gradient(circle at 7% 14%,rgba(255,255,255,.94) 0 1px,transparent 1.9px),radial-gradient(circle at 16% 32%,rgba(255,255,255,.72) 0 1.2px,transparent 2.1px),radial-gradient(circle at 24% 18%,rgba(255,255,255,.88) 0 1px,transparent 1.8px),radial-gradient(circle at 31% 41%,rgba(255,255,255,.76) 0 1.1px,transparent 2px),radial-gradient(circle at 39% 12%,rgba(255,255,255,.96) 0 1.2px,transparent 2px),radial-gradient(circle at 47% 27%,rgba(255,255,255,.69) 0 1px,transparent 1.8px),radial-gradient(circle at 55% 16%,rgba(255,255,255,.92) 0 1.2px,transparent 2px),radial-gradient(circle at 63% 36%,rgba(255,255,255,.75) 0 1.1px,transparent 2px),radial-gradient(circle at 72% 13%,rgba(255,255,255,.90) 0 1.3px,transparent 2.1px),radial-gradient(circle at 81% 29%,rgba(255,255,255,.72) 0 1px,transparent 1.9px),radial-gradient(circle at 89% 17%,rgba(255,255,255,.96) 0 1.2px,transparent 2px),radial-gradient(circle at 11% 52%,rgba(255,255,255,.79) 0 1px,transparent 1.9px),radial-gradient(circle at 21% 63%,rgba(255,255,255,.94) 0 1.2px,transparent 2px),radial-gradient(circle at 34% 56%,rgba(255,255,255,.70) 0 1px,transparent 1.8px),radial-gradient(circle at 44% 71%,rgba(255,255,255,.92) 0 1.2px,transparent 2px),radial-gradient(circle at 58% 60%,rgba(255,255,255,.78) 0 1px,transparent 1.9px),radial-gradient(circle at 68% 69%,rgba(255,255,255,.95) 0 1.2px,transparent 2px),radial-gradient(circle at 79% 58%,rgba(255,255,255,.74) 0 1px,transparent 1.9px),radial-gradient(circle at 87% 66%,rgba(255,255,255,.90) 0 1.2px,transparent 2px),radial-gradient(circle at 93% 47%,rgba(255,255,255,.72) 0 1px,transparent 1.8px);filter:drop-shadow(0 0 7px rgba(255,255,255,.18))}
+.world-moon{position:absolute;z-index:6;top:10%;right:10%;width:var(--moon-size);height:var(--moon-size);border-radius:50%;opacity:var(--moon);transform:translate3d(var(--moon-x),var(--moon-y),0) rotate(-8deg);background:radial-gradient(circle at 42% 45%,#fff 0%,#faf9ee 62%,#e1e5ef 100%);box-shadow:0 0 22px rgba(216,225,247,.36),0 0 64px rgba(216,225,247,.18);overflow:hidden}
+.world-moon::after{content:"";position:absolute;top:-6%;bottom:-6%;left:31%;right:-22%;border-radius:50%;background:rgb(var(--moon-cut-r) var(--moon-cut-g) var(--moon-cut-b))}
+.world-venus{position:absolute;z-index:7;top:28%;right:28%;width:10px;height:10px;border-radius:50%;opacity:var(--venus);background:#fffdf0;box-shadow:0 0 7px 3px rgba(255,252,225,.94),0 0 22px 8px rgba(255,239,188,.54),0 0 48px 16px rgba(255,224,157,.22)}
+#globalWaveCanvas{position:absolute;inset:0;z-index:8;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;filter:blur(.55px) saturate(1.24) contrast(1.14)}
+.world-white{z-index:9;opacity:var(--white);background:#fff}
+.world-glow{z-index:10;opacity:var(--world-glow);background:radial-gradient(72% 44% at 50% 8%,rgba(255,255,255,.82),transparent 72%),radial-gradient(42% 36% at 18% 78%,rgba(255,255,255,.16),transparent 72%),radial-gradient(46% 38% at 82% 74%,rgba(210,222,228,.12),transparent 76%);filter:blur(18px)}
+.world-vignette{z-index:11;background:linear-gradient(to bottom,rgba(255,255,255,.035),transparent 34%),radial-gradient(120% 90% at 50% 46%,transparent 58%,rgba(34,31,27,.018) 100%)}
 
 .entry-gate{position:fixed;inset:0;z-index:999;display:grid;place-items:center;background:var(--paper);opacity:1;visibility:visible;transition:opacity 1.3s ease,visibility 1.3s ease}
 body.entered .entry-gate{opacity:0;visibility:hidden;pointer-events:none}
@@ -32,23 +48,19 @@ body.entered .entry-gate{opacity:0;visibility:hidden;pointer-events:none}
 .entry-button::after{content:"";position:absolute;left:50%;bottom:8px;width:28px;height:1px;background:currentColor;opacity:.34;transform:translateX(-50%) scaleX(.45);transition:transform .45s ease,opacity .45s ease}
 .entry-button:hover::after,.entry-button:focus-visible::after{transform:translateX(-50%) scaleX(1);opacity:.62}
 
-header,main,.progress{position:relative;z-index:1}
+header,main,.progress,.dusk-passage{position:relative;z-index:1}
 .progress{position:fixed;right:14px;top:12vh;width:1px;height:76vh;background:rgba(30,28,25,.09);z-index:30;pointer-events:none}
 .progress i{display:block;width:1px;height:0;background:rgba(30,28,25,.4)}
 
-/* === CANON 1 · AMANECER CONTINUO === */
+/* El amanecer solo aporta duración; el cielo sigue siendo el global */
 .hero{position:relative;height:560svh;text-align:center}
-.dawn-sky{position:sticky;top:0;width:100vw;height:100svh;margin-left:calc(50% - 50vw);overflow:hidden;pointer-events:none;background:linear-gradient(to bottom,#9bb7c9 0%,#c5d0d4 48%,#e5ded2 78%,#f1ede5 100%);opacity:var(--dawn-sky,1)}
-.dawn-sky::before{content:"";position:absolute;inset:0;opacity:var(--dawn-night,1);background:radial-gradient(85% 50% at 50% 96%,rgba(124,102,122,.34),transparent 62%),linear-gradient(to bottom,#0a1426 0%,#17263c 42%,#41526a 72%,#756d76 100%)}
-.dawn-sky::after{content:"";position:absolute;inset:0;opacity:var(--dawn-glow,0);background:radial-gradient(110% 58% at 50% 105%,rgba(255,215,164,.74) 0%,rgba(249,188,150,.32) 30%,transparent 64%),linear-gradient(to bottom,transparent 0 42%,rgba(225,164,150,.10) 64%,rgba(247,221,184,.38) 100%)}
-.hero-inner{position:absolute;z-index:3;top:175svh;left:50%;width:min(calc(100% - 40px),900px);transform:translateX(-50%);animation:heroIn 1.5s cubic-bezier(.2,.8,.2,1) both}
+.hero-inner{position:absolute;z-index:2;top:175svh;left:50%;width:min(calc(100% - 40px),900px);transform:translateX(-50%);animation:heroIn 1.5s cubic-bezier(.2,.8,.2,1) both}
 h1{margin:0;font-size:clamp(2.65rem,8vw,5.7rem);line-height:.92;font-weight:500;letter-spacing:.105em}
 .work-subtitle{margin-top:18px;font-family:Arial,Helvetica,sans-serif;font-size:clamp(.78rem,1.45vw,.92rem);font-weight:400;letter-spacing:.12em;color:rgba(30,28,25,.58)}
 .hairline{width:52px;height:1px;background:currentColor;opacity:.34;margin:30px auto 0}
 .title-flag{margin-top:24px;font-family:Arial,Helvetica,sans-serif;font-size:.68rem;letter-spacing:.28em;text-transform:lowercase;color:rgba(30,28,25,.46)}
 .scroll-cue{width:9px;height:9px;border-right:1px solid rgba(30,28,25,.42);border-bottom:1px solid rgba(30,28,25,.42);transform:rotate(45deg);margin:42px auto 0;animation:breathe 2.8s ease-in-out infinite}
 
-/* === LECTURA === */
 main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 31vh}
 article{font-size:clamp(1.13rem,2.15vw,1.34rem);line-height:1.72;letter-spacing:.002em;hyphens:none}
 p{margin:0 0 1.16em;hanging-punctuation:first last}
@@ -86,18 +98,8 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
 .card-photo.visible .photo-frame{transform:none;box-shadow:0 28px 84px rgba(32,27,22,.13)}
 .card-photo img{border-radius:20px}
 
-/* === CANON 2 · NOCHE / ONDAS ARMÓNICAS / IMPLOSIÓN / BIG BANG / BLANCO === */
+/* El tránsito central solo mide tiempo: todo se dibuja en .world */
 .two-days-passage{position:relative;height:760vh;margin:16vh 0 0}
-.two-days-sky{position:sticky;top:0;left:50%;width:100vw;height:100svh;margin-left:calc(50% - 50vw);overflow:hidden;pointer-events:none;isolation:isolate;background:transparent}
-.two-days-black,.two-days-white,.two-days-aftertone,.time-pulse{position:absolute;inset:0;pointer-events:none}
-.two-days-black{z-index:2;background:#000;opacity:var(--black,0)}
-.two-days-stars{position:absolute;inset:0;z-index:3;opacity:var(--stars-opacity,0);background:radial-gradient(circle at 7% 14%,rgba(255,255,255,.92) 0 1px,transparent 1.9px),radial-gradient(circle at 16% 32%,rgba(255,255,255,.72) 0 1.2px,transparent 2.1px),radial-gradient(circle at 24% 18%,rgba(255,255,255,.86) 0 1px,transparent 1.8px),radial-gradient(circle at 31% 41%,rgba(255,255,255,.75) 0 1.1px,transparent 2px),radial-gradient(circle at 39% 12%,rgba(255,255,255,.95) 0 1.2px,transparent 2px),radial-gradient(circle at 47% 27%,rgba(255,255,255,.68) 0 1px,transparent 1.8px),radial-gradient(circle at 55% 16%,rgba(255,255,255,.90) 0 1.2px,transparent 2px),radial-gradient(circle at 63% 36%,rgba(255,255,255,.74) 0 1.1px,transparent 2px),radial-gradient(circle at 72% 13%,rgba(255,255,255,.88) 0 1.3px,transparent 2.1px),radial-gradient(circle at 81% 29%,rgba(255,255,255,.70) 0 1px,transparent 1.9px),radial-gradient(circle at 89% 17%,rgba(255,255,255,.94) 0 1.2px,transparent 2px),radial-gradient(circle at 11% 52%,rgba(255,255,255,.78) 0 1px,transparent 1.9px),radial-gradient(circle at 21% 63%,rgba(255,255,255,.92) 0 1.2px,transparent 2px),radial-gradient(circle at 34% 56%,rgba(255,255,255,.68) 0 1px,transparent 1.8px),radial-gradient(circle at 44% 71%,rgba(255,255,255,.90) 0 1.2px,transparent 2px),radial-gradient(circle at 58% 60%,rgba(255,255,255,.76) 0 1px,transparent 1.9px),radial-gradient(circle at 68% 69%,rgba(255,255,255,.93) 0 1.2px,transparent 2px),radial-gradient(circle at 79% 58%,rgba(255,255,255,.72) 0 1px,transparent 1.9px),radial-gradient(circle at 87% 66%,rgba(255,255,255,.88) 0 1.2px,transparent 2px),radial-gradient(circle at 93% 47%,rgba(255,255,255,.70) 0 1px,transparent 1.8px);filter:drop-shadow(0 0 7px rgba(255,255,255,.16))}
-.two-days-moon{position:absolute;z-index:4;top:11%;right:12%;width:86px;height:86px;border-radius:50%;opacity:var(--moon-opacity,0);background:radial-gradient(circle at 42% 45%,#fff 0%,#f7f7ef 62%,#dfe4ef 100%);box-shadow:0 0 18px rgba(218,226,244,.28),0 0 48px rgba(218,226,244,.14);transform:translate3d(var(--moon-x,0px),var(--moon-y,0px),0) rotate(-8deg);overflow:hidden}.two-days-moon::after{content:"";position:absolute;inset:-4px -18px -4px 24px;border-radius:50%;background:#000}
-.wave-rainbow{position:absolute;inset:0;z-index:5;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;filter:blur(.75px) saturate(1.2) contrast(1.12)}
-.two-days-white{z-index:6;background:#fff;opacity:var(--white,0)}
-.two-days-aftertone{z-index:7;background:var(--paper-paris);opacity:var(--aftertone,0)}
-.time-pulse{z-index:8;left:8%;right:8%;top:63%;height:1px;inset:auto 8%;opacity:var(--pulse,0);transform:scaleX(var(--pulse-scale,.2));transform-origin:center;background:linear-gradient(90deg,transparent,rgba(65,94,104,.20) 22%,rgba(65,94,104,.42) 50%,rgba(65,94,104,.20) 78%,transparent)}
-.time-pulse::after{content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;border-radius:50%;background:rgba(65,94,104,.36);transform:translate(-50%,-50%) scale(var(--pulse-dot,.45))}
 
 .paris-section{position:relative;margin:0 0 8.5em;padding:30vh 0 5.2em;background:transparent}
 .tower-photo{margin:3.6em auto 4.6em;width:min(78vw,520px)}
@@ -111,14 +113,8 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
 .pre-final{margin-top:15.75em;margin-bottom:31.5em;color:#6f7478;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:.8em;font-weight:400;letter-spacing:.19em;text-transform:uppercase;line-height:1.35}
 .final-line{margin:0;padding:0 0 16vh;font-size:clamp(1.85rem,4.4vw,2.8rem);line-height:1.15;letter-spacing:.008em}
 
-/* === CANON 3 · ATARDECER CONTINUO HASTA NOCHE === */
-.dusk-passage{position:relative;width:100vw;height:1400svh;margin-left:calc(50% - 50vw);overflow:clip}
-.dusk-sky-full{position:sticky;top:0;width:100vw;height:100svh;z-index:1;overflow:hidden;isolation:isolate;background:#f7f5f0}
-.dusk-sky-full::after{content:"";position:absolute;inset:0;z-index:1;opacity:var(--dusk-sunset,0);background:radial-gradient(120% 62% at 50% 108%,rgba(255,188,126,.62) 0%,rgba(244,155,120,.31) 24%,transparent 50%),radial-gradient(88% 48% at 50% 20%,rgba(170,124,151,.22) 0%,transparent 70%),linear-gradient(to bottom,#eee7e1 0%,#ddc9ca 24%,#cda4aa 52%,#aa7b86 76%,#745869 100%)}
-.dusk-sky-full::before{content:"";position:absolute;inset:0;z-index:2;opacity:var(--dusk-night,0);background:radial-gradient(105% 56% at 50% 104%,rgba(62,47,77,.28) 0%,transparent 52%),linear-gradient(to bottom,#060d1a 0%,#0a162b 38%,#15223c 68%,#2a243e 100%)}
-.dusk-stars{position:absolute;inset:0;z-index:3;opacity:var(--dusk-stars,0);background:radial-gradient(circle at 9% 18%,rgba(255,255,255,.90) 0 1px,transparent 1.8px),radial-gradient(circle at 18% 36%,rgba(255,255,255,.72) 0 1px,transparent 1.8px),radial-gradient(circle at 28% 14%,rgba(255,255,255,.96) 0 1.1px,transparent 1.9px),radial-gradient(circle at 38% 28%,rgba(255,255,255,.70) 0 1px,transparent 1.8px),radial-gradient(circle at 49% 12%,rgba(255,255,255,.88) 0 1px,transparent 1.8px),radial-gradient(circle at 58% 33%,rgba(255,255,255,.78) 0 1px,transparent 1.8px),radial-gradient(circle at 69% 19%,rgba(255,255,255,.94) 0 1.1px,transparent 1.9px),radial-gradient(circle at 80% 38%,rgba(255,255,255,.74) 0 1px,transparent 1.8px),radial-gradient(circle at 91% 16%,rgba(255,255,255,.90) 0 1px,transparent 1.8px),radial-gradient(circle at 14% 61%,rgba(255,255,255,.75) 0 1px,transparent 1.8px),radial-gradient(circle at 33% 53%,rgba(255,255,255,.93) 0 1.1px,transparent 1.9px),radial-gradient(circle at 53% 67%,rgba(255,255,255,.71) 0 1px,transparent 1.8px),radial-gradient(circle at 73% 57%,rgba(255,255,255,.87) 0 1px,transparent 1.8px),radial-gradient(circle at 88% 69%,rgba(255,255,255,.80) 0 1px,transparent 1.8px);filter:drop-shadow(0 0 6px rgba(255,255,255,.22))}
-.dusk-moon{position:absolute;z-index:4;top:10%;right:10%;width:118px;height:118px;border-radius:50%;opacity:var(--dusk-moon,0);background:radial-gradient(circle at 42% 45%,#fff 0%,#faf9ee 62%,#e1e5ef 100%);box-shadow:0 0 24px rgba(215,225,249,.34),0 0 68px rgba(215,225,249,.18);transform:translateY(var(--dusk-moon-rise,22px)) rotate(-8deg);overflow:hidden}.dusk-moon::after{content:"";position:absolute;inset:-5px -24px -5px 32px;border-radius:50%;background:#081226}
-.dusk-venus{position:absolute;z-index:5;top:28%;right:28%;width:10px;height:10px;border-radius:50%;opacity:var(--dusk-venus,0);background:#fffdf0;box-shadow:0 0 7px 3px rgba(255,252,225,.92),0 0 22px 8px rgba(255,239,188,.52),0 0 46px 16px rgba(255,224,157,.20);transform:translateY(var(--dusk-venus-rise,14px))}
+/* El atardecer final solo mide tiempo: continúa el mismo cielo global */
+.dusk-passage{width:100vw;height:1400svh;margin-left:calc(50% - 50vw)}
 
 @keyframes heroIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
 @keyframes breathe{0%,100%{opacity:.22;transform:translateY(0) rotate(45deg)}50%{opacity:.72;transform:translateY(8px) rotate(45deg)}}
@@ -144,8 +140,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   .age-right{order:3}
   .card-photo{width:min(76vw,320px)}
   .two-days-passage{height:900vh;margin:16vh 0 0}
-  .two-days-moon{top:10%;right:10%;width:72px;height:72px}
-  .wave-rainbow{filter:blur(.45px) saturate(1.28) contrast(1.16)}
+  #globalWaveCanvas{filter:blur(.35px) saturate(1.30) contrast(1.18)}
   .paris-section{margin:0 0 6.6em;padding:26vh 0 4em}
   .tower-photo{width:min(88vw,460px)}
   .chance-end{margin-bottom:14vh}
@@ -153,8 +148,6 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   .pre-final{margin-top:12.75em;margin-bottom:25.5em}
   .final-line{padding-bottom:14vh}
   .dusk-passage{height:1200svh}
-  .dusk-moon{top:9%;right:8%;width:104px;height:104px}
-  .dusk-venus{top:27%;right:27%;width:11px;height:11px}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -165,7 +158,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
 }
 @media print{
   body{background:#fff!important}
-  .world,.progress,.scroll-cue,.entry-gate,#soundtrack,.two-days-passage,.dusk-passage,.dawn-sky{display:none}
+  .world,.progress,.scroll-cue,.entry-gate,#soundtrack,.two-days-passage,.dusk-passage{display:none}
   .hero{height:auto;padding:1.5cm 0 2cm}
   .hero-inner{position:static;transform:none!important;width:auto}
   main{width:100%;padding:0}
@@ -184,13 +177,21 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   <audio id="soundtrack" preload="auto" src="solo-la-tarjeta-fondo.mp3"></audio>
 
   <div class="world" aria-hidden="true">
+    <div class="world-dawn-dark"></div>
+    <div class="world-dawn-glow"></div>
+    <div class="world-sunset"></div>
+    <div class="world-night"></div>
+    <div class="world-stars"></div>
+    <div class="world-moon"></div>
+    <div class="world-venus"></div>
+    <canvas id="globalWaveCanvas"></canvas>
+    <div class="world-white"></div>
     <div class="world-glow"></div>
     <div class="world-vignette"></div>
   </div>
   <div class="progress" aria-hidden="true"><i></i></div>
 
   <header class="hero">
-    <div class="sky dawn-sky" aria-hidden="true"></div>
     <div class="hero-inner">
       <h1>SOLO LA TARJETA</h1>
       <div class="work-subtitle">Relato breve digital inmersivo</div>
@@ -391,17 +392,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
       <p class="reveal">Una devolución.</p>
       <p class="reveal">Una tarjeta.</p>
       <p class="reveal">Un café quizá.</p>
-      <div class="two-days-passage" data-two-days aria-hidden="true">
-        <div class="two-days-sky">
-          <span class="two-days-black"></span>
-          <span class="two-days-stars"></span>
-          <span class="two-days-moon"></span>
-          <canvas class="wave-rainbow" aria-hidden="true"></canvas>
-          <span class="two-days-white"></span>
-          <span class="two-days-aftertone"></span>
-          <span class="time-pulse"></span>
-        </div>
-      </div>
+      <div class="two-days-passage" data-two-days aria-hidden="true"></div>
       <section class="paris-section">
       <p class="reveal">Dos días después vibró el teléfono.</p>
       <p class="reveal">Era un mensaje de Rebeca.</p>
@@ -469,13 +460,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     </article>
   </main>
 
-  <section class="dusk-passage" aria-hidden="true">
-    <div class="sky dusk-sky-full">
-      <span class="dusk-stars"></span>
-      <span class="dusk-moon"></span>
-      <span class="dusk-venus"></span>
-    </div>
-  </section>
+  <section class="dusk-passage" aria-hidden="true"></section>
 
   
 <script>
@@ -489,10 +474,15 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     Math.round(lerp(a[1],b[1],t)),
     Math.round(lerp(a[2],b[2],t))
   ];
+  const localProgress=el=>{
+    if(!el) return 0;
+    const r=el.getBoundingClientRect();
+    const vh=innerHeight||document.documentElement.clientHeight;
+    return clamp((-r.top)/Math.max(1,r.height-vh));
+  };
 
   const enterButton=document.getElementById('enterButton');
   const soundtrack=document.getElementById('soundtrack');
-
   const enter=async()=>{
     enterButton.disabled=true;
     soundtrack.currentTime=0;
@@ -537,13 +527,14 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   }
 
   const hero=document.querySelector('.hero');
-  const dawnSky=document.querySelector('.dawn-sky');
   const twoDays=document.querySelector('[data-two-days]');
   const paris=document.querySelector('.paris-section');
   const closing=document.querySelector('.closing-section');
   const finalLine=document.querySelector('.final-line');
   const duskPassage=document.querySelector('.dusk-passage');
   const progress=document.querySelector('.progress i');
+  const canvas=document.getElementById('globalWaveCanvas');
+  const ctx=canvas.getContext('2d');
 
   const COLORS={
     warm:[241,237,229],
@@ -566,22 +557,21 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     const finalTop=finalLine?.offsetTop||document.documentElement.scrollHeight;
 
     sceneFrames=[
-      {y:0,c:COLORS.warm,g:.46},
-      {y:Math.max(0,(hero?.offsetHeight||0)-vh*.30),c:COLORS.warm,g:.46},
+      {y:0,c:COLORS.warm,g:.42},
+      {y:Math.max(0,(hero?.offsetHeight||0)-vh*.18),c:COLORS.warm,g:.44},
       {y:Math.max(0,electronicTop-vh*.8),c:COLORS.warm,g:.46},
       {y:electronicTop+electronicH*.32,c:COLORS.electronic,g:.40},
       {y:electronicTop+electronicH+vh*.65,c:COLORS.warm,g:.44},
-      {y:Math.max(0,twoTop-vh*.55),c:COLORS.warm,g:.42},
-      {y:twoTop+twoH*.90,c:COLORS.paris,g:.34},
-      {y:parisTop+vh*.18,c:COLORS.paris,g:.32},
+      {y:Math.max(0,twoTop-vh*.70),c:COLORS.warm,g:.42},
+      {y:twoTop+twoH*.92,c:COLORS.paris,g:.32},
       {y:parisTop+parisH*.58,c:COLORS.paris,g:.30},
       {y:Math.max(parisTop+parisH*.72,closingTop-vh*.72),c:COLORS.between,g:.35},
-      {y:closingTop+vh*.18,c:COLORS.closing,g:.42},
-      {y:finalTop+vh*.25,c:COLORS.closing,g:.38}
+      {y:closingTop+vh*.18,c:COLORS.closing,g:.40},
+      {y:finalTop+vh*.30,c:COLORS.closing,g:.38}
     ].sort((a,b)=>a.y-b.y);
   };
 
-  const applyWorld=()=>{
+  const applyBaseWorld=()=>{
     if(!sceneFrames.length) buildSceneFrames();
     const vh=innerHeight||document.documentElement.clientHeight;
     const probe=scrollY+vh*.46;
@@ -598,7 +588,6 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
         }
       }
     }
-
     const span=Math.max(1,b.y-a.y);
     const t=a===b?0:smooth(clamp((probe-a.y)/span));
     const color=mixColor(a.c,b.c,t);
@@ -608,234 +597,192 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     root.style.setProperty('--world-glow',lerp(a.g,b.g,t).toFixed(3));
   };
 
+  const resizeCanvas=()=>{
+    const dpr=Math.min(2,Math.max(1,devicePixelRatio||1));
+    canvas.width=Math.round(innerWidth*dpr);
+    canvas.height=Math.round(innerHeight*dpr);
+    canvas.style.width=innerWidth+'px';
+    canvas.style.height=innerHeight+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  };
+
+  let phase=0;
+  const central={active:false,waves:0,approach:0,implode:0,burst:0};
+
+  const drawHarmonicWave=(kind,w,h)=>{
+    const mobile=innerWidth<=620;
+    const fundamentalCycles=mobile?4.0:4.4;
+    const cycles=kind==='fundamental'?fundamentalCycles:fundamentalCycles*2;
+    const baseAmp=h*(mobile?.064:.046);
+    const amp=kind==='fundamental'?baseAmp:baseAmp*.48;
+    const dance=Math.sin(phase*.58)*h*(mobile?.018:.012)*(1-central.approach);
+    const separation=h*(mobile?.145:.10)*(1-central.approach*.82)-h*.012*central.implode;
+    const center=h*.50+(kind==='fundamental'?-separation:separation)+(kind==='fundamental'?dance:-dance);
+    const collapse=1-.80*central.implode;
+    const temporal=kind==='fundamental'?phase:phase*2;
+    const phaseOffset=kind==='fundamental'?0:Math.PI*.42*(1-central.approach);
+    const alpha=Math.min(.99,central.waves*(mobile?.92:.80));
+
+    ctx.beginPath();
+    for(let x=0;x<=w;x+=3){
+      const t=x/w;
+      const envelope=.88+.12*Math.sin(Math.PI*t);
+      const y=center+Math.sin(t*cycles*Math.PI*2+temporal+phaseOffset)*amp*collapse*envelope;
+      if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    }
+    ctx.lineWidth=mobile?(kind==='fundamental'?3.0:2.05):(kind==='fundamental'?2.0:1.35);
+    if(kind==='fundamental'){
+      ctx.strokeStyle='rgba(132,211,255,'+alpha+')';
+      ctx.shadowColor='rgba(104,198,255,.70)';
+    }else{
+      ctx.strokeStyle='rgba(255,183,129,'+(alpha*.96)+')';
+      ctx.shadowColor='rgba(255,166,106,.66)';
+    }
+    ctx.shadowBlur=mobile?16:13;
+    ctx.stroke();
+    ctx.shadowBlur=0;
+  };
+
+  const drawBurst=(w,h)=>{
+    if(central.burst<=.002) return;
+    const colors=[[207,67,73],[231,126,58],[226,190,74],[92,164,108],[73,134,209],[111,96,188]];
+    const cx=w*.5,cy=h*.5;
+    const radius=Math.hypot(w,h)*(.16+.55*central.burst);
+    const core=ctx.createRadialGradient(cx,cy,0,cx,cy,radius);
+    core.addColorStop(0,'rgba(255,255,255,'+(central.burst*.88)+')');
+    core.addColorStop(.13,'rgba(255,255,255,'+(central.burst*.44)+')');
+    core.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=core;
+    ctx.fillRect(0,0,w,h);
+
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(phase*.04);
+    for(let i=0;i<36;i++){
+      const angle=(Math.PI*2*i)/36;
+      const color=colors[i%colors.length];
+      const reach=radius*(.72+.28*((i%6)/5));
+      const inner=8+central.burst*18;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(angle)*inner,Math.sin(angle)*inner);
+      ctx.lineTo(Math.cos(angle)*reach,Math.sin(angle)*reach);
+      ctx.lineWidth=1.3+central.burst*5;
+      ctx.strokeStyle='rgba('+color.join(',')+','+(central.burst*(.38+.38*((i%3)/2)))+')';
+      ctx.shadowBlur=12+central.burst*24;
+      ctx.shadowColor='rgba('+color.join(',')+','+(central.burst*.58)+')';
+      ctx.stroke();
+    }
+    ctx.restore();
+    ctx.shadowBlur=0;
+  };
+
+  const drawCanvas=()=>{
+    const w=innerWidth,h=innerHeight;
+    ctx.clearRect(0,0,w,h);
+    if(!central.active) return;
+    ctx.save();
+    ctx.globalCompositeOperation='screen';
+    if(central.waves>.002){
+      drawHarmonicWave('fundamental',w,h);
+      drawHarmonicWave('harmonic',w,h);
+    }
+    if(central.implode>.01){
+      const halo=ctx.createRadialGradient(w*.5,h*.5,0,w*.5,h*.5,Math.max(w,h)*.34);
+      halo.addColorStop(0,'rgba(255,255,255,'+(central.implode*.30)+')');
+      halo.addColorStop(.42,'rgba(255,255,255,'+(central.implode*.08)+')');
+      halo.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.fillStyle=halo;
+      ctx.fillRect(0,0,w,h);
+    }
+    drawBurst(w,h);
+    ctx.restore();
+  };
+
+  const setVisualState=()=>{
+    const hp=localProgress(hero);
+    const cp=localProgress(twoDays);
+    const dp=localProgress(duskPassage);
+
+    /* AMANECER -> COLOR DE LECTURA: mismo fondo, opacidades continuas */
+    const dawnDark=1-smooth(clamp((hp-.00)/.34));
+    const dawnGlowIn=smooth(clamp((hp-.07)/.20));
+    const dawnGlowOut=1-smooth(clamp((hp-.48)/.36));
+    const dawnGlow=Math.max(0,dawnGlowIn*dawnGlowOut);
+
+    /* TRÁNSITO CENTRAL: el mismo mundo se oscurece, sin cambiar de sistema */
+    const centralNightIn=smooth(clamp((cp-.00)/.22));
+    const centralNightOut=1-smooth(clamp((cp-.835)/.105));
+    const centralNight=Math.max(0,centralNightIn*centralNightOut);
+    const centralStarsIn=smooth(clamp((cp-.075)/.13));
+    const centralStarsOut=1-smooth(clamp((cp-.805)/.020));
+    const centralStars=Math.max(0,centralStarsIn*centralStarsOut);
+    const centralMoonIn=smooth(clamp((cp-.10)/.16));
+    const centralMoonOut=1-smooth(clamp((cp-.805)/.020));
+    const centralMoon=Math.max(0,centralMoonIn*centralMoonOut);
+
+    const wavesIn=smooth(clamp((cp-.035)/.055));
+    const approach=smooth(clamp((cp-.28)/.42));
+    const implode=smooth(clamp((cp-.70)/.105));
+    const wavesOut=1-smooth(clamp((cp-.805)/.012));
+    const waves=Math.max(0,wavesIn*wavesOut);
+    const burstIn=smooth(clamp((cp-.812)/.012));
+    const burstOut=1-smooth(clamp((cp-.885)/.030));
+    const burst=Math.max(0,burstIn*burstOut);
+    const whiteIn=smooth(clamp((cp-.865)/.045));
+    const whiteOut=1-smooth(clamp((cp-.955)/.045));
+    const centralWhite=Math.max(0,whiteIn*whiteOut);
+
+    /* ATARDECER FINAL -> NOCHE: misma capa global */
+    const sunsetIn=smooth(clamp((dp-.00)/.52));
+    const sunsetOut=1-smooth(clamp((dp-.68)/.25));
+    const sunset=Math.max(0,sunsetIn*sunsetOut);
+    const finalNight=smooth(clamp((dp-.58)/.40));
+    const finalVenus=smooth(clamp((dp-.64)/.18));
+    const finalMoon=smooth(clamp((dp-.70)/.20));
+    const finalStars=smooth(clamp((dp-.75)/.18));
+
+    const night=Math.max(centralNight,finalNight);
+    const stars=Math.max(centralStars,finalStars*.96);
+    const moon=Math.max(centralMoon,finalMoon);
+    const venus=finalVenus;
+
+    root.style.setProperty('--dawn-dark',dawnDark.toFixed(3));
+    root.style.setProperty('--dawn-glow',dawnGlow.toFixed(3));
+    root.style.setProperty('--sunset',sunset.toFixed(3));
+    root.style.setProperty('--night',night.toFixed(3));
+    root.style.setProperty('--stars',stars.toFixed(3));
+    root.style.setProperty('--moon',moon.toFixed(3));
+    root.style.setProperty('--venus',venus.toFixed(3));
+    root.style.setProperty('--white',centralWhite.toFixed(3));
+
+    const finalDominant=finalMoon>centralMoon;
+    root.style.setProperty('--moon-size',finalDominant?(innerWidth<=620?'104px':'118px'):(innerWidth<=620?'72px':'86px'));
+    root.style.setProperty('--moon-x',(finalDominant?0:approach*1.5).toFixed(2)+'px');
+    root.style.setProperty('--moon-y',(finalDominant?(18-18*finalMoon):(-approach*2.0)).toFixed(2)+'px');
+    root.style.setProperty('--moon-cut-r',finalDominant?6:0);
+    root.style.setProperty('--moon-cut-g',finalDominant?13:0);
+    root.style.setProperty('--moon-cut-b',finalDominant?26:0);
+
+    central.active=twoDays && twoDays.getBoundingClientRect().bottom>0 && twoDays.getBoundingClientRect().top<innerHeight;
+    central.waves=waves;
+    central.approach=approach;
+    central.implode=implode;
+    central.burst=burst;
+    drawCanvas();
+  };
+
   const updateProgress=()=>{
     const max=document.documentElement.scrollHeight-innerHeight;
     const ratio=max>0?clamp(scrollY/max):0;
     progress.style.height=(ratio*100)+'%';
   };
 
-  const updateDawn=()=>{
-    if(!hero||!dawnSky) return;
-    const rect=hero.getBoundingClientRect();
-    const vh=innerHeight||document.documentElement.clientHeight;
-    const travel=Math.max(1,rect.height-vh);
-    const p=clamp((-rect.top)/travel);
-
-    const night=1-smooth(clamp((p-.02)/.36));
-    const glowIn=smooth(clamp((p-.08)/.22));
-    const glowOut=1-smooth(clamp((p-.52)/.24));
-    const glow=Math.max(0,glowIn*glowOut);
-    const sky=1-smooth(clamp((p-.62)/.36));
-
-    hero.style.setProperty('--dawn-night',night.toFixed(3));
-    hero.style.setProperty('--dawn-glow',glow.toFixed(3));
-    hero.style.setProperty('--dawn-sky',sky.toFixed(3));
-  };
-
-  const canvas=twoDays?.querySelector('.wave-rainbow');
-  let coupling=null;
-
-  if(twoDays&&canvas){
-    const ctx=canvas.getContext('2d');
-    let phase=0;
-    const state={active:false,waves:0,approach:0,implode:0,burst:0};
-
-    const resizeCanvas=()=>{
-      const dpr=Math.min(2,Math.max(1,window.devicePixelRatio||1));
-      const rect=canvas.getBoundingClientRect();
-      canvas.width=Math.max(1,Math.round(rect.width*dpr));
-      canvas.height=Math.max(1,Math.round(rect.height*dpr));
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-    };
-
-    const drawWave=(kind,w,h)=>{
-      const mobile=innerWidth<=620;
-      const fundamentalCycles=mobile?4.0:4.4;
-      const harmonicCycles=fundamentalCycles*2;
-      const approach=state.approach;
-      const implode=state.implode;
-      const dance=Math.sin(phase*.58)*h*(mobile?.018:.012)*(1-approach);
-      const separation=h*(mobile?.145:.10)*(1-approach*.82)-h*.012*implode;
-      const center=h*.50+(kind==='fundamental'?-separation:separation)+
-        (kind==='fundamental'?dance:-dance);
-      const baseAmp=h*(mobile?.064:.046);
-      const amp=kind==='fundamental'?baseAmp:baseAmp*.48;
-      const collapse=1-.78*implode;
-      const cycles=kind==='fundamental'?fundamentalCycles:harmonicCycles;
-      const phaseOffset=kind==='fundamental'?phase:phase*2+Math.PI*.42*(1-approach);
-      const alpha=Math.min(.98,state.waves*(mobile?.88:.74));
-
-      ctx.beginPath();
-      for(let x=0;x<=w;x+=3){
-        const t=x/w;
-        const envelope=.88+.12*Math.sin(Math.PI*t);
-        const y=center+Math.sin(t*cycles*Math.PI*2+phaseOffset)*amp*collapse*envelope;
-        if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-      }
-
-      ctx.lineWidth=mobile?(kind==='fundamental'?3.0:2.05):(kind==='fundamental'?2.0:1.35);
-      if(kind==='fundamental'){
-        ctx.strokeStyle='rgba(132,211,255,'+alpha+')';
-        ctx.shadowColor='rgba(104,198,255,.68)';
-      }else{
-        ctx.strokeStyle='rgba(255,183,129,'+(alpha*.95)+')';
-        ctx.shadowColor='rgba(255,166,106,.62)';
-      }
-      ctx.shadowBlur=mobile?15:12;
-      ctx.stroke();
-      ctx.shadowBlur=0;
-    };
-
-    const drawBurst=(w,h)=>{
-      if(state.burst<=.002) return;
-      const colors=[[207,67,73],[231,126,58],[226,190,74],[92,164,108],[73,134,209],[111,96,188]];
-      const cx=w*.5,cy=h*.5;
-      const radius=Math.hypot(w,h)*(.16+.55*state.burst);
-      const core=ctx.createRadialGradient(cx,cy,0,cx,cy,radius);
-      core.addColorStop(0,'rgba(255,255,255,'+(state.burst*.86)+')');
-      core.addColorStop(.12,'rgba(255,255,255,'+(state.burst*.42)+')');
-      core.addColorStop(1,'rgba(255,255,255,0)');
-      ctx.fillStyle=core;
-      ctx.fillRect(0,0,w,h);
-
-      ctx.save();
-      ctx.translate(cx,cy);
-      ctx.rotate(phase*.04);
-      for(let i=0;i<36;i++){
-        const angle=(Math.PI*2*i)/36;
-        const color=colors[i%colors.length];
-        const reach=radius*(.72+.28*((i%6)/5));
-        const inner=8+state.burst*18;
-        ctx.beginPath();
-        ctx.moveTo(Math.cos(angle)*inner,Math.sin(angle)*inner);
-        ctx.lineTo(Math.cos(angle)*reach,Math.sin(angle)*reach);
-        ctx.lineWidth=1.3+state.burst*5;
-        ctx.strokeStyle='rgba('+color.join(',')+','+(state.burst*(.38+.38*((i%3)/2)))+')';
-        ctx.shadowBlur=12+state.burst*24;
-        ctx.shadowColor='rgba('+color.join(',')+','+(state.burst*.55)+')';
-        ctx.stroke();
-      }
-      ctx.restore();
-      ctx.shadowBlur=0;
-    };
-
-    const drawCoupling=()=>{
-      const w=canvas.clientWidth,h=canvas.clientHeight;
-      if(!w||!h) return;
-      ctx.clearRect(0,0,w,h);
-      if(!state.active) return;
-      ctx.save();
-      ctx.globalCompositeOperation='screen';
-      if(state.waves>.002){
-        drawWave('fundamental',w,h);
-        drawWave('harmonic',w,h);
-      }
-      if(state.implode>.01){
-        const halo=ctx.createRadialGradient(w*.5,h*.5,0,w*.5,h*.5,Math.max(w,h)*.34);
-        halo.addColorStop(0,'rgba(255,255,255,'+(state.implode*.28)+')');
-        halo.addColorStop(.42,'rgba(255,255,255,'+(state.implode*.08)+')');
-        halo.addColorStop(1,'rgba(255,255,255,0)');
-        ctx.fillStyle=halo;
-        ctx.fillRect(0,0,w,h);
-      }
-      drawBurst(w,h);
-      ctx.restore();
-    };
-
-    const updateCoupling=()=>{
-      const rect=twoDays.getBoundingClientRect();
-      const vh=innerHeight||document.documentElement.clientHeight;
-      const travel=Math.max(1,rect.height-vh);
-      const p=clamp((-rect.top)/travel);
-      state.active=rect.bottom>0&&rect.top<vh;
-
-      const black=smooth(clamp((p-.00)/.20))*(1-smooth(clamp((p-.84)/.08)));
-      const wavesIn=smooth(clamp((p-.035)/.055));
-      const approach=smooth(clamp((p-.28)/.42));
-      const implode=smooth(clamp((p-.70)/.105));
-      const wavesOut=1-smooth(clamp((p-.805)/.012));
-      const waves=Math.max(0,wavesIn*wavesOut);
-
-      const burstIn=smooth(clamp((p-.812)/.012));
-      const burstOut=1-smooth(clamp((p-.885)/.030));
-      const burst=Math.max(0,burstIn*burstOut);
-
-      const whiteIn=smooth(clamp((p-.865)/.045));
-      const whiteOut=1-smooth(clamp((p-.955)/.045));
-      const white=Math.max(0,whiteIn*whiteOut);
-      const aftertone=smooth(clamp((p-.925)/.075));
-
-      const starsIn=smooth(clamp((p-.08)/.12));
-      const starsOut=1-smooth(clamp((p-.805)/.018));
-      const stars=Math.max(0,starsIn*starsOut*(.62+.24*approach));
-
-      const moonIn=smooth(clamp((p-.12)/.14));
-      const moonOut=1-smooth(clamp((p-.805)/.018));
-      const moon=Math.max(0,moonIn*moonOut*(.72+.18*approach));
-
-      state.waves=waves;
-      state.approach=approach;
-      state.implode=implode;
-      state.burst=burst;
-
-      twoDays.style.setProperty('--black',black.toFixed(3));
-      twoDays.style.setProperty('--stars-opacity',stars.toFixed(3));
-      twoDays.style.setProperty('--moon-opacity',moon.toFixed(3));
-      twoDays.style.setProperty('--moon-x',(approach*1.6).toFixed(2)+'px');
-      twoDays.style.setProperty('--moon-y',(-approach*2.2).toFixed(2)+'px');
-      twoDays.style.setProperty('--white',white.toFixed(3));
-      twoDays.style.setProperty('--aftertone',aftertone.toFixed(3));
-      const pulse=smooth(clamp((p-.965)/.035));
-      twoDays.style.setProperty('--pulse',(pulse*.48).toFixed(3));
-      twoDays.style.setProperty('--pulse-scale',(0.22+pulse*.78).toFixed(3));
-      twoDays.style.setProperty('--pulse-dot',(0.45+pulse*.75).toFixed(3));
-      drawCoupling();
-    };
-
-    const animate=()=>{
-      phase+=.006;
-      if(state.active&&(state.waves>.002||state.implode>.002||state.burst>.002)) drawCoupling();
-      requestAnimationFrame(animate);
-    };
-
-    coupling={resizeCanvas,updateCoupling};
-    resizeCanvas();
-    updateCoupling();
-    animate();
-  }
-
-  const updateDusk=()=>{
-    if(!duskPassage) return;
-    const rect=duskPassage.getBoundingClientRect();
-    const vh=innerHeight||document.documentElement.clientHeight;
-    const travel=Math.max(1,rect.height-vh);
-    const p=clamp((-rect.top)/travel);
-
-    const sunsetIn=smooth(clamp((p-.00)/.46));
-    const sunsetOut=1-smooth(clamp((p-.66)/.26));
-    const sunset=Math.max(0,sunsetIn*sunsetOut);
-    const night=smooth(clamp((p-.58)/.38));
-    const venus=smooth(clamp((p-.66)/.16));
-    const moon=smooth(clamp((p-.72)/.18));
-    const stars=smooth(clamp((p-.76)/.18));
-
-    duskPassage.style.setProperty('--dusk-sunset',sunset.toFixed(3));
-    duskPassage.style.setProperty('--dusk-night',night.toFixed(3));
-    duskPassage.style.setProperty('--dusk-stars',(stars*.96).toFixed(3));
-    duskPassage.style.setProperty('--dusk-moon',Math.min(1,moon*1.08).toFixed(3));
-    duskPassage.style.setProperty('--dusk-venus',Math.min(1,venus*1.12).toFixed(3));
-    duskPassage.style.setProperty('--dusk-moon-rise',(22-22*moon).toFixed(2)+'px');
-    duskPassage.style.setProperty('--dusk-venus-rise',(14-14*venus).toFixed(2)+'px');
-  };
-
   let ticking=false;
   const updateAll=()=>{
     ticking=false;
-    applyWorld();
+    applyBaseWorld();
     updateProgress();
-    updateDawn();
-    coupling?.updateCoupling();
-    updateDusk();
+    setVisualState();
   };
   const requestUpdate=()=>{
     if(!ticking){
@@ -844,16 +791,24 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     }
   };
 
+  const animate=()=>{
+    phase+=.006;
+    if(central.active&&(central.waves>.002||central.implode>.002||central.burst>.002)) drawCanvas();
+    requestAnimationFrame(animate);
+  };
+
   addEventListener('scroll',requestUpdate,{passive:true});
   addEventListener('resize',()=>{
     sceneFrames=[];
     buildSceneFrames();
-    coupling?.resizeCanvas();
+    resizeCanvas();
     requestUpdate();
   });
 
+  resizeCanvas();
   buildSceneFrames();
   updateAll();
+  animate();
 })();
 </script>
 </body>
