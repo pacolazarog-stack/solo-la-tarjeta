@@ -326,7 +326,7 @@
 
     .two-days-passage {
       position:relative;
-      height:250vh;
+      height:260vh;
       margin:8em 0 0;
     }
     .two-days-sky {
@@ -344,7 +344,6 @@
     .two-days-black,
     .two-days-white,
     .two-days-aftertone,
-    .two-days-rainbow,
     .time-pulse {
       position:absolute;
       inset:0;
@@ -355,29 +354,16 @@
       background:#000;
       opacity:var(--black,0);
     }
-    .two-days-rainbow {
+    .wave-rainbow {
+      position:absolute;
+      inset:0;
       z-index:3;
+      width:100%;
+      height:100%;
       opacity:var(--rainbow,0);
-      filter:blur(10px) saturate(.92);
+      pointer-events:none;
       mix-blend-mode:screen;
-      transform:translateY(var(--rainbow-shift,0)) scaleY(var(--rainbow-stretch,1));
-      background:
-        linear-gradient(
-          to bottom,
-          transparent 0 14%,
-          rgba(204,64,70,.24) 14% 21%,
-          transparent 21% 25%,
-          rgba(228,124,58,.22) 25% 32%,
-          transparent 32% 36%,
-          rgba(223,188,73,.20) 36% 43%,
-          transparent 43% 47%,
-          rgba(94,163,106,.20) 47% 54%,
-          transparent 54% 58%,
-          rgba(73,131,205,.22) 58% 65%,
-          transparent 65% 69%,
-          rgba(111,96,185,.20) 69% 76%,
-          transparent 76% 100%
-        );
+      filter:blur(3px) saturate(.96);
     }
     .two-days-white {
       z-index:4;
@@ -424,27 +410,47 @@
 
     .paris-section {
       position:relative;
-      margin:0 -4vw 6.7em;
-      padding:28vh 4vw 4.6em;
+      margin:0 0 6.7em;
+      padding:30vh 0 4.6em;
+      background:transparent;
+      isolation:isolate;
+    }
+    .paris-section::before {
+      content:"";
+      position:absolute;
+      z-index:-2;
+      left:50%;
+      top:0;
+      width:100vw;
+      height:100%;
+      transform:translateX(-50%);
       background:
         linear-gradient(
           to bottom,
-          #e3e8ed 0%,
-          #e8ebec 24%,
+          var(--paper-paris) 0%,
+          #e8ebec 22%,
           #eeece8 46%,
-          var(--paper) 72%
+          var(--paper) 74%
         );
-    }
-    .paris-section::before {
-      content:""; position:absolute; left:50%; top:0; width:1px; height:72px;
-      background:linear-gradient(to bottom,transparent,rgba(30,28,25,.18));
-      transform:translateX(-.5px);
-    }
-    .paris-section::after {
-      content:""; position:absolute; inset:0 -16vw; z-index:-1;
-      background:linear-gradient(to bottom,transparent 0%,rgba(255,255,255,.18) 16%,rgba(255,255,255,.16) 84%,transparent 100%);
       pointer-events:none;
     }
+    .paris-section::after {
+      content:"";
+      position:absolute;
+      z-index:-1;
+      left:50%;
+      top:0;
+      width:100vw;
+      height:36vh;
+      transform:translateX(-50%);
+      background:linear-gradient(to bottom,rgba(255,255,255,.18),transparent);
+      pointer-events:none;
+    }
+    .paris-section > * {
+      position:relative;
+      z-index:1;
+    }
+
     .tower-photo {
       margin:3.2em auto 4.2em;
       width:min(78vw,520px);
@@ -520,24 +526,27 @@
       .age-axis { order:2; width:44px; height:1px!important; margin:4px 0; }
       .age-right { order:3; }
       .card-photo { width:min(76vw,320px); }
-      .two-days-passage { height:210vh; margin:7em 0 0; }
+      .two-days-passage { height:220vh; margin:7em 0 0; }
       .two-days-sky {
         width:100vw;
         margin-left:calc(50% - 50vw);
       }
-      .two-days-rainbow {
-        filter:blur(12px) saturate(.9);
+      .wave-rainbow {
+        filter:blur(4px) saturate(.94);
       }
       .paris-section {
         margin:0 0 5.8em;
-        padding:24vh 0 3.5em;
+        padding:26vh 0 3.5em;
+        background:transparent;
+      }
+      .paris-section::before {
         background:
           linear-gradient(
             to bottom,
-            #e3e8ed 0%,
-            #e8ebec 26%,
+            var(--paper-paris) 0%,
+            #e8ebec 24%,
             #eeece8 48%,
-            var(--paper) 74%
+            var(--paper) 76%
           );
       }
       .paris-section::after { inset:0 -30px; }
@@ -776,7 +785,7 @@
       <div class="two-days-passage" data-two-days aria-hidden="true">
         <div class="two-days-sky">
           <span class="two-days-black"></span>
-          <span class="two-days-rainbow"></span>
+          <canvas class="wave-rainbow" aria-hidden="true"></canvas>
           <span class="two-days-white"></span>
           <span class="two-days-aftertone"></span>
           <span class="time-pulse"></span>
@@ -902,9 +911,130 @@
       }
 
       const twoDays=document.querySelector('[data-two-days]');
-      if(twoDays){
+      const rainbowCanvas=twoDays?.querySelector('.wave-rainbow');
+
+      if(twoDays && rainbowCanvas){
+        const ctx=rainbowCanvas.getContext('2d');
         const clamp=v=>Math.min(1,Math.max(0,v));
         const smooth=t=>t*t*(3-2*t);
+
+        let phase=0;
+        let currentRainbow=0;
+        let currentHarmony=0;
+
+        const resizeRainbow=()=>{
+          const dpr=Math.min(2,Math.max(1,window.devicePixelRatio||1));
+          const rect=rainbowCanvas.getBoundingClientRect();
+          rainbowCanvas.width=Math.max(1,Math.round(rect.width*dpr));
+          rainbowCanvas.height=Math.max(1,Math.round(rect.height*dpr));
+          ctx.setTransform(dpr,0,0,dpr,0,0);
+        };
+
+        const rgba=(rgb,a)=>`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${a})`;
+
+        const drawRainbow=(intensity,harmony)=>{
+          const w=rainbowCanvas.clientWidth;
+          const h=rainbowCanvas.clientHeight;
+          if(!w||!h) return;
+
+          ctx.clearRect(0,0,w,h);
+          ctx.save();
+          ctx.globalCompositeOperation='screen';
+
+          const colors=[
+            [207,67,73],
+            [231,126,58],
+            [226,190,74],
+            [92,164,108],
+            [73,134,209],
+            [111,96,188]
+          ];
+
+          // Paco: onda algo más lenta. Rebeca: onda inicialmente más rápida.
+          // A medida que harmony crece, frecuencia y fase convergen.
+          const kP=7.8;
+          const kR=10.6-(10.6-kP)*harmony;
+          const phaseGap=(1-harmony)*Math.PI*.92;
+          const baseY=h*.16;
+          const bandGap=h*.105;
+          const bandThickness=Math.max(18,h*.055);
+
+          for(let i=0;i<colors.length;i++){
+            const top=[];
+            const bottom=[];
+            let localLightSum=0;
+            let samples=0;
+
+            for(let x=0;x<=w;x+=7){
+              const t=x/w;
+              const pWave=Math.sin(t*kP*Math.PI*2 + phase + i*.08);
+              const rWave=Math.sin(t*kR*Math.PI*2 + phase - phaseGap + i*.08);
+
+              // La coincidencia no dibuja una tercera onda: transforma la luz.
+              const constructive=(1+pWave*rWave)/2;
+              const yShift=((pWave+rWave)/2)*(6+12*(1-harmony));
+              const y0=baseY+i*bandGap+yShift;
+
+              top.push([x,y0]);
+              bottom.push([x,y0+bandThickness]);
+              localLightSum+=constructive;
+              samples++;
+            }
+
+            const localLight=samples?localLightSum/samples:.5;
+            const lightGain=.42+.58*(harmony*.72+localLight*.28);
+            const alpha=intensity*(.10+.19*lightGain);
+
+            ctx.beginPath();
+            top.forEach(([x,y],idx)=>idx?ctx.lineTo(x,y):ctx.moveTo(x,y));
+            for(let j=bottom.length-1;j>=0;j--) ctx.lineTo(bottom[j][0],bottom[j][1]);
+            ctx.closePath();
+
+            const g=ctx.createLinearGradient(0,baseY,w,baseY);
+            g.addColorStop(0,rgba(colors[i],alpha*.58));
+            g.addColorStop(.18,rgba(colors[i],alpha*.84));
+            g.addColorStop(.5,rgba(colors[i],alpha*(.9+.35*harmony)));
+            g.addColorStop(.82,rgba(colors[i],alpha*.84));
+            g.addColorStop(1,rgba(colors[i],alpha*.58));
+            ctx.fillStyle=g;
+            ctx.fill();
+          }
+
+          // Las dos ondas son visibles mientras se buscan y desaparecen en la luz al armonizar.
+          const lineOpacity=intensity*(1-harmony)*.42;
+          if(lineOpacity>.003){
+            const drawWave=(kind)=>{
+              ctx.beginPath();
+              for(let x=0;x<=w;x+=5){
+                const t=x/w;
+                const pWave=Math.sin(t*kP*Math.PI*2 + phase);
+                const rWave=Math.sin(t*kR*Math.PI*2 + phase - phaseGap);
+                const wave=kind==='p'?pWave:rWave;
+                const y=h*.51+wave*h*.035;
+                x?ctx.lineTo(x,y):ctx.moveTo(x,y);
+              }
+              ctx.lineWidth=1;
+              ctx.strokeStyle=kind==='p'
+                ? `rgba(205,218,226,${lineOpacity})`
+                : `rgba(244,229,214,${lineOpacity})`;
+              ctx.stroke();
+            };
+            drawWave('p');
+            drawWave('r');
+          }
+
+          // Cuando armonizan, la interferencia se convierte en luminancia, no en otra línea.
+          if(harmony>.15 && intensity>.05){
+            const glow=ctx.createRadialGradient(w*.5,h*.5,0,w*.5,h*.5,Math.max(w,h)*.64);
+            glow.addColorStop(0,`rgba(255,255,255,${intensity*harmony*.22})`);
+            glow.addColorStop(.5,`rgba(244,246,247,${intensity*harmony*.08})`);
+            glow.addColorStop(1,'rgba(255,255,255,0)');
+            ctx.fillStyle=glow;
+            ctx.fillRect(0,0,w,h);
+          }
+
+          ctx.restore();
+        };
 
         const updateTwoDays=()=>{
           const r=twoDays.getBoundingClientRect();
@@ -912,43 +1042,57 @@
           const travel=Math.max(1,r.height-vh);
           const p=clamp((-r.top)/travel);
 
-          // Café -> fundido muy lento y progresivo a negro.
-          const black=smooth(clamp((p-.02)/.46));
+          // El café se pierde lentamente en negro.
+          const black=smooth(clamp((p-.015)/.46));
 
-          // En el negro se manifiestan bandas cromáticas horizontales a pantalla completa.
-          const rainbowIn=smooth(clamp((p-.40)/.13));
-          const rainbowOut=1-smooth(clamp((p-.69)/.15));
+          // Las ondas empiezan separadas, se aproximan y entran en fase.
+          const harmony=smooth(clamp((p-.39)/.30));
+
+          // El espectro nace de esa armonización y después se entrega al blanco.
+          const rainbowIn=smooth(clamp((p-.37)/.14));
+          const rainbowOut=1-smooth(clamp((p-.72)/.15));
           const rainbow=Math.max(0,rainbowIn*rainbowOut);
 
-          // El negro se retira sólo cuando empieza a entrar la luz.
-          const blackRetreat=1-smooth(clamp((p-.68)/.18));
+          const blackRetreat=1-smooth(clamp((p-.66)/.19));
           const blackFinal=black*blackRetreat;
 
-          // Blanco máximo: el día de recibir noticias.
-          const whiteIn=smooth(clamp((p-.72)/.14));
-          const whiteOut=1-smooth(clamp((p-.90)/.16));
+          const whiteIn=smooth(clamp((p-.70)/.15));
+          const whiteOut=1-smooth(clamp((p-.90)/.17));
           const white=Math.max(0,whiteIn*whiteOut);
 
-          // Tras el blanco, el día se enfría poco a poco hasta acompasarse con París.
-          const aftertone=Math.pow(smooth(clamp((p-.80)/.20)),.9);
+          // Tras el blanco, la luz se acompasa poco a poco con el tono de París.
+          const aftertone=Math.pow(smooth(clamp((p-.82)/.18)),.9);
+          const pulse=smooth(clamp((p-.93)/.07));
 
-          // Pulsación muy tardía, justo antes de la noticia.
-          const pulse=smooth(clamp((p-.92)/.08));
+          currentRainbow=rainbow*.96;
+          currentHarmony=harmony;
 
           twoDays.style.setProperty('--black',blackFinal.toFixed(3));
-          twoDays.style.setProperty('--rainbow',(rainbow*.92).toFixed(3));
-          twoDays.style.setProperty('--rainbow-shift',`${(1-rainbow)*10}px`);
-          twoDays.style.setProperty('--rainbow-stretch',(0.96+rainbow*.08).toFixed(3));
+          twoDays.style.setProperty('--rainbow',currentRainbow.toFixed(3));
           twoDays.style.setProperty('--white',white.toFixed(3));
           twoDays.style.setProperty('--aftertone',aftertone.toFixed(3));
-          twoDays.style.setProperty('--pulse',(pulse*.52).toFixed(3));
+          twoDays.style.setProperty('--pulse',(pulse*.48).toFixed(3));
           twoDays.style.setProperty('--pulse-scale',(0.22+pulse*.78).toFixed(3));
           twoDays.style.setProperty('--pulse-dot',(0.45+pulse*.75).toFixed(3));
+
+          drawRainbow(currentRainbow,currentHarmony);
+        };
+
+        const animate=()=>{
+          phase+=.008;
+          if(currentRainbow>.002) drawRainbow(currentRainbow,currentHarmony);
+          requestAnimationFrame(animate);
         };
 
         addEventListener('scroll',updateTwoDays,{passive:true});
-        addEventListener('resize',updateTwoDays);
+        addEventListener('resize',()=>{
+          resizeRainbow();
+          updateTwoDays();
+        });
+
+        resizeRainbow();
         updateTwoDays();
+        animate();
       }
 
       const tones=[...document.querySelectorAll('[data-tone]')];
