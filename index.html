@@ -326,48 +326,80 @@
 
     .two-days-passage {
       position:relative;
-      height:145vh;
-      margin:8em -4vw 2em;
-      overflow:clip;
+      height:210vh;
+      margin:8em 0 0;
     }
     .two-days-sky {
       position:sticky;
       top:0;
+      left:50%;
+      width:100vw;
       height:100svh;
-      margin:0 -14vw;
+      margin-left:calc(50% - 50vw);
+      overflow:hidden;
       pointer-events:none;
       isolation:isolate;
+      background:#000;
     }
-    .two-days-sky::before,
-    .two-days-sky::after {
+    .two-days-black,
+    .two-days-white,
+    .two-days-rainbow,
+    .time-pulse {
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
+    .two-days-black {
+      z-index:1;
+      background:#000;
+      opacity:var(--black,1);
+    }
+    .two-days-white {
+      z-index:4;
+      background:#fff;
+      opacity:var(--white,0);
+    }
+    .two-days-rainbow {
+      z-index:3;
+      left:50%;
+      top:50%;
+      width:min(118vw,1500px);
+      height:min(74vw,900px);
+      inset:auto;
+      transform:translate(-50%,-48%) scale(var(--rainbow-scale,.92));
+      opacity:var(--rainbow,0);
+      filter:blur(9px) saturate(.9);
+      mix-blend-mode:screen;
+    }
+    .two-days-rainbow::before {
       content:"";
       position:absolute;
       inset:0;
-      transition:opacity .12s linear;
-    }
-    .two-days-sky::before {
-      opacity:var(--night,0);
+      border-radius:50%;
       background:
-        radial-gradient(70% 38% at 50% 18%,rgba(83,98,120,.14),transparent 72%),
-        linear-gradient(to bottom,rgba(27,39,55,.22),rgba(34,44,58,.12) 55%,transparent);
-    }
-    .two-days-sky::after {
-      opacity:var(--dawn,0);
-      background:
-        radial-gradient(58% 34% at 50% 20%,rgba(255,244,222,.28),transparent 72%),
-        linear-gradient(to bottom,rgba(255,255,255,.18),transparent 58%);
+        radial-gradient(ellipse at 50% 100%,
+          transparent 0 43%,
+          rgba(204,60,67,.48) 43.3% 45.2%,
+          rgba(226,122,56,.44) 45.3% 47.1%,
+          rgba(225,190,72,.40) 47.2% 49%,
+          rgba(91,164,106,.38) 49.1% 50.9%,
+          rgba(70,132,205,.40) 51% 52.8%,
+          rgba(103,91,183,.36) 52.9% 54.7%,
+          transparent 54.8% 100%);
+      transform:translateY(8%);
     }
     .time-pulse {
-      position:absolute;
+      z-index:5;
       left:8%;
       right:8%;
-      top:58%;
+      top:63%;
       height:1px;
+      inset:auto 8%;
       opacity:var(--pulse,0);
       transform:scaleX(var(--pulse-scale,.2));
       transform-origin:center;
-      background:linear-gradient(90deg,transparent,rgba(47,86,98,.28) 22%,rgba(47,86,98,.5) 50%,rgba(47,86,98,.28) 78%,transparent);
-      box-shadow:0 0 18px rgba(47,86,98,.12);
+      background:linear-gradient(90deg,transparent,rgba(65,94,104,.22) 22%,rgba(65,94,104,.44) 50%,rgba(65,94,104,.22) 78%,transparent);
+      box-shadow:0 0 18px rgba(65,94,104,.1);
     }
     .time-pulse::after {
       content:"";
@@ -377,9 +409,9 @@
       width:5px;
       height:5px;
       border-radius:50%;
-      background:rgba(47,86,98,.42);
+      background:rgba(65,94,104,.36);
       transform:translate(-50%,-50%) scale(var(--pulse-dot,.45));
-      box-shadow:0 0 14px rgba(47,86,98,.2);
+      box-shadow:0 0 14px rgba(65,94,104,.18);
     }
 
     .paris-section {
@@ -470,8 +502,16 @@
       .age-axis { order:2; width:44px; height:1px!important; margin:4px 0; }
       .age-right { order:3; }
       .card-photo { width:min(76vw,320px); }
-      .two-days-passage { height:120vh; margin:7em 0 1.5em; }
-      .two-days-sky { margin:0 -30px; }
+      .two-days-passage { height:180vh; margin:7em 0 0; }
+      .two-days-sky {
+        width:100vw;
+        margin-left:calc(50% - 50vw);
+      }
+      .two-days-rainbow {
+        width:132vw;
+        height:86vw;
+        filter:blur(11px) saturate(.88);
+      }
       .paris-section { margin:6em 0 5.8em; padding:4.6em 0 3.5em; }
       .paris-section::after { inset:0 -30px; }
       .tower-photo { width:min(88vw,460px); }
@@ -708,6 +748,9 @@
       <p class="reveal">Un café quizá.</p>
       <div class="two-days-passage" data-two-days aria-hidden="true">
         <div class="two-days-sky">
+          <span class="two-days-black"></span>
+          <span class="two-days-rainbow"></span>
+          <span class="two-days-white"></span>
           <span class="time-pulse"></span>
         </div>
       </div>
@@ -832,21 +875,38 @@
 
       const twoDays=document.querySelector('[data-two-days]');
       if(twoDays){
+        const clamp=v=>Math.min(1,Math.max(0,v));
+        const smooth=t=>t*t*(3-2*t);
+
         const updateTwoDays=()=>{
           const r=twoDays.getBoundingClientRect();
           const vh=innerHeight || document.documentElement.clientHeight;
-          const total=r.height+vh;
-          const p=Math.min(1,Math.max(0,(vh-r.top)/total));
+          const travel=Math.max(1,r.height-vh);
+          const p=clamp((-r.top)/travel);
 
-          const night = p<.5 ? Math.sin(Math.PI*(p/.5)) : Math.sin(Math.PI*((1-p)/.5));
-          const dawn = Math.max(0,(p-.54)/.46);
-          const pulse = Math.max(0,(p-.76)/.24);
+          // 0–0.28: el café queda atrás y la página cae a negro.
+          // 0.28–0.72: el arcoíris nace del negro y ocupa el tránsito.
+          // 0.62–1: el día nuevo entra en blanco.
+          const blackFade=smooth(clamp((p-.50)/.34));
+          const black=1-blackFade;
 
-          twoDays.style.setProperty('--night',Math.max(0,night).toFixed(3));
-          twoDays.style.setProperty('--dawn',Math.min(1,dawn).toFixed(3));
-          twoDays.style.setProperty('--pulse',Math.min(.72,pulse*.72).toFixed(3));
-          twoDays.style.setProperty('--pulse-scale',(0.22+Math.min(1,pulse)*.78).toFixed(3));
-          twoDays.style.setProperty('--pulse-dot',(0.45+Math.min(1,pulse)*.75).toFixed(3));
+          let rainbow=0;
+          if(p>=.20 && p<=.82){
+            const t=(p-.20)/.62;
+            rainbow=Math.sin(Math.PI*t);
+          }
+          rainbow=Math.pow(Math.max(0,rainbow),.82);
+
+          const white=smooth(clamp((p-.61)/.34));
+          const pulse=smooth(clamp((p-.86)/.14));
+
+          twoDays.style.setProperty('--black',black.toFixed(3));
+          twoDays.style.setProperty('--rainbow',(rainbow*.9).toFixed(3));
+          twoDays.style.setProperty('--rainbow-scale',(0.90+rainbow*.10).toFixed(3));
+          twoDays.style.setProperty('--white',white.toFixed(3));
+          twoDays.style.setProperty('--pulse',(pulse*.56).toFixed(3));
+          twoDays.style.setProperty('--pulse-scale',(0.22+pulse*.78).toFixed(3));
+          twoDays.style.setProperty('--pulse-dot',(0.45+pulse*.75).toFixed(3));
         };
         addEventListener('scroll',updateTwoDays,{passive:true});
         addEventListener('resize',updateTwoDays);
