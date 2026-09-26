@@ -133,6 +133,26 @@
       line-height:1.72; letter-spacing:.002em; hyphens:none;
     }
     p { margin:0 0 1.16em; hanging-punctuation:first last; }
+
+    .opening-section {
+      margin-bottom:3.2em;
+    }
+    .opening-section p {
+      margin-bottom:1.72em;
+    }
+    .opening-section .opening-first {
+      margin-bottom:2.45em;
+    }
+    .opening-section .opening-breath {
+      margin-bottom:3.35em;
+    }
+    .opening-section .opening-machine {
+      margin-top:.35em;
+      margin-bottom:2.55em;
+    }
+    .opening-section .opening-man {
+      margin-top:2.8em;
+    }
     .reveal {
       opacity:0; transform:translateY(14px); filter:blur(1.5px);
       transition:opacity .92s cubic-bezier(.2,.7,.2,1),
@@ -362,6 +382,11 @@
       .progress { display:none; }
       main { width:min(calc(100% - 30px),var(--reading)); padding-bottom:24vh; }
       article { line-height:1.66; }
+      .opening-section p { margin-bottom:1.55em; }
+      .opening-section .opening-first { margin-bottom:2.2em; }
+      .opening-section .opening-breath { margin-bottom:3em; }
+      .opening-section .opening-machine { margin-bottom:2.3em; }
+      .opening-section .opening-man { margin-top:2.45em; }
       .hero { min-height:92svh; }
       .electronic-zone { margin:4em 0 4.4em; padding:2.6em 0 3em; }
       .electronic-zone::before { inset:-.5em -30px; opacity:.2; }
@@ -418,14 +443,16 @@
 
   <main>
     <article>
-      <p class="reveal">Paco Olmo de Males bajó del metro con una misión sencilla: coger un autobús, llegar a otra localidad y recoger un coche.</p>
+      <section class="opening-section">
+      <p class="reveal opening-first">Paco Olmo de Males bajó del metro con una misión sencilla: coger un autobús, llegar a otra localidad y recoger un coche.</p>
       <p class="reveal">Las misiones sencillas eran las que más miedo le daban.</p>
       <p class="reveal">Las difíciles traían instrucciones.</p>
-      <p class="reveal">Las sencillas dependían de uno.</p>
-      <p class="reveal">En la estación encontró una máquina expendedora. Tenía pantalla, teclado, ranura, lector, flechas de distintos colores y un cartel que prometía que comprar un billete era fácil.</p>
+      <p class="reveal opening-breath">Las sencillas dependían de uno.</p>
+      <p class="reveal opening-machine">En la estación encontró una máquina expendedora. Tenía pantalla, teclado, ranura, lector, flechas de distintos colores y un cartel que prometía que comprar un billete era fácil.</p>
       <p class="reveal">Paco se acercó.</p>
-      <p class="reveal">Un hombre de aspecto descuidado se acercó también.</p>
+      <p class="reveal opening-man">Un hombre de aspecto descuidado se acercó también.</p>
       <p class="reveal">No parecía empleado de la estación. Tampoco parecía viajero. Llevaba la ropa vencida, el pelo sin acuerdo conocido con el peine y esa clase de presencia que consigue que el ciudadano responsable compruebe instintivamente dónde lleva la cartera.</p>
+      </section>
       <p class="reveal">—¿Adónde vas?</p>
       <p class="reveal">Paco se lo dijo.</p>
       <p class="reveal">—Dame.</p>
