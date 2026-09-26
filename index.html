@@ -225,11 +225,13 @@
     }
     .electronic-zone .overflow-line {
       position:relative;
-      margin-top:3.4em;
-      font-size:1.16em;
+      margin-top:4.8em;
+      margin-bottom:4.4em;
+      font-size:.96em;
       line-height:1.5;
       font-weight:500;
-      letter-spacing:.006em;
+      letter-spacing:.012em;
+      max-width:28ch;
     }
     .electronic-zone .overflow-line::after {
       content:"";
@@ -242,7 +244,7 @@
       transition:width 1.6s .2s ease;
     }
     .electronic-zone.signal-visible .overflow-line::after {
-      width:68%;
+      width:76%;
     }
 
     .age-mirror {
@@ -400,6 +402,11 @@
       .rebeca-name { margin-top:2.1em; margin-bottom:3.4em; }
       .electronic-zone::before { inset:-.5em -30px; opacity:.2; }
       .electronic-zone::after { left:-24px; right:-24px; opacity:.2; }
+      .electronic-zone .overflow-line {
+        margin-top:4.1em;
+        margin-bottom:3.8em;
+        font-size:.92em;
+      }
       .age-mirror { grid-template-columns:1fr; gap:10px; margin:2.5em 0 3em; min-height:0; }
       .age-left,.age-right { text-align:left; }
       .age-axis { order:2; width:44px; height:1px!important; margin:4px 0; }
