@@ -37,9 +37,12 @@ body:not(.entered){overflow:hidden}
 .world-moon{position:absolute;z-index:6;top:10%;right:10%;width:var(--moon-size);height:var(--moon-size);border-radius:50%;opacity:var(--central-moon,0);transform:translate3d(var(--moon-x),var(--moon-y),0) rotate(-8deg);background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);box-shadow:0 0 20px rgba(216,225,247,.30),0 0 56px rgba(216,225,247,.14);overflow:hidden}
 .world-moon::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:#000}
 .world-final-moon{position:absolute;z-index:6;top:10%;right:10%;width:118px;height:118px;border-radius:50%;opacity:var(--final-moon,0);transform:translateY(var(--final-moon-y,18px));filter:drop-shadow(0 0 18px rgba(215,225,249,.22)) drop-shadow(0 0 42px rgba(215,225,249,.11));overflow:hidden}
-.world-final-moon .final-crescent{position:absolute;inset:0;border-radius:50%;opacity:calc(1 - var(--yin,0));background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);transition:opacity .14s linear}
-.world-final-moon .final-crescent::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:#08101e}
-.world-final-moon svg{position:absolute;inset:0;width:100%;height:100%;opacity:var(--yin,0);transform:rotate(calc((1 - var(--yin,0))*-14deg));transition:opacity .14s linear;display:block}
+.world-final-moon .final-crescent{position:absolute;inset:0;border-radius:50%;opacity:var(--crescent-opacity,1);background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);transform:scale(var(--crescent-scale,1));transition:opacity .10s linear,transform .10s linear}
+.world-final-moon .final-crescent::after{content:"";position:absolute;top:-8%;bottom:-8%;left:var(--crescent-cut-left,42%);right:var(--crescent-cut-right,-34%);border-radius:50%;background:#08101e;transition:left .10s linear,right .10s linear}
+.world-final-moon svg{position:absolute;inset:0;width:100%;height:100%;display:block;transform:rotate(var(--yin-rotation,-10deg)) scale(var(--yin-scale,.96));transition:transform .10s linear}
+.world-final-moon .yin-body{opacity:var(--yin-body,0)}
+.world-final-moon .yin-dots{opacity:var(--yin-dots,0)}
+.world-final-moon .yin-outline{opacity:var(--yin-outline,0)}
 .world-venus{position:absolute;z-index:7;top:28%;right:28%;width:10px;height:10px;border-radius:50%;opacity:var(--venus);background:#fffdf0;box-shadow:0 0 7px 3px rgba(255,252,225,.94),0 0 22px 8px rgba(255,239,188,.54),0 0 48px 16px rgba(255,224,157,.22)}
 #globalWaveCanvas{position:absolute;inset:0;z-index:8;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;filter:blur(.55px) saturate(1.24) contrast(1.14)}
 .world-white{z-index:9;opacity:var(--white);background:#fff}
@@ -134,7 +137,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
 .final-line{margin:0;padding:0 0 16vh;font-size:clamp(1.85rem,4.4vw,2.8rem);line-height:1.15;letter-spacing:.008em}
 
 /* El atardecer final solo mide tiempo: continúa el mismo cielo global */
-.dusk-passage{width:100vw;height:1400svh;margin-left:calc(50% - 50vw)}
+.dusk-passage{width:100vw;height:1600svh;margin-left:calc(50% - 50vw)}
 
 @keyframes heroIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
 @keyframes breathe{0%,100%{opacity:.22;transform:translateY(0) rotate(45deg)}50%{opacity:.72;transform:translateY(8px) rotate(45deg)}}
@@ -180,7 +183,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   .closing-section{padding-top:11vh}
   .pre-final{margin-top:12.75em;margin-bottom:25.5em}
   .final-line{padding-bottom:14vh}
-  .dusk-passage{height:1200svh}
+  .dusk-passage{height:1900svh}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -220,15 +223,17 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
       <span class="final-crescent"></span>
       <svg viewBox="0 0 100 100" aria-hidden="true">
         <defs><clipPath id="taijituClip"><circle cx="50" cy="50" r="49"/></clipPath></defs>
-        <g clip-path="url(#taijituClip)">
+        <g class="yin-body" clip-path="url(#taijituClip)">
           <rect x="0" y="0" width="50" height="100" fill="#faf9ee"/>
           <rect x="50" y="0" width="50" height="100" fill="#08101e"/>
           <circle cx="50" cy="25" r="25" fill="#08101e"/>
           <circle cx="50" cy="75" r="25" fill="#faf9ee"/>
+        </g>
+        <g class="yin-dots">
           <circle cx="50" cy="25" r="8" fill="#faf9ee"/>
           <circle cx="50" cy="75" r="8" fill="#08101e"/>
         </g>
-        <circle cx="50" cy="50" r="49" fill="none" stroke="rgba(250,249,238,.48)" stroke-width="1"/>
+        <circle class="yin-outline" cx="50" cy="50" r="49" fill="none" stroke="rgba(250,249,238,.48)" stroke-width="1"/>
       </svg>
     </div>
     <div class="world-venus"></div>
@@ -529,6 +534,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   const root=document.documentElement;
   const clamp=v=>Math.min(1,Math.max(0,v));
   const smooth=t=>t*t*(3-2*t);
+  const smoother=t=>t*t*t*(t*(t*6-15)+10);
   const lerp=(a,b,t)=>a+(b-a)*t;
   const mixColor=(a,b,t)=>[
     Math.round(lerp(a[0],b[0],t)),
@@ -811,10 +817,12 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     const finalNight=smooth(clamp((dp-.58)/.40));
     const finalVenus=smooth(clamp((dp-.60)/.20));
 
-    // En móvil la lectura visual se divide en tres actos:
-    // 1) aparece el creciente, 2) permanece reconocible, 3) se transforma muy lentamente.
-    const finalMoon=smooth(clamp((dp-(mobileScene?.02:.06))/(mobileScene?.22:.30)));
-    const finalYinYang=smooth(clamp((dp-(mobileScene?.30:.20))/(mobileScene?.48:.44)));
+    // Metamorfosis lunar muy lenta:
+    // aparece, permanece como creciente, nace la S, se equilibra y solo al final llegan los puntos.
+    const finalMoon=smoother(clamp((dp-(mobileScene?.015:.05))/(mobileScene?.18:.26)));
+    const yinBody=smoother(clamp((dp-(mobileScene?.28:.24))/(mobileScene?.54:.50)));
+    const yinOutline=smoother(clamp((dp-(mobileScene?.44:.38))/(mobileScene?.34:.34)));
+    const yinDots=smoother(clamp((dp-(mobileScene?.68:.62))/(mobileScene?.22:.24)));
     const finalStars=smooth(clamp((dp-.72)/.20));
 
     const night=Math.max(centralNight,finalNight);
@@ -828,7 +836,15 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     root.style.setProperty('--stars',stars.toFixed(3));
     root.style.setProperty('--central-moon',centralMoon.toFixed(3));
     root.style.setProperty('--final-moon',finalMoon.toFixed(3));
-    root.style.setProperty('--yin',finalYinYang.toFixed(3));
+    root.style.setProperty('--yin-body',yinBody.toFixed(3));
+    root.style.setProperty('--yin-outline',yinOutline.toFixed(3));
+    root.style.setProperty('--yin-dots',yinDots.toFixed(3));
+    root.style.setProperty('--crescent-opacity',(1-yinBody*.94).toFixed(3));
+    root.style.setProperty('--crescent-scale',(1+yinBody*.028).toFixed(4));
+    root.style.setProperty('--crescent-cut-left',(42-yinBody*7).toFixed(2)+'%');
+    root.style.setProperty('--crescent-cut-right',(-34+yinBody*23).toFixed(2)+'%');
+    root.style.setProperty('--yin-rotation',(-10+yinBody*10).toFixed(2)+'deg');
+    root.style.setProperty('--yin-scale',(.96+yinBody*.04).toFixed(4));
     root.style.setProperty('--venus',venus.toFixed(3));
     root.style.setProperty('--white',centralWhite.toFixed(3));
     root.style.setProperty('--moon-size',innerWidth<=620?'72px':'86px');
