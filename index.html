@@ -34,8 +34,8 @@ body:not(.entered){overflow:hidden}
 .world-sunset{z-index:3;opacity:var(--sunset);background:radial-gradient(124% 64% at 50% 108%,rgba(255,191,127,.65) 0%,rgba(246,157,118,.34) 25%,transparent 52%),radial-gradient(90% 52% at 50% 18%,rgba(171,124,153,.24) 0%,transparent 72%),linear-gradient(to bottom,#eee7e2 0%,#dec9cc 25%,#cfa4ac 51%,#aa7a87 76%,#715568 100%)}
 .world-night{z-index:4;opacity:var(--night);background:radial-gradient(105% 58% at 50% 104%,rgba(65,48,81,.30) 0%,transparent 54%),linear-gradient(to bottom,#060d1a 0%,#09152a 39%,#14213b 69%,#29233d 100%)}
 .world-stars{z-index:5;opacity:var(--stars);background:radial-gradient(circle at 7% 14%,rgba(255,255,255,.94) 0 1px,transparent 1.9px),radial-gradient(circle at 16% 32%,rgba(255,255,255,.72) 0 1.2px,transparent 2.1px),radial-gradient(circle at 24% 18%,rgba(255,255,255,.88) 0 1px,transparent 1.8px),radial-gradient(circle at 31% 41%,rgba(255,255,255,.76) 0 1.1px,transparent 2px),radial-gradient(circle at 39% 12%,rgba(255,255,255,.96) 0 1.2px,transparent 2px),radial-gradient(circle at 47% 27%,rgba(255,255,255,.69) 0 1px,transparent 1.8px),radial-gradient(circle at 55% 16%,rgba(255,255,255,.92) 0 1.2px,transparent 2px),radial-gradient(circle at 63% 36%,rgba(255,255,255,.75) 0 1.1px,transparent 2px),radial-gradient(circle at 72% 13%,rgba(255,255,255,.90) 0 1.3px,transparent 2.1px),radial-gradient(circle at 81% 29%,rgba(255,255,255,.72) 0 1px,transparent 1.9px),radial-gradient(circle at 89% 17%,rgba(255,255,255,.96) 0 1.2px,transparent 2px),radial-gradient(circle at 11% 52%,rgba(255,255,255,.79) 0 1px,transparent 1.9px),radial-gradient(circle at 21% 63%,rgba(255,255,255,.94) 0 1.2px,transparent 2px),radial-gradient(circle at 34% 56%,rgba(255,255,255,.70) 0 1px,transparent 1.8px),radial-gradient(circle at 44% 71%,rgba(255,255,255,.92) 0 1.2px,transparent 2px),radial-gradient(circle at 58% 60%,rgba(255,255,255,.78) 0 1px,transparent 1.9px),radial-gradient(circle at 68% 69%,rgba(255,255,255,.95) 0 1.2px,transparent 2px),radial-gradient(circle at 79% 58%,rgba(255,255,255,.74) 0 1px,transparent 1.9px),radial-gradient(circle at 87% 66%,rgba(255,255,255,.90) 0 1.2px,transparent 2px),radial-gradient(circle at 93% 47%,rgba(255,255,255,.72) 0 1px,transparent 1.8px);filter:drop-shadow(0 0 7px rgba(255,255,255,.18))}
-.world-moon{position:absolute;z-index:6;top:10%;right:10%;width:var(--moon-size);height:var(--moon-size);border-radius:50%;opacity:var(--moon);transform:translate3d(var(--moon-x),var(--moon-y),0) rotate(-8deg);background:radial-gradient(circle at 42% 45%,#fff 0%,#faf9ee 62%,#e1e5ef 100%);box-shadow:0 0 22px rgba(216,225,247,.36),0 0 64px rgba(216,225,247,.18);overflow:hidden}
-.world-moon::after{content:"";position:absolute;top:-6%;bottom:-6%;left:31%;right:-22%;border-radius:50%;background:rgb(var(--moon-cut-r) var(--moon-cut-g) var(--moon-cut-b))}
+.world-moon{position:absolute;z-index:6;top:10%;right:10%;width:var(--moon-size);height:var(--moon-size);border-radius:50%;opacity:var(--moon);transform:translate3d(var(--moon-x),var(--moon-y),0) rotate(-8deg);background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);box-shadow:0 0 20px rgba(216,225,247,.30),0 0 56px rgba(216,225,247,.14);overflow:hidden}
+.world-moon::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:rgb(var(--moon-cut-r) var(--moon-cut-g) var(--moon-cut-b))}
 .world-venus{position:absolute;z-index:7;top:28%;right:28%;width:10px;height:10px;border-radius:50%;opacity:var(--venus);background:#fffdf0;box-shadow:0 0 7px 3px rgba(255,252,225,.94),0 0 22px 8px rgba(255,239,188,.54),0 0 48px 16px rgba(255,224,157,.22)}
 #globalWaveCanvas{position:absolute;inset:0;z-index:8;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;filter:blur(.55px) saturate(1.24) contrast(1.14)}
 .world-white{z-index:9;opacity:var(--white);background:#fff}
@@ -738,7 +738,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     const sunset=Math.max(0,sunsetIn*sunsetOut);
     const finalNight=smooth(clamp((dp-.58)/.40));
     const finalVenus=smooth(clamp((dp-.64)/.18));
-    const finalMoon=smooth(clamp((dp-.70)/.20));
+    const finalMoon=smooth(clamp((dp-.80)/.14));
     const finalStars=smooth(clamp((dp-.75)/.18));
 
     const night=Math.max(centralNight,finalNight);
@@ -759,9 +759,9 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     root.style.setProperty('--moon-size',finalDominant?(innerWidth<=620?'104px':'118px'):(innerWidth<=620?'72px':'86px'));
     root.style.setProperty('--moon-x',(finalDominant?0:approach*1.5).toFixed(2)+'px');
     root.style.setProperty('--moon-y',(finalDominant?(18-18*finalMoon):(-approach*2.0)).toFixed(2)+'px');
-    root.style.setProperty('--moon-cut-r',finalDominant?6:0);
-    root.style.setProperty('--moon-cut-g',finalDominant?13:0);
-    root.style.setProperty('--moon-cut-b',finalDominant?26:0);
+    root.style.setProperty('--moon-cut-r',finalDominant?8:0);
+    root.style.setProperty('--moon-cut-g',finalDominant?16:0);
+    root.style.setProperty('--moon-cut-b',finalDominant?30:0);
 
     central.active=twoDays && twoDays.getBoundingClientRect().bottom>0 && twoDays.getBoundingClientRect().top<innerHeight;
     central.waves=waves;
