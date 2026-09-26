@@ -96,19 +96,64 @@
     }
     .age-mirror.visible .age-axis { height:82px; }
 
-    .photo-layer { margin:4.8em auto 5.2em; padding:0; }
+    .photo-layer { margin:5.4em auto 6.1em; padding:0; }
     .photo-layer img { display:block; width:100%; height:auto; user-select:none; }
-    .photo-frame {
-      width:min(72%,390px); margin:0 auto;
-      padding:8px; background:rgba(255,255,255,.46);
-      box-shadow:0 24px 70px rgba(32,27,22,.13);
-      transform:rotate(-1deg);
+
+    /* La tarjeta no se exhibe: la mano la sostiene. */
+    .card-photo {
+      position:relative;
+      width:min(62vw,330px);
+      margin-left:auto;
+      margin-right:auto;
+      isolation:isolate;
     }
-    .card-photo.reveal { transform:translateY(22px) rotate(.35deg); }
-    .card-photo.reveal.visible { transform:rotate(.35deg); }
+    .card-photo::before {
+      content:"";
+      position:absolute;
+      z-index:-1;
+      left:8%;
+      right:8%;
+      top:18%;
+      bottom:7%;
+      border-radius:50%;
+      background:radial-gradient(ellipse at 50% 58%,
+        rgba(183,133,103,.14) 0%,
+        rgba(183,133,103,.07) 42%,
+        transparent 73%);
+      filter:blur(24px);
+      opacity:0;
+      transform:scale(.92);
+      transition:opacity 1.35s ease, transform 1.55s cubic-bezier(.2,.75,.2,1);
+    }
+    .card-photo.visible::before {
+      opacity:1;
+      transform:scale(1);
+    }
+    .card-photo.reveal {
+      transform:translateY(18px) scale(.985);
+      transition-duration:1.18s;
+    }
+    .card-photo.reveal.visible {
+      transform:none;
+    }
     .card-photo .photo-frame {
-      border-radius:2px;
-      box-shadow:0 22px 64px rgba(32,27,22,.15);
+      width:100%;
+      margin:0;
+      padding:0;
+      background:transparent;
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 24px 72px rgba(32,27,22,.11);
+      transform:translateY(5px) scale(.988);
+      transition:transform 1.6s cubic-bezier(.2,.75,.2,1),
+                 box-shadow 1.6s ease;
+    }
+    .card-photo.visible .photo-frame {
+      transform:none;
+      box-shadow:0 28px 84px rgba(32,27,22,.13);
+    }
+    .card-photo img {
+      border-radius:20px;
     }
 
     .paris-section {
@@ -175,7 +220,7 @@
       .age-left,.age-right { text-align:left; }
       .age-axis { order:2; width:44px; height:1px!important; margin:4px 0; }
       .age-right { order:3; }
-      .photo-frame { width:min(84%,360px); }
+      .card-photo { width:min(76vw,320px); }
       .paris-section { margin:6em 0 5.8em; padding:4.6em 0 3.5em; }
       .paris-section::after { inset:0 -30px; }
       .tower-photo { width:min(88vw,460px); }
