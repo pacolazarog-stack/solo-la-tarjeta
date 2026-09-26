@@ -68,7 +68,18 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
 .reveal.visible{opacity:1;transform:none;filter:none}
 .opening-section{margin-bottom:3.4em}
 .opening-section p{margin-bottom:1.76em}
-.opening-section .opening-first{margin-bottom:2.5em}
+.opening-ramp{margin:0 0 16vh}
+.opening-stage{min-height:58svh;margin:0!important;display:flex;align-items:center;max-width:24ch;font-size:clamp(1.22rem,2.55vw,1.58rem);line-height:1.42;letter-spacing:.008em}
+.opening-stage.reveal{transform:translateY(22px);filter:blur(2px);transition:opacity 1.65s cubic-bezier(.2,.7,.2,1),transform 1.65s cubic-bezier(.2,.7,.2,1),filter 1.65s ease}
+.opening-stage.reveal.visible{transform:none;filter:none}
+.opening-name{font-size:clamp(1.65rem,4vw,2.55rem);line-height:1.18;font-weight:500;letter-spacing:.018em}
+.opening-name-1{min-height:72svh}
+.opening-name-2{min-height:68svh}
+.opening-name-3{min-height:74svh}
+.opening-action{min-height:62svh}
+.opening-task{min-height:54svh;color:rgba(30,28,25,.92)}
+.opening-task-last{min-height:64svh}
+.opening-after-ramp{margin-top:18vh!important;margin-bottom:2.5em!important}
 .opening-section .opening-breath{margin-bottom:3.45em}
 .opening-section .opening-machine{margin-top:.35em;margin-bottom:2.65em}
 .opening-section .opening-man{margin-top:2.95em}
@@ -126,7 +137,16 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   .hero{height:500svh}
   .hero-inner{top:150svh;width:min(calc(100% - 30px),900px)}
   .opening-section p{margin-bottom:1.58em}
-  .opening-section .opening-first{margin-bottom:2.25em}
+  .opening-ramp{margin-bottom:18vh}
+  .opening-stage{min-height:64svh;font-size:clamp(1.18rem,5.1vw,1.42rem)}
+  .opening-name{font-size:clamp(1.7rem,8vw,2.35rem)}
+  .opening-name-1{min-height:78svh}
+  .opening-name-2{min-height:74svh}
+  .opening-name-3{min-height:82svh}
+  .opening-action{min-height:68svh}
+  .opening-task{min-height:60svh}
+  .opening-task-last{min-height:72svh}
+  .opening-after-ramp{margin-top:20vh!important;margin-bottom:2.25em!important}
   .opening-section .opening-breath{margin-bottom:3.05em}
   .opening-section .opening-machine{margin-bottom:2.35em}
   .opening-section .opening-man{margin-top:2.5em}
@@ -204,8 +224,17 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   <main>
     <article>
       <section class="opening-section">
-      <p class="reveal opening-first">Paco Olmo de Males bajó del metro con una misión sencilla: coger un autobús, llegar a otra localidad y recoger un coche.</p>
-      <p class="reveal">Las misiones sencillas eran las que más miedo le daban.</p>
+      <div class="opening-ramp" aria-label="Entrada de Paco Olmo de Males">
+        <p class="reveal opening-stage opening-name opening-name-1">Paco.</p>
+        <p class="reveal opening-stage opening-name opening-name-2">Paco Olmo.</p>
+        <p class="reveal opening-stage opening-name opening-name-3">Paco Olmo de Males.</p>
+        <p class="reveal opening-stage opening-action">Bajó del metro.</p>
+        <p class="reveal opening-stage opening-action">Con una misión sencilla.</p>
+        <p class="reveal opening-stage opening-task">Coger un autobús.</p>
+        <p class="reveal opening-stage opening-task">Llegar a otra localidad.</p>
+        <p class="reveal opening-stage opening-task opening-task-last">Recoger un coche.</p>
+      </div>
+      <p class="reveal opening-after-ramp">Las misiones sencillas eran las que más miedo le daban.</p>
       <p class="reveal">Las difíciles traían instrucciones.</p>
       <p class="reveal opening-breath">Las sencillas dependían de uno.</p>
       <p class="reveal opening-machine">En la estación encontró una máquina expendedora. Tenía pantalla, teclado, ranura, lector, flechas de distintos colores y un cartel que prometía que comprar un billete era fácil.</p>
