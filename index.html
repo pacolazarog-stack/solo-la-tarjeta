@@ -650,7 +650,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
 
     const drawWave=(kind,w,h)=>{
       const mobile=innerWidth<=620;
-      const fundamentalCycles=mobile?4.8:5.4;
+      const fundamentalCycles=mobile?4.0:4.4;
       const harmonicCycles=fundamentalCycles*2;
       const approach=state.approach;
       const implode=state.implode;
@@ -658,11 +658,11 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
       const separation=h*(mobile?.145:.10)*(1-approach*.82)-h*.012*implode;
       const center=h*.50+(kind==='fundamental'?-separation:separation)+
         (kind==='fundamental'?dance:-dance);
-      const baseAmp=h*(mobile?.060:.043);
-      const amp=kind==='fundamental'?baseAmp:baseAmp*.62;
+      const baseAmp=h*(mobile?.064:.046);
+      const amp=kind==='fundamental'?baseAmp:baseAmp*.48;
       const collapse=1-.78*implode;
       const cycles=kind==='fundamental'?fundamentalCycles:harmonicCycles;
-      const phaseOffset=kind==='fundamental'?phase:phase*1.06+Math.PI*.36*(1-approach);
+      const phaseOffset=kind==='fundamental'?phase:phase*2+Math.PI*.42*(1-approach);
       const alpha=Math.min(.98,state.waves*(mobile?.88:.74));
 
       ctx.beginPath();
@@ -673,7 +673,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
         if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
       }
 
-      ctx.lineWidth=mobile?(kind==='fundamental'?2.8:2.3):(kind==='fundamental'?1.9:1.55);
+      ctx.lineWidth=mobile?(kind==='fundamental'?3.0:2.05):(kind==='fundamental'?2.0:1.35);
       if(kind==='fundamental'){
         ctx.strokeStyle='rgba(132,211,255,'+alpha+')';
         ctx.shadowColor='rgba(104,198,255,.68)';
