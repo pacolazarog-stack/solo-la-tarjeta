@@ -324,6 +324,64 @@
       border-radius:20px;
     }
 
+    .two-days-passage {
+      position:relative;
+      height:145vh;
+      margin:8em -4vw 2em;
+      overflow:clip;
+    }
+    .two-days-sky {
+      position:sticky;
+      top:0;
+      height:100svh;
+      margin:0 -14vw;
+      pointer-events:none;
+      isolation:isolate;
+    }
+    .two-days-sky::before,
+    .two-days-sky::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      transition:opacity .12s linear;
+    }
+    .two-days-sky::before {
+      opacity:var(--night,0);
+      background:
+        radial-gradient(70% 38% at 50% 18%,rgba(83,98,120,.14),transparent 72%),
+        linear-gradient(to bottom,rgba(27,39,55,.22),rgba(34,44,58,.12) 55%,transparent);
+    }
+    .two-days-sky::after {
+      opacity:var(--dawn,0);
+      background:
+        radial-gradient(58% 34% at 50% 20%,rgba(255,244,222,.28),transparent 72%),
+        linear-gradient(to bottom,rgba(255,255,255,.18),transparent 58%);
+    }
+    .time-pulse {
+      position:absolute;
+      left:8%;
+      right:8%;
+      top:58%;
+      height:1px;
+      opacity:var(--pulse,0);
+      transform:scaleX(var(--pulse-scale,.2));
+      transform-origin:center;
+      background:linear-gradient(90deg,transparent,rgba(47,86,98,.28) 22%,rgba(47,86,98,.5) 50%,rgba(47,86,98,.28) 78%,transparent);
+      box-shadow:0 0 18px rgba(47,86,98,.12);
+    }
+    .time-pulse::after {
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:5px;
+      height:5px;
+      border-radius:50%;
+      background:rgba(47,86,98,.42);
+      transform:translate(-50%,-50%) scale(var(--pulse-dot,.45));
+      box-shadow:0 0 14px rgba(47,86,98,.2);
+    }
+
     .paris-section {
       position:relative; margin:7.5em -4vw 6.7em; padding:5.2em 4vw 4.6em;
     }
@@ -412,6 +470,8 @@
       .age-axis { order:2; width:44px; height:1px!important; margin:4px 0; }
       .age-right { order:3; }
       .card-photo { width:min(76vw,320px); }
+      .two-days-passage { height:120vh; margin:7em 0 1.5em; }
+      .two-days-sky { margin:0 -30px; }
       .paris-section { margin:6em 0 5.8em; padding:4.6em 0 3.5em; }
       .paris-section::after { inset:0 -30px; }
       .tower-photo { width:min(88vw,460px); }
@@ -428,7 +488,7 @@
     }
     @media print {
       body { background:#fff!important; }
-      .ambient,.progress,.scroll-cue,.entry-gate,#soundtrack { display:none; }
+      .ambient,.progress,.scroll-cue,.entry-gate,#soundtrack,.two-days-passage { display:none; }
       .hero { min-height:auto; padding:1.5cm 0 2cm; }
       main { width:100%; padding:0; }
       .reveal { opacity:1; transform:none; filter:none; }
@@ -646,6 +706,11 @@
       <p class="reveal">Una devolución.</p>
       <p class="reveal">Una tarjeta.</p>
       <p class="reveal">Un café quizá.</p>
+      <div class="two-days-passage" data-two-days aria-hidden="true">
+        <div class="two-days-sky">
+          <span class="time-pulse"></span>
+        </div>
+      </div>
       <section class="paris-section" data-tone="paris">
       <p class="reveal">Dos días después vibró el teléfono.</p>
       <p class="reveal">Era un mensaje de Rebeca.</p>
@@ -763,6 +828,29 @@
           }
         },{threshold:.18});
         eio.observe(electronic);
+      }
+
+      const twoDays=document.querySelector('[data-two-days]');
+      if(twoDays){
+        const updateTwoDays=()=>{
+          const r=twoDays.getBoundingClientRect();
+          const vh=innerHeight || document.documentElement.clientHeight;
+          const total=r.height+vh;
+          const p=Math.min(1,Math.max(0,(vh-r.top)/total));
+
+          const night = p<.5 ? Math.sin(Math.PI*(p/.5)) : Math.sin(Math.PI*((1-p)/.5));
+          const dawn = Math.max(0,(p-.54)/.46);
+          const pulse = Math.max(0,(p-.76)/.24);
+
+          twoDays.style.setProperty('--night',Math.max(0,night).toFixed(3));
+          twoDays.style.setProperty('--dawn',Math.min(1,dawn).toFixed(3));
+          twoDays.style.setProperty('--pulse',Math.min(.72,pulse*.72).toFixed(3));
+          twoDays.style.setProperty('--pulse-scale',(0.22+Math.min(1,pulse)*.78).toFixed(3));
+          twoDays.style.setProperty('--pulse-dot',(0.45+Math.min(1,pulse)*.75).toFixed(3));
+        };
+        addEventListener('scroll',updateTwoDays,{passive:true});
+        addEventListener('resize',updateTwoDays);
+        updateTwoDays();
       }
 
       const tones=[...document.querySelectorAll('[data-tone]')];
