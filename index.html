@@ -37,9 +37,9 @@ body:not(.entered){overflow:hidden}
 .world-moon{position:absolute;z-index:6;top:10%;right:10%;width:var(--moon-size);height:var(--moon-size);border-radius:50%;opacity:var(--central-moon,0);transform:translate3d(var(--moon-x),var(--moon-y),0) rotate(-8deg);background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);box-shadow:0 0 20px rgba(216,225,247,.30),0 0 56px rgba(216,225,247,.14);overflow:hidden}
 .world-moon::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:#000}
 .world-final-moon{position:absolute;z-index:6;top:10%;right:10%;width:118px;height:118px;border-radius:50%;opacity:var(--final-moon,0);transform:translateY(var(--final-moon-y,18px));filter:drop-shadow(0 0 18px rgba(215,225,249,.22)) drop-shadow(0 0 42px rgba(215,225,249,.11));overflow:hidden}
-.world-final-moon .final-crescent{position:absolute;inset:0;border-radius:50%;opacity:calc(1 - var(--yin,0));background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);transition:opacity .08s linear}
+.world-final-moon .final-crescent{position:absolute;inset:0;border-radius:50%;opacity:calc(1 - var(--yin,0));background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);transition:opacity .14s linear}
 .world-final-moon .final-crescent::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:#08101e}
-.world-final-moon svg{position:absolute;inset:0;width:100%;height:100%;opacity:var(--yin,0);transform:rotate(calc((1 - var(--yin,0))*-14deg));transition:opacity .08s linear;display:block}
+.world-final-moon svg{position:absolute;inset:0;width:100%;height:100%;opacity:var(--yin,0);transform:rotate(calc((1 - var(--yin,0))*-14deg));transition:opacity .14s linear;display:block}
 .world-venus{position:absolute;z-index:7;top:28%;right:28%;width:10px;height:10px;border-radius:50%;opacity:var(--venus);background:#fffdf0;box-shadow:0 0 7px 3px rgba(255,252,225,.94),0 0 22px 8px rgba(255,239,188,.54),0 0 48px 16px rgba(255,224,157,.22)}
 #globalWaveCanvas{position:absolute;inset:0;z-index:8;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;filter:blur(.55px) saturate(1.24) contrast(1.14)}
 .world-white{z-index:9;opacity:var(--white);background:#fff}
@@ -173,7 +173,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   .card-photo{width:min(76vw,320px)}
   .two-days-passage{height:900vh;margin:16vh 0 0}
   #globalWaveCanvas{filter:blur(.35px) saturate(1.30) contrast(1.18)}
-  .world-final-moon{width:104px;height:104px}
+  .world-final-moon{width:126px;height:126px;top:9%;right:7%}
   .paris-section{margin:0 0 6.6em;padding:26vh 0 4em}
   .tower-photo{width:min(88vw,460px)}
   .chance-end{margin-bottom:14vh}
@@ -807,10 +807,14 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     const sunsetIn=smooth(clamp((dp-.00)/.52));
     const sunsetOut=1-smooth(clamp((dp-.68)/.25));
     const sunset=Math.max(0,sunsetIn*sunsetOut);
+    const mobileScene=innerWidth<=620;
     const finalNight=smooth(clamp((dp-.58)/.40));
     const finalVenus=smooth(clamp((dp-.60)/.20));
-    const finalMoon=smooth(clamp((dp-.06)/.30));
-    const finalYinYang=smooth(clamp((dp-.02)/.44));
+
+    // En móvil la lectura visual se divide en tres actos:
+    // 1) aparece el creciente, 2) permanece reconocible, 3) se transforma muy lentamente.
+    const finalMoon=smooth(clamp((dp-(mobileScene?.02:.06))/(mobileScene?.22:.30)));
+    const finalYinYang=smooth(clamp((dp-(mobileScene?.30:.20))/(mobileScene?.48:.44)));
     const finalStars=smooth(clamp((dp-.72)/.20));
 
     const night=Math.max(centralNight,finalNight);
