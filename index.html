@@ -327,7 +327,28 @@
     .two-days-passage {
       position:relative;
       height:340vh;
-      margin:8em 0 0;
+      margin:-16vh 0 0;
+      padding-top:16vh;
+    }
+    .two-days-passage::before {
+      content:"";
+      position:absolute;
+      left:50%;
+      top:0;
+      width:100vw;
+      height:28vh;
+      transform:translateX(-50%);
+      pointer-events:none;
+      z-index:0;
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(241,237,229,0) 0%,
+          rgba(239,238,233,.22) 24%,
+          rgba(235,236,235,.46) 48%,
+          rgba(229,233,236,.70) 72%,
+          rgba(224,230,235,.92) 100%
+        );
     }
     .two-days-sky {
       position:sticky;
@@ -339,7 +360,15 @@
       overflow:hidden;
       pointer-events:none;
       isolation:isolate;
-      background:var(--paper);
+      background:
+        linear-gradient(
+          to bottom,
+          #f1ede5 0%,
+          #efeee9 14%,
+          #ebedeb 30%,
+          #e5e9ec 52%,
+          #dde4ea 100%
+        );
     }
     .two-days-black,
     .two-days-white,
@@ -526,7 +555,14 @@
       .age-axis { order:2; width:44px; height:1px!important; margin:4px 0; }
       .age-right { order:3; }
       .card-photo { width:min(76vw,320px); }
-      .two-days-passage { height:290vh; margin:7em 0 0; }
+      .two-days-passage {
+        height:290vh;
+        margin:-12vh 0 0;
+        padding-top:12vh;
+      }
+      .two-days-passage::before {
+        height:24vh;
+      }
       .two-days-sky {
         width:100vw;
         margin-left:calc(50% - 50vw);
@@ -1069,7 +1105,7 @@
           const p=clamp((-r.top)/travel);
 
           // 1. "Un café quizá." se pierde lentamente en negro.
-          const black=smooth(clamp((p-.015)/.32));
+          const black=smooth(clamp((p-.08)/.30));
 
           // 2. Las dos ondas aparecen claramente antes de empezar a sincronizarse.
           const wavesIn=smooth(clamp((p-.16)/.10));
