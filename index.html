@@ -69,18 +69,23 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
 .reveal.visible{opacity:1;transform:none;filter:none}
 .opening-section{margin-bottom:3.4em}
 .opening-section p{margin-bottom:1.76em}
-.opening-ramp{margin:0 0 16vh}
-.opening-stage{min-height:58svh;margin:0!important;display:flex;align-items:center;max-width:24ch;font-size:clamp(1.22rem,2.55vw,1.58rem);line-height:1.42;letter-spacing:.008em}
-.opening-stage.reveal{transform:translateY(22px);filter:blur(2px);transition:opacity 1.65s cubic-bezier(.2,.7,.2,1),transform 1.65s cubic-bezier(.2,.7,.2,1),filter 1.65s ease}
-.opening-stage.reveal.visible{transform:none;filter:none}
-.opening-name{font-size:clamp(1.65rem,4vw,2.55rem);line-height:1.18;font-weight:500;letter-spacing:.018em}
-.opening-name-1{min-height:72svh}
-.opening-name-2{min-height:68svh}
-.opening-name-3{min-height:74svh}
-.opening-action{min-height:62svh}
-.opening-task{min-height:54svh;color:rgba(30,28,25,.92)}
-.opening-task-last{min-height:64svh}
-.opening-after-ramp{margin-top:18vh!important;margin-bottom:2.5em!important}
+.opening-ramp{margin:0 0 18vh;max-width:36rem}
+.opening-ramp p{margin:0!important}
+.opening-name{display:flex;align-items:flex-end;max-width:20ch;font-weight:500;line-height:1.08;letter-spacing:.012em;transform-origin:left bottom}
+.opening-name-1{min-height:34svh;font-size:clamp(1.55rem,3.4vw,2.15rem);letter-spacing:.026em}
+.opening-name-2{min-height:24svh;font-size:clamp(1.85rem,4.1vw,2.62rem);letter-spacing:.018em}
+.opening-name-3{min-height:38svh;font-size:clamp(2.18rem,5.15vw,3.35rem);line-height:1.04;letter-spacing:.006em}
+.opening-phrase{max-width:27ch;font-size:clamp(1.18rem,2.35vw,1.46rem);line-height:1.46;letter-spacing:.003em}
+.opening-phrase-1{min-height:30svh;display:flex;align-items:flex-end}
+.opening-phrase-2{min-height:26svh;display:flex;align-items:center;color:rgba(30,28,25,.80);font-style:italic}
+.opening-tasks{margin-top:4vh;padding-left:clamp(1.1rem,3vw,2.2rem);max-width:29ch;border-left:1px solid rgba(30,28,25,.12)}
+.opening-task-line{font-size:clamp(1.08rem,2.05vw,1.31rem);line-height:1.45;letter-spacing:.002em;color:rgba(30,28,25,.90)}
+.opening-task-1{min-height:19svh}
+.opening-task-2{min-height:22svh;padding-left:clamp(.3rem,1.4vw,.85rem)}
+.opening-task-3{min-height:28svh;padding-left:clamp(.7rem,2.4vw,1.5rem)}
+.opening-name.reveal,.opening-phrase.reveal,.opening-task-line.reveal{transform:translateY(16px);filter:blur(1.45px);transition:opacity 1.45s cubic-bezier(.2,.72,.2,1),transform 1.45s cubic-bezier(.2,.72,.2,1),filter 1.45s ease}
+.opening-name.reveal.visible,.opening-phrase.reveal.visible,.opening-task-line.reveal.visible{transform:none;filter:none}
+.opening-after-ramp{margin-top:12vh!important;margin-bottom:2.5em!important}
 .opening-section .opening-breath{margin-bottom:3.45em}
 .opening-section .opening-machine{margin-top:.35em;margin-bottom:2.65em}
 .opening-section .opening-man{margin-top:2.95em}
@@ -138,16 +143,19 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   .hero{height:500svh}
   .hero-inner{top:150svh;width:min(calc(100% - 30px),900px)}
   .opening-section p{margin-bottom:1.58em}
-  .opening-ramp{margin-bottom:18vh}
-  .opening-stage{min-height:64svh;font-size:clamp(1.18rem,5.1vw,1.42rem)}
-  .opening-name{font-size:clamp(1.7rem,8vw,2.35rem)}
-  .opening-name-1{min-height:78svh}
-  .opening-name-2{min-height:74svh}
-  .opening-name-3{min-height:82svh}
-  .opening-action{min-height:68svh}
-  .opening-task{min-height:60svh}
-  .opening-task-last{min-height:72svh}
-  .opening-after-ramp{margin-top:20vh!important;margin-bottom:2.25em!important}
+  .opening-ramp{margin-bottom:18vh;max-width:100%}
+  .opening-name-1{min-height:36svh;font-size:clamp(1.65rem,7vw,2.15rem)}
+  .opening-name-2{min-height:26svh;font-size:clamp(1.95rem,7.8vw,2.55rem)}
+  .opening-name-3{min-height:42svh;font-size:clamp(2.18rem,9vw,3rem);max-width:12ch}
+  .opening-phrase{font-size:clamp(1.13rem,5.05vw,1.36rem)}
+  .opening-phrase-1{min-height:32svh}
+  .opening-phrase-2{min-height:28svh}
+  .opening-tasks{margin-top:5vh;padding-left:1rem;max-width:25ch}
+  .opening-task-line{font-size:clamp(1.08rem,4.75vw,1.28rem)}
+  .opening-task-1{min-height:21svh}
+  .opening-task-2{min-height:24svh;padding-left:.35rem}
+  .opening-task-3{min-height:30svh;padding-left:.8rem}
+  .opening-after-ramp{margin-top:13vh!important;margin-bottom:2.25em!important}
   .opening-section .opening-breath{margin-bottom:3.05em}
   .opening-section .opening-machine{margin-bottom:2.35em}
   .opening-section .opening-man{margin-top:2.5em}
@@ -226,14 +234,18 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     <article>
       <section class="opening-section">
       <div class="opening-ramp" aria-label="Entrada de Paco Olmo de Males">
-        <p class="reveal opening-stage opening-name opening-name-1">Paco.</p>
-        <p class="reveal opening-stage opening-name opening-name-2">Paco Olmo.</p>
-        <p class="reveal opening-stage opening-name opening-name-3">Paco Olmo de Males.</p>
-        <p class="reveal opening-stage opening-action">Bajó del metro.</p>
-        <p class="reveal opening-stage opening-action">Con una misión sencilla.</p>
-        <p class="reveal opening-stage opening-task">Coger un autobús.</p>
-        <p class="reveal opening-stage opening-task">Llegar a otra localidad.</p>
-        <p class="reveal opening-stage opening-task opening-task-last">Recoger un coche.</p>
+        <p class="reveal opening-name opening-name-1">Paco.</p>
+        <p class="reveal opening-name opening-name-2">Paco Olmo.</p>
+        <p class="reveal opening-name opening-name-3">Paco Olmo de Males.</p>
+
+        <p class="reveal opening-phrase opening-phrase-1">Bajó del metro.</p>
+        <p class="reveal opening-phrase opening-phrase-2">Con una misión sencilla.</p>
+
+        <div class="opening-tasks" aria-label="La misión">
+          <p class="reveal opening-task-line opening-task-1">Coger un autobús.</p>
+          <p class="reveal opening-task-line opening-task-2">Llegar a otra localidad.</p>
+          <p class="reveal opening-task-line opening-task-3">Recoger un coche.</p>
+        </div>
       </div>
       <p class="reveal opening-after-ramp">Las misiones sencillas eran las que más miedo le daban.</p>
       <p class="reveal">Las difíciles traían instrucciones.</p>
