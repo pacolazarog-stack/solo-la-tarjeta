@@ -78,12 +78,12 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
 .opening-ramp{margin:0 0 18vh;max-width:36rem}
 .opening-ramp p{margin:0!important}
 .opening-name-evolution{height:148svh;position:relative}
-.opening-name-line{position:sticky;top:43vh;max-width:23ch;font-size:clamp(1.78rem,4.1vw,2.7rem);font-weight:500;line-height:1.08;letter-spacing:.008em;white-space:nowrap}
+.opening-name-line{position:sticky;top:43vh;max-width:25ch;font-size:clamp(1.78rem,4.1vw,2.7rem);font-weight:500;line-height:1.14;letter-spacing:.01em;word-spacing:.08em;white-space:nowrap}
 .name-paco{opacity:1}
-.name-olmo,.name-males{display:inline-block;opacity:var(--name-opacity,0);filter:blur(var(--name-blur,5px));transform:translateX(var(--name-shift,8px));transition:none}
-.name-olmo{opacity:var(--name-olmo,0);filter:blur(var(--name-olmo-blur,5px));transform:translateX(var(--name-olmo-shift,8px))}
-.name-males{opacity:var(--name-males,0);filter:blur(var(--name-males-blur,5px));transform:translateX(var(--name-males-shift,8px))}
-.name-period{display:inline-block;opacity:var(--name-period,.18)}
+.name-olmo,.name-males{display:inline-block;transition:none}
+.name-olmo{margin-left:.24em;opacity:var(--name-olmo,0);filter:blur(var(--name-olmo-blur,5px));transform:translateX(var(--name-olmo-shift,10px))}
+.name-males{margin-left:.30em;opacity:var(--name-males,0);filter:blur(var(--name-males-blur,5px));transform:translateX(var(--name-males-shift,12px))}
+.name-period{display:inline-block;margin-left:.04em;opacity:var(--name-period,.18)}
 .opening-phrase{max-width:27ch;font-size:clamp(1.18rem,2.35vw,1.46rem);line-height:1.46;letter-spacing:.003em}
 .opening-phrase-1{min-height:34svh;display:flex;align-items:flex-end}
 .opening-phrase-2{min-height:30svh;display:flex;align-items:center;color:rgba(30,28,25,.80);font-style:italic}
@@ -153,8 +153,8 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   .hero-inner{top:150svh;width:min(calc(100% - 30px),900px)}
   .opening-section p{margin-bottom:1.58em}
   .opening-ramp{margin-bottom:18vh;max-width:100%}
-  .opening-name-evolution{height:168svh}
-  .opening-name-line{top:42vh;font-size:clamp(1.72rem,7.4vw,2.42rem);max-width:none;white-space:normal}
+  .opening-name-evolution{height:186svh}
+  .opening-name-line{top:42vh;font-size:clamp(1.72rem,7.2vw,2.42rem);max-width:14ch;line-height:1.18;letter-spacing:.012em;word-spacing:.10em;white-space:normal}
   .opening-phrase{font-size:clamp(1.13rem,5.05vw,1.36rem)}
   .opening-phrase-1{min-height:36svh}
   .opening-phrase-2{min-height:32svh}
@@ -782,9 +782,9 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   const updateOpeningName=()=>{
     if(!openingName) return;
     const p=localProgress(openingName);
-    const olmo=smoother(clamp((p-.16)/.30));
-    const males=smoother(clamp((p-.50)/.34));
-    const period=smoother(clamp((p-.78)/.18));
+    const olmo=smoother(clamp((p-.14)/.24));
+    const males=smoother(clamp((p-.68)/.22));
+    const period=smoother(clamp((p-.88)/.10));
 
     openingName.style.setProperty('--name-olmo',olmo.toFixed(3));
     openingName.style.setProperty('--name-olmo-blur',(5*(1-olmo)).toFixed(2)+'px');
@@ -840,10 +840,10 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
 
     // Metamorfosis lunar muy lenta:
     // aparece, permanece como creciente, nace la S, se equilibra y solo al final llegan los puntos.
-    const finalMoon=smoother(clamp((dp-(mobileScene?.015:.05))/(mobileScene?.18:.26)));
-    const yinBody=smoother(clamp((dp-(mobileScene?.28:.24))/(mobileScene?.54:.50)));
-    const yinOutline=smoother(clamp((dp-(mobileScene?.44:.38))/(mobileScene?.34:.34)));
-    const yinDots=smoother(clamp((dp-(mobileScene?.68:.62))/(mobileScene?.22:.24)));
+    const finalMoon=smoother(clamp((dp-(mobileScene?.015:.04))/(mobileScene?.12:.18)));
+    const yinBody=smoother(clamp((dp-(mobileScene?.16:.16))/(mobileScene?.72:.64)));
+    const yinOutline=smoother(clamp((dp-(mobileScene?.34:.30))/(mobileScene?.44:.42)));
+    const yinDots=smoother(clamp((dp-(mobileScene?.78:.72))/(mobileScene?.18:.20)));
     const finalStars=smooth(clamp((dp-.72)/.20));
 
     const night=Math.max(centralNight,finalNight);
