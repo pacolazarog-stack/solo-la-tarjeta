@@ -34,9 +34,12 @@ body:not(.entered){overflow:hidden}
 .world-sunset{z-index:3;opacity:var(--sunset);background:radial-gradient(124% 64% at 50% 108%,rgba(255,191,127,.65) 0%,rgba(246,157,118,.34) 25%,transparent 52%),radial-gradient(90% 52% at 50% 18%,rgba(171,124,153,.24) 0%,transparent 72%),linear-gradient(to bottom,#eee7e2 0%,#dec9cc 25%,#cfa4ac 51%,#aa7a87 76%,#715568 100%)}
 .world-night{z-index:4;opacity:var(--night);background:radial-gradient(105% 58% at 50% 104%,rgba(65,48,81,.30) 0%,transparent 54%),linear-gradient(to bottom,#060d1a 0%,#09152a 39%,#14213b 69%,#29233d 100%)}
 .world-stars{z-index:5;opacity:var(--stars);background:radial-gradient(circle at 7% 14%,rgba(255,255,255,.94) 0 1px,transparent 1.9px),radial-gradient(circle at 16% 32%,rgba(255,255,255,.72) 0 1.2px,transparent 2.1px),radial-gradient(circle at 24% 18%,rgba(255,255,255,.88) 0 1px,transparent 1.8px),radial-gradient(circle at 31% 41%,rgba(255,255,255,.76) 0 1.1px,transparent 2px),radial-gradient(circle at 39% 12%,rgba(255,255,255,.96) 0 1.2px,transparent 2px),radial-gradient(circle at 47% 27%,rgba(255,255,255,.69) 0 1px,transparent 1.8px),radial-gradient(circle at 55% 16%,rgba(255,255,255,.92) 0 1.2px,transparent 2px),radial-gradient(circle at 63% 36%,rgba(255,255,255,.75) 0 1.1px,transparent 2px),radial-gradient(circle at 72% 13%,rgba(255,255,255,.90) 0 1.3px,transparent 2.1px),radial-gradient(circle at 81% 29%,rgba(255,255,255,.72) 0 1px,transparent 1.9px),radial-gradient(circle at 89% 17%,rgba(255,255,255,.96) 0 1.2px,transparent 2px),radial-gradient(circle at 11% 52%,rgba(255,255,255,.79) 0 1px,transparent 1.9px),radial-gradient(circle at 21% 63%,rgba(255,255,255,.94) 0 1.2px,transparent 2px),radial-gradient(circle at 34% 56%,rgba(255,255,255,.70) 0 1px,transparent 1.8px),radial-gradient(circle at 44% 71%,rgba(255,255,255,.92) 0 1.2px,transparent 2px),radial-gradient(circle at 58% 60%,rgba(255,255,255,.78) 0 1px,transparent 1.9px),radial-gradient(circle at 68% 69%,rgba(255,255,255,.95) 0 1.2px,transparent 2px),radial-gradient(circle at 79% 58%,rgba(255,255,255,.74) 0 1px,transparent 1.9px),radial-gradient(circle at 87% 66%,rgba(255,255,255,.90) 0 1.2px,transparent 2px),radial-gradient(circle at 93% 47%,rgba(255,255,255,.72) 0 1px,transparent 1.8px);filter:drop-shadow(0 0 7px rgba(255,255,255,.18))}
-.world-moon{position:absolute;z-index:6;top:10%;right:10%;width:var(--moon-size);height:var(--moon-size);border-radius:50%;opacity:var(--moon);transform:translate3d(var(--moon-x),var(--moon-y),0) rotate(var(--moon-rot,-8deg));background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);box-shadow:0 0 20px rgba(216,225,247,.30),0 0 56px rgba(216,225,247,.14);overflow:hidden}
-.world-moon::before{content:"";position:absolute;inset:0;border-radius:50%;opacity:var(--moon-yinyang,0);background:radial-gradient(circle at 50% 25%,rgb(var(--moon-cut-r) var(--moon-cut-g) var(--moon-cut-b)) 0 8%,rgba(250,249,238,.99) 8.7% 25%,transparent 25.6%),radial-gradient(circle at 50% 75%,rgba(250,249,238,.99) 0 8%,rgb(var(--moon-cut-r) var(--moon-cut-g) var(--moon-cut-b)) 8.7% 25%,transparent 25.6%),linear-gradient(to right,rgba(250,249,238,.99) 0 50%,rgb(var(--moon-cut-r) var(--moon-cut-g) var(--moon-cut-b)) 50% 100%)}
-.world-moon::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:rgb(var(--moon-cut-r) var(--moon-cut-g) var(--moon-cut-b));opacity:calc(1 - var(--moon-yinyang,0))}
+.world-moon{position:absolute;z-index:6;top:10%;right:10%;width:var(--moon-size);height:var(--moon-size);border-radius:50%;opacity:var(--central-moon,0);transform:translate3d(var(--moon-x),var(--moon-y),0) rotate(-8deg);background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);box-shadow:0 0 20px rgba(216,225,247,.30),0 0 56px rgba(216,225,247,.14);overflow:hidden}
+.world-moon::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:#000}
+.world-final-moon{position:absolute;z-index:6;top:10%;right:10%;width:118px;height:118px;border-radius:50%;opacity:var(--final-moon,0);transform:translateY(var(--final-moon-y,18px));filter:drop-shadow(0 0 18px rgba(215,225,249,.22)) drop-shadow(0 0 42px rgba(215,225,249,.11));overflow:hidden}
+.world-final-moon .final-crescent{position:absolute;inset:0;border-radius:50%;opacity:calc(1 - var(--yin,0));background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);transition:opacity .08s linear}
+.world-final-moon .final-crescent::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:#08101e}
+.world-final-moon svg{position:absolute;inset:0;width:100%;height:100%;opacity:var(--yin,0);transform:rotate(calc((1 - var(--yin,0))*-14deg));transition:opacity .08s linear;display:block}
 .world-venus{position:absolute;z-index:7;top:28%;right:28%;width:10px;height:10px;border-radius:50%;opacity:var(--venus);background:#fffdf0;box-shadow:0 0 7px 3px rgba(255,252,225,.94),0 0 22px 8px rgba(255,239,188,.54),0 0 48px 16px rgba(255,224,157,.22)}
 #globalWaveCanvas{position:absolute;inset:0;z-index:8;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;filter:blur(.55px) saturate(1.24) contrast(1.14)}
 .world-white{z-index:9;opacity:var(--white);background:#fff}
@@ -170,6 +173,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   .card-photo{width:min(76vw,320px)}
   .two-days-passage{height:900vh;margin:16vh 0 0}
   #globalWaveCanvas{filter:blur(.35px) saturate(1.30) contrast(1.18)}
+  .world-final-moon{width:104px;height:104px}
   .paris-section{margin:0 0 6.6em;padding:26vh 0 4em}
   .tower-photo{width:min(88vw,460px)}
   .chance-end{margin-bottom:14vh}
@@ -212,6 +216,21 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     <div class="world-night"></div>
     <div class="world-stars"></div>
     <div class="world-moon"></div>
+    <div class="world-final-moon">
+      <span class="final-crescent"></span>
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <defs><clipPath id="taijituClip"><circle cx="50" cy="50" r="49"/></clipPath></defs>
+        <g clip-path="url(#taijituClip)">
+          <rect x="0" y="0" width="50" height="100" fill="#faf9ee"/>
+          <rect x="50" y="0" width="50" height="100" fill="#08101e"/>
+          <circle cx="50" cy="25" r="25" fill="#08101e"/>
+          <circle cx="50" cy="75" r="25" fill="#faf9ee"/>
+          <circle cx="50" cy="25" r="8" fill="#faf9ee"/>
+          <circle cx="50" cy="75" r="8" fill="#08101e"/>
+        </g>
+        <circle cx="50" cy="50" r="49" fill="none" stroke="rgba(250,249,238,.48)" stroke-width="1"/>
+      </svg>
+    </div>
     <div class="world-venus"></div>
     <canvas id="globalWaveCanvas"></canvas>
     <div class="world-white"></div>
@@ -649,7 +668,7 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
   };
 
   let phase=0;
-  const central={active:false,waves:0,approach:0,implode:0,burst:0};
+  const central={active:false,waves:0,approach:0,lock:0,implode:0,burst:0};
 
   const drawHarmonicWave=(kind,w,h)=>{
     const mobile=innerWidth<=620;
@@ -657,13 +676,22 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     const cycles=kind==='fundamental'?fundamentalCycles:fundamentalCycles*2;
     const baseAmp=h*(mobile?.064:.046);
     const amp=kind==='fundamental'?baseAmp:baseAmp*.48;
-    const dance=Math.sin(phase*.58)*h*(mobile?.018:.012)*(1-central.approach);
-    const separation=h*(mobile?.145:.10)*(1-central.approach*.82)-h*.012*central.implode;
-    const center=h*.50+(kind==='fundamental'?-separation:separation)+(kind==='fundamental'?dance:-dance);
-    const collapse=1-.80*central.implode;
+
+    // Tres tiempos del acoplamiento: distancia, atracción oscilante y bloqueo.
+    const approach=central.approach;
+    const lock=central.lock;
+    const initialSeparation=h*(mobile?.145:.10);
+    const residualSeparation=initialSeparation*(1-approach);
+    const attractionSwing=Math.sin(phase*.46)*h*(mobile?.030:.021)*(1-lock)*(0.30+approach*.70);
+    const centerOffset=(kind==='fundamental'?-1:1)*(residualSeparation+attractionSwing);
+    const center=h*.50+centerOffset*(1-lock);
+
+    const collapse=1-.82*central.implode;
+    const freeWobble=Math.sin(phase*.31)*Math.PI*.34*(1-lock);
+    const stableRelation=Math.PI*.50;
     const temporal=kind==='fundamental'?phase:phase*2;
-    const phaseOffset=kind==='fundamental'?0:Math.PI*.42*(1-central.approach);
-    const alpha=Math.min(.99,central.waves*(mobile?.92:.80));
+    const phaseOffset=kind==='fundamental'?0:lerp(freeWobble+Math.PI*.18,stableRelation,lock);
+    const alpha=Math.min(.99,central.waves*(mobile?.94:.82));
 
     ctx.beginPath();
     for(let x=0;x<=w;x+=3){
@@ -675,12 +703,12 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     ctx.lineWidth=mobile?(kind==='fundamental'?3.0:2.05):(kind==='fundamental'?2.0:1.35);
     if(kind==='fundamental'){
       ctx.strokeStyle='rgba(132,211,255,'+alpha+')';
-      ctx.shadowColor='rgba(104,198,255,.70)';
+      ctx.shadowColor='rgba(104,198,255,.74)';
     }else{
-      ctx.strokeStyle='rgba(255,183,129,'+(alpha*.96)+')';
-      ctx.shadowColor='rgba(255,166,106,.66)';
+      ctx.strokeStyle='rgba(255,183,129,'+(alpha*.98)+')';
+      ctx.shadowColor='rgba(255,166,106,.70)';
     }
-    ctx.shadowBlur=mobile?16:13;
+    ctx.shadowBlur=mobile?(16+lock*8):(13+lock*7);
     ctx.stroke();
     ctx.shadowBlur=0;
   };
@@ -763,12 +791,13 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     const centralMoon=Math.max(0,centralMoonIn*centralMoonOut);
 
     const wavesIn=smooth(clamp((cp-.035)/.055));
-    const approach=smooth(clamp((cp-.28)/.42));
-    const implode=smooth(clamp((cp-.70)/.105));
-    const wavesOut=1-smooth(clamp((cp-.805)/.012));
+    const approach=smooth(clamp((cp-.20)/.34));
+    const lock=smooth(clamp((cp-.50)/.16));
+    const implode=smooth(clamp((cp-.72)/.090));
+    const wavesOut=1-smooth(clamp((cp-.812)/.012));
     const waves=Math.max(0,wavesIn*wavesOut);
-    const burstIn=smooth(clamp((cp-.812)/.012));
-    const burstOut=1-smooth(clamp((cp-.885)/.030));
+    const burstIn=smooth(clamp((cp-.820)/.012));
+    const burstOut=1-smooth(clamp((cp-.892)/.030));
     const burst=Math.max(0,burstIn*burstOut);
     const whiteIn=smooth(clamp((cp-.865)/.045));
     const whiteOut=1-smooth(clamp((cp-.955)/.045));
@@ -786,7 +815,6 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
 
     const night=Math.max(centralNight,finalNight);
     const stars=Math.max(centralStars,finalStars*.96);
-    const moon=Math.max(centralMoon,finalMoon);
     const venus=finalVenus;
 
     root.style.setProperty('--dawn-dark',dawnDark.toFixed(3));
@@ -794,23 +822,20 @@ p{margin:0 0 1.16em;hanging-punctuation:first last}
     root.style.setProperty('--sunset',sunset.toFixed(3));
     root.style.setProperty('--night',night.toFixed(3));
     root.style.setProperty('--stars',stars.toFixed(3));
-    root.style.setProperty('--moon',moon.toFixed(3));
+    root.style.setProperty('--central-moon',centralMoon.toFixed(3));
+    root.style.setProperty('--final-moon',finalMoon.toFixed(3));
+    root.style.setProperty('--yin',finalYinYang.toFixed(3));
     root.style.setProperty('--venus',venus.toFixed(3));
     root.style.setProperty('--white',centralWhite.toFixed(3));
-
-    const finalDominant=finalMoon>centralMoon;
-    root.style.setProperty('--moon-size',finalDominant?(innerWidth<=620?'104px':'118px'):(innerWidth<=620?'72px':'86px'));
-    root.style.setProperty('--moon-x',(finalDominant?0:approach*1.5).toFixed(2)+'px');
-    root.style.setProperty('--moon-y',(finalDominant?(18-18*finalMoon):(-approach*2.0)).toFixed(2)+'px');
-    root.style.setProperty('--moon-rot',finalDominant?'0deg':'-8deg');
-    root.style.setProperty('--moon-cut-r',finalDominant?8:0);
-    root.style.setProperty('--moon-cut-g',finalDominant?16:0);
-    root.style.setProperty('--moon-cut-b',finalDominant?30:0);
-    root.style.setProperty('--moon-yinyang',finalDominant?finalYinYang.toFixed(3):'0');
+    root.style.setProperty('--moon-size',innerWidth<=620?'72px':'86px');
+    root.style.setProperty('--moon-x',(approach*1.5).toFixed(2)+'px');
+    root.style.setProperty('--moon-y',(-approach*2.0).toFixed(2)+'px');
+    root.style.setProperty('--final-moon-y',(18-18*finalMoon).toFixed(2)+'px');
 
     central.active=twoDays && twoDays.getBoundingClientRect().bottom>0 && twoDays.getBoundingClientRect().top<innerHeight;
     central.waves=waves;
     central.approach=approach;
+    central.lock=lock;
     central.implode=implode;
     central.burst=burst;
     drawCanvas();
