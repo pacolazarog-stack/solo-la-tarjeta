@@ -742,7 +742,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
       </div>
 
       <div class="dusk-beat dusk-breath-normal dusk-late dusk-emphasis">
-        <p class="reveal">La tarjeta quedó anulada.</p>
+        <p class="reveal" id="duskColorTurn">La tarjeta quedó anulada.</p>
       </div>
 
       <div class="dusk-beat dusk-breath-short dusk-late">
@@ -848,6 +848,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   const closing=document.querySelector('.closing-section');
   const finalLine=document.querySelector('.final-line');
   const dusk=document.querySelector('.dusk-passage');
+  const duskColorTurn=document.getElementById('duskColorTurn');
   const duskFinalPhrase=document.getElementById('duskFinalPhrase');
   const worldComet=document.getElementById('worldComet');
   const progress=document.querySelector('.progress i');
@@ -1098,8 +1099,13 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     const venus=smoother(clamp((dp-.58)/.28));
     const finalStars=smoother(clamp((dp-.69)/.25));
 
-    // El texto no aclara hasta que la tarde ha entrado de verdad en la noche.
-    const duskTextLight=smoother(clamp((dp-(mobile?.73:.70))/(mobile?.13:.14)));
+    // El cambio de color nace exactamente con «La tarjeta quedó anulada.».
+    // Antes de esa frase el texto permanece oscuro; mientras la frase cruza
+    // la zona de lectura, el color vira gradualmente hacia el blanco nocturno.
+    const colorTurnRect=duskColorTurn?.getBoundingClientRect();
+    const duskTextLight=colorTurnRect
+      ? smoother(clamp((innerHeight*.70-colorTurnRect.top)/(innerHeight*.32)))
+      : 0;
     const duskText=mix([31,29,26],[248,246,240],duskTextLight);
     const duskShadow=.30*duskTextLight;
 
