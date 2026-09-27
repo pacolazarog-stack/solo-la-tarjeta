@@ -17,7 +17,7 @@
   --reading:760px;
   --dawn-dark:1;--dawn-warm:0;--night:0;--stars:0;
   --central-moon:0;--final-moon:0;--venus:0;--sunset:0;--white:0;
-  --yin-body:0;--yin-outline:0;--yin-dots:0;
+  --yin-body:0;--yin-outline:0;--yin-dots:0;--final-phrase:0;
   --crescent-opacity:1;--crescent-cut-left:42%;--crescent-cut-right:-34%;
   --final-moon-y:18px;
   color-scheme:light
@@ -129,15 +129,19 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 .hinge{margin-top:2.4em!important;margin-bottom:4.6em!important;font-size:1.065em}
 .pre-final{margin-top:15em!important;margin-bottom:30em!important;color:#6f7478;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:.8em;letter-spacing:.19em;text-transform:uppercase}
 .final-line{margin:0;padding:0;font-size:clamp(1.85rem,4.4vw,2.8rem);line-height:1.15}
-/* ATARDECER FINAL: TEXTO DISTRIBUIDO + METAMORFOSIS */
-.dusk-passage{width:100vw;height:3200svh;margin-left:calc(50% - 50vw);position:relative}
+/* ATARDECER FINAL: PARTITURA RESPIRATORIA + METAMORFOSIS */
+.dusk-passage{width:100vw;height:3600svh;margin-left:calc(50% - 50vw);position:relative}
 .dusk-beat{position:absolute;top:var(--at);left:50%;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading));font-size:clamp(1.13rem,2.15vw,1.34rem);line-height:1.72;color:rgba(31,29,26,.92)}
 .dusk-beat p{margin:0}
+.dusk-beat p+p{margin-top:.82em}
+.dusk-beat .dusk-small-gap{margin-top:.34em}
+.dusk-beat .dusk-long-gap{margin-top:2.1em}
 .dusk-fragment{width:min(calc(100% - 40px),520px)}
 .dusk-emphasis{font-size:clamp(1.24rem,2.5vw,1.52rem)}
 .dusk-money{font-variant-numeric:tabular-nums;font-size:clamp(1.28rem,2.7vw,1.62rem)}
 .dusk-late{color:rgba(248,246,240,.95);text-shadow:0 2px 22px rgba(0,0,0,.30)}
-.dusk-final-wrap{position:absolute;left:50%;top:99%;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading))}\n.dusk-final-phrase{margin:0;text-align:center;font-size:clamp(1.95rem,4.6vw,3rem);line-height:1.15;color:rgba(250,249,238,.98);text-shadow:0 2px 24px rgba(0,0,0,.30)}
+.dusk-final-wrap{position:absolute;left:50%;top:97%;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading));pointer-events:none}
+.dusk-final-phrase{margin:0;text-align:center;font-size:clamp(1.95rem,4.6vw,3rem);line-height:1.15;color:rgba(250,249,238,.98);text-shadow:0 2px 24px rgba(0,0,0,.30);opacity:var(--final-phrase);filter:blur(calc((1 - var(--final-phrase))*5px));transform:translateY(calc((1 - var(--final-phrase))*14px));transition:none}
 
 @media(max-width:620px){
   .progress{display:none}
@@ -167,12 +171,14 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .closing-section{padding-top:11vh}
   .pre-final{margin-top:13em!important;margin-bottom:26em!important}
   .final-line{padding-bottom:0}
-  .dusk-passage{height:3600svh}
+  .dusk-passage{height:4200svh}
   .dusk-beat{width:min(calc(100% - 30px),var(--reading));font-size:clamp(1.12rem,5vw,1.34rem);line-height:1.68}
+  .dusk-beat p+p{margin-top:.9em}
   .dusk-fragment{width:min(calc(100% - 30px),460px)}
   .dusk-emphasis{font-size:clamp(1.22rem,5.5vw,1.48rem)}
   .dusk-money{font-size:clamp(1.3rem,6vw,1.62rem)}
-  .dusk-final-wrap{width:min(calc(100% - 30px),var(--reading))}\n  .dusk-final-phrase{font-size:clamp(1.9rem,8vw,2.7rem)}
+  .dusk-final-wrap{width:min(calc(100% - 30px),var(--reading))}
+  .dusk-final-phrase{font-size:clamp(1.9rem,8vw,2.7rem)}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -513,53 +519,130 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   </main>
 
   <section class="dusk-passage" aria-label="Atardecer final">
-    <div class="dusk-beat" style="--at:4.00%"><p class="reveal">Había una cosa que Paco no había hecho.</p></div>
-    <div class="dusk-beat" style="--at:6.05%"><p class="reveal">No había bloqueado la tarjeta.</p></div>
-    <div class="dusk-beat" style="--at:8.09%"><p class="reveal">Podía haberlo hecho desde el teléfono.</p></div>
-    <div class="dusk-beat dusk-fragment" style="--at:10.14%"><p class="reveal">Congelarla.</p></div>
-    <div class="dusk-beat dusk-fragment" style="--at:12.18%"><p class="reveal">Anularla.</p></div>
-    <div class="dusk-beat dusk-fragment" style="--at:14.23%"><p class="reveal">Pedir otra.</p></div>
-    <div class="dusk-beat" style="--at:16.27%"><p class="reveal">Era lo prudente.</p></div>
-    <div class="dusk-beat dusk-emphasis" style="--at:18.32%"><p class="reveal">No quiso.</p></div>
-    <div class="dusk-beat" style="--at:20.36%"><p class="reveal">Rebeca la llevaba en el bolso.</p></div>
-    <div class="dusk-beat" style="--at:22.41%"><p class="reveal">Bloquearla habría sido protegerse de ella, aunque ella no pudiera saberlo.</p></div>
-    <div class="dusk-beat" style="--at:24.45%"><p class="reveal">Y Paco, por una de esas decisiones íntimas que nadie presencia y que por eso mismo importan más, decidió confiar.</p></div>
-    <div class="dusk-beat dusk-emphasis" style="--at:26.50%"><p class="reveal">La tarjeta siguió activa.</p></div>
-    <div class="dusk-beat" style="--at:28.55%"><p class="reveal">Aquella misma tarde, después de recibir las fotografías de París, abrió la aplicación del banco.</p></div>
-    <div class="dusk-beat dusk-money" style="--at:30.59%"><p class="reveal">Doscientos euros con setenta y nueve céntimos.</p></div>
-    <div class="dusk-beat dusk-fragment" style="--at:32.64%"><p class="reveal">Paco acercó el teléfono.</p></div>
-    <div class="dusk-beat dusk-fragment" style="--at:34.68%"><p class="reveal">Volvió a leer.</p></div>
-    <div class="dusk-beat dusk-money" style="--at:36.73%"><p class="reveal">200,79 €.</p></div>
-    <div class="dusk-beat" style="--at:38.77%"><p class="reveal">El movimiento era del día anterior.</p></div>
-    <div class="dusk-beat" style="--at:40.82%"><p class="reveal">El cargo procedía de un servicio de inteligencia artificial.</p></div>
-    <div class="dusk-beat" style="--at:42.86%"><p class="reveal">Había entrado tiempo atrás para probarlo gratis.</p></div>
-    <div class="dusk-beat" style="--at:44.91%"><p class="reveal"><em>Gratis</em> era una palabra que, en internet, solía llevar una fecha de caducidad escrita en una tinta que nadie veía.</p></div>
-    <div class="dusk-beat" style="--at:46.95%"><p class="reveal">No recordaba haber contratado ninguna suscripción.</p></div>
-    <div class="dusk-beat dusk-emphasis" style="--at:49.00%"><p class="reveal">El sistema sí.</p></div>
-    <div class="dusk-beat" style="--at:51.05%"><p class="reveal">Paco miró el movimiento bancario.</p></div>
-    <div class="dusk-beat dusk-fragment" style="--at:53.09%"><p class="reveal">Rebeca tenía su tarjeta.</p></div>
-    <div class="dusk-beat" style="--at:55.14%"><p class="reveal">La empresa de inteligencia artificial tenía doscientos euros con setenta y nueve céntimos.</p></div>
-    <div class="dusk-beat dusk-emphasis" style="--at:57.18%"><p class="reveal">La confianza estaba, como casi siempre, en otro sitio.</p></div>
-    <div class="dusk-beat" style="--at:59.23%"><p class="reveal">Al día siguiente, por la mañana, habló con el departamento de seguridad del banco.</p></div>
-    <div class="dusk-beat dusk-late dusk-fragment" style="--at:61.27%"><p class="reveal">Explicó la prueba gratuita.</p></div>
-    <div class="dusk-beat dusk-late dusk-fragment" style="--at:63.32%"><p class="reveal">Explicó la suscripción fantasma.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:65.36%"><p class="reveal">Explicó que no reconocía aquello como un acto de su voluntad.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:67.41%"><p class="reveal">La solución fue inmediata.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:69.45%"><p class="reveal">—Tenemos que cancelar la tarjeta.</p></div>
-    <div class="dusk-beat dusk-late dusk-fragment" style="--at:71.50%"><p class="reveal">Paco se quedó callado.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:73.55%"><p class="reveal">—Le enviaremos otra con una numeración nueva.</p></div>
-    <div class="dusk-beat dusk-late dusk-emphasis" style="--at:75.59%"><p class="reveal">La tarjeta quedó anulada.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:77.64%"><p class="reveal">La que Rebeca llevaba consigo dejó de servir.</p></div>
-    <div class="dusk-beat dusk-late dusk-fragment" style="--at:79.68%"><p class="reveal">Ya no podía comprar nada con ella.</p></div>
-    <div class="dusk-beat dusk-late dusk-fragment" style="--at:81.73%"><p class="reveal">Ya no podía perder dinero con ella.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:83.77%"><p class="reveal">Ya no tenía ninguna utilidad bancaria.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:85.82%"><p class="reveal">Era, simplemente, un rectángulo de plástico con el nombre de Paco.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:87.86%"><p class="reveal">Y precisamente aquella tarde, según los cálculos de su propio mapa mental, Rebeca podía estar iniciando el regreso.</p></div>
-    <div class="dusk-beat dusk-late dusk-fragment" style="--at:89.91%"><p class="reveal">Paco miró el teléfono.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:91.95%"><p class="reveal">Habían quedado en verse para que ella le devolviera el plástico.</p></div>
-    <div class="dusk-beat dusk-late dusk-emphasis" style="--at:94.00%"><p class="reveal">Ahora la tarjeta ya no hacía falta.</p></div>
+    <div class="dusk-beat" style="--at:2.8%">
+      <p class="reveal">Había una cosa que Paco no había hecho.</p>
+      <p class="reveal">No había bloqueado la tarjeta.</p>
+    </div>
 
-    <div class="dusk-final-wrap"><p class="reveal dusk-final-phrase">La cita, en cambio, sí.</p></div>
+    <div class="dusk-beat dusk-fragment" style="--at:7.4%">
+      <p class="reveal">Podía haberlo hecho desde el teléfono.</p>
+      <p class="reveal dusk-small-gap">Congelarla.</p>
+      <p class="reveal dusk-small-gap">Anularla.</p>
+      <p class="reveal dusk-small-gap">Pedir otra.</p>
+    </div>
+
+    <div class="dusk-beat dusk-fragment" style="--at:12.6%">
+      <p class="reveal">Era lo prudente.</p>
+    </div>
+
+    <div class="dusk-beat dusk-fragment dusk-emphasis" style="--at:15.8%">
+      <p class="reveal">No quiso.</p>
+    </div>
+
+    <div class="dusk-beat" style="--at:21.0%">
+      <p class="reveal">Rebeca la llevaba en el bolso.</p>
+      <p class="reveal dusk-long-gap">Bloquearla habría sido protegerse de ella, aunque ella no pudiera saberlo.</p>
+    </div>
+
+    <div class="dusk-beat" style="--at:27.4%">
+      <p class="reveal">Y Paco, por una de esas decisiones íntimas que nadie presencia y que por eso mismo importan más, decidió confiar.</p>
+    </div>
+
+    <div class="dusk-beat dusk-fragment dusk-emphasis" style="--at:31.8%">
+      <p class="reveal">La tarjeta siguió activa.</p>
+    </div>
+
+    <div class="dusk-beat" style="--at:36.9%">
+      <p class="reveal">Aquella misma tarde, después de recibir las fotografías de París, abrió la aplicación del banco.</p>
+    </div>
+
+    <div class="dusk-beat dusk-money" style="--at:41.3%">
+      <p class="reveal">Doscientos euros con setenta y nueve céntimos.</p>
+      <p class="reveal dusk-long-gap">Paco acercó el teléfono.</p>
+      <p class="reveal dusk-small-gap">Volvió a leer.</p>
+      <p class="reveal dusk-long-gap">200,79 €.</p>
+    </div>
+
+    <div class="dusk-beat dusk-fragment" style="--at:46.0%">
+      <p class="reveal">El movimiento era del día anterior.</p>
+    </div>
+
+    <div class="dusk-beat" style="--at:50.6%">
+      <p class="reveal">El cargo procedía de un servicio de inteligencia artificial.</p>
+      <p class="reveal dusk-long-gap">Había entrado tiempo atrás para probarlo gratis.</p>
+    </div>
+
+    <div class="dusk-beat" style="--at:55.8%">
+      <p class="reveal"><em>Gratis</em> era una palabra que, en internet, solía llevar una fecha de caducidad escrita en una tinta que nadie veía.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late" style="--at:60.2%">
+      <p class="reveal">No recordaba haber contratado ninguna suscripción.</p>
+      <p class="reveal dusk-long-gap dusk-emphasis">El sistema sí.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late" style="--at:64.8%">
+      <p class="reveal">Paco miró el movimiento bancario.</p>
+      <p class="reveal dusk-long-gap">Rebeca tenía su tarjeta.</p>
+      <p class="reveal">La empresa de inteligencia artificial tenía doscientos euros con setenta y nueve céntimos.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late dusk-emphasis" style="--at:69.3%">
+      <p class="reveal">La confianza estaba, como casi siempre, en otro sitio.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late" style="--at:73.8%">
+      <p class="reveal">Al día siguiente, por la mañana, habló con el departamento de seguridad del banco.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:77.3%">
+      <p class="reveal">Explicó la prueba gratuita.</p>
+      <p class="reveal">Explicó la suscripción fantasma.</p>
+      <p class="reveal">Explicó que no reconocía aquello como un acto de su voluntad.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:80.5%">
+      <p class="reveal">La solución fue inmediata.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late" style="--at:82.6%">
+      <p class="reveal">—Tenemos que cancelar la tarjeta.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:84.8%">
+      <p class="reveal">Paco se quedó callado.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late" style="--at:86.8%">
+      <p class="reveal">—Le enviaremos otra con una numeración nueva.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late dusk-emphasis" style="--at:88.8%">
+      <p class="reveal">La tarjeta quedó anulada.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late" style="--at:90.5%">
+      <p class="reveal">La que Rebeca llevaba consigo dejó de servir.</p>
+      <p class="reveal dusk-long-gap">Ya no podía comprar nada con ella.</p>
+      <p class="reveal">Ya no podía perder dinero con ella.</p>
+      <p class="reveal">Ya no tenía ninguna utilidad bancaria.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late" style="--at:92.2%">
+      <p class="reveal">Era, simplemente, un rectángulo de plástico con el nombre de Paco.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late" style="--at:93.4%">
+      <p class="reveal">Y precisamente aquella tarde, según los cálculos de su propio mapa mental, Rebeca podía estar iniciando el regreso.</p>
+    </div>
+
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:94.1%">
+      <p class="reveal">Paco miró el teléfono.</p>
+      <p class="reveal dusk-long-gap">Habían quedado en verse para que ella le devolviera el plástico.</p>
+      <p class="reveal dusk-long-gap dusk-emphasis">Ahora la tarjeta ya no hacía falta.</p>
+    </div>
+
+    <div class="dusk-final-wrap"><p class="dusk-final-phrase">La cita, en cambio, sí.</p></div>
   </section>
 
   
@@ -785,19 +868,37 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     const whiteOut=1-smoother(clamp((cp-.96)/.04));
     const white=whiteIn*whiteOut;
 
-    /* atardecer final: la luna nace ya transformándose -> taijitu -> noche */
-    const sunset=smoother(clamp(dp/.58))*(1-smoother(clamp((dp-.70)/.25)));
-    const finalMoon=smoother(clamp(dp/(mobile?.12:.16)));
+    /* atardecer final: metamorfosis acompasada con la respiración del texto */
+    const sunset=smoother(clamp(dp/.64))*(1-smoother(clamp((dp-.74)/.23)));
+    const finalMoon=smoother(clamp(dp/(mobile?.16:.18)));
 
-    // La metamorfosis comienza con la primera aparición de la luna y se desarrolla casi imperceptiblemente durante todo el atardecer.
-    const morph=smoother(clamp(dp/(mobile?.94:.90)));
-    const yinBody=smoother(clamp(morph/.82));
-    const yinOutline=smoother(clamp((morph-.30)/.52));
-    const yinDots=smoother(clamp((morph-.70)/.26));
+    const morphAnchors=[
+      [0,0],[.08,.025],[.16,.06],[.21,.10],[.274,.15],[.318,.18],
+      [.369,.23],[.413,.28],[.46,.33],[.506,.38],[.558,.44],[.602,.49],
+      [.648,.54],[.693,.60],[.738,.66],[.773,.71],[.805,.75],[.826,.78],
+      [.848,.81],[.868,.84],[.888,.87],[.905,.89],[.922,.91],[.934,.93],
+      [.941,.945],[.952,.968],[.962,1]
+    ];
+    const pacedMorph=p=>{
+      if(p<=morphAnchors[0][0])return morphAnchors[0][1];
+      for(let i=0;i<morphAnchors.length-1;i++){
+        const a=morphAnchors[i],b=morphAnchors[i+1];
+        if(p<=b[0]){
+          const t=smoother(clamp((p-a[0])/(b[0]-a[0])));
+          return lerp(a[1],b[1],t);
+        }
+      }
+      return 1;
+    };
+    const morph=pacedMorph(dp);
+    const yinBody=smoother(clamp((morph-.055)/.925));
+    const yinOutline=smoother(clamp((morph-.34)/.63));
+    const yinDots=smoother(clamp((morph-.70)/.28));
 
-    const finalNight=smoother(clamp((dp-.60)/.38));
-    const venus=smoother(clamp((dp-.62)/.22));
-    const finalStars=smoother(clamp((dp-.72)/.20));
+    const finalNight=smoother(clamp((dp-.54)/.43));
+    const venus=smoother(clamp((dp-.64)/.25));
+    const finalStars=smoother(clamp((dp-.73)/.23));
+    const finalPhrase=smoother(clamp((dp-.965)/.012));
 
     root.style.setProperty('--dawn-dark',dawnDark.toFixed(3));
     root.style.setProperty('--dawn-warm',dawnWarm.toFixed(3));
@@ -812,10 +913,11 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     root.style.setProperty('--yin-body',yinBody.toFixed(3));
     root.style.setProperty('--yin-outline',yinOutline.toFixed(3));
     root.style.setProperty('--yin-dots',yinDots.toFixed(3));
-    root.style.setProperty('--crescent-opacity',(1-morph).toFixed(3));
-    root.style.setProperty('--crescent-cut-left',(42-morph*10).toFixed(2)+'%');
-    root.style.setProperty('--crescent-cut-right',(-34+morph*29).toFixed(2)+'%');
+    root.style.setProperty('--crescent-opacity',(1-smoother(clamp((morph-.035)/.94))).toFixed(3));
+    root.style.setProperty('--crescent-cut-left',(42-morph*8).toFixed(2)+'%');
+    root.style.setProperty('--crescent-cut-right',(-34+morph*26).toFixed(2)+'%');
     root.style.setProperty('--final-moon-y',(18-18*finalMoon).toFixed(2)+'px');
+    root.style.setProperty('--final-phrase',finalPhrase.toFixed(3));
 
     wave.active=twoDays&&twoDays.getBoundingClientRect().bottom>0&&twoDays.getBoundingClientRect().top<innerHeight;
     wave.visibility=visibility;wave.approach=approach;wave.lock=lock;wave.collapse=collapse;wave.burst=burst;
