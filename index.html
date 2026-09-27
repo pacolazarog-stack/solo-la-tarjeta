@@ -39,26 +39,30 @@ body:not(.entered){overflow:hidden}
 .world-stars{z-index:5;opacity:var(--stars);background:radial-gradient(circle at 7% 14%,#fff 0 1px,transparent 1.8px),radial-gradient(circle at 16% 32%,rgba(255,255,255,.72) 0 1.1px,transparent 1.9px),radial-gradient(circle at 24% 18%,rgba(255,255,255,.9) 0 1px,transparent 1.8px),radial-gradient(circle at 31% 41%,rgba(255,255,255,.76) 0 1.1px,transparent 1.9px),radial-gradient(circle at 39% 12%,rgba(255,255,255,.96) 0 1.2px,transparent 2px),radial-gradient(circle at 47% 27%,rgba(255,255,255,.69) 0 1px,transparent 1.8px),radial-gradient(circle at 55% 16%,rgba(255,255,255,.92) 0 1.2px,transparent 2px),radial-gradient(circle at 63% 36%,rgba(255,255,255,.75) 0 1px,transparent 1.9px),radial-gradient(circle at 72% 13%,rgba(255,255,255,.9) 0 1.2px,transparent 2px),radial-gradient(circle at 81% 29%,rgba(255,255,255,.72) 0 1px,transparent 1.9px),radial-gradient(circle at 89% 17%,rgba(255,255,255,.96) 0 1.2px,transparent 2px),radial-gradient(circle at 11% 52%,rgba(255,255,255,.79) 0 1px,transparent 1.9px),radial-gradient(circle at 21% 63%,rgba(255,255,255,.94) 0 1.2px,transparent 2px),radial-gradient(circle at 34% 56%,rgba(255,255,255,.70) 0 1px,transparent 1.8px),radial-gradient(circle at 44% 71%,rgba(255,255,255,.92) 0 1.2px,transparent 2px),radial-gradient(circle at 58% 60%,rgba(255,255,255,.78) 0 1px,transparent 1.9px),radial-gradient(circle at 68% 69%,rgba(255,255,255,.95) 0 1.2px,transparent 2px),radial-gradient(circle at 79% 58%,rgba(255,255,255,.74) 0 1px,transparent 1.9px),radial-gradient(circle at 87% 66%,rgba(255,255,255,.90) 0 1.2px,transparent 2px);filter:drop-shadow(0 0 7px rgba(255,255,255,.16))}
 
 .world-comet{z-index:5;opacity:0;pointer-events:none;overflow:visible}
-.world-comet.is-active{animation:cometField 5.2s linear forwards}
-.world-comet-core,.world-comet-tail{position:absolute;left:84%;top:11%;pointer-events:none;will-change:left,top,transform,opacity}
+.world-comet.is-active{animation:cometField 6.4s linear forwards}
+.world-comet-core,.world-comet-tail{position:absolute;left:-22%;top:30%;pointer-events:none;will-change:left,top,transform,opacity}
 .world-comet-core{width:10px;height:10px;border-radius:50%;background:rgba(255,249,231,.99);box-shadow:0 0 10px rgba(255,249,231,.98),0 0 26px rgba(255,239,194,.78),0 0 62px rgba(255,224,150,.38);filter:blur(.12px);transform:translate(-50%,-50%) scale(.74)}
-.world-comet-tail{width:250px;height:3px;transform-origin:right center;transform:translate(-100%,-50%) rotate(152deg) scaleX(.12);background:linear-gradient(to left,rgba(255,247,218,0) 0%,rgba(255,244,210,.10) 15%,rgba(255,239,196,.30) 38%,rgba(255,233,176,.72) 70%,rgba(255,247,233,.96) 100%);border-radius:999px;filter:blur(.7px);box-shadow:0 0 12px rgba(255,236,184,.25),0 0 34px rgba(255,223,152,.16)}
-.world-comet.is-active .world-comet-core{animation:cometCore 5.2s cubic-bezier(.35,.02,.22,1) forwards}
-.world-comet.is-active .world-comet-tail{animation:cometTail 5.2s cubic-bezier(.35,.02,.22,1) forwards}
+.world-comet-tail{width:340px;height:3px;transform-origin:right center;transform:translate(-100%,-50%) rotate(-12deg) scaleX(.12);background:linear-gradient(to left,rgba(255,247,218,0) 0%,rgba(255,244,210,.10) 15%,rgba(255,239,196,.30) 38%,rgba(255,233,176,.72) 70%,rgba(255,247,233,.96) 100%);border-radius:999px;filter:blur(.7px);box-shadow:0 0 12px rgba(255,236,184,.25),0 0 34px rgba(255,223,152,.16)}
+.world-comet.is-active .world-comet-core{animation:cometCore 6.4s cubic-bezier(.35,.02,.22,1) forwards}
+.world-comet.is-active .world-comet-tail{animation:cometTail 6.4s cubic-bezier(.35,.02,.22,1) forwards}
 @keyframes cometField{0%{opacity:0}8%{opacity:.16}18%{opacity:.72}46%{opacity:1}74%{opacity:.92}100%{opacity:0}}
 @keyframes cometCore{
-  0%{left:84%;top:11%;transform:translate(-50%,-50%) scale(.72)}
-  18%{left:78%;top:13%;transform:translate(-50%,-50%) scale(.88)}
-  54%{left:63%;top:19%;transform:translate(-50%,-50%) scale(1)}
-  82%{left:51%;top:24%;transform:translate(-50%,-50%) scale(.92)}
-  100%{left:45%;top:27%;transform:translate(-50%,-50%) scale(.72)}
+  0%{left:-22%;top:30%;transform:translate(-50%,-50%) scale(.72)}
+  14%{left:0%;top:28%;transform:translate(-50%,-50%) scale(.84)}
+  34%{left:28%;top:24%;transform:translate(-50%,-50%) scale(.94)}
+  56%{left:58%;top:19%;transform:translate(-50%,-50%) scale(1)}
+  78%{left:86%;top:13%;transform:translate(-50%,-50%) scale(.96)}
+  90%{left:101%;top:10%;transform:translate(-50%,-50%) scale(.88)}
+  100%{left:118%;top:8%;transform:translate(-50%,-50%) scale(.72)}
 }
 @keyframes cometTail{
-  0%{left:84%;top:11%;opacity:0;transform:translate(-100%,-50%) rotate(152deg) scaleX(.12)}
-  16%{left:78%;top:13%;opacity:.55;transform:translate(-100%,-50%) rotate(152deg) scaleX(.42)}
-  48%{left:65%;top:18%;opacity:.92;transform:translate(-100%,-50%) rotate(152deg) scaleX(.96)}
-  76%{left:53%;top:23%;opacity:.78;transform:translate(-100%,-50%) rotate(152deg) scaleX(1.08)}
-  100%{left:45%;top:27%;opacity:0;transform:translate(-100%,-50%) rotate(152deg) scaleX(.72)}
+  0%{left:-22%;top:30%;opacity:0;transform:translate(-100%,-50%) rotate(-12deg) scaleX(.12)}
+  12%{left:0%;top:28%;opacity:.42;transform:translate(-100%,-50%) rotate(-12deg) scaleX(.34)}
+  34%{left:28%;top:24%;opacity:.78;transform:translate(-100%,-50%) rotate(-12deg) scaleX(.72)}
+  56%{left:58%;top:19%;opacity:.96;transform:translate(-100%,-50%) rotate(-12deg) scaleX(1)}
+  78%{left:86%;top:13%;opacity:.90;transform:translate(-100%,-50%) rotate(-12deg) scaleX(1.10)}
+  90%{left:101%;top:10%;opacity:.62;transform:translate(-100%,-50%) rotate(-12deg) scaleX(1.02)}
+  100%{left:118%;top:8%;opacity:0;transform:translate(-100%,-50%) rotate(-12deg) scaleX(.78)}
 }
 
 .world-moon{z-index:6!important;inset:auto!important;top:10%!important;right:10%!important;width:86px;height:86px;border-radius:50%;opacity:var(--central-moon);background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);box-shadow:0 0 18px rgba(216,225,247,.28),0 0 52px rgba(216,225,247,.14);overflow:hidden;transform:rotate(-8deg)}
@@ -268,7 +272,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .world-moon{width:72px;height:72px}
   .world-final-moon{width:132px;height:132px;top:9%!important;right:7%!important}
   .world-comet-core{width:9px;height:9px}
-  .world-comet-tail{width:190px;height:2.5px}
+  .world-comet-tail{width:250px;height:2.5px}
   .paris-section{padding-top:27vh;margin-bottom:6.8em}
   .tower-photo{width:min(88vw,460px)}
   .closing-section{padding-top:11vh}
@@ -1014,7 +1018,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     void worldComet.offsetWidth;
     worldComet.classList.add('is-active');
     clearTimeout(cometTimer);
-    cometTimer=setTimeout(()=>worldComet.classList.remove('is-active'),5400);
+    cometTimer=setTimeout(()=>worldComet.classList.remove('is-active'),6600);
   };
 
   let cometDelay=null;
