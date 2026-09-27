@@ -778,7 +778,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
       <div class="dusk-beat dusk-breath-rest dusk-late dusk-fragment">
         <p class="reveal">Paco miró el teléfono.</p>
         <p class="reveal dusk-long-gap">Habían quedado en verse para que ella le devolviera el plástico.</p>
-        <p class="reveal dusk-long-gap dusk-emphasis">Ahora la tarjeta ya no hacía falta.</p>
+        <p class="reveal dusk-long-gap dusk-emphasis" id="duskPreFinal">Ahora la tarjeta ya no hacía falta.</p>
       </div>
 
     </div>
@@ -861,6 +861,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   const finalLine=document.querySelector('.final-line');
   const dusk=document.querySelector('.dusk-passage');
   const duskColorTurn=document.getElementById('duskColorTurn');
+  const duskPreFinal=document.getElementById('duskPreFinal');
   const duskFinalPhrase=document.getElementById('duskFinalPhrase');
   const worldComet=document.getElementById('worldComet');
   const progress=document.querySelector('.progress i');
@@ -1021,26 +1022,18 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     cometTimer=setTimeout(()=>worldComet.classList.remove('is-active'),6600);
   };
 
-  let cometDelay=null;
-  if(duskFinalPhrase){
-    const cometObserver=new IntersectionObserver(entries=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting&&entry.intersectionRatio>=.55){
-          clearTimeout(cometDelay);
-          cometDelay=setTimeout(triggerComet,1600);
-        }else{
-          clearTimeout(cometDelay);
-        }
-      });
-    },{threshold:[0,.55,1]});
-    cometObserver.observe(duskFinalPhrase);
-  }
-
   const renderVisualTimeline=()=>{
     const hp=localProgress(hero);
     const cp=localProgress(twoDays);
     const dp=localProgress(dusk);
     const mobile=innerWidth<=620;
+
+    // El cometa nace únicamente después de que «Ahora la tarjeta ya no hacía falta.»
+    // haya abandonado la zona de lectura y comience el silencio final.
+    if(duskPreFinal){
+      const preFinalRect=duskPreFinal.getBoundingClientRect();
+      if(preFinalRect.bottom<innerHeight*.16)triggerComet();
+    }
 
     /* amanecer */
     const dawnDark=1-smoother(clamp((hp-.00)/.38));
