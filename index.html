@@ -130,18 +130,14 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 .pre-final{margin-top:15em!important;margin-bottom:30em!important;color:#6f7478;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:.8em;letter-spacing:.19em;text-transform:uppercase}
 .final-line{margin:0;padding:0;font-size:clamp(1.85rem,4.4vw,2.8rem);line-height:1.15}
 /* ATARDECER FINAL: TEXTO DISTRIBUIDO + METAMORFOSIS */
-.dusk-passage{width:100vw;height:2600svh;margin-left:calc(50% - 50vw);position:relative}
+.dusk-passage{width:100vw;height:3200svh;margin-left:calc(50% - 50vw);position:relative}
 .dusk-beat{position:absolute;top:var(--at);left:50%;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading));font-size:clamp(1.13rem,2.15vw,1.34rem);line-height:1.72;color:rgba(31,29,26,.92)}
 .dusk-beat p{margin:0}
 .dusk-fragment{width:min(calc(100% - 40px),520px)}
 .dusk-emphasis{font-size:clamp(1.24rem,2.5vw,1.52rem)}
 .dusk-money{font-variant-numeric:tabular-nums;font-size:clamp(1.28rem,2.7vw,1.62rem)}
 .dusk-late{color:rgba(248,246,240,.95);text-shadow:0 2px 22px rgba(0,0,0,.30)}
-.dusk-coda{position:absolute;top:86.5%;left:50%;transform:translate(-50%,8vh);width:min(calc(100% - 40px),var(--reading));font-size:clamp(1.13rem,2.15vw,1.34rem);line-height:1.72;color:rgba(248,246,240,.96);text-shadow:0 2px 24px rgba(0,0,0,.32)}
-.dusk-coda p{margin:0 0 5.5em}
-.dusk-coda p:nth-last-child(3){margin-top:7em}
-.dusk-coda p:last-child{margin-bottom:0}
-.dusk-final-phrase{position:absolute;left:50%;top:96.5%;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading));margin:0;text-align:center;font-size:clamp(1.95rem,4.6vw,3rem);line-height:1.15;color:rgba(250,249,238,.98);text-shadow:0 2px 24px rgba(0,0,0,.30)}
+.dusk-final-phrase{position:absolute;left:50%;top:99%;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading));margin:0;text-align:center;font-size:clamp(1.95rem,4.6vw,3rem);line-height:1.15;color:rgba(250,249,238,.98);text-shadow:0 2px 24px rgba(0,0,0,.30)}
 
 @media(max-width:620px){
   .progress{display:none}
@@ -171,13 +167,11 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .closing-section{padding-top:11vh}
   .pre-final{margin-top:13em!important;margin-bottom:26em!important}
   .final-line{padding-bottom:0}
-  .dusk-passage{height:3000svh}
+  .dusk-passage{height:3600svh}
   .dusk-beat{width:min(calc(100% - 30px),var(--reading));font-size:clamp(1.12rem,5vw,1.34rem);line-height:1.68}
   .dusk-fragment{width:min(calc(100% - 30px),460px)}
   .dusk-emphasis{font-size:clamp(1.22rem,5.5vw,1.48rem)}
   .dusk-money{font-size:clamp(1.3rem,6vw,1.62rem)}
-  .dusk-coda{width:min(calc(100% - 30px),var(--reading));font-size:clamp(1.12rem,5vw,1.34rem);line-height:1.68}
-  .dusk-coda p{margin-bottom:6.2em}
   .dusk-final-phrase{width:min(calc(100% - 30px),var(--reading));font-size:clamp(1.9rem,8vw,2.7rem)}
 }
 @media(prefers-reduced-motion:reduce){
@@ -190,7 +184,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .hero{height:auto;padding:1.5cm 0 2cm}.hero-inner{position:static;transform:none;width:auto}
   main{width:100%;padding:0}.reveal{opacity:1;transform:none;filter:none}
   article{font-size:12.5pt;line-height:1.55}.final-line{padding-bottom:0}
-  .dusk-passage{display:block;height:auto;margin:0}.dusk-beat,.dusk-coda,.dusk-final-phrase{position:static;transform:none;width:auto;color:#000;text-shadow:none;margin:0 0 1em}.dusk-final-phrase{margin-top:2cm}
+  .dusk-passage{display:block;height:auto;margin:0}.dusk-beat,.dusk-final-phrase{position:static;transform:none;width:auto;color:#000;text-shadow:none;margin:0 0 1em}.dusk-final-phrase{margin-top:2cm}
 }
 </style>
 </head>
@@ -519,61 +513,51 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   </main>
 
   <section class="dusk-passage" aria-label="Atardecer final">
-    <div class="dusk-beat" style="--at:4%"><p class="reveal">Había una cosa que Paco no había hecho.</p></div>
-    <div class="dusk-beat" style="--at:8%"><p class="reveal">No había bloqueado la tarjeta.</p></div>
-
-    <div class="dusk-beat" style="--at:12%"><p class="reveal">Podía haberlo hecho desde el teléfono.</p></div>
-    <div class="dusk-beat dusk-fragment" style="--at:15%"><p class="reveal">Congelarla.</p></div>
-    <div class="dusk-beat dusk-fragment" style="--at:18%"><p class="reveal">Anularla.</p></div>
-    <div class="dusk-beat dusk-fragment" style="--at:21%"><p class="reveal">Pedir otra.</p></div>
-    <div class="dusk-beat" style="--at:24%"><p class="reveal">Era lo prudente.</p></div>
-    <div class="dusk-beat dusk-emphasis" style="--at:27%"><p class="reveal">No quiso.</p></div>
-
-    <div class="dusk-beat" style="--at:31%"><p class="reveal">Rebeca la llevaba en el bolso.</p></div>
-    <div class="dusk-beat" style="--at:35%"><p class="reveal">Bloquearla habría sido protegerse de ella, aunque ella no pudiera saberlo.</p></div>
-    <div class="dusk-beat" style="--at:39%"><p class="reveal">Y Paco, por una de esas decisiones íntimas que nadie presencia y que por eso mismo importan más, decidió confiar.</p></div>
-    <div class="dusk-beat dusk-emphasis" style="--at:43%"><p class="reveal">La tarjeta siguió activa.</p></div>
-
-    <div class="dusk-beat" style="--at:47%"><p class="reveal">Aquella misma tarde, después de recibir las fotografías de París, abrió la aplicación del banco.</p></div>
-    <div class="dusk-beat dusk-money" style="--at:51%"><p class="reveal">Doscientos euros con setenta y nueve céntimos.</p></div>
-    <div class="dusk-beat dusk-fragment" style="--at:54%"><p class="reveal">Paco acercó el teléfono.</p></div>
-    <div class="dusk-beat dusk-fragment" style="--at:57%"><p class="reveal">Volvió a leer.</p></div>
-    <div class="dusk-beat dusk-money" style="--at:60%"><p class="reveal">200,79 €.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:63%"><p class="reveal">El movimiento era del día anterior.</p></div>
-
-    <div class="dusk-beat dusk-late" style="--at:66%"><p class="reveal">El cargo procedía de un servicio de inteligencia artificial.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:69%"><p class="reveal">Había entrado tiempo atrás para probarlo gratis.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:72%"><p class="reveal"><em>Gratis</em> era una palabra que, en internet, solía llevar una fecha de caducidad escrita en una tinta que nadie veía.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:75%"><p class="reveal">No recordaba haber contratado ninguna suscripción.</p></div>
-    <div class="dusk-beat dusk-late dusk-emphasis" style="--at:77.5%"><p class="reveal">El sistema sí.</p></div>
-
-    <div class="dusk-beat dusk-late" style="--at:66%"><p class="reveal">Paco miró el movimiento bancario.</p></div>
-    <div class="dusk-beat dusk-late dusk-fragment" style="--at:68%"><p class="reveal">Rebeca tenía su tarjeta.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:70%"><p class="reveal">La empresa de inteligencia artificial tenía doscientos euros con setenta y nueve céntimos.</p></div>
-    <div class="dusk-beat dusk-late dusk-emphasis" style="--at:72%"><p class="reveal">La confianza estaba, como casi siempre, en otro sitio.</p></div>
-
-    <div class="dusk-beat dusk-late" style="--at:74%"><p class="reveal">Al día siguiente, por la mañana, habló con el departamento de seguridad del banco.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:75.5%"><p class="reveal">Explicó la prueba gratuita.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:77%"><p class="reveal">Explicó la suscripción fantasma.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:78.5%"><p class="reveal">Explicó que no reconocía aquello como un acto de su voluntad.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:80%"><p class="reveal">La solución fue inmediata.</p></div>
-
-    <div class="dusk-beat dusk-late" style="--at:81.5%"><p class="reveal">—Tenemos que cancelar la tarjeta.</p></div>
-    <div class="dusk-beat dusk-late dusk-fragment" style="--at:83%"><p class="reveal">Paco se quedó callado.</p></div>
-    <div class="dusk-beat dusk-late" style="--at:84.5%"><p class="reveal">—Le enviaremos otra con una numeración nueva.</p></div>
-
-    <div class="dusk-coda" aria-label="Coda de la tarjeta">
-      <p class="reveal">La tarjeta quedó anulada.</p>
-      <p class="reveal">La que Rebeca llevaba consigo dejó de servir.</p>
-      <p class="reveal">Ya no podía comprar nada con ella.</p>
-      <p class="reveal">Ya no podía perder dinero con ella.</p>
-      <p class="reveal">Ya no tenía ninguna utilidad bancaria.</p>
-      <p class="reveal">Era, simplemente, un rectángulo de plástico con el nombre de Paco.</p>
-      <p class="reveal">Y precisamente aquella tarde, según los cálculos de su propio mapa mental, Rebeca podía estar iniciando el regreso.</p>
-      <p class="reveal">Paco miró el teléfono.</p>
-      <p class="reveal">Habían quedado en verse para que ella le devolviera el plástico.</p>
-      <p class="reveal">Ahora la tarjeta ya no hacía falta.</p>
-    </div>
+    <div class="dusk-beat" style="--at:4.00%"><p class="reveal">Había una cosa que Paco no había hecho.</p></div>
+    <div class="dusk-beat" style="--at:6.05%"><p class="reveal">No había bloqueado la tarjeta.</p></div>
+    <div class="dusk-beat" style="--at:8.09%"><p class="reveal">Podía haberlo hecho desde el teléfono.</p></div>
+    <div class="dusk-beat dusk-fragment" style="--at:10.14%"><p class="reveal">Congelarla.</p></div>
+    <div class="dusk-beat dusk-fragment" style="--at:12.18%"><p class="reveal">Anularla.</p></div>
+    <div class="dusk-beat dusk-fragment" style="--at:14.23%"><p class="reveal">Pedir otra.</p></div>
+    <div class="dusk-beat" style="--at:16.27%"><p class="reveal">Era lo prudente.</p></div>
+    <div class="dusk-beat dusk-emphasis" style="--at:18.32%"><p class="reveal">No quiso.</p></div>
+    <div class="dusk-beat" style="--at:20.36%"><p class="reveal">Rebeca la llevaba en el bolso.</p></div>
+    <div class="dusk-beat" style="--at:22.41%"><p class="reveal">Bloquearla habría sido protegerse de ella, aunque ella no pudiera saberlo.</p></div>
+    <div class="dusk-beat" style="--at:24.45%"><p class="reveal">Y Paco, por una de esas decisiones íntimas que nadie presencia y que por eso mismo importan más, decidió confiar.</p></div>
+    <div class="dusk-beat dusk-emphasis" style="--at:26.50%"><p class="reveal">La tarjeta siguió activa.</p></div>
+    <div class="dusk-beat" style="--at:28.55%"><p class="reveal">Aquella misma tarde, después de recibir las fotografías de París, abrió la aplicación del banco.</p></div>
+    <div class="dusk-beat dusk-money" style="--at:30.59%"><p class="reveal">Doscientos euros con setenta y nueve céntimos.</p></div>
+    <div class="dusk-beat dusk-fragment" style="--at:32.64%"><p class="reveal">Paco acercó el teléfono.</p></div>
+    <div class="dusk-beat dusk-fragment" style="--at:34.68%"><p class="reveal">Volvió a leer.</p></div>
+    <div class="dusk-beat dusk-money" style="--at:36.73%"><p class="reveal">200,79 €.</p></div>
+    <div class="dusk-beat" style="--at:38.77%"><p class="reveal">El movimiento era del día anterior.</p></div>
+    <div class="dusk-beat" style="--at:40.82%"><p class="reveal">El cargo procedía de un servicio de inteligencia artificial.</p></div>
+    <div class="dusk-beat" style="--at:42.86%"><p class="reveal">Había entrado tiempo atrás para probarlo gratis.</p></div>
+    <div class="dusk-beat" style="--at:44.91%"><p class="reveal"><em>Gratis</em> era una palabra que, en internet, solía llevar una fecha de caducidad escrita en una tinta que nadie veía.</p></div>
+    <div class="dusk-beat" style="--at:46.95%"><p class="reveal">No recordaba haber contratado ninguna suscripción.</p></div>
+    <div class="dusk-beat dusk-emphasis" style="--at:49.00%"><p class="reveal">El sistema sí.</p></div>
+    <div class="dusk-beat" style="--at:51.05%"><p class="reveal">Paco miró el movimiento bancario.</p></div>
+    <div class="dusk-beat dusk-fragment" style="--at:53.09%"><p class="reveal">Rebeca tenía su tarjeta.</p></div>
+    <div class="dusk-beat" style="--at:55.14%"><p class="reveal">La empresa de inteligencia artificial tenía doscientos euros con setenta y nueve céntimos.</p></div>
+    <div class="dusk-beat dusk-emphasis" style="--at:57.18%"><p class="reveal">La confianza estaba, como casi siempre, en otro sitio.</p></div>
+    <div class="dusk-beat" style="--at:59.23%"><p class="reveal">Al día siguiente, por la mañana, habló con el departamento de seguridad del banco.</p></div>
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:61.27%"><p class="reveal">Explicó la prueba gratuita.</p></div>
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:63.32%"><p class="reveal">Explicó la suscripción fantasma.</p></div>
+    <div class="dusk-beat dusk-late" style="--at:65.36%"><p class="reveal">Explicó que no reconocía aquello como un acto de su voluntad.</p></div>
+    <div class="dusk-beat dusk-late" style="--at:67.41%"><p class="reveal">La solución fue inmediata.</p></div>
+    <div class="dusk-beat dusk-late" style="--at:69.45%"><p class="reveal">—Tenemos que cancelar la tarjeta.</p></div>
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:71.50%"><p class="reveal">Paco se quedó callado.</p></div>
+    <div class="dusk-beat dusk-late" style="--at:73.55%"><p class="reveal">—Le enviaremos otra con una numeración nueva.</p></div>
+    <div class="dusk-beat dusk-late dusk-emphasis" style="--at:75.59%"><p class="reveal">La tarjeta quedó anulada.</p></div>
+    <div class="dusk-beat dusk-late" style="--at:77.64%"><p class="reveal">La que Rebeca llevaba consigo dejó de servir.</p></div>
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:79.68%"><p class="reveal">Ya no podía comprar nada con ella.</p></div>
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:81.73%"><p class="reveal">Ya no podía perder dinero con ella.</p></div>
+    <div class="dusk-beat dusk-late" style="--at:83.77%"><p class="reveal">Ya no tenía ninguna utilidad bancaria.</p></div>
+    <div class="dusk-beat dusk-late" style="--at:85.82%"><p class="reveal">Era, simplemente, un rectángulo de plástico con el nombre de Paco.</p></div>
+    <div class="dusk-beat dusk-late" style="--at:87.86%"><p class="reveal">Y precisamente aquella tarde, según los cálculos de su propio mapa mental, Rebeca podía estar iniciando el regreso.</p></div>
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:89.91%"><p class="reveal">Paco miró el teléfono.</p></div>
+    <div class="dusk-beat dusk-late" style="--at:91.95%"><p class="reveal">Habían quedado en verse para que ella le devolviera el plástico.</p></div>
+    <div class="dusk-beat dusk-late dusk-emphasis" style="--at:94.00%"><p class="reveal">Ahora la tarjeta ya no hacía falta.</p></div>
 
     <p class="reveal dusk-final-phrase">La cita, en cambio, sí.</p>
   </section>
