@@ -17,7 +17,7 @@
   --reading:760px;
   --dawn-dark:1;--dawn-warm:0;--night:0;--stars:0;
   --central-moon:0;--final-moon:0;--venus:0;--sunset:0;--white:0;
-  --yin-body:0;--yin-outline:0;--yin-dots:0;--final-phrase:0;
+  --yin-body:0;--yin-outline:0;--yin-dots:0;--yin-dot-scale:0;--yin-rotate:-7deg;--yin-scale:.985;--final-phrase:0;
   --crescent-opacity:1;--crescent-cut-left:42%;--crescent-cut-right:-34%;
   --final-moon-y:18px;
   color-scheme:light
@@ -39,13 +39,14 @@ body:not(.entered){overflow:hidden}
 .world-moon{z-index:6!important;inset:auto!important;top:10%!important;right:10%!important;width:86px;height:86px;border-radius:50%;opacity:var(--central-moon);background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);box-shadow:0 0 18px rgba(216,225,247,.28),0 0 52px rgba(216,225,247,.14);overflow:hidden;transform:rotate(-8deg)}
 .world-moon::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:#000}
 
-.world-final-moon{z-index:6!important;inset:auto!important;top:10%!important;right:10%!important;width:118px;height:118px;border-radius:50%;opacity:var(--final-moon);transform:translateY(var(--final-moon-y));filter:drop-shadow(0 0 18px rgba(215,225,249,.22)) drop-shadow(0 0 48px rgba(215,225,249,.12));overflow:hidden}
+.world-final-moon{z-index:6!important;inset:auto!important;top:10%!important;right:10%!important;width:118px;height:118px;border-radius:50%;opacity:var(--final-moon);transform:translateY(var(--final-moon-y)) rotate(var(--yin-rotate)) scale(var(--yin-scale));filter:drop-shadow(0 0 18px rgba(215,225,249,.22)) drop-shadow(0 0 48px rgba(215,225,249,.12));overflow:hidden}
 .final-crescent{position:absolute;inset:0;border-radius:50%;opacity:var(--crescent-opacity);background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%)}
 .final-crescent::after{content:"";position:absolute;top:-8%;bottom:-8%;left:var(--crescent-cut-left);right:var(--crescent-cut-right);border-radius:50%;background:#08101e}
 .world-final-moon svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 .yin-body{opacity:var(--yin-body)}
 .yin-outline{opacity:var(--yin-outline)}
 .yin-dots{opacity:var(--yin-dots)}
+.yin-dots circle{transform-box:fill-box;transform-origin:center;transform:scale(var(--yin-dot-scale))}
 
 .world-venus{z-index:7!important;inset:auto!important;top:28%!important;right:28%!important;width:10px;height:10px;border-radius:50%;opacity:var(--venus);background:#fffdf0;box-shadow:0 0 7px 3px rgba(255,252,225,.92),0 0 22px 8px rgba(255,239,188,.50),0 0 46px 16px rgba(255,224,157,.18)}
 #globalWaveCanvas{z-index:8;width:100%;height:100%;mix-blend-mode:screen;filter:blur(.45px) saturate(1.24) contrast(1.14)}
@@ -130,7 +131,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 .pre-final{margin-top:15em!important;margin-bottom:30em!important;color:#6f7478;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:.8em;letter-spacing:.19em;text-transform:uppercase}
 .final-line{margin:0;padding:0;font-size:clamp(1.85rem,4.4vw,2.8rem);line-height:1.15}
 /* ATARDECER FINAL: PARTITURA RESPIRATORIA + METAMORFOSIS */
-.dusk-passage{width:100vw;height:1950svh;margin-left:calc(50% - 50vw);position:relative}
+.dusk-passage{width:100vw;height:1800svh;margin-left:calc(50% - 50vw);position:relative}
 .dusk-beat{position:absolute;top:var(--at);left:50%;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading));font-size:clamp(1.13rem,2.15vw,1.34rem);line-height:1.72;color:rgba(31,29,26,.92)}
 .dusk-beat p{margin:0}
 .dusk-beat p+p{margin-top:.82em}
@@ -140,9 +141,9 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 .dusk-emphasis{font-size:clamp(1.24rem,2.5vw,1.52rem)}
 .dusk-money{font-variant-numeric:tabular-nums;font-size:clamp(1.28rem,2.7vw,1.62rem)}
 .dusk-late{color:rgba(248,246,240,.95);text-shadow:0 2px 22px rgba(0,0,0,.30)}
-.dusk-final-wrap{position:fixed;left:50%;top:46vh;z-index:24;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading));pointer-events:none;opacity:var(--final-phrase);visibility:hidden}
-.dusk-final-wrap.is-visible{visibility:visible}
-.dusk-final-phrase{margin:0;text-align:center;font-size:clamp(1.95rem,4.6vw,3rem);line-height:1.15;color:rgba(250,249,238,.98);text-shadow:0 2px 24px rgba(0,0,0,.30);filter:blur(calc((1 - var(--final-phrase))*4px));transform:translateY(calc((1 - var(--final-phrase))*10px));transition:none}
+.dusk-final-wrap{position:absolute;left:50%;top:96.4%;z-index:24;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading));pointer-events:none;opacity:var(--final-phrase)}
+.dusk-final-phrase{margin:0;text-align:center;font-size:clamp(1.95rem,4.6vw,3rem);line-height:1.15;color:rgba(250,249,238,.98);text-shadow:0 2px 24px rgba(0,0,0,.30);filter:blur(calc((1 - var(--final-phrase))*4px));transform:translateY(calc((1 - var(--final-phrase))*12px));animation:duskPhraseFloat 8s ease-in-out infinite alternate;transition:none}
+@keyframes duskPhraseFloat{from{translate:0 -3px}to{translate:0 8px}}
 
 @media(max-width:620px){
   .progress{display:none}
@@ -172,7 +173,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .closing-section{padding-top:11vh}
   .pre-final{margin-top:13em!important;margin-bottom:26em!important}
   .final-line{padding-bottom:0}
-  .dusk-passage{height:2250svh}
+  .dusk-passage{height:2050svh}
   .dusk-beat{width:min(calc(100% - 30px),var(--reading));font-size:clamp(1.12rem,5vw,1.34rem);line-height:1.68}
   .dusk-beat p+p{margin-top:.9em}
   .dusk-fragment{width:min(calc(100% - 30px),460px)}
@@ -191,7 +192,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .hero{height:auto;padding:1.5cm 0 2cm}.hero-inner{position:static;transform:none;width:auto}
   main{width:100%;padding:0}.reveal{opacity:1;transform:none;filter:none}
   article{font-size:12.5pt;line-height:1.55}.final-line{padding-bottom:0}
-  .dusk-passage{display:block;height:auto;margin:0}.dusk-beat,.dusk-final-wrap{position:static;transform:none;width:auto;margin:0 0 1em;opacity:1!important;visibility:visible!important}.dusk-final-phrase{color:#000;text-shadow:none;margin-top:2cm}
+  .dusk-passage{display:block;height:auto;margin:0}.dusk-beat,.dusk-final-wrap{position:static;transform:none;width:auto;margin:0 0 1em;opacity:1!important}.dusk-final-phrase{color:#000;text-shadow:none;margin-top:2cm;animation:none}
 }
 </style>
 </head>
@@ -592,52 +593,52 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
       <p class="reveal">La confianza estaba, como casi siempre, en otro sitio.</p>
     </div>
 
-    <div class="dusk-beat dusk-late" style="--at:73.8%">
+    <div class="dusk-beat dusk-late" style="--at:72.6%">
       <p class="reveal">Al día siguiente, por la mañana, habló con el departamento de seguridad del banco.</p>
     </div>
 
-    <div class="dusk-beat dusk-late dusk-fragment" style="--at:77.3%">
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:75.5%">
       <p class="reveal">Explicó la prueba gratuita.</p>
       <p class="reveal">Explicó la suscripción fantasma.</p>
       <p class="reveal">Explicó que no reconocía aquello como un acto de su voluntad.</p>
     </div>
 
-    <div class="dusk-beat dusk-late dusk-fragment" style="--at:80.5%">
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:78.0%">
       <p class="reveal">La solución fue inmediata.</p>
     </div>
 
-    <div class="dusk-beat dusk-late" style="--at:82.6%">
+    <div class="dusk-beat dusk-late" style="--at:80.0%">
       <p class="reveal">—Tenemos que cancelar la tarjeta.</p>
     </div>
 
-    <div class="dusk-beat dusk-late dusk-fragment" style="--at:84.8%">
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:82.0%">
       <p class="reveal">Paco se quedó callado.</p>
     </div>
 
-    <div class="dusk-beat dusk-late" style="--at:86.8%">
+    <div class="dusk-beat dusk-late" style="--at:84.0%">
       <p class="reveal">—Le enviaremos otra con una numeración nueva.</p>
     </div>
 
-    <div class="dusk-beat dusk-late dusk-emphasis" style="--at:88.8%">
+    <div class="dusk-beat dusk-late dusk-emphasis" style="--at:86.0%">
       <p class="reveal">La tarjeta quedó anulada.</p>
     </div>
 
-    <div class="dusk-beat dusk-late" style="--at:90.5%">
+    <div class="dusk-beat dusk-late" style="--at:87.8%">
       <p class="reveal">La que Rebeca llevaba consigo dejó de servir.</p>
       <p class="reveal dusk-long-gap">Ya no podía comprar nada con ella.</p>
       <p class="reveal">Ya no podía perder dinero con ella.</p>
       <p class="reveal">Ya no tenía ninguna utilidad bancaria.</p>
     </div>
 
-    <div class="dusk-beat dusk-late" style="--at:92.2%">
+    <div class="dusk-beat dusk-late" style="--at:89.3%">
       <p class="reveal">Era, simplemente, un rectángulo de plástico con el nombre de Paco.</p>
     </div>
 
-    <div class="dusk-beat dusk-late" style="--at:93.4%">
+    <div class="dusk-beat dusk-late" style="--at:90.4%">
       <p class="reveal">Y precisamente aquella tarde, según los cálculos de su propio mapa mental, Rebeca podía estar iniciando el regreso.</p>
     </div>
 
-    <div class="dusk-beat dusk-late dusk-fragment" style="--at:94.1%">
+    <div class="dusk-beat dusk-late dusk-fragment" style="--at:91.3%">
       <p class="reveal">Paco miró el teléfono.</p>
       <p class="reveal dusk-long-gap">Habían quedado en verse para que ella le devolviera el plástico.</p>
       <p class="reveal dusk-long-gap dusk-emphasis">Ahora la tarjeta ya no hacía falta.</p>
@@ -689,7 +690,6 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   const closing=document.querySelector('.closing-section');
   const finalLine=document.querySelector('.final-line');
   const dusk=document.querySelector('.dusk-passage');
-  const duskFinalWrap=document.getElementById('duskFinalWrap');
   const progress=document.querySelector('.progress i');
   const canvas=document.getElementById('globalWaveCanvas');
   const ctx=canvas.getContext('2d');
@@ -875,12 +875,9 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     const finalMoon=smoother(clamp(dp/(mobile?.11:.13)));
 
     const morphAnchors=[
-      [0,0],[.045,.035],[.085,.075],[.126,.125],[.158,.17],
-      [.210,.225],[.274,.295],[.318,.345],[.369,.405],[.413,.455],
-      [.460,.505],[.506,.555],[.558,.61],[.602,.655],[.648,.705],
-      [.693,.75],[.738,.795],[.773,.825],[.805,.855],[.826,.875],
-      [.848,.895],[.868,.915],[.888,.935],[.905,.95],[.922,.965],
-      [.934,.977],[.941,.985],[.952,.994],[.960,1]
+      [0,0],[.05,.05],[.10,.11],[.16,.19],[.21,.27],[.274,.37],
+      [.318,.44],[.369,.52],[.413,.60],[.460,.68],[.506,.75],
+      [.558,.82],[.602,.88],[.642,.94],[.665,1]
     ];
     const pacedMorph=p=>{
       if(p<=morphAnchors[0][0])return morphAnchors[0][1];
@@ -894,14 +891,27 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
       return 1;
     };
     const morph=pacedMorph(dp);
-    const yinBody=smoother(clamp((morph-.015)/.955));
-    const yinOutline=smoother(clamp((morph-.22)/.73));
-    const yinDots=smoother(clamp((morph-.56)/.40));
+
+    // 1) El cuerpo del taijitu se forma de manera continua hasta quedar completo.
+    const yinBody=smoother(clamp((morph-.015)/.965));
+    const yinOutline=smoother(clamp((morph-.18)/.79));
+
+    // 2) Momento especial de asentamiento: el símbolo termina de girar y se coloca.
+    const settle=smoother(clamp((dp-.585)/.075));
+    const settleOvershoot=Math.sin(clamp((dp-.585)/.075)*Math.PI)*.012;
+    const yinRotate=lerp(-7,0,settle);
+    const yinScale=.985+.015*settle+settleOvershoot;
+
+    // 3) Una breve aceleración después del cuerpo completo conduce a los círculos interiores.
+    const circleKick=smoother(clamp((dp-.675)/.028));
+    const circleGrow=smoother(clamp((dp-.703)/.070));
+    const yinDots=circleGrow;
+    const yinDotScale=Math.min(1,circleGrow*(.92+.08*circleKick));
 
     const finalNight=smoother(clamp((dp-.48)/.49));
     const venus=smoother(clamp((dp-.58)/.28));
     const finalStars=smoother(clamp((dp-.69)/.25));
-    const finalPhrase=smoother(clamp((dp-.958)/.010));
+    const finalPhrase=smoother(clamp((dp-.948)/.018));
 
     root.style.setProperty('--dawn-dark',dawnDark.toFixed(3));
     root.style.setProperty('--dawn-warm',dawnWarm.toFixed(3));
@@ -916,12 +926,14 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     root.style.setProperty('--yin-body',yinBody.toFixed(3));
     root.style.setProperty('--yin-outline',yinOutline.toFixed(3));
     root.style.setProperty('--yin-dots',yinDots.toFixed(3));
-    root.style.setProperty('--crescent-opacity',(1-smoother(clamp((morph-.015)/.955))).toFixed(3));
+    root.style.setProperty('--yin-dot-scale',yinDotScale.toFixed(3));
+    root.style.setProperty('--yin-rotate',yinRotate.toFixed(2)+'deg');
+    root.style.setProperty('--yin-scale',yinScale.toFixed(4));
+    root.style.setProperty('--crescent-opacity',(1-smoother(clamp((morph-.02)/.94))).toFixed(3));
     root.style.setProperty('--crescent-cut-left',(42-morph*11).toFixed(2)+'%');
     root.style.setProperty('--crescent-cut-right',(-34+morph*30).toFixed(2)+'%');
     root.style.setProperty('--final-moon-y',(18-18*finalMoon).toFixed(2)+'px');
     root.style.setProperty('--final-phrase',finalPhrase.toFixed(3));
-    if(duskFinalWrap)duskFinalWrap.classList.toggle('is-visible',dp>=.958);
 
     wave.active=twoDays&&twoDays.getBoundingClientRect().bottom>0&&twoDays.getBoundingClientRect().top<innerHeight;
     wave.visibility=visibility;wave.approach=approach;wave.lock=lock;wave.collapse=collapse;wave.burst=burst;
