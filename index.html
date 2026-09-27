@@ -137,7 +137,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 .dusk-emphasis{font-size:clamp(1.24rem,2.5vw,1.52rem)}
 .dusk-money{font-variant-numeric:tabular-nums;font-size:clamp(1.28rem,2.7vw,1.62rem)}
 .dusk-late{color:rgba(248,246,240,.95);text-shadow:0 2px 22px rgba(0,0,0,.30)}
-.dusk-final-phrase{position:absolute;left:50%;top:99%;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading));margin:0;text-align:center;font-size:clamp(1.95rem,4.6vw,3rem);line-height:1.15;color:rgba(250,249,238,.98);text-shadow:0 2px 24px rgba(0,0,0,.30)}
+.dusk-final-wrap{position:absolute;left:50%;top:99%;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading))}\n.dusk-final-phrase{margin:0;text-align:center;font-size:clamp(1.95rem,4.6vw,3rem);line-height:1.15;color:rgba(250,249,238,.98);text-shadow:0 2px 24px rgba(0,0,0,.30)}
 
 @media(max-width:620px){
   .progress{display:none}
@@ -172,7 +172,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .dusk-fragment{width:min(calc(100% - 30px),460px)}
   .dusk-emphasis{font-size:clamp(1.22rem,5.5vw,1.48rem)}
   .dusk-money{font-size:clamp(1.3rem,6vw,1.62rem)}
-  .dusk-final-phrase{width:min(calc(100% - 30px),var(--reading));font-size:clamp(1.9rem,8vw,2.7rem)}
+  .dusk-final-wrap{width:min(calc(100% - 30px),var(--reading))}\n  .dusk-final-phrase{font-size:clamp(1.9rem,8vw,2.7rem)}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -184,7 +184,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .hero{height:auto;padding:1.5cm 0 2cm}.hero-inner{position:static;transform:none;width:auto}
   main{width:100%;padding:0}.reveal{opacity:1;transform:none;filter:none}
   article{font-size:12.5pt;line-height:1.55}.final-line{padding-bottom:0}
-  .dusk-passage{display:block;height:auto;margin:0}.dusk-beat,.dusk-final-phrase{position:static;transform:none;width:auto;color:#000;text-shadow:none;margin:0 0 1em}.dusk-final-phrase{margin-top:2cm}
+  .dusk-passage{display:block;height:auto;margin:0}.dusk-beat,.dusk-final-wrap{position:static;transform:none;width:auto;margin:0 0 1em}.dusk-final-phrase{color:#000;text-shadow:none;margin-top:2cm}
 }
 </style>
 </head>
@@ -559,7 +559,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     <div class="dusk-beat dusk-late" style="--at:91.95%"><p class="reveal">Habían quedado en verse para que ella le devolviera el plástico.</p></div>
     <div class="dusk-beat dusk-late dusk-emphasis" style="--at:94.00%"><p class="reveal">Ahora la tarjeta ya no hacía falta.</p></div>
 
-    <p class="reveal dusk-final-phrase">La cita, en cambio, sí.</p>
+    <div class="dusk-final-wrap"><p class="reveal dusk-final-phrase">La cita, en cambio, sí.</p></div>
   </section>
 
   
