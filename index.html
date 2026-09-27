@@ -82,6 +82,25 @@ body:not(.entered){overflow:hidden}
 .entry-gate{position:fixed;inset:0;z-index:999;display:grid;place-items:center;background:rgb(241 237 229);transition:opacity 1.35s ease,visibility 1.35s ease}
 body.entered .entry-gate{opacity:0;visibility:hidden;pointer-events:none}
 .entry-button{appearance:none;border:0;background:none;color:var(--ink);font:inherit;font-size:clamp(1rem,2vw,1.14rem);letter-spacing:.18em;text-transform:uppercase;padding:20px 24px;cursor:pointer}
+.sound-toggle{
+  position:fixed;right:18px;bottom:18px;z-index:80;
+  width:44px;height:44px;border:1px solid rgba(30,28,25,.16);border-radius:50%;
+  display:grid;place-items:center;padding:0;
+  color:rgba(30,28,25,.68);background:rgba(247,245,240,.72);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 6px 24px rgba(8,12,20,.08);
+  cursor:pointer;opacity:0;visibility:hidden;pointer-events:none;
+  transform:translateY(6px);
+  transition:opacity .75s ease,transform .75s ease,background .3s ease,color .3s ease
+}
+body.entered .sound-toggle{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.sound-toggle:hover{background:rgba(250,248,244,.92);color:rgba(20,19,17,.90)}
+.sound-toggle:focus-visible{outline:2px solid rgba(30,28,25,.42);outline-offset:3px}
+.sound-toggle svg{width:21px;height:21px;overflow:visible}
+.sound-toggle .sound-wave{opacity:1;transition:opacity .25s ease}
+.sound-toggle .sound-slash{opacity:0;transition:opacity .25s ease}
+.sound-toggle[aria-pressed="true"] .sound-wave{opacity:0}
+.sound-toggle[aria-pressed="true"] .sound-slash{opacity:1}
 .progress{position:fixed;right:14px;top:12vh;width:1px;height:76vh;z-index:30;background:rgba(30,28,25,.08);pointer-events:none}
 .progress i{display:block;width:1px;height:0;background:rgba(30,28,25,.34)}
 header,main,.dusk-passage{position:relative;z-index:1}
@@ -211,6 +230,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 
 @media(max-width:620px){
   .progress{display:none}
+  .sound-toggle{right:14px;bottom:14px;width:42px;height:42px}
   main{width:min(calc(100% - 30px),var(--reading));padding-bottom:8vh}
   article{line-height:1.67}
   .hero{height:500svh}
@@ -260,7 +280,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .reveal{opacity:1;transform:none;filter:none}
 }
 @media print{
-  body{background:#fff!important}.world,.progress,.entry-gate,#soundtrack,.two-days-passage{display:none}
+  body{background:#fff!important}.world,.progress,.entry-gate,.sound-toggle,#soundtrack,.two-days-passage{display:none}
   .hero{height:auto;padding:1.5cm 0 2cm}.hero-inner{position:static;transform:none;width:auto}
   main{width:100%;padding:0}.reveal{opacity:1;transform:none;filter:none}
   article{font-size:12.5pt;line-height:1.55}.final-line{padding-bottom:0}
@@ -272,7 +292,15 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   <div class="entry-gate" id="entryGate">
     <button class="entry-button" id="enterButton" type="button" aria-label="Entrar en SOLO LA TARJETA">Entrar</button>
   </div>
-  <audio id="soundtrack" preload="auto" src="solo-la-tarjeta-fondo.mp3"></audio>
+  <audio id="soundtrack" preload="auto" loop src="solo-la-tarjeta-fondo.mp3"></audio>
+  <button class="sound-toggle" id="soundToggle" type="button" aria-label="Silenciar sonido" aria-pressed="false" title="Silenciar sonido">
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 10v4h4l5 4V6l-5 4H4z"></path>
+      <path class="sound-wave" d="M16 9.2c1.4 1.5 1.4 4.1 0 5.6"></path>
+      <path class="sound-wave" d="M18.6 6.8c2.7 2.8 2.7 7.6 0 10.4"></path>
+      <path class="sound-slash" d="M5 5l14 14"></path>
+    </svg>
+  </button>
 
   <div class="world" aria-hidden="true">
     <div class="world-dawn-dark"></div>
@@ -755,19 +783,46 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 
   const enterButton=document.getElementById('enterButton');
   const soundtrack=document.getElementById('soundtrack');
+  const soundToggle=document.getElementById('soundToggle');
+  const SOUND_LEVEL=.14;
+  let soundFade=null;
+
+  const fadeSoundTo=(target,duration=900)=>{
+    clearInterval(soundFade);
+    const start=soundtrack.volume;
+    const steps=30;
+    let n=0;
+    soundFade=setInterval(()=>{
+      n++;
+      const t=n/steps;
+      soundtrack.volume=start+(target-start)*t;
+      if(n>=steps){
+        clearInterval(soundFade);
+        soundtrack.volume=target;
+      }
+    },Math.max(16,duration/steps));
+  };
+
   enterButton?.addEventListener('click',async()=>{
     enterButton.disabled=true;
-    soundtrack.currentTime=0;soundtrack.volume=0;
+    soundtrack.currentTime=0;
+    soundtrack.loop=true;
+    soundtrack.muted=false;
+    soundtrack.volume=0;
     try{
       await soundtrack.play();
-      let n=0;
-      const fade=setInterval(()=>{
-        n++;soundtrack.volume=Math.min(.14,.14*n/40);
-        if(n>=40)clearInterval(fade);
-      },78);
+      fadeSoundTo(SOUND_LEVEL,1200);
     }catch(_){}
     document.body.classList.add('entered');
     setTimeout(()=>document.getElementById('entryGate')?.remove(),1500);
+  });
+
+  soundToggle?.addEventListener('click',()=>{
+    const willMute=!soundtrack.muted;
+    soundtrack.muted=willMute;
+    soundToggle.setAttribute('aria-pressed',String(willMute));
+    soundToggle.setAttribute('aria-label',willMute?'Activar sonido':'Silenciar sonido');
+    soundToggle.setAttribute('title',willMute?'Activar sonido':'Silenciar sonido');
   });
 
   const reveals=[...document.querySelectorAll('.reveal')];
