@@ -111,8 +111,8 @@ body.entered .sound-toggle{opacity:1;visibility:visible;pointer-events:auto;tran
 header,main,.dusk-passage{position:relative;z-index:1}
 
 /* AMANECER / TÍTULO */
-.hero{height:520svh;position:relative;text-align:center}
-.hero-inner{position:absolute;left:50%;top:170svh;transform:translateX(-50%);width:min(calc(100% - 40px),900px)}
+.hero{height:450svh;position:relative;text-align:center}
+.hero-inner{position:absolute;left:50%;top:132svh;transform:translateX(-50%);width:min(calc(100% - 48px),860px)}
 h1{margin:0;font-size:clamp(2.65rem,8vw,5.7rem);line-height:.92;font-weight:500;letter-spacing:.105em}
 .work-subtitle{margin-top:18px;font-family:Arial,Helvetica,sans-serif;font-size:clamp(.78rem,1.45vw,.92rem);letter-spacing:.12em;color:rgba(30,28,25,.58)}
 .hairline{width:52px;height:1px;background:currentColor;opacity:.30;margin:30px auto 0}
@@ -123,14 +123,31 @@ h1{margin:0;font-size:clamp(2.65rem,8vw,5.7rem);line-height:.92;font-weight:500;
 main{width:min(calc(100% - 40px),var(--reading));margin:0 auto;padding:0 0 8vh}
 article{font-size:clamp(1.13rem,2.15vw,1.34rem);line-height:1.72;letter-spacing:.002em}
 p{margin:0 0 1.18em;hanging-punctuation:first last}
-.reveal{opacity:0;transform:translateY(12px);filter:blur(1.1px);transition:opacity 1.05s cubic-bezier(.2,.7,.2,1),transform 1.05s cubic-bezier(.2,.7,.2,1),filter 1.05s ease}
+.reveal{opacity:0;transform:translateY(9px);filter:blur(.75px);transition:opacity 1.28s cubic-bezier(.2,.7,.2,1),transform 1.28s cubic-bezier(.2,.7,.2,1),filter 1.28s ease}
 .reveal.visible{opacity:1;transform:none;filter:none}
 
+/* RESPIRACIÓN NARRATIVA COMÚN */
+.story-line{max-width:100%;transition-duration:1.28s}
+.story-standard{margin-bottom:1.32em!important}
+.story-dialogue{margin-bottom:.92em!important}
+.story-long{margin-bottom:1.72em!important}
+.story-cluster{margin-bottom:.46em!important}
+.story-pause{margin-top:1.4em!important;margin-bottom:4.2em!important}
+.story-scene-turn{margin-top:3.8em!important;margin-bottom:3.1em!important}
+@media(max-width:620px){
+  .story-standard{margin-bottom:1.28em!important}
+  .story-dialogue{margin-bottom:.88em!important}
+  .story-long{margin-bottom:1.58em!important}
+  .story-cluster{margin-bottom:.42em!important}
+  .story-pause{margin-top:1.2em!important;margin-bottom:3.5em!important}
+  .story-scene-turn{margin-top:3.2em!important;margin-bottom:2.7em!important}
+}
+
 /* PRESENTACIÓN DE PACO: UNA SOLA LÍNEA, UNA SOLA RESPIRACIÓN */
-.opening-section{margin-bottom:3.6em}
-.opening-ramp{margin:0 0 18vh}
-.opening-name-evolution{height:190svh;position:relative}
-.opening-name-line{position:sticky;top:43vh;margin:0;max-width:26ch;font-size:clamp(1.82rem,4.2vw,2.72rem);font-weight:500;line-height:1.14;letter-spacing:.01em}
+.opening-section{margin-bottom:4.4em}
+.opening-ramp{margin:0 0 15vh}
+.opening-name-evolution{height:180svh;position:relative}
+.opening-name-line{position:sticky;top:42vh;margin:0;max-width:28ch;font-size:clamp(1.78rem,4vw,2.62rem);font-weight:500;line-height:1.16;letter-spacing:.01em}
 .name-paco{display:inline-block}
 .name-olmo,.name-males{display:inline-block;opacity:0;filter:blur(5px)}
 .name-olmo{margin-left:.32em;opacity:var(--name-olmo,0);filter:blur(var(--name-olmo-blur,5px));transform:translateX(var(--name-olmo-shift,10px))}
@@ -150,7 +167,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 .opening-man{margin-top:3em!important}
 
 /* ZONA ELECTRÓNICA: MISMA TIPOGRAFÍA, SOLO CAMBIA EL CAMPO */
-.electronic-zone{position:relative;margin:5.8em 0 6.4em;padding:4.2em 0 4.8em}
+.electronic-zone{position:relative;margin:6.2em 0 7em;padding:4.6em 0 5.2em}
 .electronic-zone::before{content:"";position:absolute;z-index:-1;inset:-3em -18vw -2em;opacity:.17;background:linear-gradient(90deg,transparent 0 12%,rgba(42,93,103,.18) 12% 12.12%,transparent 12.12% 44%,rgba(42,93,103,.15) 44% 44.10%,transparent 44.10% 76%,rgba(42,93,103,.16) 76% 76.11%,transparent 76.11%),linear-gradient(0deg,transparent 0 28%,rgba(42,93,103,.13) 28% 28.12%,transparent 28.12% 64%,rgba(42,93,103,.14) 64% 64.12%,transparent 64.12%);mask-image:linear-gradient(to bottom,transparent,black 12%,black 88%,transparent)}
 .rebeca-name{margin-bottom:5.4em!important}
 .age-mirror{margin:3em auto 3.2em;display:grid;grid-template-columns:1fr 1px 1fr;align-items:center;gap:clamp(20px,5vw,44px);min-height:104px}
@@ -159,24 +176,24 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 .overflow-line{margin-top:6em!important;margin-bottom:4.5em!important;font-weight:500}
 
 /* IMÁGENES */
-.photo-layer{margin:5.6em auto 6.2em}
+.photo-layer{margin:6.2em auto 7em}
 .photo-layer img{display:block;width:100%;height:auto}
 .card-photo{width:min(62vw,330px)}
 .card-photo .photo-frame{overflow:hidden;border-radius:20px;box-shadow:0 24px 72px rgba(32,27,22,.11)}
 .card-photo img{border-radius:20px}
 
 /* ESPERA CENTRAL: SOLO DURACIÓN, MISMO ESCENARIO */
-.two-days-passage{height:780vh;margin:18vh 0 0}
-.paris-section{margin:0 0 8.5em;padding:28vh 0 5.2em}
+.two-days-passage{height:620svh;margin:22svh 0 0}
+.paris-section{margin:0 0 9em;padding:24svh 0 6em}
 .tower-photo{width:min(78vw,520px);margin:3.8em auto 4.8em}
 .tower-frame{overflow:hidden;background:#142a48;box-shadow:0 30px 90px rgba(16,25,38,.18)}
 .chance-end{margin-bottom:17vh!important}
 
 /* CIERRE */
-.closing-section{padding-top:13vh;position:relative}
+.closing-section{padding-top:15svh;position:relative}
 .closing-section::before{content:"";position:absolute;top:0;left:50%;width:34px;height:1px;background:rgba(30,28,25,.20);transform:translateX(-50%)}
 .hinge{margin-top:2.4em!important;margin-bottom:4.6em!important;font-size:1.065em}
-.pre-final{margin-top:15em!important;margin-bottom:30em!important;color:#6f7478;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:.8em;letter-spacing:.19em;text-transform:uppercase}
+.pre-final{margin-top:12em!important;margin-bottom:22em!important;color:#6f7478;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:.8em;letter-spacing:.19em;text-transform:uppercase}
 .final-line{margin:0;padding:0;font-size:clamp(1.85rem,4.4vw,2.8rem);line-height:1.15}
 /* ATARDECER FINAL: FLUJO RESPIRATORIO + METAMORFOSIS */
 .dusk-passage{width:100vw;margin-left:calc(50% - 50vw);position:relative}
@@ -186,7 +203,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   width:min(calc(100% - 40px),var(--reading));
   min-height:var(--breath,52svh);
   margin:0 auto;
-  padding:7svh 0;
+  padding:5.5svh 0;
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -199,11 +216,11 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 .dusk-beat p+p{margin-top:.86em}
 .dusk-beat .dusk-small-gap{margin-top:.38em}
 .dusk-beat .dusk-long-gap{margin-top:1.9em}
-.dusk-breath-tiny{--breath:34svh}
-.dusk-breath-short{--breath:42svh}
-.dusk-breath-normal{--breath:52svh}
-.dusk-breath-wide{--breath:64svh}
-.dusk-breath-rest{--breath:76svh}
+.dusk-breath-tiny{--breath:27svh}
+.dusk-breath-short{--breath:33svh}
+.dusk-breath-normal{--breath:41svh}
+.dusk-breath-wide{--breath:51svh}
+.dusk-breath-rest{--breath:62svh}
 .dusk-fragment{width:min(calc(100% - 40px),520px)}
 .dusk-emphasis{font-size:clamp(1.24rem,2.5vw,1.52rem)}
 .dusk-money{font-variant-numeric:tabular-nums}
@@ -247,48 +264,48 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .sound-toggle{right:14px;bottom:14px;width:42px;height:42px}
   main{width:min(calc(100% - 30px),var(--reading));padding-bottom:8vh}
   article{line-height:1.67}
-  .hero{height:520svh}
-  .hero-inner{left:50%;right:auto;top:138svh;width:min(calc(100% - 42px),900px);margin:0;transform:translateX(-50%);text-align:center}
-  .hero-inner h1{max-width:8.6ch;margin-left:auto;margin-right:auto;text-align:center;font-size:clamp(2.2rem,10.2vw,3.15rem);line-height:1.01;letter-spacing:.082em}
+  .hero{height:470svh}
+  .hero-inner{left:50%;right:auto;top:128svh;width:min(calc(100% - 44px),840px);margin:0;transform:translateX(-50%);text-align:center}
+  .hero-inner h1{max-width:9.2ch;margin-left:auto;margin-right:auto;text-align:center;font-size:clamp(2.08rem,9.6vw,3rem);line-height:1.04;letter-spacing:.075em}
   .hero-inner .work-subtitle{margin-top:16px;font-size:clamp(.72rem,3.45vw,.86rem);line-height:1.45}
   .hero-inner .hairline{margin-top:25px}
   .hero-inner .title-flag{margin-top:20px}
   .hero-inner .scroll-cue{margin-top:34px}
-  .opening-name-evolution{height:220svh}
-  .opening-name-line{top:40vh;width:max-content;max-width:calc(100vw - 34px);margin-left:auto;margin-right:auto;text-align:center;font-size:clamp(1.68rem,6.8vw,2.28rem);line-height:1.20}
+  .opening-name-evolution{height:195svh}
+  .opening-name-line{top:41vh;width:max-content;max-width:calc(100vw - 38px);margin-left:auto;margin-right:auto;text-align:center;font-size:clamp(1.62rem,6.45vw,2.2rem);line-height:1.22}
   .name-olmo{margin-left:.38em}
   .name-males{margin-left:.52em}
   .opening-phrase{font-size:clamp(1.13rem,5vw,1.35rem)}
-  .opening-phrase-1{min-height:45svh}
-  .opening-phrase-2{min-height:39svh}
+  .opening-phrase-1{min-height:39svh}
+  .opening-phrase-2{min-height:34svh}
   .opening-tasks{margin-top:9vh;padding-left:1rem;max-width:25ch}
   .opening-task-line{font-size:clamp(1.08rem,4.7vw,1.27rem)}
-  .opening-task-1{min-height:26svh}.opening-task-2{min-height:29svh}.opening-task-3{min-height:34svh}
+  .opening-task-1{min-height:22svh}.opening-task-2{min-height:24svh}.opening-task-3{min-height:28svh}
   .electronic-zone{margin:4.5em 0 5.2em;padding:3.2em 0 3.8em}
-  .age-mirror{grid-template-columns:1fr;gap:10px;min-height:0}.age-left,.age-right{text-align:left}.age-axis{width:44px;height:1px}
+  .age-mirror{grid-template-columns:1fr;gap:13px;min-height:0;text-align:center}.age-left,.age-right{text-align:center}.age-axis{width:46px;height:1px;margin:0 auto}
   .card-photo{width:min(76vw,320px)}
-  .two-days-passage{height:940vh;margin-top:18vh}
+  .two-days-passage{height:700svh;margin-top:20svh}
   #globalWaveCanvas{filter:blur(.28px) saturate(1.30) contrast(1.18)}
   .world-moon{width:72px;height:72px}
   .world-final-moon{width:132px;height:132px;top:9%!important;right:7%!important}
   .world-comet-core{width:9px;height:9px}
   .world-comet-tail{width:250px;height:2.5px}
-  .paris-section{padding-top:27vh;margin-bottom:6.8em}
+  .paris-section{padding-top:22svh;margin-bottom:7.4em}
   .tower-photo{width:min(88vw,460px)}
-  .closing-section{padding-top:11vh}
-  .pre-final{margin-top:13em!important;margin-bottom:26em!important}
+  .closing-section{padding-top:13svh}
+  .pre-final{margin-top:10em!important;margin-bottom:19em!important}
   .final-line{padding-bottom:0}
-  .dusk-beat{width:min(calc(100% - 30px),var(--reading));padding:6svh 0;font-size:clamp(1.12rem,5vw,1.34rem);line-height:1.68}
+  .dusk-beat{width:min(calc(100% - 34px),var(--reading));padding:5svh 0;font-size:clamp(1.1rem,4.85vw,1.32rem);line-height:1.7}
   .dusk-beat p+p{margin-top:.92em}
-  .dusk-breath-tiny{--breath:36svh}
-  .dusk-breath-short{--breath:44svh}
-  .dusk-breath-normal{--breath:54svh}
-  .dusk-breath-wide{--breath:66svh}
-  .dusk-breath-rest{--breath:78svh}
+  .dusk-breath-tiny{--breath:29svh}
+  .dusk-breath-short{--breath:35svh}
+  .dusk-breath-normal{--breath:43svh}
+  .dusk-breath-wide{--breath:53svh}
+  .dusk-breath-rest{--breath:65svh}
   .dusk-fragment{width:min(calc(100% - 30px),460px)}
   .dusk-emphasis{font-size:clamp(1.22rem,5.5vw,1.48rem)}
   .dusk-amount{font-size:clamp(1.34rem,6vw,1.7rem)}
-  .dusk-ending{min-height:300svh;padding-top:180svh}
+  .dusk-ending{min-height:285svh;padding-top:175svh}
   .dusk-final-wrap{width:min(calc(100% - 30px),var(--reading));top:44vh}
   .dusk-final-phrase{font-size:clamp(1.9rem,8vw,2.7rem)}
 }
@@ -845,6 +862,54 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   });
 
   const reveals=[...document.querySelectorAll('.reveal')];
+
+  // Una sola prosodia para todo el relato: la separación responde a longitud,
+  // diálogo, series rápidas y golpes narrativos, no a una retícula uniforme.
+  const rhythmScope=[...document.querySelectorAll('article p.reveal')]
+    .filter(p=>!p.closest('.dusk-passage')&&!p.classList.contains('opening-phrase')&&!p.classList.contains('opening-task-line'));
+
+  const normalizeText=p=>p.textContent.replace(/\s+/g,' ').trim();
+  const majorPauses=new Set([
+    'Eso fue todo.',
+    'No podía viajar.',
+    'El sistema funcionaba.',
+    'Era una muchacha.',
+    'Ojos de estatua.',
+    'Lo escuchaba.',
+    'Pensó que ahí terminaba la historia.',
+    'Era lo normal.',
+    'Paco sonrió al reconocer la voz.',
+    'Faltaba.',
+    'Nada más.',
+    'Los ojos no.'
+  ]);
+  const sceneTurns=new Set([
+    'Entonces oyó una voz detrás.',
+    'Las puertas se cerraron con un resoplido neumático.',
+    'El autobús arrancó.',
+    'Poco después sonó el teléfono.',
+    '—Te has dejado una tarjeta.',
+    'Quedaron en verse cuando regresara.'
+  ]);
+
+  rhythmScope.forEach((p,i)=>{
+    const t=normalizeText(p);
+    const prev=rhythmScope[i-1]?normalizeText(rhythmScope[i-1]):'';
+    const next=rhythmScope[i+1]?normalizeText(rhythmScope[i+1]):'';
+    p.classList.add('story-line');
+
+    const isDialogue=t.startsWith('—');
+    const isTiny=t.length<=18&&!isDialogue;
+    const tinyNeighbour=(prev.length<=18&&prev&&!prev.startsWith('—'))||(next.length<=18&&next&&!next.startsWith('—'));
+
+    if(majorPauses.has(t))p.classList.add('story-pause');
+    else if(sceneTurns.has(t))p.classList.add('story-scene-turn');
+    else if(isTiny&&tinyNeighbour)p.classList.add('story-cluster');
+    else if(isDialogue)p.classList.add('story-dialogue');
+    else if(t.length>170)p.classList.add('story-long');
+    else p.classList.add('story-standard');
+  });
+
   const io=new IntersectionObserver(entries=>{
     entries.forEach(e=>{
       if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}
@@ -1042,25 +1107,25 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     const dawnWarm=Math.max(0,dawnIn*dawnOut);
 
     /* noche central */
-    const centralNightIn=smoother(clamp((cp-.00)/.24));
-    const centralNightOut=1-smoother(clamp((cp-.84)/.10));
+    const centralNightIn=smoother(clamp((cp-.02)/.28));
+    const centralNightOut=1-smoother(clamp((cp-.82)/.13));
     const centralNight=Math.max(0,centralNightIn*centralNightOut);
-    const centralStars=smoother(clamp((cp-.09)/.16))*(1-smoother(clamp((cp-.81)/.025)));
-    const centralMoon=smoother(clamp((cp-.12)/.16))*(1-smoother(clamp((cp-.81)/.025)));
+    const centralStars=smoother(clamp((cp-.12)/.20))*(1-smoother(clamp((cp-.80)/.05)));
+    const centralMoon=smoother(clamp((cp-.16)/.19))*(1-smoother(clamp((cp-.80)/.05)));
 
     /* acoplamiento diacrónico: presencia -> aproximación -> batido -> bloqueo -> implosión */
-    const wavesIn=smoother(clamp((cp-.04)/.07));
-    const approach=smoother(clamp((cp-.20)/.28));
-    const lock=smoother(clamp((cp-.52)/.16));
-    const collapse=smoother(clamp((cp-.73)/.075));
-    const wavesOut=1-smoother(clamp((cp-.815)/.018));
+    const wavesIn=smoother(clamp((cp-.06)/.10));
+    const approach=smoother(clamp((cp-.22)/.30));
+    const lock=smoother(clamp((cp-.53)/.17));
+    const collapse=smoother(clamp((cp-.72)/.085));
+    const wavesOut=1-smoother(clamp((cp-.81)/.035));
     const visibility=wavesIn*wavesOut;
-    const burstIn=smoother(clamp((cp-.82)/.018));
-    const burstOut=1-smoother(clamp((cp-.895)/.035));
+    const burstIn=smoother(clamp((cp-.82)/.025));
+    const burstOut=1-smoother(clamp((cp-.90)/.045));
     const burst=burstIn*burstOut;
 
-    const whiteIn=smoother(clamp((cp-.87)/.05));
-    const whiteOut=1-smoother(clamp((cp-.96)/.04));
+    const whiteIn=smoother(clamp((cp-.865)/.06));
+    const whiteOut=1-smoother(clamp((cp-.955)/.045));
     const white=whiteIn*whiteOut;
 
     /* atardecer final: metamorfosis acompasada con la respiración del texto */
