@@ -902,11 +902,10 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     const yinRotate=lerp(-7,0,settle);
     const yinScale=.985+.015*settle+settleOvershoot;
 
-    // 3) Una breve aceleración después del cuerpo completo conduce a los círculos interiores.
-    const circleKick=smoother(clamp((dp-.675)/.028));
-    const circleGrow=smoother(clamp((dp-.703)/.070));
+    // 3) Al completarse el cuerpo, los círculos interiores empiezan a insinuarse y crecen lentamente.
+    const circleGrow=smoother(clamp((dp-.665)/.255));
     const yinDots=circleGrow;
-    const yinDotScale=Math.min(1,circleGrow*(.92+.08*circleKick));
+    const yinDotScale=.48+.52*circleGrow;
 
     const finalNight=smoother(clamp((dp-.48)/.49));
     const venus=smoother(clamp((dp-.58)/.28));
