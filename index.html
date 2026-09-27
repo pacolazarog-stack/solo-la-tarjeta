@@ -91,7 +91,7 @@ body:not(.entered) .dusk-passage{visibility:hidden}
 /* ENTRADA Y PROGRESO */
 .entry-gate{position:fixed;inset:0;width:100%;height:100dvh;max-width:100vw;max-height:100dvh;z-index:999;display:grid;place-items:center;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);background:#f1ede5;isolation:isolate;overscroll-behavior:none;transition:opacity 1.35s ease,visibility 1.35s ease}
 body.entered .entry-gate{opacity:0;visibility:hidden;pointer-events:none}
-.entry-button{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);appearance:none;border:0;background:none;color:var(--ink);font:inherit;font-size:clamp(1rem,2vw,1.14rem);letter-spacing:.18em;text-transform:uppercase;text-align:center;white-space:nowrap;padding:20px 24px;cursor:pointer}
+.entry-button{appearance:none;border:0;background:none;color:var(--ink);font:inherit;font-size:clamp(1rem,2vw,1.14rem);letter-spacing:.18em;text-transform:uppercase;text-align:center;white-space:nowrap;padding:20px 24px;cursor:pointer}
 .sound-toggle{
   position:fixed;right:18px;bottom:18px;z-index:80;
   width:44px;height:44px;border:1px solid rgba(30,28,25,.16);border-radius:50%;
@@ -267,10 +267,10 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 @media(max-width:620px){
   .progress{display:none}
   .sound-toggle{right:14px;bottom:14px;width:42px;height:42px}
-  main{width:min(calc(100% - 30px),var(--reading));padding-bottom:8vh}
+  main{width:min(calc(100% - 34px),var(--reading));margin-left:auto;margin-right:auto;padding-bottom:8vh}
   article{line-height:1.67}
   .hero{height:470svh}
-  .hero-inner{left:50%;right:auto;top:128svh;width:min(calc(100% - 44px),840px);margin:0;transform:translateX(-50%);text-align:center}
+  .hero-inner{left:50%;right:auto;top:128svh;width:min(calc(100% - 44px),840px);margin:0;transform:translateX(-50%);text-align:center;align-items:center}
   .hero-inner h1{max-width:9.2ch;margin-left:auto;margin-right:auto;text-align:center;font-size:clamp(2.08rem,9.6vw,3rem);line-height:1.04;letter-spacing:.075em}
   .hero-inner .work-subtitle{margin-top:16px;font-size:clamp(.72rem,3.45vw,.86rem);line-height:1.45}
   .hero-inner .hairline{margin-top:25px}
@@ -280,15 +280,18 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .opening-name-line{top:41vh;width:max-content;max-width:calc(100vw - 38px);margin-left:auto;margin-right:auto;text-align:center;font-size:clamp(1.62rem,6.45vw,2.2rem);line-height:1.22}
   .name-olmo{margin-left:.38em}
   .name-males{margin-left:.52em}
-  .opening-phrase{font-size:clamp(1.13rem,5vw,1.35rem)}
+  .opening-phrase{font-size:clamp(1.13rem,5vw,1.35rem);margin-left:auto;margin-right:auto;text-align:left}
   .opening-phrase-1{min-height:39svh}
   .opening-phrase-2{min-height:34svh}
-  .opening-tasks{margin-top:9vh;padding-left:1rem;max-width:25ch}
+  .opening-tasks{margin:9vh auto 13vh;padding-left:1rem;max-width:25ch;text-align:left}
   .opening-task-line{font-size:clamp(1.08rem,4.7vw,1.27rem)}
   .opening-task-1{min-height:22svh}.opening-task-2{min-height:24svh}.opening-task-3{min-height:28svh}
-  .electronic-zone{margin:4.5em 0 5.2em;padding:3.2em 0 3.8em}
+  .electronic-zone{margin:4.5em auto 5.2em;padding:3.2em 0 3.8em}
   .age-mirror{grid-template-columns:1fr;gap:13px;min-height:0;text-align:center}.age-left,.age-right{text-align:center}.age-axis{width:46px;height:1px;margin:0 auto}
   .card-photo{width:min(76vw,320px)}
+  .opening-ramp,.electronic-zone,.paris-section,.closing-section{margin-left:auto;margin-right:auto}
+  .photo-layer,.tower-photo,.card-photo{margin-left:auto;margin-right:auto}
+  .opening-name-evolution{margin-left:auto;margin-right:auto}
   .two-days-passage{height:700svh;margin-top:20svh}
   #globalWaveCanvas{filter:blur(.28px) saturate(1.30) contrast(1.18)}
   .world-moon{width:72px;height:72px}
