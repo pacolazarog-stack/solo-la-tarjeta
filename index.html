@@ -19,7 +19,7 @@
   --central-moon:0;--final-moon:0;--venus:0;--sunset:0;--white:0;
   --yin-body:0;--yin-outline:0;--yin-dots:0;--yin-dot-scale:0;--yin-rotate:-7deg;--yin-scale:.985;--final-phrase:0;
   --comet-opacity:0;
-  --dusk-text-r:31;--dusk-text-g:29;--dusk-text-b:26;--dusk-text-shadow:0;
+  --dusk-turn-r:31;--dusk-turn-g:29;--dusk-turn-b:26;--dusk-turn-shadow:0;
   --crescent-opacity:1;--crescent-cut-left:42%;--crescent-cut-right:-34%;
   --final-moon-y:18px;
   color-scheme:light
@@ -188,8 +188,8 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   justify-content:center;
   font-size:clamp(1.13rem,2.15vw,1.34rem);
   line-height:1.72;
-  color:rgba(var(--dusk-text-r),var(--dusk-text-g),var(--dusk-text-b),.95);
-  text-shadow:0 2px 22px rgba(0,0,0,var(--dusk-text-shadow))
+  color:rgba(31,29,26,.95);
+  text-shadow:none
 }
 .dusk-beat p{margin:0}
 .dusk-beat p+p{margin-top:.86em}
@@ -205,6 +205,14 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 .dusk-money{font-variant-numeric:tabular-nums}
 .dusk-amount{font-size:clamp(1.35rem,2.9vw,1.72rem);letter-spacing:.015em}
 .dusk-late{color:inherit;text-shadow:inherit}
+.dusk-turn-beat #duskColorTurn{
+  color:rgb(var(--dusk-turn-r) var(--dusk-turn-g) var(--dusk-turn-b));
+  text-shadow:0 2px 22px rgba(0,0,0,var(--dusk-turn-shadow))
+}
+.dusk-turn-beat ~ .dusk-beat{
+  color:rgba(248,246,240,.96);
+  text-shadow:0 2px 22px rgba(0,0,0,.30)
+}
 
 .dusk-ending{
   position:relative;
@@ -741,7 +749,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
         <p class="reveal">—Le enviaremos otra con una numeración nueva.</p>
       </div>
 
-      <div class="dusk-beat dusk-breath-normal dusk-late dusk-emphasis">
+      <div class="dusk-beat dusk-breath-normal dusk-late dusk-emphasis dusk-turn-beat">
         <p class="reveal" id="duskColorTurn">La tarjeta quedó anulada.</p>
       </div>
 
@@ -1099,15 +1107,14 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     const venus=smoother(clamp((dp-.58)/.28));
     const finalStars=smoother(clamp((dp-.69)/.25));
 
-    // El cambio de color nace exactamente con «La tarjeta quedó anulada.».
-    // Antes de esa frase el texto permanece oscuro; mientras la frase cruza
-    // la zona de lectura, el color vira gradualmente hacia el blanco nocturno.
+    // «La tarjeta quedó anulada.» es, por sí sola, el umbral cromático.
+    // Entra negra y termina blanca mientras atraviesa la zona central de lectura.
     const colorTurnRect=duskColorTurn?.getBoundingClientRect();
-    const duskTextLight=colorTurnRect
-      ? smoother(clamp((innerHeight*.70-colorTurnRect.top)/(innerHeight*.32)))
+    const duskTurnLight=colorTurnRect
+      ? smoother(clamp((innerHeight*.68-colorTurnRect.top)/(innerHeight*.30)))
       : 0;
-    const duskText=mix([31,29,26],[248,246,240],duskTextLight);
-    const duskShadow=.30*duskTextLight;
+    const duskTurn=mix([31,29,26],[248,246,240],duskTurnLight);
+    const duskTurnShadow=.30*duskTurnLight;
 
     root.style.setProperty('--dawn-dark',dawnDark.toFixed(3));
     root.style.setProperty('--dawn-warm',dawnWarm.toFixed(3));
@@ -1118,10 +1125,10 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     root.style.setProperty('--final-moon',finalMoon.toFixed(3));
     root.style.setProperty('--venus',venus.toFixed(3));
     root.style.setProperty('--white',white.toFixed(3));
-    root.style.setProperty('--dusk-text-r',duskText[0]);
-    root.style.setProperty('--dusk-text-g',duskText[1]);
-    root.style.setProperty('--dusk-text-b',duskText[2]);
-    root.style.setProperty('--dusk-text-shadow',duskShadow.toFixed(3));
+    root.style.setProperty('--dusk-turn-r',duskTurn[0]);
+    root.style.setProperty('--dusk-turn-g',duskTurn[1]);
+    root.style.setProperty('--dusk-turn-b',duskTurn[2]);
+    root.style.setProperty('--dusk-turn-shadow',duskTurnShadow.toFixed(3));
 
     root.style.setProperty('--yin-body',yinBody.toFixed(3));
     root.style.setProperty('--yin-outline',yinOutline.toFixed(3));
