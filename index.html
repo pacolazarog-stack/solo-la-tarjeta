@@ -80,7 +80,7 @@ body:not(.entered){overflow:hidden}
 .world-vignette{z-index:11;background:radial-gradient(120% 95% at 50% 47%,transparent 62%,rgba(34,31,27,.018) 100%)}
 
 /* ENTRADA Y PROGRESO */
-.entry-gate{position:fixed;inset:0;z-index:999;display:grid;place-items:center;background:rgb(241 237 229);transition:opacity 1.35s ease,visibility 1.35s ease}
+.entry-gate{position:fixed;left:0;top:0;width:100vw;height:100dvh;min-height:100svh;z-index:999;display:grid;place-items:center;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);background:rgb(241 237 229);transition:opacity 1.35s ease,visibility 1.35s ease}
 body.entered .entry-gate{opacity:0;visibility:hidden;pointer-events:none}
 .entry-button{appearance:none;border:0;background:none;color:var(--ink);font:inherit;font-size:clamp(1rem,2vw,1.14rem);letter-spacing:.18em;text-transform:uppercase;padding:20px 24px;cursor:pointer}
 .sound-toggle{
@@ -235,8 +235,8 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .sound-toggle{right:14px;bottom:14px;width:42px;height:42px}
   main{width:min(calc(100% - 30px),var(--reading));padding-bottom:8vh}
   article{line-height:1.67}
-  .hero{height:500svh}
-  .hero-inner{left:50%;right:auto;top:38svh;width:min(calc(100% - 42px),900px);margin:0;transform:translateX(-50%);text-align:center}
+  .hero{height:520svh}
+  .hero-inner{left:50%;right:auto;top:138svh;width:min(calc(100% - 42px),900px);margin:0;transform:translateX(-50%);text-align:center}
   .hero-inner h1{max-width:8.6ch;margin-left:auto;margin-right:auto;text-align:center;font-size:clamp(2.2rem,10.2vw,3.15rem);line-height:1.01;letter-spacing:.082em}
   .hero-inner .work-subtitle{margin-top:16px;font-size:clamp(.72rem,3.45vw,.86rem);line-height:1.45}
   .hero-inner .hairline{margin-top:25px}
