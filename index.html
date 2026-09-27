@@ -91,7 +91,7 @@ body:not(.entered) .dusk-passage{visibility:hidden}
 /* ENTRADA Y PROGRESO */
 .entry-gate{position:fixed;inset:0;width:100%;height:100dvh;max-width:100vw;max-height:100dvh;z-index:999;display:grid;place-items:center;overflow:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);background:#f1ede5;isolation:isolate;overscroll-behavior:none;transition:opacity 1.35s ease,visibility 1.35s ease}
 body.entered .entry-gate{opacity:0;visibility:hidden;pointer-events:none}
-.entry-button{appearance:none;border:0;background:none;color:var(--ink);font:inherit;font-size:clamp(1rem,2vw,1.14rem);letter-spacing:.18em;text-transform:uppercase;padding:20px 24px;cursor:pointer}
+.entry-button{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);appearance:none;border:0;background:none;color:var(--ink);font:inherit;font-size:clamp(1rem,2vw,1.14rem);letter-spacing:.18em;text-transform:uppercase;text-align:center;white-space:nowrap;padding:20px 24px;cursor:pointer}
 .sound-toggle{
   position:fixed;right:18px;bottom:18px;z-index:80;
   width:44px;height:44px;border:1px solid rgba(30,28,25,.16);border-radius:50%;
@@ -315,7 +315,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .dusk-final-phrase{font-size:clamp(1.9rem,8vw,2.7rem)}
 }
 @media(max-width:620px) and (orientation:portrait){
-  .entry-gate{width:100vw;height:100dvh;max-width:100vw;max-height:100dvh}
+  .entry-gate{width:100vw;height:100dvh;max-width:100vw;max-height:100dvh;padding:0}
   .world-final-moon{
     width:clamp(102px,29vw,124px);
     height:clamp(102px,29vw,124px);
