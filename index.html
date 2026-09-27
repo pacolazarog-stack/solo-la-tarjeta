@@ -18,6 +18,7 @@
   --dawn-dark:1;--dawn-warm:0;--night:0;--stars:0;
   --central-moon:0;--final-moon:0;--venus:0;--sunset:0;--white:0;
   --yin-body:0;--yin-outline:0;--yin-dots:0;--yin-dot-scale:0;--yin-rotate:-7deg;--yin-scale:.985;--final-phrase:0;
+  --comet-opacity:0;
   --crescent-opacity:1;--crescent-cut-left:42%;--crescent-cut-right:-34%;
   --final-moon-y:18px;
   color-scheme:light
@@ -35,6 +36,29 @@ body:not(.entered){overflow:hidden}
 .world-sunset{z-index:3;opacity:var(--sunset);background:radial-gradient(128% 68% at 50% 110%,rgba(255,193,128,.66) 0%,rgba(247,159,119,.34) 25%,transparent 52%),radial-gradient(88% 50% at 50% 18%,rgba(172,124,153,.24),transparent 72%),linear-gradient(to bottom,#eee8e2 0%,#ddc9cc 25%,#cda3ab 51%,#aa7a87 76%,#715568 100%)}
 .world-night{z-index:4;opacity:var(--night);background:radial-gradient(108% 60% at 50% 105%,rgba(66,49,83,.30),transparent 55%),linear-gradient(to bottom,#050c18 0%,#09152a 39%,#14213b 68%,#29233d 100%)}
 .world-stars{z-index:5;opacity:var(--stars);background:radial-gradient(circle at 7% 14%,#fff 0 1px,transparent 1.8px),radial-gradient(circle at 16% 32%,rgba(255,255,255,.72) 0 1.1px,transparent 1.9px),radial-gradient(circle at 24% 18%,rgba(255,255,255,.9) 0 1px,transparent 1.8px),radial-gradient(circle at 31% 41%,rgba(255,255,255,.76) 0 1.1px,transparent 1.9px),radial-gradient(circle at 39% 12%,rgba(255,255,255,.96) 0 1.2px,transparent 2px),radial-gradient(circle at 47% 27%,rgba(255,255,255,.69) 0 1px,transparent 1.8px),radial-gradient(circle at 55% 16%,rgba(255,255,255,.92) 0 1.2px,transparent 2px),radial-gradient(circle at 63% 36%,rgba(255,255,255,.75) 0 1px,transparent 1.9px),radial-gradient(circle at 72% 13%,rgba(255,255,255,.9) 0 1.2px,transparent 2px),radial-gradient(circle at 81% 29%,rgba(255,255,255,.72) 0 1px,transparent 1.9px),radial-gradient(circle at 89% 17%,rgba(255,255,255,.96) 0 1.2px,transparent 2px),radial-gradient(circle at 11% 52%,rgba(255,255,255,.79) 0 1px,transparent 1.9px),radial-gradient(circle at 21% 63%,rgba(255,255,255,.94) 0 1.2px,transparent 2px),radial-gradient(circle at 34% 56%,rgba(255,255,255,.70) 0 1px,transparent 1.8px),radial-gradient(circle at 44% 71%,rgba(255,255,255,.92) 0 1.2px,transparent 2px),radial-gradient(circle at 58% 60%,rgba(255,255,255,.78) 0 1px,transparent 1.9px),radial-gradient(circle at 68% 69%,rgba(255,255,255,.95) 0 1.2px,transparent 2px),radial-gradient(circle at 79% 58%,rgba(255,255,255,.74) 0 1px,transparent 1.9px),radial-gradient(circle at 87% 66%,rgba(255,255,255,.90) 0 1.2px,transparent 2px);filter:drop-shadow(0 0 7px rgba(255,255,255,.16))}
+
+.world-comet{z-index:5;opacity:0;pointer-events:none;overflow:visible}
+.world-comet.is-active{animation:cometField 5.2s linear forwards}
+.world-comet-core,.world-comet-tail{position:absolute;left:84%;top:11%;pointer-events:none;will-change:left,top,transform,opacity}
+.world-comet-core{width:10px;height:10px;border-radius:50%;background:rgba(255,249,231,.99);box-shadow:0 0 10px rgba(255,249,231,.98),0 0 26px rgba(255,239,194,.78),0 0 62px rgba(255,224,150,.38);filter:blur(.12px);transform:translate(-50%,-50%) scale(.74)}
+.world-comet-tail{width:250px;height:3px;transform-origin:right center;transform:translate(-100%,-50%) rotate(152deg) scaleX(.12);background:linear-gradient(to left,rgba(255,247,218,0) 0%,rgba(255,244,210,.10) 15%,rgba(255,239,196,.30) 38%,rgba(255,233,176,.72) 70%,rgba(255,247,233,.96) 100%);border-radius:999px;filter:blur(.7px);box-shadow:0 0 12px rgba(255,236,184,.25),0 0 34px rgba(255,223,152,.16)}
+.world-comet.is-active .world-comet-core{animation:cometCore 5.2s cubic-bezier(.35,.02,.22,1) forwards}
+.world-comet.is-active .world-comet-tail{animation:cometTail 5.2s cubic-bezier(.35,.02,.22,1) forwards}
+@keyframes cometField{0%{opacity:0}8%{opacity:.16}18%{opacity:.72}46%{opacity:1}74%{opacity:.92}100%{opacity:0}}
+@keyframes cometCore{
+  0%{left:84%;top:11%;transform:translate(-50%,-50%) scale(.72)}
+  18%{left:78%;top:13%;transform:translate(-50%,-50%) scale(.88)}
+  54%{left:63%;top:19%;transform:translate(-50%,-50%) scale(1)}
+  82%{left:51%;top:24%;transform:translate(-50%,-50%) scale(.92)}
+  100%{left:45%;top:27%;transform:translate(-50%,-50%) scale(.72)}
+}
+@keyframes cometTail{
+  0%{left:84%;top:11%;opacity:0;transform:translate(-100%,-50%) rotate(152deg) scaleX(.12)}
+  16%{left:78%;top:13%;opacity:.55;transform:translate(-100%,-50%) rotate(152deg) scaleX(.42)}
+  48%{left:65%;top:18%;opacity:.92;transform:translate(-100%,-50%) rotate(152deg) scaleX(.96)}
+  76%{left:53%;top:23%;opacity:.78;transform:translate(-100%,-50%) rotate(152deg) scaleX(1.08)}
+  100%{left:45%;top:27%;opacity:0;transform:translate(-100%,-50%) rotate(152deg) scaleX(.72)}
+}
 
 .world-moon{z-index:6!important;inset:auto!important;top:10%!important;right:10%!important;width:86px;height:86px;border-radius:50%;opacity:var(--central-moon);background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);box-shadow:0 0 18px rgba(216,225,247,.28),0 0 52px rgba(216,225,247,.14);overflow:hidden;transform:rotate(-8deg)}
 .world-moon::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:#000}
@@ -168,6 +192,8 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   #globalWaveCanvas{filter:blur(.28px) saturate(1.30) contrast(1.18)}
   .world-moon{width:72px;height:72px}
   .world-final-moon{width:132px;height:132px;top:9%!important;right:7%!important}
+  .world-comet-core{width:9px;height:9px}
+  .world-comet-tail{width:190px;height:2.5px}
   .paris-section{padding-top:27vh;margin-bottom:6.8em}
   .tower-photo{width:min(88vw,460px)}
   .closing-section{padding-top:11vh}
@@ -184,7 +210,8 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  *,*::before,*::after{transition:none!important}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+  .world-comet{display:none}
   .reveal{opacity:1;transform:none;filter:none}
 }
 @media print{
@@ -208,6 +235,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     <div class="world-sunset"></div>
     <div class="world-night"></div>
     <div class="world-stars"></div>
+    <div class="world-comet" id="worldComet"><span class="world-comet-tail"></span><span class="world-comet-core"></span></div>
     <div class="world-moon"></div>
     <div class="world-final-moon">
       <span class="final-crescent"></span>
@@ -690,6 +718,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   const closing=document.querySelector('.closing-section');
   const finalLine=document.querySelector('.final-line');
   const dusk=document.querySelector('.dusk-passage');
+  const worldComet=document.getElementById('worldComet');
   const progress=document.querySelector('.progress i');
   const canvas=document.getElementById('globalWaveCanvas');
   const ctx=canvas.getContext('2d');
@@ -836,6 +865,18 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     ctx.restore();
   };
 
+  let cometArmed=true;
+  let cometTimer=null;
+  const triggerComet=()=>{
+    if(!worldComet||!cometArmed)return;
+    cometArmed=false;
+    worldComet.classList.remove('is-active');
+    void worldComet.offsetWidth;
+    worldComet.classList.add('is-active');
+    clearTimeout(cometTimer);
+    cometTimer=setTimeout(()=>worldComet.classList.remove('is-active'),5400);
+  };
+
   const renderVisualTimeline=()=>{
     const hp=localProgress(hero);
     const cp=localProgress(twoDays);
@@ -933,6 +974,8 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     root.style.setProperty('--crescent-cut-right',(-34+morph*30).toFixed(2)+'%');
     root.style.setProperty('--final-moon-y',(18-18*finalMoon).toFixed(2)+'px');
     root.style.setProperty('--final-phrase',finalPhrase.toFixed(3));
+    if(dp>=.981)triggerComet();
+    else if(dp<.94){cometArmed=true;worldComet?.classList.remove('is-active')}
 
     wave.active=twoDays&&twoDays.getBoundingClientRect().bottom>0&&twoDays.getBoundingClientRect().top<innerHeight;
     wave.visibility=visibility;wave.approach=approach;wave.lock=lock;wave.collapse=collapse;wave.burst=burst;
