@@ -130,7 +130,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 .pre-final{margin-top:15em!important;margin-bottom:30em!important;color:#6f7478;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:.8em;letter-spacing:.19em;text-transform:uppercase}
 .final-line{margin:0;padding:0;font-size:clamp(1.85rem,4.4vw,2.8rem);line-height:1.15}
 /* ATARDECER FINAL: PARTITURA RESPIRATORIA + METAMORFOSIS */
-.dusk-passage{width:100vw;height:3600svh;margin-left:calc(50% - 50vw);position:relative}
+.dusk-passage{width:100vw;height:1950svh;margin-left:calc(50% - 50vw);position:relative}
 .dusk-beat{position:absolute;top:var(--at);left:50%;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading));font-size:clamp(1.13rem,2.15vw,1.34rem);line-height:1.72;color:rgba(31,29,26,.92)}
 .dusk-beat p{margin:0}
 .dusk-beat p+p{margin-top:.82em}
@@ -140,8 +140,9 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 .dusk-emphasis{font-size:clamp(1.24rem,2.5vw,1.52rem)}
 .dusk-money{font-variant-numeric:tabular-nums;font-size:clamp(1.28rem,2.7vw,1.62rem)}
 .dusk-late{color:rgba(248,246,240,.95);text-shadow:0 2px 22px rgba(0,0,0,.30)}
-.dusk-final-wrap{position:absolute;left:50%;top:97%;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading));pointer-events:none}
-.dusk-final-phrase{margin:0;text-align:center;font-size:clamp(1.95rem,4.6vw,3rem);line-height:1.15;color:rgba(250,249,238,.98);text-shadow:0 2px 24px rgba(0,0,0,.30);opacity:var(--final-phrase);filter:blur(calc((1 - var(--final-phrase))*5px));transform:translateY(calc((1 - var(--final-phrase))*14px));transition:none}
+.dusk-final-wrap{position:fixed;left:50%;top:46vh;z-index:24;transform:translateX(-50%);width:min(calc(100% - 40px),var(--reading));pointer-events:none;opacity:var(--final-phrase);visibility:hidden}
+.dusk-final-wrap.is-visible{visibility:visible}
+.dusk-final-phrase{margin:0;text-align:center;font-size:clamp(1.95rem,4.6vw,3rem);line-height:1.15;color:rgba(250,249,238,.98);text-shadow:0 2px 24px rgba(0,0,0,.30);filter:blur(calc((1 - var(--final-phrase))*4px));transform:translateY(calc((1 - var(--final-phrase))*10px));transition:none}
 
 @media(max-width:620px){
   .progress{display:none}
@@ -171,7 +172,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .closing-section{padding-top:11vh}
   .pre-final{margin-top:13em!important;margin-bottom:26em!important}
   .final-line{padding-bottom:0}
-  .dusk-passage{height:4200svh}
+  .dusk-passage{height:2250svh}
   .dusk-beat{width:min(calc(100% - 30px),var(--reading));font-size:clamp(1.12rem,5vw,1.34rem);line-height:1.68}
   .dusk-beat p+p{margin-top:.9em}
   .dusk-fragment{width:min(calc(100% - 30px),460px)}
@@ -190,7 +191,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   .hero{height:auto;padding:1.5cm 0 2cm}.hero-inner{position:static;transform:none;width:auto}
   main{width:100%;padding:0}.reveal{opacity:1;transform:none;filter:none}
   article{font-size:12.5pt;line-height:1.55}.final-line{padding-bottom:0}
-  .dusk-passage{display:block;height:auto;margin:0}.dusk-beat,.dusk-final-wrap{position:static;transform:none;width:auto;margin:0 0 1em}.dusk-final-phrase{color:#000;text-shadow:none;margin-top:2cm}
+  .dusk-passage{display:block;height:auto;margin:0}.dusk-beat,.dusk-final-wrap{position:static;transform:none;width:auto;margin:0 0 1em;opacity:1!important;visibility:visible!important}.dusk-final-phrase{color:#000;text-shadow:none;margin-top:2cm}
 }
 </style>
 </head>
@@ -642,7 +643,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
       <p class="reveal dusk-long-gap dusk-emphasis">Ahora la tarjeta ya no hacía falta.</p>
     </div>
 
-    <div class="dusk-final-wrap"><p class="dusk-final-phrase">La cita, en cambio, sí.</p></div>
+    <div class="dusk-final-wrap" id="duskFinalWrap"><p class="dusk-final-phrase">La cita, en cambio, sí.</p></div>
   </section>
 
   
@@ -688,6 +689,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   const closing=document.querySelector('.closing-section');
   const finalLine=document.querySelector('.final-line');
   const dusk=document.querySelector('.dusk-passage');
+  const duskFinalWrap=document.getElementById('duskFinalWrap');
   const progress=document.querySelector('.progress i');
   const canvas=document.getElementById('globalWaveCanvas');
   const ctx=canvas.getContext('2d');
@@ -869,36 +871,37 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     const white=whiteIn*whiteOut;
 
     /* atardecer final: metamorfosis acompasada con la respiración del texto */
-    const sunset=smoother(clamp(dp/.64))*(1-smoother(clamp((dp-.74)/.23)));
-    const finalMoon=smoother(clamp(dp/(mobile?.16:.18)));
+    const sunset=smoother(clamp(dp/.52))*(1-smoother(clamp((dp-.72)/.24)));
+    const finalMoon=smoother(clamp(dp/(mobile?.11:.13)));
 
     const morphAnchors=[
-      [0,0],[.08,.025],[.16,.06],[.21,.10],[.274,.15],[.318,.18],
-      [.369,.23],[.413,.28],[.46,.33],[.506,.38],[.558,.44],[.602,.49],
-      [.648,.54],[.693,.60],[.738,.66],[.773,.71],[.805,.75],[.826,.78],
-      [.848,.81],[.868,.84],[.888,.87],[.905,.89],[.922,.91],[.934,.93],
-      [.941,.945],[.952,.968],[.962,1]
+      [0,0],[.045,.035],[.085,.075],[.126,.125],[.158,.17],
+      [.210,.225],[.274,.295],[.318,.345],[.369,.405],[.413,.455],
+      [.460,.505],[.506,.555],[.558,.61],[.602,.655],[.648,.705],
+      [.693,.75],[.738,.795],[.773,.825],[.805,.855],[.826,.875],
+      [.848,.895],[.868,.915],[.888,.935],[.905,.95],[.922,.965],
+      [.934,.977],[.941,.985],[.952,.994],[.960,1]
     ];
     const pacedMorph=p=>{
       if(p<=morphAnchors[0][0])return morphAnchors[0][1];
       for(let i=0;i<morphAnchors.length-1;i++){
         const a=morphAnchors[i],b=morphAnchors[i+1];
         if(p<=b[0]){
-          const t=smoother(clamp((p-a[0])/(b[0]-a[0])));
+          const t=smooth(clamp((p-a[0])/(b[0]-a[0])));
           return lerp(a[1],b[1],t);
         }
       }
       return 1;
     };
     const morph=pacedMorph(dp);
-    const yinBody=smoother(clamp((morph-.055)/.925));
-    const yinOutline=smoother(clamp((morph-.34)/.63));
-    const yinDots=smoother(clamp((morph-.70)/.28));
+    const yinBody=smoother(clamp((morph-.015)/.955));
+    const yinOutline=smoother(clamp((morph-.22)/.73));
+    const yinDots=smoother(clamp((morph-.56)/.40));
 
-    const finalNight=smoother(clamp((dp-.54)/.43));
-    const venus=smoother(clamp((dp-.64)/.25));
-    const finalStars=smoother(clamp((dp-.73)/.23));
-    const finalPhrase=smoother(clamp((dp-.965)/.012));
+    const finalNight=smoother(clamp((dp-.48)/.49));
+    const venus=smoother(clamp((dp-.58)/.28));
+    const finalStars=smoother(clamp((dp-.69)/.25));
+    const finalPhrase=smoother(clamp((dp-.958)/.010));
 
     root.style.setProperty('--dawn-dark',dawnDark.toFixed(3));
     root.style.setProperty('--dawn-warm',dawnWarm.toFixed(3));
@@ -913,11 +916,12 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     root.style.setProperty('--yin-body',yinBody.toFixed(3));
     root.style.setProperty('--yin-outline',yinOutline.toFixed(3));
     root.style.setProperty('--yin-dots',yinDots.toFixed(3));
-    root.style.setProperty('--crescent-opacity',(1-smoother(clamp((morph-.035)/.94))).toFixed(3));
-    root.style.setProperty('--crescent-cut-left',(42-morph*8).toFixed(2)+'%');
-    root.style.setProperty('--crescent-cut-right',(-34+morph*26).toFixed(2)+'%');
+    root.style.setProperty('--crescent-opacity',(1-smoother(clamp((morph-.015)/.955))).toFixed(3));
+    root.style.setProperty('--crescent-cut-left',(42-morph*11).toFixed(2)+'%');
+    root.style.setProperty('--crescent-cut-right',(-34+morph*30).toFixed(2)+'%');
     root.style.setProperty('--final-moon-y',(18-18*finalMoon).toFixed(2)+'px');
     root.style.setProperty('--final-phrase',finalPhrase.toFixed(3));
+    if(duskFinalWrap)duskFinalWrap.classList.toggle('is-visible',dp>=.958);
 
     wave.active=twoDays&&twoDays.getBoundingClientRect().bottom>0&&twoDays.getBoundingClientRect().top<innerHeight;
     wave.visibility=visibility;wave.approach=approach;wave.lock=lock;wave.collapse=collapse;wave.burst=burst;
