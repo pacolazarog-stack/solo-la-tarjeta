@@ -19,6 +19,7 @@
   --central-moon:0;--final-moon:0;--venus:0;--sunset:0;--white:0;
   --yin-body:0;--yin-outline:0;--yin-dots:0;--yin-dot-scale:0;--yin-rotate:-7deg;--yin-scale:.985;--final-phrase:0;
   --comet-opacity:0;
+  --dusk-text-r:31;--dusk-text-g:29;--dusk-text-b:26;--dusk-text-shadow:0;
   --crescent-opacity:1;--crescent-cut-left:42%;--crescent-cut-right:-34%;
   --final-moon-y:18px;
   color-scheme:light
@@ -187,7 +188,8 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   justify-content:center;
   font-size:clamp(1.13rem,2.15vw,1.34rem);
   line-height:1.72;
-  color:rgba(31,29,26,.92)
+  color:rgba(var(--dusk-text-r),var(--dusk-text-g),var(--dusk-text-b),.95);
+  text-shadow:0 2px 22px rgba(0,0,0,var(--dusk-text-shadow))
 }
 .dusk-beat p{margin:0}
 .dusk-beat p+p{margin-top:.86em}
@@ -202,7 +204,7 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
 .dusk-emphasis{font-size:clamp(1.24rem,2.5vw,1.52rem)}
 .dusk-money{font-variant-numeric:tabular-nums}
 .dusk-amount{font-size:clamp(1.35rem,2.9vw,1.72rem);letter-spacing:.015em}
-.dusk-late{color:rgba(248,246,240,.95);text-shadow:0 2px 22px rgba(0,0,0,.30)}
+.dusk-late{color:inherit;text-shadow:inherit}
 
 .dusk-ending{
   position:relative;
@@ -234,9 +236,14 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
   main{width:min(calc(100% - 30px),var(--reading));padding-bottom:8vh}
   article{line-height:1.67}
   .hero{height:500svh}
-  .hero-inner{top:150svh;width:min(calc(100% - 30px),900px)}
+  .hero-inner{top:38svh;width:min(calc(100% - 42px),900px)}
+  .hero-inner h1{max-width:8.6ch;margin-left:auto;margin-right:auto;font-size:clamp(2.2rem,10.2vw,3.15rem);line-height:1.01;letter-spacing:.082em}
+  .hero-inner .work-subtitle{margin-top:16px;font-size:clamp(.72rem,3.45vw,.86rem);line-height:1.45}
+  .hero-inner .hairline{margin-top:25px}
+  .hero-inner .title-flag{margin-top:20px}
+  .hero-inner .scroll-cue{margin-top:34px}
   .opening-name-evolution{height:220svh}
-  .opening-name-line{top:42vh;font-size:clamp(1.72rem,7.1vw,2.38rem);max-width:14ch;line-height:1.20}
+  .opening-name-line{top:40vh;font-size:clamp(1.68rem,6.8vw,2.28rem);max-width:16ch;line-height:1.20}
   .name-olmo{margin-left:.38em}
   .name-males{margin-left:.52em}
   .opening-phrase{font-size:clamp(1.13rem,5vw,1.35rem)}
@@ -1091,6 +1098,11 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     const venus=smoother(clamp((dp-.58)/.28));
     const finalStars=smoother(clamp((dp-.69)/.25));
 
+    // El texto no aclara hasta que la tarde ha entrado de verdad en la noche.
+    const duskTextLight=smoother(clamp((dp-(mobile?.73:.70))/(mobile?.13:.14)));
+    const duskText=mix([31,29,26],[248,246,240],duskTextLight);
+    const duskShadow=.30*duskTextLight;
+
     root.style.setProperty('--dawn-dark',dawnDark.toFixed(3));
     root.style.setProperty('--dawn-warm',dawnWarm.toFixed(3));
     root.style.setProperty('--sunset',sunset.toFixed(3));
@@ -1100,6 +1112,10 @@ p{margin:0 0 1.18em;hanging-punctuation:first last}
     root.style.setProperty('--final-moon',finalMoon.toFixed(3));
     root.style.setProperty('--venus',venus.toFixed(3));
     root.style.setProperty('--white',white.toFixed(3));
+    root.style.setProperty('--dusk-text-r',duskText[0]);
+    root.style.setProperty('--dusk-text-g',duskText[1]);
+    root.style.setProperty('--dusk-text-b',duskText[2]);
+    root.style.setProperty('--dusk-text-shadow',duskShadow.toFixed(3));
 
     root.style.setProperty('--yin-body',yinBody.toFixed(3));
     root.style.setProperty('--yin-outline',yinOutline.toFixed(3));
