@@ -496,6 +496,32 @@
       pointer-events:none;
     }
 
+    .heat-part{
+      display:block;
+      opacity:0;
+      filter:blur(5px);
+      transition:
+        opacity 2.15s cubic-bezier(.2,.7,.2,1),
+        filter 2.15s ease,
+        transform 2.15s cubic-bezier(.2,.7,.2,1);
+    }
+
+    .heat-el{
+      transform:translateX(-12px);
+    }
+
+    .heat-calor{
+      margin-top:.42em;
+      transform:translateX(14px);
+    }
+
+    .heat-final.is-shown .heat-el,
+    .heat-final.show-calor .heat-calor{
+      opacity:1;
+      filter:blur(0);
+      transform:none;
+    }
+
     .heat-final.is-burning{
       animation:flameText 1.25s ease-in-out infinite alternate;
     }
@@ -580,7 +606,7 @@
 
     @media(prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
-      .entry,.name-prelude,.name-ana,.name-klaudya,.line,.sound-toggle,main{transition-duration:.01ms}
+      .entry,.name-prelude,.name-ana,.name-klaudya,.line,.heat-part,.sound-toggle,main{transition-duration:.01ms}
       .pulse-field,.pulse-field::before,.pulse-field::after{animation-duration:3.8s}
       .world-fire{animation:none}
       .heat-final.is-burning{animation:none}
@@ -668,7 +694,10 @@
       <span class="line b-close">retiene intacto</span>
       <span class="line b-soft">un rostro,</span>
       <span class="line b-deep">y de todo un abrazo,</span>
-      <span class="line b-sentence heat-final" id="finalHeat">el calor.</span>
+      <span class="line b-sentence heat-final" id="finalHeat">
+        <span class="heat-part heat-el">el</span>
+        <span class="heat-part heat-calor">calor.</span>
+      </span>
 
       <span class="line signature" id="signature">flag · 2026</span>
     </div>
@@ -701,6 +730,7 @@
       let ticking = false;
       let fireTakeover = 0;
       let fireStarted = false;
+      let finalRevealScheduled = false;
 
       const clamp = value => Math.min(1,Math.max(0,value));
       const smooth = t => t*t*t*(t*(t*6-15)+10);
@@ -803,7 +833,14 @@
           const rect = line.getBoundingClientRect();
           if(rect.top <= revealY && rect.bottom > 0){
             line.classList.add('is-shown');
-            if(line === finalHeat) startFireTakeover();
+
+            if(line === finalHeat && !finalRevealScheduled){
+              finalRevealScheduled = true;
+              setTimeout(() => {
+                finalHeat.classList.add('show-calor');
+                startFireTakeover();
+              },4500);
+            }
           }
         });
       };
