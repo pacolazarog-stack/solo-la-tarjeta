@@ -25,6 +25,10 @@
       --forest:0;
       --forest-deep:0;
       --billiard:0;
+      --pulse-opacity:.045;
+      --pulse-scale:.88;
+      --pulse-ring:.055;
+      --pulse-duration:4.1s;
       --text-light:0;
       color-scheme:light;
     }
@@ -94,8 +98,68 @@
       opacity:var(--gold);
       transition:opacity 1.8s cubic-bezier(.2,.7,.2,1);
     }
+    .heartbeat-field{
+      position:absolute;
+      inset:0;
+      z-index:1;
+      display:grid;
+      place-items:center;
+      pointer-events:none;
+      opacity:var(--pulse-opacity);
+      transition:opacity .35s linear;
+    }
+    .heartbeat-core{
+      position:absolute;
+      left:50%;
+      top:54%;
+      width:min(58vw,620px);
+      aspect-ratio:1;
+      border-radius:50%;
+      transform:translate(-50%,-50%) scale(var(--pulse-scale));
+      background:
+        radial-gradient(circle,
+          rgba(207,181,98,.10) 0%,
+          rgba(93,139,103,.10) 28%,
+          rgba(24,87,59,.055) 50%,
+          rgba(24,87,59,0) 72%);
+      filter:blur(10px);
+      animation:heartPulse var(--pulse-duration) ease-in-out infinite;
+      will-change:transform,opacity;
+    }
+    .heartbeat-core::before,
+    .heartbeat-core::after{
+      content:"";
+      position:absolute;
+      inset:14%;
+      border-radius:50%;
+      border:1px solid rgba(28,94,62,var(--pulse-ring));
+      box-shadow:0 0 34px rgba(28,94,62,calc(var(--pulse-ring)*.65));
+      opacity:.78;
+      transform:scale(.86);
+      animation:heartRing var(--pulse-duration) ease-out infinite;
+    }
+    .heartbeat-core::after{
+      inset:4%;
+      opacity:.42;
+      animation-delay:.18s;
+    }
+    @keyframes heartPulse{
+      0%,100%{transform:translate(-50%,-50%) scale(var(--pulse-scale));opacity:.72}
+      10%{transform:translate(-50%,-50%) scale(calc(var(--pulse-scale) * 1.032));opacity:.92}
+      17%{transform:translate(-50%,-50%) scale(var(--pulse-scale));opacity:.74}
+      25%{transform:translate(-50%,-50%) scale(calc(var(--pulse-scale) * 1.055));opacity:1}
+      38%{transform:translate(-50%,-50%) scale(var(--pulse-scale));opacity:.70}
+    }
+    @keyframes heartRing{
+      0%,7%{transform:scale(.82);opacity:0}
+      12%{opacity:.72}
+      30%{transform:scale(1.08);opacity:.18}
+      40%,100%{transform:scale(1.13);opacity:0}
+    }
+
     .halo{
       position:absolute;
+      z-index:2;
       left:50%;
       top:47%;
       width:min(62vw,680px);
@@ -113,6 +177,7 @@
     }
     .voice-line{
       position:absolute;
+      z-index:3;
       left:50%;
       top:50%;
       width:min(74vw,760px);
@@ -152,6 +217,7 @@
     }
     .grain{
       position:absolute;
+      z-index:4;
       inset:0;
       opacity:.08;
       background-image:
@@ -427,6 +493,7 @@
       html{scroll-behavior:auto}
       *,*::before,*::after{animation:none!important;transition:none!important}
       .hero-inner,.beat-inner{opacity:1;transform:none;filter:none}
+      .heartbeat-core,.heartbeat-core::before,.heartbeat-core::after{animation:none!important}
       .cue{display:none}
     }
   </style>
@@ -450,6 +517,7 @@
     <div class="billiard-field"></div>
     <div class="green-wash"></div>
     <div class="gold-wash"></div>
+    <div class="heartbeat-field"><div class="heartbeat-core"></div></div>
     <div class="halo"></div>
     <div class="voice-line"></div>
     <div class="grain"></div>
@@ -505,7 +573,8 @@
     (() => {
       const soundtrack = document.getElementById('anaSoundtrack');
       const soundToggle = document.getElementById('soundToggle');
-      const SOUND_LEVEL = .12;
+      const SOUND_MIN = .16;
+      const SOUND_MAX = .26;
       let soundStarted = false;
       let soundFrame = null;
 
@@ -542,10 +611,11 @@
         try{
           await soundtrack.play();
           soundStarted = true;
-          fadeSoundTo(SOUND_LEVEL,2200);
+          fadeSoundTo(SOUND_MIN,1350);
           syncSoundButton();
+          onScroll?.();
         }catch(_){
-          soundtrack.volume = SOUND_LEVEL;
+          soundtrack.volume = SOUND_MIN;
         }
       };
 
@@ -605,6 +675,26 @@
 
       let ticking = false;
       const renderScroll = () => {
+        const maxScroll = Math.max(1,document.documentElement.scrollHeight - window.innerHeight);
+        const pageProgress = clamp(window.scrollY / maxScroll);
+
+        // La música nace ya presente y gana cuerpo muy lentamente.
+        if(soundStarted && soundtrack && !soundtrack.muted && !soundtrack.paused){
+          const targetVolume = SOUND_MIN + (SOUND_MAX - SOUND_MIN) * smoother(pageProgress);
+          soundtrack.volume += (targetVolume - soundtrack.volume) * .12;
+        }
+
+        // Latido visual: desde el primer instante, cada vez más visible,
+        // ligeramente más amplio y algo más cercano conforme avanza la lectura.
+        const pulseOpacity = .045 + .155 * smoother(pageProgress);
+        const pulseScale = .88 + .20 * smoother(pageProgress);
+        const pulseRing = .055 + .125 * smoother(pageProgress);
+        const pulseDuration = 4.1 - 1.05 * smoother(pageProgress);
+        root.style.setProperty('--pulse-opacity',pulseOpacity.toFixed(3));
+        root.style.setProperty('--pulse-scale',pulseScale.toFixed(3));
+        root.style.setProperty('--pulse-ring',pulseRing.toFixed(3));
+        root.style.setProperty('--pulse-duration',pulseDuration.toFixed(2)+'s');
+
         const targetY = window.innerHeight * .48;
         let best = beats[0];
         let bestDistance = Infinity;
