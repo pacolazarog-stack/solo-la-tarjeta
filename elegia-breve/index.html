@@ -54,7 +54,7 @@
       position:absolute;
       inset:0;
       background:
-        radial-gradient(105% 78% at 50% 92%,rgba(91,178,74,.92) 0%,rgba(37,137,68,.94) 34%,rgba(13,101,61,.96) 66%,rgba(7,67,47,.98) 100%);
+        radial-gradient(105% 78% at 50% 92%,rgba(126,181,108,.72) 0%,rgba(89,157,91,.62) 36%,rgba(55,126,82,.52) 68%,rgba(39,99,72,.46) 100%);
       opacity:var(--forest);
       transition:opacity .18s linear;
     }
@@ -62,8 +62,8 @@
       position:absolute;
       inset:0;
       background:
-        radial-gradient(70% 48% at 50% 76%,rgba(212,186,72,.16),transparent 66%),
-        linear-gradient(to bottom,#0d6b45 0%,#07563b 48%,#063b2d 100%);
+        radial-gradient(70% 48% at 50% 76%,rgba(212,186,72,.10),transparent 66%),
+        linear-gradient(to bottom,#7fae7f 0%,#67966e 48%,#507c63 100%);
       opacity:var(--forest-deep);
       transition:opacity .18s linear;
     }
@@ -242,11 +242,11 @@
     }
     .beat-inner{
       width:100%;
-      color:rgb(var(--text-r,32) var(--text-g,29) var(--text-b,25));
+      color:rgb(32 29 25);
       opacity:0;
       transform:translateY(14px);
       filter:blur(.45px);
-      text-shadow:0 1px calc(var(--text-light)*18px) rgba(0,32,20,calc(var(--text-light)*.30));
+      text-shadow:none;
       transition:opacity 1.15s cubic-bezier(.2,.7,.2,1),transform 1.15s cubic-bezier(.2,.7,.2,1),filter 1.15s ease;
     }
     .beat.visible .beat-inner{opacity:1;transform:none;filter:none}
@@ -476,42 +476,43 @@
         });
         if(best) setStage(best.dataset.stage);
 
-        // Transición fuerte al verde:
-        // comienza al acercarse “Y luego habló. Brasil…”
-        // y queda plenamente estable antes del abrazo.
+        // Transición verde amplia y continua:
+        // empieza antes de “Y luego habló”, madura durante la voz
+        // y alcanza su punto más fértil en el abrazo, sin salto cromático.
         const vr = voiceSection.getBoundingClientRect();
         const er = embraceSection.getBoundingClientRect();
         const mr = memorySection.getBoundingClientRect();
 
-        const voiceStart = window.innerHeight * .88;
-        const voiceFull = window.innerHeight * .28;
-        const raw = (voiceStart - vr.top) / Math.max(1, voiceStart - voiceFull);
-        let forest = smoother(clamp(raw));
+        const start = window.innerHeight * 1.22;
+        const mature = window.innerHeight * .08;
+        const raw = (start - vr.top) / Math.max(1, start - mature);
+        let forest = .58 * smoother(clamp(raw));
 
-        // Mantener el verde plenamente instalado durante abrazo y memoria.
-        if(er.top < window.innerHeight * .72) forest = Math.max(forest, .96);
-        if(mr.top < window.innerHeight * .78) forest = Math.max(forest, .88);
+        // En el abrazo sólo se intensifica un poco; no invade toda la pantalla.
+        const embraceRaw = (window.innerHeight * .90 - er.top) / Math.max(1, window.innerHeight * 1.05);
+        const embraceLift = .12 * smoother(clamp(embraceRaw));
+        forest = Math.min(.68, forest + embraceLift);
 
-        // Profundización: verde claro -> verde bosque al llegar al abrazo.
-        const deepRaw = (window.innerHeight * .82 - er.top) / Math.max(1, window.innerHeight * .64);
-        let deep = .78 * smoother(clamp(deepRaw));
-        if(mr.top < window.innerHeight * .72) deep = Math.max(deep, .58);
+        // En la memoria retrocede levemente, como poso, no como apagón.
+        if(mr.top < window.innerHeight * .72){
+          const memoryFade = smoother(clamp((window.innerHeight * .72 - mr.top) / (window.innerHeight * .95)));
+          forest = forest * (1 - .14 * memoryFade);
+        }
 
-        // El texto cambia a marfil una vez que el campo verde domina.
-        const textLight = ramp(forest,.42,.70);
-        const tr = mix(32,247,textLight);
-        const tg = mix(29,246,textLight);
-        const tb = mix(25,236,textLight);
+        // Profundización muy moderada: verde vegetal, no bosque oscuro.
+        const deepRaw = (window.innerHeight * .92 - er.top) / Math.max(1, window.innerHeight * 1.20);
+        let deep = .26 * smoother(clamp(deepRaw));
+        if(mr.top < window.innerHeight * .72) deep *= .82;
 
         root.style.setProperty('--forest', forest.toFixed(3));
         root.style.setProperty('--forest-deep', deep.toFixed(3));
-        root.style.setProperty('--text-light', textLight.toFixed(3));
-        root.style.setProperty('--text-r', tr);
-        root.style.setProperty('--text-g', tg);
-        root.style.setProperty('--text-b', tb);
+        root.style.setProperty('--text-light', '0');
+        root.style.setProperty('--text-r', '32');
+        root.style.setProperty('--text-g', '29');
+        root.style.setProperty('--text-b', '25');
 
-        // El dorado aparece sólo como respiración brasileña en el abrazo.
-        const gold = .03 + .12 * ramp(deep,.18,.72);
+        // Oro apenas perceptible: una respiración, no un emblema.
+        const gold = .015 + .045 * ramp(deep,.06,.24);
         root.style.setProperty('--gold', gold.toFixed(3));
 
         ticking = false;
