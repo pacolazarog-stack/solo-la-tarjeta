@@ -1,0 +1,683 @@
+# CENICIENTO
+
+Paco miró el reloj antes de sentarse.
+
+Las siete y doce.
+
+Después dejó la mano sobre la mesa y se quedó mirándola.
+
+Eso fue lo primero.
+
+No estaban las pequeñas manchas que conocía de memoria. La piel parecía más firme sobre los nudillos y las venas permanecían debajo, discretas, como si todavía no hubieran aprendido el camino hacia la superficie.
+
+Giró la mano.
+
+Luego la otra.
+
+Al fondo del café había un espejo estrecho entre dos lámparas.
+
+Paco se levantó.
+
+Se acercó despacio.
+
+Y allí estaba.
+
+No él exactamente.
+
+O sí.
+
+Él, muchos años antes.
+
+La mandíbula conservaba una firmeza olvidada. El cabello obedecía de nuevo. Las mejillas habían recuperado una tersura que ya no recordaba como propia. Solo los ojos permanecían iguales, aunque dentro de aquel rostro también parecían más jóvenes.
+
+Paco sonrió.
+
+El muchacho del espejo sonrió con él.
+
+—No puede ser.
+
+Se tocó la cara.
+
+El espejo insistió.
+
+Volvió a la mesa.
+
+La luz de la tarde entraba oblicua por los ventanales y dejaba sobre la madera una franja dorada. El local olía a café recién molido, madera encerada y bizcocho caliente. Una cucharilla golpeaba contra una taza en algún lugar detrás de él. Dos mujeres hablaban junto a la barra. De los altavoces llegaba una música tan baja que parecía existir únicamente cuando nadie decía nada.
+
+Paco volvió a contemplar sus manos.
+
+Aquello era absurdo.
+
+Y maravilloso.
+
+Había pasado sesenta y dos años asistiendo a transformaciones que nadie le había consultado: crecer, ensancharse, adelgazar, perder pelo, recuperarlo donde no lo necesitaba, descubrir que una escalera tenía más peldaños de los que recordaba y que las letras pequeñas habían decidido conspirar contra él.
+
+Ahora el tiempo había rectificado.
+
+No sabía por cuánto.
+
+Eso formaba parte de la gracia.
+
+Y del miedo.
+
+En los cuentos siempre había una condición que nadie explicaba hasta que resultaba demasiado tarde.
+
+Cuando ella entró, Paco dejó de pensar en ello.
+
+La reconoció enseguida.
+
+Ella sonrió y se acercó a la mesa.
+
+—Hola, Paco.
+
+Él se levantó.
+
+Un abrazo breve.
+
+Natural.
+
+Después ella dejó el bolso junto a la silla y se sentó.
+
+—¿Llevas mucho esperando?
+
+—No.
+
+Paco permaneció de pie un instante más.
+
+—¿Qué pasa?
+
+—Nada.
+
+Se sentó.
+
+Ella abrió la carta.
+
+Paco miró de reojo el cristal de la ventana.
+
+El reflejo seguía allí.
+
+Treinta y tantos.
+
+Tal vez cuarenta.
+
+Era difícil calcular la edad de uno mismo cuando la edad ya había pasado.
+
+Ella levantó los ojos.
+
+—¿Qué miras?
+
+—A un tipo.
+
+—¿Conocido?
+
+—Mucho.
+
+—Entonces salúdalo de mi parte.
+
+Paco sonrió.
+
+Durante algunos minutos hablaron de cosas pequeñas. Del tráfico. De una representación reciente. De alguien que había llegado tarde. De una calle de Granada donde aparcar requería más fe que habilidad.
+
+Paco escuchaba y, de vez en cuando, buscaba su rostro en el cristal.
+
+La misma juventud.
+
+La misma imposibilidad.
+
+Pidieron vino.
+
+Después algo de comer.
+
+El café fue llenándose lentamente. Las conversaciones aumentaron alrededor de ellos hasta formar un murmullo continuo. Los cubiertos chocaban contra los platos. La máquina de café exhalaba periódicamente un soplido de vapor. Afuera la tarde fue perdiendo su amarillo y adquirió aquel azul breve que Granada concede antes de la noche.
+
+Paco contó una historia sobre una estación de autobuses.
+
+Un hombre de aspecto descuidado que conocía la máquina expendedora mejor que cualquier empleado.
+
+Ella se rio.
+
+Después apareció una tarjeta.
+
+Un viaje.
+
+París.
+
+Una mujer joven.
+
+Una historia que durante algún tiempo había parecido contener una posibilidad.
+
+Ella escuchó hasta el final.
+
+—¿Y qué pasó?
+
+Paco bebió un poco de vino.
+
+—Ella siguió su camino.
+
+—¿Y tú?
+
+—Yo también.
+
+Ella asintió.
+
+No hubo lástima.
+
+Ni curiosidad añadida.
+
+Eso le gustó.
+
+El camarero retiró los platos.
+
+Paco miró otra vez el cristal.
+
+El muchacho seguía allí.
+
+Demasiado joven para las cosas que acababa de contar.
+
+—Te estás mirando mucho hoy —dijo ella.
+
+—Estoy comprobando una cosa.
+
+—¿Y funciona?
+
+—Todavía sí.
+
+Ella arqueó ligeramente una ceja, pero no pidió explicación.
+
+El camarero dejó dos cafés.
+
+Paco se recostó por primera vez en la silla.
+
+Hasta entonces había mantenido la espalda demasiado recta, como si cualquier movimiento brusco pudiera romper el encantamiento.
+
+Ella se quitó la chaqueta, la dejó sobre el respaldo y acercó la taza con las dos manos.
+
+El segundo café produjo entre ellos una tranquilidad distinta.
+
+Ya no parecía necesario llenar cada silencio.
+
+Hablaron de ciudades.
+
+Luego de viajes.
+
+Después de palabras que cambiaban cuando cruzaban una frontera.
+
+Brasil apareció así, sin que ninguno lo buscara.
+
+Ella pronunció una palabra cualquiera.
+
+No importaba cuál.
+
+Importó la manera.
+
+El peso cálido de las vocales.
+
+Una sílaba que parecía demorarse una fracción de segundo más de lo previsto.
+
+Paco levantó la cabeza.
+
+Ella lo vio.
+
+—¿Qué?
+
+—Nada.
+
+—Estás escribiendo algo.
+
+—Estoy intentando no hacerlo.
+
+—Pues no lo intentes tanto.
+
+Ella removió el café.
+
+—Una vez me hicieron repetir un vídeo porque querían que disimulara el acento.
+
+Paco dejó la taza sobre el plato.
+
+—¿Disimularlo?
+
+—Sí.
+
+Levantó un dedo y pulsó dos veces sobre la mesa.
+
+—Brasil. España. Brasil. España.
+
+Paco sonrió.
+
+Ella no.
+
+Entonces comprendió.
+
+—Te molestó.
+
+—Muchísimo. Como si una pudiera elegirlo. Como si hubiera un botón.
+
+La cucharilla de otra mesa cayó al suelo.
+
+Alguien pidió la cuenta.
+
+La puerta se abrió y durante unos segundos entró desde la calle un aire frío.
+
+Paco la miró.
+
+—Menos mal que no funcionaba.
+
+Ella alzó los ojos.
+
+—¿Por qué?
+
+—Porque habría sido una pena.
+
+No añadió nada.
+
+Ella sostuvo la mirada unos segundos.
+
+Luego sonrió.
+
+—Eso ha sido bonito.
+
+Paco bajó los ojos.
+
+Y vio el reloj.
+
+Las nueve y treinta y ocho.
+
+El gesto de comprobar la hora fue automático.
+
+Ella lo descubrió.
+
+—Otra vez.
+
+—Perdón.
+
+—¿Tienes que irte?
+
+Paco pensó en contestar que no.
+
+Pero no sabía.
+
+No conocía las reglas.
+
+Solo sabía que aquello acabaría.
+
+Las manos.
+
+El rostro.
+
+La espalda que no dolía.
+
+Aquella facilidad recién recuperada para levantarse de una silla.
+
+Todo.
+
+Quizá a medianoche.
+
+Los cuentos tenían una conocida obsesión con las doce.
+
+—Tengo que irme antes de convertirme en calabaza.
+
+Ella se rio.
+
+—Tú no eres Cenicienta.
+
+—Eso parece.
+
+Lo miró durante unos segundos.
+
+—Ceniciento.
+
+Paco soltó una carcajada.
+
+—Eso suena terrible.
+
+—A mí me gusta.
+
+El camarero dejó la cuenta sobre un pequeño plato blanco.
+
+Paco extendió la mano.
+
+Ella fue más rápida.
+
+Puso la suya encima.
+
+—Todavía no.
+
+Paco miró aquella mano.
+
+Después la miró a ella.
+
+—¿No?
+
+—No.
+
+Retiró la suya.
+
+Pidieron otro café.
+
+Esta vez Paco dejó el reloj boca abajo.
+
+Hablaron sin vigilar el tiempo.
+
+Y quizá por eso la noche avanzó más deprisa.
+
+Cuando finalmente salieron, el café quedó a sus espaldas como un pequeño escenario iluminado.
+
+La puerta se cerró.
+
+La luz cambió.
+
+Dentro habían quedado el ámbar de las lámparas, la madera cálida, el vino y los reflejos dorados de los cristales.
+
+Fuera, Granada los recibió con una claridad blanca y dura.
+
+La farola de la esquina caía casi vertical sobre la acera. El escaparate de una farmacia arrojaba una luz azulada que borraba los matices del rostro. Los coches pasaban dejando breves destellos sobre el pavimento.
+
+Paco sintió de pronto que la noche no admitía trucos.
+
+El aire era frío.
+
+Seco.
+
+Entraba por el cuello de la camisa y descendía por la espalda con aquella precisión que tiene el frío granadino cuando decide recordar a alguien que todavía es invierno en alguna parte del cuerpo.
+
+Ella se cruzó los brazos.
+
+Paco llevó la mano hacia su chaqueta.
+
+Desabrochó el primer botón.
+
+Se detuvo.
+
+Había aprendido aquel gesto hacía muchos años.
+
+Volvió a abrocharlo.
+
+Ella lo observaba.
+
+—¿Qué estabas haciendo?
+
+—Modernizándome.
+
+Se rio.
+
+—¿Con éxito?
+
+—Moderado.
+
+Empezaron a caminar.
+
+Paco notaba las piernas ligeras.
+
+El cuerpo respondía antes de que él terminara de pedirle las cosas.
+
+Pasaron junto a un escaparate apagado.
+
+Miró.
+
+El joven continuaba allí.
+
+Ella, a su lado.
+
+Durante un instante, en aquel cristal oscuro, parecían pertenecer al mismo tiempo.
+
+Paco sintió una alegría infantil.
+
+Y después miedo.
+
+Estaba empezando a desear que aquello no terminara.
+
+Llegaron al lugar donde debían separarse.
+
+Ella se volvió hacia él.
+
+La farola quedaba detrás.
+
+Su luz era fría, casi despiadada.
+
+Nada protegía ya la escena.
+
+No había lámparas ámbar.
+
+Ni cristales dorados.
+
+Ni música.
+
+Solo una calle de Granada, el aire frío y dos personas que habían alargado una conversación más de lo previsto.
+
+Ella dio un paso.
+
+Lo abrazó.
+
+Paco sintió primero el perfume.
+
+Después el cabello junto a la mejilla.
+
+Luego los brazos.
+
+Y por último el calor.
+
+El contraste con la noche fue tan preciso que durante unos segundos tuvo la impresión de que todo el frío de la ciudad se había detenido alrededor de aquel punto.
+
+Cerró los ojos.
+
+No supo cuánto duró.
+
+Quizá poco.
+
+Quizá todo lo necesario.
+
+Cuando se separaron, ella permaneció cerca una fracción de segundo.
+
+—Buenas noches, Ceniciento.
+
+Paco sonrió.
+
+—Buenas noches.
+
+La vio alejarse.
+
+Luego echó a andar en dirección contraria.
+
+No miró el reloj.
+
+Dos calles más abajo, el frío empezó a entrarle por las mangas.
+
+Hundió las manos en los bolsillos.
+
+Aquellas manos todavía eran jóvenes.
+
+Un poco después sintió una molestia en la rodilla.
+
+Pequeña.
+
+Conocida.
+
+Se detuvo.
+
+Movió la pierna.
+
+La molestia regresó.
+
+Paco sonrió.
+
+—Ya estamos.
+
+Siguió andando.
+
+El aire descendía desde las calles altas y se acumulaba en las esquinas. Le enfriaba las orejas, le endurecía los dedos dentro de los bolsillos y le obligaba a encoger ligeramente los hombros.
+
+Cada paso parecía devolverle algo.
+
+Una articulación.
+
+Una arruga.
+
+Un año.
+
+Frente al escaparate cerrado de una tienda, se detuvo.
+
+La luz blanca del interior permanecía encendida.
+
+Se acercó al cristal.
+
+El joven estaba desapareciendo.
+
+No de golpe.
+
+Primero la piel.
+
+Luego la línea de la mandíbula.
+
+Después el cabello.
+
+Las manchas regresaron lentamente a las manos.
+
+Las venas encontraron otra vez su camino.
+
+Los párpados recuperaron su peso.
+
+Paco contempló la transformación entera.
+
+No apartó los ojos.
+
+Sesenta y dos años.
+
+Allí estaban.
+
+De nuevo.
+
+El hechizo se extinguía con una eficacia administrativa.
+
+Todo eso se iba.
+
+La tersura.
+
+El cabello.
+
+Las piernas rápidas.
+
+La mentira del cristal.
+
+Todo junto.
+
+Todo deprisa.
+
+Hasta dejarlo allí.
+
+Solo.
+
+Frente a sí mismo.
+
+Entonces recordó el abrazo.
+
+No al muchacho.
+
+A él.
+
+Paco se quedó inmóvil.
+
+Había algo que no había comprendido.
+
+Volvió mentalmente al café.
+
+A su entrada.
+
+Ella había sonreído.
+
+—Hola, Paco.
+
+Y después había pasado toda la tarde frente a él.
+
+El vino.
+
+Brasil.
+
+El acento.
+
+La cuenta.
+
+Todavía no.
+
+Paco miró su reflejo.
+
+Entonces lo entendió.
+
+Ella nunca había visto al joven.
+
+Para ella, en aquella mesa, había estado siempre sentado el hombre de sesenta y dos años.
+
+Con su chaqueta algo anticuada.
+
+Con sus zapatos cómodos y gastados.
+
+Con aquellas manos.
+
+Y cuando había puesto la suya sobre la cuenta para decir:
+
+—Todavía no.
+
+se lo había dicho a ese hombre.
+
+Cuando había caminado junto a él por la calle, caminaba junto a ese hombre.
+
+Y cuando lo abrazó bajo la luz blanca de la farola,
+
+había abrazado a ese hombre.
+
+No al muchacho.
+
+A él.
+
+Paco apoyó una mano en el cristal.
+
+Estaba frío.
+
+Durante unas horas el tiempo le había permitido contemplar al muchacho que había sido.
+
+Ella, en cambio, había seguido viendo a Paco.
+
+Y lo había abrazado.
+
+Paco retiró la mano del cristal.
+
+El aire de Granada volvió a morderle los dedos.
+
+Los guardó en los bolsillos.
+
+La rodilla protestó al comenzar a caminar.
+
+Esta vez no sonrió por resignación.
+
+Sonrió porque el dolor era suyo.
+
+También las manos.
+
+También los años.
+
+Detrás quedaban el café, dos copas, una cucharilla cayendo al suelo y una cuenta que durante unos minutos nadie había querido pagar.
+
+Delante no había palacio.
+
+Ni carroza.
+
+Ni promesa.
+
+Solo una calle fría.
+
+Paco avanzó por ella.
+
+Y comprendió finalmente la diferencia.
+
+A Cenicienta el prodigio la había transformado para que alguien pudiera verla.
+
+A Ceniciento,
+
+el prodigio le había devuelto por unas horas al hombre que fue
+
+para que pudiera descubrir,
+
+cuando desapareciera,
+
+que alguien había estado mirando
+
+al hombre que era.
