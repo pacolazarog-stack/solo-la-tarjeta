@@ -496,9 +496,8 @@
         opacity 1.35s cubic-bezier(.2,.7,.2,1),
         transform 1.35s cubic-bezier(.2,.7,.2,1),
         filter 1.2s ease;
-      transition-delay:calc(var(--i,0) * .72s);
     }
-    .beat.visible .verse-line{
+    .verse-line.is-shown{
       opacity:1;
       transform:none;
       filter:none;
@@ -620,7 +619,8 @@
     @media (prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
       *,*::before,*::after{animation:none!important;transition:none!important}
-      .beat-inner,.verse-line{opacity:1;transform:none;filter:none}
+      .beat-inner{opacity:1;transform:none;filter:none}
+      .verse-line.is-shown{opacity:1;transform:none;filter:none}
       .cue{display:none}
     }
   </style>
@@ -797,7 +797,6 @@
         document.body.classList.add('reading-ready');
         namePrelude?.classList.add('fade-name');
         window.scrollTo({top:0,left:0,behavior:'auto'});
-        setTimeout(() => document.querySelector('.face')?.classList.add('visible'),900);
       };
 
       const startSound = async () => {
@@ -859,9 +858,22 @@
             entry.target.classList.add('visible');
           }
         });
-      }, {threshold:.24});
+      }, {threshold:.12});
 
       document.querySelectorAll('.beat').forEach(el => revealObserver.observe(el));
+      const verseLines = [...document.querySelectorAll('.verse-line')];
+
+      const revealVersesByScroll = () => {
+        if(document.body.classList.contains('prelude-active')) return;
+        const revealY = window.innerHeight * .72;
+        verseLines.forEach(line => {
+          if(line.classList.contains('is-shown')) return;
+          const rect = line.getBoundingClientRect();
+          if(rect.top <= revealY && rect.bottom > 0){
+            line.classList.add('is-shown');
+          }
+        });
+      };
 
       const root = document.documentElement;
       const voiceSection = document.querySelector('.voice');
@@ -954,7 +966,10 @@
 
       const onScroll = () => {
         if(!ticking){
-          requestAnimationFrame(renderScroll);
+          requestAnimationFrame(() => {
+            renderScroll();
+            revealVersesByScroll();
+          });
           ticking = true;
         }
       };
