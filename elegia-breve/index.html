@@ -72,8 +72,8 @@
       position:absolute;
       inset:0;
       background:
-        radial-gradient(82% 62% at 50% 76%,rgba(35,128,79,.82) 0%,rgba(20,105,64,.86) 46%,rgba(12,79,49,.90) 100%),
-        linear-gradient(to bottom,#267b50 0%,#176a43 54%,#0d5838 100%);
+        radial-gradient(82% 62% at 50% 76%,rgba(24,108,67,.88) 0%,rgba(13,86,53,.92) 46%,rgba(6,63,40,.96) 100%),
+        linear-gradient(to bottom,#1a6843 0%,#0f5436 54%,#063d28 100%);
       opacity:var(--billiard);
       transition:opacity .18s linear;
     }
@@ -525,7 +525,7 @@
         // Empieza cuando el cierre entra en la parte baja de la pantalla
         // y sólo alcanza su plenitud junto a «el calor.».
         const billiardRaw = (window.innerHeight * 1.02 - fr.top) / Math.max(1, window.innerHeight * 1.18);
-        const billiard = .56 * smoother(clamp(billiardRaw));
+        const billiard = .68 * smoother(clamp(billiardRaw));
         root.style.setProperty('--billiard', billiard.toFixed(3));
 
         root.style.setProperty('--text-light', '0');
