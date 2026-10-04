@@ -13,9 +13,9 @@
     :root{
       --ink:#201d19;
       --muted:#777066;
-      --paper:#f2eee7;
-      --warm:#e8d4c2;
-      --deep:#3a2b27;
+      --paper:#eef1e7;
+      --warm:#c9d8b7;
+      --deep:#234432;
       --glow:0;
       --voice:0;
       --heat:0;
@@ -40,8 +40,9 @@
       pointer-events:none;
       overflow:hidden;
       background:
-        radial-gradient(70% 45% at 50% 14%,rgba(255,255,255,.72),transparent 70%),
-        linear-gradient(to bottom,#f4f0e9 0%,#f2eee7 62%,#eee6dc 100%);
+        radial-gradient(72% 46% at 50% 14%,rgba(255,255,255,.74),transparent 70%),
+        radial-gradient(68% 50% at 50% 82%,rgba(151,182,126,.12),transparent 72%),
+        linear-gradient(to bottom,#f3f4ec 0%,#edf1e5 60%,#e5ecdc 100%);
       transition:background 1.6s ease;
     }
     .halo{
@@ -54,9 +55,9 @@
       transform:translate(-50%,-50%) scale(calc(.82 + var(--glow)*.18));
       background:
         radial-gradient(circle,
-          rgba(205,149,111,calc(.16 + var(--heat)*.12)) 0%,
-          rgba(205,149,111,calc(.07 + var(--heat)*.08)) 32%,
-          rgba(205,149,111,0) 70%);
+          rgba(122,157,94,calc(.18 + var(--heat)*.10)) 0%,
+          rgba(182,164,89,calc(.06 + var(--heat)*.07)) 34%,
+          rgba(122,157,94,0) 72%);
       filter:blur(18px);
       opacity:calc(.34 + var(--glow)*.42);
       transition:opacity 1.2s ease,transform 1.2s ease;
@@ -73,28 +74,28 @@
         linear-gradient(90deg,
           transparent 0%,
           transparent 5%,
-          rgba(84,57,48,.15) 10%,
+          rgba(53,91,61,.16) 10%,
           transparent 12%,
           transparent 17%,
-          rgba(84,57,48,.24) 18%,
+          rgba(53,91,61,.26) 18%,
           transparent 20%,
           transparent 27%,
-          rgba(84,57,48,.18) 29%,
+          rgba(53,91,61,.19) 29%,
           transparent 31%,
           transparent 38%,
-          rgba(84,57,48,.26) 39%,
+          rgba(53,91,61,.28) 39%,
           transparent 41%,
           transparent 48%,
-          rgba(84,57,48,.16) 49%,
+          rgba(53,91,61,.17) 49%,
           transparent 51%,
           transparent 58%,
-          rgba(84,57,48,.24) 60%,
+          rgba(53,91,61,.26) 60%,
           transparent 62%,
           transparent 70%,
-          rgba(84,57,48,.17) 72%,
+          rgba(53,91,61,.18) 72%,
           transparent 74%,
           transparent 81%,
-          rgba(84,57,48,.22) 83%,
+          rgba(53,91,61,.23) 83%,
           transparent 85%,
           transparent 100%);
       mask-image:linear-gradient(to right,transparent,black 15%,black 85%,transparent);
@@ -254,19 +255,32 @@
       right:0;
       bottom:-.12em;
       height:1px;
-      background:rgba(78,49,42,.24);
+      background:linear-gradient(90deg,rgba(35,90,52,.28),rgba(190,164,72,.22));
       transform:scaleX(var(--voice));
       transform-origin:left;
     }
 
     body.stage-voice{
-      --glow:.45;
+      --glow:.58;
       --voice:1;
     }
+    body.stage-voice .atmosphere{
+      background:
+        radial-gradient(74% 48% at 50% 18%,rgba(255,255,255,.70),transparent 70%),
+        radial-gradient(62% 42% at 50% 72%,rgba(82,132,82,.15),transparent 72%),
+        linear-gradient(to bottom,#f1f3e9 0%,#e7eee0 66%,#dce8d5 100%);
+    }
     body.stage-embrace{
-      --glow:.72;
+      --glow:.78;
       --voice:.28;
       --heat:1;
+    }
+    body.stage-embrace .atmosphere{
+      background:
+        radial-gradient(76% 52% at 50% 22%,rgba(255,255,255,.62),transparent 72%),
+        radial-gradient(58% 42% at 50% 68%,rgba(92,145,86,.20),transparent 70%),
+        radial-gradient(48% 34% at 52% 78%,rgba(205,181,87,.08),transparent 72%),
+        linear-gradient(to bottom,#eef2e6 0%,#e2ebda 58%,#d4e2ca 100%);
     }
     body.stage-memory{
       --glow:.24;
@@ -276,8 +290,9 @@
     }
     body.stage-memory .atmosphere{
       background:
-        radial-gradient(85% 55% at 50% 30%,rgba(255,255,255,.56),transparent 74%),
-        linear-gradient(to bottom,#f1ece4 0%,#eee6dc 56%,#e5d7ca 100%);
+        radial-gradient(85% 55% at 50% 30%,rgba(255,255,255,.58),transparent 74%),
+        radial-gradient(62% 44% at 50% 76%,rgba(111,151,86,.16),transparent 72%),
+        linear-gradient(to bottom,#f0f2e8 0%,#e9eee0 56%,#dde7d3 100%);
     }
 
     footer{
