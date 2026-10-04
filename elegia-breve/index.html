@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <meta name="theme-color" content="#f2eee7">
+  <meta name="theme-color" content="#e7eee0">
   <meta property="og:title" content="ELEGÍA BREVE PARA ANA KLAUDYA">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="es_ES">
@@ -20,6 +20,8 @@
       --voice:0;
       --heat:0;
       --memory:0;
+      --green:0;
+      --gold:0;
       color-scheme:light;
     }
     *{box-sizing:border-box}
@@ -44,6 +46,23 @@
         radial-gradient(68% 50% at 50% 82%,rgba(151,182,126,.12),transparent 72%),
         linear-gradient(to bottom,#f3f4ec 0%,#edf1e5 60%,#e5ecdc 100%);
       transition:background 1.6s ease;
+    }
+    .green-wash{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(78% 58% at 50% 58%,rgba(72,124,74,.74) 0%,rgba(103,151,88,.58) 34%,rgba(142,174,105,.38) 58%,rgba(142,174,105,0) 82%),
+        linear-gradient(to bottom,rgba(53,104,66,.18),rgba(101,151,81,.42));
+      opacity:var(--green);
+      transition:opacity 1.8s cubic-bezier(.2,.7,.2,1);
+    }
+    .gold-wash{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(46% 34% at 56% 72%,rgba(215,188,83,.48),rgba(215,188,83,0) 72%);
+      opacity:var(--gold);
+      transition:opacity 1.8s cubic-bezier(.2,.7,.2,1);
     }
     .halo{
       position:absolute;
@@ -263,6 +282,8 @@
     body.stage-voice{
       --glow:.58;
       --voice:1;
+      --green:.30;
+      --gold:.03;
     }
     body.stage-voice .atmosphere{
       background:
@@ -274,6 +295,8 @@
       --glow:.78;
       --voice:.28;
       --heat:1;
+      --green:.50;
+      --gold:.13;
     }
     body.stage-embrace .atmosphere{
       background:
@@ -287,6 +310,8 @@
       --voice:0;
       --heat:.45;
       --memory:1;
+      --green:.36;
+      --gold:.05;
     }
     body.stage-memory .atmosphere{
       background:
@@ -326,6 +351,8 @@
 </head>
 <body>
   <div class="atmosphere" aria-hidden="true">
+    <div class="green-wash"></div>
+    <div class="gold-wash"></div>
     <div class="halo"></div>
     <div class="voice-line"></div>
     <div class="grain"></div>
@@ -398,15 +425,36 @@
 
       document.querySelectorAll('.beat').forEach(el => revealObserver.observe(el));
 
-      const stageObserver = new IntersectionObserver(entries => {
-        const visible = entries
-          .filter(e => e.isIntersecting)
-          .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if(visible) setStage(visible.target.dataset.stage);
-      }, {threshold:[.25,.45,.65]});
+      let ticking = false;
+      const updateStageFromScroll = () => {
+        const targetY = window.innerHeight * .48;
+        let best = beats[0];
+        let bestDistance = Infinity;
 
-      beats.forEach(el => stageObserver.observe(el));
-      setStage('face');
+        beats.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          const center = rect.top + rect.height / 2;
+          const distance = Math.abs(center - targetY);
+          if(distance < bestDistance){
+            bestDistance = distance;
+            best = el;
+          }
+        });
+
+        if(best) setStage(best.dataset.stage);
+        ticking = false;
+      };
+
+      const onScroll = () => {
+        if(!ticking){
+          requestAnimationFrame(updateStageFromScroll);
+          ticking = true;
+        }
+      };
+
+      window.addEventListener('scroll', onScroll, {passive:true});
+      window.addEventListener('resize', onScroll);
+      updateStageFromScroll();
     })();
   </script>
 </body>
