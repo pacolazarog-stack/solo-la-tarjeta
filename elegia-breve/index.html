@@ -281,6 +281,12 @@
       text-transform:uppercase;
       color:rgba(32,29,25,.46);
     }
+    .entry-gate .entry-flag{
+      margin:-5px 0 0;
+      font:400 .68rem/1 Arial,Helvetica,sans-serif;
+      letter-spacing:.28em;
+      color:rgba(32,29,25,.40);
+    }
     .entry-gate button{
       margin-top:6px;
       border:1px solid rgba(23,63,50,.26);
@@ -300,6 +306,23 @@
       transform:translateY(-1px);
       box-shadow:0 9px 34px rgba(8,49,32,.13);
       outline:none;
+    }
+
+    body.prelude-active main,
+    body.prelude-active .progress,
+    body.prelude-active footer{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+    main,.progress,footer{
+      transition:opacity 2.4s cubic-bezier(.2,.7,.2,1),visibility 2.4s ease;
+    }
+    body.reading-ready main,
+    body.reading-ready .progress,
+    body.reading-ready footer{
+      opacity:1;
+      visibility:visible;
     }
 
     .sound-toggle{
@@ -380,66 +403,11 @@
       width:min(calc(100% - 42px),740px);
       margin:0 auto;
     }
-    .hero{
-      min-height:108svh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:12svh 0 18svh;
-    }
-    .hero-inner{
-      width:min(100%,700px);
-      opacity:0;
-      transform:translateY(14px);
-      animation:arrive 1.5s .16s cubic-bezier(.2,.7,.2,1) forwards;
-    }
-    @keyframes arrive{to{opacity:1;transform:none}}
-    .kicker{
-      margin:0 0 18px;
-      font-family:Arial,Helvetica,sans-serif;
-      font-size:.7rem;
-      letter-spacing:.24em;
-      text-transform:uppercase;
-      color:rgba(32,29,25,.47);
-    }
-    h1{
-      margin:0;
-      font-weight:500;
-      font-size:clamp(2.25rem,7vw,5rem);
-      line-height:.98;
-      letter-spacing:.055em;
-    }
-    .hairline{
-      width:44px;
-      height:1px;
-      background:currentColor;
-      opacity:.26;
-      margin:30px auto 0;
-    }
-    .flag{
-      margin:22px 0 0;
-      font-family:Arial,Helvetica,sans-serif;
-      font-size:.67rem;
-      letter-spacing:.29em;
-      color:rgba(32,29,25,.42);
-    }
-    .cue{
-      margin:44px auto 0;
-      width:8px;
-      height:8px;
-      border-right:1px solid rgba(32,29,25,.34);
-      border-bottom:1px solid rgba(32,29,25,.34);
-      transform:rotate(45deg);
-      animation:cue 2.2s ease-in-out infinite;
-    }
-    @keyframes cue{0%,100%{transform:translateY(0) rotate(45deg);opacity:.38}50%{transform:translateY(7px) rotate(45deg);opacity:.82}}
-
     .beat{
-      min-height:86svh;
+      min-height:112svh;
       display:flex;
       align-items:center;
-      padding:14svh 0;
+      padding:24svh 0;
     }
     .beat-inner{
       width:100%;
@@ -448,7 +416,7 @@
       transform:translateY(14px);
       filter:blur(.45px);
       text-shadow:none;
-      transition:opacity 1.15s cubic-bezier(.2,.7,.2,1),transform 1.15s cubic-bezier(.2,.7,.2,1),filter 1.15s ease;
+      transition:opacity 2.35s cubic-bezier(.2,.7,.2,1),transform 2.35s cubic-bezier(.2,.7,.2,1),filter 2.1s ease;
     }
     .beat.visible .beat-inner{opacity:1;transform:none;filter:none}
     .beat p{
@@ -461,13 +429,13 @@
     }
     .beat:nth-of-type(even) p{margin-left:auto}
     .voice p{max-width:38ch}
-    .embrace{min-height:78svh}
+    .embrace{min-height:104svh}
     .embrace p{max-width:29ch}
     .memory{
-      min-height:118svh;
+      min-height:154svh;
       align-items:flex-start;
-      padding-top:26svh;
-      padding-bottom:34svh;
+      padding-top:34svh;
+      padding-bottom:52svh;
     }
     .memory .beat-inner{text-align:center}
     .memory p{
@@ -565,25 +533,26 @@
     @media (max-width:640px){
       .progress{right:10px}
       .beat:nth-of-type(even) p{margin-left:0}
-      .beat{min-height:82svh}
-      .memory{min-height:110svh}
+      .beat{min-height:104svh}
+      .memory{min-height:142svh}
       .voice-line{width:92vw}
       h1{letter-spacing:.035em}
     }
     @media (prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
       *,*::before,*::after{animation:none!important;transition:none!important}
-      .hero-inner,.beat-inner{opacity:1;transform:none;filter:none}
+      .beat-inner{opacity:1;transform:none;filter:none}
       .cue{display:none}
     }
   </style>
 </head>
-<body class="entry-locked">
+<body class="entry-locked prelude-active">
   <audio id="anaSoundtrack" preload="auto" loop src="ana-klaudya.m4a"></audio>
   <div class="entry-gate" id="entryGate" role="dialog" aria-modal="true" aria-label="Entrada a la pieza">
     <div class="entry-gate-inner">
       <p class="entry-sub">pieza breve</p>
-      <p class="entry-title">ANA KLAUDYA</p>
+      <p class="entry-title">ELEGÍA BREVE<br>PARA ANA KLAUDYA</p>
+      <p class="entry-flag">flag</p>
       <button id="entryButton" type="button">Entrar</button>
     </div>
   </div>
@@ -618,16 +587,6 @@
   </nav>
 
   <main>
-    <header class="hero" data-stage="face">
-      <div class="hero-inner">
-        <p class="kicker">pieza breve</p>
-        <h1>ELEGÍA BREVE<br>PARA ANA KLAUDYA</h1>
-        <div class="hairline"></div>
-        <p class="flag">flag</p>
-        <div class="cue" aria-hidden="true"></div>
-      </div>
-    </header>
-
     <section class="beat face" data-stage="face">
       <div class="beat-inner">
         <p>Había en su rostro una belleza serena, de las que no reclaman hacerse notar. La hondura de los ojos, el trazo de la boca, el cabello dispuesto con un cuidado que subraya sin corregir.</p>
@@ -687,9 +646,16 @@
         });
       };
 
-      const openReading = () => {
-        document.body.classList.remove('entry-locked');
+      const beginPrelude = () => {
         entryGate?.classList.add('is-open');
+        document.body.classList.add('prelude-active');
+        document.body.classList.remove('reading-ready');
+        window.scrollTo({top:0,left:0,behavior:'auto'});
+      };
+
+      const releaseReading = () => {
+        document.body.classList.remove('entry-locked','prelude-active');
+        document.body.classList.add('reading-ready');
         window.scrollTo({top:0,left:0,behavior:'auto'});
       };
 
@@ -710,11 +676,12 @@
 
       entryButton?.addEventListener('click',async () => {
         entryButton.disabled = true;
-        restartPulse();
         soundtrack.currentTime = 0;
+        restartPulse();
         const started = await startSound();
         if(started){
-          openReading();
+          beginPrelude();
+          setTimeout(releaseReading,15000);
         }else{
           entryButton.disabled = false;
           entryButton.textContent = 'Volver a intentar';
@@ -752,6 +719,7 @@
       }, {threshold:.24});
 
       document.querySelectorAll('.beat').forEach(el => revealObserver.observe(el));
+      document.querySelector('.face')?.classList.add('visible');
 
       const root = document.documentElement;
       const voiceSection = document.querySelector('.voice');
