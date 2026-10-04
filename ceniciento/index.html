@@ -1,1 +1,172 @@
-__FROM_FILE__
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#100e0d">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>CENICIENTO · leer o escuchar</title>
+<style>
+:root{--gray:0;--prog:0;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:#100e0d;color:#f7f1e8}
+body{font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia,"Times New Roman",serif;-webkit-font-smoothing:antialiased}
+body.listen-mode{width:100%;height:100%;overflow:hidden}
+body.read-mode{min-height:100%;overflow-x:hidden}
+.bg{position:fixed;inset:-5%;z-index:0;overflow:hidden;background:#100e0d}
+.bg video{width:100%;height:100%;object-fit:cover;transform:scale(1.07);filter:grayscale(var(--gray)) saturate(calc(1 - .72*var(--gray))) brightness(calc(.44 - .07*var(--gray))) contrast(calc(1 + .18*var(--gray)));transition:filter 1.1s ease}
+.bg:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 28%,rgba(0,0,0,.08),rgba(0,0,0,.48) 64%,rgba(0,0,0,.80)),linear-gradient(to bottom,rgba(17,12,9,.22),rgba(7,7,8,.56));box-shadow:inset 0 0 14vw rgba(0,0,0,.62)}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;background-image:radial-gradient(circle,rgba(255,255,255,.55) 0 .4px,transparent .55px);background-size:8px 8px;mix-blend-mode:soft-light}
+.portrait{position:fixed;z-index:3;left:50%;top:4.5svh;transform:translateX(-50%);width:min(62vw,470px);aspect-ratio:3/4;border-radius:25px;overflow:hidden;background:#211914;box-shadow:0 24px 95px rgba(0,0,0,.55),0 0 0 1px rgba(255,238,210,.15);transition:width .45s ease,left .45s ease,right .45s ease,top .45s ease,transform .45s ease,opacity .45s ease}
+.portrait .age-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;filter:saturate(1.02) contrast(1.025) brightness(.98);transition:opacity .9s ease}.portrait .age-layer.active{opacity:1}
+.portrait:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,rgba(255,210,145,.06),transparent 45%,rgba(0,0,0,.08));box-shadow:inset 0 0 55px rgba(0,0,0,.13)}
+.brand{position:fixed;z-index:12;left:max(15px,env(safe-area-inset-left));top:max(15px,env(safe-area-inset-top));font:500 .65rem/1.2 Arial,sans-serif;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,246,232,.64)}
+.controls{position:fixed;z-index:13;right:max(13px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.controls button{border:1px solid rgba(255,255,255,.23);background:rgba(15,13,12,.52);color:rgba(255,255,255,.84);border-radius:999px;padding:.62em .92em;font:500 .62rem/1 Arial,sans-serif;letter-spacing:.11em;text-transform:uppercase;backdrop-filter:blur(8px)}
+.karaoke{position:fixed;z-index:7;left:50%;bottom:7.2svh;transform:translateX(-50%);width:min(calc(100% - 30px),850px);text-align:center;text-shadow:0 3px 18px rgba(0,0,0,.88);pointer-events:none}
+.line{transition:opacity .55s ease,transform .55s ease;min-height:1.5em}
+.prev,.next{font-size:clamp(.82rem,1.8vw,1.02rem);line-height:1.35;color:rgba(245,239,231,.37)}
+.prev{margin-bottom:.72rem}.next{margin-top:.78rem}
+.current{font-size:clamp(1.34rem,3.35vw,2.15rem);line-height:1.22;font-weight:500;color:#fffaf1;max-width:32ch;margin:auto}
+.current.dramatic{font-size:clamp(1.7rem,4.4vw,2.8rem);line-height:1.12}
+.current.final-line{font-size:clamp(1.85rem,4.8vw,3rem)}
+.progress{position:fixed;z-index:14;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.08)}
+.progress i{display:block;width:calc(var(--prog)*100%);height:100%;background:rgba(244,235,222,.72);transition:width .35s linear}
+.status{position:fixed;z-index:12;left:50%;bottom:2.1svh;transform:translateX(-50%);font:500 .58rem/1 Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.42);white-space:nowrap}
+.reader{display:none;position:relative;z-index:6;width:min(calc(100% - 32px),760px);margin:0 auto;padding:18svh 0 24svh}
+.reader article{background:rgba(248,245,238,.93);color:#211c18;border-radius:22px;padding:clamp(1.25rem,4vw,2.4rem);box-shadow:0 28px 90px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
+.reader h1{text-align:center;font-weight:500;letter-spacing:.08em;font-size:clamp(2.2rem,6vw,3.8rem);margin:.2em 0 .18em}
+.reader .by{text-align:center;font:500 .65rem/1 Arial,sans-serif;letter-spacing:.24em;text-transform:uppercase;opacity:.45;margin:0 0 2.8rem}
+.reader p{font-size:clamp(1.08rem,2.3vw,1.31rem);line-height:1.68;margin:.85em 0}
+.reader p.dramatic{font-size:1.16em;font-weight:600;text-align:center;margin:1.7em 0}
+.reader p.final{font-size:1.12em;text-align:center}
+.read-mode .reader{display:block}
+.read-mode .karaoke,.read-mode .status{display:none}
+.read-mode .portrait{left:auto;right:4vw;top:7svh;transform:none;width:min(31vw,330px);opacity:.94}
+.read-mode .controls #pause,.read-mode .controls #restart{display:none}
+.read-mode .progress{position:fixed}
+.entry{position:fixed;z-index:30;inset:0;display:grid;place-items:center;background:rgba(12,9,8,.56);backdrop-filter:blur(8px);transition:opacity 1.1s ease,visibility 1.1s ease}
+.entry.open{opacity:0;visibility:hidden;pointer-events:none}
+.card{text-align:center;padding:30px;color:#f8efe3;text-shadow:0 3px 24px rgba(0,0,0,.65)}
+.card h1{font-size:clamp(2.7rem,9vw,5.4rem);font-weight:500;letter-spacing:.09em;margin:0}
+.card p{font:500 .66rem/1.5 Arial,sans-serif;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,244,230,.65);margin:1rem 0 1.5rem}
+.mode-buttons{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+.card button{border:1px solid rgba(255,243,224,.47);background:rgba(36,27,21,.42);color:#fff4e7;border-radius:999px;padding:1em 1.8em;font:600 .7rem/1 Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase}
+.card button:disabled{opacity:.38}
+.hint{margin-top:1rem!important;font-size:.55rem!important;letter-spacing:.1em!important;text-transform:none!important;opacity:.62}
+@media(max-width:760px){
+ .portrait{top:6.8svh;width:min(82vw,405px);border-radius:21px}
+ .karaoke{bottom:8.4svh;width:calc(100% - 22px)}
+ .current{font-size:clamp(1.28rem,5.6vw,1.7rem);max-width:28ch}
+ .current.dramatic{font-size:clamp(1.55rem,7vw,2.15rem)}
+ .prev,.next{font-size:.78rem}.brand{font-size:.55rem}
+ .controls button{font-size:.55rem;padding:.58em .75em}
+ .read-mode .portrait{left:50%;right:auto;top:5.5svh;transform:translateX(-50%);width:min(66vw,300px);opacity:.88}
+ .reader{padding-top:58svh;width:min(calc(100% - 22px),760px)}
+ .reader article{padding:1.15rem 1.05rem 1.7rem;border-radius:18px}
+ .reader p{font-size:1.07rem;line-height:1.64}
+}
+@media(prefers-reduced-motion:reduce){.line,.bg video,.progress i,.entry,.portrait{transition-duration:.01ms}}
+</style>
+</head>
+<body>
+<div class="bg"><video id="bgv" muted playsinline preload="auto"></video></div><div class="grain"></div>
+<div class="portrait"><img id="ageA" class="age-layer active" alt="" aria-hidden="true"><img id="ageB" class="age-layer" alt="" aria-hidden="true"></div>
+<div class="brand">Ceniciento · flag · 2026</div>
+<div class="controls">
+ <button id="modeSwitch" type="button" hidden>Cambiar modo</button>
+ <button id="pause" type="button">Pausa</button>
+ <button id="restart" type="button">Inicio</button>
+</div>
+<div class="karaoke" aria-live="polite"><div id="prev" class="line prev"></div><div id="current" class="line current"></div><div id="next" class="line next"></div></div>
+<div id="status" class="status">cargando cuento</div><div class="progress"><i></i></div>
+<div class="reader" id="reader"><article><h1>CENICIENTO</h1><p class="by">flag · 2026</p><div id="readerText"></div></article></div>
+<div id="entry" class="entry"><div class="card"><h1>CENICIENTO</h1><p>cuento · flag · 2026</p><div class="mode-buttons"><button id="listen">Escuchar</button><button id="read">Leer</button></div><p class="hint">puede escucharse con texto sincronizado o leerse en silencio</p></div></div>
+<audio id="narrator" preload="metadata"></audio>
+<script>
+(()=>{
+const $=id=>document.getElementById(id),root=document.documentElement,body=document.body;
+const bgv=$('bgv'),ageA=$('ageA'),ageB=$('ageB'),entry=$('entry'),listenBtn=$('listen'),readBtn=$('read'),pauseBtn=$('pause'),restartBtn=$('restart'),modeSwitch=$('modeSwitch'),audio=$('narrator'),status=$('status');
+const prev=$('prev'),cur=$('current'),next=$('next'),readerText=$('readerText');
+const seqFiles=[1,2,3,4,5,6].map(n=>`seq/v1-0${n}.txt?v=14`);
+const aiAudio=[
+'https://www.aidocmaker.com/g0/audio?name=b9b09ddf66e3486cbe8efe65b94e633a',
+'https://www.aidocmaker.com/g0/audio?name=a43768bba8884eb18f8ba1ebb161aa73',
+'https://www.aidocmaker.com/g0/audio?name=ce8c457cb4ea40e38c25028405c2b5f9'];
+let rawText='',phrases=[],ranges=[],weights=[],storyReady=false,seqReady=false,audioTimingReady=false,paused=false,playMode='ai',block=0,currentIndex=0,lastGray=0,videoUrl=null,raf=0,speechToken=0,activeMode=null,currentAgeState=0,activeAgeLayer=0,ageFrames=[];
+const AGE_ANCHORS=[0,2,3,5,6,7,9],AGE_STATES=AGE_ANCHORS.length;
+let audioDurations=[0,0,0],narrationTotal=0;
+const clamp=x=>Math.max(0,Math.min(1,x));
+function check(){readBtn.disabled=!storyReady;listenBtn.disabled=!storyReady;if(storyReady)status.textContent=seqReady?'listo':'texto listo · cargando imagen'}
+function cleanText(raw){return raw.replace(/^#\s*CENICIENTO\s*/i,'').trim()}
+function splitPhrases(raw){const pars=cleanText(raw).split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean),out=[];for(const p of pars){if(p.length<=185){out.push(p);continue}out.push(...(p.match(/[^.!?…]+(?:[.!?…]+|$)/g)?.map(x=>x.trim()).filter(Boolean)||[p]))}return out}
+const ix=(needle,last=false)=>{const arr=[];phrases.forEach((p,i)=>{if(p.includes(needle))arr.push(i)});return arr.length?(last?arr[arr.length-1]:arr[0]):-1};
+function dramatic(t){return /Todavía no|No al muchacho|^A él\.$|^—?Ceniciento\.?$|Sesenta y dos años|al hombre que era|Las nueve y treinta y ocho|Y por último el calor/i.test(t)}
+function setupRanges(){let b1=ix('El peso cálido de las vocales'),b2=ix('Siguió andando');if(b1<0)b1=Math.floor(phrases.length*.38);if(b2<0)b2=Math.floor(phrases.length*.72);ranges=[[0,b1],[b1+1,b2],[b2+1,phrases.length-1]];weights=ranges.map(([a,b])=>{let total=0,cum=[];for(let i=a;i<=b;i++){const t=phrases[i],words=t.split(/\s+/).length;let w=Math.max(.8,words*.34);if(/[.!?…]$/.test(t))w+=.3;if(dramatic(t))w+=.7;total+=w;cum.push(total)}return{a,b,total,cum}})}
+function buildReader(raw){readerText.innerHTML='';for(const p of cleanText(raw).split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean)){const el=document.createElement('p');el.textContent=p;if(dramatic(p))el.classList.add('dramatic');if(p.includes('A Cenicienta el prodigio')||p.includes('al hombre que era'))el.classList.add('final');readerText.appendChild(el)}}
+function renderLine(i){i=Math.max(0,Math.min(phrases.length-1,i));currentIndex=i;prev.textContent=phrases[i-1]||'';cur.textContent=phrases[i]||'';next.textContent=phrases[i+1]||'';cur.className='line current'+(dramatic(phrases[i])?' dramatic':'')+(i===phrases.length-1?' final-line':'');root.style.setProperty('--prog',((i+1)/phrases.length).toFixed(5));visualByIndex(i)}
+function stageFor(i){return clamp(i/Math.max(1,phrases.length-1))}
+function showAgeState(state,instant=false){
+ state=Math.max(0,Math.min(AGE_STATES-1,state));
+ if(!ageFrames.length)return;
+ if(state===currentAgeState&&!instant)return;
+ currentAgeState=state;
+ const incoming=activeAgeLayer===0?ageB:ageA, outgoing=activeAgeLayer===0?ageA:ageB;
+ incoming.src=ageFrames[state];
+ if(instant){outgoing.classList.remove('active');incoming.classList.add('active')}else requestAnimationFrame(()=>{incoming.classList.add('active');outgoing.classList.remove('active')});
+ activeAgeLayer=activeAgeLayer===0?1:0;
+}
+function setAgeProgress(progress){const p=clamp(progress);const state=p>=1?AGE_STATES-1:Math.min(AGE_STATES-1,Math.floor(p*AGE_STATES));showAgeState(state)}
+function setGrayProgress(g){lastGray=Math.max(lastGray,clamp(g));root.style.setProperty('--gray',lastGray.toFixed(4))}
+function visualByIndex(i){if(activeMode!=='listen')setAgeProgress(stageFor(i));const gs=ix('Cuando finalmente salieron'),ge=phrases.length-1;setGrayProgress(gs>=0?(i-gs)/Math.max(1,ge-gs):0)}
+async function loadSequence(){
+ const parts=await Promise.all(seqFiles.map(async f=>{const r=await fetch(f,{cache:'no-store'});if(!r.ok)throw Error('seq');return(await r.text()).trim()}));
+ const b64=parts.join('').replace(/\s+/g,''),bin=atob(b64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+ videoUrl=URL.createObjectURL(new Blob([u],{type:'video/mp4'}));bgv.src=videoUrl;
+ const cap=document.createElement('video');cap.muted=true;cap.playsInline=true;cap.preload='auto';cap.src=videoUrl;
+ await Promise.all([new Promise((ok,ko)=>{bgv.onloadedmetadata=ok;bgv.onerror=ko}),new Promise((ok,ko)=>{cap.onloadedmetadata=ok;cap.onerror=ko})]);
+ bgv.currentTime=.04;
+ const canvas=document.createElement('canvas');canvas.width=cap.videoWidth||360;canvas.height=cap.videoHeight||480;const cx=canvas.getContext('2d');
+ const seek=t=>new Promise((ok,ko)=>{const done=()=>{const grab=()=>{cx.drawImage(cap,0,0,canvas.width,canvas.height);ok(canvas.toDataURL('image/webp',.9))};if(cap.requestVideoFrameCallback)cap.requestVideoFrameCallback(grab);else setTimeout(grab,45)};cap.addEventListener('seeked',done,{once:true});cap.onerror=ko;cap.currentTime=Math.min(Math.max(.04,t+.04),Math.max(.04,cap.duration-.04))});
+ ageFrames=[];for(const anchor of AGE_ANCHORS)ageFrames.push(await seek(anchor));
+ ageA.src=ageFrames[0];ageB.src=ageFrames[0];ageA.classList.add('active');ageB.classList.remove('active');activeAgeLayer=0;currentAgeState=0;
+ seqReady=true;if(activeMode==='read')readScroll();else if(activeMode==='listen')setAgeProgress(totalNarrationProgress());check()
+}
+async function loadStory(){const r=await fetch('texto.md?v=14',{cache:'no-store'});if(!r.ok)throw Error('texto');rawText=await r.text();phrases=splitPhrases(rawText);setupRanges();buildReader(rawText);renderLine(0);storyReady=true;check()}
+
+async function loadNarrationTiming(){
+ const getDuration=url=>new Promise((resolve,reject)=>{
+  const a=new Audio();let done=false;
+  const finish=v=>{if(done)return;done=true;a.src='';v>0&&isFinite(v)?resolve(v):reject(Error('duracion'))};
+  const timer=setTimeout(()=>finish(0),9000);
+  a.preload='metadata';a.onloadedmetadata=()=>{clearTimeout(timer);finish(a.duration)};a.onerror=()=>{clearTimeout(timer);finish(0)};a.src=url;a.load();
+ });
+ try{audioDurations=await Promise.all(aiAudio.map(getDuration));narrationTotal=audioDurations.reduce((a,b)=>a+b,0);audioTimingReady=narrationTotal>0&&audioDurations.every(d=>d>0&&isFinite(d));}
+ catch(e){audioTimingReady=false;status.textContent='no se pudo medir la narracion'}
+ check();
+}
+function totalNarrationProgress(){if(!audioTimingReady||!narrationTotal)return 0;const previous=audioDurations.slice(0,block).reduce((a,b)=>a+b,0);return clamp((previous+audio.currentTime)/narrationTotal)}
+
+function weightIndex(b,p){const W=weights[b],target=p*W.total;let k=W.cum.findIndex(x=>x>=target);if(k<0)k=W.cum.length-1;return W.a+k}
+function stopAudio(){cancelAnimationFrame(raf);audio.pause();audio.removeAttribute('src');audio.load();speechSynthesis.cancel()}
+function syncAudio(){if(activeMode!=='listen'||playMode!=='ai'||paused)return;const d=audio.duration;if(d&&isFinite(d)){const lp=clamp(audio.currentTime/d);renderLine(weightIndex(block,lp));setAgeProgress(totalNarrationProgress())}raf=requestAnimationFrame(syncAudio)}
+function playAI(b){playMode='ai';block=b;status.textContent=`narrador · parte ${b+1}/3`;audio.src=aiAudio[b];audio.load();let settled=false;const fallback=()=>{if(settled||playMode!=='ai')return;settled=true;stopAudio();playMode='device';status.textContent='voz del dispositivo';speakFrom(ranges[b][0])};const timer=setTimeout(fallback,4500);audio.onplaying=()=>{settled=true;clearTimeout(timer);syncAudio()};audio.onerror=fallback;audio.onended=()=>{cancelAnimationFrame(raf);if(block<2)setTimeout(()=>playAI(block+1),350);else finish()};audio.play().catch(fallback)}
+function chooseVoice(){const vs=speechSynthesis.getVoices().filter(v=>/^es/i.test(v.lang));return vs.find(v=>/Alvaro|Álvaro|Jorge|Pablo|Raul|Raúl|Diego|Antonio|Miguel|Carlos|Enrique|Fernando/i.test(v.name))||vs.find(v=>/es-ES/i.test(v.lang))||vs[0]||null}
+function speakFrom(i){if(activeMode!=='listen'||paused||i>=phrases.length){if(i>=phrases.length)finish();return}playMode='device';speechToken++;const token=speechToken,u=new SpeechSynthesisUtterance(phrases[i]);u.lang='es-ES';u.rate=.91;u.pitch=.93;u.voice=chooseVoice();u.onstart=()=>renderLine(i);u.onend=()=>{if(token===speechToken&&!paused)setTimeout(()=>speakFrom(i+1),dramatic(phrases[i])?520:170)};u.onerror=()=>{if(token===speechToken)setTimeout(()=>speakFrom(i+1),100)};speechSynthesis.speak(u)}
+function startListen(){if(!storyReady){status.textContent='cargando texto';return}activeMode='listen';body.className='listen-mode';modeSwitch.hidden=false;entry.classList.add('open');lastGray=0;currentAgeState=0;if(seqReady)showAgeState(0,true);root.style.setProperty('--gray','0');renderLine(0);paused=false;pauseBtn.textContent='Pausa';setTimeout(()=>playAI(0),250)}
+function startRead(){if(!storyReady){status.textContent='cargando texto';return}activeMode='read';stopAudio();body.className='read-mode';modeSwitch.hidden=false;entry.classList.add('open');lastGray=0;currentAgeState=0;if(seqReady)showAgeState(0,true);root.style.setProperty('--gray','0');scrollTo(0,0);status.textContent='lectura silenciosa';readScroll()}
+function readScroll(){if(activeMode!=='read')return;const max=Math.max(1,document.documentElement.scrollHeight-innerHeight),p=clamp(scrollY/max);root.style.setProperty('--prog',p.toFixed(4));setAgeProgress(p);const night=.55;setGrayProgress((p-night)/(1-night))}
+function finish(){renderLine(phrases.length-1);status.textContent='fin';paused=true;pauseBtn.textContent='Repetir'}
+function restartListen(){stopAudio();lastGray=0;currentAgeState=0;if(seqReady)showAgeState(0,true);root.style.setProperty('--gray','0');renderLine(0);paused=false;pauseBtn.textContent='Pausa';setTimeout(()=>playAI(0),180)}
+listenBtn.onclick=startListen;readBtn.onclick=startRead;
+pauseBtn.onclick=()=>{if(activeMode!=='listen')return;if(paused){if(currentIndex>=phrases.length-1){restartListen();return}paused=false;pauseBtn.textContent='Pausa';if(playMode==='ai')audio.play().then(syncAudio).catch(()=>speakFrom(currentIndex));else speakFrom(currentIndex)}else{paused=true;pauseBtn.textContent='Seguir';if(playMode==='ai')audio.pause();else speechSynthesis.cancel()}};
+restartBtn.onclick=()=>{if(activeMode==='listen')restartListen()};
+modeSwitch.onclick=()=>{stopAudio();entry.classList.remove('open');body.className='';activeMode=null;modeSwitch.hidden=true;lastGray=0;currentAgeState=0;if(seqReady)showAgeState(0,true);root.style.setProperty('--gray','0');root.style.setProperty('--prog','0');scrollTo(0,0)};
+addEventListener('scroll',readScroll,{passive:true});
+addEventListener('beforeunload',()=>{stopAudio();if(videoUrl)URL.revokeObjectURL(videoUrl)});
+Promise.allSettled([loadStory(),loadSequence(),loadNarrationTiming()]).then(rs=>{if(rs[0].status==='rejected'){status.textContent='error al cargar el texto';return}if(rs[1].status==='rejected')status.textContent='texto listo · imagen no disponible';else if(rs[2].status==='rejected')status.textContent='listo · voz del dispositivo disponible';check()});
+})();
+</script>
+</body>
+</html>
