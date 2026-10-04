@@ -726,6 +726,12 @@
 
       const SOUND_MIN=.20;
       const SOUND_MAX=.28;
+      const MOBILE_GAIN_MIN=.94;
+      const MOBILE_GAIN_MAX=1.06;
+      const mobilePlayback=
+        window.matchMedia('(max-width:760px)').matches ||
+        window.matchMedia('(pointer:coarse)').matches ||
+        navigator.maxTouchPoints>0;
 
       let soundStarted=false;
       let readingReady=false;
@@ -737,9 +743,81 @@
       let warmTakeover=0;
       let warmPhase=0;
 
+      let audioContext=null;
+      let mobileAudioReady=false;
+      let mobileMasterGain=null;
+
       const clamp=value=>Math.min(1,Math.max(0,value));
       const smooth=t=>t*t*t*(t*(t*6-15)+10);
       const ramp=(value,start,end)=>smooth(clamp((value-start)/Math.max(.0001,end-start)));
+
+      const prepareMobileAudio=async()=>{
+        if(!mobilePlayback || mobileAudioReady) return;
+
+        const AudioContextClass=window.AudioContext || window.webkitAudioContext;
+        if(!AudioContextClass) return;
+
+        try{
+          audioContext=new AudioContextClass();
+
+          const source=audioContext.createMediaElementSource(soundtrack);
+
+          const highpass=audioContext.createBiquadFilter();
+          highpass.type='highpass';
+          highpass.frequency.value=78;
+          highpass.Q.value=.55;
+
+          const warmth=audioContext.createBiquadFilter();
+          warmth.type='peaking';
+          warmth.frequency.value=280;
+          warmth.Q.value=.72;
+          warmth.gain.value=1.7;
+
+          const presence=audioContext.createBiquadFilter();
+          presence.type='peaking';
+          presence.frequency.value=1550;
+          presence.Q.value=.82;
+          presence.gain.value=1.15;
+
+          const soften=audioContext.createBiquadFilter();
+          soften.type='highshelf';
+          soften.frequency.value=6200;
+          soften.gain.value=-2.4;
+
+          const compressor=audioContext.createDynamicsCompressor();
+          compressor.threshold.value=-24;
+          compressor.knee.value=18;
+          compressor.ratio.value=2.15;
+          compressor.attack.value=.018;
+          compressor.release.value=.27;
+
+          mobileMasterGain=audioContext.createGain();
+          mobileMasterGain.gain.value=MOBILE_GAIN_MIN;
+
+          source
+            .connect(highpass)
+            .connect(warmth)
+            .connect(presence)
+            .connect(soften)
+            .connect(compressor)
+            .connect(mobileMasterGain)
+            .connect(audioContext.destination);
+
+          soundtrack.volume=1;
+          mobileAudioReady=true;
+
+          if(audioContext.state==='suspended'){
+            await audioContext.resume();
+          }
+        }catch(_){
+          mobileAudioReady=false;
+          mobileMasterGain=null;
+          if(audioContext){
+            try{ await audioContext.close(); }catch(__){}
+          }
+          audioContext=null;
+        }
+      };
 
       const syncSoundToggle=()=>{
         const active=soundStarted && !soundtrack.paused && !soundtrack.muted;
@@ -751,7 +829,16 @@
       const startSound=async()=>{
         soundtrack.currentTime=0;
         soundtrack.muted=false;
-        soundtrack.volume=SOUND_MIN;
+
+        if(mobilePlayback){
+          await prepareMobileAudio();
+          soundtrack.volume=mobileAudioReady ? 1 : .72;
+          if(audioContext && audioContext.state==='suspended'){
+            try{ await audioContext.resume(); }catch(_){}
+          }
+        }else{
+          soundtrack.volume=SOUND_MIN;
+        }
 
         try{
           await soundtrack.play();
@@ -898,7 +985,16 @@
         if(soundStarted && !soundtrack.paused && !soundtrack.muted){
           const maxScroll=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
           const p=clamp(window.scrollY/maxScroll);
-          soundtrack.volume=SOUND_MIN+(SOUND_MAX-SOUND_MIN)*smooth(p);
+
+          if(mobileAudioReady && mobileMasterGain){
+            mobileMasterGain.gain.value=
+              MOBILE_GAIN_MIN+(MOBILE_GAIN_MAX-MOBILE_GAIN_MIN)*smooth(p);
+            soundtrack.volume=1;
+          }else if(mobilePlayback){
+            soundtrack.volume=.72+.12*smooth(p);
+          }else{
+            soundtrack.volume=SOUND_MIN+(SOUND_MAX-SOUND_MIN)*smooth(p);
+          }
         }
 
         const heatRect=finalHeat.getBoundingClientRect();
