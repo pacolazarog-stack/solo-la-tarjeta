@@ -30,6 +30,10 @@
       --billiard:0;
       --pulse-tone:.16;
       --pulse-duration:2.65s;
+      --flame-r:95;
+      --flame-g:88;
+      --flame-b:80;
+      --flame-glow:0;
       --text-light:0;
       color-scheme:light;
     }
@@ -534,8 +538,19 @@
     }
     .memory .last-warm{
       margin-top:8.6em;
-      color:#5f5850;
-      text-shadow:none;
+      color:rgb(var(--flame-r) var(--flame-g) var(--flame-b));
+      text-shadow:
+        0 0 calc(1px + 7px * var(--flame-glow)) rgba(255,82,18,calc(.05 + .42 * var(--flame-glow))),
+        0 -1px calc(1px + 11px * var(--flame-glow)) rgba(255,176,46,calc(.03 + .22 * var(--flame-glow)));
+      transition:color .12s linear,text-shadow .12s linear;
+    }
+    .memory .last-warm.is-burning{
+      animation:flameFlicker 1.35s ease-in-out infinite alternate;
+    }
+    @keyframes flameFlicker{
+      0%{filter:brightness(1) saturate(1)}
+      55%{filter:brightness(1.06) saturate(1.08)}
+      100%{filter:brightness(1.02) saturate(1.14)}
     }
 
     .word-voice{
@@ -757,6 +772,9 @@
       const SOUND_MIN = .20;
       const SOUND_MAX = .28;
       let soundStarted = false;
+      let readingReleased = false;
+      let userScrollStarted = false;
+      let releaseScrollY = 0;
 
       const syncSoundButton = () => {
         if(!soundtrack || !soundToggle) return;
@@ -797,6 +815,9 @@
         document.body.classList.add('reading-ready');
         namePrelude?.classList.add('fade-name');
         window.scrollTo({top:0,left:0,behavior:'auto'});
+        releaseScrollY = window.scrollY;
+        readingReleased = true;
+        userScrollStarted = false;
       };
 
       const startSound = async () => {
@@ -864,7 +885,7 @@
       const verseLines = [...document.querySelectorAll('.verse-line')];
 
       const revealVersesByScroll = () => {
-        if(document.body.classList.contains('prelude-active')) return;
+        if(document.body.classList.contains('prelude-active') || !readingReleased || !userScrollStarted) return;
         const revealY = window.innerHeight * .72;
         verseLines.forEach(line => {
           if(line.classList.contains('is-shown')) return;
@@ -880,6 +901,7 @@
       const embraceSection = document.querySelector('.embrace');
       const memorySection = document.querySelector('.memory');
       const finalMemoryLine = document.querySelector('.memory .last');
+      const finalWarmLine = document.querySelector('.memory .last-warm');
 
       const clamp = v => Math.min(1, Math.max(0, v));
       const smoother = t => t*t*t*(t*(t*6-15)+10);
@@ -961,10 +983,36 @@
         const gold = .015 + .045 * ramp(deep,.06,.24);
         root.style.setProperty('--gold', gold.toFixed(3));
 
+        // «el calor.» evoluciona con el avance: tibio -> ámbar -> naranja -> rojo llama.
+        if(finalWarmLine){
+          const wr = finalWarmLine.getBoundingClientRect();
+          const flame = smoother(clamp((window.innerHeight * .92 - wr.top) / (window.innerHeight * .92)));
+          let r,g,b;
+          if(flame < .55){
+            const t = flame / .55;
+            r = Math.round(95 + (214-95)*t);
+            g = Math.round(88 + (121-88)*t);
+            b = Math.round(80 + (37-80)*t);
+          }else{
+            const t = (flame - .55) / .45;
+            r = Math.round(214 + (196-214)*t);
+            g = Math.round(121 + (18-121)*t);
+            b = Math.round(37 + (9-37)*t);
+          }
+          root.style.setProperty('--flame-r',String(r));
+          root.style.setProperty('--flame-g',String(g));
+          root.style.setProperty('--flame-b',String(b));
+          root.style.setProperty('--flame-glow',flame.toFixed(3));
+          finalWarmLine.classList.toggle('is-burning', flame > .82 && finalWarmLine.classList.contains('is-shown'));
+        }
+
         ticking = false;
       };
 
       const onScroll = () => {
+        if(readingReleased && !userScrollStarted && Math.abs(window.scrollY - releaseScrollY) > 3){
+          userScrollStarted = true;
+        }
         if(!ticking){
           requestAnimationFrame(() => {
             renderScroll();
