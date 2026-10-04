@@ -12,6 +12,7 @@
   <meta property="og:type" content="article">
   <meta property="og:locale" content="es_ES">
   <title>ANA KLAUDYA</title>
+
   <style>
     :root{
       --paper:#eef1e9;
@@ -19,12 +20,12 @@
       --green:0;
       --deep:0;
       --billiard:0;
-      --flame-r:106;
-      --flame-g:82;
-      --flame-b:65;
-      --flame-glow:0;
-      --fire-takeover:0;
+      --warm:0;
       --pulse-duration:1.85s;
+      --heat-r:205;
+      --heat-g:118;
+      --heat-b:86;
+      --heat-glow:0;
       color-scheme:light;
     }
 
@@ -41,12 +42,12 @@
       margin:0;
       width:100%;
       min-height:100%;
+      overflow-x:clip;
       color:var(--ink);
       background:var(--paper);
       font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia,"Times New Roman",serif;
       -webkit-font-smoothing:antialiased;
       text-rendering:optimizeLegibility;
-      overflow-x:clip;
     }
 
     body.locked{
@@ -64,59 +65,55 @@
       overflow:hidden;
       isolation:isolate;
       background:
-        radial-gradient(78% 50% at 50% 12%,rgba(255,255,255,.74),transparent 72%),
+        radial-gradient(80% 52% at 50% 12%,rgba(255,255,255,.74),transparent 72%),
         linear-gradient(to bottom,#f2f4ee 0%,#e9efe8 58%,#dfe9e1 100%);
     }
 
-    .world-green,
-    .world-deep,
-    .world-billiard,
-    .world-fire,
-    .pulse-field,
-    .grain{
+    .layer{
       position:absolute;
       inset:0;
     }
 
-    .world-green{
+    .layer-green{
       opacity:var(--green);
       background:
-        radial-gradient(110% 82% at 50% 96%,rgba(80,128,98,.72) 0%,rgba(53,107,80,.60) 38%,rgba(30,78,59,.48) 68%,transparent 100%),
-        linear-gradient(to bottom,rgba(227,237,230,.16),rgba(38,89,67,.32));
+        radial-gradient(110% 82% at 50% 96%,rgba(80,128,98,.70) 0%,rgba(53,107,80,.60) 38%,rgba(30,78,59,.45) 68%,transparent 100%),
+        linear-gradient(to bottom,rgba(227,237,230,.16),rgba(38,89,67,.28));
       transition:opacity .18s linear;
     }
 
-    .world-deep{
+    .layer-deep{
       opacity:var(--deep);
       background:
-        radial-gradient(88% 58% at 50% 78%,rgba(53,103,77,.26),transparent 70%),
+        radial-gradient(88% 58% at 50% 78%,rgba(53,103,77,.24),transparent 70%),
         linear-gradient(to bottom,#dce7df 0%,#9fb8a7 54%,#456e59 100%);
       transition:opacity .18s linear;
     }
 
-    .world-billiard{
+    .layer-billiard{
       opacity:var(--billiard);
       background:
-        radial-gradient(88% 66% at 50% 82%,rgba(18,112,68,.92) 0%,rgba(10,82,51,.94) 47%,rgba(4,55,36,.98) 100%),
+        radial-gradient(88% 66% at 50% 82%,rgba(18,112,68,.90) 0%,rgba(10,82,51,.92) 47%,rgba(4,55,36,.96) 100%),
         linear-gradient(to bottom,#185f3f 0%,#0f4d34 56%,#063925 100%);
       transition:opacity .18s linear;
     }
 
-    .world-fire{
+    /* CALOR ENVOLVENTE, NO ABRASIVO */
+    .layer-warm{
       z-index:3;
-      opacity:var(--fire-takeover);
+      opacity:var(--warm);
       background:
-        radial-gradient(54% 42% at 50% 54%,
-          rgba(255,205,132,.38) 0%,
-          rgba(236,159,104,.30) 38%,
-          rgba(202,119,91,.18) 64%,
-          transparent 84%),
+        radial-gradient(52% 40% at 50% 54%,
+          rgba(255,211,151,.34) 0%,
+          rgba(236,170,114,.28) 40%,
+          rgba(207,130,101,.16) 66%,
+          transparent 86%),
         radial-gradient(108% 84% at 50% 88%,
-          rgba(204,126,94,.70) 0%,
-          rgba(181,104,85,.66) 44%,
-          rgba(150,83,75,.58) 72%,
-          rgba(118,69,66,.48) 100%),
-        linear-gradient(to bottom,#d3a07f 0%,#c78872 44%,#9c6d67 100%);
+          rgba(208,140,105,.62) 0%,
+          rgba(190,121,96,.60) 44%,
+          rgba(165,104,90,.54) 72%,
+          rgba(139,91,84,.44) 100%),
+        linear-gradient(to bottom,#d6aa87 0%,#cb9078 44%,#a2756b 100%);
       transition:opacity 1.05s cubic-bezier(.18,.72,.2,1);
       animation:warmBreath var(--pulse-duration) linear infinite;
       will-change:opacity,filter;
@@ -140,10 +137,9 @@
       mix-blend-mode:multiply;
     }
 
-    /* LATIDO: existe desde la portada y no se sustituye después */
+    /* LATIDO CONTINUO DESDE LA PORTADA */
     .pulse-field{
       z-index:4;
-      overflow:hidden;
       animation:pulseField var(--pulse-duration) linear infinite;
       will-change:opacity,filter;
     }
@@ -211,7 +207,7 @@
       background:rgba(238,241,233,.48);
       -webkit-backdrop-filter:blur(5px);
       backdrop-filter:blur(5px);
-      transition:opacity 1.15s ease,visibility 1.15s ease;
+      transition:opacity 1.1s ease,visibility 1.1s ease;
     }
 
     .entry.is-open{
@@ -267,7 +263,7 @@
       outline:none;
     }
 
-    /* PRELUDIO DE 15 SEGUNDOS */
+    /* PRELUDIO ANA -> KLAUDYA */
     .name-prelude{
       position:fixed;
       inset:0;
@@ -277,7 +273,7 @@
       pointer-events:none;
       opacity:0;
       visibility:hidden;
-      transition:opacity 1.45s ease,visibility 1.45s ease;
+      transition:opacity 1.4s ease,visibility 1.4s ease;
     }
 
     body.prelude .name-prelude{
@@ -317,9 +313,7 @@
       transform:none;
     }
 
-    .name-prelude.fade{
-      opacity:0!important;
-    }
+    .name-prelude.fade{opacity:0!important}
 
     /* AUDIO */
     .sound-toggle{
@@ -397,10 +391,11 @@
     }
 
     .line{
+      --gap:10svh;
       display:block;
       width:max-content;
       max-width:100%;
-      margin-top:var(--breath,10svh);
+      margin-top:var(--gap);
       opacity:0;
       transform:translateY(.55em);
       filter:blur(.48px);
@@ -408,8 +403,8 @@
         opacity 1.45s cubic-bezier(.2,.7,.2,1),
         transform 1.45s cubic-bezier(.2,.7,.2,1),
         filter 1.3s ease,
-        color .12s linear,
-        text-shadow .12s linear;
+        color .18s linear,
+        text-shadow .18s linear;
     }
 
     .line:first-child{margin-top:0}
@@ -420,30 +415,32 @@
       filter:none;
     }
 
-    /* Respiración: no escala mecánica; cada nivel responde al sentido. */
-    .b-close{--breath:7svh}
-    .b-soft{--breath:11svh}
-    .opening-breath-double{--breath:22svh}
-    .subraya-double{--breath:28svh}
-    .music-double{--breath:14svh}
-    .disimular-double{--breath:14svh}
-    .b-comma{--breath:15svh}
-    .b-sentence{--breath:24svh}
-    .eyes-double{--breath:48svh}
-    .b-turn{--breath:34svh}
-    .b-deep{--breath:46svh}
+    /* RESPIRACIÓN DEL POEMA */
+    .g-close{--gap:7svh}
+    .g-soft{--gap:11svh}
+    .g-comma{--gap:15svh}
+    .g-sentence{--gap:24svh}
+    .g-turn{--gap:34svh}
+    .g-deep{--gap:46svh}
 
-    /* Suspensión reflexiva: comprensión -> contemplación -> revelación */
-    .reflection-open{--breath:108svh}
-    .reflection-thought{--breath:30svh}
-    .reflection-suspense{--breath:22svh}
-    .reflection-reveal{--breath:38svh}
+    .g-opening-2{--gap:22svh}
+    .g-eyes-2{--gap:48svh}
+    .g-subraya-2{--gap:28svh}
 
-    /* Respiración ampliada del abrazo */
-    .embrace-reflect-1{--breath:48svh}
-    .embrace-reflect-2{--breath:20svh}
-    .embrace-reflect-3{--breath:62svh}
-    .embrace-heat-double{--breath:38svh}
+    .g-music-2a{--gap:14svh}
+    .g-music-2b{--gap:14svh}
+
+    .g-reflection-open{--gap:108svh}
+    .g-reflection-thought{--gap:30svh}
+    .g-reflection-suspense{--gap:22svh}
+    .g-reflection-voice{--gap:38svh}
+
+    .g-embrace-a{--gap:48svh}
+    .g-embrace-b{--gap:20svh}
+    .g-embrace-c{--gap:62svh}
+    .g-embrace-d{--gap:38svh}
+
+    .g-final-signature{--gap:120svh}
 
     .voice-word{
       position:relative;
@@ -467,21 +464,22 @@
       text-shadow:0 0 10px rgba(213,113,32,.08);
     }
 
+    /* CIERRE: "el" -> "calor." */
     .heat-final{
       position:relative;
-      --breath:58svh;
+      --gap:58svh;
       margin-bottom:0;
       font-size:clamp(2.25rem,5.8vw,3.85rem);
       line-height:1.04;
       font-weight:500;
       letter-spacing:.012em;
-      color:rgb(var(--flame-r) var(--flame-g) var(--flame-b));
+      color:rgb(var(--heat-r) var(--heat-g) var(--heat-b));
       -webkit-text-stroke:.25px rgba(255,224,192,.18);
       text-shadow:
         0 0 2px rgba(75,38,34,.62),
-        0 0 calc(1px + 5px * var(--flame-glow)) rgba(255,170,104,calc(.05 + .26 * var(--flame-glow))),
-        0 -1px calc(2px + 9px * var(--flame-glow)) rgba(255,222,158,calc(.04 + .20 * var(--flame-glow))),
-        0 2px calc(1px + 4px * var(--flame-glow)) rgba(112,61,55,calc(.06 + .18 * var(--flame-glow)));
+        0 0 calc(1px + 5px * var(--heat-glow)) rgba(255,170,104,calc(.05 + .26 * var(--heat-glow))),
+        0 -1px calc(2px + 9px * var(--heat-glow)) rgba(255,222,158,calc(.04 + .20 * var(--heat-glow))),
+        0 2px calc(1px + 4px * var(--heat-glow)) rgba(112,61,55,calc(.06 + .18 * var(--heat-glow)));
     }
 
     .heat-final.is-shown{
@@ -523,18 +521,16 @@
     }
 
     .heat-final.is-burning{
-      animation:flameText 1.25s ease-in-out infinite alternate;
+      animation:heatBreath 1.25s ease-in-out infinite alternate;
     }
 
-    @keyframes flameText{
+    @keyframes heatBreath{
       0%{filter:brightness(1) saturate(1)}
-      52%{filter:brightness(1.09) saturate(1.10)}
-      100%{filter:brightness(1.03) saturate(1.18)}
+      52%{filter:brightness(1.06) saturate(1.05)}
+      100%{filter:brightness(1.02) saturate(1.10)}
     }
 
     .signature{
-      margin-top:120svh;
-      padding-bottom:12svh;
       font-family:Arial,Helvetica,sans-serif;
       font-size:.68rem;
       letter-spacing:.19em;
@@ -573,57 +569,65 @@
         width:min(calc(100% - 34px),760px);
         padding-top:64svh;
       }
+
       .poem{
         width:min(100%,31ch);
         font-size:clamp(1.18rem,5.2vw,1.48rem);
         line-height:1.5;
       }
-      .b-close{--breath:8svh}
-      .b-soft{--breath:12svh}
-      .opening-breath-double{--breath:24svh}
-      .subraya-double{--breath:32svh}
-      .music-double{--breath:16svh}
-      .disimular-double{--breath:16svh}
-      .b-comma{--breath:16svh}
-      .b-sentence{--breath:25svh}
-      .eyes-double{--breath:50svh}
-      .b-turn{--breath:35svh}
-      .b-deep{--breath:47svh}
-      .reflection-open{--breath:100svh}
-      .reflection-thought{--breath:28svh}
-      .reflection-suspense{--breath:20svh}
-      .reflection-reveal{--breath:36svh}
-      .embrace-reflect-1{--breath:50svh}
-      .embrace-reflect-2{--breath:22svh}
-      .embrace-reflect-3{--breath:66svh}
-      .embrace-heat-double{--breath:40svh}
+
+      .g-close{--gap:8svh}
+      .g-soft{--gap:12svh}
+      .g-comma{--gap:16svh}
+      .g-sentence{--gap:25svh}
+      .g-turn{--gap:35svh}
+      .g-deep{--gap:47svh}
+
+      .g-opening-2{--gap:24svh}
+      .g-eyes-2{--gap:50svh}
+      .g-subraya-2{--gap:32svh}
+      .g-music-2a{--gap:16svh}
+      .g-music-2b{--gap:16svh}
+
+      .g-reflection-open{--gap:100svh}
+      .g-reflection-thought{--gap:28svh}
+      .g-reflection-suspense{--gap:20svh}
+      .g-reflection-voice{--gap:36svh}
+
+      .g-embrace-a{--gap:50svh}
+      .g-embrace-b{--gap:22svh}
+      .g-embrace-c{--gap:66svh}
+      .g-embrace-d{--gap:40svh}
+
       .heat-final{
-        --breath:54svh;
+        --gap:54svh;
         font-size:clamp(2.15rem,9.5vw,3.25rem);
       }
-      .signature{margin-top:112svh}
+
+      .g-final-signature{--gap:112svh}
     }
 
     @media(prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
       .entry,.name-prelude,.name-ana,.name-klaudya,.line,.heat-part,.sound-toggle,main{transition-duration:.01ms}
       .pulse-field,.pulse-field::before,.pulse-field::after{animation-duration:3.8s}
-      .world-fire{animation:none}
+      .layer-warm{animation:none}
       .heat-final.is-burning{animation:none}
       .scroll-cue{animation:none}
     }
   </style>
 </head>
+
 <body class="locked">
   <audio id="soundtrack" preload="auto" loop src="ana-klaudya.m4a"></audio>
 
   <div class="world" aria-hidden="true">
-    <div class="world-green"></div>
-    <div class="world-deep"></div>
-    <div class="world-billiard"></div>
-    <div class="world-fire" id="worldFire"></div>
-    <div class="pulse-field" id="pulseField"></div>
-    <div class="grain"></div>
+    <div class="layer layer-green"></div>
+    <div class="layer layer-deep"></div>
+    <div class="layer layer-billiard"></div>
+    <div class="layer layer-warm"></div>
+    <div class="layer pulse-field" id="pulseField"></div>
+    <div class="layer grain"></div>
   </div>
 
   <div class="entry" id="entry" role="dialog" aria-modal="true" aria-label="Entrada a Ana Klaudya">
@@ -655,51 +659,52 @@
   <main id="reading">
     <div class="poem">
       <span class="line" data-stage="face">Había en su rostro</span>
-      <span class="line b-soft opening-breath-double">una belleza serena,</span>
-      <span class="line b-comma">de las que no reclaman</span>
-      <span class="line b-close">hacerse notar.</span>
+      <span class="line g-opening-2">una belleza serena,</span>
+      <span class="line g-comma">de las que no reclaman</span>
+      <span class="line g-close">hacerse notar.</span>
 
-      <span class="line b-sentence eyes-double">La hondura de los ojos,</span>
-      <span class="line b-comma">el trazo de la boca,</span>
-      <span class="line b-comma">el cabello dispuesto</span>
-      <span class="line b-close">con un cuidado</span>
-      <span class="line b-soft">que subraya</span>
-      <span class="line b-close subraya-double">sin corregir.</span>
+      <span class="line g-eyes-2">La hondura de los ojos,</span>
+      <span class="line g-comma">el trazo de la boca,</span>
+      <span class="line g-comma">el cabello dispuesto</span>
+      <span class="line g-close">con un cuidado</span>
+      <span class="line g-soft">que subraya</span>
+      <span class="line g-subraya-2">sin corregir.</span>
 
-      <span class="line b-turn" id="voiceStart" data-stage="voice">Y luego habló.</span>
-      <span class="line b-sentence">Brasil seguía intacto</span>
-      <span class="line b-close">en su manera de decir:</span>
-      <span class="line b-comma">el peso tibio de las vocales,</span>
-      <span class="line b-comma">la sílaba demorada,</span>
-      <span class="line b-comma">una música</span>
-      <span class="line b-close music-double">que se negaba</span>
-      <span class="line b-close disimular-double">a disimular.</span>
+      <span class="line g-turn" id="voiceStart" data-stage="voice">Y luego habló.</span>
+      <span class="line g-sentence">Brasil seguía intacto</span>
+      <span class="line g-close">en su manera de decir:</span>
+      <span class="line g-comma">el peso tibio de las vocales,</span>
+      <span class="line g-comma">la sílaba demorada,</span>
+      <span class="line g-comma">una música</span>
+      <span class="line g-music-2a">que se negaba</span>
+      <span class="line g-music-2b">a disimular.</span>
 
-      <span class="line reflection-open">Entonces comprendí</span>
-      <span class="line reflection-thought">que a la luz de aquel rostro</span>
-      <span class="line reflection-suspense">le faltaba todavía</span>
-      <span class="line reflection-reveal">la <span class="voice-word">voz</span>.</span>
+      <span class="line g-reflection-open">Entonces comprendí</span>
+      <span class="line g-reflection-thought">que a la luz de aquel rostro</span>
+      <span class="line g-reflection-suspense">le faltaba todavía</span>
+      <span class="line g-reflection-voice">la <span class="voice-word">voz</span>.</span>
 
-      <span class="line b-deep" id="embraceStart" data-stage="embrace">Después vino</span>
-      <span class="line b-close">el abrazo.</span>
-      <span class="line b-sentence embrace-reflect-1">Ignoro cuánto duró</span>
-      <span class="line b-close embrace-reflect-2">o quién se acercó primero.</span>
-      <span class="line b-deep embrace-reflect-3">Solo recuerdo</span>
-      <span class="line b-soft heat-one embrace-heat-double">el calor.</span>
+      <span class="line g-deep" id="embraceStart" data-stage="embrace">Después vino</span>
+      <span class="line g-close">el abrazo.</span>
+      <span class="line g-embrace-a">Ignoro cuánto duró</span>
+      <span class="line g-embrace-b">o quién se acercó primero.</span>
+      <span class="line g-embrace-c">Solo recuerdo</span>
+      <span class="line g-embrace-d heat-one">el calor.</span>
 
-      <span class="line b-deep" id="memoryStart" data-stage="memory">Y quedó también</span>
-      <span class="line b-soft">esa íntima injusticia</span>
-      <span class="line b-comma">que a veces comete la memoria:</span>
-      <span class="line b-sentence">de toda una tarde</span>
-      <span class="line b-close">retiene intacto</span>
-      <span class="line b-soft">un rostro,</span>
-      <span class="line b-deep">y de todo un abrazo,</span>
-      <span class="line b-sentence heat-final" id="finalHeat">
+      <span class="line g-deep" id="memoryStart" data-stage="memory">Y quedó también</span>
+      <span class="line g-soft">esa íntima injusticia</span>
+      <span class="line g-comma">que a veces comete la memoria:</span>
+      <span class="line g-sentence">de toda una tarde</span>
+      <span class="line g-close">retiene intacto</span>
+      <span class="line g-soft">un rostro,</span>
+      <span class="line g-deep">y de todo un abrazo,</span>
+
+      <span class="line heat-final" id="finalHeat">
         <span class="heat-part heat-el">el</span>
         <span class="heat-part heat-calor">calor.</span>
       </span>
 
-      <span class="line signature" id="signature">flag · 2026</span>
+      <span class="line signature g-final-signature" id="signature">flag · 2026</span>
     </div>
   </main>
 
@@ -711,7 +716,6 @@
       const entryButton = document.getElementById('entryButton');
       const namePrelude = document.getElementById('namePrelude');
       const pulseField = document.getElementById('pulseField');
-      const worldFire = document.getElementById('worldFire');
       const soundtrack = document.getElementById('soundtrack');
       const soundToggle = document.getElementById('soundToggle');
       const lines = [...document.querySelectorAll('.line')];
@@ -720,44 +724,38 @@
       const memoryStart = document.getElementById('memoryStart');
       const finalHeat = document.getElementById('finalHeat');
 
-      const SOUND_MIN = .20;
-      const SOUND_MAX = .28;
+      const SOUND_MIN=.20;
+      const SOUND_MAX=.28;
 
-      let soundStarted = false;
-      let readingReady = false;
-      let hasScrolled = false;
-      let releaseY = 0;
-      let ticking = false;
-      let fireTakeover = 0;
-      let fireStarted = false;
-      let finalRevealScheduled = false;
+      let soundStarted=false;
+      let readingReady=false;
+      let hasScrolled=false;
+      let releaseY=0;
+      let ticking=false;
 
-      const clamp = value => Math.min(1,Math.max(0,value));
-      const smooth = t => t*t*t*(t*(t*6-15)+10);
-      const ramp = (value,start,end) => smooth(clamp((value-start)/Math.max(.0001,end-start)));
+      let finalSequenceStarted=false;
+      let warmTakeover=0;
+      let warmPhase=0;
 
-      const restartPulse = () => {
-        pulseField.classList.add('pulse-reset');
-        pulseField.style.animation = 'none';
-        void pulseField.offsetWidth;
-        pulseField.style.animation = '';
-        pulseField.classList.remove('pulse-reset');
-      };
+      const clamp=value=>Math.min(1,Math.max(0,value));
+      const smooth=t=>t*t*t*(t*(t*6-15)+10);
+      const ramp=(value,start,end)=>smooth(clamp((value-start)/Math.max(.0001,end-start)));
 
-      const syncSoundToggle = () => {
-        const active = soundStarted && !soundtrack.paused && !soundtrack.muted;
+      const syncSoundToggle=()=>{
+        const active=soundStarted && !soundtrack.paused && !soundtrack.muted;
         soundToggle.classList.toggle('is-muted',soundtrack.muted || !active);
         soundToggle.setAttribute('aria-pressed',String(!active));
-        soundToggle.setAttribute('aria-label',active ? 'Silenciar sonido' : 'Activar sonido');
+        soundToggle.setAttribute('aria-label',active?'Silenciar sonido':'Activar sonido');
       };
 
-      const startSound = async () => {
-        soundtrack.currentTime = 0;
-        soundtrack.muted = false;
-        soundtrack.volume = SOUND_MIN;
+      const startSound=async()=>{
+        soundtrack.currentTime=0;
+        soundtrack.muted=false;
+        soundtrack.volume=SOUND_MIN;
+
         try{
           await soundtrack.play();
-          soundStarted = true;
+          soundStarted=true;
           body.classList.add('sound-ready');
           syncSoundToggle();
           return true;
@@ -767,152 +765,182 @@
         }
       };
 
-      const beginPrelude = () => {
+      const beginPrelude=()=>{
         body.classList.add('prelude');
         entry.classList.add('is-open');
         namePrelude.classList.remove('show-ana','show-klaudya','fade');
-        restartPulse();
 
-        setTimeout(() => namePrelude.classList.add('show-ana'),2500);
-        setTimeout(() => namePrelude.classList.add('show-klaudya'),7000);
-        setTimeout(() => namePrelude.classList.add('fade'),12400);
+        setTimeout(()=>namePrelude.classList.add('show-ana'),2600);
+        setTimeout(()=>namePrelude.classList.add('show-klaudya'),7200);
+        setTimeout(()=>namePrelude.classList.add('fade'),12500);
 
-        setTimeout(() => {
+        setTimeout(()=>{
           body.classList.remove('locked','prelude');
           body.classList.add('reading-ready');
           namePrelude.classList.add('fade');
           window.scrollTo({top:0,left:0,behavior:'auto'});
-          releaseY = window.scrollY;
-          readingReady = true;
-          hasScrolled = false;
+          releaseY=window.scrollY;
+          readingReady=true;
+          hasScrolled=false;
         },15000);
       };
 
-      entryButton.addEventListener('click',async () => {
-        entryButton.disabled = true;
-        const started = await startSound();
+      entryButton.addEventListener('click',async()=>{
+        entryButton.disabled=true;
+        const started=await startSound();
+
         if(started){
           beginPrelude();
         }else{
-          entryButton.disabled = false;
-          entryButton.textContent = 'Volver a intentar';
+          entryButton.disabled=false;
+          entryButton.textContent='Volver a intentar';
         }
       });
 
-      soundToggle.addEventListener('click',async () => {
+      soundToggle.addEventListener('click',async()=>{
         if(!soundStarted || soundtrack.paused){
-          const started = await startSound();
+          const started=await startSound();
           if(!started) return;
         }else{
-          soundtrack.muted = !soundtrack.muted;
+          soundtrack.muted=!soundtrack.muted;
         }
         syncSoundToggle();
       });
 
-      const startFireTakeover = () => {
-        if(fireStarted) return;
-        fireStarted = true;
-        fireTakeover = Math.max(fireTakeover,.07);
-        root.style.setProperty('--fire-takeover',fireTakeover.toFixed(3));
+      const startWarmPrelude=()=>{
+        if(warmPhase!==0) return;
+        warmPhase=1;
+        warmTakeover=Math.max(warmTakeover,.05);
+        root.style.setProperty('--warm',warmTakeover.toFixed(3));
       };
 
-      // Cada ciclo completo del mismo latido que existe desde la portada
-      // extiende una capa más de calor por el fondo, sin abrasarlo.
-      pulseField.addEventListener('animationiteration',event => {
-        if(event.animationName !== 'pulseField' || !fireStarted) return;
-        fireTakeover = Math.min(.92,fireTakeover + .055);
-        root.style.setProperty('--fire-takeover',fireTakeover.toFixed(3));
+      const intensifyWarmWithCalor=()=>{
+        warmPhase=2;
+        warmTakeover=Math.max(warmTakeover,.15);
+        root.style.setProperty('--warm',warmTakeover.toFixed(3));
+      };
+
+      pulseField.addEventListener('animationiteration',event=>{
+        if(event.animationName!=='pulseField' || warmPhase===0) return;
+
+        const step=warmPhase===1 ? .025 : .045;
+        warmTakeover=Math.min(.92,warmTakeover+step);
+        root.style.setProperty('--warm',warmTakeover.toFixed(3));
       });
 
-      const revealLines = () => {
+      const startFinalSequence=()=>{
+        if(finalSequenceStarted) return;
+        finalSequenceStarted=true;
+
+        /* "el": primera señal térmica, preparación */
+        startWarmPrelude();
+
+        /* "calor.": revelación; desde aquí cada pulso pesa más */
+        setTimeout(()=>{
+          finalHeat.classList.add('show-calor');
+          intensifyWarmWithCalor();
+        },4500);
+      };
+
+      const revealLines=()=>{
         if(!readingReady || !hasScrolled) return;
 
-        const revealY = window.innerHeight * .48;
-        lines.forEach(line => {
+        const revealY=window.innerHeight*.48;
+
+        lines.forEach(line=>{
           if(line.classList.contains('is-shown')) return;
-          const rect = line.getBoundingClientRect();
-          if(rect.top <= revealY && rect.bottom > 0){
+
+          const rect=line.getBoundingClientRect();
+
+          if(rect.top<=revealY && rect.bottom>0){
             line.classList.add('is-shown');
 
-            if(line === finalHeat && !finalRevealScheduled){
-              finalRevealScheduled = true;
-              setTimeout(() => {
-                finalHeat.classList.add('show-calor');
-                startFireTakeover();
-              },4500);
+            if(line===finalHeat){
+              startFinalSequence();
             }
           }
         });
       };
 
-      const stageProgress = element => {
-        const rect = element.getBoundingClientRect();
-        return ramp(window.innerHeight - rect.top,0,window.innerHeight * 1.25);
+      const stageProgress=element=>{
+        const rect=element.getBoundingClientRect();
+        return ramp(window.innerHeight-rect.top,0,window.innerHeight*1.25);
       };
 
-      const renderWorld = () => {
+      const renderWorld=()=>{
         if(!readingReady){
           root.style.setProperty('--green','0');
           root.style.setProperty('--deep','0');
           root.style.setProperty('--billiard','0');
+          root.style.setProperty('--warm',warmTakeover.toFixed(3));
           return;
         }
 
-        const voice = stageProgress(voiceStart);
-        const embrace = stageProgress(embraceStart);
-        const memory = stageProgress(memoryStart);
+        const voice=stageProgress(voiceStart);
+        const embrace=stageProgress(embraceStart);
+        const memory=stageProgress(memoryStart);
+        const finalStage=stageProgress(finalHeat);
 
-        const fireFade = 1 - fireTakeover*.62;
-        const green = Math.min(.58,.10 + voice*.34 + embrace*.14) * fireFade;
-        const deep = Math.min(.46,embrace*.25 + memory*.21) * (1 - fireTakeover*.46);
-        const billiard = Math.min(.76,memory*.34 + stageProgress(finalHeat)*.42) * (1 - fireTakeover*.68);
+        const greenBase=Math.min(.58,.10+voice*.34+embrace*.14);
+        const deepBase=Math.min(.46,embrace*.25+memory*.21);
+        const billiardBase=Math.min(.76,memory*.34+finalStage*.42);
+
+        const warmFade=1-warmTakeover*.62;
+        const green=greenBase*warmFade;
+        const deep=deepBase*(1-warmTakeover*.46);
+        const billiard=billiardBase*(1-warmTakeover*.68);
 
         root.style.setProperty('--green',green.toFixed(3));
         root.style.setProperty('--deep',deep.toFixed(3));
         root.style.setProperty('--billiard',billiard.toFixed(3));
+        root.style.setProperty('--warm',warmTakeover.toFixed(3));
 
         if(soundStarted && !soundtrack.paused && !soundtrack.muted){
-          const maxScroll = Math.max(1,document.documentElement.scrollHeight - window.innerHeight);
-          const p = clamp(window.scrollY/maxScroll);
-          soundtrack.volume = SOUND_MIN + (SOUND_MAX-SOUND_MIN)*smooth(p);
+          const maxScroll=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
+          const p=clamp(window.scrollY/maxScroll);
+          soundtrack.volume=SOUND_MIN+(SOUND_MAX-SOUND_MIN)*smooth(p);
         }
 
-        const heatRect = finalHeat.getBoundingClientRect();
-        const heat = smooth(clamp((window.innerHeight*.88 - heatRect.top)/(window.innerHeight*.48)));
+        const heatRect=finalHeat.getBoundingClientRect();
+        const heat=smooth(clamp((window.innerHeight*.88-heatRect.top)/(window.innerHeight*.48)));
 
         let r,g,b;
-        if(heat < .48){
-          const t = heat/.48;
-          r = Math.round(106 + (210-106)*t);
-          g = Math.round(82 + (104-82)*t);
-          b = Math.round(65 + (26-65)*t);
+
+        if(heat<.48){
+          const t=heat/.48;
+          r=Math.round(205+(220-205)*t);
+          g=Math.round(118+(142-118)*t);
+          b=Math.round(86+(110-86)*t);
         }else{
-          const t = (heat-.48)/.52;
-          r = Math.round(210 + (232-210)*t);
-          g = Math.round(104 + (112-104)*t);
-          b = Math.round(26 + (86-26)*t);
+          const t=(heat-.48)/.52;
+          r=Math.round(220+(232-220)*t);
+          g=Math.round(142+(156-142)*t);
+          b=Math.round(110+(126-110)*t);
         }
 
-        root.style.setProperty('--flame-r',String(r));
-        root.style.setProperty('--flame-g',String(g));
-        root.style.setProperty('--flame-b',String(b));
-        root.style.setProperty('--flame-glow',heat.toFixed(3));
+        root.style.setProperty('--heat-r',String(r));
+        root.style.setProperty('--heat-g',String(g));
+        root.style.setProperty('--heat-b',String(b));
+        root.style.setProperty('--heat-glow',heat.toFixed(3));
 
-        finalHeat.classList.toggle('is-burning',heat>.82 && finalHeat.classList.contains('is-shown'));
+        finalHeat.classList.toggle(
+          'is-burning',
+          warmPhase>0 && finalHeat.classList.contains('is-shown')
+        );
       };
 
-      const onScroll = () => {
+      const onScroll=()=>{
         if(readingReady && !hasScrolled && Math.abs(window.scrollY-releaseY)>4){
-          hasScrolled = true;
+          hasScrolled=true;
           body.classList.add('has-scrolled');
         }
 
         if(!ticking){
-          ticking = true;
-          requestAnimationFrame(() => {
+          ticking=true;
+          requestAnimationFrame(()=>{
             revealLines();
             renderWorld();
-            ticking = false;
+            ticking=false;
           });
         }
       };
