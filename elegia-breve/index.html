@@ -13,9 +13,9 @@
     :root{
       --ink:#201d19;
       --muted:#777066;
-      --paper:#edf3e5;
-      --warm:#a9c98b;
-      --deep:#1f4f2f;
+      --paper:#eef1e9;
+      --warm:#a9bca9;
+      --deep:#173f32;
       --glow:0;
       --voice:0;
       --heat:0;
@@ -46,15 +46,15 @@
       overflow:hidden;
       background:
         radial-gradient(72% 46% at 50% 14%,rgba(255,255,255,.70),transparent 70%),
-        radial-gradient(74% 58% at 50% 84%,rgba(96,152,82,.24),transparent 74%),
-        linear-gradient(to bottom,#f0f4e9 0%,#e5efdd 56%,#d5e6cb 100%);
+        radial-gradient(74% 58% at 50% 84%,rgba(66,112,87,.18),transparent 74%),
+        linear-gradient(to bottom,#f1f3ed 0%,#e7eee7 56%,#dce8df 100%);
       transition:background 1.6s ease;
     }
     .forest-field{
       position:absolute;
       inset:0;
       background:
-        radial-gradient(105% 78% at 50% 92%,rgba(126,181,108,.72) 0%,rgba(89,157,91,.62) 36%,rgba(55,126,82,.52) 68%,rgba(39,99,72,.46) 100%);
+        radial-gradient(105% 78% at 50% 92%,rgba(82,126,99,.66) 0%,rgba(56,106,82,.58) 36%,rgba(35,82,65,.52) 68%,rgba(23,63,50,.48) 100%);
       opacity:var(--forest);
       transition:opacity .18s linear;
     }
@@ -62,8 +62,8 @@
       position:absolute;
       inset:0;
       background:
-        radial-gradient(70% 48% at 50% 76%,rgba(212,186,72,.10),transparent 66%),
-        linear-gradient(to bottom,#7fae7f 0%,#67966e 48%,#507c63 100%);
+        radial-gradient(70% 48% at 50% 76%,rgba(196,176,94,.07),transparent 66%),
+        linear-gradient(to bottom,#315f4c 0%,#244b3d 48%,#173f32 100%);
       opacity:var(--forest-deep);
       transition:opacity .18s linear;
     }
@@ -71,8 +71,8 @@
       position:absolute;
       inset:0;
       background:
-        radial-gradient(80% 62% at 50% 58%,rgba(35,126,57,.92) 0%,rgba(64,145,67,.80) 34%,rgba(97,161,77,.58) 58%,rgba(97,161,77,0) 84%),
-        linear-gradient(to bottom,rgba(26,102,46,.40),rgba(79,150,63,.68));
+        radial-gradient(80% 62% at 50% 58%,rgba(37,92,70,.70) 0%,rgba(48,105,79,.58) 34%,rgba(74,126,95,.40) 58%,rgba(74,126,95,0) 84%),
+        linear-gradient(to bottom,rgba(24,70,54,.26),rgba(57,111,84,.45));
       opacity:var(--green);
       transition:opacity 1.8s cubic-bezier(.2,.7,.2,1);
     }
@@ -309,9 +309,9 @@
     }
     body.stage-voice .atmosphere{
       background:
-        radial-gradient(72% 46% at 50% 16%,rgba(255,255,255,.56),transparent 68%),
-        radial-gradient(72% 52% at 50% 74%,rgba(54,139,63,.34),transparent 72%),
-        linear-gradient(to bottom,#edf3e6 0%,#dcebd5 58%,#c8dfbd 100%);
+        radial-gradient(72% 46% at 50% 16%,rgba(255,255,255,.58),transparent 68%),
+        radial-gradient(72% 52% at 50% 74%,rgba(48,102,77,.28),transparent 72%),
+        linear-gradient(to bottom,#eef2ed 0%,#dde9e1 58%,#cbdccf 100%);
     }
     body.stage-embrace{
       --glow:.86;
@@ -322,10 +322,10 @@
     }
     body.stage-embrace .atmosphere{
       background:
-        radial-gradient(74% 50% at 50% 20%,rgba(255,255,255,.46),transparent 70%),
-        radial-gradient(66% 48% at 50% 68%,rgba(38,130,56,.42),transparent 70%),
-        radial-gradient(50% 36% at 52% 80%,rgba(214,187,72,.10),transparent 72%),
-        linear-gradient(to bottom,#e7f0df 0%,#cfe3c2 54%,#afd09f 100%);
+        radial-gradient(74% 50% at 50% 20%,rgba(255,255,255,.48),transparent 70%),
+        radial-gradient(66% 48% at 50% 68%,rgba(37,91,69,.34),transparent 70%),
+        radial-gradient(50% 36% at 52% 80%,rgba(199,178,91,.07),transparent 72%),
+        linear-gradient(to bottom,#e8eee9 0%,#d1e0d5 54%,#b8cdbd 100%);
     }
     body.stage-memory{
       --glow:.30;
@@ -337,9 +337,9 @@
     }
     body.stage-memory .atmosphere{
       background:
-        radial-gradient(84% 54% at 50% 28%,rgba(255,255,255,.48),transparent 74%),
-        radial-gradient(66% 46% at 50% 76%,rgba(46,126,59,.30),transparent 72%),
-        linear-gradient(to bottom,#eaf1e2 0%,#d7e7ce 56%,#bdd8af 100%);
+        radial-gradient(84% 54% at 50% 28%,rgba(255,255,255,.50),transparent 74%),
+        radial-gradient(66% 46% at 50% 76%,rgba(43,92,71,.24),transparent 72%),
+        linear-gradient(to bottom,#e9efea 0%,#d6e2da 56%,#bfd1c4 100%);
     }
 
     footer{
@@ -486,12 +486,12 @@
         const start = window.innerHeight * 1.22;
         const mature = window.innerHeight * .08;
         const raw = (start - vr.top) / Math.max(1, start - mature);
-        let forest = .58 * smoother(clamp(raw));
+        let forest = .54 * smoother(clamp(raw));
 
         // En el abrazo sólo se intensifica un poco; no invade toda la pantalla.
         const embraceRaw = (window.innerHeight * .90 - er.top) / Math.max(1, window.innerHeight * 1.05);
-        const embraceLift = .12 * smoother(clamp(embraceRaw));
-        forest = Math.min(.68, forest + embraceLift);
+        const embraceLift = .10 * smoother(clamp(embraceRaw));
+        forest = Math.min(.62, forest + embraceLift);
 
         // En la memoria retrocede levemente, como poso, no como apagón.
         if(mr.top < window.innerHeight * .72){
@@ -501,7 +501,7 @@
 
         // Profundización muy moderada: verde vegetal, no bosque oscuro.
         const deepRaw = (window.innerHeight * .92 - er.top) / Math.max(1, window.innerHeight * 1.20);
-        let deep = .26 * smoother(clamp(deepRaw));
+        let deep = .22 * smoother(clamp(deepRaw));
         if(mr.top < window.innerHeight * .72) deep *= .82;
 
         root.style.setProperty('--forest', forest.toFixed(3));
