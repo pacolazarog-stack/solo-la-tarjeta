@@ -234,12 +234,26 @@
       z-index:60;
       display:grid;
       place-items:center;
-      background:rgba(238,241,233,.66);
+      background:
+        radial-gradient(90% 72% at 50% 52%,
+          rgba(61,116,84,.20) 0%,
+          rgba(75,126,94,.11) 42%,
+          rgba(238,241,233,0) 74%),
+        rgba(238,241,233,.62);
       -webkit-backdrop-filter:blur(7px);
       backdrop-filter:blur(7px);
       opacity:1;
       visibility:visible;
+      animation:entryHeartbeat var(--pulse-duration) linear infinite;
       transition:opacity .8s ease,visibility .8s ease;
+      will-change:filter,background;
+    }
+    @keyframes entryHeartbeat{
+      0%,100%{filter:saturate(1) brightness(1)}
+      8%{filter:saturate(1.07) brightness(.972)}
+      14%{filter:saturate(1.01) brightness(1)}
+      23%{filter:saturate(1.05) brightness(.982)}
+      31%{filter:saturate(1) brightness(1)}
     }
     .entry-gate.is-open{
       opacity:0;
@@ -471,9 +485,10 @@
       width:max-content;
       max-width:100%;
       margin:1.05em auto 0;
-      font-size:1.26em;
-      letter-spacing:.018em;
-      color:#746451;
+      font-size:1em;
+      font-weight:400;
+      letter-spacing:.010em;
+      color:#5f5850;
       text-shadow:none;
     }
 
@@ -559,7 +574,6 @@
       html{scroll-behavior:auto}
       *,*::before,*::after{animation:none!important;transition:none!important}
       .hero-inner,.beat-inner{opacity:1;transform:none;filter:none}
-      .heartbeat-field,.heartbeat-field::before,.heartbeat-field::after{animation:none!important}
       .cue{display:none}
     }
   </style>
@@ -648,6 +662,7 @@
       const soundToggle = document.getElementById('soundToggle');
       const entryGate = document.getElementById('entryGate');
       const entryButton = document.getElementById('entryButton');
+      const heartbeatField = document.querySelector('.heartbeat-field');
       const SOUND_MIN = .20;
       const SOUND_MAX = .28;
       let soundStarted = false;
@@ -661,6 +676,15 @@
         const label = active ? 'Silenciar sonido' : 'Activar sonido';
         soundToggle.setAttribute('aria-label',label);
         soundToggle.title = label;
+      };
+
+      const restartPulse = () => {
+        [heartbeatField,entryGate].forEach(el => {
+          if(!el) return;
+          el.style.animation = 'none';
+          void el.offsetWidth;
+          el.style.animation = '';
+        });
       };
 
       const openReading = () => {
@@ -686,6 +710,8 @@
 
       entryButton?.addEventListener('click',async () => {
         entryButton.disabled = true;
+        restartPulse();
+        soundtrack.currentTime = 0;
         const started = await startSound();
         if(started){
           openReading();
