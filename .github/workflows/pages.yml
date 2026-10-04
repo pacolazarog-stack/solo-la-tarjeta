@@ -23,6 +23,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Aplicar envejecimiento de Ceniciento
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('ceniciento/index.html')
+          s = p.read_text(encoding='utf-8')
+          tag = '<script src="age-patch.js?v=20261004-2"></script>'
+          if tag not in s:
+              s = s.replace('</body>', tag + '\n</body>')
+          p.write_text(s, encoding='utf-8')
+          PY
       - name: Configurar Pages
         uses: actions/configure-pages@v5
       - name: Empaquetar sitio
