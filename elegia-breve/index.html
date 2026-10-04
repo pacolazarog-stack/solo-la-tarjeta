@@ -462,10 +462,10 @@
       margin:0 auto;
     }
     .beat{
-      min-height:112svh;
+      min-height:168svh;
       display:flex;
       align-items:center;
-      padding:24svh 0;
+      padding:34svh 0;
     }
     .beat-inner{
       width:100%;
@@ -488,7 +488,7 @@
       display:block;
       width:max-content;
       max-width:100%;
-      margin:.62em 0;
+      margin:.88em 0;
       opacity:0;
       transform:translateY(.42em);
       filter:blur(.4px);
@@ -496,27 +496,27 @@
         opacity 1.35s cubic-bezier(.2,.7,.2,1),
         transform 1.35s cubic-bezier(.2,.7,.2,1),
         filter 1.2s ease;
-      transition-delay:calc(var(--i,0) * .58s);
+      transition-delay:calc(var(--i,0) * .72s);
     }
     .beat.visible .verse-line{
       opacity:1;
       transform:none;
       filter:none;
     }
-    .breath-short{margin-top:1.05em}
-    .breath-medium{margin-top:2.25em}
-    .breath-long{margin-top:3.75em}
-    .breath-deep{margin-top:5.1em}
+    .breath-short{margin-top:2.15em}
+    .breath-medium{margin-top:4.85em}
+    .breath-long{margin-top:8.4em}
+    .breath-deep{margin-top:13.2em}
     .voice .poem{width:min(100%,39ch)}
     .embrace{
-      min-height:112svh;
+      min-height:190svh;
     }
     .embrace .poem{width:min(100%,30ch)}
     .memory{
-      min-height:168svh;
+      min-height:265svh;
       align-items:flex-start;
-      padding-top:38svh;
-      padding-bottom:58svh;
+      padding-top:52svh;
+      padding-bottom:92svh;
     }
     .memory .beat-inner{text-align:center}
     .memory .poem{
@@ -529,12 +529,12 @@
       margin-right:auto;
     }
     .memory .last{
-      margin-top:2.6em;
+      margin-top:5.8em;
       font-size:1.08em;
       line-height:1.46;
     }
     .memory .last-warm{
-      margin-top:1.5em;
+      margin-top:8.6em;
       color:#5f5850;
       text-shadow:none;
     }
@@ -611,8 +611,9 @@
 
     @media (max-width:640px){
       .progress{right:10px}
-      .beat{min-height:104svh}
-      .memory{min-height:142svh}
+      .beat{min-height:158svh}
+      .embrace{min-height:178svh}
+      .memory{min-height:244svh}
       .voice-line{width:92vw}
       h1{letter-spacing:.035em}
     }
