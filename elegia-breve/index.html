@@ -311,6 +311,61 @@
       outline:none;
     }
 
+    .name-prelude{
+      position:fixed;
+      inset:0;
+      z-index:25;
+      display:grid;
+      place-items:center;
+      pointer-events:none;
+      opacity:0;
+      visibility:hidden;
+      transition:opacity 1.4s ease,visibility 1.4s ease;
+    }
+    body.prelude-active .name-prelude{
+      opacity:1;
+      visibility:visible;
+    }
+    .name-prelude-line{
+      margin:0;
+      width:max-content;
+      max-width:calc(100vw - 42px);
+      text-align:center;
+      font-size:clamp(1.9rem,4.6vw,2.9rem);
+      line-height:1.18;
+      font-weight:500;
+      letter-spacing:.012em;
+      color:rgba(32,29,25,.90);
+    }
+    .name-ana{
+      display:inline-block;
+      opacity:0;
+      filter:blur(5px);
+      transform:translateX(-8px);
+      transition:opacity 2.1s cubic-bezier(.2,.7,.2,1),filter 2.1s ease,transform 2.1s cubic-bezier(.2,.7,.2,1);
+    }
+    .name-klaudya{
+      display:inline-block;
+      margin-left:.34em;
+      opacity:0;
+      filter:blur(5px);
+      transform:translateX(12px);
+      transition:opacity 2.3s cubic-bezier(.2,.7,.2,1),filter 2.3s ease,transform 2.3s cubic-bezier(.2,.7,.2,1);
+    }
+    .name-prelude.show-ana .name-ana{
+      opacity:1;
+      filter:blur(0);
+      transform:none;
+    }
+    .name-prelude.show-klaudya .name-klaudya{
+      opacity:1;
+      filter:blur(0);
+      transform:none;
+    }
+    .name-prelude.fade-name{
+      opacity:0!important;
+    }
+
     body.prelude-active main,
     body.prelude-active .progress,
     body.prelude-active footer{
@@ -433,7 +488,7 @@
       display:block;
       width:max-content;
       max-width:100%;
-      margin:.28em 0;
+      margin:.62em 0;
       opacity:0;
       transform:translateY(.42em);
       filter:blur(.4px);
@@ -441,14 +496,17 @@
         opacity 1.35s cubic-bezier(.2,.7,.2,1),
         transform 1.35s cubic-bezier(.2,.7,.2,1),
         filter 1.2s ease;
-      transition-delay:calc(var(--i,0) * .42s);
+      transition-delay:calc(var(--i,0) * .58s);
     }
     .beat.visible .verse-line{
       opacity:1;
       transform:none;
       filter:none;
     }
-    .verse-gap{margin-top:1.65em}
+    .breath-short{margin-top:1.05em}
+    .breath-medium{margin-top:2.25em}
+    .breath-long{margin-top:3.75em}
+    .breath-deep{margin-top:5.1em}
     .voice .poem{width:min(100%,39ch)}
     .embrace{
       min-height:112svh;
@@ -598,6 +656,10 @@
     <div class="grain"></div>
   </div>
 
+  <div class="name-prelude" id="namePrelude" aria-hidden="true">
+    <p class="name-prelude-line"><span class="name-ana">Ana</span><span class="name-klaudya">Klaudya</span></p>
+  </div>
+
   <nav class="progress" aria-label="Progreso de lectura">
     <i class="active"></i>
     <i></i>
@@ -610,16 +672,16 @@
       <div class="beat-inner">
         <div class="poem">
           <span class="verse-line" style="--i:0">Había en su rostro</span>
-          <span class="verse-line" style="--i:1">una belleza serena,</span>
-          <span class="verse-line" style="--i:2">de las que no reclaman</span>
-          <span class="verse-line" style="--i:3">hacerse notar.</span>
+          <span class="verse-line breath-short" style="--i:1">una belleza serena,</span>
+          <span class="verse-line breath-medium" style="--i:2">de las que no reclaman</span>
+          <span class="verse-line breath-short" style="--i:3">hacerse notar.</span>
 
-          <span class="verse-line verse-gap" style="--i:5">La hondura de los ojos,</span>
-          <span class="verse-line" style="--i:6">el trazo de la boca,</span>
-          <span class="verse-line" style="--i:7">el cabello dispuesto</span>
-          <span class="verse-line" style="--i:8">con un cuidado</span>
-          <span class="verse-line" style="--i:9">que subraya</span>
-          <span class="verse-line" style="--i:10">sin corregir.</span>
+          <span class="verse-line breath-long" style="--i:5">La hondura de los ojos,</span>
+          <span class="verse-line breath-short" style="--i:6">el trazo de la boca,</span>
+          <span class="verse-line breath-medium" style="--i:7">el cabello dispuesto</span>
+          <span class="verse-line breath-short" style="--i:8">con un cuidado</span>
+          <span class="verse-line breath-medium" style="--i:9">que subraya</span>
+          <span class="verse-line breath-short" style="--i:10">sin corregir.</span>
         </div>
       </div>
     </section>
@@ -629,19 +691,19 @@
         <div class="poem">
           <span class="verse-line" style="--i:0">Y luego habló.</span>
 
-          <span class="verse-line verse-gap" style="--i:2">Brasil seguía intacto</span>
-          <span class="verse-line" style="--i:3">en su manera de decir:</span>
+          <span class="verse-line breath-long" style="--i:2">Brasil seguía intacto</span>
+          <span class="verse-line breath-short" style="--i:3">en su manera de decir:</span>
 
-          <span class="verse-line verse-gap" style="--i:5">el peso tibio de las vocales,</span>
-          <span class="verse-line" style="--i:6">la sílaba demorada,</span>
-          <span class="verse-line" style="--i:7">una música</span>
-          <span class="verse-line" style="--i:8">que se negaba</span>
-          <span class="verse-line" style="--i:9">a disimular.</span>
+          <span class="verse-line breath-medium" style="--i:5">el peso tibio de las vocales,</span>
+          <span class="verse-line breath-short" style="--i:6">la sílaba demorada,</span>
+          <span class="verse-line breath-medium" style="--i:7">una música</span>
+          <span class="verse-line breath-short" style="--i:8">que se negaba</span>
+          <span class="verse-line breath-short" style="--i:9">a disimular.</span>
 
-          <span class="verse-line verse-gap" style="--i:11">Entonces comprendí</span>
-          <span class="verse-line" style="--i:12">que a la luz de aquel rostro</span>
-          <span class="verse-line" style="--i:13">le faltaba todavía</span>
-          <span class="verse-line" style="--i:14">la <span class="word-voice">voz</span>.</span>
+          <span class="verse-line breath-long" style="--i:11">Entonces comprendí</span>
+          <span class="verse-line breath-medium" style="--i:12">que a la luz de aquel rostro</span>
+          <span class="verse-line breath-short" style="--i:13">le faltaba todavía</span>
+          <span class="verse-line breath-medium" style="--i:14">la <span class="word-voice">voz</span>.</span>
         </div>
       </div>
     </section>
@@ -650,13 +712,13 @@
       <div class="beat-inner">
         <div class="poem">
           <span class="verse-line" style="--i:0">Después vino</span>
-          <span class="verse-line" style="--i:1">el abrazo.</span>
+          <span class="verse-line breath-short" style="--i:1">el abrazo.</span>
 
-          <span class="verse-line verse-gap" style="--i:3">Ignoro cuánto duró</span>
-          <span class="verse-line" style="--i:4">o quién se acercó primero.</span>
+          <span class="verse-line breath-long" style="--i:3">Ignoro cuánto duró</span>
+          <span class="verse-line breath-short" style="--i:4">o quién se acercó primero.</span>
 
-          <span class="verse-line verse-gap" style="--i:6">Solo recuerdo</span>
-          <span class="verse-line" style="--i:7">el calor.</span>
+          <span class="verse-line breath-deep" style="--i:6">Solo recuerdo</span>
+          <span class="verse-line breath-medium" style="--i:7">el calor.</span>
         </div>
       </div>
     </section>
@@ -665,16 +727,16 @@
       <div class="beat-inner">
         <div class="poem">
           <span class="verse-line" style="--i:0">Y quedó también</span>
-          <span class="verse-line" style="--i:1">esa íntima injusticia</span>
-          <span class="verse-line" style="--i:2">que a veces comete la memoria:</span>
+          <span class="verse-line breath-short" style="--i:1">esa íntima injusticia</span>
+          <span class="verse-line breath-medium" style="--i:2">que a veces comete la memoria:</span>
 
-          <span class="verse-line verse-gap" style="--i:4">de toda una tarde</span>
-          <span class="verse-line" style="--i:5">retiene intacto</span>
-          <span class="verse-line" style="--i:6">un rostro,</span>
+          <span class="verse-line breath-long" style="--i:4">de toda una tarde</span>
+          <span class="verse-line breath-short" style="--i:5">retiene intacto</span>
+          <span class="verse-line breath-medium" style="--i:6">un rostro,</span>
 
           <div class="last">
-            <span class="verse-line verse-gap" style="--i:8">y de todo un abrazo,</span>
-            <span class="verse-line last-warm" style="--i:10">el calor.</span>
+            <span class="verse-line breath-deep" style="--i:8">y de todo un abrazo,</span>
+            <span class="verse-line last-warm breath-long" style="--i:10">el calor.</span>
           </div>
         </div>
       </div>
@@ -690,6 +752,7 @@
       const entryGate = document.getElementById('entryGate');
       const entryButton = document.getElementById('entryButton');
       const heartbeatField = document.querySelector('.heartbeat-field');
+      const namePrelude = document.getElementById('namePrelude');
       const SOUND_MIN = .20;
       const SOUND_MAX = .28;
       let soundStarted = false;
@@ -718,13 +781,22 @@
         entryGate?.classList.add('is-open');
         document.body.classList.add('prelude-active');
         document.body.classList.remove('reading-ready');
+        namePrelude?.classList.remove('show-ana','show-klaudya','fade-name');
         window.scrollTo({top:0,left:0,behavior:'auto'});
+
+        // Como «Paco / Olmo / de Males» en SOLO LA TARJETA:
+        // primero el nombre; después se completa.
+        setTimeout(() => namePrelude?.classList.add('show-ana'),2600);
+        setTimeout(() => namePrelude?.classList.add('show-klaudya'),7200);
+        setTimeout(() => namePrelude?.classList.add('fade-name'),12500);
       };
 
       const releaseReading = () => {
         document.body.classList.remove('entry-locked','prelude-active');
         document.body.classList.add('reading-ready');
+        namePrelude?.classList.add('fade-name');
         window.scrollTo({top:0,left:0,behavior:'auto'});
+        setTimeout(() => document.querySelector('.face')?.classList.add('visible'),900);
       };
 
       const startSound = async () => {
@@ -782,12 +854,13 @@
 
       const revealObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-          if(entry.isIntersecting) entry.target.classList.add('visible');
+          if(entry.isIntersecting && !document.body.classList.contains('prelude-active')){
+            entry.target.classList.add('visible');
+          }
         });
       }, {threshold:.24});
 
       document.querySelectorAll('.beat').forEach(el => revealObserver.observe(el));
-      document.querySelector('.face')?.classList.add('visible');
 
       const root = document.documentElement;
       const voiceSection = document.querySelector('.voice');
