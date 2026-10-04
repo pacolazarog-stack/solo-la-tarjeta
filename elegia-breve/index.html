@@ -161,6 +161,56 @@
       mix-blend-mode:multiply;
     }
 
+    .sound-toggle{
+      position:fixed;
+      left:max(14px,env(safe-area-inset-left));
+      bottom:max(14px,env(safe-area-inset-bottom));
+      z-index:30;
+      width:42px;
+      height:42px;
+      border:1px solid rgba(23,63,50,.20);
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      padding:0;
+      background:rgba(247,246,236,.76);
+      color:#173f32;
+      cursor:pointer;
+      opacity:.66;
+      -webkit-backdrop-filter:blur(10px);
+      backdrop-filter:blur(10px);
+      box-shadow:0 5px 22px rgba(8,49,32,.08);
+      transition:opacity .4s ease,transform .4s ease,background .4s ease,box-shadow .4s ease;
+    }
+    .sound-toggle:hover,.sound-toggle:focus-visible{
+      opacity:1;
+      transform:scale(1.05);
+      outline:none;
+    }
+    .sound-toggle.is-playing{
+      opacity:.84;
+      box-shadow:0 5px 24px rgba(8,65,42,.15);
+    }
+    .sound-toggle.is-muted{opacity:.45}
+    .sound-toggle .sound-off{display:none}
+    .sound-toggle.is-muted .sound-on{display:none}
+    .sound-toggle.is-muted .sound-off{display:block}
+    .sound-toggle svg{width:19px;height:19px}
+    .sound-toggle path,.sound-toggle circle{
+      fill:none;
+      stroke:currentColor;
+      stroke-width:1.55;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+    .sound-toggle:not(.is-playing):not(.is-muted){
+      animation:soundHint 3.2s ease-in-out infinite;
+    }
+    @keyframes soundHint{
+      0%,100%{box-shadow:0 5px 22px rgba(8,49,32,.08)}
+      50%{box-shadow:0 5px 30px rgba(8,65,42,.20)}
+    }
+
     .progress{
       position:fixed;
       right:18px;
@@ -382,6 +432,18 @@
   </style>
 </head>
 <body>
+  <audio id="anaSoundtrack" preload="auto" loop src="ana-klaudya.m4a"></audio>
+  <button class="sound-toggle" id="soundToggle" type="button" aria-label="Activar música" aria-pressed="false" title="Música">
+    <svg class="sound-on" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M9 18V6l9-2v12"></path>
+      <circle cx="6.5" cy="18" r="2.5"></circle>
+      <circle cx="15.5" cy="16" r="2.5"></circle>
+    </svg>
+    <svg class="sound-off" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 6l12 12"></path>
+      <path d="M9 18V6l9-2v8"></path>
+    </svg>
+  </button>
   <div class="atmosphere" aria-hidden="true">
     <div class="forest-field"></div>
     <div class="forest-deep"></div>
@@ -441,6 +503,76 @@
 
   <script>
     (() => {
+      const soundtrack = document.getElementById('anaSoundtrack');
+      const soundToggle = document.getElementById('soundToggle');
+      const SOUND_LEVEL = .12;
+      let soundStarted = false;
+      let soundFrame = null;
+
+      const fadeSoundTo = (target,duration=2200) => {
+        if(!soundtrack) return;
+        if(soundFrame) cancelAnimationFrame(soundFrame);
+        const start = soundtrack.volume;
+        const began = performance.now();
+        const tick = now => {
+          const t = Math.min(1,(now-began)/duration);
+          const e = t*t*(3-2*t);
+          soundtrack.volume = start + (target-start)*e;
+          if(t < 1) soundFrame = requestAnimationFrame(tick);
+        };
+        soundFrame = requestAnimationFrame(tick);
+      };
+
+      const syncSoundButton = () => {
+        if(!soundtrack || !soundToggle) return;
+        const active = soundStarted && !soundtrack.muted && !soundtrack.paused;
+        soundToggle.classList.toggle('is-playing',active);
+        soundToggle.classList.toggle('is-muted',soundStarted && soundtrack.muted);
+        soundToggle.setAttribute('aria-pressed',String(active));
+        const label = active ? 'Silenciar música' : 'Activar música';
+        soundToggle.setAttribute('aria-label',label);
+        soundToggle.title = label;
+      };
+
+      const startSound = async () => {
+        if(!soundtrack || soundStarted) return;
+        soundtrack.currentTime = 0;
+        soundtrack.volume = 0;
+        soundtrack.muted = false;
+        try{
+          await soundtrack.play();
+          soundStarted = true;
+          fadeSoundTo(SOUND_LEVEL,2200);
+          syncSoundButton();
+        }catch(_){
+          soundtrack.volume = SOUND_LEVEL;
+        }
+      };
+
+      window.addEventListener('pointerdown',event => {
+        if(event.target.closest?.('#soundToggle')) return;
+        startSound();
+      },{once:true,passive:true});
+      window.addEventListener('keydown',startSound,{once:true});
+
+      soundToggle?.addEventListener('click',async event => {
+        event.stopPropagation();
+        if(!soundStarted){
+          await startSound();
+          syncSoundButton();
+          return;
+        }
+        soundtrack.muted = !soundtrack.muted;
+        if(!soundtrack.muted && soundtrack.paused){
+          try{ await soundtrack.play(); }catch(_){}
+        }
+        syncSoundButton();
+      });
+
+      // Some browsers permit autoplay; otherwise the first click/touch/key starts it.
+      startSound();
+      syncSoundButton();
+
       const beats = [...document.querySelectorAll('[data-stage]')];
       const dots = [...document.querySelectorAll('.progress i')];
       const stageOrder = ['face','voice','embrace','memory'];
