@@ -25,7 +25,6 @@
       --forest:0;
       --forest-deep:0;
       --billiard:0;
-      --final-warm:0;
       --pulse-opacity:.10;
       --pulse-scale:.90;
       --pulse-ring:.11;
@@ -91,23 +90,6 @@
         linear-gradient(to bottom,rgba(24,70,54,.26),rgba(57,111,84,.45));
       opacity:var(--green);
       transition:opacity 1.8s cubic-bezier(.2,.7,.2,1);
-    }
-    .final-warm-field{
-      position:absolute;
-      inset:0;
-      z-index:1;
-      pointer-events:none;
-      opacity:var(--final-warm);
-      background:
-        radial-gradient(42% 24% at 50% 74%,
-          rgba(255,236,185,.92) 0%,
-          rgba(255,194,98,.72) 28%,
-          rgba(238,126,46,.42) 50%,
-          rgba(190,77,32,.16) 66%,
-          rgba(190,77,32,0) 82%);
-      filter:blur(10px);
-      mix-blend-mode:screen;
-      transition:opacity .22s linear;
     }
     .gold-wash{
       position:absolute;
@@ -280,6 +262,71 @@
         radial-gradient(circle at 70% 65%,rgba(53,43,37,.18) 0 .6px,transparent .7px);
       background-size:7px 7px,11px 11px;
       mix-blend-mode:multiply;
+    }
+
+    body.entry-locked{
+      overflow:hidden;
+      overscroll-behavior:none;
+      touch-action:none;
+    }
+    .entry-gate{
+      position:fixed;
+      inset:0;
+      z-index:60;
+      display:grid;
+      place-items:center;
+      background:rgba(238,241,233,.82);
+      -webkit-backdrop-filter:blur(7px);
+      backdrop-filter:blur(7px);
+      opacity:1;
+      visibility:visible;
+      transition:opacity .8s ease,visibility .8s ease;
+    }
+    .entry-gate.is-open{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+    .entry-gate-inner{
+      display:grid;
+      justify-items:center;
+      gap:18px;
+      text-align:center;
+      padding:24px;
+    }
+    .entry-gate .entry-title{
+      margin:0;
+      font-size:clamp(1.8rem,5vw,3.2rem);
+      font-weight:500;
+      letter-spacing:.05em;
+      color:#201d19;
+    }
+    .entry-gate .entry-sub{
+      margin:0;
+      font:400 .7rem/1.5 Arial,Helvetica,sans-serif;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:rgba(32,29,25,.46);
+    }
+    .entry-gate button{
+      margin-top:6px;
+      border:1px solid rgba(23,63,50,.26);
+      border-radius:999px;
+      padding:.78em 1.6em;
+      background:rgba(248,247,239,.92);
+      color:#173f32;
+      font:500 .76rem/1 Arial,Helvetica,sans-serif;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+      cursor:pointer;
+      box-shadow:0 7px 28px rgba(8,49,32,.08);
+      transition:transform .25s ease,box-shadow .25s ease;
+    }
+    .entry-gate button:hover,
+    .entry-gate button:focus-visible{
+      transform:translateY(-1px);
+      box-shadow:0 9px 34px rgba(8,49,32,.13);
+      outline:none;
     }
 
     .sound-toggle{
@@ -461,56 +508,14 @@
       line-height:1.22;
     }
     .memory .last span{
-      position:relative;
-      isolation:isolate;
       display:block;
       width:max-content;
       max-width:100%;
       margin:1.05em auto 0;
-      padding:.18em .58em .22em;
       font-size:1.26em;
       letter-spacing:.018em;
-      color:#fff0bd;
-      text-shadow:
-        0 0 8px rgba(255,241,193,.82),
-        0 0 20px rgba(255,190,89,.68),
-        0 0 40px rgba(235,119,40,.46);
-      transition:color 1.2s ease,text-shadow 1.2s ease;
-      animation:warmBreath 2.8s ease-in-out infinite;
-    }
-    .memory .last span::before{
-      content:"";
-      position:absolute;
-      z-index:-1;
-      left:50%;
-      top:52%;
-      width:9.2em;
-      height:3.8em;
-      transform:translate(-50%,-50%);
-      border-radius:50%;
-      background:
-        radial-gradient(ellipse at center,
-          rgba(255,236,188,.70) 0%,
-          rgba(255,188,82,.50) 34%,
-          rgba(237,116,37,.26) 58%,
-          rgba(237,116,37,0) 78%);
-      filter:blur(12px);
-      opacity:1;
-      pointer-events:none;
-    }
-    @keyframes warmBreath{
-      0%,100%{
-        text-shadow:
-          0 0 8px rgba(255,241,193,.72),
-          0 0 18px rgba(255,190,89,.56),
-          0 0 34px rgba(235,119,40,.34);
-      }
-      50%{
-        text-shadow:
-          0 0 12px rgba(255,248,218,.98),
-          0 0 28px rgba(255,194,93,.82),
-          0 0 52px rgba(235,119,40,.58);
-      }
+      color:#c89a55;
+      text-shadow:0 0 12px rgba(200,154,85,.14);
     }
 
     .word-voice{
@@ -600,8 +605,15 @@
     }
   </style>
 </head>
-<body>
-  <audio id="anaSoundtrack" preload="auto" autoplay loop src="ana-klaudya.m4a"></audio>
+<body class="entry-locked">
+  <audio id="anaSoundtrack" preload="auto" loop src="ana-klaudya.m4a"></audio>
+  <div class="entry-gate" id="entryGate" role="dialog" aria-modal="true" aria-label="Entrada a la pieza">
+    <div class="entry-gate-inner">
+      <p class="entry-sub">pieza breve</p>
+      <p class="entry-title">ANA KLAUDYA</p>
+      <button id="entryButton" type="button">Entrar</button>
+    </div>
+  </div>
   <button class="sound-toggle" id="soundToggle" type="button" aria-label="Activar música" aria-pressed="false" title="Música">
     <svg class="sound-on" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M9 18V6l9-2v12"></path>
@@ -617,7 +629,6 @@
     <div class="forest-field"></div>
     <div class="forest-deep"></div>
     <div class="billiard-field"></div>
-    <div class="final-warm-field"></div>
     <div class="green-wash"></div>
     <div class="gold-wash"></div>
     <div class="heartbeat-field">
@@ -682,8 +693,10 @@
     (() => {
       const soundtrack = document.getElementById('anaSoundtrack');
       const soundToggle = document.getElementById('soundToggle');
+      const entryGate = document.getElementById('entryGate');
+      const entryButton = document.getElementById('entryButton');
       const SOUND_MIN = .20;
-      const SOUND_MAX = .30;
+      const SOUND_MAX = .28;
       let soundStarted = false;
 
       const syncSoundButton = () => {
@@ -691,10 +704,16 @@
         const active = soundStarted && !soundtrack.muted && !soundtrack.paused;
         soundToggle.classList.toggle('is-playing',active);
         soundToggle.classList.toggle('is-muted',soundtrack.muted);
-        soundToggle.setAttribute('aria-pressed',String(!soundtrack.muted));
-        const label = soundtrack.muted ? 'Activar sonido' : 'Silenciar sonido';
+        soundToggle.setAttribute('aria-pressed',String(active));
+        const label = active ? 'Silenciar sonido' : 'Activar sonido';
         soundToggle.setAttribute('aria-label',label);
         soundToggle.title = label;
+      };
+
+      const openReading = () => {
+        document.body.classList.remove('entry-locked');
+        entryGate?.classList.add('is-open');
+        window.scrollTo({top:0,left:0,behavior:'auto'});
       };
 
       const startSound = async () => {
@@ -712,17 +731,16 @@
         }
       };
 
-      // La música intenta comenzar en cuanto se abre la página.
-      // Si el navegador bloquea el autoplay con sonido, la primera interacción
-      // del lector la inicia automáticamente, sin botón de entrada.
-      startSound();
-
-      const startOnFirstGesture = async () => {
-        if(!soundStarted) await startSound();
-      };
-      window.addEventListener('pointerdown',startOnFirstGesture,{once:true,passive:true});
-      window.addEventListener('touchstart',startOnFirstGesture,{once:true,passive:true});
-      window.addEventListener('keydown',startOnFirstGesture,{once:true});
+      entryButton?.addEventListener('click',async () => {
+        entryButton.disabled = true;
+        const started = await startSound();
+        if(started){
+          openReading();
+        }else{
+          entryButton.disabled = false;
+          entryButton.textContent = 'Volver a intentar';
+        }
+      });
 
       soundToggle?.addEventListener('click',async event => {
         event.stopPropagation();
@@ -845,12 +863,6 @@
         const billiardRaw = (window.innerHeight * 1.02 - fr.top) / Math.max(1, window.innerHeight * 1.18);
         const billiard = .68 * smoother(clamp(billiardRaw));
         root.style.setProperty('--billiard', billiard.toFixed(3));
-
-        // El cierre introduce temperatura real en el campo visual.
-        // La luz cálida aparece sólo al acercarse «el calor.» y crece hasta el final.
-        const warmRaw = (window.innerHeight * 1.06 - fr.top) / Math.max(1, window.innerHeight * .92);
-        const finalWarm = .78 * smoother(clamp(warmRaw));
-        root.style.setProperty('--final-warm', finalWarm.toFixed(3));
 
         root.style.setProperty('--text-light', '0');
         root.style.setProperty('--text-r', '32');
