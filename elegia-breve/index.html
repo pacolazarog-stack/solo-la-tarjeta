@@ -23,6 +23,7 @@
       --flame-g:82;
       --flame-b:65;
       --flame-glow:0;
+      --fire-takeover:0;
       --pulse-duration:1.85s;
       color-scheme:light;
     }
@@ -70,6 +71,7 @@
     .world-green,
     .world-deep,
     .world-billiard,
+    .world-fire,
     .pulse-field,
     .grain{
       position:absolute;
@@ -98,6 +100,34 @@
         radial-gradient(88% 66% at 50% 82%,rgba(18,112,68,.92) 0%,rgba(10,82,51,.94) 47%,rgba(4,55,36,.98) 100%),
         linear-gradient(to bottom,#185f3f 0%,#0f4d34 56%,#063925 100%);
       transition:opacity .18s linear;
+    }
+
+    .world-fire{
+      z-index:3;
+      opacity:var(--fire-takeover);
+      background:
+        radial-gradient(46% 34% at 50% 54%,
+          rgba(255,126,30,.34) 0%,
+          rgba(223,54,16,.30) 34%,
+          rgba(143,15,8,.20) 62%,
+          transparent 82%),
+        radial-gradient(96% 74% at 50% 88%,
+          rgba(214,38,13,.86) 0%,
+          rgba(148,14,9,.90) 46%,
+          rgba(83,7,8,.94) 76%,
+          rgba(48,5,8,.98) 100%),
+        linear-gradient(to bottom,#8e120c 0%,#a9180d 42%,#66090a 100%);
+      transition:opacity .72s cubic-bezier(.18,.72,.2,1);
+      animation:fireBreath var(--pulse-duration) linear infinite;
+      will-change:opacity,filter;
+    }
+
+    @keyframes fireBreath{
+      0%,100%{filter:brightness(.96) saturate(1.03)}
+      10%{filter:brightness(1.09) saturate(1.13)}
+      18%{filter:brightness(.98) saturate(1.05)}
+      33%{filter:brightness(1.06) saturate(1.10)}
+      44%{filter:brightness(.97) saturate(1.04)}
     }
 
     .grain{
@@ -448,9 +478,10 @@
       color:rgb(var(--flame-r) var(--flame-g) var(--flame-b));
       -webkit-text-stroke:.25px rgba(255,224,192,.18);
       text-shadow:
+        0 0 2px rgba(35,3,3,.88),
         0 0 calc(1px + 5px * var(--flame-glow)) rgba(255,96,24,calc(.05 + .34 * var(--flame-glow))),
-        0 -1px calc(2px + 9px * var(--flame-glow)) rgba(255,190,70,calc(.03 + .18 * var(--flame-glow))),
-        0 2px calc(1px + 4px * var(--flame-glow)) rgba(112,8,0,calc(.02 + .18 * var(--flame-glow)));
+        0 -1px calc(2px + 9px * var(--flame-glow)) rgba(255,210,105,calc(.05 + .24 * var(--flame-glow))),
+        0 2px calc(1px + 4px * var(--flame-glow)) rgba(70,2,2,calc(.10 + .28 * var(--flame-glow)));
     }
 
     .heat-final.is-shown{
@@ -551,6 +582,7 @@
       html{scroll-behavior:auto}
       .entry,.name-prelude,.name-ana,.name-klaudya,.line,.sound-toggle,main{transition-duration:.01ms}
       .pulse-field,.pulse-field::before,.pulse-field::after{animation-duration:3.8s}
+      .world-fire{animation:none}
       .heat-final.is-burning{animation:none}
       .scroll-cue{animation:none}
     }
@@ -563,6 +595,7 @@
     <div class="world-green"></div>
     <div class="world-deep"></div>
     <div class="world-billiard"></div>
+    <div class="world-fire" id="worldFire"></div>
     <div class="pulse-field" id="pulseField"></div>
     <div class="grain"></div>
   </div>
@@ -649,6 +682,7 @@
       const entryButton = document.getElementById('entryButton');
       const namePrelude = document.getElementById('namePrelude');
       const pulseField = document.getElementById('pulseField');
+      const worldFire = document.getElementById('worldFire');
       const soundtrack = document.getElementById('soundtrack');
       const soundToggle = document.getElementById('soundToggle');
       const lines = [...document.querySelectorAll('.line')];
@@ -665,6 +699,8 @@
       let hasScrolled = false;
       let releaseY = 0;
       let ticking = false;
+      let fireTakeover = 0;
+      let fireStarted = false;
 
       const clamp = value => Math.min(1,Math.max(0,value));
       const smooth = t => t*t*t*(t*(t*6-15)+10);
@@ -743,6 +779,21 @@
         syncSoundToggle();
       });
 
+      const startFireTakeover = () => {
+        if(fireStarted) return;
+        fireStarted = true;
+        fireTakeover = Math.max(fireTakeover,.07);
+        root.style.setProperty('--fire-takeover',fireTakeover.toFixed(3));
+      };
+
+      // Cada ciclo completo del mismo latido que existe desde la portada
+      // conquista una fracción más del fondo.
+      pulseField.addEventListener('animationiteration',event => {
+        if(event.animationName !== 'pulseField' || !fireStarted) return;
+        fireTakeover = Math.min(1,fireTakeover + .075);
+        root.style.setProperty('--fire-takeover',fireTakeover.toFixed(3));
+      });
+
       const revealLines = () => {
         if(!readingReady || !hasScrolled) return;
 
@@ -752,6 +803,7 @@
           const rect = line.getBoundingClientRect();
           if(rect.top <= revealY && rect.bottom > 0){
             line.classList.add('is-shown');
+            if(line === finalHeat) startFireTakeover();
           }
         });
       };
@@ -773,9 +825,10 @@
         const embrace = stageProgress(embraceStart);
         const memory = stageProgress(memoryStart);
 
-        const green = Math.min(.58,.10 + voice*.34 + embrace*.14);
-        const deep = Math.min(.46,embrace*.25 + memory*.21);
-        const billiard = Math.min(.76,memory*.34 + stageProgress(finalHeat)*.42);
+        const fireFade = 1 - fireTakeover*.82;
+        const green = Math.min(.58,.10 + voice*.34 + embrace*.14) * fireFade;
+        const deep = Math.min(.46,embrace*.25 + memory*.21) * (1 - fireTakeover*.62);
+        const billiard = Math.min(.76,memory*.34 + stageProgress(finalHeat)*.42) * fireFade;
 
         root.style.setProperty('--green',green.toFixed(3));
         root.style.setProperty('--deep',deep.toFixed(3));
