@@ -487,15 +487,22 @@
       left:50%;
       top:50%;
       z-index:24;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
       margin:0;
       transform:translate(-50%,-50%)!important;
       max-width:calc(100vw - 32px);
       text-align:center;
+      line-height:.84;
       pointer-events:none;
     }
 
     .heat-part{
       display:block;
+      width:max-content;
+      line-height:.84;
       opacity:0;
       filter:blur(5px);
       transition:
@@ -509,7 +516,7 @@
     }
 
     .heat-calor{
-      margin-top:-.04em;
+      margin-top:-.16em;
       transform:translateX(14px);
     }
 
