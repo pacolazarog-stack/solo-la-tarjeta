@@ -13,9 +13,9 @@
     :root{
       --ink:#201d19;
       --muted:#777066;
-      --paper:#eef1e7;
-      --warm:#c9d8b7;
-      --deep:#234432;
+      --paper:#edf3e5;
+      --warm:#a9c98b;
+      --deep:#1f4f2f;
       --glow:0;
       --voice:0;
       --heat:0;
@@ -42,17 +42,17 @@
       pointer-events:none;
       overflow:hidden;
       background:
-        radial-gradient(72% 46% at 50% 14%,rgba(255,255,255,.74),transparent 70%),
-        radial-gradient(68% 50% at 50% 82%,rgba(151,182,126,.12),transparent 72%),
-        linear-gradient(to bottom,#f3f4ec 0%,#edf1e5 60%,#e5ecdc 100%);
+        radial-gradient(72% 46% at 50% 14%,rgba(255,255,255,.70),transparent 70%),
+        radial-gradient(74% 58% at 50% 84%,rgba(96,152,82,.24),transparent 74%),
+        linear-gradient(to bottom,#f0f4e9 0%,#e5efdd 56%,#d5e6cb 100%);
       transition:background 1.6s ease;
     }
     .green-wash{
       position:absolute;
       inset:0;
       background:
-        radial-gradient(78% 58% at 50% 58%,rgba(72,124,74,.74) 0%,rgba(103,151,88,.58) 34%,rgba(142,174,105,.38) 58%,rgba(142,174,105,0) 82%),
-        linear-gradient(to bottom,rgba(53,104,66,.18),rgba(101,151,81,.42));
+        radial-gradient(80% 62% at 50% 58%,rgba(35,126,57,.92) 0%,rgba(64,145,67,.80) 34%,rgba(97,161,77,.58) 58%,rgba(97,161,77,0) 84%),
+        linear-gradient(to bottom,rgba(26,102,46,.40),rgba(79,150,63,.68));
       opacity:var(--green);
       transition:opacity 1.8s cubic-bezier(.2,.7,.2,1);
     }
@@ -280,44 +280,44 @@
     }
 
     body.stage-voice{
-      --glow:.58;
+      --glow:.64;
       --voice:1;
-      --green:.30;
-      --gold:.03;
+      --green:.48;
+      --gold:.04;
     }
     body.stage-voice .atmosphere{
       background:
-        radial-gradient(74% 48% at 50% 18%,rgba(255,255,255,.70),transparent 70%),
-        radial-gradient(62% 42% at 50% 72%,rgba(82,132,82,.15),transparent 72%),
-        linear-gradient(to bottom,#f1f3e9 0%,#e7eee0 66%,#dce8d5 100%);
+        radial-gradient(72% 46% at 50% 16%,rgba(255,255,255,.56),transparent 68%),
+        radial-gradient(72% 52% at 50% 74%,rgba(54,139,63,.34),transparent 72%),
+        linear-gradient(to bottom,#edf3e6 0%,#dcebd5 58%,#c8dfbd 100%);
     }
     body.stage-embrace{
-      --glow:.78;
+      --glow:.86;
       --voice:.28;
       --heat:1;
-      --green:.50;
-      --gold:.13;
+      --green:.72;
+      --gold:.11;
     }
     body.stage-embrace .atmosphere{
       background:
-        radial-gradient(76% 52% at 50% 22%,rgba(255,255,255,.62),transparent 72%),
-        radial-gradient(58% 42% at 50% 68%,rgba(92,145,86,.20),transparent 70%),
-        radial-gradient(48% 34% at 52% 78%,rgba(205,181,87,.08),transparent 72%),
-        linear-gradient(to bottom,#eef2e6 0%,#e2ebda 58%,#d4e2ca 100%);
+        radial-gradient(74% 50% at 50% 20%,rgba(255,255,255,.46),transparent 70%),
+        radial-gradient(66% 48% at 50% 68%,rgba(38,130,56,.42),transparent 70%),
+        radial-gradient(50% 36% at 52% 80%,rgba(214,187,72,.10),transparent 72%),
+        linear-gradient(to bottom,#e7f0df 0%,#cfe3c2 54%,#afd09f 100%);
     }
     body.stage-memory{
-      --glow:.24;
+      --glow:.30;
       --voice:0;
       --heat:.45;
       --memory:1;
-      --green:.36;
-      --gold:.05;
+      --green:.56;
+      --gold:.04;
     }
     body.stage-memory .atmosphere{
       background:
-        radial-gradient(85% 55% at 50% 30%,rgba(255,255,255,.58),transparent 74%),
-        radial-gradient(62% 44% at 50% 76%,rgba(111,151,86,.16),transparent 72%),
-        linear-gradient(to bottom,#f0f2e8 0%,#e9eee0 56%,#dde7d3 100%);
+        radial-gradient(84% 54% at 50% 28%,rgba(255,255,255,.48),transparent 74%),
+        radial-gradient(66% 46% at 50% 76%,rgba(46,126,59,.30),transparent 72%),
+        linear-gradient(to bottom,#eaf1e2 0%,#d7e7ce 56%,#bdd8af 100%);
     }
 
     footer{
