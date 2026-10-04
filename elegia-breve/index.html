@@ -422,11 +422,18 @@
 
     .heat-final{
       position:relative;
+      --breath:58svh;
+      margin-bottom:0;
+      font-size:clamp(2.25rem,5.8vw,3.85rem);
+      line-height:1.04;
+      font-weight:500;
+      letter-spacing:.012em;
       color:rgb(var(--flame-r) var(--flame-g) var(--flame-b));
+      -webkit-text-stroke:.25px rgba(255,224,192,.18);
       text-shadow:
-        0 0 calc(1px + 8px * var(--flame-glow)) rgba(255,70,12,calc(.05 + .46 * var(--flame-glow))),
-        0 -1px calc(2px + 13px * var(--flame-glow)) rgba(255,177,42,calc(.03 + .26 * var(--flame-glow))),
-        0 2px calc(1px + 5px * var(--flame-glow)) rgba(128,8,0,calc(.02 + .28 * var(--flame-glow)));
+        0 0 calc(1px + 5px * var(--flame-glow)) rgba(255,96,24,calc(.05 + .34 * var(--flame-glow))),
+        0 -1px calc(2px + 9px * var(--flame-glow)) rgba(255,190,70,calc(.03 + .18 * var(--flame-glow))),
+        0 2px calc(1px + 4px * var(--flame-glow)) rgba(112,8,0,calc(.02 + .18 * var(--flame-glow)));
     }
 
     .heat-final.is-burning{
@@ -440,7 +447,7 @@
     }
 
     .signature{
-      margin-top:52svh;
+      margin-top:78svh;
       padding-bottom:12svh;
       font-family:Arial,Helvetica,sans-serif;
       font-size:.68rem;
@@ -491,7 +498,11 @@
       .b-sentence{--breath:25svh}
       .b-turn{--breath:35svh}
       .b-deep{--breath:47svh}
-      .signature{margin-top:48svh}
+      .heat-final{
+        --breath:54svh;
+        font-size:clamp(2.15rem,9.5vw,3.25rem);
+      }
+      .signature{margin-top:72svh}
     }
 
     @media(prefers-reduced-motion:reduce){
@@ -745,9 +756,9 @@
           b = Math.round(65 + (26-65)*t);
         }else{
           const t = (heat-.48)/.52;
-          r = Math.round(210 + (225-210)*t);
-          g = Math.round(104 + (24-104)*t);
-          b = Math.round(26 + (8-26)*t);
+          r = Math.round(210 + (255-210)*t);
+          g = Math.round(104 + (62-104)*t);
+          b = Math.round(26 + (16-26)*t);
         }
 
         root.style.setProperty('--flame-r',String(r));
