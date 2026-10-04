@@ -25,11 +25,8 @@
       --forest:0;
       --forest-deep:0;
       --billiard:0;
-      --pulse-opacity:.10;
-      --pulse-scale:.90;
-      --pulse-ring:.11;
-      --pulse-trace:.07;
-      --pulse-duration:3.9s;
+      --pulse-tone:.16;
+      --pulse-duration:2.65s;
       --text-light:0;
       color-scheme:light;
     }
@@ -104,94 +101,56 @@
       inset:0;
       z-index:1;
       pointer-events:none;
-      opacity:var(--pulse-opacity);
-      transition:opacity .35s linear;
+      overflow:hidden;
+      animation:ambientHeartbeat var(--pulse-duration) linear infinite;
+      will-change:opacity,filter;
     }
-    .heartbeat-core{
-      position:absolute;
-      left:50%;
-      top:54%;
-      width:min(62vw,680px);
-      aspect-ratio:1;
-      border-radius:50%;
-      transform:translate(-50%,-50%) scale(var(--pulse-scale));
-      background:
-        radial-gradient(circle,
-          rgba(216,183,96,.13) 0%,
-          rgba(103,151,112,.12) 28%,
-          rgba(28,94,62,.075) 51%,
-          rgba(28,94,62,0) 72%);
-      filter:blur(7px);
-      animation:heartPulse var(--pulse-duration) ease-in-out infinite;
-      will-change:transform,opacity;
-    }
-    .heartbeat-ring,
-    .heartbeat-ring::after{
-      position:absolute;
-      left:50%;
-      top:54%;
-      width:min(47vw,520px);
-      aspect-ratio:1;
-      border-radius:50%;
-      border:1.5px solid rgba(34,104,70,var(--pulse-ring));
-      transform:translate(-50%,-50%) scale(.78);
-      opacity:0;
-      box-shadow:0 0 26px rgba(34,104,70,calc(var(--pulse-ring)*.75));
-      animation:heartRing var(--pulse-duration) ease-out infinite;
+    .heartbeat-field::before,
+    .heartbeat-field::after{
       content:"";
-    }
-    .heartbeat-ring::after{
-      left:50%;
-      top:50%;
-      width:100%;
-      animation:heartRingSecond var(--pulse-duration) ease-out infinite;
-    }
-    .heartbeat-trace{
       position:absolute;
-      left:50%;
-      top:54%;
-      width:min(78vw,820px);
-      height:92px;
-      transform:translate(-50%,-50%);
-      opacity:var(--pulse-trace);
-      overflow:visible;
-      filter:drop-shadow(0 0 5px rgba(35,95,66,.10));
+      inset:-8%;
+      pointer-events:none;
     }
-    .heartbeat-trace path{
-      fill:none;
-      stroke:rgba(31,93,63,.78);
-      stroke-width:1.35;
-      stroke-linecap:round;
-      stroke-linejoin:round;
-      vector-effect:non-scaling-stroke;
-      stroke-dasharray:880;
-      stroke-dashoffset:880;
-      animation:heartTrace var(--pulse-duration) linear infinite;
+    .heartbeat-field::before{
+      background:
+        radial-gradient(92% 74% at 50% 52%,
+          rgba(41,101,71,.28) 0%,
+          rgba(31,82,59,.18) 42%,
+          rgba(22,64,49,.08) 66%,
+          rgba(22,64,49,0) 82%);
+      animation:ambientToneA var(--pulse-duration) ease-in-out infinite;
     }
-    @keyframes heartPulse{
-      0%,100%{transform:translate(-50%,-50%) scale(var(--pulse-scale));opacity:.62}
-      9%{transform:translate(-50%,-50%) scale(calc(var(--pulse-scale) * 1.045));opacity:.95}
-      15%{transform:translate(-50%,-50%) scale(var(--pulse-scale));opacity:.66}
-      22%{transform:translate(-50%,-50%) scale(calc(var(--pulse-scale) * 1.075));opacity:1}
-      34%{transform:translate(-50%,-50%) scale(var(--pulse-scale));opacity:.62}
+    .heartbeat-field::after{
+      background:
+        radial-gradient(100% 82% at 50% 58%,
+          rgba(126,159,117,.14) 0%,
+          rgba(77,121,92,.11) 40%,
+          rgba(29,78,56,.06) 68%,
+          rgba(29,78,56,0) 84%);
+      animation:ambientToneB var(--pulse-duration) ease-in-out infinite;
     }
-    @keyframes heartRing{
-      0%,6%{transform:translate(-50%,-50%) scale(.78);opacity:0}
-      9%{opacity:.86}
-      25%{transform:translate(-50%,-50%) scale(1.10);opacity:.18}
-      36%,100%{transform:translate(-50%,-50%) scale(1.17);opacity:0}
+    @keyframes ambientHeartbeat{
+      0%,100%{opacity:.42;filter:saturate(1) brightness(1)}
+      8%{opacity:.72;filter:saturate(1.06) brightness(.975)}
+      14%{opacity:.46;filter:saturate(1.01) brightness(1)}
+      23%{opacity:.64;filter:saturate(1.045) brightness(.985)}
+      31%{opacity:.44;filter:saturate(1) brightness(1)}
+      100%{opacity:.42;filter:saturate(1) brightness(1)}
     }
-    @keyframes heartRingSecond{
-      0%,16%{transform:translate(-50%,-50%) scale(.80);opacity:0}
-      21%{opacity:.72}
-      34%{transform:translate(-50%,-50%) scale(1.08);opacity:.15}
-      43%,100%{transform:translate(-50%,-50%) scale(1.15);opacity:0}
+    @keyframes ambientToneA{
+      0%,100%{opacity:.28;transform:scale(1)}
+      8%{opacity:.58;transform:scale(1.018)}
+      14%{opacity:.30;transform:scale(1.002)}
+      23%{opacity:.50;transform:scale(1.013)}
+      31%{opacity:.29;transform:scale(1)}
     }
-    @keyframes heartTrace{
-      0%{stroke-dashoffset:880;opacity:.08}
-      7%{opacity:.72}
-      34%{stroke-dashoffset:0;opacity:.56}
-      46%,100%{stroke-dashoffset:-880;opacity:.05}
+    @keyframes ambientToneB{
+      0%,100%{opacity:.18;transform:scale(1.006)}
+      8%{opacity:.35;transform:scale(1.026)}
+      14%{opacity:.20;transform:scale(1.008)}
+      23%{opacity:.30;transform:scale(1.020)}
+      31%{opacity:.18;transform:scale(1.006)}
     }
 
     .halo{
@@ -275,7 +234,7 @@
       z-index:60;
       display:grid;
       place-items:center;
-      background:rgba(238,241,233,.82);
+      background:rgba(238,241,233,.66);
       -webkit-backdrop-filter:blur(7px);
       backdrop-filter:blur(7px);
       opacity:1;
@@ -514,8 +473,8 @@
       margin:1.05em auto 0;
       font-size:1.26em;
       letter-spacing:.018em;
-      color:#c89a55;
-      text-shadow:0 0 12px rgba(200,154,85,.14);
+      color:#746451;
+      text-shadow:none;
     }
 
     .word-voice{
@@ -600,7 +559,7 @@
       html{scroll-behavior:auto}
       *,*::before,*::after{animation:none!important;transition:none!important}
       .hero-inner,.beat-inner{opacity:1;transform:none;filter:none}
-      .heartbeat-core,.heartbeat-ring,.heartbeat-ring::after,.heartbeat-trace path{animation:none!important}
+      .heartbeat-field,.heartbeat-field::before,.heartbeat-field::after{animation:none!important}
       .cue{display:none}
     }
   </style>
@@ -631,13 +590,7 @@
     <div class="billiard-field"></div>
     <div class="green-wash"></div>
     <div class="gold-wash"></div>
-    <div class="heartbeat-field">
-      <div class="heartbeat-core"></div>
-      <div class="heartbeat-ring"></div>
-      <svg class="heartbeat-trace" viewBox="0 0 900 100" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 54 H250 L282 54 L300 52 L318 54 L334 53 L348 54 L362 28 L378 76 L394 46 L410 54 L455 54 L475 54 L490 52 L505 54 L520 53 L534 54 L548 34 L563 70 L579 48 L595 54 H900"/>
-      </svg>
-    </div>
+    <div class="heartbeat-field"></div>
     <div class="halo"></div>
     <div class="voice-line"></div>
     <div class="grain"></div>
@@ -795,19 +748,6 @@
           const targetVolume = SOUND_MIN + (SOUND_MAX - SOUND_MIN) * smoother(pageProgress);
           soundtrack.volume += (targetVolume - soundtrack.volume) * .12;
         }
-
-        // Latido visual: desde el primer instante, cada vez más visible,
-        // ligeramente más amplio y algo más cercano conforme avanza la lectura.
-        const pulseOpacity = .10 + .20 * smoother(pageProgress);
-        const pulseScale = .90 + .18 * smoother(pageProgress);
-        const pulseRing = .11 + .16 * smoother(pageProgress);
-        const pulseTrace = .07 + .16 * smoother(pageProgress);
-        const pulseDuration = 3.9 - .80 * smoother(pageProgress);
-        root.style.setProperty('--pulse-opacity',pulseOpacity.toFixed(3));
-        root.style.setProperty('--pulse-scale',pulseScale.toFixed(3));
-        root.style.setProperty('--pulse-ring',pulseRing.toFixed(3));
-        root.style.setProperty('--pulse-trace',pulseTrace.toFixed(3));
-        root.style.setProperty('--pulse-duration',pulseDuration.toFixed(2)+'s');
 
         const targetY = window.innerHeight * .48;
         let best = beats[0];
