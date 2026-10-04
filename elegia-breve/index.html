@@ -106,28 +106,28 @@
       z-index:3;
       opacity:var(--fire-takeover);
       background:
-        radial-gradient(46% 34% at 50% 54%,
-          rgba(255,126,30,.34) 0%,
-          rgba(223,54,16,.30) 34%,
-          rgba(143,15,8,.20) 62%,
-          transparent 82%),
-        radial-gradient(96% 74% at 50% 88%,
-          rgba(214,38,13,.86) 0%,
-          rgba(148,14,9,.90) 46%,
-          rgba(83,7,8,.94) 76%,
-          rgba(48,5,8,.98) 100%),
-        linear-gradient(to bottom,#8e120c 0%,#a9180d 42%,#66090a 100%);
-      transition:opacity .72s cubic-bezier(.18,.72,.2,1);
-      animation:fireBreath var(--pulse-duration) linear infinite;
+        radial-gradient(54% 42% at 50% 54%,
+          rgba(255,205,132,.38) 0%,
+          rgba(236,159,104,.30) 38%,
+          rgba(202,119,91,.18) 64%,
+          transparent 84%),
+        radial-gradient(108% 84% at 50% 88%,
+          rgba(204,126,94,.70) 0%,
+          rgba(181,104,85,.66) 44%,
+          rgba(150,83,75,.58) 72%,
+          rgba(118,69,66,.48) 100%),
+        linear-gradient(to bottom,#d3a07f 0%,#c78872 44%,#9c6d67 100%);
+      transition:opacity 1.05s cubic-bezier(.18,.72,.2,1);
+      animation:warmBreath var(--pulse-duration) linear infinite;
       will-change:opacity,filter;
     }
 
-    @keyframes fireBreath{
-      0%,100%{filter:brightness(.96) saturate(1.03)}
-      10%{filter:brightness(1.09) saturate(1.13)}
-      18%{filter:brightness(.98) saturate(1.05)}
-      33%{filter:brightness(1.06) saturate(1.10)}
-      44%{filter:brightness(.97) saturate(1.04)}
+    @keyframes warmBreath{
+      0%,100%{filter:brightness(1) saturate(.94)}
+      10%{filter:brightness(1.045) saturate(.99)}
+      18%{filter:brightness(1.01) saturate(.95)}
+      33%{filter:brightness(1.035) saturate(.98)}
+      44%{filter:brightness(1) saturate(.94)}
     }
 
     .grain{
@@ -478,10 +478,10 @@
       color:rgb(var(--flame-r) var(--flame-g) var(--flame-b));
       -webkit-text-stroke:.25px rgba(255,224,192,.18);
       text-shadow:
-        0 0 2px rgba(35,3,3,.88),
-        0 0 calc(1px + 5px * var(--flame-glow)) rgba(255,96,24,calc(.05 + .34 * var(--flame-glow))),
-        0 -1px calc(2px + 9px * var(--flame-glow)) rgba(255,210,105,calc(.05 + .24 * var(--flame-glow))),
-        0 2px calc(1px + 4px * var(--flame-glow)) rgba(70,2,2,calc(.10 + .28 * var(--flame-glow)));
+        0 0 2px rgba(75,38,34,.62),
+        0 0 calc(1px + 5px * var(--flame-glow)) rgba(255,170,104,calc(.05 + .26 * var(--flame-glow))),
+        0 -1px calc(2px + 9px * var(--flame-glow)) rgba(255,222,158,calc(.04 + .20 * var(--flame-glow))),
+        0 2px calc(1px + 4px * var(--flame-glow)) rgba(112,61,55,calc(.06 + .18 * var(--flame-glow)));
     }
 
     .heat-final.is-shown{
@@ -787,10 +787,10 @@
       };
 
       // Cada ciclo completo del mismo latido que existe desde la portada
-      // conquista una fracción más del fondo.
+      // extiende una capa más de calor por el fondo, sin abrasarlo.
       pulseField.addEventListener('animationiteration',event => {
         if(event.animationName !== 'pulseField' || !fireStarted) return;
-        fireTakeover = Math.min(1,fireTakeover + .075);
+        fireTakeover = Math.min(.92,fireTakeover + .055);
         root.style.setProperty('--fire-takeover',fireTakeover.toFixed(3));
       });
 
@@ -825,10 +825,10 @@
         const embrace = stageProgress(embraceStart);
         const memory = stageProgress(memoryStart);
 
-        const fireFade = 1 - fireTakeover*.82;
+        const fireFade = 1 - fireTakeover*.62;
         const green = Math.min(.58,.10 + voice*.34 + embrace*.14) * fireFade;
-        const deep = Math.min(.46,embrace*.25 + memory*.21) * (1 - fireTakeover*.62);
-        const billiard = Math.min(.76,memory*.34 + stageProgress(finalHeat)*.42) * fireFade;
+        const deep = Math.min(.46,embrace*.25 + memory*.21) * (1 - fireTakeover*.46);
+        const billiard = Math.min(.76,memory*.34 + stageProgress(finalHeat)*.42) * (1 - fireTakeover*.68);
 
         root.style.setProperty('--green',green.toFixed(3));
         root.style.setProperty('--deep',deep.toFixed(3));
@@ -851,9 +851,9 @@
           b = Math.round(65 + (26-65)*t);
         }else{
           const t = (heat-.48)/.52;
-          r = Math.round(210 + (255-210)*t);
-          g = Math.round(104 + (62-104)*t);
-          b = Math.round(26 + (16-26)*t);
+          r = Math.round(210 + (232-210)*t);
+          g = Math.round(104 + (112-104)*t);
+          b = Math.round(26 + (86-26)*t);
         }
 
         root.style.setProperty('--flame-r',String(r));
