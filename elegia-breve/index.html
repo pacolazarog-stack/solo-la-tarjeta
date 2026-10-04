@@ -452,6 +452,18 @@
         0 2px calc(1px + 4px * var(--flame-glow)) rgba(112,8,0,calc(.02 + .18 * var(--flame-glow)));
     }
 
+    .heat-final.is-shown{
+      position:fixed;
+      left:50%;
+      top:50%;
+      z-index:24;
+      margin:0;
+      transform:translate(-50%,-50%)!important;
+      max-width:calc(100vw - 32px);
+      text-align:center;
+      pointer-events:none;
+    }
+
     .heat-final.is-burning{
       animation:flameText 1.25s ease-in-out infinite alternate;
     }
@@ -463,7 +475,7 @@
     }
 
     .signature{
-      margin-top:78svh;
+      margin-top:120svh;
       padding-bottom:12svh;
       font-family:Arial,Helvetica,sans-serif;
       font-size:.68rem;
@@ -530,7 +542,7 @@
         --breath:54svh;
         font-size:clamp(2.15rem,9.5vw,3.25rem);
       }
-      .signature{margin-top:72svh}
+      .signature{margin-top:112svh}
     }
 
     @media(prefers-reduced-motion:reduce){
