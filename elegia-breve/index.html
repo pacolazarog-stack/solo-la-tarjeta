@@ -422,43 +422,61 @@
       transition:opacity 2.35s cubic-bezier(.2,.7,.2,1),transform 2.35s cubic-bezier(.2,.7,.2,1),filter 2.1s ease;
     }
     .beat.visible .beat-inner{opacity:1;transform:none;filter:none}
-    .beat p{
-      margin:0;
-      max-width:34ch;
-      font-size:clamp(1.23rem,2.65vw,1.63rem);
-      line-height:1.64;
-      letter-spacing:.002em;
-      text-wrap:pretty;
+    .poem{
+      width:min(100%,36ch);
+      font-size:clamp(1.28rem,2.8vw,1.72rem);
+      line-height:1.58;
+      letter-spacing:.004em;
     }
-    .beat:nth-of-type(even) p{margin-left:auto}
-    .voice p{max-width:38ch}
-    .embrace{min-height:104svh}
-    .embrace p{max-width:29ch}
-    .memory{
-      min-height:154svh;
-      align-items:flex-start;
-      padding-top:34svh;
-      padding-bottom:52svh;
-    }
-    .memory .beat-inner{text-align:center}
-    .memory p{
-      margin-left:auto!important;
-      margin-right:auto!important;
-      max-width:32ch;
-    }
-    .memory .last{
-      margin-top:2.8em;
-      font-size:clamp(1.6rem,4.3vw,2.65rem);
-      line-height:1.22;
-    }
-    .memory .last span{
+    .beat:nth-of-type(even) .poem{margin-left:auto}
+    .verse-line{
       display:block;
       width:max-content;
       max-width:100%;
-      margin:1.05em auto 0;
-      font-size:1em;
-      font-weight:400;
-      letter-spacing:.010em;
+      margin:.28em 0;
+      opacity:0;
+      transform:translateY(.42em);
+      filter:blur(.4px);
+      transition:
+        opacity 1.35s cubic-bezier(.2,.7,.2,1),
+        transform 1.35s cubic-bezier(.2,.7,.2,1),
+        filter 1.2s ease;
+      transition-delay:calc(var(--i,0) * .42s);
+    }
+    .beat.visible .verse-line{
+      opacity:1;
+      transform:none;
+      filter:none;
+    }
+    .verse-gap{margin-top:1.65em}
+    .voice .poem{width:min(100%,39ch)}
+    .embrace{
+      min-height:112svh;
+    }
+    .embrace .poem{width:min(100%,30ch)}
+    .memory{
+      min-height:168svh;
+      align-items:flex-start;
+      padding-top:38svh;
+      padding-bottom:58svh;
+    }
+    .memory .beat-inner{text-align:center}
+    .memory .poem{
+      width:min(100%,32ch);
+      margin-left:auto;
+      margin-right:auto;
+    }
+    .memory .verse-line{
+      margin-left:auto;
+      margin-right:auto;
+    }
+    .memory .last{
+      margin-top:2.6em;
+      font-size:1.08em;
+      line-height:1.46;
+    }
+    .memory .last-warm{
+      margin-top:1.5em;
       color:#5f5850;
       text-shadow:none;
     }
@@ -535,7 +553,6 @@
 
     @media (max-width:640px){
       .progress{right:10px}
-      .beat:nth-of-type(even) p{margin-left:0}
       .beat{min-height:104svh}
       .memory{min-height:142svh}
       .voice-line{width:92vw}
@@ -544,7 +561,7 @@
     @media (prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
       *,*::before,*::after{animation:none!important;transition:none!important}
-      .beat-inner{opacity:1;transform:none;filter:none}
+      .beat-inner,.verse-line{opacity:1;transform:none;filter:none}
       .cue{display:none}
     }
   </style>
@@ -591,26 +608,75 @@
   <main>
     <section class="beat face" data-stage="face">
       <div class="beat-inner">
-        <p>Había en su rostro una belleza serena, de las que no reclaman hacerse notar. La hondura de los ojos, el trazo de la boca, el cabello dispuesto con un cuidado que subraya sin corregir.</p>
+        <div class="poem">
+          <span class="verse-line" style="--i:0">Había en su rostro</span>
+          <span class="verse-line" style="--i:1">una belleza serena,</span>
+          <span class="verse-line" style="--i:2">de las que no reclaman</span>
+          <span class="verse-line" style="--i:3">hacerse notar.</span>
+
+          <span class="verse-line verse-gap" style="--i:5">La hondura de los ojos,</span>
+          <span class="verse-line" style="--i:6">el trazo de la boca,</span>
+          <span class="verse-line" style="--i:7">el cabello dispuesto</span>
+          <span class="verse-line" style="--i:8">con un cuidado</span>
+          <span class="verse-line" style="--i:9">que subraya</span>
+          <span class="verse-line" style="--i:10">sin corregir.</span>
+        </div>
       </div>
     </section>
 
     <section class="beat voice" data-stage="voice">
       <div class="beat-inner">
-        <p>Y luego habló. Brasil seguía intacto en su manera de decir: el peso tibio de las vocales, la sílaba demorada, una música que se negaba a disimular. Entonces comprendí que a la luz de aquel rostro le faltaba todavía la <span class="word-voice">voz</span>.</p>
+        <div class="poem">
+          <span class="verse-line" style="--i:0">Y luego habló.</span>
+
+          <span class="verse-line verse-gap" style="--i:2">Brasil seguía intacto</span>
+          <span class="verse-line" style="--i:3">en su manera de decir:</span>
+
+          <span class="verse-line verse-gap" style="--i:5">el peso tibio de las vocales,</span>
+          <span class="verse-line" style="--i:6">la sílaba demorada,</span>
+          <span class="verse-line" style="--i:7">una música</span>
+          <span class="verse-line" style="--i:8">que se negaba</span>
+          <span class="verse-line" style="--i:9">a disimular.</span>
+
+          <span class="verse-line verse-gap" style="--i:11">Entonces comprendí</span>
+          <span class="verse-line" style="--i:12">que a la luz de aquel rostro</span>
+          <span class="verse-line" style="--i:13">le faltaba todavía</span>
+          <span class="verse-line" style="--i:14">la <span class="word-voice">voz</span>.</span>
+        </div>
       </div>
     </section>
 
     <section class="beat embrace" data-stage="embrace">
       <div class="beat-inner">
-        <p>Después vino el abrazo. Ignoro cuánto duró o quién se acercó primero. Solo recuerdo el calor.</p>
+        <div class="poem">
+          <span class="verse-line" style="--i:0">Después vino</span>
+          <span class="verse-line" style="--i:1">el abrazo.</span>
+
+          <span class="verse-line verse-gap" style="--i:3">Ignoro cuánto duró</span>
+          <span class="verse-line" style="--i:4">o quién se acercó primero.</span>
+
+          <span class="verse-line verse-gap" style="--i:6">Solo recuerdo</span>
+          <span class="verse-line" style="--i:7">el calor.</span>
+        </div>
       </div>
     </section>
 
     <section class="beat memory" data-stage="memory">
       <div class="beat-inner">
-        <p>Y quedó también esa íntima injusticia que a veces comete la memoria: de toda una tarde retiene intacto un rostro,</p>
-        <p class="last">y de todo un abrazo,<span>el calor.</span></p>
+        <div class="poem">
+          <span class="verse-line" style="--i:0">Y quedó también</span>
+          <span class="verse-line" style="--i:1">esa íntima injusticia</span>
+          <span class="verse-line" style="--i:2">que a veces comete la memoria:</span>
+
+          <span class="verse-line verse-gap" style="--i:4">de toda una tarde</span>
+          <span class="verse-line" style="--i:5">retiene intacto</span>
+          <span class="verse-line" style="--i:6">un rostro,</span>
+
+          <div class="last">
+            <span class="verse-line verse-gap" style="--i:8">y de todo un abrazo,</span>
+            <span class="verse-line last-warm" style="--i:10">el calor.</span>
+          </div>
+        </div>
       </div>
     </section>
   </main>
