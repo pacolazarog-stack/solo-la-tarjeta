@@ -24,6 +24,7 @@
       --gold:0;
       --forest:0;
       --forest-deep:0;
+      --billiard:0;
       --text-light:0;
       color-scheme:light;
     }
@@ -65,6 +66,15 @@
         radial-gradient(70% 48% at 50% 76%,rgba(196,176,94,.07),transparent 66%),
         linear-gradient(to bottom,#315f4c 0%,#244b3d 48%,#173f32 100%);
       opacity:var(--forest-deep);
+      transition:opacity .18s linear;
+    }
+    .billiard-field{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(82% 62% at 50% 76%,rgba(35,128,79,.82) 0%,rgba(20,105,64,.86) 46%,rgba(12,79,49,.90) 100%),
+        linear-gradient(to bottom,#267b50 0%,#176a43 54%,#0d5838 100%);
+      opacity:var(--billiard);
       transition:opacity .18s linear;
     }
     .green-wash{
@@ -375,6 +385,7 @@
   <div class="atmosphere" aria-hidden="true">
     <div class="forest-field"></div>
     <div class="forest-deep"></div>
+    <div class="billiard-field"></div>
     <div class="green-wash"></div>
     <div class="gold-wash"></div>
     <div class="halo"></div>
@@ -453,6 +464,7 @@
       const voiceSection = document.querySelector('.voice');
       const embraceSection = document.querySelector('.embrace');
       const memorySection = document.querySelector('.memory');
+      const finalMemoryLine = document.querySelector('.memory .last');
 
       const clamp = v => Math.min(1, Math.max(0, v));
       const smoother = t => t*t*t*(t*(t*6-15)+10);
@@ -482,6 +494,7 @@
         const vr = voiceSection.getBoundingClientRect();
         const er = embraceSection.getBoundingClientRect();
         const mr = memorySection.getBoundingClientRect();
+        const fr = finalMemoryLine.getBoundingClientRect();
 
         const start = window.innerHeight * 1.22;
         const mature = window.innerHeight * .08;
@@ -506,6 +519,15 @@
 
         root.style.setProperty('--forest', forest.toFixed(3));
         root.style.setProperty('--forest-deep', deep.toFixed(3));
+
+        // Último tramo: el verde inglés se concentra lentamente
+        // hasta convertirse en un verde billar reconocible.
+        // Empieza cuando el cierre entra en la parte baja de la pantalla
+        // y sólo alcanza su plenitud junto a «el calor.».
+        const billiardRaw = (window.innerHeight * 1.02 - fr.top) / Math.max(1, window.innerHeight * 1.18);
+        const billiard = .56 * smoother(clamp(billiardRaw));
+        root.style.setProperty('--billiard', billiard.toFixed(3));
+
         root.style.setProperty('--text-light', '0');
         root.style.setProperty('--text-r', '32');
         root.style.setProperty('--text-g', '29');
