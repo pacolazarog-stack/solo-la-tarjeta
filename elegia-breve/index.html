@@ -22,6 +22,9 @@
       --memory:0;
       --green:0;
       --gold:0;
+      --forest:0;
+      --forest-deep:0;
+      --text-light:0;
       color-scheme:light;
     }
     *{box-sizing:border-box}
@@ -46,6 +49,23 @@
         radial-gradient(74% 58% at 50% 84%,rgba(96,152,82,.24),transparent 74%),
         linear-gradient(to bottom,#f0f4e9 0%,#e5efdd 56%,#d5e6cb 100%);
       transition:background 1.6s ease;
+    }
+    .forest-field{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(105% 78% at 50% 92%,rgba(91,178,74,.92) 0%,rgba(37,137,68,.94) 34%,rgba(13,101,61,.96) 66%,rgba(7,67,47,.98) 100%);
+      opacity:var(--forest);
+      transition:opacity .18s linear;
+    }
+    .forest-deep{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(70% 48% at 50% 76%,rgba(212,186,72,.16),transparent 66%),
+        linear-gradient(to bottom,#0d6b45 0%,#07563b 48%,#063b2d 100%);
+      opacity:var(--forest-deep);
+      transition:opacity .18s linear;
     }
     .green-wash{
       position:absolute;
@@ -222,9 +242,11 @@
     }
     .beat-inner{
       width:100%;
+      color:rgb(var(--text-r,32) var(--text-g,29) var(--text-b,25));
       opacity:0;
       transform:translateY(14px);
       filter:blur(.45px);
+      text-shadow:0 1px calc(var(--text-light)*18px) rgba(0,32,20,calc(var(--text-light)*.30));
       transition:opacity 1.15s cubic-bezier(.2,.7,.2,1),transform 1.15s cubic-bezier(.2,.7,.2,1),filter 1.15s ease;
     }
     .beat.visible .beat-inner{opacity:1;transform:none;filter:none}
@@ -282,8 +304,8 @@
     body.stage-voice{
       --glow:.64;
       --voice:1;
-      --green:.48;
-      --gold:.04;
+      --green:.18;
+      --gold:.02;
     }
     body.stage-voice .atmosphere{
       background:
@@ -295,8 +317,8 @@
       --glow:.86;
       --voice:.28;
       --heat:1;
-      --green:.72;
-      --gold:.11;
+      --green:.20;
+      --gold:.09;
     }
     body.stage-embrace .atmosphere{
       background:
@@ -310,8 +332,8 @@
       --voice:0;
       --heat:.45;
       --memory:1;
-      --green:.56;
-      --gold:.04;
+      --green:.16;
+      --gold:.03;
     }
     body.stage-memory .atmosphere{
       background:
@@ -351,6 +373,8 @@
 </head>
 <body>
   <div class="atmosphere" aria-hidden="true">
+    <div class="forest-field"></div>
+    <div class="forest-deep"></div>
     <div class="green-wash"></div>
     <div class="gold-wash"></div>
     <div class="halo"></div>
@@ -425,8 +449,18 @@
 
       document.querySelectorAll('.beat').forEach(el => revealObserver.observe(el));
 
+      const root = document.documentElement;
+      const voiceSection = document.querySelector('.voice');
+      const embraceSection = document.querySelector('.embrace');
+      const memorySection = document.querySelector('.memory');
+
+      const clamp = v => Math.min(1, Math.max(0, v));
+      const smoother = t => t*t*t*(t*(t*6-15)+10);
+      const ramp = (x,a,b) => smoother(clamp((x-a)/Math.max(.0001,b-a)));
+      const mix = (a,b,t) => Math.round(a + (b-a)*t);
+
       let ticking = false;
-      const updateStageFromScroll = () => {
+      const renderScroll = () => {
         const targetY = window.innerHeight * .48;
         let best = beats[0];
         let bestDistance = Infinity;
@@ -440,21 +474,59 @@
             best = el;
           }
         });
-
         if(best) setStage(best.dataset.stage);
+
+        // Transición fuerte al verde:
+        // comienza al acercarse “Y luego habló. Brasil…”
+        // y queda plenamente estable antes del abrazo.
+        const vr = voiceSection.getBoundingClientRect();
+        const er = embraceSection.getBoundingClientRect();
+        const mr = memorySection.getBoundingClientRect();
+
+        const voiceStart = window.innerHeight * .88;
+        const voiceFull = window.innerHeight * .28;
+        const raw = (voiceStart - vr.top) / Math.max(1, voiceStart - voiceFull);
+        let forest = smoother(clamp(raw));
+
+        // Mantener el verde plenamente instalado durante abrazo y memoria.
+        if(er.top < window.innerHeight * .72) forest = Math.max(forest, .96);
+        if(mr.top < window.innerHeight * .78) forest = Math.max(forest, .88);
+
+        // Profundización: verde claro -> verde bosque al llegar al abrazo.
+        const deepRaw = (window.innerHeight * .82 - er.top) / Math.max(1, window.innerHeight * .64);
+        let deep = .78 * smoother(clamp(deepRaw));
+        if(mr.top < window.innerHeight * .72) deep = Math.max(deep, .58);
+
+        // El texto cambia a marfil una vez que el campo verde domina.
+        const textLight = ramp(forest,.42,.70);
+        const tr = mix(32,247,textLight);
+        const tg = mix(29,246,textLight);
+        const tb = mix(25,236,textLight);
+
+        root.style.setProperty('--forest', forest.toFixed(3));
+        root.style.setProperty('--forest-deep', deep.toFixed(3));
+        root.style.setProperty('--text-light', textLight.toFixed(3));
+        root.style.setProperty('--text-r', tr);
+        root.style.setProperty('--text-g', tg);
+        root.style.setProperty('--text-b', tb);
+
+        // El dorado aparece sólo como respiración brasileña en el abrazo.
+        const gold = .03 + .12 * ramp(deep,.18,.72);
+        root.style.setProperty('--gold', gold.toFixed(3));
+
         ticking = false;
       };
 
       const onScroll = () => {
         if(!ticking){
-          requestAnimationFrame(updateStageFromScroll);
+          requestAnimationFrame(renderScroll);
           ticking = true;
         }
       };
 
       window.addEventListener('scroll', onScroll, {passive:true});
       window.addEventListener('resize', onScroll);
-      updateStageFromScroll();
+      renderScroll();
     })();
   </script>
 </body>
