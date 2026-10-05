@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -23,23 +23,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Instalar versión sincronizada de Ceniciento
-        env:
-          CENICIENTO_PAGE_URL: "https://sdmntpritalynorth.oaiusercontent.com/files/00000000-ed74-8246-9407-70abb281b369/raw?se=2026-10-05T00%3A48%3A55Z&sp=r&sv=2026-02-06&sr=b&scid=e8a0154d-33a6-577b-bc1c-ff8af52ac8e2&skoid=8981e47a-681f-4a6a-b86c-73d6347614b7&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-04T08%3A33%3A14Z&ske=2026-10-05T08%3A33%3A14Z&sks=b&skv=2026-02-06&sig=tKbpdhl/nTajiZyOeqSaD4lTlqPHO1UbTMwSWXCe50U%3D"
-        run: |
-          set -euo pipefail
-          curl --fail --location --retry 3 --output ceniciento/index.html "$CENICIENTO_PAGE_URL"
-          test "$(wc -c < ceniciento/index.html)" -eq 21457
-          grep -q "CENICIENTO_completo.m4a" ceniciento/index.html
-          ! grep -q "aidocmaker" ceniciento/index.html
-          ! grep -q "speechSynthesis" ceniciento/index.html
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ceniciento/index.html
-          git commit -m "Sincronizar Ceniciento con la narración completa" || true
-          git push
-
       - name: Configurar Pages
         uses: actions/configure-pages@v5
       - name: Empaquetar sitio
