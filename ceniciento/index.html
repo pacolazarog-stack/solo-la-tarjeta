@@ -55,7 +55,7 @@ body.read-mode{min-height:100%;overflow-x:hidden}
 .reader p.final{font-size:1.12em;text-align:center}
 .read-mode .reader{display:block}
 .read-mode .karaoke,.read-mode .status{display:none}
-.read-mode .portrait{left:auto;right:4vw;top:7svh;transform:none;width:min(31vw,330px);opacity:.94}
+.read-mode:not(.revealing) .portrait{left:auto;right:4vw;top:7svh;transform:none;width:min(31vw,330px);opacity:.94}
 .read-mode .controls #pause,.read-mode .controls #restart{display:none}
 .read-mode .progress{position:fixed}
 .entry{position:fixed;z-index:30;inset:0;display:grid;place-items:center;background:rgba(12,9,8,.56);backdrop-filter:blur(8px);transition:opacity 1.1s ease,visibility 1.1s ease}
@@ -75,7 +75,7 @@ body.read-mode{min-height:100%;overflow-x:hidden}
  .current.dramatic{font-size:clamp(1.55rem,7vw,2.15rem)}
  .prev,.next{font-size:.78rem}.brand{font-size:.55rem}
  .controls button{font-size:.55rem;padding:.58em .75em}
- .read-mode .portrait{left:50%;right:auto;top:5.5svh;transform:translateX(-50%);width:min(66vw,300px);opacity:.88}
+ .read-mode:not(.revealing) .portrait{left:50%;right:auto;top:5.5svh;transform:translateX(-50%);width:min(66vw,300px);opacity:.88}
  .reader{padding-top:58svh;width:min(calc(100% - 22px),760px)}
  .reader article{padding:1.15rem 1.05rem 1.7rem;border-radius:18px}
  .reader p{font-size:1.07rem;line-height:1.64}
