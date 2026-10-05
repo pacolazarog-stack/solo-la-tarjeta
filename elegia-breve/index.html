@@ -273,6 +273,8 @@
     .voice-launch:hover,.voice-launch:focus-visible{transform:translate(-50%,calc(-50% - 1px))}
     body.reading-ready .voice-launch{opacity:1;visibility:visible;pointer-events:auto}
     .voice-dialog{
+      position:fixed;top:0;bottom:0;left:auto;right:max(16px,env(safe-area-inset-right));
+      margin:auto 0;height:fit-content;
       width:min(440px,calc(100% - 32px));max-height:calc(100svh - 32px);
       padding:32px 24px;border:1px solid rgba(23,63,50,.22);border-radius:20px;
       background:#eef1e9;color:#201d19;text-align:center;
@@ -787,7 +789,7 @@
       const voiceMusic = document.getElementById('voiceMusic');
       const musicEnabled = document.getElementById('musicEnabled');
       const musicLevel = document.getElementById('musicLevel');
-      let mixContext=null, musicGain=null, voiceAnalyser=null, musicAnalyser=null, nameAnalyser=null;
+      let mixContext=null, musicGain=null, voiceAnalyser=null, musicAnalyser=null;
       let voiceSamples=null, musicSamples=null, mixFrame=0;
       let nameFrame=0, namePriming=false;
       let voicePending=false, voicePriming=false, voiceAllowed=false;
@@ -806,14 +808,12 @@
       };
       const stopMonitor=()=>{cancelAnimationFrame(mixFrame);mixFrame=0;};
       const monitorMix=()=>{
-        const speakingName=!nameAudio.paused && !namePriming;
         const speakingRecording=!recording.paused && voiceDialog.open && !voicePriming;
-        if((!speakingName && !speakingRecording) || !musicEnabled.checked || voicePending){stopMonitor();return;}
-        const activeAudio=speakingName ? nameAudio : recording;
-        (speakingName ? nameAnalyser : voiceAnalyser).getFloatTimeDomainData(voiceSamples);
+        if(!speakingRecording || !musicEnabled.checked || voicePending){stopMonitor();return;}
+        voiceAnalyser.getFloatTimeDomainData(voiceSamples);
         musicAnalyser.getFloatTimeDomainData(musicSamples);
         const voiceEnergy=rms(voiceSamples),musicEnergy=rms(musicSamples);
-        const target=activeAudio.muted || activeAudio.volume===0 ? 0 :
+        const target=recording.muted || recording.volume===0 ? 0 :
           Math.min(voiceBedLimit(),voiceEnergy>.003 ? voiceEnergy*.30/Math.max(.001,musicEnergy) : voiceBedLimit());
         const gain=musicGain.gain,now=mixContext.currentTime;
         const current=gain.value;
@@ -828,7 +828,6 @@
           if(!Context) return false;
           mixContext=new Context();
           voiceAnalyser=mixContext.createAnalyser();musicAnalyser=mixContext.createAnalyser();
-          nameAnalyser=mixContext.createAnalyser();nameAnalyser.fftSize=1024;
           voiceAnalyser.fftSize=1024;musicAnalyser.fftSize=1024;
           voiceSamples=new Float32Array(1024);musicSamples=new Float32Array(1024);
           musicGain=mixContext.createGain();musicGain.gain.value=voiceMusic.paused ? 0 : voiceMusic.volume;
@@ -836,8 +835,7 @@
           voiceDelay.delayTime.value=.12;musicDelay.delayTime.value=.12;
           mixContext.createMediaElementSource(recording).connect(voiceAnalyser);
           voiceAnalyser.connect(voiceDelay).connect(mixContext.destination);
-          mixContext.createMediaElementSource(nameAudio).connect(nameAnalyser);
-          nameAnalyser.connect(mixContext.destination);
+          mixContext.createMediaElementSource(nameAudio).connect(mixContext.destination);
           mixContext.createMediaElementSource(voiceMusic).connect(musicAnalyser);
           musicAnalyser.connect(musicGain).connect(musicDelay).connect(mixContext.destination);
           voiceMusic.volume=1;
@@ -905,7 +903,7 @@
         });
       };
       const startMix=()=>{
-        if(voicePending || (recording.paused && nameAudio.paused) || voicePriming || namePriming) return;
+        if(voicePending || recording.paused || voicePriming) return;
         if(!musicEnabled.checked){fadeMusicTo(0);return;}
         if(!prepareMix()) return;
         ensureAmbientMusic();
@@ -939,10 +937,10 @@
         }).catch(()=>{nameAudio.muted=false;namePriming=false;return false;});
       };
       nameAudio.addEventListener('playing',()=>{
-        if(!namePriming){startMix();cancelAnimationFrame(nameFrame);syncNameWords();}
+        if(!namePriming){cancelAnimationFrame(nameFrame);syncNameWords();}
       });
       nameAudio.addEventListener('ended',()=>{
-        cancelAnimationFrame(nameFrame);nameFrame=0;restoreAmbient();
+        cancelAnimationFrame(nameFrame);nameFrame=0;
       });
       const lines = [...document.querySelectorAll('.line')];
       const voiceStart = document.getElementById('voiceStart');
@@ -987,7 +985,6 @@
         namePrelude.classList.remove('show-ana','show-klaudya','fade');
 
         if(nameReady){
-          fadeMusicTo(voiceBedLimit(),2.4);
           setTimeout(()=>{
             nameAudio.play().catch(()=>{
               setTimeout(()=>namePrelude.classList.add('show-ana'),190);
@@ -1034,14 +1031,13 @@
         syncSoundToggle();
       });
 
-      const openVoice=(play=false)=>{
+      const openVoice=()=>{
         if(!readingReady) return;
         if(!voiceDialog.open){
           body.classList.add('voice-open');voiceDialog.showModal();
         }
-        if(play) playRecording();
       };
-      document.getElementById('voiceLaunch').addEventListener('click',()=>openVoice(true));
+      document.getElementById('voiceLaunch').addEventListener('click',()=>openVoice());
       voicePlay.addEventListener('click',()=>{
         if(voicePending) cancelVoiceStart();
         else if(recording.paused) playRecording();
