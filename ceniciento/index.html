@@ -147,7 +147,7 @@ const TIME_ANCHORS=[
 let rawText='',phrases=[],storyReady=false,seqReady=false,audioReady=false,paused=false,currentIndex=0,lastGray=0,videoUrl=null,raf=0,activeMode=null,currentAgeState=0,activeAgeLayer=0,ageFrames=[],narrationTotal=EXPECTED_DURATION;
 let listenOrder=[],listenStarts=[];
 const clamp=x=>Math.max(0,Math.min(1,x));
-function check(){const visualReady=storyReady&&seqReady;readBtn.disabled=!visualReady;listenBtn.disabled=!(visualReady&&audioReady);if(visualReady&&audioReady)status.textContent='listo · narración completa'}
+function check(){readBtn.disabled=!storyReady;listenBtn.disabled=!(storyReady&&audioReady);if(!activeMode&&storyReady)status.textContent=audioReady?'listo · narración completa':'texto listo · cargando narración'}
 function cleanText(raw){return raw.replace(/^#\s*CENICIENTO\s*/i,'').trim()}
 function splitPhrases(raw){const pars=cleanText(raw).split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean),out=[];for(const p of pars){if(p.length<=185){out.push(p);continue}out.push(...(p.match(/[^.!?…]+(?:[.!?…]+|$)/g)?.map(x=>x.trim()).filter(Boolean)||[p]))}return out}
 const matches=needle=>{const arr=[];phrases.forEach((p,i)=>{if(p.includes(needle))arr.push(i)});return arr};
@@ -161,7 +161,27 @@ function showAgeState(state,instant=false){state=Math.max(0,Math.min(AGE_STATES-
 function setAgeProgress(progress){const p=clamp(progress),state=p>=1?AGE_STATES-1:Math.min(AGE_STATES-1,Math.floor(p*AGE_STATES));showAgeState(state)}
 function setGrayProgress(g){lastGray=Math.max(lastGray,clamp(g));root.style.setProperty('--gray',lastGray.toFixed(4))}
 function visualByIndex(i){if(activeMode!=='listen')setAgeProgress(stageFor(i));const gs=ix('Cuando finalmente salieron'),ge=phrases.length-1;setGrayProgress(gs>=0?(i-gs)/Math.max(1,ge-gs):0)}
-async function loadSequence(){const parts=await Promise.all(seqFiles.map(async f=>{const r=await fetch(f,{cache:'no-store'});if(!r.ok)throw Error('seq');return(await r.text()).trim()}));const b64=parts.join('').replace(/\s+/g,''),bin=atob(b64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);videoUrl=URL.createObjectURL(new Blob([u],{type:'video/mp4'}));bgv.src=videoUrl;const cap=document.createElement('video');cap.muted=true;cap.playsInline=true;cap.preload='auto';cap.src=videoUrl;await Promise.all([new Promise((ok,ko)=>{bgv.onloadedmetadata=ok;bgv.onerror=ko}),new Promise((ok,ko)=>{cap.onloadedmetadata=ok;cap.onerror=ko})]);bgv.currentTime=.04;const canvas=document.createElement('canvas');canvas.width=cap.videoWidth||360;canvas.height=cap.videoHeight||480;const cx=canvas.getContext('2d');const seek=t=>new Promise((ok,ko)=>{const done=()=>{const grab=()=>{cx.drawImage(cap,0,0,canvas.width,canvas.height);ok(canvas.toDataURL('image/webp',.9))};if(cap.requestVideoFrameCallback)cap.requestVideoFrameCallback(grab);else setTimeout(grab,45)};cap.addEventListener('seeked',done,{once:true});cap.onerror=ko;cap.currentTime=Math.min(Math.max(.04,t+.04),Math.max(.04,cap.duration-.04))});ageFrames=[];for(const anchor of AGE_ANCHORS)ageFrames.push(await seek(anchor));ageA.src=ageFrames[0];ageB.src=ageFrames[0];ageA.classList.add('active');ageB.classList.remove('active');activeAgeLayer=0;currentAgeState=0;seqReady=true;check()}
+function waitForMetadata(video){return new Promise((resolve,reject)=>{let timer;const cleanup=()=>{clearTimeout(timer);video.removeEventListener('loadedmetadata',ready);video.removeEventListener('error',failed)};const ready=()=>{cleanup();resolve()};const failed=()=>{cleanup();reject(Error('vídeo no disponible'))};video.addEventListener('loadedmetadata',ready,{once:true});video.addEventListener('error',failed,{once:true});timer=setTimeout(failed,10000);if(video.readyState>=1)ready();else video.load()})}
+async function loadSequence(){
+ const parts=await Promise.all(seqFiles.map(async f=>{const r=await fetch(f,{cache:'no-store'});if(!r.ok)throw Error('seq');return(await r.text()).trim()}));
+ const b64=parts.join('').replace(/\s+/g,''),bin=atob(b64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+ videoUrl=URL.createObjectURL(new Blob([u],{type:'video/mp4'}));bgv.src=videoUrl;
+ const cap=document.createElement('video');cap.muted=true;cap.playsInline=true;cap.preload='auto';cap.src=videoUrl;
+ try{
+  await Promise.all([waitForMetadata(bgv),waitForMetadata(cap)]);bgv.currentTime=.04;
+  const canvas=document.createElement('canvas');canvas.width=cap.videoWidth||360;canvas.height=cap.videoHeight||480;const cx=canvas.getContext('2d');if(!cx)throw Error('imagen no disponible');
+  const seek=t=>new Promise((resolve,reject)=>{
+   let timer,grabTimer;const cleanup=()=>{clearTimeout(timer);clearTimeout(grabTimer);cap.removeEventListener('seeked',done);cap.removeEventListener('error',failed)};
+   const failed=()=>{cleanup();reject(Error('imagen no disponible'))};
+   const done=()=>{grabTimer=setTimeout(()=>{try{cx.drawImage(cap,0,0,canvas.width,canvas.height);const frame=canvas.toDataURL('image/webp',.9);cleanup();resolve(frame)}catch(error){cleanup();reject(error)}},45)};
+   cap.addEventListener('seeked',done,{once:true});cap.addEventListener('error',failed,{once:true});timer=setTimeout(failed,5000);
+   cap.currentTime=Math.min(Math.max(.04,t+.04),Math.max(.04,cap.duration-.04));
+  });
+  const frames=[];for(const anchor of AGE_ANCHORS)frames.push(await seek(anchor));ageFrames=frames;
+  ageA.src=ageFrames[0];ageB.src=ageFrames[0];ageA.classList.add('active');ageB.classList.remove('active');activeAgeLayer=0;currentAgeState=0;seqReady=true;
+  if(activeMode==='read')readScroll();else if(activeMode==='listen')setAgeProgress((audio.currentTime-516.496)/(933.917-516.496));check();
+ }finally{cap.pause();cap.removeAttribute('src');cap.load()}
+}
 function buildListeningTimeline(){
  const cuts=[['Ella asintió','Ella removió el café'],['Ella dio un paso','La luz blanca del interior permanecía encendida']].map(([a,b])=>[ix(a),ix(b)]);
  const omitted=i=>cuts.some(([a,b])=>a>=0&&b>a&&i>=a&&i<b);
@@ -187,8 +207,8 @@ function stopAudio(){cancelAnimationFrame(raf);audio.pause()}
 function syncAudio(){if(activeMode!=='listen'||paused)return;const t=audio.currentTime,d=audio.duration||narrationTotal;renderLine(phraseForTime(t));root.style.setProperty('--prog',clamp(t/d).toFixed(5));const ageStart=516.496,ageEnd=933.917;setAgeProgress((t-ageStart)/(ageEnd-ageStart));const grayStart=642.641;setGrayProgress((t-grayStart)/(d-grayStart));raf=requestAnimationFrame(syncAudio)}
 function playMaster(fromStart=false){if(!audioReady){status.textContent='audio completo no disponible';return}if(fromStart)audio.currentTime=0;paused=false;pauseBtn.textContent='Pausa';status.textContent='narración completa · 20:05';audio.onended=finish;audio.play().then(syncAudio).catch(()=>{paused=true;pauseBtn.textContent='Seguir';status.textContent='pulsa Seguir para escuchar'})}
 function resetVisuals(){lastGray=0;currentAgeState=0;if(seqReady)showAgeState(0,true);root.style.setProperty('--gray','0');root.style.setProperty('--prog','0')}
-function startListen(){if(!(storyReady&&seqReady&&audioReady)){status.textContent='cargando narración completa';return}activeMode='listen';body.className='listen-mode';modeSwitch.hidden=false;entry.classList.add('open');resetVisuals();currentIndex=-1;renderLine(0);playMaster(true)}
-function startRead(){if(!(storyReady&&seqReady))return;activeMode='read';stopAudio();body.className='read-mode';modeSwitch.hidden=false;entry.classList.add('open');resetVisuals();scrollTo(0,0);status.textContent='lectura silenciosa';readScroll()}
+function startListen(){if(!(storyReady&&audioReady)){status.textContent='cargando narración completa';return}activeMode='listen';body.className='listen-mode';modeSwitch.hidden=false;entry.classList.add('open');resetVisuals();currentIndex=-1;renderLine(0);playMaster(true)}
+function startRead(){if(!storyReady)return;activeMode='read';stopAudio();body.className='read-mode';modeSwitch.hidden=false;entry.classList.add('open');resetVisuals();scrollTo(0,0);status.textContent='lectura silenciosa';readScroll()}
 function readScroll(){if(activeMode!=='read')return;const max=Math.max(1,document.documentElement.scrollHeight-innerHeight),p=clamp(scrollY/max);root.style.setProperty('--prog',p.toFixed(4));setAgeProgress(p);const night=.55;setGrayProgress((p-night)/(1-night))}
 function finish(){cancelAnimationFrame(raf);renderLine(phrases.length-1);root.style.setProperty('--prog','1');status.textContent='fin';paused=true;pauseBtn.textContent='Repetir'}
 function restartListen(){stopAudio();resetVisuals();currentIndex=-1;renderLine(0);playMaster(true)}
@@ -198,7 +218,7 @@ restartBtn.onclick=()=>{if(activeMode==='listen')restartListen()};
 modeSwitch.onclick=()=>{stopAudio();entry.classList.remove('open');body.className='';activeMode=null;modeSwitch.hidden=true;resetVisuals();scrollTo(0,0)};
 addEventListener('scroll',readScroll,{passive:true});
 addEventListener('beforeunload',()=>{stopAudio();if(videoUrl)URL.revokeObjectURL(videoUrl)});
-Promise.allSettled([loadStory(),loadSequence(),loadNarration()]).then(rs=>{if(rs[0].status==='rejected')status.textContent='error al cargar el texto';else if(rs[1].status==='rejected')status.textContent='texto listo · imagen no disponible';else if(rs[2].status==='rejected')status.textContent='texto listo · audio no disponible';check()});
+Promise.allSettled([loadStory(),loadSequence(),loadNarration()]).then(rs=>{check();if(rs[0].status==='rejected'){status.textContent='error al cargar el texto';document.querySelector('.hint').textContent='No se ha podido cargar el cuento. Recarga la página.'}else if(rs[2].status==='rejected'&&!audioReady&&!activeMode){status.textContent='texto listo · audio no disponible';document.querySelector('.hint').textContent='La lectura está disponible. Recarga la página para volver a cargar el audio.'}});
 })();
 </script>
 </body>
