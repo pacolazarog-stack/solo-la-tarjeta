@@ -280,8 +280,15 @@
     .voice-dialog h2{margin:0;font-size:clamp(1.55rem,6vw,2rem);font-weight:500;letter-spacing:.045em}
     .voice-caption{margin:14px 0 24px;color:#375548}
     .voice-dialog audio{display:block;width:100%;margin:18px 0}
+    .voice-dialog audio:not([controls]){display:none}
     .voice-status{min-height:1.4em;font:400 .85rem/1.4 Arial,Helvetica,sans-serif;color:#375548}
     .voice-download{display:inline-block;margin-top:20px;color:#173f32;font-size:.9rem;text-underline-offset:4px}
+    .voice-mix{margin:22px 0;padding:16px;border:1px solid rgba(23,63,50,.16);border-radius:12px;text-align:left;font:400 .88rem/1.5 Arial,Helvetica,sans-serif}
+    .voice-mix label{display:flex;align-items:center;gap:10px}
+    .voice-mix input[type="checkbox"]{width:18px;height:18px;accent-color:#375548}
+    .voice-mix input[type="range"]{width:100%;margin:12px 0 0;accent-color:#375548}
+    .voice-mix p{margin:4px 0 0;color:#375548;font-size:.78rem}
+    .music-level{display:flex;justify-content:space-between;margin-top:12px}
     body.voice-open{overflow:hidden;overscroll-behavior:none;touch-action:auto}
 
     /* PRELUDIO ANA -> KLAUDYA */
@@ -676,6 +683,13 @@
     <audio id="recording" controls preload="metadata" src="voz.m4a" aria-label="Recitado de Ana Klaudya por Paco">
       <a href="voz.m4a">Escuchar la grabación</a>
     </audio>
+    <audio id="voiceMusic" preload="metadata" loop src="ana-klaudya.m4a"></audio>
+    <div class="voice-mix">
+      <label><input id="musicEnabled" type="checkbox"> Acompañar con música</label>
+      <p>Voz en primer plano · música suave</p>
+      <div class="music-level"><label for="musicLevel">Nivel de música</label><output id="musicLevelValue" for="musicLevel">6 %</output></div>
+      <input id="musicLevel" type="range" min="0" max="8" value="6" step="1" aria-label="Nivel de música">
+    </div>
     <p class="voice-status" id="voiceStatus" role="status" aria-live="polite"></p>
     <div class="entry-actions">
       <button class="entry-button" id="voicePlay" type="button">Escuchar</button>
@@ -769,6 +783,93 @@
       const voicePlay = document.getElementById('voicePlay');
       const voiceStatus = document.getElementById('voiceStatus');
       let resumeMusic = false;
+      const voiceMusic = document.getElementById('voiceMusic');
+      const musicEnabled = document.getElementById('musicEnabled');
+      const musicLevel = document.getElementById('musicLevel');
+      let mixContext=null, musicGain=null, voiceAnalyser=null, musicAnalyser=null;
+      let voiceSamples=null, musicSamples=null, mixFrame=0;
+      let mixUnavailable=false;
+      const musicLimit=()=>Number(musicLevel.value)/100;
+      const rms=samples=>Math.sqrt(samples.reduce((sum,value)=>sum+value*value,0)/samples.length);
+      const stopMix=()=>{
+        voiceMusic.pause();
+        cancelAnimationFrame(mixFrame);
+        mixFrame=0;
+        if(musicGain){
+          musicGain.gain.cancelScheduledValues(mixContext.currentTime);
+          musicGain.gain.setValueAtTime(0,mixContext.currentTime);
+        }
+      };
+      const monitorMix=()=>{
+        if(recording.paused || !musicEnabled.checked || !voiceDialog.open){stopMix();return;}
+        voiceAnalyser.getFloatTimeDomainData(voiceSamples);
+        musicAnalyser.getFloatTimeDomainData(musicSamples);
+        const voiceEnergy=rms(voiceSamples), musicEnergy=rms(musicSamples);
+        const target=recording.muted || recording.volume===0 ? 0 :
+          Math.min(musicLimit(),voiceEnergy>.003 ? voiceEnergy*.18/Math.max(.001,musicEnergy) : musicLimit()*.5);
+        const gain=musicGain.gain, now=mixContext.currentTime;
+        gain.cancelScheduledValues(now);
+        if(target<gain.value) gain.setValueAtTime(target,now);
+        else gain.setTargetAtTime(target,now,.65);
+        mixFrame=requestAnimationFrame(monitorMix);
+      };
+      const prepareMix=()=>{
+        if(mixUnavailable) return false;
+        if(!mixContext){
+          const Context=window.AudioContext || window.webkitAudioContext;
+          if(!Context){
+            mixUnavailable=true;musicEnabled.checked=false;musicEnabled.disabled=true;
+            voiceStatus.textContent='Este navegador permite escuchar la voz, pero no mezclarla con música.';
+            return false;
+          }
+          mixContext=new Context();
+          voiceAnalyser=mixContext.createAnalyser();musicAnalyser=mixContext.createAnalyser();
+          voiceAnalyser.fftSize=1024;musicAnalyser.fftSize=1024;
+          voiceSamples=new Float32Array(1024);musicSamples=new Float32Array(1024);
+          musicGain=mixContext.createGain();musicGain.gain.value=0;
+          const voiceDelay=mixContext.createDelay(.5), musicDelay=mixContext.createDelay(.5);
+          voiceDelay.delayTime.value=.12;musicDelay.delayTime.value=.12;
+          mixContext.createMediaElementSource(recording).connect(voiceAnalyser);
+          voiceAnalyser.connect(voiceDelay).connect(mixContext.destination);
+          mixContext.createMediaElementSource(voiceMusic).connect(musicAnalyser);
+          musicAnalyser.connect(musicGain).connect(musicDelay).connect(mixContext.destination);
+        }
+        if(mixContext.state==='suspended') mixContext.resume().catch(()=>{});
+        return true;
+      };
+      const alignMusic=()=>{
+        if(Number.isFinite(voiceMusic.duration) && voiceMusic.duration>0){
+          voiceMusic.currentTime=recording.currentTime%voiceMusic.duration;
+        }
+      };
+      const startMix=()=>{
+        if(!musicEnabled.checked || recording.paused || !voiceDialog.open){stopMix();return;}
+        if(!prepareMix()) return;
+        voiceMusic.muted=false;voiceMusic.volume=1;
+        if(voiceMusic.paused){
+          alignMusic();
+          voiceMusic.play().catch(()=>{
+            stopMix();
+            voiceStatus.textContent='La voz sigue disponible. Desactiva y activa la música para volver a intentarlo.';
+          });
+        }
+        if(!mixFrame) monitorMix();
+      };
+      musicEnabled.addEventListener('change',()=>{
+        if(musicEnabled.checked){prepareMix();startMix();}
+        else stopMix();
+      });
+      musicLevel.addEventListener('input',()=>{
+        document.getElementById('musicLevelValue').textContent=musicLevel.value+' %';
+        if(musicGain && musicGain.gain.value>musicLimit()){
+          musicGain.gain.cancelScheduledValues(mixContext.currentTime);
+          musicGain.gain.setValueAtTime(musicLimit(),mixContext.currentTime);
+        }
+      });
+      recording.addEventListener('seeking',()=>{voiceMusic.pause();});
+      recording.addEventListener('seeked',()=>{alignMusic();startMix();});
+      recording.addEventListener('waiting',stopMix);
+      recording.addEventListener('playing',startMix);
       const lines = [...document.querySelectorAll('.line')];
       const voiceStart = document.getElementById('voiceStart');
       const embraceStart = document.getElementById('embraceStart');
@@ -947,7 +1048,9 @@
 
       const playRecording=()=>{
         voiceStatus.textContent='';
+        if(musicEnabled.checked || mixContext) prepareMix();
         recording.play().catch(()=>{
+          stopMix();
           voiceStatus.textContent='Pulsa Escuchar o el botón del reproductor para iniciar la grabación.';
         });
       };
@@ -970,6 +1073,7 @@
       document.getElementById('voiceClose').addEventListener('click',()=>voiceDialog.close());
       voiceDialog.addEventListener('close',()=>{
         recording.pause();
+        stopMix();
         body.classList.remove('voice-open');
         if(resumeMusic) soundtrack.play().then(syncSoundToggle).catch(syncSoundToggle);
         resumeMusic=false;
@@ -978,13 +1082,16 @@
         soundtrack.pause();
         voicePlay.textContent='Pausar';
         voiceStatus.textContent='';
+        startMix();
       });
-      recording.addEventListener('pause',()=>{voicePlay.textContent='Escuchar';});
+      recording.addEventListener('pause',()=>{voicePlay.textContent='Escuchar';stopMix();});
       recording.addEventListener('ended',()=>{
+        stopMix();
         voicePlay.textContent='Volver a escuchar';
         voiceStatus.textContent='Fin de la grabación.';
       });
       recording.addEventListener('error',()=>{
+        stopMix();
         voiceStatus.textContent='No se ha podido cargar el audio. Puedes volver a intentarlo o descargar la grabación.';
       });
 
