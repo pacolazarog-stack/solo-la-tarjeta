@@ -1200,11 +1200,14 @@
       document.getElementById('cenicientoLink').addEventListener('click',event=>{
         if(event.button>0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
+        if(!cenicientoFrame.hidden || sonrisaLeaving)return;
+        sonrisaLeaving=false;
+        cenicientoFrame.classList.remove('sonrisa-visible');cenicientoFrame.classList.add('sonrisa-transition');body.classList.add('sonrisa-open');
         anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title='CENICIENTO · leer o escuchar';
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
         cenicientoFrame.hidden=false;
-        if(!cenicientoFrame.getAttribute('src'))cenicientoFrame.src='../ceniciento/?music=parent&v=20261005-pulse24';
+        if(!cenicientoFrame.getAttribute('src'))cenicientoFrame.src='../ceniciento/?music=parent&v=20261006-fundido7';
         if(window.location.hash!=='#ceniciento')window.history.pushState({ceniciento:true},'','#ceniciento');
       });
       let sonrisaLeaving=false;
@@ -1253,7 +1256,17 @@
           setTimeout(()=>{closeCeniciento();sonrisaLeaving=false;window.scrollTo({top:0,left:0,behavior:'auto'});window.history.replaceState(null,'',window.location.pathname+window.location.search);},duration);
           return;
         }
-        if(data.type==='close'){closeCeniciento();window.history.replaceState(null,'',window.location.pathname+window.location.search);return;}
+        if(data.type==='close'){
+          if(sonrisaLeaving)return;
+          sonrisaLeaving=true;
+          cenicientoFrame.classList.remove('sonrisa-visible');
+          const duration=window.matchMedia('(prefers-reduced-motion: reduce)').matches?220:7100;
+          setTimeout(()=>{
+            closeCeniciento();sonrisaLeaving=false;
+            window.history.replaceState(null,'',window.location.pathname+window.location.search);
+          },duration);
+          return;
+        }
         if(data.type==='level' && Number.isFinite(data.level)){
           const level=Math.max(0,Math.min(.8,data.level));ambientLevel=level;showMusicLevel(level);fadeMusicTo(musicEnabled.checked?level:0,.5);
         }
