@@ -265,10 +265,12 @@
 
     .entry-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
     .voice-launch{
-      position:fixed;right:max(16px,env(safe-area-inset-right));
-      top:max(16px,env(safe-area-inset-top));z-index:36;margin:0;
+      position:absolute;left:50%;top:50svh;z-index:36;margin:0;
+      transform:translate(-50%,-50%);
       opacity:0;visibility:hidden;pointer-events:none;
+      transition:opacity 1.4s ease,visibility 1.4s ease,background .25s ease,box-shadow .25s ease;
     }
+    .voice-launch:hover,.voice-launch:focus-visible{transform:translate(-50%,calc(-50% - 1px))}
     body.reading-ready .voice-launch{opacity:1;visibility:visible;pointer-events:auto}
     .voice-dialog{
       width:min(440px,calc(100% - 32px));max-height:calc(100svh - 32px);
@@ -654,7 +656,8 @@
 </head>
 
 <body class="locked">
-  <audio id="soundtrack" preload="auto" loop src="ana-klaudya.m4a"></audio>
+  <audio id="voiceMusic" preload="auto" loop src="ana-klaudya.m4a"></audio>
+  <audio id="nameAudio" preload="auto" src="nombre.m4a"></audio>
 
   <div class="world" aria-hidden="true">
     <div class="layer layer-green"></div>
@@ -678,10 +681,9 @@
   <button class="entry-button voice-launch" id="voiceLaunch" type="button" aria-haspopup="dialog">Voz</button>
   <dialog class="voice-dialog" id="voiceDialog" aria-labelledby="voiceTitle">
     <h2 id="voiceTitle">ANA KLAUDYA</h2>
-    <audio id="recording" controls preload="metadata" src="voz.m4a" aria-label="Recitado de Ana Klaudya">
-      <a href="voz.m4a">Escuchar la grabación</a>
+    <audio id="recording" controls preload="metadata" src="recitado.m4a" aria-label="Recitado de Ana Klaudya">
+      <a href="recitado.m4a">Escuchar la grabación</a>
     </audio>
-    <audio id="voiceMusic" preload="metadata" loop src="ana-klaudya.m4a"></audio>
     <div class="voice-mix">
       <label><input id="musicEnabled" type="checkbox" checked> Acompañar con música</label>
       <p>Voz en primer plano</p>
@@ -694,7 +696,7 @@
       <button class="entry-button" id="voicePlay" type="button">Activar voz</button>
       <button class="entry-button" id="voiceClose" type="button">Volver</button>
     </div>
-    <a class="voice-download" href="voz.m4a" download="Ana-Klaudya.m4a">Descargar grabación</a>
+    <a class="voice-download" href="recitado.m4a" download="Ana-Klaudya.m4a">Descargar grabación</a>
   </dialog>
 
   <div class="name-prelude" id="namePrelude" aria-hidden="true">
@@ -781,12 +783,13 @@
       const recording = document.getElementById('recording');
       const voicePlay = document.getElementById('voicePlay');
       const voiceStatus = document.getElementById('voiceStatus');
-      const requestVoiceAfterEntry=new URLSearchParams(window.location.search).get('voz')==='1';
+      const nameAudio = document.getElementById('nameAudio');
       const voiceMusic = document.getElementById('voiceMusic');
       const musicEnabled = document.getElementById('musicEnabled');
       const musicLevel = document.getElementById('musicLevel');
-      let mixContext=null, musicGain=null, voiceAnalyser=null, musicAnalyser=null;
+      let mixContext=null, musicGain=null, voiceAnalyser=null, musicAnalyser=null, nameAnalyser=null;
       let voiceSamples=null, musicSamples=null, mixFrame=0;
+      let nameFrame=0, namePriming=false;
       let voicePending=false, voicePriming=false, voiceAllowed=false;
       let voiceTimer=null, voiceRequest=0;
       const TRANSITION_SECONDS=4;
@@ -803,11 +806,14 @@
       };
       const stopMonitor=()=>{cancelAnimationFrame(mixFrame);mixFrame=0;};
       const monitorMix=()=>{
-        if(recording.paused || !musicEnabled.checked || !voiceDialog.open || voicePending){stopMonitor();return;}
-        voiceAnalyser.getFloatTimeDomainData(voiceSamples);
+        const speakingName=!nameAudio.paused && !namePriming;
+        const speakingRecording=!recording.paused && voiceDialog.open && !voicePriming;
+        if((!speakingName && !speakingRecording) || !musicEnabled.checked || voicePending){stopMonitor();return;}
+        const activeAudio=speakingName ? nameAudio : recording;
+        (speakingName ? nameAnalyser : voiceAnalyser).getFloatTimeDomainData(voiceSamples);
         musicAnalyser.getFloatTimeDomainData(musicSamples);
         const voiceEnergy=rms(voiceSamples),musicEnergy=rms(musicSamples);
-        const target=recording.muted || recording.volume===0 ? 0 :
+        const target=activeAudio.muted || activeAudio.volume===0 ? 0 :
           Math.min(voiceBedLimit(),voiceEnergy>.003 ? voiceEnergy*.30/Math.max(.001,musicEnergy) : voiceBedLimit());
         const gain=musicGain.gain,now=mixContext.currentTime;
         const current=gain.value;
@@ -822,6 +828,7 @@
           if(!Context) return false;
           mixContext=new Context();
           voiceAnalyser=mixContext.createAnalyser();musicAnalyser=mixContext.createAnalyser();
+          nameAnalyser=mixContext.createAnalyser();nameAnalyser.fftSize=1024;
           voiceAnalyser.fftSize=1024;musicAnalyser.fftSize=1024;
           voiceSamples=new Float32Array(1024);musicSamples=new Float32Array(1024);
           musicGain=mixContext.createGain();musicGain.gain.value=voiceMusic.paused ? 0 : voiceMusic.volume;
@@ -829,6 +836,8 @@
           voiceDelay.delayTime.value=.12;musicDelay.delayTime.value=.12;
           mixContext.createMediaElementSource(recording).connect(voiceAnalyser);
           voiceAnalyser.connect(voiceDelay).connect(mixContext.destination);
+          mixContext.createMediaElementSource(nameAudio).connect(nameAnalyser);
+          nameAnalyser.connect(mixContext.destination);
           mixContext.createMediaElementSource(voiceMusic).connect(musicAnalyser);
           musicAnalyser.connect(musicGain).connect(musicDelay).connect(mixContext.destination);
           voiceMusic.volume=1;
@@ -843,7 +852,8 @@
         if(!musicEnabled.checked) return Promise.resolve(false);
         voiceMusic.muted=false;
         if(!mixContext) voiceMusic.volume=musicLimit();
-        return voiceMusic.play().then(()=>{
+        const playback=voiceMusic.paused ? voiceMusic.play() : Promise.resolve();
+        return playback.then(()=>{
           ambientButtons(false);soundStarted=true;body.classList.add('sound-ready');syncSoundToggle();return true;
         }).catch(()=>{ambientButtons(true);return false;});
       };
@@ -895,7 +905,7 @@
         });
       };
       const startMix=()=>{
-        if(voicePriming || voicePending || recording.paused) return;
+        if(voicePending || (recording.paused && nameAudio.paused) || voicePriming || namePriming) return;
         if(!musicEnabled.checked){fadeMusicTo(0);return;}
         if(!prepareMix()) return;
         ensureAmbientMusic();
@@ -916,6 +926,24 @@
         if(!voicePending && recording.paused) fadeMusicTo(musicEnabled.checked ? musicLimit() : 0,.5);
       });
       recording.addEventListener('playing',startMix);
+      const syncNameWords=()=>{
+        if(namePriming || !body.classList.contains('prelude')) return;
+        if(nameAudio.currentTime>=.19) namePrelude.classList.add('show-ana');
+        if(nameAudio.currentTime>=4.79) namePrelude.classList.add('show-klaudya');
+        if(!nameAudio.paused) nameFrame=requestAnimationFrame(syncNameWords);
+      };
+      const primeNameAudio=()=>{
+        namePriming=true;nameAudio.muted=true;
+        return nameAudio.play().then(()=>{
+          nameAudio.pause();nameAudio.currentTime=0;nameAudio.muted=false;namePriming=false;return true;
+        }).catch(()=>{nameAudio.muted=false;namePriming=false;return false;});
+      };
+      nameAudio.addEventListener('playing',()=>{
+        if(!namePriming){startMix();cancelAnimationFrame(nameFrame);syncNameWords();}
+      });
+      nameAudio.addEventListener('ended',()=>{
+        cancelAnimationFrame(nameFrame);nameFrame=0;restoreAmbient();
+      });
       const lines = [...document.querySelectorAll('.line')];
       const voiceStart = document.getElementById('voiceStart');
       const embraceStart = document.getElementById('embraceStart');
@@ -945,17 +973,32 @@
 
       const startSound=()=>{
         musicEnabled.checked=true;
-        prepareMix();fadeMusicTo(musicLimit(),.6);
+        prepareMix();
+        if(voiceMusic.paused && musicGain){
+          musicGain.gain.cancelScheduledValues(mixContext.currentTime);
+          musicGain.gain.setValueAtTime(musicLimit(),mixContext.currentTime);
+        }else fadeMusicTo(musicLimit(),.6);
         return ensureAmbientMusic();
       };
 
-      const beginPrelude=()=>{
+      const beginPrelude=(nameReady)=>{
         body.classList.add('prelude');
         entry.classList.add('is-open');
         namePrelude.classList.remove('show-ana','show-klaudya','fade');
 
-        setTimeout(()=>namePrelude.classList.add('show-ana'),2600);
-        setTimeout(()=>namePrelude.classList.add('show-klaudya'),7200);
+        if(nameReady){
+          fadeMusicTo(voiceBedLimit(),2.4);
+          setTimeout(()=>{
+            nameAudio.play().catch(()=>{
+              setTimeout(()=>namePrelude.classList.add('show-ana'),190);
+              setTimeout(()=>namePrelude.classList.add('show-klaudya'),4790);
+              restoreAmbient();
+            });
+          },2410);
+        }else{
+          setTimeout(()=>namePrelude.classList.add('show-ana'),2600);
+          setTimeout(()=>namePrelude.classList.add('show-klaudya'),7200);
+        }
         setTimeout(()=>namePrelude.classList.add('fade'),12500);
 
         setTimeout(()=>{
@@ -966,16 +1009,15 @@
           releaseY=window.scrollY;
           readingReady=true;
           hasScrolled=false;
-          if(requestVoiceAfterEntry) openVoice();
-        },15000);
+        },14000);
       };
 
       entryButton.addEventListener('click',async()=>{
         entryButton.disabled=true;
-        const started=await startSound();
+        const [started,nameReady]=await Promise.all([startSound(),primeNameAudio()]);
 
         if(started){
-          beginPrelude();
+          beginPrelude(nameReady);
         }else{
           entryButton.disabled=false;
           entryButton.textContent='Volver a intentar';
