@@ -25,6 +25,19 @@ jobs:
         uses: actions/checkout@v4
       - name: Configurar Pages
         uses: actions/configure-pages@v5
+      - name: Preparar voz de Ceniciento
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          parts = sorted(Path('ceniciento/voz-parts').glob('*.bin'))
+          if len(parts) != 14:
+              raise RuntimeError('Faltan partes de la voz de Ceniciento')
+          audio = b''.join(part.read_bytes() for part in parts)
+          if hashlib.sha256(audio).hexdigest() != '5bf334d4dcfcffa240d455719795ee9687293395467b93b220219fb8b158d55b':
+              raise RuntimeError('La grabación no coincide con el audio completo')
+          Path('ceniciento/ceniciento-voz-completa.mp3').write_bytes(audio)
+          PY
       - name: Empaquetar sitio
         uses: actions/upload-pages-artifact@v3
         with:
