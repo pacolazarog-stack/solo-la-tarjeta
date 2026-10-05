@@ -14,7 +14,9 @@ location.replace('../elegia-breve/#sonrisa');
 :root{color-scheme:dark;--ink:#f8eee4;--rose:#e9b5be;--gold:#c8ae83;--muted:#c0afb8}
 *{box-sizing:border-box}
 body{margin:0;background:#17121b;color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100svh}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 12% 30%,#6d34412e,transparent 56%),radial-gradient(ellipse at 85% 70%,#89704b20,transparent 55%);z-index:-1}
+body{isolation:isolate}
+body:after{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:url('./labios-ana.jpg') center 52%/cover no-repeat}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(23,18,27,.90),rgba(23,18,27,.72) 48%,rgba(23,18,27,.83)),radial-gradient(ellipse at 50% 45%,transparent,#17121b66);z-index:-1}
 header{max-width:1180px;margin:auto;padding:28px 6vw;display:flex;justify-content:space-between;gap:20px;font:11px/1.5 system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase}
 a{color:var(--muted);text-decoration:none}a:hover{color:var(--ink)}
 main{max-width:1160px;margin:0 auto;padding:45px 6vw 80px;display:grid;grid-template-columns:.8fr 1.2fr;gap:7vw;align-items:start}
@@ -38,7 +40,7 @@ button.primary{background:var(--rose);color:#24151d;border-color:var(--rose)}
 footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:10px/1.6 system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase}
 @media(max-width:760px){header{padding:22px 7vw}main{display:block;padding:15px 7vw 40px}.intro{position:static;padding-top:10px}h1{font-size:64px}.subtitle{max-width:none}.controls{margin-top:24px}.poem{padding:22px 0 0;border-left:none;border-top:1px solid #c8ae8338;margin-top:30px;font-size:clamp(18px,4.8vw,25px)}.stanza{margin-bottom:28px}footer{padding:0 7vw 25px}}
 @media(prefers-reduced-motion:reduce){.line{transition:none}.line.hidden-line{filter:none}}
-@media print{body{background:white;color:black}body:before,header,.controls,.status,footer{display:none}main{display:block;padding:0}.intro{position:static;padding:0}h1{font-size:32px}h1 em,.kicker,.subtitle,.accent,.ending,.signature{color:black}.rule{display:none}.poem{border:0;padding:0;font-size:16px}.line.hidden-line{opacity:1;filter:none}}
+@media print{body{background:white;color:black}body:after,body:before,header,.controls,.status,footer{display:none}main{display:block;padding:0}.intro{position:static;padding:0}h1{font-size:32px}h1 em,.kicker,.subtitle,.accent,.ending,.signature{color:black}.rule{display:none}.poem{border:0;padding:0;font-size:16px}.line.hidden-line{opacity:1;filter:none}}
 .music-controls{display:grid;gap:13px;margin-top:24px;color:var(--muted);font:12px/1.5 system-ui,sans-serif;max-width:260px}.music-controls button{justify-self:start}.music-controls button[hidden]{display:none}.music-controls input{accent-color:var(--rose)}.music-controls label{display:flex;gap:10px;align-items:center}.music-controls input[type=range]{width:100%;min-height:28px}.music-controls output{margin-left:auto}@media print{.music-controls{display:none}}
 </style>
 </head>
