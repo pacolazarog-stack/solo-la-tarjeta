@@ -314,7 +314,7 @@
     body.ana-navigation-ready main{padding-bottom:100px}
     .ceniciento-frame{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#100e0d}
     .ceniciento-frame[hidden]{display:none}
-    .ceniciento-frame.sonrisa-transition{opacity:0;transition:opacity 3.2s ease-in-out;background:transparent}
+    .ceniciento-frame.sonrisa-transition{opacity:0;transition:opacity 7s ease-in-out;background:transparent}
     .ceniciento-frame.sonrisa-transition.sonrisa-visible{opacity:1}
     @media(prefers-reduced-motion:reduce){.ceniciento-frame.sonrisa-transition{transition-duration:.2s}}
     html.ceniciento-open,body.ceniciento-open{overflow:hidden}
@@ -1216,7 +1216,7 @@
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
         cenicientoFrame.hidden=false;
-        cenicientoFrame.src='../sonrisa/?music=parent&v=20261006-fundido';
+        cenicientoFrame.src='../sonrisa/?music=parent&v=20261006-fundido7';
         if(window.location.hash!=='#sonrisa')window.history.pushState({sonrisa:true},'','#sonrisa');
       };
       document.getElementById('anaSonrisa').addEventListener('click',openSonrisa);
@@ -1249,7 +1249,7 @@
           readingReady=false;hasScrolled=false;
           namePrelude.classList.add('fade');portraitFinale.setAttribute('aria-hidden','true');
           cenicientoFrame.classList.remove('sonrisa-visible');
-          const duration=window.matchMedia('(prefers-reduced-motion: reduce)').matches?220:3300;
+          const duration=window.matchMedia('(prefers-reduced-motion: reduce)').matches?220:7100;
           setTimeout(()=>{closeCeniciento();sonrisaLeaving=false;window.scrollTo({top:0,left:0,behavior:'auto'});window.history.replaceState(null,'',window.location.pathname+window.location.search);},duration);
           return;
         }
@@ -1268,7 +1268,8 @@
       cenicientoFrame.addEventListener('load',()=>{
         sendCenicientoMusicState();
         if(body.classList.contains('sonrisa-open')&&!sonrisaLeaving){
-          requestAnimationFrame(()=>requestAnimationFrame(()=>cenicientoFrame.classList.add('sonrisa-visible')));
+          cenicientoFrame.getBoundingClientRect();
+          setTimeout(()=>{if(body.classList.contains('sonrisa-open')&&!sonrisaLeaving)cenicientoFrame.classList.add('sonrisa-visible');},350);
         }
       });
 
