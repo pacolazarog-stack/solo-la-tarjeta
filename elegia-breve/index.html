@@ -308,7 +308,7 @@
       display:block;width:100%;height:100%;object-fit:contain;
       opacity:0;transition:opacity 6s ease 6s;
     }
-    .ana-navigation{position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:45;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;width:max-content;max-width:calc(100% - 28px);padding:10px;border:1px solid rgba(23,63,50,.2);border-radius:22px;background:rgba(238,241,233,.94);box-shadow:0 8px 30px rgba(0,0,0,.15)}
+    .ana-navigation{position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;width:max-content;max-width:calc(100% - 28px);padding:10px;border:1px solid rgba(23,63,50,.2);border-radius:22px;background:rgba(238,241,233,.94);box-shadow:0 8px 30px rgba(0,0,0,.15)}
     .ana-navigation[hidden]{display:none}.ana-navigation .entry-button{margin:0;padding:.85em 1.2em;letter-spacing:.08em;font-size:.68rem}
     body.ana-navigation-ready main{padding-bottom:100px}
     .ceniciento-frame{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#100e0d}
@@ -1179,7 +1179,7 @@
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
         cenicientoFrame.hidden=false;
-        if(!cenicientoFrame.getAttribute('src'))cenicientoFrame.src='../ceniciento/?music=parent&v=20261005-clarity22';
+        if(!cenicientoFrame.getAttribute('src'))cenicientoFrame.src='../ceniciento/?music=parent&v=20261005-clarity23';
         if(window.location.hash!=='#ceniciento')window.history.pushState({ceniciento:true},'','#ceniciento');
       });
       const showAnaText=()=>{
@@ -1187,8 +1187,8 @@
         cancelVoiceStart();recording.pause();nameAudio.pause();
         entry.classList.add('is-open');body.classList.remove('locked','prelude','portrait-revealed');
         portraitFinale.setAttribute('aria-hidden','true');namePrelude.classList.add('fade');
-        body.classList.add('reading-ready');readingReady=true;hasScrolled=false;
-        window.scrollTo({top:0,left:0,behavior:'auto'});releaseY=window.scrollY;
+        body.classList.add('reading-ready');readingReady=true;hasScrolled=true;
+        window.scrollTo({top:window.innerHeight*.25,left:0,behavior:'auto'});releaseY=window.scrollY;revealLines();
       };
       document.getElementById('anaRead').addEventListener('click',showAnaText);
       document.getElementById('anaVoice').addEventListener('click',()=>{showAnaText();openVoice();});
