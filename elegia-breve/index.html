@@ -287,7 +287,6 @@
     .voice-dialog audio{display:block;width:100%;margin:18px 0}
     .voice-dialog audio:not([controls]){display:none}
     .voice-status{min-height:1.4em;font:400 .85rem/1.4 Arial,Helvetica,sans-serif;color:#375548}
-    .voice-download{display:inline-block;margin-top:20px;color:#173f32;font-size:.9rem;text-underline-offset:4px}
     .voice-mix{margin:22px 0;padding:16px;border:1px solid rgba(23,63,50,.16);border-radius:12px;text-align:left;font:400 .88rem/1.5 Arial,Helvetica,sans-serif}
     .voice-mix label{display:flex;align-items:center;gap:10px}
     .voice-mix input[type="checkbox"]{width:18px;height:18px;accent-color:#375548}
@@ -689,8 +688,8 @@
   <button class="entry-button voice-launch" id="voiceLaunch" type="button" aria-haspopup="dialog">Voz</button>
   <dialog class="voice-dialog" id="voiceDialog" aria-labelledby="voiceTitle">
     <h2 id="voiceTitle">ANA KLAUDYA</h2>
-    <audio id="recording" controls preload="metadata" src="recitado.m4a" aria-label="Recitado de Ana Klaudya">
-      <a href="recitado.m4a">Escuchar la grabación</a>
+    <audio id="recording" controls controlslist="nodownload" preload="metadata" src="recitado.m4a" aria-label="Recitado de Ana Klaudya">
+      Tu navegador no admite la reproducción de audio.
     </audio>
     <div class="voice-mix">
       <label><input id="musicEnabled" type="checkbox" checked> Acompañar con música</label>
@@ -703,7 +702,6 @@
       <button class="entry-button" id="voicePlay" type="button">Activar voz</button>
       <button class="entry-button" id="voiceClose" type="button">Volver</button>
     </div>
-    <a class="voice-download" href="recitado.m4a" download="Ana-Klaudya.m4a">Descargar grabación</a>
   </dialog>
 
   <div class="name-prelude" id="namePrelude" aria-hidden="true">
@@ -911,6 +909,7 @@
         fadeMusicTo(musicEnabled.checked ? musicLimit() : 0,.5);
       });
       recording.addEventListener('playing',startMix);
+      recording.addEventListener('contextmenu',event=>event.preventDefault());
       const syncNameWords=()=>{
         if(namePriming || !body.classList.contains('prelude')) return;
         if(nameAudio.currentTime>=.19) namePrelude.classList.add('show-ana');
@@ -1049,7 +1048,7 @@
       });
       recording.addEventListener('error',()=>{
         cancelVoiceStart();
-        voiceStatus.textContent='No se ha podido cargar el audio. Puedes volver a intentarlo o descargar la grabación.';
+        voiceStatus.textContent='No se ha podido cargar el audio. Puedes volver a intentarlo.';
       });
 
       const startWarmPrelude=()=>{
