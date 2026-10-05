@@ -15,7 +15,7 @@ location.replace('../elegia-breve/#sonrisa');
 *{box-sizing:border-box}
 body{margin:0;background:#17121b;color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100svh}
 body{isolation:isolate}
-body:after{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:url('./labios-ana.jpg') center 52%/cover no-repeat}
+body:after{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:url('./labios-ana.jpg') center 52%/cover no-repeat;animation:labiosHeartbeat 1.85s linear infinite;animation-delay:var(--pulse-delay,0s);transform-origin:50% 52%;will-change:filter,transform}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(23,18,27,.90),rgba(23,18,27,.72) 48%,rgba(23,18,27,.83)),radial-gradient(ellipse at 50% 45%,transparent,#17121b66);z-index:-1}
 header{max-width:1180px;margin:auto;padding:28px 6vw;display:flex;justify-content:space-between;gap:20px;font:11px/1.5 system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase}
 a{color:var(--muted);text-decoration:none}a:hover{color:var(--ink)}
@@ -42,6 +42,14 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 @media(prefers-reduced-motion:reduce){.line{transition:none}.line.hidden-line{filter:none}}
 @media print{body{background:white;color:black}body:after,body:before,header,.controls,.status,footer{display:none}main{display:block;padding:0}.intro{position:static;padding:0}h1{font-size:32px}h1 em,.kicker,.subtitle,.accent,.ending,.signature{color:black}.rule{display:none}.poem{border:0;padding:0;font-size:16px}.line.hidden-line{opacity:1;filter:none}}
 .music-controls{display:grid;gap:13px;margin-top:24px;color:var(--muted);font:12px/1.5 system-ui,sans-serif;max-width:260px}.music-controls button{justify-self:start}.music-controls button[hidden]{display:none}.music-controls input{accent-color:var(--rose)}.music-controls label{display:flex;gap:10px;align-items:center}.music-controls input[type=range]{width:100%;min-height:28px}.music-controls output{margin-left:auto}@media print{.music-controls{display:none}}
+@keyframes labiosHeartbeat{
+0%,100%{filter:brightness(1);transform:scale(1)}
+10%{filter:brightness(1.07);transform:scale(1.006)}
+18%{filter:brightness(1.01);transform:scale(1.001)}
+33%{filter:brightness(1.05);transform:scale(1.004)}
+44%{filter:brightness(1);transform:scale(1)}
+}
+@media(prefers-reduced-motion:reduce){body:after{animation:none}}
 </style>
 </head>
 <body>
@@ -102,6 +110,10 @@ document.getElementById('backAna').addEventListener('click',event=>{
 });
 window.addEventListener('message',event=>{
  if(event.origin!==location.origin || event.source!==window.parent || event.data?.channel!=='ceniciento-music-v1' || event.data.type!=='state')return;
+ if(Number.isFinite(event.data.pulseTime) && !document.body.dataset.pulseSynced){
+ document.documentElement.style.setProperty('--pulse-delay',(-((event.data.pulseTime%1850)/1000))+'s');
+ document.body.dataset.pulseSynced='true';
+}
  musicLevel.value=String(Math.round(Math.max(0,Math.min(.8,Number(event.data.level)||0))*100));
  musicValue.textContent=musicLevel.value+' %';musicEnabled.checked=!!event.data.enabled;
  musicStart.hidden=!musicEnabled.checked || !!event.data.playing;
