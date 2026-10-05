@@ -737,6 +737,7 @@
     <button class="entry-button" id="anaRead" type="button">Leer Ana</button>
     <button class="entry-button" id="anaVoice" type="button">Escuchar Ana</button>
     <button class="entry-button" id="anaCeniciento" type="button">Ceniciento</button>
+    <button class="entry-button" id="anaSonrisa" type="button">En tus labios</button>
   </nav>
 
   <iframe id="cenicientoFrame" class="ceniciento-frame" title="Ceniciento" allow="autoplay" hidden></iframe>
@@ -1203,6 +1204,15 @@
         if(!cenicientoFrame.getAttribute('src'))cenicientoFrame.src='../ceniciento/?music=parent&v=20261005-pulse24';
         if(window.location.hash!=='#ceniciento')window.history.pushState({ceniciento:true},'','#ceniciento');
       });
+      const openSonrisa=()=>{
+        anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title='EN TUS LABIOS';
+        voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
+        recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
+        cenicientoFrame.hidden=false;
+        cenicientoFrame.src='../sonrisa/?music=parent&v=20261005-continuidad';
+        if(window.location.hash!=='#sonrisa')window.history.pushState({sonrisa:true},'','#sonrisa');
+      };
+      document.getElementById('anaSonrisa').addEventListener('click',openSonrisa);
       const showAnaText=()=>{
         if(voiceDialog.open)voiceDialog.close();
         cancelVoiceStart();recording.pause();nameAudio.pause();
@@ -1215,8 +1225,9 @@
       document.getElementById('anaVoice').addEventListener('click',()=>{showAnaText();openVoice();});
       document.getElementById('anaCeniciento').addEventListener('click',()=>document.getElementById('cenicientoLink').click());
       window.addEventListener('popstate',()=>{
-        if(window.location.hash!=='#ceniciento')closeCeniciento();
-        else document.getElementById('cenicientoLink').click();
+        if(window.location.hash==='#sonrisa')openSonrisa();
+        else if(window.location.hash==='#ceniciento')document.getElementById('cenicientoLink').click();
+        else closeCeniciento();
       });
       window.addEventListener('message',event=>{
         if(event.origin!==window.location.origin || event.source!==cenicientoFrame.contentWindow || event.data?.channel!=='ceniciento-music-v1')return;
@@ -1376,6 +1387,7 @@
       renderWorld();
       ensureAmbientMusic();
       if(window.location.hash==='#ceniciento')document.getElementById('cenicientoLink').click();
+      else if(window.location.hash==='#sonrisa')openSonrisa();
     })();
   </script>
 </body>
