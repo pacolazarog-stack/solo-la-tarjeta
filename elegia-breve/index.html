@@ -300,18 +300,34 @@
       background:#1b1711;opacity:0;visibility:hidden;
       transition:opacity 6s ease,visibility 6s ease;
     }
+    .portrait-image-area{
+      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    }
+    .portrait-image-wrap{position:relative;width:min(100%,59.9609375svh);aspect-ratio:1228/2048}
     .portrait-finale img{
       display:block;width:100%;height:100%;object-fit:contain;
       opacity:0;transition:opacity 6s ease 6s;
     }
-    body.voice-open .portrait-finale img{width:calc(100% - 480px)}
+    .portrait-question{
+      position:absolute;left:30%;top:44%;transform:translate(-50%,-50%);
+      display:grid;place-items:center;width:48px;height:48px;border-radius:50%;
+      border:1px solid rgba(255,246,225,.65);background:rgba(238,241,233,.92);color:#342719;
+      font:400 2rem/1 Georgia,"Times New Roman",serif;text-decoration:none;
+      box-shadow:0 5px 22px rgba(0,0,0,.24);cursor:pointer;
+      opacity:0;visibility:hidden;pointer-events:none;
+      transition:opacity 1.4s ease 13s,visibility 0s linear 13s;
+    }
+    .portrait-question:hover{background:#fff9ec}
+    .portrait-question:focus-visible{outline:3px solid #fff9ec;outline-offset:4px}
+    body.voice-open .portrait-image-area{width:calc(100% - 480px)}
     body.portrait-revealed .portrait-finale{opacity:1;visibility:visible}
     body.portrait-revealed .portrait-finale img{opacity:1}
+    body.portrait-revealed .portrait-question{opacity:1;visibility:visible;pointer-events:auto}
     body.reading-ready.portrait-revealed main{opacity:0;visibility:hidden;transition:opacity 6s ease,visibility 6s ease}
     @media(max-width:900px){
       body.voice-open .voice-dialog{position:relative;top:auto;bottom:auto;right:auto;margin:24px 16px 0 auto}
       body.voice-open main{width:calc(100% - 34px);margin:0 auto;padding-top:20svh}
-      body.voice-open .portrait-finale img{width:100%}
+      body.voice-open .portrait-image-area{width:100%}
     }
 
     /* PRELUDIO ANA -> KLAUDYA */
@@ -690,7 +706,12 @@
   </div>
 
   <div class="portrait-finale" id="portraitFinale" aria-hidden="true">
-    <img id="anaPortrait" src="ana-klaudya-fotografia.jpg" alt="Ana Klaudya" decoding="async">
+    <div class="portrait-image-area">
+      <div class="portrait-image-wrap">
+        <img id="anaPortrait" src="ana-klaudya-fotografia.jpg" alt="Ana Klaudya" decoding="async">
+        <a class="portrait-question" href="../ceniciento/" aria-label="Descubrir Ceniciento">?</a>
+      </div>
+    </div>
   </div>
 
   <div class="entry" id="entry" role="dialog" aria-modal="true" aria-label="Entrada a Ana Klaudya">
