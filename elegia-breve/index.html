@@ -316,10 +316,9 @@
     .ceniciento-frame[hidden]{display:none}
     .ceniciento-frame.sonrisa-transition{opacity:0;transition:opacity 3.2s ease-in-out;background:transparent}
     .ceniciento-frame.sonrisa-transition.sonrisa-visible{opacity:1}
-    body.ceniciento-open.sonrisa-open > :not(iframe):not(audio):not(script){visibility:visible}
     @media(prefers-reduced-motion:reduce){.ceniciento-frame.sonrisa-transition{transition-duration:.2s}}
     html.ceniciento-open,body.ceniciento-open{overflow:hidden}
-    body.ceniciento-open > :not(iframe):not(audio):not(script){visibility:hidden}
+    body.ceniciento-open:not(.sonrisa-open) > :not(iframe):not(audio):not(script){visibility:hidden}
     .portrait-question{
       position:absolute;left:30%;top:44%;transform:translate(-50%,-50%);
       display:grid;place-items:center;width:48px;height:48px;border-radius:50%;
