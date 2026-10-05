@@ -1156,14 +1156,14 @@
         cenicientoFrame.contentWindow.postMessage({channel:'ceniciento-music-v1',type:'state',level:musicLimit(),enabled:musicEnabled.checked && !voiceMusic.muted,playing:!voiceMusic.paused},window.location.origin);
       };
       const closeCeniciento=()=>{
-        cenicientoFrame.hidden=true;body.classList.remove('ceniciento-open');
+        cenicientoFrame.hidden=true;body.classList.remove('ceniciento-open');document.title='ANA KLAUDYA';
         // Unload narration only; the music remains in this document.
         cenicientoFrame.removeAttribute('src');
       };
       document.getElementById('cenicientoLink').addEventListener('click',event=>{
         if(event.button>0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
-        body.classList.add('ceniciento-open');
+        body.classList.add('ceniciento-open');document.title='CENICIENTO · leer o escuchar';
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
         cenicientoFrame.hidden=false;
@@ -1329,6 +1329,7 @@
       syncSoundToggle();
       renderWorld();
       ensureAmbientMusic();
+      if(window.location.hash==='#ceniciento')document.getElementById('cenicientoLink').click();
     })();
   </script>
 </body>
