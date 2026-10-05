@@ -269,7 +269,7 @@
       top:max(16px,env(safe-area-inset-top));z-index:36;margin:0;
       opacity:0;visibility:hidden;pointer-events:none;
     }
-    body.sound-ready .voice-launch{opacity:1;visibility:visible;pointer-events:auto}
+    body.reading-ready .voice-launch{opacity:1;visibility:visible;pointer-events:auto}
     .voice-dialog{
       width:min(440px,calc(100% - 32px));max-height:calc(100svh - 32px);
       padding:32px 24px;border:1px solid rgba(23,63,50,.22);border-radius:20px;
@@ -669,10 +669,8 @@
     <div class="entry-inner">
       <p class="entry-title">ANA KLAUDYA</p>
       <p class="entry-flag">flag</p>
-      <button class="entry-button" id="ambientStart" type="button" hidden>Activar música</button>
       <div class="entry-actions">
         <button class="entry-button" id="entryButton" type="button">Entrar</button>
-        <button class="entry-button" id="entryVoice" type="button" aria-haspopup="dialog">Voz</button>
       </div>
     </div>
   </div>
@@ -783,6 +781,7 @@
       const recording = document.getElementById('recording');
       const voicePlay = document.getElementById('voicePlay');
       const voiceStatus = document.getElementById('voiceStatus');
+      const requestVoiceAfterEntry=new URLSearchParams(window.location.search).get('voz')==='1';
       const voiceMusic = document.getElementById('voiceMusic');
       const musicEnabled = document.getElementById('musicEnabled');
       const musicLevel = document.getElementById('musicLevel');
@@ -838,7 +837,6 @@
         return true;
       };
       const ambientButtons=show=>{
-        document.getElementById('ambientStart').hidden=!show;
         document.getElementById('dialogMusicStart').hidden=!show;
       };
       const ensureAmbientMusic=()=>{
@@ -903,7 +901,7 @@
         ensureAmbientMusic();
         if(!mixFrame) monitorMix();
       };
-      [document.getElementById('ambientStart'),document.getElementById('dialogMusicStart')].forEach(button=>{
+      [document.getElementById('dialogMusicStart')].forEach(button=>{
         button.addEventListener('click',()=>{
           prepareMix();fadeMusicTo(recording.paused ? musicLimit() : voiceBedLimit(),.6);ensureAmbientMusic();
         });
@@ -968,6 +966,7 @@
           releaseY=window.scrollY;
           readingReady=true;
           hasScrolled=false;
+          if(requestVoiceAfterEntry) openVoice();
         },15000);
       };
 
@@ -994,12 +993,12 @@
       });
 
       const openVoice=(play=false)=>{
+        if(!readingReady) return;
         if(!voiceDialog.open){
           body.classList.add('voice-open');voiceDialog.showModal();
         }
         if(play) playRecording();
       };
-      document.getElementById('entryVoice').addEventListener('click',()=>openVoice(true));
       document.getElementById('voiceLaunch').addEventListener('click',()=>openVoice(true));
       voicePlay.addEventListener('click',()=>{
         if(voicePending) cancelVoiceStart();
@@ -1165,7 +1164,6 @@
 
       syncSoundToggle();
       renderWorld();
-      if(new URLSearchParams(window.location.search).get('voz')==='1') openVoice();
       ensureAmbientMusic();
     })();
   </script>
