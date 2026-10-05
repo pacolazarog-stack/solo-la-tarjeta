@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#17121b">
 <title>En tus labios · flag</title>
+<script>
+if(window.parent===window && new URLSearchParams(location.search).get('music')!=='parent'){
+location.replace('../elegia-breve/#sonrisa');
+}
+</script>
 <style>
 :root{color-scheme:dark;--ink:#f8eee4;--rose:#e9b5be;--gold:#c8ae83;--muted:#c0afb8}
 *{box-sizing:border-box}
@@ -34,10 +39,11 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 @media(max-width:760px){header{padding:22px 7vw}main{display:block;padding:15px 7vw 40px}.intro{position:static;padding-top:10px}h1{font-size:64px}.subtitle{max-width:none}.controls{margin-top:24px}.poem{padding:22px 0 0;border-left:none;border-top:1px solid #c8ae8338;margin-top:30px;font-size:clamp(18px,4.8vw,25px)}.stanza{margin-bottom:28px}footer{padding:0 7vw 25px}}
 @media(prefers-reduced-motion:reduce){.line{transition:none}.line.hidden-line{filter:none}}
 @media print{body{background:white;color:black}body:before,header,.controls,.status,footer{display:none}main{display:block;padding:0}.intro{position:static;padding:0}h1{font-size:32px}h1 em,.kicker,.subtitle,.accent,.ending,.signature{color:black}.rule{display:none}.poem{border:0;padding:0;font-size:16px}.line.hidden-line{opacity:1;filter:none}}
+.music-controls{display:grid;gap:13px;margin-top:24px;color:var(--muted);font:12px/1.5 system-ui,sans-serif;max-width:260px}.music-controls button{justify-self:start}.music-controls button[hidden]{display:none}.music-controls input{accent-color:var(--rose)}.music-controls label{display:flex;gap:10px;align-items:center}.music-controls input[type=range]{width:100%;min-height:28px}.music-controls output{margin-left:auto}@media print{.music-controls{display:none}}
 </style>
 </head>
 <body>
-<header><span>flag · poesía</span><a href="../">Volver al inicio ↗</a></header>
+<header><span>flag · poesía</span><a href="../elegia-breve/" id="backAna">Volver a Ana ↗</a></header>
 <main>
 <section class="intro" aria-labelledby="title">
 <div class="kicker">Una sonrisa · un poema</div>
@@ -49,6 +55,12 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 <button id="full" type="button">Poema completo</button>
 </div>
 <p class="status" id="status" role="status">A tu ritmo.</p>
+<div class="music-controls">
+<button id="musicStart" type="button">Activar música</button>
+<label><input id="musicEnabled" type="checkbox" checked> Música de fondo</label>
+<label for="musicLevel">Volumen <output id="musicValue">30 %</output></label>
+<input id="musicLevel" type="range" min="0" max="80" value="30">
+</div>
 </section>
 <article class="poem" aria-label="En tus labios">
 <p class="stanza">
@@ -76,6 +88,23 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 </main>
 <footer>En tus labios · octubre de 2026</footer>
 <script>
+const inheritedMusic=window.parent!==window && new URLSearchParams(location.search).get('music')==='parent';
+const musicLevel=document.getElementById('musicLevel'),musicEnabled=document.getElementById('musicEnabled'),musicValue=document.getElementById('musicValue'),musicStart=document.getElementById('musicStart');
+const sendMusic=type=>window.parent.postMessage({channel:'ceniciento-music-v1',type,level:Number(musicLevel.value)/100,enabled:musicEnabled.checked},location.origin);
+musicLevel.addEventListener('input',()=>{musicValue.textContent=musicLevel.value+' %';sendMusic('level')});
+musicEnabled.addEventListener('change',()=>sendMusic('enabled'));
+musicStart.addEventListener('click',()=>{musicEnabled.checked=true;sendMusic('enabled');sendMusic('start')});
+document.getElementById('backAna').addEventListener('click',event=>{
+ if(!inheritedMusic || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)return;
+ event.preventDefault();sendMusic('close');
+});
+window.addEventListener('message',event=>{
+ if(event.origin!==location.origin || event.source!==window.parent || event.data?.channel!=='ceniciento-music-v1' || event.data.type!=='state')return;
+ musicLevel.value=String(Math.round(Math.max(0,Math.min(.8,Number(event.data.level)||0))*100));
+ musicValue.textContent=musicLevel.value+' %';musicEnabled.checked=!!event.data.enabled;
+ musicStart.hidden=!musicEnabled.checked || !!event.data.playing;
+});
+if(inheritedMusic)sendMusic('ready');
 const lines=[...document.querySelectorAll('.line')];
 const paced=document.getElementById('paced'),full=document.getElementById('full'),status=document.getElementById('status');
 let timer=null,index=0,mode='full';
