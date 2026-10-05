@@ -694,7 +694,6 @@
     </audio>
     <div class="voice-mix">
       <label><input id="musicEnabled" type="checkbox" checked> Acompañar con música</label>
-      <p>Voz en primer plano</p>
       <div class="music-level"><label for="musicLevel">Nivel de música</label><output id="musicLevelValue" for="musicLevel">80 %</output></div>
       <input id="musicLevel" type="range" min="0" max="80" value="80" step="1" aria-label="Nivel de música">
     </div>
@@ -795,15 +794,18 @@
       const voiceMusic = document.getElementById('voiceMusic');
       const musicEnabled = document.getElementById('musicEnabled');
       const musicLevel = document.getElementById('musicLevel');
-      let mixContext=null, musicGain=null, voiceAnalyser=null, musicAnalyser=null;
-      let voiceSamples=null, musicSamples=null, mixFrame=0;
+      let mixContext=null, musicGain=null;
+      let ambientLevel=Number(musicLevel.value)/100;
       let nameFrame=0, namePriming=false;
       let voicePending=false, voicePriming=false, voiceAllowed=false;
       let voiceTimer=null, voiceRequest=0;
       const TRANSITION_SECONDS=4;
       const musicLimit=()=>Number(musicLevel.value)/100;
-      const voiceBedLimit=()=>Math.min(.10,musicLimit());
-      const rms=samples=>Math.sqrt(samples.reduce((sum,value)=>sum+value*value,0)/samples.length);
+      const voiceBedLimit=()=>musicLimit()*.8;
+      const showMusicLevel=level=>{
+        musicLevel.value=String(Math.round(level*100));
+        document.getElementById('musicLevelValue').textContent=musicLevel.value+' %';
+      };
       const fadeMusicTo=(target,seconds=TRANSITION_SECONDS)=>{
         if(musicGain){
           const gain=musicGain.gain,now=mixContext.currentTime;
@@ -812,38 +814,15 @@
           gain.linearRampToValueAtTime(target,now+seconds);
         }else voiceMusic.volume=target;
       };
-      const stopMonitor=()=>{cancelAnimationFrame(mixFrame);mixFrame=0;};
-      const monitorMix=()=>{
-        const speakingRecording=!recording.paused && voiceDialog.open && !voicePriming;
-        if(!speakingRecording || !musicEnabled.checked || voicePending){stopMonitor();return;}
-        voiceAnalyser.getFloatTimeDomainData(voiceSamples);
-        musicAnalyser.getFloatTimeDomainData(musicSamples);
-        const voiceEnergy=rms(voiceSamples),musicEnergy=rms(musicSamples);
-        const target=recording.muted || recording.volume===0 ? 0 :
-          Math.min(voiceBedLimit(),voiceEnergy>.003 ? voiceEnergy*.30/Math.max(.001,musicEnergy) : voiceBedLimit());
-        const gain=musicGain.gain,now=mixContext.currentTime;
-        const current=gain.value;
-        gain.cancelScheduledValues(now);
-        gain.setValueAtTime(current,now);
-        gain.setTargetAtTime(target,now,target<current ? .025 : 1.2);
-        mixFrame=requestAnimationFrame(monitorMix);
-      };
       const prepareMix=()=>{
         if(!mixContext){
           const Context=window.AudioContext || window.webkitAudioContext;
           if(!Context) return false;
           mixContext=new Context();
-          voiceAnalyser=mixContext.createAnalyser();musicAnalyser=mixContext.createAnalyser();
-          voiceAnalyser.fftSize=1024;musicAnalyser.fftSize=1024;
-          voiceSamples=new Float32Array(1024);musicSamples=new Float32Array(1024);
           musicGain=mixContext.createGain();musicGain.gain.value=voiceMusic.paused ? 0 : voiceMusic.volume;
-          const voiceDelay=mixContext.createDelay(.5),musicDelay=mixContext.createDelay(.5);
-          voiceDelay.delayTime.value=.12;musicDelay.delayTime.value=.12;
-          mixContext.createMediaElementSource(recording).connect(voiceAnalyser);
-          voiceAnalyser.connect(voiceDelay).connect(mixContext.destination);
+          mixContext.createMediaElementSource(recording).connect(mixContext.destination);
           mixContext.createMediaElementSource(nameAudio).connect(mixContext.destination);
-          mixContext.createMediaElementSource(voiceMusic).connect(musicAnalyser);
-          musicAnalyser.connect(musicGain).connect(musicDelay).connect(mixContext.destination);
+          mixContext.createMediaElementSource(voiceMusic).connect(musicGain).connect(mixContext.destination);
           voiceMusic.volume=1;
         }
         if(mixContext.state==='suspended') mixContext.resume().catch(()=>{});
@@ -862,9 +841,9 @@
         }).catch(()=>{ambientButtons(true);return false;});
       };
       const restoreAmbient=()=>{
-        stopMonitor();
+        showMusicLevel(ambientLevel);
         if(musicEnabled.checked){
-          fadeMusicTo(musicLimit());
+          fadeMusicTo(ambientLevel);
           ensureAmbientMusic();
         }else fadeMusicTo(0);
       };
@@ -877,7 +856,7 @@
         if(voicePending) return;
         const request=++voiceRequest,playhead=recording.ended ? 0 : recording.currentTime;
         const muted=recording.muted;
-        const canMix=prepareMix();
+        prepareMix();
         voicePending=true;voicePriming=true;voiceAllowed=false;
         voicePlay.textContent='Cancelar';
         voiceStatus.textContent='La música desciende suavemente…';
@@ -892,7 +871,9 @@
           recording.pause();recording.currentTime=playhead;recording.muted=muted;voicePriming=false;
           if(request!==voiceRequest) return;
           if(musicEnabled.checked){
-            fadeMusicTo(canMix ? voiceBedLimit() : 0);
+            const target=voiceBedLimit();
+            fadeMusicTo(target);
+            showMusicLevel(target);
           }
           voiceTimer=setTimeout(()=>{
             if(request!==voiceRequest || !voiceDialog.open) return;
@@ -913,21 +894,21 @@
         if(!musicEnabled.checked){fadeMusicTo(0);return;}
         if(!prepareMix()) return;
         ensureAmbientMusic();
-        if(!mixFrame) monitorMix();
       };
       [document.getElementById('dialogMusicStart')].forEach(button=>{
         button.addEventListener('click',()=>{
-          prepareMix();fadeMusicTo(recording.paused ? musicLimit() : voiceBedLimit(),.6);ensureAmbientMusic();
+          prepareMix();fadeMusicTo(musicLimit(),.6);ensureAmbientMusic();
         });
       });
       musicEnabled.addEventListener('change',()=>{
         if(musicEnabled.checked){
-          prepareMix();fadeMusicTo(recording.paused ? musicLimit() : voiceBedLimit());ensureAmbientMusic();startMix();
-        }else {stopMonitor();fadeMusicTo(0);ambientButtons(false);}
+          prepareMix();fadeMusicTo(musicLimit());ensureAmbientMusic();startMix();
+        }else {fadeMusicTo(0);ambientButtons(false);}
       });
       musicLevel.addEventListener('input',()=>{
+        ambientLevel=musicLimit();
         document.getElementById('musicLevelValue').textContent=musicLevel.value+' %';
-        if(!voicePending && recording.paused) fadeMusicTo(musicEnabled.checked ? musicLimit() : 0,.5);
+        fadeMusicTo(musicEnabled.checked ? musicLimit() : 0,.5);
       });
       recording.addEventListener('playing',startMix);
       const syncNameWords=()=>{
