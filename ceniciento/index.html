@@ -9,7 +9,7 @@
 <title>CENICIENTO · leer o escuchar</title>
 <script id="continuousHost">
 // Keep the soundtrack in one document, including visits directly to Ceniciento.
-if(window.parent===window){window.location.replace('../elegia-breve/?v=20261005-clarity21#ceniciento');}
+if(window.parent===window){window.location.replace('../elegia-breve/?v=20261005-clarity22#ceniciento');}
 </script>
 <style>
 :root{--gray:0;--prog:0;--clarity:0;color-scheme:dark}
@@ -19,7 +19,7 @@ body{font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia
 body.listen-mode{width:100%;height:100%;overflow:hidden}
 body.read-mode{min-height:100%;overflow-x:hidden}
 .bg{position:fixed;inset:-5%;z-index:0;overflow:hidden;background:#100e0d}
-.bg .age-background{width:100%;height:100%;object-fit:cover;transform:scale(1.07);filter:blur(calc(2px + 30px * (1 - var(--clarity)))) grayscale(var(--gray)) saturate(calc(1 - .72*var(--gray))) brightness(calc(.27 + .17*var(--clarity) - .07*var(--gray))) contrast(calc(1 + .18*var(--gray)));transition:filter .3s linear;position:absolute;inset:0;opacity:0}
+.bg .age-background{width:100%;height:100%;object-fit:cover;transform:scale(1.07);filter:blur(calc(32px * (1 - var(--clarity)))) grayscale(var(--gray)) saturate(calc(1 - .72*var(--gray))) brightness(calc(.27 + .17*var(--clarity) - .07*var(--gray))) contrast(calc(1 + .18*var(--gray)));transition:filter .3s linear;position:absolute;inset:0;opacity:0}
 .bg:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 28%,rgba(0,0,0,.08),rgba(0,0,0,.48) 64%,rgba(0,0,0,.80)),linear-gradient(to bottom,rgba(17,12,9,.22),rgba(7,7,8,.56));box-shadow:inset 0 0 14vw rgba(0,0,0,.62)}
 .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;background-image:radial-gradient(circle,rgba(255,255,255,.55) 0 .4px,transparent .55px);background-size:8px 8px;mix-blend-mode:soft-light}
 .portrait{position:fixed;z-index:3;left:50%;top:4.5svh;transform:translateX(-50%);width:min(62vw,470px);aspect-ratio:3/4;border-radius:25px;overflow:hidden;background:#211914;box-shadow:0 24px 95px rgba(0,0,0,.55),0 0 0 1px rgba(255,238,210,.15);transition:width .45s ease,left .45s ease,right .45s ease,top .45s ease,transform .45s ease,opacity .45s ease}
@@ -34,7 +34,7 @@ body.read-mode{min-height:100%;overflow-x:hidden}
 .read-mode .clarity-panel,.listen-mode .clarity-panel{display:block}.clarity-panel label{display:flex;justify-content:space-between;gap:8px}.clarity-panel input{display:block;width:100%;margin:8px 0;accent-color:#ead6b7}.clarity-panel button{font:inherit;color:inherit;background:transparent;border:1px solid rgba(255,255,255,.23);border-radius:20px;padding:5px 9px}
 .reveal-gate{display:none;position:fixed;z-index:21;bottom:7svh;left:50%;transform:translateX(-50%);width:min(620px,calc(100% - 30px));text-align:center;text-shadow:0 3px 18px #000}
 .revealing .reveal-gate{display:block}.reveal-gate p{font:500 .75rem/1.5 Arial,sans-serif;letter-spacing:.05em;color:rgba(255,248,238,.76)}.reveal-gate button{border:1px solid rgba(255,243,224,.50);background:rgba(36,27,21,.65);color:#fff4e7;border-radius:999px;padding:1em 1.8em;font:600 .7rem/1 Arial,sans-serif;letter-spacing:.1em}
-.revealing .karaoke,.revealing .reader,.revealing .voice-timeline{display:none!important}.revealing .portrait{left:50%;right:auto;top:4.5svh;transform:translateX(-50%);width:min(62vw,470px);opacity:1}.read-mode.revealing{height:100svh;overflow:hidden}
+.reveal-gate button:disabled{opacity:.38;cursor:wait}.revealing .karaoke,.revealing .reader,.revealing .voice-timeline{display:none!important}.revealing .portrait{left:50%;right:auto;top:4.5svh;transform:translateX(-50%);width:min(62vw,470px);opacity:1}.read-mode.revealing{height:100svh;overflow:hidden}
 .voice-timeline{display:none;position:fixed;z-index:13;right:max(15px,env(safe-area-inset-right));top:58px;width:min(240px,calc(100vw - 30px));padding:10px 13px;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(15,13,12,.64);font:500 .65rem/1.3 Arial,sans-serif;color:rgba(255,255,255,.75)}.listen-mode .voice-timeline{display:block}.voice-timeline label{display:flex;justify-content:space-between;gap:10px}.voice-timeline input{display:block;width:100%;margin:8px 0 0;accent-color:#ead6b7}
 .karaoke{position:fixed;z-index:7;left:50%;bottom:7.2svh;transform:translateX(-50%);width:min(calc(100% - 30px),850px);text-align:center;text-shadow:0 3px 18px rgba(0,0,0,.88);pointer-events:none}
 .line{transition:opacity .55s ease,transform .55s ease;min-height:1.5em}
@@ -100,7 +100,7 @@ body.read-mode{min-height:100%;overflow-x:hidden}
 <div class="voice-timeline"><label for="voiceSeek">Voz <span id="voiceTime">0:00 / 14:24</span></label><input id="voiceSeek" type="range" min="0" max="1000" step="1" value="0" aria-label="Avance de la voz"></div>
 <aside class="music-panel" aria-label="Música de fondo"><label><input id="cenMusicEnabled" type="checkbox" checked> Música <output id="cenMusicValue">80 %</output></label><input id="cenMusicLevel" type="range" min="0" max="80" step="1" value="80" aria-label="Volumen de la música"><button id="cenMusicStart" type="button" hidden>Activar música</button></aside>
 <aside class="clarity-panel" aria-label="Nitidez de la imagen"><label for="clarityLevel">Nitidez <output id="clarityValue">0 %</output></label><input id="clarityLevel" type="range" min="0" max="100" step="1" value="0" aria-label="Nitidez de la imagen"><button id="clarityHold" type="button">Fijar nitidez</button></aside>
-<div class="reveal-gate"><p id="clarityStatus" role="status">La imagen se aclara lentamente…</p><button id="revealContinue" type="button">Comenzar</button></div>
+<div class="reveal-gate"><p id="clarityStatus" role="status">La imagen se aclara lentamente…</p><button id="revealContinue" type="button" disabled>Comenzar</button></div>
 <audio id="backgroundMusic" preload="metadata" loop></audio>
 <audio id="narrator" preload="metadata" controlslist="nodownload" oncontextmenu="return false"></audio>
 <script>
@@ -192,14 +192,20 @@ function playMaster(fromStart=false){if(!audioReady){status.textContent='audio c
 function resetVisuals(){lastGray=0;currentAgeState=-1;setAgeProgress(0);root.style.setProperty('--gray','0');root.style.setProperty('--prog','0');voiceSeek.value='0';voiceTime.textContent='0:00 / '+formatTime(audio.duration||narrationTotal)}
 const clarityLevel=$('clarityLevel'),clarityValue=$('clarityValue'),clarityHold=$('clarityHold'),clarityStatus=$('clarityStatus'),revealContinue=$('revealContinue');
 const CLARITY_SECONDS=20;
-let clarityFrame=0,clarity=0,clarityRunning=false;
+let clarityFrame=0,clarity=0,clarityRunning=false,clarityReady=false,clarityTimer=0;
 function setClarity(value){
  clarity=clamp(value);root.style.setProperty('--clarity',clarity.toFixed(4));
  clarityLevel.value=String(Math.round(clarity*100));clarityValue.textContent=clarityLevel.value+' %';
+ clearTimeout(clarityTimer);clarityReady=false;revealContinue.disabled=true;
+ // Wait for the image's CSS filter transition to finish before enabling either version.
+ if(clarity===1)clarityTimer=setTimeout(()=>{
+  clarityReady=true;revealContinue.disabled=false;
+  clarityStatus.textContent='La imagen está clara. Continúa cuando quieras.';
+ },350);
 }
 function holdClarity(){
  cancelAnimationFrame(clarityFrame);clarityFrame=0;clarityRunning=false;clarityHold.textContent='Aclarar lentamente';
- clarityStatus.textContent=clarity>=1?'La imagen está clara. Continúa cuando quieras.':'Nitidez fijada. Continúa cuando quieras.';
+ clarityStatus.textContent=clarityReady?'La imagen está clara. Continúa cuando quieras.':clarity===1?'Terminando de aclarar la imagen…':'Nitidez fijada. Aclara la imagen al 100 % para continuar.';
 }
 function clarifySlowly(){
  holdClarity();const initial=clarity,start=performance.now();
@@ -226,7 +232,7 @@ function startRead(){if(storyReady)prepareVersion('read')}
 clarityLevel.addEventListener('input',()=>{setClarity(Number(clarityLevel.value)/100);holdClarity()});
 clarityHold.addEventListener('click',()=>{if(clarityRunning)holdClarity();else clarifySlowly()});
 revealContinue.onclick=()=>{
- if(!activeMode || !body.classList.contains('revealing'))return;
+ if(!activeMode || !body.classList.contains('revealing') || !clarityReady || clarity!==1)return;
  holdClarity();body.classList.remove('revealing');
  if(activeMode==='listen')playMaster(true);
  else{status.textContent='lectura sin voz';readScroll();}
@@ -236,8 +242,8 @@ function finish(){cancelAnimationFrame(raf);setAgeProgress(1);renderLine(LISTEN_
 function restartListen(){stopAudio();resetVisuals();currentIndex=-1;renderLine(0);playMaster(true)}
 voiceSeek.oninput=()=>{if(activeMode!=='listen'||!audioReady)return;audio.currentTime=(audio.duration||narrationTotal)*Number(voiceSeek.value)/1000;lastGray=0;renderAudioPosition()};
 listenBtn.onclick=startListen;readBtn.onclick=startRead;
-pauseBtn.onclick=()=>{if(activeMode!=='listen')return;if(paused){if(audio.ended||audio.currentTime>=(audio.duration||narrationTotal)-.2){restartListen();return}paused=false;pauseBtn.textContent='Pausa';audio.play().then(syncAudio).catch(()=>{paused=true;pauseBtn.textContent='Seguir'})}else{paused=true;pauseBtn.textContent='Seguir';cancelAnimationFrame(raf);audio.pause()}};
-restartBtn.onclick=()=>{if(activeMode==='listen')restartListen()};
+pauseBtn.onclick=()=>{if(activeMode!=='listen'||body.classList.contains('revealing'))return;if(paused){if(audio.ended||audio.currentTime>=(audio.duration||narrationTotal)-.2){restartListen();return}paused=false;pauseBtn.textContent='Pausa';audio.play().then(syncAudio).catch(()=>{paused=true;pauseBtn.textContent='Seguir'})}else{paused=true;pauseBtn.textContent='Seguir';cancelAnimationFrame(raf);audio.pause()}};
+restartBtn.onclick=()=>{if(activeMode==='listen'&&!body.classList.contains('revealing'))restartListen()};
 modeSwitch.onclick=()=>{holdClarity();setClarity(0);stopAudio();entry.classList.remove('open');body.className='';activeMode=null;modeSwitch.hidden=true;resetVisuals();scrollTo(0,0)};
 addEventListener('scroll',readScroll,{passive:true});
 for(const event of ['timeupdate','seeking','seeked','loadedmetadata'])audio.addEventListener(event,renderAudioPosition);
