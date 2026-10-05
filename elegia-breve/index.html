@@ -669,6 +669,7 @@
     <div class="entry-inner">
       <p class="entry-title">ANA KLAUDYA</p>
       <p class="entry-flag">flag</p>
+      <button class="entry-button" id="ambientStart" type="button" hidden>Activar música</button>
       <div class="entry-actions">
         <button class="entry-button" id="entryButton" type="button">Entrar</button>
         <button class="entry-button" id="entryVoice" type="button" aria-haspopup="dialog">Voz</button>
@@ -685,14 +686,15 @@
     </audio>
     <audio id="voiceMusic" preload="metadata" loop src="ana-klaudya.m4a"></audio>
     <div class="voice-mix">
-      <label><input id="musicEnabled" type="checkbox"> Acompañar con música</label>
+      <label><input id="musicEnabled" type="checkbox" checked> Acompañar con música</label>
       <p>Voz en primer plano</p>
-      <div class="music-level"><label for="musicLevel">Nivel de música</label><output id="musicLevelValue" for="musicLevel">6 %</output></div>
-      <input id="musicLevel" type="range" min="0" max="80" value="6" step="1" aria-label="Nivel de música">
+      <div class="music-level"><label for="musicLevel">Nivel de música</label><output id="musicLevelValue" for="musicLevel">80 %</output></div>
+      <input id="musicLevel" type="range" min="0" max="80" value="80" step="1" aria-label="Nivel de música">
     </div>
+    <button class="entry-button" id="dialogMusicStart" type="button" hidden>Activar música</button>
     <p class="voice-status" id="voiceStatus" role="status" aria-live="polite"></p>
     <div class="entry-actions">
-      <button class="entry-button" id="voicePlay" type="button">Escuchar</button>
+      <button class="entry-button" id="voicePlay" type="button">Activar voz</button>
       <button class="entry-button" id="voiceClose" type="button">Volver</button>
     </div>
     <a class="voice-download" href="voz.m4a" download="Ana-Klaudya-Paco.m4a">Descargar grabación</a>
@@ -776,118 +778,152 @@
       const entryButton = document.getElementById('entryButton');
       const namePrelude = document.getElementById('namePrelude');
       const pulseField = document.getElementById('pulseField');
-      const soundtrack = document.getElementById('soundtrack');
+      const soundtrack = document.getElementById('voiceMusic');
       const soundToggle = document.getElementById('soundToggle');
       const voiceDialog = document.getElementById('voiceDialog');
       const recording = document.getElementById('recording');
       const voicePlay = document.getElementById('voicePlay');
       const voiceStatus = document.getElementById('voiceStatus');
-      let resumeMusic = false;
       const voiceMusic = document.getElementById('voiceMusic');
       const musicEnabled = document.getElementById('musicEnabled');
       const musicLevel = document.getElementById('musicLevel');
       let mixContext=null, musicGain=null, voiceAnalyser=null, musicAnalyser=null;
       let voiceSamples=null, musicSamples=null, mixFrame=0;
-      let mixUnavailable=false;
+      let voicePending=false, voicePriming=false, voiceAllowed=false;
+      let voiceTimer=null, voiceRequest=0;
+      const TRANSITION_SECONDS=4;
       const musicLimit=()=>Number(musicLevel.value)/100;
-      const voiceMusicRatio=()=>{
-        const level=musicLimit();
-        return level<=.06 ? level*3 : .18+(level-.06)*(.62/.74);
-      };
+      const voiceBedLimit=()=>Math.min(.10,musicLimit());
       const rms=samples=>Math.sqrt(samples.reduce((sum,value)=>sum+value*value,0)/samples.length);
-      const stopMix=()=>{
-        voiceMusic.pause();
-        cancelAnimationFrame(mixFrame);
-        mixFrame=0;
+      const fadeMusicTo=(target,seconds=TRANSITION_SECONDS)=>{
         if(musicGain){
-          musicGain.gain.cancelScheduledValues(mixContext.currentTime);
-          musicGain.gain.setValueAtTime(0,mixContext.currentTime);
-        }
+          const gain=musicGain.gain,now=mixContext.currentTime;
+          if(gain.cancelAndHoldAtTime) gain.cancelAndHoldAtTime(now);
+          else {const value=gain.value;gain.cancelScheduledValues(now);gain.setValueAtTime(value,now);}
+          gain.linearRampToValueAtTime(target,now+seconds);
+        }else voiceMusic.volume=target;
       };
+      const stopMonitor=()=>{cancelAnimationFrame(mixFrame);mixFrame=0;};
       const monitorMix=()=>{
-        if(recording.paused || !musicEnabled.checked || !voiceDialog.open){stopMix();return;}
+        if(recording.paused || !musicEnabled.checked || !voiceDialog.open || voicePending){stopMonitor();return;}
         voiceAnalyser.getFloatTimeDomainData(voiceSamples);
         musicAnalyser.getFloatTimeDomainData(musicSamples);
-        const voiceEnergy=rms(voiceSamples), musicEnergy=rms(musicSamples);
+        const voiceEnergy=rms(voiceSamples),musicEnergy=rms(musicSamples);
         const target=recording.muted || recording.volume===0 ? 0 :
-          Math.min(musicLimit(),voiceEnergy>.003 ? voiceEnergy*voiceMusicRatio()/Math.max(.001,musicEnergy) : musicLimit()*.5);
-        const gain=musicGain.gain, now=mixContext.currentTime;
+          Math.min(voiceBedLimit(),voiceEnergy>.003 ? voiceEnergy*.30/Math.max(.001,musicEnergy) : voiceBedLimit());
+        const gain=musicGain.gain,now=mixContext.currentTime;
+        const current=gain.value;
         gain.cancelScheduledValues(now);
-        if(target<gain.value) gain.setValueAtTime(target,now);
-        else gain.setTargetAtTime(target,now,.65);
+        gain.setValueAtTime(current,now);
+        gain.setTargetAtTime(target,now,target<current ? .025 : 1.2);
         mixFrame=requestAnimationFrame(monitorMix);
       };
       const prepareMix=()=>{
-        if(mixUnavailable) return false;
         if(!mixContext){
           const Context=window.AudioContext || window.webkitAudioContext;
-          if(!Context){
-            mixUnavailable=true;musicEnabled.checked=false;musicEnabled.disabled=true;
-            voiceStatus.textContent='Este navegador permite escuchar la voz, pero no mezclarla con música.';
-            return false;
-          }
+          if(!Context) return false;
           mixContext=new Context();
           voiceAnalyser=mixContext.createAnalyser();musicAnalyser=mixContext.createAnalyser();
           voiceAnalyser.fftSize=1024;musicAnalyser.fftSize=1024;
           voiceSamples=new Float32Array(1024);musicSamples=new Float32Array(1024);
-          musicGain=mixContext.createGain();musicGain.gain.value=0;
-          const voiceDelay=mixContext.createDelay(.5), musicDelay=mixContext.createDelay(.5);
+          musicGain=mixContext.createGain();musicGain.gain.value=voiceMusic.paused ? 0 : voiceMusic.volume;
+          const voiceDelay=mixContext.createDelay(.5),musicDelay=mixContext.createDelay(.5);
           voiceDelay.delayTime.value=.12;musicDelay.delayTime.value=.12;
           mixContext.createMediaElementSource(recording).connect(voiceAnalyser);
           voiceAnalyser.connect(voiceDelay).connect(mixContext.destination);
           mixContext.createMediaElementSource(voiceMusic).connect(musicAnalyser);
           musicAnalyser.connect(musicGain).connect(musicDelay).connect(mixContext.destination);
+          voiceMusic.volume=1;
         }
         if(mixContext.state==='suspended') mixContext.resume().catch(()=>{});
         return true;
       };
-      const alignMusic=()=>{
-        if(Number.isFinite(voiceMusic.duration) && voiceMusic.duration>0){
-          voiceMusic.currentTime=recording.currentTime%voiceMusic.duration;
-        }
+      const ambientButtons=show=>{
+        document.getElementById('ambientStart').hidden=!show;
+        document.getElementById('dialogMusicStart').hidden=!show;
       };
-      const startMix=()=>{
-        if(!musicEnabled.checked || recording.paused || !voiceDialog.open){stopMix();return;}
-        if(!prepareMix()) return;
-        voiceMusic.muted=false;voiceMusic.volume=1;
-        if(voiceMusic.paused){
-          alignMusic();
-          voiceMusic.play().catch(()=>{
-            stopMix();
-            voiceStatus.textContent='La voz sigue disponible. Desactiva y activa la música para volver a intentarlo.';
-          });
-        }
-        if(!mixFrame) monitorMix();
+      const ensureAmbientMusic=()=>{
+        if(!musicEnabled.checked) return Promise.resolve(false);
+        voiceMusic.muted=false;
+        if(!mixContext) voiceMusic.volume=musicLimit();
+        return voiceMusic.play().then(()=>{
+          ambientButtons(false);soundStarted=true;body.classList.add('sound-ready');syncSoundToggle();return true;
+        }).catch(()=>{ambientButtons(true);return false;});
       };
-      musicEnabled.addEventListener('change',()=>{
-        if(musicEnabled.checked){prepareMix();startMix();}
-        else stopMix();
-      });
-      musicLevel.addEventListener('input',()=>{
-        document.getElementById('musicLevelValue').textContent=musicLevel.value+' %';
-        if(musicGain && musicGain.gain.value>musicLimit()){
+      const restoreAmbient=()=>{
+        stopMonitor();
+        if(musicEnabled.checked){
+          fadeMusicTo(musicLimit());
+          ensureAmbientMusic();
+        }else fadeMusicTo(0);
+      };
+      const cancelVoiceStart=()=>{
+        voiceRequest++;
+        clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
+        voicePlay.textContent='Activar voz';voiceStatus.textContent='';restoreAmbient();
+      };
+      const playRecording=()=>{
+        if(voicePending) return;
+        const request=++voiceRequest,playhead=recording.ended ? 0 : recording.currentTime;
+        const muted=recording.muted;
+        const canMix=prepareMix();
+        voicePending=true;voicePriming=true;voiceAllowed=false;
+        voicePlay.textContent='Cancelar';
+        voiceStatus.textContent='La música desciende suavemente…';
+        if(musicEnabled.checked && voiceMusic.paused && musicGain){
           musicGain.gain.cancelScheduledValues(mixContext.currentTime);
           musicGain.gain.setValueAtTime(musicLimit(),mixContext.currentTime);
         }
+        ensureAmbientMusic();
+        // Unlock media playback in this user gesture, preserving the first word.
+        recording.muted=true;
+        recording.play().then(()=>{
+          recording.pause();recording.currentTime=playhead;recording.muted=muted;voicePriming=false;
+          if(request!==voiceRequest) return;
+          if(musicEnabled.checked){
+            fadeMusicTo(canMix ? voiceBedLimit() : 0);
+          }
+          voiceTimer=setTimeout(()=>{
+            if(request!==voiceRequest || !voiceDialog.open) return;
+            voiceTimer=null;voicePending=false;voiceAllowed=true;
+            recording.play().catch(()=>{
+              voiceAllowed=false;voicePlay.textContent='Activar voz';restoreAmbient();
+              voiceStatus.textContent='Pulsa Activar voz para volver a intentarlo.';
+            });
+          },musicEnabled.checked ? TRANSITION_SECONDS*1000 : 0);
+        }).catch(()=>{
+          recording.muted=muted;voicePriming=false;voicePending=false;voiceAllowed=false;
+          voicePlay.textContent='Activar voz';restoreAmbient();
+          voiceStatus.textContent='Pulsa Activar voz para iniciar la grabación.';
+        });
+      };
+      const startMix=()=>{
+        if(voicePriming || voicePending || recording.paused) return;
+        if(!musicEnabled.checked){fadeMusicTo(0);return;}
+        if(!prepareMix()) return;
+        ensureAmbientMusic();
+        if(!mixFrame) monitorMix();
+      };
+      [document.getElementById('ambientStart'),document.getElementById('dialogMusicStart')].forEach(button=>{
+        button.addEventListener('click',()=>{
+          prepareMix();fadeMusicTo(recording.paused ? musicLimit() : voiceBedLimit(),.6);ensureAmbientMusic();
+        });
       });
-      recording.addEventListener('seeking',()=>{voiceMusic.pause();});
-      recording.addEventListener('seeked',()=>{alignMusic();startMix();});
-      recording.addEventListener('waiting',stopMix);
+      musicEnabled.addEventListener('change',()=>{
+        if(musicEnabled.checked){
+          prepareMix();fadeMusicTo(recording.paused ? musicLimit() : voiceBedLimit());ensureAmbientMusic();startMix();
+        }else {stopMonitor();fadeMusicTo(0);ambientButtons(false);}
+      });
+      musicLevel.addEventListener('input',()=>{
+        document.getElementById('musicLevelValue').textContent=musicLevel.value+' %';
+        if(!voicePending && recording.paused) fadeMusicTo(musicEnabled.checked ? musicLimit() : 0,.5);
+      });
       recording.addEventListener('playing',startMix);
       const lines = [...document.querySelectorAll('.line')];
       const voiceStart = document.getElementById('voiceStart');
       const embraceStart = document.getElementById('embraceStart');
       const memoryStart = document.getElementById('memoryStart');
       const finalHeat = document.getElementById('finalHeat');
-
-      const SOUND_MIN=.20;
-      const SOUND_MAX=.28;
-      const MOBILE_GAIN_MIN=.94;
-      const MOBILE_GAIN_MAX=1.06;
-      const mobilePlayback=
-        window.matchMedia('(max-width:760px)').matches ||
-        window.matchMedia('(pointer:coarse)').matches ||
-        navigator.maxTouchPoints>0;
 
       let soundStarted=false;
       let readingReady=false;
@@ -899,81 +935,9 @@
       let warmTakeover=0;
       let warmPhase=0;
 
-      let audioContext=null;
-      let mobileAudioReady=false;
-      let mobileMasterGain=null;
-
       const clamp=value=>Math.min(1,Math.max(0,value));
       const smooth=t=>t*t*t*(t*(t*6-15)+10);
       const ramp=(value,start,end)=>smooth(clamp((value-start)/Math.max(.0001,end-start)));
-
-      const prepareMobileAudio=async()=>{
-        if(!mobilePlayback || mobileAudioReady) return;
-
-        const AudioContextClass=window.AudioContext || window.webkitAudioContext;
-        if(!AudioContextClass) return;
-
-        try{
-          audioContext=new AudioContextClass();
-
-          const source=audioContext.createMediaElementSource(soundtrack);
-
-          const highpass=audioContext.createBiquadFilter();
-          highpass.type='highpass';
-          highpass.frequency.value=78;
-          highpass.Q.value=.55;
-
-          const warmth=audioContext.createBiquadFilter();
-          warmth.type='peaking';
-          warmth.frequency.value=280;
-          warmth.Q.value=.72;
-          warmth.gain.value=1.7;
-
-          const presence=audioContext.createBiquadFilter();
-          presence.type='peaking';
-          presence.frequency.value=1550;
-          presence.Q.value=.82;
-          presence.gain.value=1.15;
-
-          const soften=audioContext.createBiquadFilter();
-          soften.type='highshelf';
-          soften.frequency.value=6200;
-          soften.gain.value=-2.4;
-
-          const compressor=audioContext.createDynamicsCompressor();
-          compressor.threshold.value=-24;
-          compressor.knee.value=18;
-          compressor.ratio.value=2.15;
-          compressor.attack.value=.018;
-          compressor.release.value=.27;
-
-          mobileMasterGain=audioContext.createGain();
-          mobileMasterGain.gain.value=MOBILE_GAIN_MIN;
-
-          source
-            .connect(highpass)
-            .connect(warmth)
-            .connect(presence)
-            .connect(soften)
-            .connect(compressor)
-            .connect(mobileMasterGain)
-            .connect(audioContext.destination);
-
-          soundtrack.volume=1;
-          mobileAudioReady=true;
-
-          if(audioContext.state==='suspended'){
-            await audioContext.resume();
-          }
-        }catch(_){
-          mobileAudioReady=false;
-          mobileMasterGain=null;
-          if(audioContext){
-            try{ await audioContext.close(); }catch(__){}
-          }
-          audioContext=null;
-        }
-      };
 
       const syncSoundToggle=()=>{
         const active=soundStarted && !soundtrack.paused && !soundtrack.muted;
@@ -982,30 +946,10 @@
         soundToggle.setAttribute('aria-label',active?'Silenciar sonido':'Activar sonido');
       };
 
-      const startSound=async()=>{
-        soundtrack.currentTime=0;
-        soundtrack.muted=false;
-
-        if(mobilePlayback){
-          await prepareMobileAudio();
-          soundtrack.volume=mobileAudioReady ? 1 : .72;
-          if(audioContext && audioContext.state==='suspended'){
-            try{ await audioContext.resume(); }catch(_){}
-          }
-        }else{
-          soundtrack.volume=SOUND_MIN;
-        }
-
-        try{
-          await soundtrack.play();
-          soundStarted=true;
-          body.classList.add('sound-ready');
-          syncSoundToggle();
-          return true;
-        }catch(_){
-          syncSoundToggle();
-          return false;
-        }
+      const startSound=()=>{
+        musicEnabled.checked=true;
+        prepareMix();fadeMusicTo(musicLimit(),.6);
+        return ensureAmbientMusic();
       };
 
       const beginPrelude=()=>{
@@ -1050,52 +994,38 @@
         syncSoundToggle();
       });
 
-      const playRecording=()=>{
-        voiceStatus.textContent='';
-        if(musicEnabled.checked || mixContext) prepareMix();
-        recording.play().catch(()=>{
-          stopMix();
-          voiceStatus.textContent='Pulsa Escuchar o el botón del reproductor para iniciar la grabación.';
-        });
-      };
       const openVoice=(play=false)=>{
         if(!voiceDialog.open){
-          resumeMusic=!soundtrack.paused;
-          soundtrack.pause();
-          syncSoundToggle();
-          body.classList.add('voice-open');
-          voiceDialog.showModal();
+          body.classList.add('voice-open');voiceDialog.showModal();
         }
         if(play) playRecording();
       };
       document.getElementById('entryVoice').addEventListener('click',()=>openVoice(true));
       document.getElementById('voiceLaunch').addEventListener('click',()=>openVoice(true));
       voicePlay.addEventListener('click',()=>{
-        if(recording.paused) playRecording();
+        if(voicePending) cancelVoiceStart();
+        else if(recording.paused) playRecording();
         else recording.pause();
       });
       document.getElementById('voiceClose').addEventListener('click',()=>voiceDialog.close());
       voiceDialog.addEventListener('close',()=>{
-        recording.pause();
-        stopMix();
-        body.classList.remove('voice-open');
-        if(resumeMusic) soundtrack.play().then(syncSoundToggle).catch(syncSoundToggle);
-        resumeMusic=false;
+        cancelVoiceStart();recording.pause();body.classList.remove('voice-open');restoreAmbient();
       });
       recording.addEventListener('play',()=>{
-        soundtrack.pause();
-        voicePlay.textContent='Pausar';
-        voiceStatus.textContent='';
-        startMix();
+        if(voicePriming) return;
+        if(!voiceAllowed){recording.pause();playRecording();return;}
+        voicePlay.textContent='Pausar';voiceStatus.textContent='';startMix();
       });
-      recording.addEventListener('pause',()=>{voicePlay.textContent='Escuchar';stopMix();});
+      recording.addEventListener('pause',()=>{
+        if(voicePriming || voicePending) return;
+        voiceAllowed=false;voicePlay.textContent='Activar voz';restoreAmbient();
+      });
       recording.addEventListener('ended',()=>{
-        stopMix();
-        voicePlay.textContent='Volver a escuchar';
-        voiceStatus.textContent='Fin de la grabación.';
+        voiceAllowed=false;voicePlay.textContent='Volver a escuchar';
+        voiceStatus.textContent='Fin de la grabación.';restoreAmbient();
       });
       recording.addEventListener('error',()=>{
-        stopMix();
+        cancelVoiceStart();
         voiceStatus.textContent='No se ha podido cargar el audio. Puedes volver a intentarlo o descargar la grabación.';
       });
 
@@ -1187,21 +1117,6 @@
         root.style.setProperty('--billiard',billiard.toFixed(3));
         root.style.setProperty('--warm',warmTakeover.toFixed(3));
 
-        if(soundStarted && !soundtrack.paused && !soundtrack.muted){
-          const maxScroll=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
-          const p=clamp(window.scrollY/maxScroll);
-
-          if(mobileAudioReady && mobileMasterGain){
-            mobileMasterGain.gain.value=
-              MOBILE_GAIN_MIN+(MOBILE_GAIN_MAX-MOBILE_GAIN_MIN)*smooth(p);
-            soundtrack.volume=1;
-          }else if(mobilePlayback){
-            soundtrack.volume=.72+.12*smooth(p);
-          }else{
-            soundtrack.volume=SOUND_MIN+(SOUND_MAX-SOUND_MIN)*smooth(p);
-          }
-        }
-
         const heatRect=finalHeat.getBoundingClientRect();
         const heat=smooth(clamp((window.innerHeight*.88-heatRect.top)/(window.innerHeight*.48)));
 
@@ -1252,6 +1167,7 @@
       syncSoundToggle();
       renderWorld();
       if(new URLSearchParams(window.location.search).get('voz')==='1') openVoice();
+      ensureAmbientMusic();
     })();
   </script>
 </body>
