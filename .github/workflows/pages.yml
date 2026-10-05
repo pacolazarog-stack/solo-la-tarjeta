@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -23,17 +23,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Aplicar envejecimiento de Ceniciento
+
+      - name: Incorporar audio completo de Ceniciento
+        if: ${{ hashFiles('ceniciento/CENICIENTO_completo.m4a') == '' }}
+        env:
+          CENICIENTO_AUDIO_URL: "https://sdmntprdenmarkeast.oaiusercontent.com/files/00000000-3a7c-8210-9258-7be2d9fd3f86/raw?se=2026-10-05T00%3A39%3A59Z&sp=r&sv=2026-02-06&sr=b&scid=683da54c-6a0e-584d-9e91-c56ffd45a165&skoid=8981e47a-681f-4a6a-b86c-73d6347614b7&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-04T03%3A25%3A08Z&ske=2026-10-05T03%3A25%3A08Z&sks=b&skv=2026-02-06&sig=KgzMF/2CYZoCvkn1owUTHq7o3ai8FDATWBI7504kYUs%3D"
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          p = Path('ceniciento/index.html')
-          s = p.read_text(encoding='utf-8')
-          tag = '<script src="age-patch.js?v=20261004-2"></script>'
-          if tag not in s:
-              s = s.replace('</body>', tag + '\n</body>')
-          p.write_text(s, encoding='utf-8')
-          PY
+          set -euo pipefail
+          curl --fail --location --retry 3 --output ceniciento/CENICIENTO_completo.m4a "$CENICIENTO_AUDIO_URL"
+          test "$(wc -c < ceniciento/CENICIENTO_completo.m4a)" -eq 29755985
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ceniciento/CENICIENTO_completo.m4a
+          git commit -m "Añadir narración completa de Ceniciento" || true
+          git push
+
       - name: Configurar Pages
         uses: actions/configure-pages@v5
       - name: Empaquetar sitio
