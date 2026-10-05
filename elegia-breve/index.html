@@ -302,7 +302,7 @@
       transition:opacity 6s ease,visibility 6s ease;
     }
     .portrait-image-area{
-      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+      position:absolute;inset:0 auto 0 0;width:100vw;display:flex;align-items:center;justify-content:center;
     }
     .portrait-image-wrap{position:relative;width:min(100%,59.9609375svh);aspect-ratio:1228/2048}
     .portrait-finale img{
@@ -341,7 +341,7 @@
     }
     .portrait-question:hover .question-beat{background:#fff9ec}
     .portrait-question:focus-visible{outline:3px solid #fff9ec;outline-offset:4px}
-    body.voice-open .portrait-image-area{width:calc(100% - 480px)}
+    body.voice-open .portrait-image-area{width:100vw}
     body.portrait-revealed .portrait-finale{opacity:1;visibility:visible}
     body.portrait-revealed .portrait-finale img{opacity:1}
     body.portrait-revealed .portrait-question{opacity:1;visibility:visible;pointer-events:auto}
@@ -349,7 +349,7 @@
     @media(max-width:900px){
       body.voice-open .voice-dialog{position:relative;top:auto;bottom:auto;right:auto;margin:24px 16px 0 auto}
       body.voice-open main{width:calc(100% - 34px);margin:0 auto;padding-top:20svh}
-      body.voice-open .portrait-image-area{width:100%}
+      body.voice-open .portrait-image-area{width:100vw}
     }
 
     /* PRELUDIO ANA -> KLAUDYA */
