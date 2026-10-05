@@ -274,13 +274,14 @@
     body.reading-ready .voice-launch{opacity:1;visibility:visible;pointer-events:auto}
     .voice-dialog{
       position:fixed;top:0;bottom:0;left:auto;right:max(16px,env(safe-area-inset-right));
+      z-index:40;
       margin:auto 0;height:fit-content;
       width:min(440px,calc(100% - 32px));max-height:calc(100svh - 32px);
       padding:32px 24px;border:1px solid rgba(23,63,50,.22);border-radius:20px;
       background:#eef1e9;color:#201d19;text-align:center;
       box-shadow:0 20px 80px rgba(8,49,32,.2);overflow:auto;
     }
-    .voice-dialog::backdrop{background:rgba(20,42,32,.36);backdrop-filter:blur(8px)}
+    .voice-dialog::backdrop{background:transparent}
     .voice-dialog h2{margin:0;font-size:clamp(1.55rem,6vw,2rem);font-weight:500;letter-spacing:.045em}
     .voice-caption{margin:14px 0 24px;color:#375548}
     .voice-dialog audio{display:block;width:100%;margin:18px 0}
@@ -293,7 +294,12 @@
     .voice-mix input[type="range"]{width:100%;margin:12px 0 0;accent-color:#375548}
     .voice-mix p{margin:4px 0 0;color:#375548;font-size:.78rem}
     .music-level{display:flex;justify-content:space-between;margin-top:12px}
-    body.voice-open{overflow:hidden;overscroll-behavior:none;touch-action:auto}
+    body.voice-open .voice-launch{visibility:hidden;pointer-events:none}
+    body.voice-open main{width:calc(100% - 504px);margin-left:24px;margin-right:480px}
+    @media(max-width:900px){
+      body.voice-open .voice-dialog{position:relative;top:auto;bottom:auto;right:auto;margin:24px 16px 0 auto}
+      body.voice-open main{width:calc(100% - 34px);margin:0 auto;padding-top:20svh}
+    }
 
     /* PRELUDIO ANA -> KLAUDYA */
     .name-prelude{
@@ -1034,7 +1040,7 @@
       const openVoice=()=>{
         if(!readingReady) return;
         if(!voiceDialog.open){
-          body.classList.add('voice-open');voiceDialog.showModal();
+          body.classList.add('voice-open');voiceDialog.show();
         }
       };
       document.getElementById('voiceLaunch').addEventListener('click',()=>openVoice());
