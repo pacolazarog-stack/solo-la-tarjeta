@@ -1209,7 +1209,7 @@
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
         cenicientoFrame.hidden=false;
-        cenicientoFrame.src='../sonrisa/?music=parent&v=20261005-continuidad';
+        cenicientoFrame.src='../sonrisa/?music=parent&v=20261006-inicio-ana';
         if(window.location.hash!=='#sonrisa')window.history.pushState({sonrisa:true},'','#sonrisa');
       };
       document.getElementById('anaSonrisa').addEventListener('click',openSonrisa);
@@ -1232,6 +1232,17 @@
       window.addEventListener('message',event=>{
         if(event.origin!==window.location.origin || event.source!==cenicientoFrame.contentWindow || event.data?.channel!=='ceniciento-music-v1')return;
         const data=event.data;
+        if(data.type==='home'){
+          closeCeniciento();
+          entry.classList.remove('is-open');
+          entryButton.disabled=false;entryButton.textContent='Entrar';
+          body.classList.add('locked');body.classList.remove('reading-ready','prelude','portrait-revealed');
+          readingReady=false;hasScrolled=false;
+          namePrelude.classList.add('fade');portraitFinale.setAttribute('aria-hidden','true');
+          window.scrollTo({top:0,left:0,behavior:'auto'});
+          window.history.replaceState(null,'',window.location.pathname+window.location.search);
+          return;
+        }
         if(data.type==='close'){closeCeniciento();window.history.replaceState(null,'',window.location.pathname+window.location.search);return;}
         if(data.type==='level' && Number.isFinite(data.level)){
           const level=Math.max(0,Math.min(.8,data.level));ambientLevel=level;showMusicLevel(level);fadeMusicTo(musicEnabled.checked?level:0,.5);
