@@ -295,9 +295,23 @@
     .music-level{display:flex;justify-content:space-between;margin-top:12px}
     body.voice-open .voice-launch{visibility:hidden;pointer-events:none}
     body.voice-open main{width:calc(100% - 504px);margin-left:24px;margin-right:480px}
+    .portrait-finale{
+      position:fixed;inset:0;z-index:12;pointer-events:none;
+      background:#1b1711;opacity:0;visibility:hidden;
+      transition:opacity 6s ease,visibility 6s ease;
+    }
+    .portrait-finale img{
+      display:block;width:100%;height:100%;object-fit:contain;
+      opacity:0;transition:opacity 6s ease 6s;
+    }
+    body.voice-open .portrait-finale img{width:calc(100% - 480px)}
+    body.portrait-revealed .portrait-finale{opacity:1;visibility:visible}
+    body.portrait-revealed .portrait-finale img{opacity:1}
+    body.reading-ready.portrait-revealed main{opacity:0;visibility:hidden;transition:opacity 6s ease,visibility 6s ease}
     @media(max-width:900px){
       body.voice-open .voice-dialog{position:relative;top:auto;bottom:auto;right:auto;margin:24px 16px 0 auto}
       body.voice-open main{width:calc(100% - 34px);margin:0 auto;padding-top:20svh}
+      body.voice-open .portrait-finale img{width:100%}
     }
 
     /* PRELUDIO ANA -> KLAUDYA */
@@ -675,6 +689,10 @@
     <div class="layer grain"></div>
   </div>
 
+  <div class="portrait-finale" id="portraitFinale" aria-hidden="true">
+    <img id="anaPortrait" src="ana-klaudya-fotografia.jpg" alt="Ana Klaudya" decoding="async">
+  </div>
+
   <div class="entry" id="entry" role="dialog" aria-modal="true" aria-label="Entrada a Ana Klaudya">
     <div class="entry-inner">
       <p class="entry-title">ANA KLAUDYA</p>
@@ -792,6 +810,21 @@
       const voiceMusic = document.getElementById('voiceMusic');
       const musicEnabled = document.getElementById('musicEnabled');
       const musicLevel = document.getElementById('musicLevel');
+      const anaPortrait=document.getElementById('anaPortrait');
+      const portraitFinale=document.getElementById('portraitFinale');
+      let completedVoicePasses=0, listeningStart=null, listeningEnd=0;
+      let listenedRanges=[], portraitRequested=false;
+      const revealPortrait=()=>{
+        if(portraitRequested) return;
+        portraitRequested=true;
+        const reveal=()=>{
+          if(!anaPortrait.naturalWidth) return;
+          portraitFinale.setAttribute('aria-hidden','false');
+          body.classList.add('portrait-revealed');
+        };
+        if(anaPortrait.complete) reveal();
+        else anaPortrait.addEventListener('load',reveal,{once:true});
+      };
       let mixContext=null, musicGain=null;
       let ambientLevel=Number(musicLevel.value)/100;
       let nameFrame=0, namePriming=false;
@@ -910,6 +943,44 @@
       });
       recording.addEventListener('playing',startMix);
       recording.addEventListener('contextmenu',event=>event.preventDefault());
+      const saveListenedRange=()=>{
+        if(listeningStart!==null && listeningEnd>listeningStart){
+          listenedRanges.push([listeningStart,listeningEnd]);
+        }
+        listeningStart=null;
+      };
+      recording.addEventListener('playing',()=>{
+        if(voicePriming || voicePending) return;
+        listeningStart=recording.currentTime;listeningEnd=listeningStart;
+      });
+      recording.addEventListener('timeupdate',()=>{
+        if(listeningStart===null || voicePriming || recording.seeking) return;
+        listeningEnd=recording.currentTime;
+      });
+      recording.addEventListener('seeking',saveListenedRange);
+      recording.addEventListener('seeked',()=>{
+        if(recording.paused || voicePriming || voicePending) return;
+        listeningStart=recording.currentTime;listeningEnd=listeningStart;
+      });
+      recording.addEventListener('pause',()=>{
+        if(voicePriming || voicePending || recording.seeking) return;
+        if(listeningStart!==null) listeningEnd=recording.currentTime;
+        saveListenedRange();
+      });
+      const finishVoicePass=()=>{
+        if(listeningStart!==null) listeningEnd=recording.currentTime;
+        saveListenedRange();
+        let coveredUntil=0;
+        for(const [start,end] of listenedRanges.sort((a,b)=>a[0]-b[0])){
+          if(start>coveredUntil+.35) break;
+          coveredUntil=Math.max(coveredUntil,end);
+        }
+        if(Number.isFinite(recording.duration) && recording.duration>0 && coveredUntil>=recording.duration-.35){
+          completedVoicePasses++;
+          if(completedVoicePasses===2) revealPortrait();
+        }
+        listenedRanges=[];listeningStart=null;
+      };
       const syncNameWords=()=>{
         if(namePriming || !body.classList.contains('prelude')) return;
         if(nameAudio.currentTime>=.19) namePrelude.classList.add('show-ana');
@@ -1043,6 +1114,7 @@
         voiceAllowed=false;voicePlay.textContent='Activar voz';restoreAmbient();
       });
       recording.addEventListener('ended',()=>{
+        finishVoicePass();
         voiceAllowed=false;voicePlay.textContent='Volver a escuchar';
         voiceStatus.textContent='Fin de la grabación.';restoreAmbient();
       });
