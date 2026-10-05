@@ -43,7 +43,7 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 </style>
 </head>
 <body>
-<header><span>flag · poesía</span><a href="../elegia-breve/" id="backAna">Volver a Ana ↗</a></header>
+<header><span>flag · poesía</span><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></header>
 <main>
 <section class="intro" aria-labelledby="title">
 <div class="kicker">Una sonrisa · un poema</div>
@@ -96,7 +96,7 @@ musicEnabled.addEventListener('change',()=>sendMusic('enabled'));
 musicStart.addEventListener('click',()=>{musicEnabled.checked=true;sendMusic('enabled');sendMusic('start')});
 document.getElementById('backAna').addEventListener('click',event=>{
  if(!inheritedMusic || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)return;
- event.preventDefault();sendMusic('close');
+ event.preventDefault();sendMusic('home');
 });
 window.addEventListener('message',event=>{
  if(event.origin!==location.origin || event.source!==window.parent || event.data?.channel!=='ceniciento-music-v1' || event.data.type!=='state')return;
