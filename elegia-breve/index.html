@@ -22,6 +22,7 @@
       --billiard:0;
       --warm:0;
       --pulse-duration:1.85s;
+      --question-current:.22;--question-first:.22;--question-next:.22;
       --heat-r:205;
       --heat-g:118;
       --heat-b:86;
@@ -318,13 +319,24 @@
     .portrait-question{
       position:absolute;left:30%;top:44%;transform:translate(-50%,-50%);
       display:grid;place-items:center;width:48px;height:48px;border-radius:50%;
-      border:1px solid rgba(255,246,225,.65);background:rgba(238,241,233,.92);color:#342719;
-      font:400 2rem/1 Georgia,"Times New Roman",serif;text-decoration:none;
-      box-shadow:0 5px 22px rgba(0,0,0,.24);cursor:pointer;
+      color:#342719;font:400 2rem/1 Georgia,"Times New Roman",serif;text-decoration:none;cursor:pointer;
       opacity:0;visibility:hidden;pointer-events:none;
       transition:opacity 1.4s ease 13s,visibility 0s linear 13s;
     }
-    .portrait-question:hover{background:#fff9ec}
+    .question-beat{
+      display:grid;place-items:center;width:48px;height:48px;border-radius:50%;
+      border:1px solid rgba(255,246,225,.65);background:rgba(238,241,233,.92);
+      box-shadow:0 5px 22px rgba(0,0,0,.24);pointer-events:none;
+      animation:questionHeartbeat var(--pulse-duration) linear infinite;will-change:transform;
+    }
+    @keyframes questionHeartbeat{
+      0%{transform:scale(var(--question-current))}
+      10%{transform:scale(calc(var(--question-first) * 1.12))}
+      18%{transform:scale(var(--question-first))}
+      33%{transform:scale(calc(var(--question-next) * 1.08))}
+      44%,100%{transform:scale(var(--question-next))}
+    }
+    .portrait-question:hover .question-beat{background:#fff9ec}
     .portrait-question:focus-visible{outline:3px solid #fff9ec;outline-offset:4px}
     body.voice-open .portrait-image-area{width:calc(100% - 480px)}
     body.portrait-revealed .portrait-finale{opacity:1;visibility:visible}
@@ -691,7 +703,7 @@
     @media(prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
       .entry,.name-prelude,.name-ana,.name-klaudya,.line,.heat-part,.sound-toggle,main{transition-duration:.01ms}
-      .pulse-field,.pulse-field::before,.pulse-field::after{animation-duration:3.8s}
+      .pulse-field,.pulse-field::before,.pulse-field::after,.question-beat{animation-duration:3.8s}
       .layer-warm{animation:none}
       .heat-final.is-burning{animation:none}
       .scroll-cue{animation:none}
@@ -716,7 +728,7 @@
     <div class="portrait-image-area">
       <div class="portrait-image-wrap">
         <img id="anaPortrait" src="ana-klaudya-fotografia.jpg" alt="Ana Klaudya" decoding="async">
-        <a id="cenicientoLink" class="portrait-question" href="../ceniciento/" aria-label="Descubrir Ceniciento">?</a>
+        <a id="cenicientoLink" class="portrait-question" href="../ceniciento/" aria-label="Descubrir Ceniciento"><span class="question-beat" aria-hidden="true">?</span></a>
       </div>
     </div>
   </div>
@@ -850,6 +862,14 @@
       const portraitFinale=document.getElementById('portraitFinale');
       let completedVoicePasses=0, listeningStart=null, listeningEnd=0;
       let listenedRanges=[], portraitRequested=false;
+      let questionGrowthActive=false,questionGrowth=.22,questionNext=.22;
+      const growQuestionOnHeartbeat=()=>{
+        if(!questionGrowthActive || !body.classList.contains('portrait-revealed') || body.classList.contains('ceniciento-open'))return;
+        questionGrowth=questionNext;questionNext=Math.min(1,questionGrowth+.12);
+        root.style.setProperty('--question-current',questionGrowth.toFixed(3));
+        root.style.setProperty('--question-first',Math.min(1,questionGrowth+.06).toFixed(3));
+        root.style.setProperty('--question-next',questionNext.toFixed(3));
+      };
       const revealPortrait=()=>{
         if(portraitRequested) return;
         portraitRequested=true;
@@ -857,6 +877,7 @@
           if(!anaPortrait.naturalWidth) return;
           portraitFinale.setAttribute('aria-hidden','false');
           body.classList.add('portrait-revealed');
+          setTimeout(()=>{questionGrowthActive=true;},13000);
         };
         if(anaPortrait.complete) reveal();
         else anaPortrait.addEventListener('load',reveal,{once:true});
@@ -1179,7 +1200,7 @@
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
         cenicientoFrame.hidden=false;
-        if(!cenicientoFrame.getAttribute('src'))cenicientoFrame.src='../ceniciento/?music=parent&v=20261005-clarity23';
+        if(!cenicientoFrame.getAttribute('src'))cenicientoFrame.src='../ceniciento/?music=parent&v=20261005-pulse24';
         if(window.location.hash!=='#ceniciento')window.history.pushState({ceniciento:true},'','#ceniciento');
       });
       const showAnaText=()=>{
@@ -1228,7 +1249,9 @@
       };
 
       pulseField.addEventListener('animationiteration',event=>{
-        if(event.animationName!=='pulseField' || warmPhase===0) return;
+        if(event.animationName!=='pulseField') return;
+        growQuestionOnHeartbeat();
+        if(warmPhase===0) return;
 
         const step=warmPhase===1 ? .025 : .045;
         warmTakeover=Math.min(.92,warmTakeover+step);
