@@ -263,6 +263,27 @@
       outline:none;
     }
 
+    .entry-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+    .voice-launch{
+      position:fixed;right:max(16px,env(safe-area-inset-right));
+      top:max(16px,env(safe-area-inset-top));z-index:36;margin:0;
+      opacity:0;visibility:hidden;pointer-events:none;
+    }
+    body.sound-ready .voice-launch{opacity:1;visibility:visible;pointer-events:auto}
+    .voice-dialog{
+      width:min(440px,calc(100% - 32px));max-height:calc(100svh - 32px);
+      padding:32px 24px;border:1px solid rgba(23,63,50,.22);border-radius:20px;
+      background:#eef1e9;color:#201d19;text-align:center;
+      box-shadow:0 20px 80px rgba(8,49,32,.2);overflow:auto;
+    }
+    .voice-dialog::backdrop{background:rgba(20,42,32,.36);backdrop-filter:blur(8px)}
+    .voice-dialog h2{margin:0;font-size:clamp(1.55rem,6vw,2rem);font-weight:500;letter-spacing:.045em}
+    .voice-caption{margin:14px 0 24px;color:#375548}
+    .voice-dialog audio{display:block;width:100%;margin:18px 0}
+    .voice-status{min-height:1.4em;font:400 .85rem/1.4 Arial,Helvetica,sans-serif;color:#375548}
+    .voice-download{display:inline-block;margin-top:20px;color:#173f32;font-size:.9rem;text-underline-offset:4px}
+    body.voice-open{overflow:hidden;overscroll-behavior:none;touch-action:auto}
+
     /* PRELUDIO ANA -> KLAUDYA */
     .name-prelude{
       position:fixed;
@@ -641,9 +662,27 @@
     <div class="entry-inner">
       <p class="entry-title">ANA KLAUDYA</p>
       <p class="entry-flag">flag</p>
-      <button class="entry-button" id="entryButton" type="button">Entrar</button>
+      <div class="entry-actions">
+        <button class="entry-button" id="entryButton" type="button">Entrar</button>
+        <button class="entry-button" id="entryVoice" type="button" aria-haspopup="dialog">Voz</button>
+      </div>
     </div>
   </div>
+
+  <button class="entry-button voice-launch" id="voiceLaunch" type="button" aria-haspopup="dialog">Voz</button>
+  <dialog class="voice-dialog" id="voiceDialog" aria-labelledby="voiceTitle" aria-describedby="voiceCaption">
+    <h2 id="voiceTitle">ANA KLAUDYA</h2>
+    <p class="voice-caption" id="voiceCaption">En voz de Paco</p>
+    <audio id="recording" controls preload="metadata" src="voz.m4a" aria-label="Recitado de Ana Klaudya por Paco">
+      <a href="voz.m4a">Escuchar la grabación</a>
+    </audio>
+    <p class="voice-status" id="voiceStatus" role="status" aria-live="polite"></p>
+    <div class="entry-actions">
+      <button class="entry-button" id="voicePlay" type="button">Escuchar</button>
+      <button class="entry-button" id="voiceClose" type="button">Volver</button>
+    </div>
+    <a class="voice-download" href="voz.m4a" download="Ana-Klaudya-Paco.m4a">Descargar grabación</a>
+  </dialog>
 
   <div class="name-prelude" id="namePrelude" aria-hidden="true">
     <p class="name-line"><span class="name-ana">Ana</span><span class="name-klaudya">Klaudya</span></p>
@@ -725,6 +764,11 @@
       const pulseField = document.getElementById('pulseField');
       const soundtrack = document.getElementById('soundtrack');
       const soundToggle = document.getElementById('soundToggle');
+      const voiceDialog = document.getElementById('voiceDialog');
+      const recording = document.getElementById('recording');
+      const voicePlay = document.getElementById('voicePlay');
+      const voiceStatus = document.getElementById('voiceStatus');
+      let resumeMusic = false;
       const lines = [...document.querySelectorAll('.line')];
       const voiceStart = document.getElementById('voiceStart');
       const embraceStart = document.getElementById('embraceStart');
@@ -901,6 +945,49 @@
         syncSoundToggle();
       });
 
+      const playRecording=()=>{
+        voiceStatus.textContent='';
+        recording.play().catch(()=>{
+          voiceStatus.textContent='Pulsa Escuchar o el botón del reproductor para iniciar la grabación.';
+        });
+      };
+      const openVoice=(play=false)=>{
+        if(!voiceDialog.open){
+          resumeMusic=!soundtrack.paused;
+          soundtrack.pause();
+          syncSoundToggle();
+          body.classList.add('voice-open');
+          voiceDialog.showModal();
+        }
+        if(play) playRecording();
+      };
+      document.getElementById('entryVoice').addEventListener('click',()=>openVoice(true));
+      document.getElementById('voiceLaunch').addEventListener('click',()=>openVoice(true));
+      voicePlay.addEventListener('click',()=>{
+        if(recording.paused) playRecording();
+        else recording.pause();
+      });
+      document.getElementById('voiceClose').addEventListener('click',()=>voiceDialog.close());
+      voiceDialog.addEventListener('close',()=>{
+        recording.pause();
+        body.classList.remove('voice-open');
+        if(resumeMusic) soundtrack.play().then(syncSoundToggle).catch(syncSoundToggle);
+        resumeMusic=false;
+      });
+      recording.addEventListener('play',()=>{
+        soundtrack.pause();
+        voicePlay.textContent='Pausar';
+        voiceStatus.textContent='';
+      });
+      recording.addEventListener('pause',()=>{voicePlay.textContent='Escuchar';});
+      recording.addEventListener('ended',()=>{
+        voicePlay.textContent='Volver a escuchar';
+        voiceStatus.textContent='Fin de la grabación.';
+      });
+      recording.addEventListener('error',()=>{
+        voiceStatus.textContent='No se ha podido cargar el audio. Puedes volver a intentarlo o descargar la grabación.';
+      });
+
       const startWarmPrelude=()=>{
         if(warmPhase!==0) return;
         warmPhase=1;
@@ -1053,6 +1140,7 @@
 
       syncSoundToggle();
       renderWorld();
+      if(new URLSearchParams(window.location.search).get('voz')==='1') openVoice();
     })();
   </script>
 </body>
