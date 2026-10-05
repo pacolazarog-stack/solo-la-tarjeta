@@ -686,9 +686,9 @@
     <audio id="voiceMusic" preload="metadata" loop src="ana-klaudya.m4a"></audio>
     <div class="voice-mix">
       <label><input id="musicEnabled" type="checkbox"> Acompañar con música</label>
-      <p>Voz en primer plano · música suave</p>
+      <p>Voz en primer plano</p>
       <div class="music-level"><label for="musicLevel">Nivel de música</label><output id="musicLevelValue" for="musicLevel">6 %</output></div>
-      <input id="musicLevel" type="range" min="0" max="8" value="6" step="1" aria-label="Nivel de música">
+      <input id="musicLevel" type="range" min="0" max="80" value="6" step="1" aria-label="Nivel de música">
     </div>
     <p class="voice-status" id="voiceStatus" role="status" aria-live="polite"></p>
     <div class="entry-actions">
@@ -790,6 +790,10 @@
       let voiceSamples=null, musicSamples=null, mixFrame=0;
       let mixUnavailable=false;
       const musicLimit=()=>Number(musicLevel.value)/100;
+      const voiceMusicRatio=()=>{
+        const level=musicLimit();
+        return level<=.06 ? level*3 : .18+(level-.06)*(.62/.74);
+      };
       const rms=samples=>Math.sqrt(samples.reduce((sum,value)=>sum+value*value,0)/samples.length);
       const stopMix=()=>{
         voiceMusic.pause();
@@ -806,7 +810,7 @@
         musicAnalyser.getFloatTimeDomainData(musicSamples);
         const voiceEnergy=rms(voiceSamples), musicEnergy=rms(musicSamples);
         const target=recording.muted || recording.volume===0 ? 0 :
-          Math.min(musicLimit(),voiceEnergy>.003 ? voiceEnergy*.18/Math.max(.001,musicEnergy) : musicLimit()*.5);
+          Math.min(musicLimit(),voiceEnergy>.003 ? voiceEnergy*voiceMusicRatio()/Math.max(.001,musicEnergy) : musicLimit()*.5);
         const gain=musicGain.gain, now=mixContext.currentTime;
         gain.cancelScheduledValues(now);
         if(target<gain.value) gain.setValueAtTime(target,now);
