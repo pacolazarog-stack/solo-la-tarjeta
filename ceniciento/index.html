@@ -24,6 +24,7 @@ body.read-mode{min-height:100%;overflow-x:hidden}
 .brand{position:fixed;z-index:12;left:max(15px,env(safe-area-inset-left));top:max(15px,env(safe-area-inset-top));font:500 .65rem/1.2 Arial,sans-serif;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,246,232,.64)}
 .controls{position:fixed;z-index:13;right:max(13px,env(safe-area-inset-right));top:max(12px,env(safe-area-inset-top));display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
 .controls button{border:1px solid rgba(255,255,255,.23);background:rgba(15,13,12,.52);color:rgba(255,255,255,.84);border-radius:999px;padding:.62em .92em;font:500 .62rem/1 Arial,sans-serif;letter-spacing:.11em;text-transform:uppercase;backdrop-filter:blur(8px)}
+.music-panel{position:fixed;z-index:16;left:max(15px,env(safe-area-inset-left));top:43px;width:min(210px,calc(100vw - 30px));padding:10px 12px;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(15,13,12,.70);font:500 .65rem/1.4 Arial,sans-serif;color:rgba(255,255,255,.78)}.music-panel label{display:flex;align-items:center;gap:6px}.music-panel .music-value{margin-left:auto}.music-panel input[type=range]{display:block;width:100%;margin:8px 0 0;accent-color:#ead6b7}.music-panel button{font:inherit;border:1px solid rgba(255,255,255,.23);border-radius:20px;background:transparent;color:inherit;padding:4px 9px;margin-top:7px}.music-panel button[hidden]{display:none}
 .voice-timeline{display:none;position:fixed;z-index:13;right:max(15px,env(safe-area-inset-right));top:58px;width:min(240px,calc(100vw - 30px));padding:10px 13px;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(15,13,12,.64);font:500 .65rem/1.3 Arial,sans-serif;color:rgba(255,255,255,.75)}.listen-mode .voice-timeline{display:block}.voice-timeline label{display:flex;justify-content:space-between;gap:10px}.voice-timeline input{display:block;width:100%;margin:8px 0 0;accent-color:#ead6b7}
 .karaoke{position:fixed;z-index:7;left:50%;bottom:7.2svh;transform:translateX(-50%);width:min(calc(100% - 30px),850px);text-align:center;text-shadow:0 3px 18px rgba(0,0,0,.88);pointer-events:none}
 .line{transition:opacity .55s ease,transform .55s ease;min-height:1.5em}
@@ -57,7 +58,7 @@ body.read-mode{min-height:100%;overflow-x:hidden}
 .card button:disabled{opacity:.38}
 .hint{margin-top:1rem!important;font-size:.55rem!important;letter-spacing:.1em!important;text-transform:none!important;opacity:.62}
 @media(max-width:760px){
- .portrait{top:6.8svh;width:min(82vw,405px);border-radius:21px}
+ .music-panel{top:42px;width:145px;padding:7px 9px;font-size:.6rem}.voice-timeline{top:42px;width:145px;padding:7px 9px;font-size:.6rem}.portrait{top:18svh;width:min(82vw,405px);border-radius:21px}
  .karaoke{bottom:8.4svh;width:calc(100% - 22px)}
  .current{font-size:clamp(1.28rem,5.6vw,1.7rem);max-width:28ch}
  .current.dramatic{font-size:clamp(1.55rem,7vw,2.15rem)}
@@ -83,13 +84,42 @@ body.read-mode{min-height:100%;overflow-x:hidden}
 <div class="karaoke" aria-live="polite"><div id="prev" class="line prev"></div><div id="current" class="line current"></div><div id="next" class="line next"></div></div>
 <div id="status" class="status">cargando cuento</div><div class="progress"><i></i></div>
 <div class="reader" id="reader"><article><h1>CENICIENTO</h1><p class="by">flag · 2026</p><div id="readerText"></div></article></div>
-<div id="entry" class="entry"><div class="card"><h1>CENICIENTO</h1><p>cuento · flag · 2026</p><div class="mode-buttons"><button id="listen" disabled>Voz</button><button id="read" disabled>Leer</button></div><p class="hint">puede escucharse con texto sincronizado o leerse en silencio</p></div></div>
+<div id="entry" class="entry"><div class="card"><h1>CENICIENTO</h1><p>cuento · flag · 2026</p><div class="mode-buttons"><button id="listen" disabled>Voz</button><button id="read" disabled>Leer</button></div><p class="hint">puede escucharse con texto sincronizado o leerse sin voz</p></div></div>
 <div class="voice-timeline"><label for="voiceSeek">Voz <span id="voiceTime">0:00 / 14:24</span></label><input id="voiceSeek" type="range" min="0" max="1000" step="1" value="0" aria-label="Avance de la voz"></div>
+<aside class="music-panel" aria-label="Música de fondo"><label><input id="cenMusicEnabled" type="checkbox" checked> Música <output id="cenMusicValue">80 %</output></label><input id="cenMusicLevel" type="range" min="0" max="80" step="1" value="80" aria-label="Volumen de la música"><button id="cenMusicStart" type="button" hidden>Activar música</button><button id="backAna" type="button" hidden>Volver a Ana</button></aside>
+<audio id="backgroundMusic" preload="metadata" loop></audio>
 <audio id="narrator" preload="metadata" controlslist="nodownload" oncontextmenu="return false"></audio>
 <script>
 (()=>{
 const $=id=>document.getElementById(id),root=document.documentElement,body=document.body;
 const bgA=$('bgA'),bgB=$('bgB'),ageA=$('ageA'),ageB=$('ageB'),entry=$('entry'),listenBtn=$('listen'),readBtn=$('read'),pauseBtn=$('pause'),restartBtn=$('restart'),modeSwitch=$('modeSwitch'),audio=$('narrator'),status=$('status');
+const music=$('backgroundMusic'),musicLevel=$('cenMusicLevel'),musicEnabled=$('cenMusicEnabled'),musicValue=$('cenMusicValue'),musicStart=$('cenMusicStart'),backAna=$('backAna');
+const inheritedMusic=window.parent!==window && new URLSearchParams(window.location.search).get('music')==='parent';
+const sendMusic=type=>window.parent.postMessage({channel:'ceniciento-music-v1',type,level:Number(musicLevel.value)/100,enabled:musicEnabled.checked},window.location.origin);
+function updateMusic(){
+ const level=Math.max(0,Math.min(.8,Number(musicLevel.value)/100));
+ musicValue.textContent=Math.round(level*100)+' %';
+ if(!inheritedMusic){music.volume=level;music.muted=!musicEnabled.checked;}
+}
+function startMusic(){
+ if(inheritedMusic){sendMusic('start');return;}
+ updateMusic();if(!musicEnabled.checked)return;
+ if(music.paused)music.play().then(()=>{musicStart.hidden=true}).catch(()=>{musicStart.hidden=false});
+}
+musicLevel.addEventListener('input',()=>{updateMusic();if(inheritedMusic)sendMusic('level')});
+musicEnabled.addEventListener('change',()=>{updateMusic();if(inheritedMusic)sendMusic('enabled');else startMusic()});
+musicStart.addEventListener('click',startMusic);
+backAna.addEventListener('click',()=>sendMusic('close'));
+if(inheritedMusic){
+ backAna.hidden=false;
+ window.addEventListener('message',event=>{
+  if(event.origin!==window.location.origin || event.source!==window.parent || event.data?.channel!=='ceniciento-music-v1' || event.data.type!=='state')return;
+  musicLevel.value=String(Math.round(Math.max(0,Math.min(.8,Number(event.data.level)||0))*100));musicEnabled.checked=!!event.data.enabled;updateMusic();
+  musicStart.hidden=!musicEnabled.checked || !!event.data.playing;
+ });
+ sendMusic('ready');
+}else {music.src='../elegia-breve/ana-klaudya.m4a';updateMusic();}
+
 const voiceSeek=$('voiceSeek'),voiceTime=$('voiceTime');
 const formatTime=t=>{const n=Math.max(0,Math.floor(t||0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')};
 const prev=$('prev'),cur=$('current'),next=$('next'),readerText=$('readerText');
@@ -146,8 +176,8 @@ function renderAudioPosition(){if(activeMode!=='listen')return;const t=audio.cur
 function syncAudio(){cancelAnimationFrame(raf);if(activeMode!=='listen'||paused)return;renderAudioPosition();raf=requestAnimationFrame(syncAudio)}
 function playMaster(fromStart=false){if(!audioReady){status.textContent='audio completo no disponible';return}if(fromStart)audio.currentTime=0;paused=false;pauseBtn.textContent='Pausa';status.textContent='narración completa · '+formatTime(audio.duration||narrationTotal);audio.onended=finish;audio.play().then(syncAudio).catch(()=>{paused=true;pauseBtn.textContent='Seguir';status.textContent='pulsa Seguir para escuchar'})}
 function resetVisuals(){lastGray=0;currentAgeState=-1;setAgeProgress(0);root.style.setProperty('--gray','0');root.style.setProperty('--prog','0');voiceSeek.value='0';voiceTime.textContent='0:00 / '+formatTime(audio.duration||narrationTotal)}
-function startListen(){if(!(storyReady&&audioReady)){status.textContent='cargando narración completa';return}activeMode='listen';body.className='listen-mode';modeSwitch.hidden=false;entry.classList.add('open');resetVisuals();currentIndex=-1;renderLine(0);playMaster(true)}
-function startRead(){if(!storyReady)return;activeMode='read';stopAudio();body.className='read-mode';modeSwitch.hidden=false;entry.classList.add('open');resetVisuals();scrollTo(0,0);status.textContent='lectura silenciosa';readScroll()}
+function startListen(){if(!(storyReady&&audioReady)){status.textContent='cargando narración completa';return}startMusic();activeMode='listen';body.className='listen-mode';modeSwitch.hidden=false;entry.classList.add('open');resetVisuals();currentIndex=-1;renderLine(0);playMaster(true)}
+function startRead(){if(!storyReady)return;startMusic();activeMode='read';stopAudio();body.className='read-mode';modeSwitch.hidden=false;entry.classList.add('open');resetVisuals();scrollTo(0,0);status.textContent='lectura sin voz';readScroll()}
 function readScroll(){if(activeMode!=='read')return;const max=Math.max(1,document.documentElement.scrollHeight-innerHeight),p=clamp(scrollY/max);root.style.setProperty('--prog',p.toFixed(4));setAgeProgress(p);const night=.55;setGrayProgress((p-night)/(1-night))}
 function finish(){cancelAnimationFrame(raf);setAgeProgress(1);renderLine(LISTEN_CUES.length-1);root.style.setProperty('--prog','1');voiceSeek.value='1000';voiceTime.textContent=formatTime(audio.duration||narrationTotal)+' / '+formatTime(audio.duration||narrationTotal);status.textContent='fin';paused=true;pauseBtn.textContent='Repetir'}
 function restartListen(){stopAudio();resetVisuals();currentIndex=-1;renderLine(0);playMaster(true)}

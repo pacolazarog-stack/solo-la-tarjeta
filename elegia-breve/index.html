@@ -308,6 +308,9 @@
       display:block;width:100%;height:100%;object-fit:contain;
       opacity:0;transition:opacity 6s ease 6s;
     }
+    .ceniciento-frame{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#100e0d}
+    .ceniciento-frame[hidden]{display:none}
+    body.ceniciento-open{overflow:hidden}
     .portrait-question{
       position:absolute;left:30%;top:44%;transform:translate(-50%,-50%);
       display:grid;place-items:center;width:48px;height:48px;border-radius:50%;
@@ -709,10 +712,12 @@
     <div class="portrait-image-area">
       <div class="portrait-image-wrap">
         <img id="anaPortrait" src="ana-klaudya-fotografia.jpg" alt="Ana Klaudya" decoding="async">
-        <a class="portrait-question" href="../ceniciento/" aria-label="Descubrir Ceniciento">?</a>
+        <a id="cenicientoLink" class="portrait-question" href="../ceniciento/" aria-label="Descubrir Ceniciento">?</a>
       </div>
     </div>
   </div>
+
+  <iframe id="cenicientoFrame" class="ceniciento-frame" title="Ceniciento" allow="autoplay" hidden></iframe>
 
   <div class="entry" id="entry" role="dialog" aria-modal="true" aria-label="Entrada a Ana Klaudya">
     <div class="entry-inner">
@@ -1123,6 +1128,7 @@
       });
       document.getElementById('voiceClose').addEventListener('click',()=>voiceDialog.close());
       voiceDialog.addEventListener('close',()=>{
+        if(body.classList.contains('ceniciento-open')){recording.pause();body.classList.remove('voice-open');return;}
         cancelVoiceStart();recording.pause();body.classList.remove('voice-open');restoreAmbient();
       });
       recording.addEventListener('play',()=>{
@@ -1131,7 +1137,7 @@
         voicePlay.textContent='Pausar';voiceStatus.textContent='';startMix();
       });
       recording.addEventListener('pause',()=>{
-        if(voicePriming || voicePending) return;
+        if(voicePriming || voicePending || body.classList.contains('ceniciento-open')) return;
         voiceAllowed=false;voicePlay.textContent='Activar voz';restoreAmbient();
       });
       recording.addEventListener('ended',()=>{
@@ -1143,6 +1149,47 @@
         cancelVoiceStart();
         voiceStatus.textContent='No se ha podido cargar el audio. Puedes volver a intentarlo.';
       });
+
+      const cenicientoFrame=document.getElementById('cenicientoFrame');
+      const sendCenicientoMusicState=()=>{
+        if(!cenicientoFrame.contentWindow || cenicientoFrame.hidden) return;
+        cenicientoFrame.contentWindow.postMessage({channel:'ceniciento-music-v1',type:'state',level:musicLimit(),enabled:musicEnabled.checked && !voiceMusic.muted,playing:!voiceMusic.paused},window.location.origin);
+      };
+      const closeCeniciento=()=>{
+        cenicientoFrame.hidden=true;body.classList.remove('ceniciento-open');
+        // Unload narration only; the music remains in this document.
+        cenicientoFrame.removeAttribute('src');
+      };
+      document.getElementById('cenicientoLink').addEventListener('click',event=>{
+        if(event.button>0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        body.classList.add('ceniciento-open');
+        voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
+        recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
+        cenicientoFrame.hidden=false;
+        if(!cenicientoFrame.getAttribute('src'))cenicientoFrame.src='../ceniciento/?music=parent&v=20261005-continuous';
+        if(window.location.hash!=='#ceniciento')window.history.pushState({ceniciento:true},'','#ceniciento');
+      });
+      window.addEventListener('popstate',()=>{
+        if(window.location.hash!=='#ceniciento')closeCeniciento();
+        else document.getElementById('cenicientoLink').click();
+      });
+      window.addEventListener('message',event=>{
+        if(event.origin!==window.location.origin || event.source!==cenicientoFrame.contentWindow || event.data?.channel!=='ceniciento-music-v1')return;
+        const data=event.data;
+        if(data.type==='close'){window.history.back();return;}
+        if(data.type==='level' && Number.isFinite(data.level)){
+          const level=Math.max(0,Math.min(.8,data.level));ambientLevel=level;showMusicLevel(level);fadeMusicTo(musicEnabled.checked?level:0,.5);
+        }
+        if(data.type==='enabled'){
+          musicEnabled.checked=!!data.enabled;voiceMusic.muted=false;
+          if(musicEnabled.checked){prepareMix();fadeMusicTo(musicLimit(),.5);ensureAmbientMusic();}
+          else fadeMusicTo(0,.5);
+        }
+        if(data.type==='start')ensureAmbientMusic();
+        sendCenicientoMusicState();
+      });
+      cenicientoFrame.addEventListener('load',sendCenicientoMusicState);
 
       const startWarmPrelude=()=>{
         if(warmPhase!==0) return;
