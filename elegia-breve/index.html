@@ -713,7 +713,8 @@
       .heat-final.is-burning{animation:none}
       .scroll-cue{animation:none}
     }
-  </style>
+  body.eyes-open *,body.eyes-open *::before,body.eyes-open *::after{animation-play-state:paused!important}
+</style>
 </head>
 
 <body class="locked">
@@ -1197,7 +1198,7 @@
         cenicientoFrame.contentWindow.postMessage({channel:'ceniciento-music-v1',type:'state',pulseTime:(pulseField.getAnimations?.()[0]?.currentTime||0),level:musicLimit(),enabled:musicEnabled.checked && !voiceMusic.muted,playing:!voiceMusic.paused},window.location.origin);
       };
       const closeCeniciento=()=>{
-        cenicientoFrame.hidden=true;cenicientoFrame.classList.remove('sonrisa-transition','sonrisa-visible');body.classList.remove('sonrisa-open','ceniciento-open');root.classList.remove('ceniciento-open');document.title='ANA KLAUDYA';
+        cenicientoFrame.hidden=true;cenicientoFrame.classList.remove('sonrisa-transition','sonrisa-visible');body.classList.remove('sonrisa-open','ceniciento-open','eyes-open');root.classList.remove('ceniciento-open');document.title='ANA KLAUDYA';
         // Unload narration only; the music remains in this document.
         cenicientoFrame.removeAttribute('src');
         anaNavigation.hidden=false;body.classList.add('ana-navigation-ready');
@@ -1218,13 +1219,14 @@
       let sonrisaLeaving=false;
       const openPoem=(piece)=>{
         if(body.classList.contains('sonrisa-open'))return;
+        body.classList.toggle('eyes-open',piece==='ojos');
         sonrisaLeaving=false;
         cenicientoFrame.classList.remove('sonrisa-visible');cenicientoFrame.classList.add('sonrisa-transition');body.classList.add('sonrisa-open');
         anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=piece==='ojos'?'EN TUS OJOS':'EN TUS LABIOS';
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
         cenicientoFrame.hidden=false;
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261006-ojos';
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261006-ojos-inmoviles-1524';
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openSonrisa=()=>openPoem('sonrisa');
