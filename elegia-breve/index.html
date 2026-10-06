@@ -288,6 +288,7 @@
     .voice-dialog audio{display:block;width:100%;margin:18px 0}
     .voice-dialog audio:not([controls]){display:none}
     .voice-status{min-height:1.4em;font:400 .85rem/1.4 Arial,Helvetica,sans-serif;color:#375548}
+    .voice-mix[hidden]{display:none}
     .voice-mix{margin:22px 0;padding:16px;border:1px solid rgba(23,63,50,.16);border-radius:12px;text-align:left;font:400 .88rem/1.5 Arial,Helvetica,sans-serif}
     .voice-mix label{display:flex;align-items:center;gap:10px}
     .voice-mix input[type="checkbox"]{width:18px;height:18px;accent-color:#375548}
@@ -765,12 +766,11 @@
     <audio id="recording" controls controlslist="nodownload" preload="metadata" src="recitado.m4a" aria-label="Recitado de Ana Klaudya">
       Tu navegador no admite la reproducción de audio.
     </audio>
-    <div class="voice-mix">
+    <div class="voice-mix" hidden>
       <label><input id="musicEnabled" type="checkbox" checked> Acompañar con música</label>
       <div class="music-level"><label for="musicLevel">Nivel de música</label><output id="musicLevelValue" for="musicLevel">80 %</output></div>
       <input id="musicLevel" type="range" min="0" max="80" value="80" step="1" aria-label="Nivel de música">
     </div>
-    <button class="entry-button" id="dialogMusicStart" type="button" hidden>Activar música</button>
     <p class="voice-status" id="voiceStatus" role="status" aria-live="polite"></p>
     <div class="entry-actions">
       <button class="entry-button" id="voicePlay" type="button">Activar voz</button>
@@ -925,9 +925,7 @@
         if(mixContext.state==='suspended') mixContext.resume().catch(()=>{});
         return true;
       };
-      const ambientButtons=show=>{
-        document.getElementById('dialogMusicStart').hidden=!show;
-      };
+      const ambientButtons=show=>{if(show){body.classList.add('sound-ready');syncSoundToggle();}};
       const ensureAmbientMusic=()=>{
         if(!musicEnabled.checked) return Promise.resolve(false);
         voiceMusic.muted=false;
@@ -992,12 +990,7 @@
         if(!prepareMix()) return;
         ensureAmbientMusic();
       };
-      [document.getElementById('dialogMusicStart')].forEach(button=>{
-        button.addEventListener('click',()=>{
-          prepareMix();fadeMusicTo(musicLimit(),.6);ensureAmbientMusic();
-        });
-      });
-      musicEnabled.addEventListener('change',()=>{
+            musicEnabled.addEventListener('change',()=>{
         if(musicEnabled.checked){
           prepareMix();fadeMusicTo(musicLimit());ensureAmbientMusic();startMix();
         }else {fadeMusicTo(0);ambientButtons(false);}
