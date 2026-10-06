@@ -772,7 +772,7 @@
     <button class="entry-button" id="anaOjos" type="button">En tus ojos</button>
     <button class="entry-button" id="anaCabello" type="button">Tu cabello</button>
     <button class="entry-button" id="anaPiel" type="button">Tu piel</button>
-    <button class="entry-button" id="anaEstrella" type="button">Prólogo · Siguiendo una estrella</button>
+    <button class="entry-button" id="anaEstrella" type="button">Prólogo · Siguiendo una tarjeta</button>
     <button class="entry-button flambe-button" id="anaEpilogue" type="button">Epílogo · A fuego lento</button>
   </nav>
 
@@ -1255,13 +1255,13 @@
         body.classList.toggle('eyes-open',piece==='ojos');
         sonrisaLeaving=false;
         cenicientoFrame.classList.remove('sonrisa-visible');cenicientoFrame.classList.add('sonrisa-transition');body.classList.add('sonrisa-open');
-        anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=({ojos:'EN TUS OJOS',sonrisa:'EN TUS LABIOS',cabello:'TU CABELLO',piel:'TU PIEL',estrella:'SIGUIENDO UNA ESTRELLA',epilogo:'A FUEGO LENTO · EPÍLOGO'})[piece];
+        anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=({ojos:'EN TUS OJOS',sonrisa:'EN TUS LABIOS',cabello:'TU CABELLO',piel:'TU PIEL',estrella:'SIGUIENDO UNA TARJETA',epilogo:'A FUEGO LENTO · EPÍLOGO'})[piece];
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
         prologueActive=asPrologue;
         cenicientoFrame.hidden=false;
         cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261007-epilogo-brasa-0035'+(asPrologue?'&prologue=1':'');
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261007-ana-134'+(asPrologue?'&prologue=1':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openSonrisa=()=>openPoem('sonrisa');
