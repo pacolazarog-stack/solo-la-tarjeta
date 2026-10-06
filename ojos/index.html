@@ -15,7 +15,7 @@ location.replace('../elegia-breve/#ojos');
 *{box-sizing:border-box}
 body{margin:0;background:#17121b;color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100svh}
 body{isolation:isolate}
-.eye-background{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;animation:labiosHeartbeat 1.85s linear infinite;animation-delay:var(--pulse-delay,0s);will-change:filter,transform}.eye-background img{position:absolute;width:max(240vw,180svh);max-width:none;height:auto;left:50%;top:45%;transform:translate(-67%,-44%)} 
+.eye-background{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;animation:labiosHeartbeat 1.85s linear infinite;animation-delay:var(--pulse-delay,0s);will-change:filter,transform}.eye-background img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 54%} 
 body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(23,18,27,.90),rgba(23,18,27,.72) 48%,rgba(23,18,27,.83)),radial-gradient(ellipse at 50% 45%,transparent,#17121b66);z-index:-1}
 header{max-width:1180px;margin:auto;padding:28px 6vw;display:flex;justify-content:space-between;gap:20px;font:11px/1.5 system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase}
 a{color:var(--muted);text-decoration:none}a:hover{color:var(--ink)}
@@ -38,7 +38,7 @@ button.primary{background:var(--rose);color:#24151d;border-color:var(--rose)}
 .accent{color:var(--rose)}.ending{font-style:italic;color:var(--rose)}
 .signature{font:12px/1.5 system-ui,sans-serif;letter-spacing:.25em;color:var(--gold);margin-top:45px}
 footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:10px/1.6 system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase}
-@media(max-width:760px){header{padding:22px 7vw}main{display:block;padding:15px 7vw 40px}.intro{position:static;padding-top:10px}h1{font-size:64px}.subtitle{max-width:none}.controls{margin-top:24px}.poem{padding:22px 0 0;border-left:none;border-top:1px solid #c8ae8338;margin-top:30px;font-size:clamp(18px,4.8vw,25px)}.stanza{margin-bottom:28px}footer{padding:0 7vw 25px}}
+@media(max-width:760px){.eye-background img{object-fit:contain;object-position:center 45%}header{padding:22px 7vw}main{display:block;padding:15px 7vw 40px}.intro{position:static;padding-top:10px}h1{font-size:64px}.subtitle{max-width:none}.controls{margin-top:24px}.poem{padding:22px 0 0;border-left:none;border-top:1px solid #c8ae8338;margin-top:30px;font-size:clamp(18px,4.8vw,25px)}.stanza{margin-bottom:28px}footer{padding:0 7vw 25px}}
 @media(prefers-reduced-motion:reduce){.line{transition:none}.line.hidden-line{filter:none}}
 @media print{body{background:white;color:black}body:after,body:before,.eye-background,header,.controls,.status,footer{display:none}main{display:block;padding:0}.intro{position:static;padding:0}h1{font-size:32px}h1 em,.kicker,.subtitle,.accent,.ending,.signature{color:black}.rule{display:none}.poem{border:0;padding:0;font-size:16px}.line.hidden-line{opacity:1;filter:none}}
 .music-controls{display:grid;gap:13px;margin-top:24px;color:var(--muted);font:12px/1.5 system-ui,sans-serif;max-width:260px}.music-controls button{justify-self:start}.music-controls button[hidden]{display:none}.music-controls input{accent-color:var(--rose)}.music-controls label{display:flex;gap:10px;align-items:center}.music-controls input[type=range]{width:100%;min-height:28px}.music-controls output{margin-left:auto}@media print{.music-controls{display:none}}
@@ -53,7 +53,7 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 </style>
 </head>
 <body>
-<div class="eye-background" aria-hidden="true"><img src="../elegia-breve/ana-klaudya-fotografia.jpg" alt="" decoding="async"></div>
+<div class="eye-background" aria-hidden="true"><img src="./ojos-ana.svg" alt="" decoding="async"></div>
 <header><span>flag · poesía</span><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></header>
 <main>
 <section class="intro" aria-labelledby="title">
