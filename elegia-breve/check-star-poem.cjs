@@ -66,8 +66,8 @@ get('cenicientoFrame').hidden=true;
   const childScript=[...child.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
   const items=new Map(),childTimers=new Map(),messages=[];let seq=0;
   const node=id=>{if(!items.has(id))items.set(id,new Element(id));return items.get(id);};
-  const pattern=piece==='estrella'?/class="phrase hidden-phrase(?: ending final-stanza)?" aria-hidden="true" data-wait="(\d+)">([^<]+)/g:/class="line(?: ending)?" data-wait="(\d+)">([^<]+)/g;
-  const lines=[...child.matchAll(pattern)].map((m,i)=>{const e=node('line'+i);e.dataset={wait:m[1]};e.textContent=m[2];if(piece==='estrella'){e.classList.add('hidden-phrase');e.setAttribute('aria-hidden','true');}return e;});
+  const pattern=piece==='estrella'?/class="phrase hidden-phrase(?: ending final-stanza)?" aria-hidden="true" data-wait="(\d+)">([\s\S]*?)<\/p>/g:/class="line(?: ending)?" data-wait="(\d+)">([^<]+)/g;
+  const lines=[...child.matchAll(pattern)].map((m,i)=>{const e=node('line'+i);e.dataset={wait:m[1]};e.textContent=m[2].replace(/<br>\s*/g,' ');if(piece==='estrella'){assert.equal((m[2].match(/<br>/g)||[]).length,1,'Each complete sentence retains its two verses');e.classList.add('hidden-phrase');e.setAttribute('aria-hidden','true');}return e;});
   assert.equal(lines.length,piece==='estrella'?5:piece==='cabello'?16:17);
   if(piece==='estrella'){
    assert.deepEqual(lines.map(l=>l.textContent),['Siguiendo una estrella, encontré un lugar.','Al detenerme allí, empezó a ser mi hogar.','Siguiendo a mi ángel, llegué hasta ti.','Cuando era yang, buscaba el yin.','Ahora que soy yin, me basta con mirarte.']);

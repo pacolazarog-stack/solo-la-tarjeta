@@ -8,7 +8,7 @@
 <title>Siguiendo una estrella · flag</title>
 <script>
 if(window.parent===window && new URLSearchParams(location.search).get('music')!=='parent'){
-location.replace('../elegia-breve/?v=luna-frases-20261006#estrella');
+location.replace('../elegia-breve/?v=luna-versos-20261006#estrella');
 }
 </script>
 <style>
@@ -39,7 +39,8 @@ button:disabled{opacity:.45;cursor:default}
 .stanza{margin:0 0 38px}
 .line{display:block;transition:opacity .8s ease,filter .8s ease}
 .line.hidden-line{opacity:0;filter:blur(5px)}
-.phrase{margin:0 0 38px;transition:opacity 1.2s ease;opacity:1}
+.phrase{margin:0 0 48px;line-height:1.85;transition:opacity 1.2s ease;opacity:1}
+@media(max-width:760px){.phrase{margin-bottom:40px}}
 .phrase.hidden-phrase{visibility:hidden;opacity:0}
 .signature{transition:opacity 1.2s ease}
 .accent{color:var(--rose)}.ending{font-style:italic;color:var(--rose)}
@@ -140,11 +141,16 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 </div>
 </section>
 <article class="poem" id="poem" aria-label="Siguiendo una estrella" hidden>
-<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Siguiendo una estrella, encontré un lugar.</p>
-<p class="phrase hidden-phrase" aria-hidden="true" data-wait="7000">Al detenerme allí, empezó a ser mi hogar.</p>
-<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Siguiendo a mi ángel, llegué hasta ti.</p>
-<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6500">Cuando era yang, buscaba el yin.</p>
-<p class="phrase hidden-phrase ending final-stanza" aria-hidden="true" data-wait="7000">Ahora que soy yin, me basta con mirarte.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Siguiendo una estrella,<br>
+encontré un lugar.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="7000">Al detenerme allí,<br>
+empezó a ser mi hogar.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Siguiendo a mi ángel,<br>
+llegué hasta ti.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6500">Cuando era yang,<br>
+buscaba el yin.</p>
+<p class="phrase hidden-phrase ending final-stanza" aria-hidden="true" data-wait="7000">Ahora que soy yin,<br>
+me basta con mirarte.</p>
 <div class="signature" id="signature" hidden>flag</div>
 </article>
 </main>
