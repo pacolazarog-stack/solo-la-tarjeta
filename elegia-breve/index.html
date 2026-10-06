@@ -315,6 +315,10 @@
     body.ana-navigation-ready main{padding-bottom:100px}
     .ceniciento-frame{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#100e0d}
     .ceniciento-frame[hidden]{display:none}
+    .epilogue-invitation{margin:18svh 0 0}
+    .epilogue-invitation[hidden]{display:none}
+    .portrait-epilogue{position:absolute;right:max(24px,env(safe-area-inset-right));bottom:max(32px,env(safe-area-inset-bottom));pointer-events:none;opacity:0;visibility:hidden;transition:opacity 3s ease 25s,visibility 0s linear 25s}
+    body.portrait-revealed .portrait-epilogue{opacity:1;visibility:visible;pointer-events:auto}
     .ceniciento-frame.sonrisa-transition{opacity:0;transition:opacity 7s ease-in-out;background:transparent}
     .ceniciento-frame.sonrisa-transition.sonrisa-visible{opacity:1}
     @media(prefers-reduced-motion:reduce){.ceniciento-frame.sonrisa-transition{transition-duration:.2s}}
@@ -738,6 +742,7 @@
         <a id="cenicientoLink" class="portrait-question" href="../ceniciento/" aria-label="Descubrir Ceniciento"><span class="question-beat" aria-hidden="true">?</span></a>
       </div>
     </div>
+    <button class="entry-button portrait-epilogue" id="portraitEpilogue" type="button">Epílogo · A fuego lento →</button>
   </div>
 
   <nav class="ana-navigation" id="anaNavigation" aria-label="Navegar entre las obras" hidden>
@@ -749,6 +754,7 @@
     <button class="entry-button" id="anaCabello" type="button">Tu cabello</button>
     <button class="entry-button" id="anaPiel" type="button">Tu piel</button>
     <button class="entry-button" id="anaEstrella" type="button">Prólogo · Siguiendo una estrella</button>
+    <button class="entry-button" id="anaEpilogue" type="button">Epílogo · A fuego lento</button>
   </nav>
 
   <iframe id="cenicientoFrame" class="ceniciento-frame" title="Ceniciento" allow="autoplay" hidden></iframe>
@@ -847,6 +853,7 @@
         <span class="heat-part heat-calor">calor.</span>
       </span>
 
+      <div class="epilogue-invitation" id="epilogueInvitation" hidden><button class="entry-button" id="readEpilogue" type="button">Epílogo · A fuego lento →</button></div>
       <span class="line signature g-final-signature" id="signature">flag · 2026</span>
     </div>
   </main>
@@ -1037,6 +1044,7 @@
         listenedRanges=[];listeningStart=null;
       };
       const resetPortraitFinale=()=>{
+        document.getElementById('epilogueInvitation').hidden=true;
         clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
         portraitRequested=false;completedVoicePasses=0;
         questionGrowthActive=false;questionGrowth=.22;questionNext=.22;
@@ -1228,13 +1236,13 @@
         body.classList.toggle('eyes-open',piece==='ojos');
         sonrisaLeaving=false;
         cenicientoFrame.classList.remove('sonrisa-visible');cenicientoFrame.classList.add('sonrisa-transition');body.classList.add('sonrisa-open');
-        anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=({ojos:'EN TUS OJOS',sonrisa:'EN TUS LABIOS',cabello:'TU CABELLO',piel:'TU PIEL',estrella:'SIGUIENDO UNA ESTRELLA'})[piece];
+        anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=({ojos:'EN TUS OJOS',sonrisa:'EN TUS LABIOS',cabello:'TU CABELLO',piel:'TU PIEL',estrella:'SIGUIENDO UNA ESTRELLA',epilogo:'A FUEGO LENTO · EPÍLOGO'})[piece];
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
         prologueActive=asPrologue;
         cenicientoFrame.hidden=false;
         cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261006-prologo-2304'+(asPrologue?'&prologue=1':'');
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261006-epilogo-2344'+(asPrologue?'&prologue=1':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openSonrisa=()=>openPoem('sonrisa');
@@ -1242,6 +1250,8 @@
       const openCabello=()=>openPoem('cabello');
       const openPiel=()=>openPoem('piel');
       const openEstrella=()=>openPoem('estrella');
+      const openEpilogue=()=>openPoem('epilogo');
+      for(const id of ['anaEpilogue','readEpilogue','portraitEpilogue'])document.getElementById(id).addEventListener('click',openEpilogue);
       document.getElementById('anaSonrisa').addEventListener('click',openSonrisa);
       document.getElementById('anaOjos').addEventListener('click',openOjos);
       document.getElementById('anaCabello').addEventListener('click',openCabello);
@@ -1260,7 +1270,8 @@
       document.getElementById('anaVoice').addEventListener('click',()=>{showAnaText();recording.currentTime=0;openVoice();});
       document.getElementById('anaCeniciento').addEventListener('click',()=>document.getElementById('cenicientoLink').click());
       window.addEventListener('popstate',()=>{
-        if(window.location.hash==='#estrella')openEstrella();
+        if(window.location.hash==='#epilogo')openEpilogue();
+        else if(window.location.hash==='#estrella')openEstrella();
         else if(window.location.hash==='#cabello')openCabello();
         else if(window.location.hash==='#piel')openPiel();
         else if(window.location.hash==='#ojos')openOjos();
@@ -1368,6 +1379,7 @@
         setTimeout(()=>{
           finalHeat.classList.add('show-calor');
           intensifyWarmWithCalor();
+          document.getElementById('epilogueInvitation').hidden=false;
         },4500);
       };
 
@@ -1474,7 +1486,8 @@
       syncSoundToggle();
       renderWorld();
       ensureAmbientMusic();
-      if(window.location.hash==='#ceniciento')document.getElementById('cenicientoLink').click();
+      if(window.location.hash==='#epilogo')openEpilogue();
+      else if(window.location.hash==='#ceniciento')document.getElementById('cenicientoLink').click();
       else if(window.location.hash==='#estrella')openEstrella();
       else if(window.location.hash==='#cabello')openCabello();
         else if(window.location.hash==='#piel')openPiel();

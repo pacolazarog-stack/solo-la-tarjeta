@@ -38,7 +38,7 @@ get('cenicientoFrame').hidden=true;
 (async()=>{
  vm.runInNewContext(script,context);await flush();
  const calls=get('voiceMusic').playCalls;get('voiceMusic').currentTime=47.5;
- for(const [piece,id,title] of [['cabello','anaCabello','TU CABELLO'],['piel','anaPiel','TU PIEL'],['estrella','anaEstrella','SIGUIENDO UNA ESTRELLA']]){
+ for(const [piece,id,title] of [['cabello','anaCabello','TU CABELLO'],['piel','anaPiel','TU PIEL'],['estrella','anaEstrella','SIGUIENDO UNA ESTRELLA'],['epilogo','anaEpilogue','A FUEGO LENTO · EPÍLOGO']]){
   get(id).click();await flush();
   assert.equal(context.document.title,title);
   assert.equal(get('cenicientoFrame').hidden,false);
@@ -59,16 +59,24 @@ get('cenicientoFrame').hidden=true;
   assert.equal(get('voiceMusic').playCalls,calls,'Returning also preserves the soundtrack');
   const child=fs.readFileSync(__dirname+'/../'+piece+'/index.html','utf8');
   assert(child.includes('class="detail-background"'));
-  assert(child.includes(piece==='estrella'?'umbral.jpg':'ana-klaudya-fotografia.jpg'));
-  assert(child.includes('.detail-background.is-clear '+(piece==='estrella'?'img':'svg')+'{filter:blur(0)'));
-  assert(child.includes('transition:filter '+(piece==='estrella'?'36':'60')+'s ease-in-out'));
+  if(piece!=='epilogo'){
+   assert(child.includes(piece==='estrella'?'umbral.jpg':'ana-klaudya-fotografia.jpg'));
+   assert(child.includes('.detail-background.is-clear '+(piece==='estrella'?'img':'svg')+'{filter:blur(0)'));
+   assert(child.includes('transition:filter '+(piece==='estrella'?'36':'60')+'s ease-in-out'));
+  }else{assert(child.includes('Epílogo · Ana Klaudya'));assert(child.includes('transition:opacity 7s ease-in-out'));assert(!child.includes('Amor a fuego lento'));}
   assert(!child.includes('<audio'),'Both poems share the host music track');
   const childScript=[...child.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
   const items=new Map(),childTimers=new Map(),messages=[];let seq=0;
   const node=id=>{if(!items.has(id))items.set(id,new Element(id));return items.get(id);};
-  const pattern=piece==='estrella'?/class="phrase hidden-phrase(?: ending final-stanza)?" aria-hidden="true" data-wait="(\d+)">([\s\S]*?)<\/p>/g:/class="line(?: ending)?" data-wait="(\d+)">([^<]+)/g;
-  const lines=[...child.matchAll(pattern)].map((m,i)=>{const e=node('line'+i);e.dataset={wait:m[1]};e.textContent=m[2].replace(/<br>\s*/g,' ');if(piece==='estrella'){assert.equal((m[2].match(/<br>/g)||[]).length,1,'Each complete sentence retains its two verses');e.classList.add('hidden-phrase');e.setAttribute('aria-hidden','true');}return e;});
-  assert.equal(lines.length,piece==='estrella'?5:piece==='cabello'?16:17);
+  const pattern=['estrella','epilogo'].includes(piece)?/class="phrase hidden-phrase(?: ending(?: final-stanza)?)?" aria-hidden="true" data-wait="(\d+)">([\s\S]*?)<\/p>/g:/class="line(?: ending)?" data-wait="(\d+)">([^<]+)/g;
+  const lines=[...child.matchAll(pattern)].map((m,i)=>{const e=node('line'+i);e.dataset={wait:m[1]};e.textContent=m[2].replace(/<br>\s*/g,' ');if(['estrella','epilogo'].includes(piece)){if(piece==='estrella')assert.equal((m[2].match(/<br>/g)||[]).length,1,'Each complete sentence retains its two verses');e.classList.add('hidden-phrase');e.setAttribute('aria-hidden','true');}return e;});
+  assert.equal(lines.length,piece==='estrella'?5:['cabello','epilogo'].includes(piece)?16:17);
+  if(piece==='epilogo'){
+   assert.equal(lines[0].textContent,'Yo iba a escribirte un poema. Tú me diste una cebolla.');
+   assert.equal(lines[9].textContent,'—Al puchero, Paco.');
+   assert.equal(lines.at(-1).textContent,'Lo alcanzo con la otra.');
+   assert.equal([...child.matchAll(pattern)].reduce((n,m)=>n+1+(m[2].match(/<br>/g)||[]).length,0),29);
+  }
   if(piece==='estrella'){
    assert.deepEqual(lines.map(l=>l.textContent),['Siguiendo una estrella, encontré un lugar.','Al detenerme allí, empezó a ser mi hogar.','Siguiendo a mi ángel, llegué hasta ti.','Cuando era yang, buscaba el yin.','Ahora que soy yin, me basta con mirarte.']);
    assert(child.includes('id="poem" aria-label="Siguiendo una estrella" hidden'));
@@ -99,7 +107,8 @@ get('cenicientoFrame').hidden=true;
    assert(child.includes('cx="50" cy="75" r="8" fill="#08101e"'));
   }
   assert.equal(messages[0].type,'ready');
-  const clear=[...childTimers.values()].find(t=>t.ms===350);clear.fn();assert(node('background').classList.contains('is-clear'));
+  if(piece!=='epilogo'){const clear=[...childTimers.values()].find(t=>t.ms===350);clear.fn();}
+  assert(node('background').classList.contains('is-clear'));
   if(piece==='estrella'){
    const moon=node('homeMoon');moon.emit('transitionend',{target:moon,currentTarget:moon,propertyName:'opacity'});
    assert.equal(node('poem').hidden,true,'The early opacity transition does not open the gate');
@@ -122,6 +131,13 @@ get('cenicientoFrame').hidden=true;
    [...childTimers.values()].find(t=>t.ms===40100).fn();
    assert.equal(node('poem').hidden,false,'The timer fallback opens the gate if transitionend is unavailable');
    assert(lines.slice(1).every(l=>l.classList.contains('hidden-phrase')));
+  }else if(piece==='epilogo'){
+   node('full').click();assert(lines.every(l=>l.classList.contains('hidden-phrase')),'Full reading cannot bypass the entry fade');
+   [...childTimers.values()].find(t=>t.ms===7200).fn();
+   assert.equal(node('poem').hidden,false);assert.equal(node('paced').disabled,false);
+   assert(!lines[0].classList.contains('hidden-phrase'));assert(lines[1].classList.contains('hidden-phrase'));
+   node('paced').click();assert.equal(node('paced').textContent,'Continuar');
+   node('full').click();assert(lines.every(l=>!l.classList.contains('hidden-phrase')));assert.equal(node('signature').hidden,false);
   }else{
    node('paced').click();assert(!lines[0].classList.contains('hidden-line'));assert(lines[1].classList.contains('hidden-line'));
    node('paced').click();assert.equal(node('paced').textContent,'Continuar');
@@ -150,5 +166,7 @@ get('cenicientoFrame').hidden=true;
  const anaReading=[...timers.entries()].find(([,t])=>t.ms===14000);assert(anaReading);anaReading[1].fn();
  assert(get('body').classList.contains('reading-ready'));
  get('entryButton').click();await flush();assert.equal(get('cenicientoFrame').hidden,true,'Returning to Ana does not force another prologue');
- console.log('PASS: entry → prologue → spoken name → Ana; uninterrupted music, lunar gate, verse sentences, pause, replay and return');
+ get('readEpilogue').click();await flush();assert(get('cenicientoFrame').src.includes('../epilogo/?music=parent'));
+ assert.equal(get('voiceMusic').currentTime,47.5);assert.equal(get('voiceMusic').playCalls,musicCalls);
+ console.log('PASS: prologue → Ana → epilogue; four routes, uninterrupted music, lunar gate, verse sentences, pause, replay and return');
 })().catch(error=>{console.error(error);process.exit(1);});

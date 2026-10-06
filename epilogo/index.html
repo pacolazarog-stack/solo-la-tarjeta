@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="theme-color" content="#101010">
+<title>A fuego lento · Epílogo de Ana Klaudya</title>
+<script>
+if(window.parent===window && new URLSearchParams(location.search).get('music')!=='parent'){
+location.replace('../elegia-breve/?v=epilogo-20261006#epilogo');
+}
+</script>
+<style>
+:root{color-scheme:dark;--ink:#fff3df;--rose:#e8cc9d;--gold:#d4b177;--muted:#cfbb9f}
+*{box-sizing:border-box}
+body{margin:0;background:#18110b;color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100svh}
+body{isolation:isolate}
+.detail-background{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;}.detail-background svg{position:absolute;inset:0;width:100%;height:100%;filter:blur(18px);transition:filter 60s ease-in-out}.detail-background.is-clear svg{filter:blur(0) contrast(1.04)} 
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(16,16,16,.55),rgba(16,16,16,.38) 48%,rgba(16,16,16,.58)),radial-gradient(ellipse at 50% 45%,transparent,#10101066);z-index:-1;opacity:1;transition:opacity 60s ease-in-out}
+body.detail-clear:before{opacity:.65}
+header{max-width:1180px;margin:auto;padding:28px 6vw;display:flex;justify-content:space-between;gap:20px;font:11px/1.5 system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase}
+a{color:var(--muted);text-decoration:none}a:hover{color:var(--ink)}
+main{max-width:1160px;margin:0 auto;padding:45px 6vw 80px;display:grid;grid-template-columns:.8fr 1.2fr;gap:7vw;align-items:start}
+.intro{position:sticky;top:60px;padding-top:40px}
+.kicker{font:11px/1.8 system-ui,sans-serif;letter-spacing:.26em;color:var(--gold);text-transform:uppercase}
+h1{font-weight:400;font-size:clamp(55px,7vw,95px);letter-spacing:-.05em;line-height:1.02;margin:22px 0 24px}
+h1 em{font-weight:400;color:var(--rose)}
+.rule{width:56px;height:1px;background:var(--gold);margin:30px 0}
+.subtitle{font-size:19px;line-height:1.6;color:var(--muted);max-width:260px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:35px}
+button{font:12px/1.4 system-ui,sans-serif;letter-spacing:.03em;color:var(--ink);background:transparent;border:1px solid #725662;border-radius:30px;padding:13px 18px;min-height:44px;cursor:pointer}
+button:hover{background:#e9b5be16}button:focus-visible,a:focus-visible{outline:2px solid var(--rose);outline-offset:5px}
+button.primary{background:var(--rose);color:#24151d;border-color:var(--rose)}
+.status{min-height:22px;margin-top:15px;color:var(--muted);font:12px/1.5 system-ui,sans-serif}
+.poem{border-left:1px solid #c8ae8338;padding:35px 0 25px 38px;text-shadow:0 2px 6px #000,0 0 18px #101010;font-size:clamp(20px,2.3vw,27px);line-height:1.7;letter-spacing:-.015em}
+.stanza{margin:0 0 38px}
+.line{display:block;transition:opacity .8s ease,filter .8s ease}
+.line.hidden-line{opacity:0;filter:blur(5px)}
+.accent{color:var(--rose)}.ending{font-style:italic;color:var(--rose)}
+.signature{font:12px/1.5 system-ui,sans-serif;letter-spacing:.25em;color:var(--gold);margin-top:45px}
+footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:10px/1.6 system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase}
+@media(max-width:760px){header{padding:22px 7vw}main{display:block;padding:15px 7vw 40px}.intro{position:static;padding-top:10px}h1{font-size:64px}.subtitle{max-width:none}.controls{margin-top:24px}.poem{padding:22px 0 0;border-left:none;border-top:1px solid #c8ae8338;margin-top:30px;font-size:clamp(18px,4.8vw,25px)}.stanza{margin-bottom:28px}footer{padding:0 7vw 25px}}
+@media(prefers-reduced-motion:reduce){.line{transition:none}.line.hidden-line{filter:none}}
+@media print{body{background:white;color:black}body:after,body:before,.detail-background,header,.controls,.status,footer{display:none}main{display:block;padding:0}.intro{position:static;padding:0}h1{font-size:32px}h1 em,.kicker,.subtitle,.accent,.ending,.signature{color:black}.rule{display:none}.poem{border:0;padding:0;font-size:16px}.line.hidden-line{opacity:1;filter:none}}
+.music-controls{display:grid;gap:13px;margin-top:24px;color:var(--muted);font:12px/1.5 system-ui,sans-serif;max-width:260px}.music-controls button{justify-self:start}.music-controls button[hidden]{display:none}.music-controls input{accent-color:var(--rose)}.music-controls label{display:flex;gap:10px;align-items:center}.music-controls input[type=range]{width:100%;min-height:28px}.music-controls output{margin-left:auto}@media print{.music-controls{display:none}}
+
+@media(prefers-reduced-motion:reduce){ .detail-background,.detail-background svg{animation:none!important}.detail-background svg{transition:none;filter:none}}
+/* El fondo solo cambia de nitidez una vez: sin latido ni zoom. */
+.detail-background,.detail-background svg,body::before,body::after{animation:none!important;transform:none!important}
+[hidden]{display:none!important}
+button:disabled{opacity:.45;cursor:default}
+h1{font-size:clamp(48px,6.5vw,82px)}
+.detail-background{background:radial-gradient(ellipse at 18% 80%,#9c5d2a55,transparent 60%),radial-gradient(ellipse at 80% 5%,#be985429,transparent 65%),linear-gradient(140deg,#302113,#18110b 70%);opacity:.3;transition:opacity 7s ease-in-out}
+.detail-background.is-clear{opacity:1}
+.phrase{margin:0 0 44px;line-height:1.85;transition:opacity 1.2s ease;opacity:1}
+.phrase.hidden-phrase{visibility:hidden;opacity:0}
+.ending{margin-top:60px}
+@media(max-width:760px){h1{font-size:clamp(45px,12vw,64px)}.phrase{margin-bottom:36px}}
+@media(prefers-reduced-motion:reduce){.detail-background,.phrase{transition:none}}
+</style>
+</head>
+<body>
+<div class="detail-background" aria-hidden="true"></div>
+<header><span>flag · poesía</span><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></header>
+<main>
+<section class="intro" aria-labelledby="title">
+<div class="kicker">Epílogo · Ana Klaudya</div>
+<h1 id="title">A fuego<br><em>lento.</em></h1>
+<div class="rule" aria-hidden="true"></div>
+
+<div class="controls">
+<button class="primary" id="paced" type="button" disabled>Entrando</button>
+<button id="full" type="button" disabled>Poema completo</button>
+</div>
+<p class="status" id="status" role="status">Deja entrar la luz.</p>
+<div class="music-controls">
+<button id="musicStart" type="button">Activar música</button>
+<label><input id="musicEnabled" type="checkbox" checked> Música de fondo</label>
+<label for="musicLevel">Volumen <output id="musicValue">30 %</output></label>
+<input id="musicLevel" type="range" min="0" max="80" value="30">
+</div>
+</section>
+<article class="poem" id="poem" aria-label="A fuego lento" hidden>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="4800">Yo iba a escribirte un poema.<br>
+Tú me diste una cebolla.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3200">—Empieza por aquí.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="5200">A los dos minutos<br>
+ya me habías hecho llorar<br>
+sin romperme el corazón.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6800">Tarareas algo en portugués<br>
+mientras el aceite se calienta.<br>
+Yo sigo el ritmo con el pie.<br>
+La cuchara<br>
+se me queda quieta.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3200">—Remueve, poeta.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="5500">Se me había olvidado el puchero.<br>
+Estaba buscando una palabra<br>
+para el modo en que sonríes.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3000">Me acercas la cuchara.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3200">—Prueba. ¿Qué le falta?</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3200">Me quedo mirándote.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3200">—Al puchero, Paco.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="4000">—Sal.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Tú pones dos platos.<br>
+Yo llevo el puchero a la mesa.<br>
+Apartas los papeles<br>
+para que quepa.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="4200">El poema sigue sin terminar.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="4600">Me pides el pan.<br>
+Yo te doy la mano.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3500">—El pan, poeta.</p>
+<p class="phrase hidden-phrase ending" aria-hidden="true" data-wait="5500">Lo alcanzo con la otra.</p>
+<div class="signature" id="signature" hidden>flag</div>
+</article>
+</main>
+<footer>A fuego lento · Epílogo · octubre de 2026</footer>
+<script>
+const detailBackground=document.querySelector('.detail-background');
+requestAnimationFrame(()=>requestAnimationFrame(()=>detailBackground.classList.add('is-clear')));
+const inheritedMusic=window.parent!==window && new URLSearchParams(location.search).get('music')==='parent';
+const musicLevel=document.getElementById('musicLevel'),musicEnabled=document.getElementById('musicEnabled'),musicValue=document.getElementById('musicValue'),musicStart=document.getElementById('musicStart');
+const sendMusic=type=>window.parent.postMessage({channel:'ceniciento-music-v1',type,level:Number(musicLevel.value)/100,enabled:musicEnabled.checked},location.origin);
+musicLevel.addEventListener('input',()=>{musicValue.textContent=musicLevel.value+' %';sendMusic('level')});
+musicEnabled.addEventListener('change',()=>sendMusic('enabled'));
+musicStart.addEventListener('click',()=>{musicEnabled.checked=true;sendMusic('enabled');sendMusic('start')});
+document.getElementById('backAna').addEventListener('click',event=>{
+ if(!inheritedMusic || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)return;
+ event.preventDefault();sendMusic('home');
+});
+window.addEventListener('message',event=>{
+ if(event.origin!==location.origin || event.source!==window.parent || event.data?.channel!=='ceniciento-music-v1' || event.data.type!=='state')return;
+
+ musicLevel.value=String(Math.round(Math.max(0,Math.min(.8,Number(event.data.level)||0))*100));
+ musicValue.textContent=musicLevel.value+' %';musicEnabled.checked=!!event.data.enabled;
+ musicStart.hidden=!musicEnabled.checked || !!event.data.playing;
+});
+if(inheritedMusic)sendMusic('ready');
+const phrases=[...document.querySelectorAll('.phrase')];
+const poem=document.getElementById('poem'),signature=document.getElementById('signature');
+const paced=document.getElementById('paced'),full=document.getElementById('full'),status=document.getElementById('status');
+let timer=null,index=0,mode='waiting',ready=false;
+function clear(){clearTimeout(timer);timer=null}
+function hidePhrase(phrase){phrase.classList.add('hidden-phrase');phrase.setAttribute('aria-hidden','true')}
+function showPhrase(phrase){phrase.classList.remove('hidden-phrase');phrase.removeAttribute('aria-hidden')}
+function reveal(){
+ if(!ready || mode!=='playing')return;
+ if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';signature.hidden=false;return}
+ const phrase=phrases[index++];showPhrase(phrase);
+ timer=setTimeout(reveal,Number(phrase.dataset.wait));
+}
+function beginReading(){
+ clear();index=0;signature.hidden=true;phrases.forEach(hidePhrase);mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';reveal();
+}
+paced.addEventListener('click',()=>{
+ if(!ready)return;
+ if(mode==='playing'){clear();mode='paused';paced.textContent='Continuar';status.textContent='Una pausa, a tu elección.';return}
+ if(mode==='paused'){mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';reveal();return}
+ beginReading();
+});
+full.addEventListener('click',()=>{
+ if(!ready)return;
+ clear();mode='full';phrases.forEach(showPhrase);signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';
+});
+setTimeout(()=>{ready=true;poem.hidden=false;paced.disabled=false;full.disabled=false;beginReading()},window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches?220:7200);
+</script>
+</body>
+</html>
