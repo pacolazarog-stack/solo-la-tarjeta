@@ -320,12 +320,13 @@
     .portrait-epilogue{position:absolute;right:max(24px,env(safe-area-inset-right));bottom:max(32px,env(safe-area-inset-bottom));pointer-events:none;opacity:0;visibility:hidden;transition:opacity 3s ease 25s,visibility 0s linear 25s}
     body.portrait-revealed .portrait-epilogue{opacity:1;visibility:visible;pointer-events:auto}
     .flambe-button,.flambe-button:hover,.flambe-button:focus-visible{
-      position:relative;isolation:isolate;overflow:hidden;color:#321609;border-color:#ed993d;
+      isolation:isolate;overflow:hidden;color:#321609;border-color:#ed993d;
       background:linear-gradient(115deg,#ffe19a,#ffad50 24%,#f79548 48%,#ffcf68 72%,#ffe19a);
       background-size:280% 100%;text-shadow:0 1px 0 rgba(255,239,178,.4);
       box-shadow:0 0 16px rgba(255,150,51,.34),0 7px 25px rgba(184,72,16,.24);
       animation:flambeSurface 18s ease-in-out infinite;
     }
+    .flambe-button:not(.portrait-epilogue){position:relative}
     .flambe-button::before{
       content:"";position:absolute;inset:-55% -15% -35%;z-index:-1;pointer-events:none;
       background:radial-gradient(ellipse at 12% 95%,#ffe5a3 0 12%,transparent 32%),radial-gradient(ellipse at 38% 105%,#ffd275 0 18%,transparent 40%),radial-gradient(ellipse at 65% 95%,#fff0b6 0 12%,transparent 33%),radial-gradient(ellipse at 90% 105%,#ffc869 0 18%,transparent 40%);
