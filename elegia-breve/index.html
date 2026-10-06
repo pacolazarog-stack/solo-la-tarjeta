@@ -319,6 +319,24 @@
     .epilogue-invitation[hidden]{display:none}
     .portrait-epilogue{position:absolute;right:max(24px,env(safe-area-inset-right));bottom:max(32px,env(safe-area-inset-bottom));pointer-events:none;opacity:0;visibility:hidden;transition:opacity 3s ease 25s,visibility 0s linear 25s}
     body.portrait-revealed .portrait-epilogue{opacity:1;visibility:visible;pointer-events:auto}
+    .flambe-button,.flambe-button:hover,.flambe-button:focus-visible{
+      position:relative;isolation:isolate;overflow:hidden;color:#321609;border-color:#ed993d;
+      background:linear-gradient(115deg,#ffe19a,#ffad50 24%,#f79548 48%,#ffcf68 72%,#ffe19a);
+      background-size:280% 100%;text-shadow:0 1px 0 rgba(255,239,178,.4);
+      box-shadow:0 0 16px rgba(255,150,51,.34),0 7px 25px rgba(184,72,16,.24);
+      animation:flambeSurface 18s ease-in-out infinite;
+    }
+    .flambe-button::before{
+      content:"";position:absolute;inset:-55% -15% -35%;z-index:-1;pointer-events:none;
+      background:radial-gradient(ellipse at 12% 95%,#ffe5a3 0 12%,transparent 32%),radial-gradient(ellipse at 38% 105%,#ffd275 0 18%,transparent 40%),radial-gradient(ellipse at 65% 95%,#fff0b6 0 12%,transparent 33%),radial-gradient(ellipse at 90% 105%,#ffc869 0 18%,transparent 40%);
+      opacity:.75;transform-origin:center bottom;animation:flambeFlames 8s ease-in-out infinite;
+    }
+    .flambe-button::after{content:"";position:absolute;inset:1px;z-index:-1;pointer-events:none;border-radius:inherit;border:1px solid rgba(255,237,160,.55);background:linear-gradient(180deg,rgba(255,238,181,.2),transparent 60%)}
+    .flambe-button:focus-visible{outline:2px solid #773414;outline-offset:4px}
+    @keyframes flambeSurface{0%,100%{background-position:0% 50%;box-shadow:0 0 16px rgba(255,150,51,.34),0 7px 25px rgba(184,72,16,.24)}50%{background-position:100% 50%;box-shadow:0 0 23px rgba(255,161,59,.5),0 7px 30px rgba(190,80,18,.32)}}
+    @keyframes flambeFlames{0%,100%{transform:translate(-3%,5%) scaleY(.92)}50%{transform:translate(3%,-4%) scaleY(1.12)}}
+    @media(prefers-reduced-motion:reduce){.flambe-button,.flambe-button::before{animation:none}}
+    @media(forced-colors:active){.flambe-button,.flambe-button:hover,.flambe-button:focus-visible{animation:none;background:ButtonFace;color:ButtonText;border:1px solid ButtonText;box-shadow:none;text-shadow:none}.flambe-button::before,.flambe-button::after{display:none}}
     .ceniciento-frame.sonrisa-transition{opacity:0;transition:opacity 7s ease-in-out;background:transparent}
     .ceniciento-frame.sonrisa-transition.sonrisa-visible{opacity:1}
     @media(prefers-reduced-motion:reduce){.ceniciento-frame.sonrisa-transition{transition-duration:.2s}}
@@ -742,7 +760,7 @@
         <a id="cenicientoLink" class="portrait-question" href="../ceniciento/" aria-label="Descubrir Ceniciento"><span class="question-beat" aria-hidden="true">?</span></a>
       </div>
     </div>
-    <button class="entry-button portrait-epilogue" id="portraitEpilogue" type="button">Epílogo · A fuego lento →</button>
+    <button class="entry-button portrait-epilogue flambe-button" id="portraitEpilogue" type="button">Epílogo · A fuego lento →</button>
   </div>
 
   <nav class="ana-navigation" id="anaNavigation" aria-label="Navegar entre las obras" hidden>
@@ -754,7 +772,7 @@
     <button class="entry-button" id="anaCabello" type="button">Tu cabello</button>
     <button class="entry-button" id="anaPiel" type="button">Tu piel</button>
     <button class="entry-button" id="anaEstrella" type="button">Prólogo · Siguiendo una estrella</button>
-    <button class="entry-button" id="anaEpilogue" type="button">Epílogo · A fuego lento</button>
+    <button class="entry-button flambe-button" id="anaEpilogue" type="button">Epílogo · A fuego lento</button>
   </nav>
 
   <iframe id="cenicientoFrame" class="ceniciento-frame" title="Ceniciento" allow="autoplay" hidden></iframe>
@@ -853,7 +871,7 @@
         <span class="heat-part heat-calor">calor.</span>
       </span>
 
-      <div class="epilogue-invitation" id="epilogueInvitation" hidden><button class="entry-button" id="readEpilogue" type="button">Epílogo · A fuego lento →</button></div>
+      <div class="epilogue-invitation" id="epilogueInvitation" hidden><button class="entry-button flambe-button" id="readEpilogue" type="button">Epílogo · A fuego lento →</button></div>
       <span class="line signature g-final-signature" id="signature">flag · 2026</span>
     </div>
   </main>
