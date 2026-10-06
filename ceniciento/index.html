@@ -30,8 +30,6 @@ body.read-mode{min-height:100%;overflow-x:hidden}
 .controls #pause,.controls #restart{display:none}.listen-mode:not(.revealing) .controls #pause,.listen-mode:not(.revealing) .controls #restart{display:block}
 .controls button{border:1px solid rgba(255,255,255,.23);background:rgba(15,13,12,.52);color:rgba(255,255,255,.84);border-radius:999px;padding:.62em .92em;font:500 .62rem/1 Arial,sans-serif;letter-spacing:.11em;text-transform:uppercase;backdrop-filter:blur(8px)}
 .music-panel{position:fixed;z-index:16;left:max(15px,env(safe-area-inset-left));top:43px;width:min(210px,calc(100vw - 30px));padding:10px 12px;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(15,13,12,.70);font:500 .65rem/1.4 Arial,sans-serif;color:rgba(255,255,255,.78)}.music-panel label{display:flex;align-items:center;gap:6px}.music-panel .music-value{margin-left:auto}.music-panel input[type=range]{display:block;width:100%;margin:8px 0 0;accent-color:#ead6b7}.music-panel button{font:inherit;border:1px solid rgba(255,255,255,.23);border-radius:20px;background:transparent;color:inherit;padding:4px 9px;margin-top:7px}.music-panel button[hidden]{display:none}
-.clarity-panel{display:none;position:fixed;z-index:19;left:max(15px,env(safe-area-inset-left));top:144px;width:210px;padding:10px 12px;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:rgba(15,13,12,.70);font:500 .65rem/1.4 Arial,sans-serif;color:rgba(255,255,255,.80)}
-.read-mode .clarity-panel,.listen-mode .clarity-panel{display:block}.clarity-panel label{display:flex;justify-content:space-between;gap:8px}.clarity-panel input{display:block;width:100%;margin:8px 0;accent-color:#ead6b7}.clarity-panel button{font:inherit;color:inherit;background:transparent;border:1px solid rgba(255,255,255,.23);border-radius:20px;padding:5px 9px}
 .reveal-gate{display:none;position:fixed;z-index:21;bottom:7svh;left:50%;transform:translateX(-50%);width:min(620px,calc(100% - 30px));text-align:center;text-shadow:0 3px 18px #000}
 .revealing .reveal-gate{display:block}.reveal-gate p{font:500 .75rem/1.5 Arial,sans-serif;letter-spacing:.05em;color:rgba(255,248,238,.76)}.reveal-gate button{border:1px solid rgba(255,243,224,.50);background:rgba(36,27,21,.65);color:#fff4e7;border-radius:999px;padding:1em 1.8em;font:600 .7rem/1 Arial,sans-serif;letter-spacing:.1em}
 .reveal-gate button:disabled{opacity:.38;cursor:wait}.revealing .karaoke,.revealing .reader,.revealing .voice-timeline{display:none!important}.revealing .portrait{left:50%;right:auto;top:4.5svh;transform:translateX(-50%);width:min(62vw,470px);opacity:1}.read-mode.revealing{height:100svh;overflow:hidden}
@@ -68,7 +66,7 @@ body.read-mode{min-height:100%;overflow-x:hidden}
 .card button:disabled{opacity:.38}
 .hint{margin-top:1rem!important;font-size:.55rem!important;letter-spacing:.1em!important;text-transform:none!important;opacity:.62}
 @media(max-width:760px){
- .clarity-panel{top:144px;width:145px;padding:7px 9px;font-size:.6rem}.revealing .portrait{top:25svh;width:min(82vw,405px)}
+.revealing .portrait{top:25svh;width:min(82vw,405px)}
  .music-panel{top:42px;width:145px;padding:7px 9px;font-size:.6rem}.voice-timeline{top:42px;width:145px;padding:7px 9px;font-size:.6rem}.portrait{top:18svh;width:min(82vw,405px);border-radius:21px}
  .karaoke{bottom:8.4svh;width:calc(100% - 22px)}
  .current{font-size:clamp(1.28rem,5.6vw,1.7rem);max-width:28ch}
@@ -81,6 +79,20 @@ body.read-mode{min-height:100%;overflow-x:hidden}
  .reader p{font-size:1.07rem;line-height:1.64}
 }
 @media(prefers-reduced-motion:reduce){.line,.bg .age-background,.progress i,.entry,.portrait{transition-duration:.01ms}}
+@media(max-width:760px){
+ body.read-mode:not(.revealing){height:100svh;overflow:hidden}
+ .read-mode:not(.revealing) .portrait{left:50%;right:auto;top:132px;transform:translateX(-50%);height:30svh;width:auto;aspect-ratio:3/4;opacity:1;border-radius:14px}
+ .read-mode:not(.revealing) .reader{position:fixed;top:calc(132px + 30svh + 12px);bottom:12px;left:11px;right:11px;width:auto;margin:0;padding:0 0 24px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+ .read-mode .controls{top:35px;left:11px;right:11px;justify-content:center}
+ .read-mode .music-panel{top:73px;left:11px;width:calc(100% - 22px);padding:5px 9px}
+ .read-mode .music-panel label{display:inline-flex;min-width:100px}
+ .read-mode .music-panel input[type=range]{display:inline-block;width:calc(100% - 115px);margin:0 0 0 8px;vertical-align:middle}
+ .read-mode .music-panel button{margin:3px 0 0}
+ .read-mode .reader article{border-radius:14px;box-shadow:none}
+ .read-mode .reader h1{font-size:1.8rem}
+ .read-mode .reader .by{margin-bottom:1.5rem}
+ .read-mode .reader p{font-size:1.04rem;line-height:1.6}
+}
 </style>
 </head>
 <body>
@@ -99,7 +111,6 @@ body.read-mode{min-height:100%;overflow-x:hidden}
 <div id="entry" class="entry"><div class="card"><h1>CENICIENTO</h1><p>cuento · flag · 2026</p><div class="mode-buttons"><button id="listen" disabled>Voz</button><button id="read" disabled>Leer</button></div><p class="hint">puede escucharse con texto sincronizado o leerse sin voz</p></div></div>
 <div class="voice-timeline"><label for="voiceSeek">Voz <span id="voiceTime">0:00 / 14:24</span></label><input id="voiceSeek" type="range" min="0" max="1000" step="1" value="0" aria-label="Avance de la voz"></div>
 <aside class="music-panel" aria-label="Música de fondo"><label><input id="cenMusicEnabled" type="checkbox" checked> Música <output id="cenMusicValue">80 %</output></label><input id="cenMusicLevel" type="range" min="0" max="80" step="1" value="80" aria-label="Volumen de la música"><button id="cenMusicStart" type="button" hidden>Activar música</button></aside>
-<aside class="clarity-panel" aria-label="Nitidez de la imagen"><label for="clarityLevel">Nitidez <output id="clarityValue">0 %</output></label><input id="clarityLevel" type="range" min="0" max="100" step="1" value="0" aria-label="Nitidez de la imagen"><button id="clarityHold" type="button">Fijar nitidez</button></aside>
 <div class="reveal-gate"><p id="clarityStatus" role="status">La imagen se aclara lentamente…</p><button id="revealContinue" type="button" disabled>Comenzar</button></div>
 <audio id="backgroundMusic" preload="metadata" loop></audio>
 <audio id="narrator" preload="metadata" controlslist="nodownload" oncontextmenu="return false"></audio>
@@ -190,12 +201,11 @@ function renderAudioPosition(){if(activeMode!=='listen')return;const t=audio.cur
 function syncAudio(){cancelAnimationFrame(raf);if(activeMode!=='listen'||paused)return;renderAudioPosition();raf=requestAnimationFrame(syncAudio)}
 function playMaster(fromStart=false){if(!audioReady){status.textContent='audio completo no disponible';return}if(fromStart)audio.currentTime=0;paused=false;pauseBtn.textContent='Pausa';status.textContent='narración completa · '+formatTime(audio.duration||narrationTotal);audio.onended=finish;audio.play().then(syncAudio).catch(()=>{paused=true;pauseBtn.textContent='Seguir';status.textContent='pulsa Seguir para escuchar'})}
 function resetVisuals(){lastGray=0;currentAgeState=-1;setAgeProgress(0);root.style.setProperty('--gray','0');root.style.setProperty('--prog','0');voiceSeek.value='0';voiceTime.textContent='0:00 / '+formatTime(audio.duration||narrationTotal)}
-const clarityLevel=$('clarityLevel'),clarityValue=$('clarityValue'),clarityHold=$('clarityHold'),clarityStatus=$('clarityStatus'),revealContinue=$('revealContinue');
+const clarityStatus=$('clarityStatus'),revealContinue=$('revealContinue');
 const CLARITY_SECONDS=20;
 let clarityFrame=0,clarity=0,clarityRunning=false,clarityReady=false,clarityTimer=0;
 function setClarity(value){
  clarity=clamp(value);root.style.setProperty('--clarity',clarity.toFixed(4));
- clarityLevel.value=String(Math.round(clarity*100));clarityValue.textContent=clarityLevel.value+' %';
  clearTimeout(clarityTimer);clarityReady=false;revealContinue.disabled=true;
  // Wait for the image's CSS filter transition to finish before enabling either version.
  if(clarity===1)clarityTimer=setTimeout(()=>{
@@ -204,13 +214,13 @@ function setClarity(value){
  },350);
 }
 function holdClarity(){
- cancelAnimationFrame(clarityFrame);clarityFrame=0;clarityRunning=false;clarityHold.textContent='Aclarar lentamente';
+ cancelAnimationFrame(clarityFrame);clarityFrame=0;clarityRunning=false;
  clarityStatus.textContent=clarityReady?'La imagen está clara. Continúa cuando quieras.':clarity===1?'Terminando de aclarar la imagen…':'Nitidez fijada. Aclara la imagen al 100 % para continuar.';
 }
 function clarifySlowly(){
  holdClarity();const initial=clarity,start=performance.now();
  const duration=CLARITY_SECONDS*1000*(1-initial);
- clarityRunning=true;clarityHold.textContent='Fijar nitidez';clarityStatus.textContent='La imagen se aclara lentamente…';
+ clarityRunning=true;clarityStatus.textContent='La imagen se aclara lentamente…';
  const tick=now=>{
   if(!clarityRunning)return;
   const progress=duration>0?clamp((now-start)/duration):1;
@@ -223,21 +233,20 @@ function clarifySlowly(){
 function prepareVersion(mode){
  startMusic();stopAudio();activeMode=mode;paused=true;
  body.className=(mode==='listen'?'listen-mode':'read-mode')+' revealing';modeSwitch.hidden=false;entry.classList.add('open');
- resetVisuals();scrollTo(0,0);currentIndex=-1;renderLine(0);
+ resetVisuals();scrollTo(0,0);$('reader').scrollTop=0;currentIndex=-1;renderLine(0);
  revealContinue.textContent=mode==='listen'?'Escuchar el cuento':'Leer el cuento';
  status.textContent='transición con música';holdClarity();setClarity(0);clarifySlowly();
 }
 function startListen(){if(!(storyReady&&audioReady)){status.textContent='cargando narración completa';return;}prepareVersion('listen')}
 function startRead(){if(storyReady)prepareVersion('read')}
-clarityLevel.addEventListener('input',()=>{setClarity(Number(clarityLevel.value)/100);holdClarity()});
-clarityHold.addEventListener('click',()=>{if(clarityRunning)holdClarity();else clarifySlowly()});
 revealContinue.onclick=()=>{
  if(!activeMode || !body.classList.contains('revealing') || !clarityReady || clarity!==1)return;
  holdClarity();body.classList.remove('revealing');
  if(activeMode==='listen')playMaster(true);
  else{status.textContent='lectura sin voz';readScroll();}
 };
-function readScroll(){if(activeMode!=='read'||body.classList.contains('revealing'))return;const max=Math.max(1,document.documentElement.scrollHeight-innerHeight),p=clamp(scrollY/max);root.style.setProperty('--prog',p.toFixed(4));setAgeProgress(p);const night=.55;setGrayProgress((p-night)/(1-night))}
+function readScroll(){if(activeMode!=='read'||body.classList.contains('revealing'))return;const reader=$('reader'),mobile=matchMedia('(max-width:760px)').matches;
+ const max=mobile?Math.max(1,reader.scrollHeight-reader.clientHeight):Math.max(1,document.documentElement.scrollHeight-innerHeight),p=clamp((mobile?reader.scrollTop:scrollY)/max);root.style.setProperty('--prog',p.toFixed(4));setAgeProgress(p);const night=.55;setGrayProgress((p-night)/(1-night))}
 function finish(){cancelAnimationFrame(raf);setAgeProgress(1);renderLine(LISTEN_CUES.length-1);root.style.setProperty('--prog','1');voiceSeek.value='1000';voiceTime.textContent=formatTime(audio.duration||narrationTotal)+' / '+formatTime(audio.duration||narrationTotal);status.textContent='fin';paused=true;pauseBtn.textContent='Repetir'}
 function restartListen(){stopAudio();resetVisuals();currentIndex=-1;renderLine(0);playMaster(true)}
 voiceSeek.oninput=()=>{if(activeMode!=='listen'||!audioReady)return;audio.currentTime=(audio.duration||narrationTotal)*Number(voiceSeek.value)/1000;lastGray=0;renderAudioPosition()};
@@ -246,6 +255,8 @@ pauseBtn.onclick=()=>{if(activeMode!=='listen'||body.classList.contains('reveali
 restartBtn.onclick=()=>{if(activeMode==='listen'&&!body.classList.contains('revealing'))restartListen()};
 modeSwitch.onclick=()=>{holdClarity();setClarity(0);stopAudio();entry.classList.remove('open');body.className='';activeMode=null;modeSwitch.hidden=true;resetVisuals();scrollTo(0,0)};
 addEventListener('scroll',readScroll,{passive:true});
+$('reader').addEventListener('scroll',readScroll,{passive:true});
+addEventListener('resize',readScroll);
 for(const event of ['timeupdate','seeking','seeked','loadedmetadata'])audio.addEventListener(event,renderAudioPosition);
 addEventListener('beforeunload',()=>{holdClarity();stopAudio()});
 Promise.allSettled([loadStory(),loadSequence(),loadNarration()]).then(rs=>{check();if(rs[0].status==='rejected'){status.textContent='error al cargar el texto';document.querySelector('.hint').textContent='No se ha podido cargar el cuento. Recarga la página.'}else if(rs[2].status==='rejected'&&!audioReady&&!activeMode){status.textContent='texto listo · audio no disponible';document.querySelector('.hint').textContent='La lectura está disponible. Recarga la página para volver a cargar el audio.'}});
