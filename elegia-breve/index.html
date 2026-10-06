@@ -748,6 +748,7 @@
     <button class="entry-button" id="anaOjos" type="button">En tus ojos</button>
     <button class="entry-button" id="anaCabello" type="button">Tu cabello</button>
     <button class="entry-button" id="anaPiel" type="button">Tu piel</button>
+    <button class="entry-button" id="anaEstrella" type="button">Siguiendo una estrella</button>
   </nav>
 
   <iframe id="cenicientoFrame" class="ceniciento-frame" title="Ceniciento" allow="autoplay" hidden></iframe>
@@ -1220,21 +1221,23 @@
         body.classList.toggle('eyes-open',piece==='ojos');
         sonrisaLeaving=false;
         cenicientoFrame.classList.remove('sonrisa-visible');cenicientoFrame.classList.add('sonrisa-transition');body.classList.add('sonrisa-open');
-        anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=({ojos:'EN TUS OJOS',sonrisa:'EN TUS LABIOS',cabello:'TU CABELLO',piel:'TU PIEL'})[piece];
+        anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=({ojos:'EN TUS OJOS',sonrisa:'EN TUS LABIOS',cabello:'TU CABELLO',piel:'TU PIEL',estrella:'SIGUIENDO UNA ESTRELLA'})[piece];
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
         cenicientoFrame.hidden=false;
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261006-cabello-piel-1947';
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261006-estrella-2030';
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openSonrisa=()=>openPoem('sonrisa');
       const openOjos=()=>openPoem('ojos');
       const openCabello=()=>openPoem('cabello');
       const openPiel=()=>openPoem('piel');
+      const openEstrella=()=>openPoem('estrella');
       document.getElementById('anaSonrisa').addEventListener('click',openSonrisa);
       document.getElementById('anaOjos').addEventListener('click',openOjos);
       document.getElementById('anaCabello').addEventListener('click',openCabello);
       document.getElementById('anaPiel').addEventListener('click',openPiel);
+      document.getElementById('anaEstrella').addEventListener('click',openEstrella);
       const showAnaText=()=>{
         resetPortraitFinale();
         if(voiceDialog.open)voiceDialog.close();
@@ -1248,7 +1251,8 @@
       document.getElementById('anaVoice').addEventListener('click',()=>{showAnaText();recording.currentTime=0;openVoice();});
       document.getElementById('anaCeniciento').addEventListener('click',()=>document.getElementById('cenicientoLink').click());
       window.addEventListener('popstate',()=>{
-        if(window.location.hash==='#cabello')openCabello();
+        if(window.location.hash==='#estrella')openEstrella();
+        else if(window.location.hash==='#cabello')openCabello();
         else if(window.location.hash==='#piel')openPiel();
         else if(window.location.hash==='#ojos')openOjos();
         else if(window.location.hash==='#sonrisa')openSonrisa();
@@ -1444,6 +1448,7 @@
       renderWorld();
       ensureAmbientMusic();
       if(window.location.hash==='#ceniciento')document.getElementById('cenicientoLink').click();
+      else if(window.location.hash==='#estrella')openEstrella();
       else if(window.location.hash==='#cabello')openCabello();
         else if(window.location.hash==='#piel')openPiel();
         else if(window.location.hash==='#ojos')openOjos();
@@ -1452,4 +1457,3 @@
   </script>
 </body>
 </html>
-
