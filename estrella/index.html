@@ -8,7 +8,7 @@
 <title>Siguiendo una estrella · flag</title>
 <script>
 if(window.parent===window && new URLSearchParams(location.search).get('music')!=='parent'){
-location.replace('../elegia-breve/?v=luna-mitad-20261006#estrella');
+location.replace('../elegia-breve/?v=luna-frases-20261006#estrella');
 }
 </script>
 <style>
@@ -32,11 +32,16 @@ h1 em{font-weight:400;color:var(--rose)}
 button{font:12px/1.4 system-ui,sans-serif;letter-spacing:.03em;color:var(--ink);background:transparent;border:1px solid #725662;border-radius:30px;padding:13px 18px;min-height:44px;cursor:pointer}
 button:hover{background:#e9b5be16}button:focus-visible,a:focus-visible{outline:2px solid var(--rose);outline-offset:5px}
 button.primary{background:var(--rose);color:#24151d;border-color:var(--rose)}
+button:disabled{opacity:.45;cursor:default}
+[hidden]{display:none!important}
 .status{min-height:22px;margin-top:15px;color:var(--muted);font:12px/1.5 system-ui,sans-serif}
 .poem{border-left:1px solid #c8ae8338;padding:35px 0 25px 38px;text-shadow:0 2px 6px #000,0 0 18px #090e19;font-size:clamp(20px,2.3vw,27px);line-height:1.7;letter-spacing:-.015em}
 .stanza{margin:0 0 38px}
 .line{display:block;transition:opacity .8s ease,filter .8s ease}
 .line.hidden-line{opacity:0;filter:blur(5px)}
+.phrase{margin:0 0 38px;transition:opacity 1.2s ease;opacity:1}
+.phrase.hidden-phrase{visibility:hidden;opacity:0}
+.signature{transition:opacity 1.2s ease}
 .accent{color:var(--rose)}.ending{font-style:italic;color:var(--rose)}
 .signature{font:12px/1.5 system-ui,sans-serif;letter-spacing:.25em;color:var(--gold);margin-top:45px}
 footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:10px/1.6 system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase}
@@ -124,10 +129,9 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 <div class="rule" aria-hidden="true"></div>
 
 <div class="controls">
-<button class="primary" id="paced" type="button">Leer con pausas</button>
-<button id="full" type="button">Poema completo</button>
+<button class="primary" id="paced" type="button" disabled>Esperando a la luna</button>
 </div>
-<p class="status" id="status" role="status">A tu ritmo.</p>
+<p class="status" id="status" role="status">La luna se está formando.</p>
 <div class="music-controls">
 <button id="musicStart" type="button">Activar música</button>
 <label><input id="musicEnabled" type="checkbox" checked> Música de fondo</label>
@@ -135,35 +139,13 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 <input id="musicLevel" type="range" min="0" max="80" value="30">
 </div>
 </section>
-<article class="poem" aria-label="Siguiendo una estrella">
-<p class="stanza">
-<span class="line" data-wait="2800">Siguiendo una estrella,</span>
-<span class="line" data-wait="3200">encontré un lugar.</span>
-<span class="line" data-wait="3000">Al detenerme allí,</span>
-<span class="line" data-wait="3600">pude entrever un hogar:</span>
-<span class="line" data-wait="3000">todavía sin llave,</span>
-<span class="line" data-wait="2800">pero ya imaginaba</span>
-<span class="line" data-wait="4800">mis pasos al volver.</span>
-</p>
-<p class="stanza">
-<span class="line" data-wait="3000">Siguiendo a mi ángel,</span>
-<span class="line" data-wait="6500">llegué hasta ti.</span>
-</p>
-<p class="stanza">
-<span class="line" data-wait="3000">Cuando era yang,</span>
-<span class="line" data-wait="3600">buscaba el yin:</span>
-<span class="line" data-wait="3000">tendía la mano</span>
-<span class="line" data-wait="4800">antes de saber a quién.</span>
-</p>
-<p class="stanza">
-<span class="line" data-wait="3200">Ahora que soy yin,</span>
-<span class="line" data-wait="3000">la dejo abierta</span>
-<span class="line" data-wait="6500">junto a la tuya.</span>
-</p>
-<p class="stanza final-stanza">
-<span class="line ending" data-wait="6500">Me basta con mirarte.</span>
-</p>
-<div class="signature">flag</div>
+<article class="poem" id="poem" aria-label="Siguiendo una estrella" hidden>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Siguiendo una estrella, encontré un lugar.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="7000">Al detenerme allí, empezó a ser mi hogar.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Siguiendo a mi ángel, llegué hasta ti.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6500">Cuando era yang, buscaba el yin.</p>
+<p class="phrase hidden-phrase ending final-stanza" aria-hidden="true" data-wait="7000">Ahora que soy yin, me basta con mirarte.</p>
+<div class="signature" id="signature" hidden>flag</div>
 </article>
 </main>
 <footer>Siguiendo una estrella · octubre de 2026</footer>
@@ -172,19 +154,27 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 const celestialScene=document.getElementById('celestialScene');
 const worldComet=document.getElementById('worldComet');
 let celestialTimers=[];
+let moonReady=false;
 function beginCelestialJourney(delay=7200){
  celestialTimers.forEach(clearTimeout);celestialTimers=[];
+ clear();moonReady=false;mode='waiting';index=0;poem.hidden=true;signature.hidden=true;
+ phrases.forEach(phrase=>{phrase.classList.add('hidden-phrase');phrase.setAttribute('aria-hidden','true')});
+ paced.disabled=true;paced.textContent='Esperando a la luna';status.textContent='La luna se está formando.';
  celestialScene.classList.add('is-resetting');
  celestialScene.classList.remove('is-awake','is-home');worldComet.classList.remove('is-active');
  void celestialScene.offsetWidth;
  celestialScene.classList.remove('is-resetting');
- if(window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches){celestialScene.classList.add('is-awake','is-home');return;}
+ if(window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches){celestialScene.classList.add('is-awake','is-home');completeMoon();return;}
  celestialTimers=[setTimeout(()=>{
   worldComet.classList.add('is-active');
   celestialScene.classList.add('is-awake','is-home');
+  // The last lunar transition is the 40-second glow. Never reveal text early.
+  celestialTimers.push(setTimeout(completeMoon,40100));
  },delay)];
 }
-beginCelestialJourney();
+document.getElementById('homeMoon').addEventListener('transitionend',event=>{
+ if(event.target===event.currentTarget && event.propertyName==='box-shadow' && celestialScene.classList.contains('is-home'))completeMoon();
+});
 const detailBackground=document.querySelector('.detail-background');
 const detailPhoto=new Image();
 const clarifyDetail=()=>{requestAnimationFrame(()=>requestAnimationFrame(()=>{setTimeout(()=>{detailBackground.classList.add('is-clear');document.body.classList.add('detail-clear')},350)}));};
@@ -208,22 +198,29 @@ window.addEventListener('message',event=>{
  musicStart.hidden=!musicEnabled.checked || !!event.data.playing;
 });
 if(inheritedMusic)sendMusic('ready');
-const lines=[...document.querySelectorAll('.line')];
-const paced=document.getElementById('paced'),full=document.getElementById('full'),status=document.getElementById('status');
-let timer=null,index=0,mode='full';
+const phrases=[...document.querySelectorAll('.phrase')];
+const poem=document.getElementById('poem'),signature=document.getElementById('signature');
+const paced=document.getElementById('paced'),status=document.getElementById('status');
+let timer=null,index=0,mode='waiting';
 function clear(){clearTimeout(timer);timer=null}
+function completeMoon(){
+ if(moonReady || mode!=='waiting')return;
+ moonReady=true;poem.hidden=false;paced.disabled=false;
+ mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';reveal();
+}
 function reveal(){
- if(mode!=='playing')return;
- if(index===lines.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';return}
- const line=lines[index++];line.classList.remove('hidden-line');
- timer=setTimeout(reveal,Number(line.dataset.wait));
+ if(!moonReady || mode!=='playing')return;
+ if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';signature.hidden=false;return}
+ const phrase=phrases[index++];phrase.classList.remove('hidden-phrase');phrase.removeAttribute('aria-hidden');
+ timer=setTimeout(reveal,Number(phrase.dataset.wait));
 }
 paced.addEventListener('click',()=>{
+ if(!moonReady)return;
  if(mode==='playing'){clear();mode='paused';paced.textContent='Continuar';status.textContent='Una pausa, a tu elección.';return}
- if(mode==='paused'){mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada verso.';reveal();return}
- clear();beginCelestialJourney(300);index=0;lines.forEach(l=>l.classList.add('hidden-line'));mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada verso.';reveal();
+ if(mode==='paused'){mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';reveal();return}
+ beginCelestialJourney(300);
 });
-full.addEventListener('click',()=>{clear();mode='full';lines.forEach(l=>l.classList.remove('hidden-line'));paced.textContent='Leer con pausas';status.textContent='A tu ritmo.'});
+beginCelestialJourney();
 </script>
 </body>
 </html>
