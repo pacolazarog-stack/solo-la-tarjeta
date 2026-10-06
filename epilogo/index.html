@@ -59,6 +59,25 @@ h1{font-size:clamp(48px,6.5vw,82px)}
 .ending{margin-top:60px}
 @media(max-width:760px){h1{font-size:clamp(45px,12vw,64px)}.phrase{margin-bottom:36px}}
 @media(prefers-reduced-motion:reduce){.detail-background,.phrase{transition:none}}
+/* El color se templa como una brasa: sin cambiar la forma de las letras. */
+@keyframes simmerInk{0%,100%{color:#ebc68d}35%{color:#efb591}70%{color:#ddaaa0}}
+@keyframes simmerColors{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+header,.kicker,.status,.signature,footer,.music-controls{animation:simmerInk 48s ease-in-out infinite}
+header a{color:inherit}
+h1{color:#ffd88a}h1 em{color:inherit}
+.phrase{color:#ffd4a2}
+@supports ((background-clip:text) or (-webkit-background-clip:text)){
+ h1,.phrase{
+  background-image:linear-gradient(115deg,#ffe1a0 0%,#ffc078 25%,#f3a08a 50%,#f2c39b 75%,#ffe1a0 100%);
+  background-size:220% 100%;background-position:0% 50%;
+  background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  text-shadow:none;animation:simmerColors 64s ease-in-out infinite;
+ }
+ h1{background-image:linear-gradient(120deg,#ffe0a0,#ffbd69 30%,#f6977f 60%,#ffd38a);animation-duration:48s}
+}
+@media(prefers-reduced-motion:reduce){header,.kicker,.status,.signature,footer,.music-controls,h1,.phrase{animation:none}}
+@media print{header,.kicker,.status,.signature,footer,.music-controls,h1,h1 em,.phrase{animation:none;background:none;color:#000;-webkit-text-fill-color:currentColor}}
+@media(forced-colors:active){header,.kicker,.status,.signature,footer,.music-controls,h1,h1 em,.phrase{animation:none;background:none;color:CanvasText;-webkit-text-fill-color:currentColor}}
 </style>
 </head>
 <body>
