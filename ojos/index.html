@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="theme-color" content="#17121b">
 <title>En tus ojos · flag</title>
 <script>
@@ -45,6 +46,8 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 .music-controls{display:grid;gap:13px;margin-top:24px;color:var(--muted);font:12px/1.5 system-ui,sans-serif;max-width:260px}.music-controls button{justify-self:start}.music-controls button[hidden]{display:none}.music-controls input{accent-color:var(--rose)}.music-controls label{display:flex;gap:10px;align-items:center}.music-controls input[type=range]{width:100%;min-height:28px}.music-controls output{margin-left:auto}@media print{.music-controls{display:none}}
 
 @media(prefers-reduced-motion:reduce){ .eye-background,.eye-background img{animation:none!important}.eye-background img{transition:none;filter:none}}
+/* El fondo solo cambia de nitidez una vez: sin latido ni zoom. */
+.eye-background,.eye-background img,body::before,body::after{animation:none!important;transform:none!important}
 </style>
 </head>
 <body>
@@ -120,10 +123,7 @@ document.getElementById('backAna').addEventListener('click',event=>{
 });
 window.addEventListener('message',event=>{
  if(event.origin!==location.origin || event.source!==window.parent || event.data?.channel!=='ceniciento-music-v1' || event.data.type!=='state')return;
- if(Number.isFinite(event.data.pulseTime) && !document.body.dataset.pulseSynced){
- document.documentElement.style.setProperty('--pulse-delay',(-((event.data.pulseTime%1850)/1000))+'s');
- document.body.dataset.pulseSynced='true';
-}
+
  musicLevel.value=String(Math.round(Math.max(0,Math.min(.8,Number(event.data.level)||0))*100));
  musicValue.textContent=musicLevel.value+' %';musicEnabled.checked=!!event.data.enabled;
  musicStart.hidden=!musicEnabled.checked || !!event.data.playing;
