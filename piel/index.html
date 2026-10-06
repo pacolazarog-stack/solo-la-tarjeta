@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="theme-color" content="#191311">
+<title>Tu piel · flag</title>
+<script>
+if(window.parent===window && new URLSearchParams(location.search).get('music')!=='parent'){
+location.replace('../elegia-breve/#piel');
+}
+</script>
+<style>
+:root{color-scheme:dark;--ink:#f8eee4;--rose:#e7b993;--gold:#c8ae83;--muted:#c0afb8}
+*{box-sizing:border-box}
+body{margin:0;background:#191311;color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100svh}
+body{isolation:isolate}
+.detail-background{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;}.detail-background svg{position:absolute;inset:0;width:100%;height:100%;filter:blur(18px);transition:filter 60s ease-in-out}.detail-background.is-clear svg{filter:blur(0) contrast(1.04)} 
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(25,19,17,.55),rgba(25,19,17,.38) 48%,rgba(25,19,17,.58)),radial-gradient(ellipse at 50% 45%,transparent,#19131166);z-index:-1;opacity:1;transition:opacity 60s ease-in-out}
+body.detail-clear:before{opacity:.65}
+header{max-width:1180px;margin:auto;padding:28px 6vw;display:flex;justify-content:space-between;gap:20px;font:11px/1.5 system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase}
+a{color:var(--muted);text-decoration:none}a:hover{color:var(--ink)}
+main{max-width:1160px;margin:0 auto;padding:45px 6vw 80px;display:grid;grid-template-columns:.8fr 1.2fr;gap:7vw;align-items:start}
+.intro{position:sticky;top:60px;padding-top:40px}
+.kicker{font:11px/1.8 system-ui,sans-serif;letter-spacing:.26em;color:var(--gold);text-transform:uppercase}
+h1{font-weight:400;font-size:clamp(55px,7vw,95px);letter-spacing:-.05em;line-height:1.02;margin:22px 0 24px}
+h1 em{font-weight:400;color:var(--rose)}
+.rule{width:56px;height:1px;background:var(--gold);margin:30px 0}
+.subtitle{font-size:19px;line-height:1.6;color:var(--muted);max-width:260px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:35px}
+button{font:12px/1.4 system-ui,sans-serif;letter-spacing:.03em;color:var(--ink);background:transparent;border:1px solid #725662;border-radius:30px;padding:13px 18px;min-height:44px;cursor:pointer}
+button:hover{background:#e9b5be16}button:focus-visible,a:focus-visible{outline:2px solid var(--rose);outline-offset:5px}
+button.primary{background:var(--rose);color:#24151d;border-color:var(--rose)}
+.status{min-height:22px;margin-top:15px;color:var(--muted);font:12px/1.5 system-ui,sans-serif}
+.poem{border-left:1px solid #c8ae8338;padding:35px 0 25px 38px;text-shadow:0 2px 6px #000,0 0 18px #191311;font-size:clamp(20px,2.3vw,27px);line-height:1.7;letter-spacing:-.015em}
+.stanza{margin:0 0 38px}
+.line{display:block;transition:opacity .8s ease,filter .8s ease}
+.line.hidden-line{opacity:0;filter:blur(5px)}
+.accent{color:var(--rose)}.ending{font-style:italic;color:var(--rose)}
+.signature{font:12px/1.5 system-ui,sans-serif;letter-spacing:.25em;color:var(--gold);margin-top:45px}
+footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:10px/1.6 system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase}
+@media(max-width:760px){header{padding:22px 7vw}main{display:block;padding:15px 7vw 40px}.intro{position:static;padding-top:10px}h1{font-size:64px}.subtitle{max-width:none}.controls{margin-top:24px}.poem{padding:22px 0 0;border-left:none;border-top:1px solid #c8ae8338;margin-top:30px;font-size:clamp(18px,4.8vw,25px)}.stanza{margin-bottom:28px}footer{padding:0 7vw 25px}}
+@media(prefers-reduced-motion:reduce){.line{transition:none}.line.hidden-line{filter:none}}
+@media print{body{background:white;color:black}body:after,body:before,.detail-background,header,.controls,.status,footer{display:none}main{display:block;padding:0}.intro{position:static;padding:0}h1{font-size:32px}h1 em,.kicker,.subtitle,.accent,.ending,.signature{color:black}.rule{display:none}.poem{border:0;padding:0;font-size:16px}.line.hidden-line{opacity:1;filter:none}}
+.music-controls{display:grid;gap:13px;margin-top:24px;color:var(--muted);font:12px/1.5 system-ui,sans-serif;max-width:260px}.music-controls button{justify-self:start}.music-controls button[hidden]{display:none}.music-controls input{accent-color:var(--rose)}.music-controls label{display:flex;gap:10px;align-items:center}.music-controls input[type=range]{width:100%;min-height:28px}.music-controls output{margin-left:auto}@media print{.music-controls{display:none}}
+
+@media(prefers-reduced-motion:reduce){ .detail-background,.detail-background svg{animation:none!important}.detail-background svg{transition:none;filter:none}}
+/* El fondo solo cambia de nitidez una vez: sin latido ni zoom. */
+.detail-background,.detail-background svg,body::before,body::after{animation:none!important;transform:none!important}
+</style>
+</head>
+<body>
+<div class="detail-background" aria-hidden="true"><svg viewBox="855 1090 180 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><image href="../elegia-breve/ana-klaudya-fotografia.jpg" width="1228" height="2048"/></svg></div>
+<header><span>flag · poesía</span><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></header>
+<main>
+<section class="intro" aria-labelledby="title">
+<div class="kicker">Una caricia · un poema</div>
+<h1 id="title">Tu<br><em>piel.</em></h1>
+<div class="rule" aria-hidden="true"></div>
+<p class="subtitle">Va entibiando la mía.</p>
+<div class="controls">
+<button class="primary" id="paced" type="button">Leer con pausas</button>
+<button id="full" type="button">Poema completo</button>
+</div>
+<p class="status" id="status" role="status">A tu ritmo.</p>
+<div class="music-controls">
+<button id="musicStart" type="button">Activar música</button>
+<label><input id="musicEnabled" type="checkbox" checked> Música de fondo</label>
+<label for="musicLevel">Volumen <output id="musicValue">30 %</output></label>
+<input id="musicLevel" type="range" min="0" max="80" value="30">
+</div>
+</section>
+<article class="poem" aria-label="Tu piel">
+<p class="stanza">
+<span class="line" data-wait="2400">Tu piel tiene ese tono de bronce</span>
+<span class="line" data-wait="2400">que la luz recorre</span>
+<span class="line" data-wait="4200">sin encontrar una arista.</span>
+</p>
+<p class="stanza">
+<span class="line" data-wait="2400">Se demora en tu hombro,</span>
+<span class="line" data-wait="2400">desciende por el brazo</span>
+<span class="line" data-wait="2400">y alcanza la mano</span>
+<span class="line" data-wait="4200">que descansa junto a la mía.</span>
+</p>
+<p class="stanza">
+<span class="line" data-wait="2400">Mueves los dedos</span>
+<span class="line" data-wait="2400">y una claridad fugaz</span>
+<span class="line" data-wait="4200">se desliza por tus nudillos.</span>
+</p>
+<p class="stanza">
+<span class="line" data-wait="2400">Yo contemplo esa tersura</span>
+<span class="line" data-wait="2400">y quisiera conocerla</span>
+<span class="line" data-wait="4200">con algo más que los ojos:</span>
+</p>
+<p class="stanza">
+<span class="line" data-wait="2400">posar despacio la mano,</span>
+<span class="line" data-wait="2400">dejarla allí,</span>
+<span class="line" data-wait="2400">y sentir cómo tu piel</span>
+<span class="line ending" data-wait="4200">va entibiando la mía.</span>
+</p>
+<div class="signature">flag</div>
+</article>
+</main>
+<footer>Tu piel · octubre de 2026</footer>
+<script>
+const detailBackground=document.querySelector('.detail-background');
+const detailPhoto=new Image();
+const clarifyDetail=()=>{requestAnimationFrame(()=>requestAnimationFrame(()=>{setTimeout(()=>{detailBackground.classList.add('is-clear');document.body.classList.add('detail-clear')},350)}));};
+detailPhoto.addEventListener('load',clarifyDetail,{once:true});
+detailPhoto.src='../elegia-breve/ana-klaudya-fotografia.jpg';
+const inheritedMusic=window.parent!==window && new URLSearchParams(location.search).get('music')==='parent';
+const musicLevel=document.getElementById('musicLevel'),musicEnabled=document.getElementById('musicEnabled'),musicValue=document.getElementById('musicValue'),musicStart=document.getElementById('musicStart');
+const sendMusic=type=>window.parent.postMessage({channel:'ceniciento-music-v1',type,level:Number(musicLevel.value)/100,enabled:musicEnabled.checked},location.origin);
+musicLevel.addEventListener('input',()=>{musicValue.textContent=musicLevel.value+' %';sendMusic('level')});
+musicEnabled.addEventListener('change',()=>sendMusic('enabled'));
+musicStart.addEventListener('click',()=>{musicEnabled.checked=true;sendMusic('enabled');sendMusic('start')});
+document.getElementById('backAna').addEventListener('click',event=>{
+ if(!inheritedMusic || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)return;
+ event.preventDefault();sendMusic('home');
+});
+window.addEventListener('message',event=>{
+ if(event.origin!==location.origin || event.source!==window.parent || event.data?.channel!=='ceniciento-music-v1' || event.data.type!=='state')return;
+
+ musicLevel.value=String(Math.round(Math.max(0,Math.min(.8,Number(event.data.level)||0))*100));
+ musicValue.textContent=musicLevel.value+' %';musicEnabled.checked=!!event.data.enabled;
+ musicStart.hidden=!musicEnabled.checked || !!event.data.playing;
+});
+if(inheritedMusic)sendMusic('ready');
+const lines=[...document.querySelectorAll('.line')];
+const paced=document.getElementById('paced'),full=document.getElementById('full'),status=document.getElementById('status');
+let timer=null,index=0,mode='full';
+function clear(){clearTimeout(timer);timer=null}
+function reveal(){
+ if(mode!=='playing')return;
+ if(index===lines.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';return}
+ const line=lines[index++];line.classList.remove('hidden-line');
+ timer=setTimeout(reveal,Number(line.dataset.wait));
+}
+paced.addEventListener('click',()=>{
+ if(mode==='playing'){clear();mode='paused';paced.textContent='Continuar';status.textContent='Una pausa, a tu elección.';return}
+ if(mode==='paused'){mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada verso.';reveal();return}
+ clear();index=0;lines.forEach(l=>l.classList.add('hidden-line'));mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada verso.';reveal();
+});
+full.addEventListener('click',()=>{clear();mode='full';lines.forEach(l=>l.classList.remove('hidden-line'));paced.textContent='Leer con pausas';status.textContent='A tu ritmo.'});
+</script>
+</body>
+</html>
