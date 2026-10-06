@@ -1154,6 +1154,8 @@
         if(!voiceDialog.open){
           body.classList.add('voice-open');voiceDialog.show();
         }
+        // Start in the same user gesture, keeping the existing music fade.
+        if(recording.paused && !voicePending && !voicePriming)playRecording();
       };
       document.getElementById('voiceLaunch').addEventListener('click',()=>openVoice());
       voicePlay.addEventListener('click',()=>{
