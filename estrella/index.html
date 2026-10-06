@@ -50,11 +50,11 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 .final-stanza{margin-top:64px}.ending{font-size:1.08em}
 @media(max-width:760px){.final-stanza{margin-top:48px}}
 .detail-background,.detail-background img,body::before,body::after{animation:none!important;transform:none!important}
-.world-comet{position:absolute;inset:0;z-index:2;opacity:0;pointer-events:none;overflow:visible}
+.world-comet{position:absolute;inset:0;z-index:2;opacity:.85;pointer-events:none;overflow:visible}
 .world-comet.is-active{animation:cometField 12.8s linear forwards}
 .world-comet-core,.world-comet-tail{position:absolute;left:50%;top:5%;pointer-events:none;will-change:left,top,transform,opacity}
 .world-comet-core{width:10px;height:10px;border-radius:50%;background:rgba(255,249,231,.99);box-shadow:0 0 10px rgba(255,249,231,.98),0 0 26px rgba(255,239,194,.78),0 0 62px rgba(255,224,150,.38);filter:blur(.12px);transform:translate(-50%,-50%) scale(.74)}
-.world-comet-tail{width:340px;height:3px;transform-origin:right center;transform:translate(-100%,-50%) rotate(var(--comet-angle,12deg)) scaleX(.12);background:linear-gradient(to left,rgba(255,247,218,0) 0%,rgba(255,244,210,.10) 15%,rgba(255,239,196,.30) 38%,rgba(255,233,176,.72) 70%,rgba(255,247,233,.96) 100%);border-radius:999px;filter:blur(.7px);box-shadow:0 0 12px rgba(255,236,184,.25),0 0 34px rgba(255,223,152,.16)}
+.world-comet-tail{width:340px;height:3px;opacity:0;transform-origin:right center;transform:translate(-100%,-50%) rotate(var(--comet-angle,12deg)) scaleX(.12);background:linear-gradient(to left,rgba(255,247,218,0) 0%,rgba(255,244,210,.10) 15%,rgba(255,239,196,.30) 38%,rgba(255,233,176,.72) 70%,rgba(255,247,233,.96) 100%);border-radius:999px;filter:blur(.7px);box-shadow:0 0 12px rgba(255,236,184,.25),0 0 34px rgba(255,223,152,.16)}
 .world-comet.is-active .world-comet-core{animation:cometCore 12.8s cubic-bezier(.35,.02,.22,1) forwards}
 .world-comet.is-active .world-comet-tail{animation:cometTail 12.8s cubic-bezier(.35,.02,.22,1) forwards}
 @keyframes cometField{0%{opacity:.85}8%{opacity:1}18%{opacity:1}46%{opacity:1}74%{opacity:.92}100%{opacity:0}}
