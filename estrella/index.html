@@ -181,8 +181,8 @@ function beginCelestialJourney(delay=8500){
  if(window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches){celestialScene.classList.add('is-awake','is-home');return;}
  celestialTimers=[
   setTimeout(()=>celestialScene.classList.add('is-awake'),delay),
-  setTimeout(()=>worldComet.classList.add('is-active'),delay+4000),
-  setTimeout(()=>celestialScene.classList.add('is-home'),delay+8800)
+  setTimeout(()=>celestialScene.classList.add('is-home'),delay+3000),
+  setTimeout(()=>worldComet.classList.add('is-active'),delay+15000)
  ];
 }
 beginCelestialJourney();
