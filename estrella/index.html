@@ -86,15 +86,15 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 
 /* La misma estrella y la misma luna de Solo la tarjeta. */
 .celestial-scene{position:absolute;inset:0;z-index:1;pointer-events:none}
-.world-final-moon{position:absolute;left:82%;top:14%;width:clamp(82px,9vw,122px);aspect-ratio:1;border-radius:50%;z-index:3;opacity:0;overflow:hidden;background:#08101e;transform:translate(-50%,-50%) rotate(-7deg);box-shadow:0 0 18px rgba(215,225,249,.22),0 0 48px rgba(215,225,249,.12);transition:opacity 8s ease,transform 28s ease,box-shadow 40s ease}
+.world-final-moon{position:absolute;left:82%;top:14%;width:clamp(82px,9vw,122px);aspect-ratio:1;border-radius:50%;z-index:3;opacity:0;overflow:hidden;background:#08101e;transform:translate(-50%,-50%) rotate(-7deg);box-shadow:0 0 18px rgba(215,225,249,.22),0 0 48px rgba(215,225,249,.12);transition:opacity 4s ease,transform 14s ease,box-shadow 20s ease}
 .is-awake .world-final-moon{opacity:1;transform:translate(-50%,-50%) rotate(0)}
 .is-home .world-final-moon{box-shadow:0 0 22px rgba(244,222,176,.3),0 0 65px rgba(255,220,157,.17)}
-.final-crescent{position:absolute;inset:0;border-radius:50%;opacity:1;background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);transition:opacity 19s ease}
+.final-crescent{position:absolute;inset:0;border-radius:50%;opacity:1;background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);transition:opacity 9.5s ease}
 .final-crescent::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:#08101e}
 .world-final-moon svg{position:absolute;inset:0;width:100%;height:100%;display:block}
-.yin-body,.yin-outline{opacity:0;transition:opacity 19s ease}
-.yin-dots{opacity:0;transition:opacity 17.4s ease 1.6s}
-.yin-dots circle{transform-box:fill-box;transform-origin:center;transform:scale(.46);transition:transform 17.4s ease 1.6s}
+.yin-body,.yin-outline{opacity:0;transition:opacity 9.5s ease}
+.yin-dots{opacity:0;transition:opacity 8.7s ease .8s}
+.yin-dots circle{transform-box:fill-box;transform-origin:center;transform:scale(.46);transition:transform 8.7s ease .8s}
 .is-home .final-crescent{opacity:0}
 .is-home .yin-body,.is-home .yin-outline,.is-home .yin-dots{opacity:1}
 .is-home .yin-dots circle{transform:scale(1)}
@@ -177,8 +177,8 @@ function beginCelestialJourney(delay=7200){
  celestialTimers=[setTimeout(()=>{
   worldComet.classList.add('is-active');
   celestialScene.classList.add('is-awake','is-home');
-  // The last lunar transition is the 40-second glow. Never reveal text early.
-  celestialTimers.push(setTimeout(completeMoon,40100));
+  // The last lunar transition is the 20-second glow. Never reveal text early.
+  celestialTimers.push(setTimeout(completeMoon,20100));
  },delay)];
 }
 document.getElementById('homeMoon').addEventListener('transitionend',event=>{
