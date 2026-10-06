@@ -869,7 +869,7 @@
       const anaPortrait=document.getElementById('anaPortrait');
       const portraitFinale=document.getElementById('portraitFinale');
       let completedVoicePasses=0, listeningStart=null, listeningEnd=0;
-      let listenedRanges=[], portraitRequested=false;
+      let listenedRanges=[], portraitRequested=false, portraitRevealTimer=null;
       let questionGrowthActive=false,questionGrowth=.22,questionNext=.22;
       const growQuestionOnHeartbeat=()=>{
         if(!questionGrowthActive || !body.classList.contains('portrait-revealed') || body.classList.contains('ceniciento-open'))return;
@@ -879,13 +879,14 @@
         root.style.setProperty('--question-next',questionNext.toFixed(3));
       };
       const revealPortrait=()=>{
-        if(portraitRequested) return;
+        if(body.classList.contains('portrait-revealed')) return;
         portraitRequested=true;
         const reveal=()=>{
           if(!anaPortrait.naturalWidth) return;
           portraitFinale.setAttribute('aria-hidden','false');
           body.classList.add('portrait-revealed');
-          setTimeout(()=>{questionGrowthActive=true;},25000);
+          clearTimeout(portraitRevealTimer);
+          portraitRevealTimer=setTimeout(()=>{questionGrowthActive=true;},25000);
         };
         if(anaPortrait.complete) reveal();
         else anaPortrait.addEventListener('load',reveal,{once:true});
@@ -1035,15 +1036,17 @@
       const finishVoicePass=()=>{
         if(listeningStart!==null) listeningEnd=recording.currentTime;
         saveListenedRange();
-        let coveredUntil=0;
-        for(const [start,end] of listenedRanges.sort((a,b)=>a[0]-b[0])){
-          if(start>coveredUntil+.35) break;
-          coveredUntil=Math.max(coveredUntil,end);
-        }
-        if(Number.isFinite(recording.duration) && recording.duration>0 && coveredUntil>=recording.duration-.35){
-          completedVoicePasses++;
-          if(completedVoicePasses===1) revealPortrait();
-        }
+        completedVoicePasses++;
+        revealPortrait();
+        listenedRanges=[];listeningStart=null;
+      };
+      const resetPortraitFinale=()=>{
+        clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
+        portraitRequested=false;completedVoicePasses=0;
+        questionGrowthActive=false;questionGrowth=.22;questionNext=.22;
+        for(const key of ['--question-current','--question-first','--question-next'])root.style.setProperty(key,'.22');
+        body.classList.remove('portrait-revealed');
+        portraitFinale.setAttribute('aria-hidden','true');
         listenedRanges=[];listeningStart=null;
       };
       const syncNameWords=()=>{
@@ -1234,6 +1237,7 @@
       document.getElementById('anaSonrisa').addEventListener('click',openSonrisa);
       document.getElementById('anaOjos').addEventListener('click',openOjos);
       const showAnaText=()=>{
+        resetPortraitFinale();
         if(voiceDialog.open)voiceDialog.close();
         cancelVoiceStart();recording.pause();nameAudio.pause();
         entry.classList.add('is-open');body.classList.remove('locked','prelude','portrait-revealed');
@@ -1242,7 +1246,7 @@
         window.scrollTo({top:window.innerHeight*.25,left:0,behavior:'auto'});releaseY=window.scrollY;revealLines();
       };
       document.getElementById('anaRead').addEventListener('click',showAnaText);
-      document.getElementById('anaVoice').addEventListener('click',()=>{showAnaText();openVoice();});
+      document.getElementById('anaVoice').addEventListener('click',()=>{showAnaText();recording.currentTime=0;openVoice();});
       document.getElementById('anaCeniciento').addEventListener('click',()=>document.getElementById('cenicientoLink').click());
       window.addEventListener('popstate',()=>{
         if(window.location.hash==='#ojos')openOjos();
@@ -1257,6 +1261,7 @@
           if(sonrisaLeaving)return;
           sonrisaLeaving=true;
           // Reveal Ana behind the poem before fading the frame away.
+          resetPortraitFinale();
           entry.classList.remove('is-open');
           entryButton.disabled=false;entryButton.textContent='Entrar';
           body.classList.add('locked');body.classList.remove('reading-ready','prelude','portrait-revealed');
