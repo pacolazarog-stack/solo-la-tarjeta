@@ -8,7 +8,7 @@
 <title>Siguiendo una estrella · flag</title>
 <script>
 if(window.parent===window && new URLSearchParams(location.search).get('music')!=='parent'){
-location.replace('../elegia-breve/?v=luna-versos-20261006#estrella');
+location.replace('../elegia-breve/?v=prologo-20261006#estrella');
 }
 </script>
 <style>
@@ -125,7 +125,7 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 <header><span>flag · poesía</span><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></header>
 <main>
 <section class="intro" aria-labelledby="title">
-<div class="kicker">Un lugar · un encuentro</div>
+<div class="kicker">Prólogo · Ana Klaudya</div>
 <h1 id="title">Siguiendo<br><em>una estrella.</em></h1>
 <div class="rule" aria-hidden="true"></div>
 
@@ -152,6 +152,7 @@ buscaba el yin.</p>
 <p class="phrase hidden-phrase ending final-stanza" aria-hidden="true" data-wait="7000">Ahora que soy yin,<br>
 me basta con mirarte.</p>
 <div class="signature" id="signature" hidden>flag</div>
+<button class="primary" id="continueAna" type="button" hidden>Entrar en Ana Klaudya →</button>
 </article>
 </main>
 <footer>Siguiendo una estrella · octubre de 2026</footer>
@@ -163,7 +164,7 @@ let celestialTimers=[];
 let moonReady=false;
 function beginCelestialJourney(delay=7200){
  celestialTimers.forEach(clearTimeout);celestialTimers=[];
- clear();moonReady=false;mode='waiting';index=0;poem.hidden=true;signature.hidden=true;
+ clear();moonReady=false;mode='waiting';index=0;poem.hidden=true;signature.hidden=true;continueAna.hidden=true;
  phrases.forEach(phrase=>{phrase.classList.add('hidden-phrase');phrase.setAttribute('aria-hidden','true')});
  paced.disabled=true;paced.textContent='Esperando a la luna';status.textContent='La luna se está formando.';
  celestialScene.classList.add('is-resetting');
@@ -187,6 +188,8 @@ const clarifyDetail=()=>{requestAnimationFrame(()=>requestAnimationFrame(()=>{se
 detailPhoto.addEventListener('load',clarifyDetail,{once:true});
 detailPhoto.src='umbral.jpg?v=20261006-sin-estrella-fija';
 const inheritedMusic=window.parent!==window && new URLSearchParams(location.search).get('music')==='parent';
+const asPrologue=new URLSearchParams(location.search).get('prologue')==='1';
+if(asPrologue)document.getElementById('backAna').hidden=true;
 const musicLevel=document.getElementById('musicLevel'),musicEnabled=document.getElementById('musicEnabled'),musicValue=document.getElementById('musicValue'),musicStart=document.getElementById('musicStart');
 const sendMusic=type=>window.parent.postMessage({channel:'ceniciento-music-v1',type,level:Number(musicLevel.value)/100,enabled:musicEnabled.checked},location.origin);
 musicLevel.addEventListener('input',()=>{musicValue.textContent=musicLevel.value+' %';sendMusic('level')});
@@ -206,6 +209,8 @@ window.addEventListener('message',event=>{
 if(inheritedMusic)sendMusic('ready');
 const phrases=[...document.querySelectorAll('.phrase')];
 const poem=document.getElementById('poem'),signature=document.getElementById('signature');
+const continueAna=document.getElementById('continueAna');
+continueAna.addEventListener('click',()=>{if(mode==='done')sendMusic('ana')});
 const paced=document.getElementById('paced'),status=document.getElementById('status');
 let timer=null,index=0,mode='waiting';
 function clear(){clearTimeout(timer);timer=null}
@@ -216,7 +221,7 @@ function completeMoon(){
 }
 function reveal(){
  if(!moonReady || mode!=='playing')return;
- if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';signature.hidden=false;return}
+ if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';signature.hidden=false;continueAna.hidden=false;return}
  const phrase=phrases[index++];phrase.classList.remove('hidden-phrase');phrase.removeAttribute('aria-hidden');
  timer=setTimeout(reveal,Number(phrase.dataset.wait));
 }

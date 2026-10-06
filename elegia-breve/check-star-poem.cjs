@@ -80,6 +80,7 @@ get('cenicientoFrame').hidden=true;
   vm.runInNewContext(childScript,childContext);
   if(piece==='estrella'){
    assert.equal(node('poem').hidden,true);assert.equal(node('paced').disabled,true);
+   assert.equal(node('continueAna').hidden,true);node('continueAna').click();assert(!messages.some(m=>m.type==='ana'),'Continuation waits for the entire poem');
    node('paced').click();assert(lines.every(l=>l.classList.contains('hidden-phrase')),'Clicking early cannot expose text');
    const startCue=[...childTimers.values()].find(t=>t.ms===7200);assert(startCue);
    assert(!node('worldComet').classList.contains('is-active'));assert(!node('celestialScene').classList.contains('is-home'));
@@ -114,6 +115,7 @@ get('cenicientoFrame').hidden=true;
    [...childTimers.values()].find(t=>t.ms===40100).fn();assert(lines[2].classList.contains('hidden-phrase'));
    for(let i=2;i<5;i++){runReading();assert(!lines[i].classList.contains('hidden-phrase'));}
    runReading();assert.equal(node('paced').textContent,'Volver a leer');assert.equal(node('signature').hidden,false);
+   assert.equal(node('continueAna').hidden,false);node('continueAna').click();assert.equal(messages.at(-1).type,'ana');
    node('paced').click();assert.equal(node('poem').hidden,true);assert.equal(node('paced').disabled,true);
    assert(!node('celestialScene').classList.contains('is-home'));assert(!node('worldComet').classList.contains('is-active'));
    [...childTimers.values()].find(t=>t.ms===300).fn();
@@ -127,5 +129,26 @@ get('cenicientoFrame').hidden=true;
   }
   node('backAna').click();assert.equal(messages.at(-1).type,'home');
  }
- console.log('PASS: three routes, continuous music, complete lunar gate, five sequential sentences, pause, replay and return');
+ // The main entry now opens the prologue before the spoken name or elegy.
+ const musicCalls=get('voiceMusic').playCalls;
+ get('entryButton').click();await flush();
+ assert.equal(get('cenicientoFrame').hidden,false);
+ assert(get('cenicientoFrame').src.includes('../estrella/?music=parent'));
+ assert(get('cenicientoFrame').src.includes('&prologue=1'));
+ assert.equal(get('cenicientoFrame').getAttribute('title'),'Prólogo de Ana Klaudya');
+ assert.equal(get('nameAudio').paused,true,'The spoken name waits for the prologue');
+ assert.equal(get('voiceMusic').currentTime,47.5);assert.equal(get('voiceMusic').playCalls,musicCalls);
+ assert(![...timers.values()].some(t=>t.ms===2410),'No name timer runs behind the prologue');
+ for(const fn of windowEvents.message)fn({origin:context.window.location.origin,source:get('cenicientoFrame').contentWindow,data:{channel:'ceniciento-music-v1',type:'ana'}});
+ const transition=[...timers.entries()].find(([,t])=>t.ms===7100);assert(transition);
+ timers.delete(transition[0]);transition[1].fn();
+ assert.equal(get('cenicientoFrame').hidden,true);assert.equal(get('anaNavigation').hidden,true);
+ assert(get('body').classList.contains('prelude'));
+ assert.equal(get('voiceMusic').currentTime,47.5);assert.equal(get('voiceMusic').playCalls,musicCalls);
+ const spokenName=[...timers.entries()].find(([,t])=>t.ms===2410);assert(spokenName);spokenName[1].fn();await flush();
+ assert.equal(get('nameAudio').paused,false,'The name begins only after the prologue fades away');
+ const anaReading=[...timers.entries()].find(([,t])=>t.ms===14000);assert(anaReading);anaReading[1].fn();
+ assert(get('body').classList.contains('reading-ready'));
+ get('entryButton').click();await flush();assert.equal(get('cenicientoFrame').hidden,true,'Returning to Ana does not force another prologue');
+ console.log('PASS: entry → prologue → spoken name → Ana; uninterrupted music, lunar gate, verse sentences, pause, replay and return');
 })().catch(error=>{console.error(error);process.exit(1);});
