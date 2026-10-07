@@ -18,24 +18,34 @@ replace_exact(
 replace_exact(
     "ojos/index.html",
     '''<p class="stanza">\n<span class="line" data-wait="2400">Tus párpados se entornan.</span>\n<span class="line" data-wait="2400">No sé cuánto de mí</span>\n<span class="line" data-wait="4200">has visto ya.</span>\n</p>\n<p class="stanza">\n<span class="line ending" data-wait="4200">Y no bajo los ojos.</span>\n</p>''',
-    '''<p class="stanza">\n<span class="line" data-wait="2400">Tus párpados se entornan.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Algo de mí</span>\n<span class="line" data-wait="4200">ha quedado a la vista.</span>\n</p>\n<p class="stanza">\n<span class="line ending" data-wait="4200">Y no bajo los ojos.</span>\n</p>''',
+    '''<p class="stanza">\n<span class="line" data-wait="2400">Tus párpados se entornan.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Algo mío</span>\n<span class="line" data-wait="4200">queda a la vista.</span>\n</p>\n<p class="stanza">\n<span class="line ending" data-wait="4200">Y no bajo los ojos.</span>\n</p>''',
 )
 
 # EN TUS LABIOS · versión canónica actual.
 replace_exact(
     "sonrisa/index.html",
     '''<article class="poem" aria-label="En tus labios">\n<p class="stanza">\n<span class="line" data-wait="2400">Tu sonrisa comienza en las comisuras:</span>\n<span class="line" data-wait="2400">un leve movimiento</span>\n<span class="line" data-wait="2400">y ya te estoy mirando</span>\n<span class="line" data-wait="4200">más allá de toda prudencia.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">El gesto se extiende por tu rostro.</span>\n<span class="line" data-wait="2400">Yo también sonrío.</span>\n<span class="line" data-wait="4200">Todavía no has dicho nada.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Cuando voy a decirte</span>\n<span class="line" data-wait="4800">lo hermosa que eres…</span>\n<span class="line" data-wait="2400">vuelves a sonreír</span>\n<span class="line" data-wait="2400">y me quedo en tus labios,</span>\n<span class="line ending" data-wait="4200">sin llegar a las palabras.</span>\n</p>''',
-    '''<article class="poem" aria-label="En tus labios">\n<p class="stanza">\n<span class="line" data-wait="3000">Iba a decirte algo.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Tu sonrisa comienza en las comisuras:</span>\n<span class="line" data-wait="2400">apenas un movimiento</span>\n<span class="line" data-wait="2400">y ya te estoy mirando</span>\n<span class="line" data-wait="4200">más allá de toda prudencia.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Yo también sonrío.</span>\n<span class="line" data-wait="4200">Todavía no has dicho nada.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="3000">Busco la frase.</span>\n<span class="line" data-wait="3000">Vuelves a sonreír.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Me quedo en tus labios,</span>\n<span class="line ending" data-wait="4200">sin llegar a las palabras.</span>\n</p>''',
+    '''<article class="poem" aria-label="En tus labios">\n<p class="stanza">\n<span class="line" data-wait="3000">Iba a decirte algo.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Tu sonrisa empieza en las comisuras:</span>\n<span class="line" data-wait="2400">apenas un movimiento</span>\n<span class="line" data-wait="2400">y ya te estoy mirando</span>\n<span class="line" data-wait="4200">más allá de la prudencia.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Yo también sonrío.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="4200">Todavía no has dicho nada.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="3000">Busco la frase.</span>\n<span class="line" data-wait="3000">Vuelves a sonreír.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Me quedo en tus labios,</span>\n<span class="line ending" data-wait="4200">sin llegar a las palabras.</span>\n</p>''',
 )
 
-# TU CABELLO · cierre canónico.
+# TU CABELLO · versión canónica actual.
 replace_exact(
     "cabello/index.html",
     '''<p class="stanza">\n<span class="line" data-wait="2400">Sigues hablando.</span>\n<span class="line" data-wait="2400">El mechón vuelve a su sitio.</span>\n<span class="line" data-wait="2400">Yo tardo</span>\n<span class="line ending" data-wait="4200">un poco más.</span>\n</p>''',
-    '''<p class="stanza">\n<span class="line" data-wait="2400">Lo sueltas.</span>\n<span class="line" data-wait="2400">El mechón vuelve a su sitio.</span>\n<span class="line ending" data-wait="4200">Sigues hablando.</span>\n</p>''',
+    '''<p class="stanza">\n<span class="line" data-wait="2400">Lo sueltas.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">El mechón vuelve a su sitio.</span>\n</p>\n<p class="stanza">\n<span class="line ending" data-wait="4200">Sigues hablando.</span>\n</p>''',
+)
+replace_exact(
+    "cabello/index.html",
+    'la luz resbala por él<br>\nsin llegar a aclararlo.',
+    'la luz resbala por él<br>\nsin aclararlo.',
+)
+replace_exact(
+    "cabello/index.html",
+    'Tú regresas a tus palabras;<br>\npero un mechón prolonga',
+    'Tú vuelves a tus palabras,<br>\npero un mechón prolonga',
 )
 
-# TU PIEL · nueva contención final canónica.
+# TU PIEL · nueva contención final canónica y depuración verbal.
 replace_exact(
     "piel/index.html",
     '''<p class="stanza">\n<span class="line" data-wait="2400">Quisiera conocer esa tersura</span>\n<span class="line" data-wait="2400">con algo más que los ojos:</span>\n<span class="line" data-wait="2400">posar despacio la mano,</span>\n<span class="line" data-wait="2400">dejarla allí</span>\n<span class="line" data-wait="2400">y sentir cómo tu piel</span>\n<span class="line ending" data-wait="4200">va entibiando la mía.</span>\n</p>''',
@@ -43,8 +53,35 @@ replace_exact(
 )
 replace_exact(
     "piel/index.html",
+    '<span class="line" data-wait="2400">y alcanza la mano</span>',
+    '<span class="line" data-wait="2400">y llega hasta la mano</span>',
+)
+replace_exact(
+    "piel/index.html",
+    '<span class="line" data-wait="4200">se desliza por tus nudillos.</span>',
+    '<span class="line" data-wait="4200">resbala por tus nudillos.</span>',
+)
+replace_exact(
+    "piel/index.html",
     '<p class="subtitle">Va entibiando la mía.</p>',
     '<p class="subtitle">No lo atravieso.</p>',
+)
+
+# EPÍLOGO · depuración canónica actual.
+replace_exact(
+    "epilogo/index.html",
+    'Tarareas algo en portugués<br>\nmientras el aceite se calienta.<br>',
+    'Tarareas algo en portugués<br>\nmientras se calienta el aceite.<br>',
+)
+replace_exact(
+    "epilogo/index.html",
+    '''<p class="phrase hidden-phrase" aria-hidden="true" data-wait="5500">Se me había olvidado el puchero.<br>\nEstaba buscando una palabra<br>\npara el modo en que sonríes.</p>''',
+    '''<p class="phrase hidden-phrase" aria-hidden="true" data-wait="5500">Se me olvidó el puchero.<br>\nBuscaba una palabra<br>\npara el modo en que sonríes.</p>''',
+)
+replace_exact(
+    "epilogo/index.html",
+    '''<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Tú pones dos platos.<br>\nYo llevo el puchero a la mesa.<br>\nApartas los papeles<br>\npara que quepa.</p>''',
+    '''<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Tú pones dos platos.<br>\nYo llevo el puchero a la mesa.</p>\n<p class="phrase hidden-phrase" aria-hidden="true" data-wait="4200">Apartas los papeles<br>\npara que quepa.</p>''',
 )
 
 # PRÓLOGO · texto canónico.
@@ -121,4 +158,4 @@ replace_exact(
     "      for(const id of ['anaEpilogue','readEpilogue'])document.getElementById(id).addEventListener('click',openEpilogue);",
 )
 
-print("ANA KLAUDYA: canon actual aplicado; el interrogante final enlaza a CENICIENTO como obra autónoma")
+print("ANA KLAUDYA: nueva depuración canónica aplicada; interrogante final enlazado a CENICIENTO autónomo")
