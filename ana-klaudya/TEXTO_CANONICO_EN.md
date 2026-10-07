@@ -9,7 +9,7 @@ I found a place.
 When I stopped there,  
 it began to feel like home.
 
-Following my angel,  
+Following an angel,  
 I came to you.
 
 When I was yang,  
