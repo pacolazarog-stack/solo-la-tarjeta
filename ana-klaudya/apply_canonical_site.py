@@ -73,16 +73,13 @@ for old, new in replacements.items():
     text = text.replace(old, new)
 p.write_text(text, encoding="utf-8")
 
-# ANA KLAUDYA · CENICIENTO deja de formar parte de la obra.
+# ANA KLAUDYA · CENICIENTO no forma parte de la obra.
+# No aparece como botón de navegación ni como sección interna de ANA.
+# Sin embargo, el interrogante final se conserva como enlace directo a la obra autónoma CENICIENTO.
 replace_exact(
     "elegia-breve/index.html",
     '    <button class="entry-button" id="anaCeniciento" type="button">Ceniciento</button>\n',
     "",
-)
-replace_exact(
-    "elegia-breve/index.html",
-    '        <a id="cenicientoLink" class="portrait-question" href="../ceniciento/" aria-label="Descubrir Ceniciento"><span class="question-beat" aria-hidden="true">?</span></a>',
-    '        <span id="anaQuestion" class="portrait-question" aria-hidden="true"><span class="question-beat" aria-hidden="true">?</span></span>',
 )
 replace_exact(
     "elegia-breve/index.html",
@@ -124,4 +121,4 @@ replace_exact(
     "      for(const id of ['anaEpilogue','readEpilogue'])document.getElementById(id).addEventListener('click',openEpilogue);",
 )
 
-print("ANA KLAUDYA: canon actual aplicado; navegación final completa y sin botón duplicado de Epílogo")
+print("ANA KLAUDYA: canon actual aplicado; el interrogante final enlaza a CENICIENTO como obra autónoma")
