@@ -9,23 +9,23 @@ def replace_exact(path: str, old: str, new: str) -> None:
     p.write_text(text.replace(old, new, 1), encoding="utf-8")
 
 
-# EN TUS OJOS · eliminar el verso de una versión anterior.
+# EN TUS OJOS · versión canónica actual.
 replace_exact(
     "ojos/index.html",
     '''<p class="stanza">\n<span class="line" data-wait="3000">Te miro.</span>\n</p>\n''',
     "",
 )
-
-# EN TUS LABIOS · versión canónica completa.
 replace_exact(
-    "sonrisa/index.html",
-    '''<article class="poem" aria-label="En tus labios">\n<p class="stanza">\n<span class="line" data-wait="2400">Tu sonrisa comienza en las comisuras:</span>\n''',
-    '''<article class="poem" aria-label="En tus labios">\n<p class="stanza">\n<span class="line" data-wait="3000">Iba a decirte algo.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Tu sonrisa comienza en las comisuras:</span>\n''',
+    "ojos/index.html",
+    '''<p class="stanza">\n<span class="line" data-wait="2400">Tus párpados se entornan.</span>\n<span class="line" data-wait="2400">No sé cuánto de mí</span>\n<span class="line" data-wait="4200">has visto ya.</span>\n</p>\n<p class="stanza">\n<span class="line ending" data-wait="4200">Y no bajo los ojos.</span>\n</p>''',
+    '''<p class="stanza">\n<span class="line" data-wait="2400">Tus párpados se entornan.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Algo de mí</span>\n<span class="line" data-wait="4200">ha quedado a la vista.</span>\n</p>\n<p class="stanza">\n<span class="line ending" data-wait="4200">Y no bajo los ojos.</span>\n</p>''',
 )
+
+# EN TUS LABIOS · versión canónica actual.
 replace_exact(
     "sonrisa/index.html",
-    '''<p class="stanza">\n<span class="line" data-wait="2400">Cuando voy a decirte</span>\n<span class="line" data-wait="4800">lo hermosa que eres…</span>\n<span class="line" data-wait="2400">vuelves a sonreír</span>\n<span class="line" data-wait="2400">y me quedo en tus labios,</span>\n<span class="line ending" data-wait="4200">sin llegar a las palabras.</span>\n</p>''',
-    '''<p class="stanza">\n<span class="line" data-wait="3000">Busco la frase.</span>\n<span class="line" data-wait="2400">Vuelves a sonreír</span>\n<span class="line" data-wait="2400">y me quedo en tus labios,</span>\n<span class="line ending" data-wait="4200">sin llegar a las palabras.</span>\n</p>''',
+    '''<article class="poem" aria-label="En tus labios">\n<p class="stanza">\n<span class="line" data-wait="2400">Tu sonrisa comienza en las comisuras:</span>\n<span class="line" data-wait="2400">un leve movimiento</span>\n<span class="line" data-wait="2400">y ya te estoy mirando</span>\n<span class="line" data-wait="4200">más allá de toda prudencia.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">El gesto se extiende por tu rostro.</span>\n<span class="line" data-wait="2400">Yo también sonrío.</span>\n<span class="line" data-wait="4200">Todavía no has dicho nada.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Cuando voy a decirte</span>\n<span class="line" data-wait="4800">lo hermosa que eres…</span>\n<span class="line" data-wait="2400">vuelves a sonreír</span>\n<span class="line" data-wait="2400">y me quedo en tus labios,</span>\n<span class="line ending" data-wait="4200">sin llegar a las palabras.</span>\n</p>''',
+    '''<article class="poem" aria-label="En tus labios">\n<p class="stanza">\n<span class="line" data-wait="3000">Iba a decirte algo.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Tu sonrisa comienza en las comisuras:</span>\n<span class="line" data-wait="2400">apenas un movimiento</span>\n<span class="line" data-wait="2400">y ya te estoy mirando</span>\n<span class="line" data-wait="4200">más allá de toda prudencia.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Yo también sonrío.</span>\n<span class="line" data-wait="4200">Todavía no has dicho nada.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="3000">Busco la frase.</span>\n<span class="line" data-wait="3000">Vuelves a sonreír.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Me quedo en tus labios,</span>\n<span class="line ending" data-wait="4200">sin llegar a las palabras.</span>\n</p>''',
 )
 
 # TU CABELLO · cierre canónico.
@@ -35,11 +35,16 @@ replace_exact(
     '''<p class="stanza">\n<span class="line" data-wait="2400">Lo sueltas.</span>\n<span class="line" data-wait="2400">El mechón vuelve a su sitio.</span>\n<span class="line ending" data-wait="4200">Sigues hablando.</span>\n</p>''',
 )
 
-# TU PIEL · incorporar el verso de contención antes del deseo táctil.
+# TU PIEL · nueva contención final canónica.
 replace_exact(
     "piel/index.html",
-    '''<p class="stanza">\n<span class="line" data-wait="2400">Quisiera conocer esa tersura</span>''',
-    '''<p class="stanza">\n<span class="line ending" data-wait="4200">Mi mano sigue quieta.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Quisiera conocer esa tersura</span>''',
+    '''<p class="stanza">\n<span class="line" data-wait="2400">Quisiera conocer esa tersura</span>\n<span class="line" data-wait="2400">con algo más que los ojos:</span>\n<span class="line" data-wait="2400">posar despacio la mano,</span>\n<span class="line" data-wait="2400">dejarla allí</span>\n<span class="line" data-wait="2400">y sentir cómo tu piel</span>\n<span class="line ending" data-wait="4200">va entibiando la mía.</span>\n</p>''',
+    '''<p class="stanza">\n<span class="line" data-wait="4200">Mi mano sigue quieta.</span>\n</p>\n<p class="stanza">\n<span class="line" data-wait="2400">Entre tu piel y la mía</span>\n<span class="line" data-wait="4200">queda apenas el aire.</span>\n</p>\n<p class="stanza">\n<span class="line ending" data-wait="5200">No lo atravieso.</span>\n</p>''',
+)
+replace_exact(
+    "piel/index.html",
+    '<p class="subtitle">Va entibiando la mía.</p>',
+    '<p class="subtitle">No lo atravieso.</p>',
 )
 
 # PRÓLOGO · texto canónico.
@@ -69,8 +74,6 @@ for old, new in replacements.items():
 p.write_text(text, encoding="utf-8")
 
 # ANA KLAUDYA · CENICIENTO deja de formar parte de la obra.
-# Se conserva CENICIENTO como obra autónoma en el repositorio, pero se elimina
-# de la navegación, del cierre interrogativo y de las rutas internas de ANA.
 replace_exact(
     "elegia-breve/index.html",
     '    <button class="entry-button" id="anaCeniciento" type="button">Ceniciento</button>\n',
@@ -121,4 +124,4 @@ replace_exact(
     "      for(const id of ['anaEpilogue','readEpilogue'])document.getElementById(id).addEventListener('click',openEpilogue);",
 )
 
-print("ANA KLAUDYA: canon aplicado; navegación final completa y sin botón duplicado de Epílogo")
+print("ANA KLAUDYA: canon actual aplicado; navegación final completa y sin botón duplicado de Epílogo")
