@@ -25,6 +25,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Configurar Pages
         uses: actions/configure-pages@v5
+      - name: Aplicar canon de ANA KLAUDYA
+        run: python3 ana-klaudya/apply_canonical_site.py
       - name: Preparar voz de Ceniciento
         run: |
           python3 - <<'PY'
