@@ -78,10 +78,11 @@ Under your gaze,
 the face I came in with  
 falls out of order.
 
-Your eyelids narrow.
+Your eyelids half-close.
 
-I do not know how much of me  
-you have already seen.  
+Something of me  
+has been left in plain sight.
+
 And I do not look away.
 
 ---
@@ -91,17 +92,17 @@ And I do not look away.
 I was going to tell you something.
 
 Your smile begins at the corners of your mouth:  
-the slightest movement,  
+barely a movement,  
 and I am already looking at you  
 beyond all caution.
 
-The gesture spreads across your face.  
 I smile too.  
 You still have not said a word.
 
 I search for the sentence.  
-You smile again  
-and I remain on your lips,  
+You smile again.
+
+I remain on your lips,  
 never reaching the words.
 
 ---
@@ -147,12 +148,10 @@ slides across your knuckles.
 
 My hand remains still.
 
-I would like to know that smoothness  
-with something more than my eyes:  
-to lay my hand there slowly,  
-leave it there,  
-and feel your skin  
-gradually warming mine.
+Between your skin and mine  
+there is barely air.
+
+I do not cross it.
 
 ---
 
@@ -168,8 +167,7 @@ you had already made me cry
 without breaking my heart.
 
 You hum something in Portuguese  
-while the oil grows hot.
-
+while the oil grows hot.  
 I keep the rhythm with my foot.
 
 The spoon  
