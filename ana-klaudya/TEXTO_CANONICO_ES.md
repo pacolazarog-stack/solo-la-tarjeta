@@ -12,10 +12,10 @@ empezó a ser mi hogar.
 Siguiendo a un ángel,  
 llegué hasta ti.
 
-Cuando era yang,  
-buscaba el yin.
+Cuando era *yang*,  
+buscaba el *yin*.
 
-Ahora que soy yin,  
+Ahora que soy *yin*,  
 me basta con mirarte.
 
 ---
@@ -80,8 +80,9 @@ la cara que traía.
 
 Tus párpados se entornan.
 
-No sé cuánto de mí  
-has visto ya.  
+Algo de mí  
+ha quedado a la vista.
+
 Y no bajo los ojos.
 
 ---
@@ -91,17 +92,17 @@ Y no bajo los ojos.
 Iba a decirte algo.
 
 Tu sonrisa comienza en las comisuras:  
-un leve movimiento  
+apenas un movimiento  
 y ya te estoy mirando  
 más allá de toda prudencia.
 
-El gesto se extiende por tu rostro.  
 Yo también sonrío.  
 Todavía no has dicho nada.
 
 Busco la frase.  
-Vuelves a sonreír  
-y me quedo en tus labios,  
+Vuelves a sonreír.
+
+Me quedo en tus labios,  
 sin llegar a las palabras.
 
 ---
@@ -147,12 +148,10 @@ se desliza por tus nudillos.
 
 Mi mano sigue quieta.
 
-Quisiera conocer esa tersura  
-con algo más que los ojos:  
-posar despacio la mano,  
-dejarla allí  
-y sentir cómo tu piel  
-va entibiando la mía.
+Entre tu piel y la mía  
+queda apenas el aire.
+
+No lo atravieso.
 
 ---
 
@@ -168,8 +167,7 @@ ya me habías hecho llorar
 sin romperme el corazón.
 
 Tarareas algo en portugués  
-mientras el aceite se calienta.
-
+mientras el aceite se calienta.  
 Yo sigo el ritmo con el pie.
 
 La cuchara  
