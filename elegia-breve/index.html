@@ -311,10 +311,12 @@
       opacity:0;transition:opacity 20s ease-in-out 4s;
     }
     .ana-navigation{position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;width:max-content;max-width:calc(100% - 28px);padding:10px;border:1px solid rgba(23,63,50,.2);border-radius:22px;background:rgba(238,241,233,.94);box-shadow:0 8px 30px rgba(0,0,0,.15)}
-    .ana-navigation[hidden]{display:none}.ana-navigation .entry-button{margin:0;padding:.85em 1.2em;letter-spacing:.08em;font-size:.68rem}
+    .ana-navigation[hidden]{display:none}.ana-navigation .entry-button{min-height:44px;touch-action:manipulation;margin:0;padding:.85em 1.2em;letter-spacing:.08em;font-size:.68rem}
+    .ana-navigation{max-height:45svh;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
     body.ana-navigation-ready main{padding-bottom:100px}
     .ceniciento-frame{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#100e0d}
     .ceniciento-frame[hidden]{display:none}
+    .ceniciento-frame.sonrisa-leaving{pointer-events:none}
     .epilogue-invitation{margin:18svh 0 0}
     .epilogue-invitation[hidden]{display:none}
     .portrait-epilogue{position:absolute;right:max(24px,env(safe-area-inset-right));bottom:max(32px,env(safe-area-inset-bottom));pointer-events:none;opacity:0;visibility:hidden;transition:opacity 3s ease 25s,visibility 0s linear 25s}
@@ -1096,6 +1098,17 @@
       const memoryStart = document.getElementById('memoryStart');
       const finalHeat = document.getElementById('finalHeat');
 
+      let anaEntryRequest=0;
+      const anaPreludeTimers=new Set();
+      const cancelAnaPrelude=()=>{
+        anaEntryRequest++;
+        for(const timer of anaPreludeTimers)clearTimeout(timer);
+        anaPreludeTimers.clear();
+      };
+      const preludeTimeout=(fn,delay)=>{
+        const timer=setTimeout(()=>{anaPreludeTimers.delete(timer);fn();},delay);
+        anaPreludeTimers.add(timer);
+      };
       let soundStarted=false;
       let prologuePlayed=false, prologueActive=false, prologueNameReady=false;
       let readingReady=false;
@@ -1129,25 +1142,26 @@
       };
 
       const beginPrelude=(nameReady)=>{
+        cancelAnaPrelude();
         body.classList.add('prelude');
         entry.classList.add('is-open');
         namePrelude.classList.remove('show-ana','show-klaudya','fade');
 
         if(nameReady){
-          setTimeout(()=>{
+          preludeTimeout(()=>{
             nameAudio.play().catch(()=>{
-              setTimeout(()=>namePrelude.classList.add('show-ana'),190);
-              setTimeout(()=>namePrelude.classList.add('show-klaudya'),4790);
+              preludeTimeout(()=>namePrelude.classList.add('show-ana'),190);
+              preludeTimeout(()=>namePrelude.classList.add('show-klaudya'),4790);
               restoreAmbient();
             });
           },2410);
         }else{
-          setTimeout(()=>namePrelude.classList.add('show-ana'),2600);
-          setTimeout(()=>namePrelude.classList.add('show-klaudya'),7200);
+          preludeTimeout(()=>namePrelude.classList.add('show-ana'),2600);
+          preludeTimeout(()=>namePrelude.classList.add('show-klaudya'),7200);
         }
-        setTimeout(()=>namePrelude.classList.add('fade'),12500);
+        preludeTimeout(()=>namePrelude.classList.add('fade'),12500);
 
-        setTimeout(()=>{
+        preludeTimeout(()=>{
           body.classList.remove('locked','prelude');
           body.classList.add('reading-ready');
           namePrelude.classList.add('fade');
@@ -1159,9 +1173,12 @@
       };
 
       entryButton.addEventListener('click',async()=>{
+        if(entryButton.disabled)return;
+        const request=++anaEntryRequest;
         entryButton.disabled=true;
         const [started,nameReady]=await Promise.all([startSound(),primeNameAudio()]);
 
+        if(request!==anaEntryRequest)return;
         if(started){
           if(prologuePlayed)beginPrelude(nameReady);
           else{
@@ -1229,40 +1246,75 @@
         if(!cenicientoFrame.contentWindow || cenicientoFrame.hidden) return;
         cenicientoFrame.contentWindow.postMessage({channel:'ceniciento-music-v1',type:'state',pulseTime:(pulseField.getAnimations?.()[0]?.currentTime||0),level:musicLimit(),enabled:musicEnabled.checked && !voiceMusic.muted,playing:!voiceMusic.paused},window.location.origin);
       };
+      let sonrisaLeaving=false, poemRoute='', poemTransition=0;
+      let poemExitTimer=null, poemRevealTimer=null;
+      const cancelPoemTransition=()=>{
+        poemTransition++;
+        clearTimeout(poemExitTimer);clearTimeout(poemRevealTimer);
+        poemExitTimer=null;poemRevealTimer=null;sonrisaLeaving=false;
+        cenicientoFrame.classList.remove('sonrisa-leaving');
+        cenicientoFrame.removeAttribute('aria-busy');
+      };
       const closeCeniciento=()=>{
-        if(prologueActive){prologueActive=false;entry.classList.remove('is-open');entryButton.disabled=false;}
+        cancelPoemTransition();
+        if(prologueActive){prologueActive=false;entry.classList.remove('is-open');}
+        entryButton.disabled=false;
+        poemRoute='';
         cenicientoFrame.hidden=true;cenicientoFrame.classList.remove('sonrisa-transition','sonrisa-visible');body.classList.remove('sonrisa-open','ceniciento-open','eyes-open');root.classList.remove('ceniciento-open');document.title='ANA KLAUDYA';
         // Unload narration only; the music remains in this document.
         cenicientoFrame.removeAttribute('src');
         anaNavigation.hidden=false;body.classList.add('ana-navigation-ready');
       };
-      document.getElementById('cenicientoLink').addEventListener('click',event=>{
-        if(event.button>0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-        event.preventDefault();
-        if(!cenicientoFrame.hidden || sonrisaLeaving)return;
-        sonrisaLeaving=false;
-        cenicientoFrame.classList.remove('sonrisa-visible');cenicientoFrame.classList.add('sonrisa-transition');body.classList.add('sonrisa-open');
-        anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title='CENICIENTO · leer o escuchar';
-        voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
-        recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
-        cenicientoFrame.hidden=false;
-        if(!cenicientoFrame.getAttribute('src'))cenicientoFrame.src='../ceniciento/?music=parent&v=20261006-fundido7';
-        if(window.location.hash!=='#ceniciento')window.history.pushState({ceniciento:true},'','#ceniciento');
-      });
-      let sonrisaLeaving=false;
       const openPoem=(piece,asPrologue=false)=>{
-        if(body.classList.contains('sonrisa-open'))return;
+        if(poemRoute===piece&&!cenicientoFrame.hidden&&!sonrisaLeaving)return;
+        cancelPoemTransition();cancelAnaPrelude();
+        poemRoute=piece;
         body.classList.toggle('eyes-open',piece==='ojos');
-        sonrisaLeaving=false;
         cenicientoFrame.classList.remove('sonrisa-visible');cenicientoFrame.classList.add('sonrisa-transition');body.classList.add('sonrisa-open');
-        anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=({ojos:'EN TUS OJOS',sonrisa:'EN TUS LABIOS',cabello:'TU CABELLO',piel:'TU PIEL',estrella:'SIGUIENDO UNA TARJETA',epilogo:'A FUEGO LENTO · EPÍLOGO'})[piece];
+        anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=({ceniciento:'CENICIENTO · leer o escuchar',ojos:'EN TUS OJOS',sonrisa:'EN TUS LABIOS',cabello:'TU CABELLO',piel:'TU PIEL',estrella:'SIGUIENDO UNA TARJETA',epilogo:'A FUEGO LENTO · EPÍLOGO'})[piece];
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
         prologueActive=asPrologue;
         cenicientoFrame.hidden=false;
         cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261007-ana-134-luna20'+(asPrologue?'&prologue=1':'');
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261007-mobile-nav'+(asPrologue?'&prologue=1':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
+      };
+      document.getElementById('cenicientoLink').addEventListener('click',event=>{
+        if(event.button>0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();openPoem('ceniciento');
+      });
+      const returnToAna=(mode='home',updateHistory=true)=>{
+        if(cenicientoFrame.hidden||sonrisaLeaving)return;
+        cancelPoemTransition();cancelAnaPrelude();
+        const transition=poemTransition;
+        sonrisaLeaving=true;
+        cenicientoFrame.classList.add('sonrisa-leaving');
+        cenicientoFrame.setAttribute('aria-busy','true');
+        if(mode==='ana'||mode==='home'){
+          resetPortraitFinale();
+          body.classList.add('locked');body.classList.remove('reading-ready','prelude','portrait-revealed');
+          readingReady=false;hasScrolled=false;
+          namePrelude.classList.add('fade');portraitFinale.setAttribute('aria-hidden','true');
+          entryButton.disabled=true;
+          if(mode==='ana'){
+            prologuePlayed=true;prologueActive=false;entry.classList.add('is-open');
+          }else{
+            entry.classList.remove('is-open');entryButton.textContent='Entrar';
+          }
+        }
+        cenicientoFrame.classList.remove('sonrisa-visible');
+        const duration=window.matchMedia('(prefers-reduced-motion: reduce)').matches?220:7100;
+        poemExitTimer=setTimeout(()=>{
+          if(transition!==poemTransition)return;
+          closeCeniciento();
+          if(updateHistory)window.history.replaceState(null,'',window.location.pathname+window.location.search);
+          if(mode==='home'||mode==='ana')window.scrollTo({top:0,left:0,behavior:'auto'});
+          if(mode==='ana'){
+            anaNavigation.hidden=true;body.classList.remove('ana-navigation-ready');
+            beginPrelude(prologueNameReady);
+          }
+        },duration);
       };
       const openSonrisa=()=>openPoem('sonrisa');
       const openOjos=()=>openPoem('ojos');
@@ -1277,6 +1329,8 @@
       document.getElementById('anaPiel').addEventListener('click',openPiel);
       document.getElementById('anaEstrella').addEventListener('click',openEstrella);
       const showAnaText=()=>{
+        cancelAnaPrelude();
+        if(!cenicientoFrame.hidden){closeCeniciento();window.history.replaceState(null,'',window.location.pathname+window.location.search);}
         resetPortraitFinale();
         if(voiceDialog.open)voiceDialog.close();
         cancelVoiceStart();recording.pause();nameAudio.pause();
@@ -1288,63 +1342,18 @@
       document.getElementById('anaRead').addEventListener('click',showAnaText);
       document.getElementById('anaVoice').addEventListener('click',()=>{showAnaText();recording.currentTime=0;openVoice();});
       document.getElementById('anaCeniciento').addEventListener('click',()=>document.getElementById('cenicientoLink').click());
-      window.addEventListener('popstate',()=>{
-        if(window.location.hash==='#epilogo')openEpilogue();
-        else if(window.location.hash==='#estrella')openEstrella();
-        else if(window.location.hash==='#cabello')openCabello();
-        else if(window.location.hash==='#piel')openPiel();
-        else if(window.location.hash==='#ojos')openOjos();
-        else if(window.location.hash==='#sonrisa')openSonrisa();
-        else if(window.location.hash==='#ceniciento')document.getElementById('cenicientoLink').click();
-        else closeCeniciento();
-      });
+      const syncPoemRoute=()=>{
+        const piece=window.location.hash.slice(1);
+        if(['epilogo','estrella','cabello','piel','ojos','sonrisa','ceniciento'].includes(piece))openPoem(piece);
+        else if(!cenicientoFrame.hidden)returnToAna('home',false);
+      };
+      window.addEventListener('popstate',syncPoemRoute);
+      window.addEventListener('hashchange',syncPoemRoute);
       window.addEventListener('message',event=>{
-        if(event.origin!==window.location.origin || event.source!==cenicientoFrame.contentWindow || event.data?.channel!=='ceniciento-music-v1')return;
+        if(event.origin!==window.location.origin || event.source!==cenicientoFrame.contentWindow || event.data?.channel!=='ceniciento-music-v1'||cenicientoFrame.hidden)return;
         const data=event.data;
-        if(data.type==='ana' && cenicientoFrame.getAttribute('src')?.includes('../estrella/')){
-          if(sonrisaLeaving)return;
-          sonrisaLeaving=true;prologuePlayed=true;prologueActive=false;
-          resetPortraitFinale();
-          body.classList.add('locked');body.classList.remove('reading-ready','prelude','portrait-revealed');
-          readingReady=false;hasScrolled=false;
-          entry.classList.add('is-open');namePrelude.classList.add('fade');
-          cenicientoFrame.classList.remove('sonrisa-visible');
-          const duration=window.matchMedia('(prefers-reduced-motion: reduce)').matches?220:7100;
-          setTimeout(()=>{
-            closeCeniciento();sonrisaLeaving=false;
-            anaNavigation.hidden=true;body.classList.remove('ana-navigation-ready');
-            window.scrollTo({top:0,left:0,behavior:'auto'});
-            window.history.replaceState(null,'',window.location.pathname+window.location.search);
-            beginPrelude(prologueNameReady);
-          },duration);
-          return;
-        }
-        if(data.type==='home'){
-          if(sonrisaLeaving)return;
-          sonrisaLeaving=true;
-          // Reveal Ana behind the poem before fading the frame away.
-          resetPortraitFinale();
-          entry.classList.remove('is-open');
-          entryButton.disabled=false;entryButton.textContent='Entrar';
-          body.classList.add('locked');body.classList.remove('reading-ready','prelude','portrait-revealed');
-          readingReady=false;hasScrolled=false;
-          namePrelude.classList.add('fade');portraitFinale.setAttribute('aria-hidden','true');
-          cenicientoFrame.classList.remove('sonrisa-visible');
-          const duration=window.matchMedia('(prefers-reduced-motion: reduce)').matches?220:7100;
-          setTimeout(()=>{closeCeniciento();sonrisaLeaving=false;window.scrollTo({top:0,left:0,behavior:'auto'});window.history.replaceState(null,'',window.location.pathname+window.location.search);},duration);
-          return;
-        }
-        if(data.type==='close'){
-          if(sonrisaLeaving)return;
-          sonrisaLeaving=true;
-          cenicientoFrame.classList.remove('sonrisa-visible');
-          const duration=window.matchMedia('(prefers-reduced-motion: reduce)').matches?220:7100;
-          setTimeout(()=>{
-            closeCeniciento();sonrisaLeaving=false;
-            window.history.replaceState(null,'',window.location.pathname+window.location.search);
-          },duration);
-          return;
-        }
+        if(data.type==='ana'&&poemRoute==='estrella'){returnToAna('ana');return;}
+        if(data.type==='home'||data.type==='close'){returnToAna(data.type);return;}
         if(data.type==='level' && Number.isFinite(data.level)){
           const level=Math.max(0,Math.min(.8,data.level));ambientLevel=level;showMusicLevel(level);fadeMusicTo(musicEnabled.checked?level:0,.5);
         }
@@ -1360,7 +1369,9 @@
         sendCenicientoMusicState();
         if(body.classList.contains('sonrisa-open')&&!sonrisaLeaving){
           cenicientoFrame.getBoundingClientRect();
-          setTimeout(()=>{if(body.classList.contains('sonrisa-open')&&!sonrisaLeaving)cenicientoFrame.classList.add('sonrisa-visible');},350);
+          const transition=poemTransition;
+          clearTimeout(poemRevealTimer);
+          poemRevealTimer=setTimeout(()=>{if(transition===poemTransition&&!cenicientoFrame.hidden&&!sonrisaLeaving)cenicientoFrame.classList.add('sonrisa-visible');},350);
         }
       });
 
@@ -1505,13 +1516,7 @@
       syncSoundToggle();
       renderWorld();
       ensureAmbientMusic();
-      if(window.location.hash==='#epilogo')openEpilogue();
-      else if(window.location.hash==='#ceniciento')document.getElementById('cenicientoLink').click();
-      else if(window.location.hash==='#estrella')openEstrella();
-      else if(window.location.hash==='#cabello')openCabello();
-        else if(window.location.hash==='#piel')openPiel();
-        else if(window.location.hash==='#ojos')openOjos();
-        else if(window.location.hash==='#sonrisa')openSonrisa();
+      syncPoemRoute();
     })();
   </script>
 </body>
