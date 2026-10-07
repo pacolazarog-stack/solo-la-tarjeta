@@ -9,7 +9,7 @@ encontré un lugar.
 Al detenerme allí,  
 empezó a ser mi hogar.
 
-Siguiendo a mi ángel,  
+Siguiendo a un ángel,  
 llegué hasta ti.
 
 Cuando era yang,  
