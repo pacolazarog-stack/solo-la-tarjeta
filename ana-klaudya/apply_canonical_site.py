@@ -97,4 +97,17 @@ replace_exact(
     "        if(['epilogo','estrella','cabello','piel','ojos','sonrisa'].includes(piece))openPoem(piece);",
 )
 
-print("ANA KLAUDYA: canon aplicado; CENICIENTO queda fuera de la obra y permanece autónomo")
+# CIERRE DE ANA · al aparecer la fotografía y el interrogante deben aparecer
+# simultáneamente todos los botones de navegación propios de ANA KLAUDYA.
+replace_exact(
+    "elegia-breve/index.html",
+    '''          portraitFinale.setAttribute('aria-hidden','false');\n          body.classList.add('portrait-revealed');\n          clearTimeout(portraitRevealTimer);''',
+    '''          portraitFinale.setAttribute('aria-hidden','false');\n          body.classList.add('portrait-revealed');\n          const finalNavigation=document.getElementById('anaNavigation');\n          finalNavigation.hidden=false;\n          body.classList.add('ana-navigation-ready');\n          clearTimeout(portraitRevealTimer);''',
+)
+replace_exact(
+    "elegia-breve/index.html",
+    '''        body.classList.remove('portrait-revealed');\n        portraitFinale.setAttribute('aria-hidden','true');\n        listenedRanges=[];listeningStart=null;''',
+    '''        body.classList.remove('portrait-revealed');\n        portraitFinale.setAttribute('aria-hidden','true');\n        document.getElementById('anaNavigation').hidden=true;\n        body.classList.remove('ana-navigation-ready');\n        listenedRanges=[];listeningStart=null;''',
+)
+
+print("ANA KLAUDYA: canon aplicado; CENICIENTO queda fuera; foto + interrogante muestran toda la navegación")
