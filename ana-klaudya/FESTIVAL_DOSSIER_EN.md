@@ -34,13 +34,15 @@ The purpose is not to describe a woman exhaustively. It is to record the changin
 6. Your Skin
 7. Epilogue · Over a Low Flame
 
-## Festival cuts
+## Duration status · corrected 2026-10-07
 
-- **Cadence cut:** target 05:58
-- **Midwest cut:** target 06:48
-- **Weimar cut:** more spacious version, close to the full audiovisual rhythm
+The current GitHub work is an **interactive audiovisual experience**, not a fixed-length linear film. Its full duration therefore depends on user scrolling, navigation and optional voice playback.
 
-Do not mechanically time-stretch the Spanish voice. Compression should come primarily from pauses, fades and transitions.
+A first code audit shows that the **scripted timed material alone, excluding the scroll-driven Elegy and excluding most navigation time, already amounts to approximately 4 min 55 s**. Once the Elegy, transitions, fades and user interaction are included, the complete experience is substantially longer than 5–6 minutes.
+
+The previously prepared **05:58 Cadence** and **06:48 Midwest** subtitle files are therefore retained only as **hypothetical abbreviated timing studies**. They are **not the canonical duration of ANA KLAUDYA** and must not be used as evidence of running time.
+
+Before festival submission, a separate linear festival master must be defined and timed from picture lock. The Spanish voice must not be mechanically accelerated.
 
 ## Credits template
 
@@ -59,10 +61,8 @@ AI-assisted tools were used in selected stages of the audiovisual production. Th
 
 This wording must be revised against the final production inventory before any festival submission.
 
-## Priority festival route
+## Festival route · pending duration verification
 
-1. Cadence Video Poetry Festival 2027
-2. Midwest Video Poetry Fest 2027
-3. Weimar Poetry Film Award 2027
+Cadence Video Poetry Festival, Midwest Video Poetry Fest and Weimar Poetry Film Award remain reference targets only until the final linear master duration is established and each current call is checked against that actual running time.
 
 The Spanish canonical text is not to be altered for festival adaptation. English is a literary subtitle/translation layer.
