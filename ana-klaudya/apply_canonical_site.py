@@ -68,4 +68,33 @@ for old, new in replacements.items():
     text = text.replace(old, new)
 p.write_text(text, encoding="utf-8")
 
-print("ANA KLAUDYA: textos canónicos y ciclo celeste aplicados al sitio desplegable")
+# ANA KLAUDYA · CENICIENTO deja de formar parte de la obra.
+# Se conserva CENICIENTO como obra autónoma en el repositorio, pero se elimina
+# de la navegación, del cierre interrogativo y de las rutas internas de ANA.
+replace_exact(
+    "elegia-breve/index.html",
+    '    <button class="entry-button" id="anaCeniciento" type="button">Ceniciento</button>\n',
+    "",
+)
+replace_exact(
+    "elegia-breve/index.html",
+    '        <a id="cenicientoLink" class="portrait-question" href="../ceniciento/" aria-label="Descubrir Ceniciento"><span class="question-beat" aria-hidden="true">?</span></a>',
+    '        <span id="anaQuestion" class="portrait-question" aria-hidden="true"><span class="question-beat" aria-hidden="true">?</span></span>',
+)
+replace_exact(
+    "elegia-breve/index.html",
+    '''      document.getElementById('cenicientoLink').addEventListener('click',event=>{\n        if(event.button>0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;\n        event.preventDefault();openPoem('ceniciento');\n      });\n''',
+    "",
+)
+replace_exact(
+    "elegia-breve/index.html",
+    "      document.getElementById('anaCeniciento').addEventListener('click',()=>document.getElementById('cenicientoLink').click());\n",
+    "",
+)
+replace_exact(
+    "elegia-breve/index.html",
+    "        if(['epilogo','estrella','cabello','piel','ojos','sonrisa','ceniciento'].includes(piece))openPoem(piece);",
+    "        if(['epilogo','estrella','cabello','piel','ojos','sonrisa'].includes(piece))openPoem(piece);",
+)
+
+print("ANA KLAUDYA: canon aplicado; CENICIENTO queda fuera de la obra y permanece autónomo")
