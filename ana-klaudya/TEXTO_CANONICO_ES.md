@@ -23,7 +23,7 @@ me basta con mirarte.
 ## Elegía breve para Ana Klaudya
 
 Había en su rostro  
-una belleza serena,  
+una belleza serena  
 de las que no reclaman  
 hacerse notar.
 
@@ -34,7 +34,8 @@ con un cuidado
 que subraya  
 sin corregir.
 
-Y luego habló.  
+Y luego habló.
+
 Brasil seguía intacto  
 en su manera de decir:  
 el peso tibio de las vocales,  
@@ -49,7 +50,8 @@ le faltaba todavía
 la voz.
 
 Después vino  
-el abrazo.  
+el abrazo.
+
 Ignoro cuánto duró  
 o quién se acercó primero.  
 Solo recuerdo  
@@ -60,8 +62,8 @@ esa íntima injusticia
 que a veces comete la memoria:  
 de toda una tarde  
 retiene intacto  
-un rostro,  
-y de todo un abrazo,
+un rostro  
+y, de todo un abrazo,
 
 el  
 calor.
@@ -80,8 +82,8 @@ la cara que traía.
 
 Tus párpados se entornan.
 
-Algo de mí  
-ha quedado a la vista.
+Algo mío  
+queda a la vista.
 
 Y no bajo los ojos.
 
@@ -91,12 +93,13 @@ Y no bajo los ojos.
 
 Iba a decirte algo.
 
-Tu sonrisa comienza en las comisuras:  
+Tu sonrisa empieza en las comisuras:  
 apenas un movimiento  
 y ya te estoy mirando  
-más allá de toda prudencia.
+más allá de la prudencia.
 
-Yo también sonrío.  
+Yo también sonrío.
+
 Todavía no has dicho nada.
 
 Busco la frase.  
@@ -112,11 +115,12 @@ sin llegar a las palabras.
 Negro, con ese brillo de crin  
 que estalla al volver la cabeza:  
 la luz resbala por él  
-sin llegar a aclararlo.
+sin aclararlo.
 
 Cae sobre tu hombro  
-y tarda en quedarse quieto.  
-Tú regresas a tus palabras;  
+y tarda en quedarse quieto.
+
+Tú vuelves a tus palabras,  
 pero un mechón prolonga  
 el giro de tu rostro.
 
@@ -125,26 +129,29 @@ El gesto desnuda tu cuello
 y deja entre las hebras  
 una grieta de luz.
 
-Lo sueltas.  
-El mechón vuelve a su sitio.  
+Lo sueltas.
+
+El mechón vuelve a su sitio.
+
 Sigues hablando.
 
 ---
 
 ## Tu piel
 
-Tu piel tiene ese tono de bronce.  
+Tu piel tiene ese tono de bronce.
+
 En el pliegue del codo  
 el color se hace más hondo.
 
 La luz se demora en tu hombro,  
 desciende por el brazo  
-y alcanza la mano  
+y llega hasta la mano  
 que acompaña tu voz.
 
 Mueves los dedos  
 y una claridad fugaz  
-se desliza por tus nudillos.
+resbala por tus nudillos.
 
 Mi mano sigue quieta.
 
@@ -167,7 +174,8 @@ ya me habías hecho llorar
 sin romperme el corazón.
 
 Tarareas algo en portugués  
-mientras el aceite se calienta.  
+mientras se calienta el aceite.
+
 Yo sigo el ritmo con el pie.
 
 La cuchara  
@@ -175,8 +183,8 @@ se me queda quieta.
 
 —Remueve, poeta.
 
-Se me había olvidado el puchero.  
-Estaba buscando una palabra  
+Se me olvidó el puchero.  
+Buscaba una palabra  
 para el modo en que sonríes.
 
 Me acercas la cuchara.
@@ -190,7 +198,8 @@ Me quedo mirándote.
 —Sal.
 
 Tú pones dos platos.  
-Yo llevo el puchero a la mesa.  
+Yo llevo el puchero a la mesa.
+
 Apartas los papeles  
 para que quepa.
 
