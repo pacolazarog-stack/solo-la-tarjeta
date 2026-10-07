@@ -109,4 +109,16 @@ replace_exact(
     "        body.classList.remove('portrait-revealed');\n        anaNavigation.hidden=true;body.classList.remove('ana-navigation-ready');\n        portraitFinale.setAttribute('aria-hidden','true');",
 )
 
-print("ANA KLAUDYA: canon aplicado; CENICIENTO queda fuera y la navegación reaparece con el retrato final")
+# CIERRE DE ANA · evitar duplicar el botón de Epílogo cuando ya está visible en la navegación final.
+replace_exact(
+    "elegia-breve/index.html",
+    '    <button class="entry-button portrait-epilogue flambe-button" id="portraitEpilogue" type="button">Epílogo · A fuego lento →</button>\n',
+    "",
+)
+replace_exact(
+    "elegia-breve/index.html",
+    "      for(const id of ['anaEpilogue','readEpilogue','portraitEpilogue'])document.getElementById(id).addEventListener('click',openEpilogue);",
+    "      for(const id of ['anaEpilogue','readEpilogue'])document.getElementById(id).addEventListener('click',openEpilogue);",
+)
+
+print("ANA KLAUDYA: canon aplicado; navegación final completa y sin botón duplicado de Epílogo")
