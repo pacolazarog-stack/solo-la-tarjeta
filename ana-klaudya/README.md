@@ -8,6 +8,7 @@ Obra multimedia de **flag** · 2026.
 - Traducción inglesa: versión literaria estable para subtítulos y dossier internacional.
 - Valoración homogénea recuperada: **9,55/10**.
 - Destino: circuito internacional de videopoesía 2027.
+- **CENICIENTO no forma parte de ANA KLAUDYA.** Permanece como obra autónoma e independiente dentro del repositorio.
 
 ## Estructura
 
@@ -41,6 +42,7 @@ Obra multimedia de **flag** · 2026.
 - La música comienza alta y desciende al entrar la voz.
 - Los ojos ganan nitidez de manera gradual, **sin latido ni zoom**.
 - Fundidos lentos hacia la fotografía y cierre con interrogante.
+- El interrogante final **ya no enlaza con CENICIENTO**.
 - La voz **no se acelera** para adaptar los cortes de festival; se comprimen montaje, silencios y transiciones.
 - Se preservan el segundo **«el calor»**, **«Mi mano sigue quieta»** y el tempo cómico del epílogo.
 
