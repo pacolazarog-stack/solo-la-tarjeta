@@ -46,7 +46,7 @@ replace_exact(
 replace_exact(
     "estrella/index.html",
     '''<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Siguiendo una tarjeta,<br>\nencontré un lugar.</p>\n<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3200">Iba a recogerla.</p>\n<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Antes de irme,<br>\nya quería volver.</p>\n<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Siguiendo a un ángel,<br>\nllegué hasta ti.</p>\n<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6500">Cuando era <em>yang</em>,<br>\nbuscaba el <em>yin</em>.</p>\n<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Ahora que soy <em>yin</em>,<br>\npuedo quedarme.</p>\n<p class="phrase hidden-phrase ending final-stanza" aria-hidden="true" data-wait="7000">Me basta con mirarte.</p>''',
-    '''<p class="phrase hidden-phrase" aria-hidden="true" data-wait="5200">Siguiendo una tarjeta,<br>\nencontré un lugar.<br>\nAl detenerme allí,<br>\nempezó a ser mi hogar.</p>\n<p class="phrase hidden-phrase" aria-hidden="true" data-wait="5200">Siguiendo a mi ángel,<br>\nllegué hasta ti.</p>\n<p class="phrase hidden-phrase" aria-hidden="true" data-wait="5200">Cuando era <em>yang</em>,<br>\nbuscaba el <em>yin</em>.</p>\n<p class="phrase hidden-phrase ending final-stanza" aria-hidden="true" data-wait="6200">Ahora que soy <em>yin</em>,<br>\nme basta con mirarte.</p>''',
+    '''<p class="phrase hidden-phrase" aria-hidden="true" data-wait="5200">Siguiendo una tarjeta,<br>\nencontré un lugar.<br>\nAl detenerme allí,<br>\nempezó a ser mi hogar.</p>\n<p class="phrase hidden-phrase" aria-hidden="true" data-wait="5200">Siguiendo a un ángel,<br>\nllegué hasta ti.</p>\n<p class="phrase hidden-phrase" aria-hidden="true" data-wait="5200">Cuando era <em>yang</em>,<br>\nbuscaba el <em>yin</em>.</p>\n<p class="phrase hidden-phrase ending final-stanza" aria-hidden="true" data-wait="6200">Ahora que soy <em>yin</em>,<br>\nme basta con mirarte.</p>''',
 )
 
 # PRÓLOGO · ciclo celeste aproximadamente a la mitad de duración.
@@ -97,17 +97,16 @@ replace_exact(
     "        if(['epilogo','estrella','cabello','piel','ojos','sonrisa'].includes(piece))openPoem(piece);",
 )
 
-# CIERRE DE ANA · al aparecer la fotografía y el interrogante deben aparecer
-# simultáneamente todos los botones de navegación propios de ANA KLAUDYA.
+# CIERRE DE ANA · al aparecer el retrato y el interrogante, mostrar toda la navegación.
 replace_exact(
     "elegia-breve/index.html",
-    '''          portraitFinale.setAttribute('aria-hidden','false');\n          body.classList.add('portrait-revealed');\n          clearTimeout(portraitRevealTimer);''',
-    '''          portraitFinale.setAttribute('aria-hidden','false');\n          body.classList.add('portrait-revealed');\n          const finalNavigation=document.getElementById('anaNavigation');\n          finalNavigation.hidden=false;\n          body.classList.add('ana-navigation-ready');\n          clearTimeout(portraitRevealTimer);''',
+    "          body.classList.add('portrait-revealed');\n          clearTimeout(portraitRevealTimer);",
+    "          body.classList.add('portrait-revealed');\n          anaNavigation.hidden=false;body.classList.add('ana-navigation-ready');\n          clearTimeout(portraitRevealTimer);",
 )
 replace_exact(
     "elegia-breve/index.html",
-    '''        body.classList.remove('portrait-revealed');\n        portraitFinale.setAttribute('aria-hidden','true');\n        listenedRanges=[];listeningStart=null;''',
-    '''        body.classList.remove('portrait-revealed');\n        portraitFinale.setAttribute('aria-hidden','true');\n        document.getElementById('anaNavigation').hidden=true;\n        body.classList.remove('ana-navigation-ready');\n        listenedRanges=[];listeningStart=null;''',
+    "        body.classList.remove('portrait-revealed');\n        portraitFinale.setAttribute('aria-hidden','true');",
+    "        body.classList.remove('portrait-revealed');\n        anaNavigation.hidden=true;body.classList.remove('ana-navigation-ready');\n        portraitFinale.setAttribute('aria-hidden','true');",
 )
 
-print("ANA KLAUDYA: canon aplicado; CENICIENTO queda fuera; foto + interrogante muestran toda la navegación")
+print("ANA KLAUDYA: canon aplicado; CENICIENTO queda fuera y la navegación reaparece con el retrato final")
