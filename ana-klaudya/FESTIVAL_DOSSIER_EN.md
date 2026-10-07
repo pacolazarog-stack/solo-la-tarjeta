@@ -38,11 +38,29 @@ The purpose is not to describe a woman exhaustively. It is to record the changin
 
 The current GitHub work is an **interactive audiovisual experience**, not a fixed-length linear film. Its full duration therefore depends on user scrolling, navigation and optional voice playback.
 
-A first code audit shows that the **scripted timed material alone, excluding the scroll-driven Elegy and excluding most navigation time, already amounts to approximately 4 min 55 s**. Once the Elegy, transitions, fades and user interaction are included, the complete experience is substantially longer than 5–6 minutes.
+A first code audit showed that the **scripted timed material alone, excluding the scroll-driven Elegy and excluding most navigation time, already amounts to approximately 4 min 55 s**. Once the Elegy, transitions, fades and user interaction are included, the complete experience is substantially longer than 5–6 minutes.
 
-The previously prepared **05:58 Cadence** and **06:48 Midwest** subtitle files are therefore retained only as **hypothetical abbreviated timing studies**. They are **not the canonical duration of ANA KLAUDYA** and must not be used as evidence of running time.
+A separate **linear festival master** has therefore been planned with a current editorial target of **09:27**. This version preserves all seven canonical sections, does not mechanically accelerate the Spanish voice and does not cut canonical verses. The central Elegy remains the longest and slowest section.
 
-Before festival submission, a separate linear festival master must be defined and timed from picture lock. The Spanish voice must not be mechanically accelerated.
+The former **05:58 Cadence** and **06:48 Midwest** subtitle files are retained only as **historical abbreviated timing studies**. They are not the canonical duration of *ANA KLAUDYA* and should not be used for submission unless a genuinely separate shortened version is deliberately created later.
+
+The definitive running time will be the measured duration of the final encoded MP4 after picture lock.
+
+## Linear master reference
+
+Current editorial target: **09:27**.
+
+The detailed timecode structure is recorded in `LINEAR_MASTER_TIMELINE.md`.
+
+Key principles:
+
+- preserve the complete canonical Spanish text;
+- no mechanical voice acceleration;
+- retain the second “the warmth” / «el calor» as a structural climax;
+- retain “My hand remains still.” / «Mi mano sigue quieta» as an independent beat;
+- preserve the comic pauses of the Epilogue;
+- final portrait and unresolved question remain self-contained;
+- **CENICIENTO is not part of ANA KLAUDYA and is not part of the festival master.**
 
 ## Credits template
 
@@ -55,14 +73,18 @@ Visual conception and editing: **flag**
 
 Music, image and tool credits must be completed from the final production inventory before submission.
 
+## Rights documentation
+
+Before any submission using identifiable photographs or video of Ana Klaudya, the production file should contain her express written authorization for the use of her image in *ANA KLAUDYA* and its festival exhibition/promotion. Copyright ownership or permission for each underlying photograph must also be documented separately where the photographer is a third party.
+
 ## AI disclosure · working version
 
 AI-assisted tools were used in selected stages of the audiovisual production. The poetry, artistic concept, structure, sequencing and final editorial decisions are by the author. All uses of generative or AI-assisted tools are identified in the production documentation and credits.
 
 This wording must be revised against the final production inventory before any festival submission.
 
-## Festival route · pending duration verification
+## Festival route · pending current-rule verification
 
-Cadence Video Poetry Festival, Midwest Video Poetry Fest and Weimar Poetry Film Award remain reference targets only until the final linear master duration is established and each current call is checked against that actual running time.
+Candidate festivals must now be evaluated against a film of approximately **09:27**, not against the obsolete 05:58 / 06:48 studies. Any festival whose current maximum duration is below the final master runtime should be treated as incompatible with the canonical linear version unless a separate, artistically justified short cut is intentionally produced.
 
-The Spanish canonical text is not to be altered for festival adaptation. English is a literary subtitle/translation layer.
+The Spanish canonical text is not to be altered merely to fit a festival limit. English remains a literary subtitle/translation layer.
