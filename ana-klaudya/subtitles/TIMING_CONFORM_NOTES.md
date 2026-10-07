@@ -1,25 +1,25 @@
 # ANA KLAUDYA · Timing conform notes
 
-Source timing draft: **7.59 minutes**.
+## Current status
 
-## Midwest cut
+The canonical web work is interactive and has **no single fixed running time**. A linear festival master is now planned with an editorial target of **09:27**, pending final render and measurement of the encoded MP4.
 
-Target end: **06:48**  
-Scale factor from first draft: **0.8957**  
-Purpose: keep safely below the 7-minute ceiling while preserving pauses.
+The former 05:58 and 06:48 subtitle maps are **historical compression studies only**. They must not be described as the running time of ANA KLAUDYA.
 
-## Cadence cut
+## Linear master
 
-Target end: **05:58**  
-Scale factor from first draft: **0.7859**  
-Purpose: move the work into a more compact festival rhythm.
+Current editorial target: **09:27**.
+
+Reference document: `../LINEAR_MASTER_TIMELINE.md`.
+
+Subtitle timing for the final festival master must be generated from the actual picture-locked 09:27-class edit, not by proportionally scaling the old short maps.
 
 ## Editorial rules
 
-- These are timing maps, not picture-lock masters.
-- Final subtitle timings must be conformed to the actual Spanish voice recording and final audiovisual edit.
-- Do **not** time-stretch the voice mechanically to these maps.
-- Prefer editorial compression of silences, transitions and section gaps before shortening spoken delivery.
+- Final subtitle timings must conform to the actual Spanish voice recording and final audiovisual edit.
+- Do **not** time-stretch the voice mechanically.
+- Do not remove canonical verses merely to satisfy an external duration limit.
+- Prefer compression of transition holds before altering poem delivery.
 - Keep the long pause before the second **“the warmth”** in the Elegy.
 - Preserve a perceptible pause before **“My hand remains still.”**
 - Preserve comic timing in the Epilogue, especially:
@@ -27,7 +27,20 @@ Purpose: move the work into a more compact festival rhythm.
   - “—The stew, Paco.”
   - “—Salt.”
   - “—The bread, poet.”
+- The final unresolved question belongs to ANA KLAUDYA itself and does not lead to CENICIENTO.
 
-## Weimar cut
+## Historical abbreviated studies
 
-Keep a more spacious version, close to the full audiovisual rhythm. The Spanish voice remains natural and unaccelerated.
+### 05:58 study
+
+Former Cadence-oriented timing experiment. Retained for archive/history only.
+
+### 06:48 study
+
+Former Midwest-oriented timing experiment. Retained for archive/history only.
+
+Neither file should be used for submission without intentionally creating and approving a separate shortened cut.
+
+## Final validation
+
+The definitive subtitle package must be created after picture lock from the rendered MP4. The definitive running time is the actual encoded file duration.
