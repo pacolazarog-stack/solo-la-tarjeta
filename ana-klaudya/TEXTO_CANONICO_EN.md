@@ -23,7 +23,7 @@ looking at you is enough.
 ## A Brief Elegy for Ana Klaudya
 
 There was in her face  
-a quiet beauty,  
+a quiet beauty  
 the kind that never asks  
 to be noticed.
 
@@ -34,7 +34,8 @@ with a care
 that accentuates  
 without correcting.
 
-And then she spoke.  
+And then she spoke.
+
 Brazil remained intact  
 in the way she spoke:  
 the warm weight of the vowels,  
@@ -49,7 +50,8 @@ was still missing
 her voice.
 
 Then came  
-the embrace.  
+the embrace.
+
 I do not know how long it lasted  
 or who moved closer first.  
 I remember only  
@@ -60,8 +62,8 @@ that private injustice
 memory sometimes commits:  
 from an entire afternoon  
 it keeps intact  
-a face,  
-and from an entire embrace,
+a face  
+and, from an entire embrace,
 
 the  
 warmth.
@@ -80,8 +82,8 @@ falls out of order.
 
 Your eyelids half-close.
 
-Something of me  
-has been left in plain sight.
+Something of mine  
+remains in view.
 
 And I do not look away.
 
@@ -91,12 +93,13 @@ And I do not look away.
 
 I was going to tell you something.
 
-Your smile begins at the corners of your mouth:  
+Your smile starts at the corners of your mouth:  
 barely a movement,  
 and I am already looking at you  
-beyond all caution.
+beyond prudence.
 
-I smile too.  
+I smile too.
+
 You still have not said a word.
 
 I search for the sentence.  
@@ -112,11 +115,12 @@ never reaching the words.
 Black, with that sheen of a mane  
 that flashes when you turn your head:  
 light glides across it  
-without ever making it lighter.
+without lightening it.
 
 It falls across your shoulder  
-and takes its time becoming still.  
-You return to your words;  
+and takes its time becoming still.
+
+You return to your words,  
 but one strand prolongs  
 the turning of your face.
 
@@ -125,15 +129,18 @@ The gesture bares your neck
 and leaves between the strands  
 a crack of light.
 
-You let it go.  
-The strand falls back into place.  
+You let it go.
+
+The strand falls back into place.
+
 You keep talking.
 
 ---
 
 ## Your Skin
 
-Your skin has that bronze tone.  
+Your skin has that bronze tone.
+
 In the bend of your elbow  
 the colour deepens.
 
@@ -144,7 +151,7 @@ that accompanies your voice.
 
 You move your fingers  
 and a fleeting brightness  
-slides across your knuckles.
+glides over your knuckles.
 
 My hand remains still.
 
@@ -167,7 +174,8 @@ you had already made me cry
 without breaking my heart.
 
 You hum something in Portuguese  
-while the oil grows hot.  
+while the oil heats up.
+
 I keep the rhythm with my foot.
 
 The spoon  
@@ -175,7 +183,7 @@ goes still in my hand.
 
 —Stir, poet.
 
-I had forgotten about the stew.  
+I forgot the stew.  
 I was looking for a word  
 for the way you smile.
 
@@ -190,7 +198,8 @@ I keep looking at you.
 —Salt.
 
 You set out two plates.  
-I carry the stew to the table.  
+I carry the stew to the table.
+
 You move the papers aside  
 to make room for it.
 
