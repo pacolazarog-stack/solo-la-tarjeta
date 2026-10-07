@@ -40,9 +40,17 @@ Obra multimedia de **flag** · 2026.
 
 Los antiguos objetivos **05:58** y **06:48** quedan expresamente descartados como duración representativa de la obra. Se conservan únicamente como estudios históricos de compresión.
 
-## Circuito internacional
+## Compatibilidad de festivales · verificada 2026-10-07
 
-Los festivales candidatos deben seleccionarse **después de comprobar sus límites de duración vigentes contra un máster cercano a 09:27**. No debe reducirse la obra a 5–7 minutos únicamente para encajar en una convocatoria si ello altera su estructura o respiración.
+- **Cadence Video Poetry Festival 2027:** el máster **09:27** entra en la categoría **Video Poetry (<10 min)**. La convocatoria admite hasta **10:00 con créditos** en esa categoría. Aunque Cadence indica que suele favorecer trabajos por debajo de cinco minutos, acepta obras más largas. Para obras no inglesas exige subtítulos ingleses incrustados; si resulta seleccionada, pide además copia 1920×1080 H.264, sinopsis, créditos, stills y archivo `.srt`/`.vtt`. El uso de IA debe declararse. **Fecha final: 15/12/2026.**
+- **Weimar Poetry Film Award 2027:** el máster **09:27** es compatible con el límite de **15:00**. La convocatoria es internacional y admite obras producidas desde 2024. Para obras cuyo idioma original no sea inglés, la copia de proyección debe estar subtitulada en inglés o acompañarse de lista de diálogos. El uso de IA debe declararse y los derechos son responsabilidad del participante. **Fecha ordinaria: 28/02/2027.**
+- **Midwest Video Poetry Fest 2027:** el máster **09:27 no es admisible**, porque el máximo es **7:00**. Sólo sería posible mediante una versión abreviada específica ≤7:00. Exige subtítulos ingleses para obras en otros idiomas, y el autor debe poder acreditar por escrito los derechos de todos los materiales. **Fecha límite: 15/12/2026.**
+
+### Prioridad actual
+
+1. **Weimar 2027** — ajuste natural a 09:27 y alta afinidad con la relación entre poesía escrita y cine.
+2. **Cadence 2027** — técnicamente compatible sin comprimir el máster por debajo de 10 minutos.
+3. **Midwest 2027** — sólo si se decide crear una versión abreviada autónoma ≤7:00; no debe sustituir al máster 09:27.
 
 ## Decisiones audiovisuales fijadas
 
@@ -55,6 +63,7 @@ Los festivales candidatos deben seleccionarse **después de comprobar sus límit
 - La voz **no se acelera** para adaptar la obra a límites de festival.
 - Se preservan el segundo **«el calor»**, **«Mi mano sigue quieta»** y el tempo cómico del epílogo.
 - No se eliminan versos del texto canónico para alcanzar la duración objetivo.
+- Antes de presentar la obra deben quedar documentados el permiso de imagen de Ana Klaudya y, cuando corresponda, los derechos de autor de las fotografías.
 
 ## Sitio
 
