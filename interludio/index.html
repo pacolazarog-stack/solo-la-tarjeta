@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#080706">
 <title>Iba a llevarte flores · Interludio de Ana Klaudya</title>
 <script>
-if(window.parent===window)location.replace('../elegia-breve/?v=20261008-flores-yin-yang#interludio');
+if(window.parent===window)location.replace('../elegia-breve/?v=20261008-mundo-cebolla#interludio');
 </script>
 <style>
 :root{color-scheme:dark}*{box-sizing:border-box}[hidden]{display:none!important}
@@ -30,14 +30,14 @@ button:focus-visible{outline:2px solid #eadbc8;outline-offset:4px}
 <body data-publication="web">
 <main>
 <h1>Interludio · Iba a llevarte flores</h1>
-<div class="stage" role="img" aria-label="Un pétalo con gotas da paso a una calle florida, una ciudad, un paisaje y un planeta cubierto de flores junto a una luna yin yang; una cebolla devuelve la escena a lo cotidiano y abre A fuego lento.">
+<div class="stage" role="img" aria-label="Un pétalo con gotas da paso a una calle florida, una ciudad, un paisaje y un planeta cubierto de flores junto a una luna yin yang; el planeta se transforma suavemente en una cebolla que devuelve la escena a lo cotidiano y abre A fuego lento.">
 <!-- The six views display the supplied storyboard without its layout or timing labels. -->
 <svg class="shot" viewBox="15 103 487 297" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop1" clipPathUnits="userSpaceOnUse"><rect x="15" y="103" width="487" height="297"/></clipPath></defs><image href="mundo-flores.png" width="1536" height="1024" clip-path="url(#shotCrop1)"/></svg>
 <svg class="shot" viewBox="524 103 487 297" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop2" clipPathUnits="userSpaceOnUse"><rect x="524" y="103" width="487" height="297"/></clipPath></defs><image href="mundo-flores.png" width="1536" height="1024" clip-path="url(#shotCrop2)"/></svg>
 <svg class="shot" viewBox="1034 103 487 297" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop3" clipPathUnits="userSpaceOnUse"><rect x="1034" y="103" width="487" height="297"/></clipPath></defs><image href="mundo-flores.png" width="1536" height="1024" clip-path="url(#shotCrop3)"/></svg>
 <svg class="shot" viewBox="15 541 487 322" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop4" clipPathUnits="userSpaceOnUse"><rect x="15" y="541" width="487" height="322"/></clipPath></defs><image href="mundo-flores.png" width="1536" height="1024" clip-path="url(#shotCrop4)"/></svg>
 <svg class="shot" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop5" clipPathUnits="userSpaceOnUse"><rect x="0" y="0" width="1536" height="1024"/></clipPath></defs><image href="mundo-flores-yin-yang.png" width="1536" height="1024" clip-path="url(#shotCrop5)"/></svg>
-<svg class="shot" viewBox="1034 541 487 322" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop6" clipPathUnits="userSpaceOnUse"><rect x="1034" y="541" width="487" height="322"/></clipPath></defs><image href="mundo-flores.png" width="1536" height="1024" clip-path="url(#shotCrop6)"/></svg>
+<svg class="shot" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop6" clipPathUnits="userSpaceOnUse"><rect x="0" y="0" width="1536" height="1024"/></clipPath></defs><g clip-path="url(#shotCrop6)"><image href="cebolla-transformacion.png" width="1536" height="1024" transform="matrix(1.24 0 0 1.32 -260 -190)"/></g></svg>
 </div>
 <div class="controls"><button id="pause" type="button" aria-label="Pausar" title="Pausar" data-state="playing" disabled><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg><svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 3 15 9-15 9z"/></svg></button><button id="replay" type="button" aria-label="Volver a ver" title="Volver a ver" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7V2L0 7l5 5V9a7 7 0 1 1-1 7l-2 1a9 9 0 1 0 3-10z"/></svg></button></div>
 <p class="status" id="status" role="status">Cargando las imágenes.</p>
@@ -48,6 +48,7 @@ const pause=document.getElementById('pause'),replay=document.getElementById('rep
 // The flower opens, scale accelerates, the impossible garden lingers, and the onion returns us to the table.
 const cueStarts=[0,2800,4600,6300,9300,12000],duration=15000;
 const fadeIn=[600,260,100,380,450,500],fadeOut=[360,130,180,420,400,600];
+const morphStart=10700,morphEnd=13300;
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const inheritedMusic=window.parent!==window&&new URLSearchParams(location.search).get('music')==='parent';
 const sendMusic=type=>{if(inheritedMusic)window.parent.postMessage({channel:'ceniciento-music-v1',type},location.origin)};
@@ -55,7 +56,16 @@ let elapsed=0,last=0,frame=0,introTimer=null,running=false,ready=false,finished=
 function render(){
  const index=cueStarts.reduce((found,start,i)=>elapsed>=start?i:found,0);
  const into=elapsed-cueStarts[index],until=(cueStarts[index+1]??duration)-elapsed;
- // Each image fades out completely; a short darkness separates it from the next.
+ // The first four cuts pass through darkness; the last pair shares one matched frame.
+ if(!reducedMotion&&elapsed>=morphStart){
+  const t=Math.max(0,Math.min(1,(elapsed-morphStart)/(morphEnd-morphStart)));
+  const blend=t*t*(3-2*t);
+  const tail=Math.max(0,Math.min(1,(duration-elapsed-90)/fadeOut[5]));
+  const finalOpacity=tail*tail*(3-2*tail);
+  // Keep the world opaque underneath the incoming onion to avoid a luminance dip.
+  shots.forEach((shot,i)=>{shot.classList.toggle('active',i===index);shot.style.opacity=String(i===4?(blend<1?1:0):i===5?blend*finalOpacity:0);});
+  return;
+ }
  const incoming=(into-(index===0?0:80))/fadeIn[index];
  const outgoing=(until-90)/fadeOut[index];
  const amount=reducedMotion?1:Math.max(0,Math.min(1,incoming,outgoing));
@@ -78,9 +88,9 @@ replay.addEventListener('click',reset);
 document.addEventListener('visibilitychange',()=>{last=0;});
 window.addEventListener('pagehide',stop);
 let loadedImages=0;
-for(const path of ['mundo-flores.png','mundo-flores-yin-yang.png']){
+for(const path of ['mundo-flores.png','mundo-flores-yin-yang.png','cebolla-transformacion.png']){
  const image=new Image();
- image.addEventListener('load',()=>{if(++loadedImages===2){ready=true;pause.disabled=false;replay.disabled=false;introTimer=setTimeout(start,850);}},{once:true});
+ image.addEventListener('load',()=>{if(++loadedImages===3){ready=true;pause.disabled=false;replay.disabled=false;introTimer=setTimeout(start,850);}},{once:true});
  image.addEventListener('error',()=>{status.textContent='No se han podido cargar las imágenes. Puedes continuar al epílogo con Siguiente.';},{once:true});
  image.src=path;
 }
