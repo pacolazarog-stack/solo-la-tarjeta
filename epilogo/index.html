@@ -196,7 +196,7 @@ full.addEventListener('click',()=>{
  if(!ready)return;
  clear();mode='full';phrases.forEach(showPhrase);signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';
 });
-setTimeout(()=>{ready=true;poem.hidden=false;paced.disabled=false;full.disabled=false;beginReading()},window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches?220:7200);
+ready=true;poem.hidden=false;paced.disabled=false;full.disabled=false;beginReading();
 </script>
 </body>
 </html>

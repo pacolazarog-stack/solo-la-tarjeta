@@ -1345,7 +1345,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
         setJourney(piece);
         body.classList.add('journey-started');
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261008-mundo-cebolla-pan'+(asPrologue?'&prologue=1':'');
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261008-fundido-largo-epilogo-directo'+(asPrologue?'&prologue=1':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openCeniciento=()=>openPoem('ceniciento');
@@ -1441,7 +1441,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
           cenicientoFrame.getBoundingClientRect();
           const transition=poemTransition;
           clearTimeout(poemRevealTimer);
-          poemRevealTimer=setTimeout(()=>{if(transition===poemTransition&&!cenicientoFrame.hidden&&!sonrisaLeaving)cenicientoFrame.classList.add('sonrisa-visible');},350);
+          poemRevealTimer=setTimeout(()=>{if(transition===poemTransition&&!cenicientoFrame.hidden&&!sonrisaLeaving)cenicientoFrame.classList.add('sonrisa-visible');},poemRoute==='epilogo'?0:350);
         }
       });
 

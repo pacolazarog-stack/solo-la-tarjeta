@@ -63,7 +63,7 @@ frame.emit('load');run(350);assert(frame.classList.contains('sonrisa-visible'));
 for(const reducedMotion of [false,true]){
  reduced=reducedMotion;
  for(const [piece,id] of [['ojos','anaOjos'],['sonrisa','anaSonrisa'],['cabello','anaCabello'],['piel','anaPiel'],['estrella','anaEstrella'],['interludio','anaInterlude'],['epilogo','anaEpilogue'],['ceniciento','cenicientoLink']]){
-  get(id).click();assertPiece(piece);frame.emit('load');run(350);
+  get(id).click();assertPiece(piece);frame.emit('load');run(piece==='epilogo'?0:350);
   message('home','https://other.test');assert(!frame.classList.contains('sonrisa-leaving'));
   message(piece==='ceniciento'?'close':'home');message('home');
   const delay=reduced?220:2100;

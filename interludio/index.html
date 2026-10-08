@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#080706">
 <title>Iba a llevarte flores · Interludio de Ana Klaudya</title>
 <script>
-if(window.parent===window)location.replace('../elegia-breve/?v=20261008-mundo-cebolla-pan#interludio');
+if(window.parent===window)location.replace('../elegia-breve/?v=20261008-fundido-largo-epilogo-directo#interludio');
 </script>
 <style>
 :root{color-scheme:dark}*{box-sizing:border-box}[hidden]{display:none!important}
@@ -47,9 +47,9 @@ const shots=[...document.querySelectorAll('.shot')];
 const moonBridge=document.getElementById('moonBridge');
 const pause=document.getElementById('pause'),replay=document.getElementById('replay'),status=document.getElementById('status');
 // The flower opens, scale accelerates, the impossible garden lingers, and the onion returns us to the table.
-const cueStarts=[0,2800,4600,6300,9300,12000],duration=15000;
+const cueStarts=[0,2800,4600,6300,9300,13300],duration=15900;
 const fadeIn=[600,260,100,380,450,500],fadeOut=[360,130,180,420,400,600];
-const morphStart=10700,morphEnd=13300;
+const morphStart=10700,morphEnd=15900;
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const inheritedMusic=window.parent!==window&&new URLSearchParams(location.search).get('music')==='parent';
 const sendMusic=type=>{if(inheritedMusic)window.parent.postMessage({channel:'ceniciento-music-v1',type},location.origin)};
@@ -64,10 +64,8 @@ function render(){
   const blend=t*t*(3-2*t);
   const descent=Math.min(1,t*2),settle=descent*descent*(3-2*descent);
   moonBridge.setAttribute('transform',`translate(${-27*settle} ${131*settle})`);
-  const tail=Math.max(0,Math.min(1,(duration-elapsed-90)/fadeOut[5]));
-  const finalOpacity=tail*tail*(3-2*tail);
   // Keep the world opaque underneath the incoming onion to avoid a luminance dip.
-  shots.forEach((shot,i)=>{shot.classList.toggle('active',i===index);shot.style.opacity=String(i===4?(blend<1?1:0):i===5?blend*finalOpacity:0);});
+  shots.forEach((shot,i)=>{shot.classList.toggle('active',i===index);shot.style.opacity=String(i===4?(blend<1?1:0):i===5?blend:0);});
   return;
  }
  const incoming=(into-(index===0?0:80))/fadeIn[index];
