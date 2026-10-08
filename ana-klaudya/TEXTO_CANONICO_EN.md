@@ -8,7 +8,7 @@ When I stopped there,
 it began to feel like home  
 (still without a key,  
 but I was already imagining  
-my footsteps on returning).
+my footsteps on returning)
 
 Following an angel,  
 I came to you.
