@@ -12,6 +12,9 @@
   <meta property="og:type" content="article">
   <meta property="og:locale" content="es_ES">
   <title>ANA KLAUDYA</title>
+  <script data-poem-entry>
+  if(['estrella','ojos','sonrisa','cabello','piel','interludio','epilogo','ceniciento'].includes(window.location.hash.slice(1))){document.documentElement.classList.add('poem-route-loading');}
+  </script>
 
   <style>
     :root{
@@ -778,6 +781,13 @@ body.journey-started main{padding-bottom:130px}
 .journey-nav #journeySkipInterlude{background:#efdfc7;color:#573e2d}
 @media(forced-colors:active){.petal-button,.journey-index .entry-button.petal-button{background:ButtonFace;color:ButtonText;border:1px solid ButtonText}.petal-mark{display:none}.journey-nav #journeySkipInterlude{background:ButtonFace;color:ButtonText}}
 
+
+html.poem-route-loading,html.poem-route-loading body{background:#080706}
+html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;background:#080706;pointer-events:none}
+.poem-backdrop{position:fixed;inset:0;z-index:95;background:#080706;opacity:1;pointer-events:none;transition:none}
+.poem-backdrop[hidden]{display:none!important}
+.poem-backdrop.is-leaving{opacity:0;transition:opacity 2s ease-in-out}
+@media(prefers-reduced-motion:reduce){.poem-backdrop.is-leaving{transition-duration:.2s}}
 </style>
 <script src="../ana-klaudya/publication.js"></script>
 </head>
@@ -827,6 +837,7 @@ body.journey-started main{padding-bottom:130px}
 <button id="journeySkipInterlude" type="button" aria-label="Ir al epílogo sin ver el interludio" hidden>Epílogo ↗</button>
 </nav>
 
+  <div id="poemBackdrop" class="poem-backdrop" aria-hidden="true" hidden></div>
   <iframe id="cenicientoFrame" class="ceniciento-frame" title="Ceniciento" allow="autoplay" hidden></iframe>
 
   <div class="entry" id="entry" role="dialog" aria-modal="true" aria-label="Entrada a Ana Klaudya">
@@ -1287,6 +1298,7 @@ body.journey-started main{padding-bottom:130px}
       });
 
       const cenicientoFrame=document.getElementById('cenicientoFrame');
+      const poemBackdrop=document.getElementById('poemBackdrop');
       const anaNavigation=document.getElementById('anaNavigation');
       const sendCenicientoMusicState=()=>{
         if(!cenicientoFrame.contentWindow || cenicientoFrame.hidden) return;
@@ -1299,6 +1311,7 @@ body.journey-started main{padding-bottom:130px}
         clearTimeout(poemExitTimer);clearTimeout(poemRevealTimer);
         poemExitTimer=null;poemRevealTimer=null;sonrisaLeaving=false;
         cenicientoFrame.classList.remove('sonrisa-leaving');
+        poemBackdrop.classList.remove('is-leaving');
         cenicientoFrame.removeAttribute('aria-busy');
       };
       const closeCeniciento=()=>{
@@ -1306,6 +1319,7 @@ body.journey-started main{padding-bottom:130px}
         if(prologueActive){prologueActive=false;entry.classList.remove('is-open');}
         entryButton.disabled=false;
         poemRoute='';
+        poemBackdrop.hidden=true;
         cenicientoFrame.hidden=true;cenicientoFrame.classList.remove('sonrisa-transition','sonrisa-visible','interlude-transition');body.classList.remove('sonrisa-open','ceniciento-open','eyes-open');root.classList.remove('ceniciento-open');document.title='ANA KLAUDYA';
         // Unload narration only; the music remains in this document.
         cenicientoFrame.removeAttribute('src');
@@ -1314,6 +1328,9 @@ body.journey-started main{padding-bottom:130px}
       };
       const openPoem=(piece,asPrologue=false)=>{
         if(poemRoute===piece&&!cenicientoFrame.hidden&&!sonrisaLeaving)return;
+        // Keep Ana covered throughout every child-to-child navigation and load.
+        poemBackdrop.hidden=false;
+        root.classList.remove('poem-route-loading');
         const briefFade=piece==='interludio'||poemRoute==='interludio';
         cancelPoemTransition();cancelAnaPrelude();
         cenicientoFrame.classList.toggle('interlude-transition',briefFade);
@@ -1328,7 +1345,7 @@ body.journey-started main{padding-bottom:130px}
         cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
         setJourney(piece);
         body.classList.add('journey-started');
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261008-flores-limpio'+(asPrologue?'&prologue=1':'');
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261008-directo-limpio'+(asPrologue?'&prologue=1':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openCeniciento=()=>openPoem('ceniciento');
@@ -1338,6 +1355,7 @@ body.journey-started main{padding-bottom:130px}
         cancelPoemTransition();cancelAnaPrelude();
         const transition=poemTransition;
         sonrisaLeaving=true;
+        poemBackdrop.classList.add('is-leaving');
         cenicientoFrame.classList.add('sonrisa-leaving');
         cenicientoFrame.setAttribute('aria-busy','true');
         if(mode==='ana'||mode==='home'){

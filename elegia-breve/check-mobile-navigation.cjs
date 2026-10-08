@@ -25,7 +25,7 @@ const context={document:{documentElement:root,body,getElementById:get,querySelec
 const message=(type,origin=location.origin)=>{for(const fn of events.message)fn({origin,source:frame.contentWindow,data:{channel:'ceniciento-music-v1',type}});};
 const run=ms=>{const match=[...timers].find(([,t])=>t.ms===ms);assert(match,'Missing timer '+ms);timers.delete(match[0]);match[1].fn();};
 const route=(piece,type='popstate')=>{location.hash=piece?'#'+piece:'';fire(type);};
-const assertPiece=piece=>{assert.equal(frame.hidden,false);assert(frame.src.includes('../'+piece+'/?music=parent'));assert.equal(location.hash,'#'+piece);};
+const assertPiece=piece=>{assert.equal(frame.hidden,false);assert.equal(get('poemBackdrop').hidden,false,'Ana is covered throughout navigation between pieces');assert(!get('poemBackdrop').classList.contains('is-leaving'),'No fading cover can expose Ana during a child route');assert(frame.src.includes('../'+piece+'/?music=parent'));assert.equal(location.hash,'#'+piece);};
 vm.runInNewContext(script,context);
 const music=get('voiceMusic');music.currentTime=51;music.paused=false;const plays=music.playCalls;
 // The full navigation returns when the final photograph finishes fading in.
@@ -66,7 +66,7 @@ for(const reducedMotion of [false,true]){
   message(piece==='ceniciento'?'close':'home');message('home');
   const delay=reduced?220:2100;
   assert.equal([...timers.values()].filter(t=>t.ms===delay).length,1);
-  run(delay);assert.equal(frame.hidden,true);assert.equal(nav.hidden,false);
+  run(delay);assert.equal(get('poemBackdrop').hidden,true,'Ana returns only when requested');assert.equal(frame.hidden,true);assert.equal(nav.hidden,false);
   assert(!body.classList.contains('sonrisa-open'));assert(!root.classList.contains('ceniciento-open'));
   assert.equal(get('entryButton').disabled,false);
   assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
