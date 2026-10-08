@@ -37,7 +37,7 @@ run(25000);assert.equal(nav.hidden,false,'All poem controls appear on the final 
 assert(!source.includes('id="portraitEpilogue"'),'No duplicate epilogue button on the portrait');
 assert(!source.includes('anaCeniciento'),'Ceniciento has no button or handler in Ana navigation');
 const navigation=source.match(/<nav[^>]*id="anaNavigation"[\s\S]*?<\/nav>/)[0];
-assert.equal((navigation.match(/<button\b/g)||[]).length,8,'Ana has eight controls for its seven pieces');
+assert.equal((navigation.match(/<button\b/g)||[]).length,9,'Ana has nine controls for its seven poems and visual interlude');
 // The portrait question works for touch/keyboard click events without mouse fields.
 body.classList.add('portrait-revealed','voice-open');get('voiceDialog').show();
 get('cenicientoLink').emit('click',{preventDefault(){}});assertPiece('ceniciento');
@@ -60,7 +60,7 @@ frame.emit('load');run(350);assert(frame.classList.contains('sonrisa-visible'));
 // Repeated touch clicks cannot create multiple exit transitions.
 for(const reducedMotion of [false,true]){
  reduced=reducedMotion;
- for(const [piece,id] of [['ojos','anaOjos'],['sonrisa','anaSonrisa'],['cabello','anaCabello'],['piel','anaPiel'],['estrella','anaEstrella'],['epilogo','anaEpilogue'],['ceniciento','cenicientoLink']]){
+ for(const [piece,id] of [['ojos','anaOjos'],['sonrisa','anaSonrisa'],['cabello','anaCabello'],['piel','anaPiel'],['estrella','anaEstrella'],['interludio','anaInterlude'],['epilogo','anaEpilogue'],['ceniciento','cenicientoLink']]){
   get(id).click();assertPiece(piece);frame.emit('load');run(350);
   message('home','https://other.test');assert(!frame.classList.contains('sonrisa-leaving'));
   message(piece==='ceniciento'?'close':'home');message('home');
@@ -79,4 +79,4 @@ route('ojos');interrupted();assertPiece('ojos');
 message('home');run(2100);get('anaRead').click();assert(body.classList.contains('reading-ready'));assert(get('entry').classList.contains('is-open'));
 assert(source.includes('.ceniciento-frame.sonrisa-leaving{pointer-events:none}'));
 assert(source.includes('min-height:44px;touch-action:manipulation'));
-console.log('PASS: seven return routes, repeated clicks, Back/Forward, hash changes, stale fades, reduced motion and uninterrupted music');
+console.log('PASS: eight return routes, repeated clicks, Back/Forward, hash changes, stale fades, reduced motion and uninterrupted music');

@@ -763,6 +763,7 @@ body.journey-started main{padding-bottom:130px}
 @media(prefers-reduced-motion:reduce){.world *,.question-beat{animation:none!important}.portrait-finale,.portrait-finale img{transition:none!important}}
 @media print{.journey-nav,.journey-index{display:none!important}}
 
+.ceniciento-frame.sonrisa-transition.interlude-transition{transition-duration:.5s}
 </style>
 <script src="../ana-klaudya/publication.js"></script>
 </head>
@@ -799,6 +800,7 @@ body.journey-started main{padding-bottom:130px}
 <button class="entry-button" id="anaSonrisa" type="button">En tus labios</button>
 <button class="entry-button" id="anaCabello" type="button">Tu cabello</button>
 <button class="entry-button" id="anaPiel" type="button">Tu piel</button>
+<button class="entry-button" id="anaInterlude" type="button">Interludio · Iba a llevarte flores</button>
 <button class="entry-button flambe-button" id="anaEpilogue" type="button">Epílogo · A fuego lento</button>
 <button class="entry-button" id="anaVoice" type="button">▶ Escuchar la elegía</button>
 </nav>
@@ -1289,7 +1291,7 @@ body.journey-started main{padding-bottom:130px}
         if(prologueActive){prologueActive=false;entry.classList.remove('is-open');}
         entryButton.disabled=false;
         poemRoute='';
-        cenicientoFrame.hidden=true;cenicientoFrame.classList.remove('sonrisa-transition','sonrisa-visible');body.classList.remove('sonrisa-open','ceniciento-open','eyes-open');root.classList.remove('ceniciento-open');document.title='ANA KLAUDYA';
+        cenicientoFrame.hidden=true;cenicientoFrame.classList.remove('sonrisa-transition','sonrisa-visible','interlude-transition');body.classList.remove('sonrisa-open','ceniciento-open','eyes-open');root.classList.remove('ceniciento-open');document.title='ANA KLAUDYA';
         // Unload narration only; the music remains in this document.
         cenicientoFrame.removeAttribute('src');
         anaNavigation.hidden=false;body.classList.add('ana-navigation-ready');
@@ -1297,11 +1299,13 @@ body.journey-started main{padding-bottom:130px}
       };
       const openPoem=(piece,asPrologue=false)=>{
         if(poemRoute===piece&&!cenicientoFrame.hidden&&!sonrisaLeaving)return;
+        const briefFade=piece==='interludio'||poemRoute==='interludio';
         cancelPoemTransition();cancelAnaPrelude();
+        cenicientoFrame.classList.toggle('interlude-transition',briefFade);
         poemRoute=piece;
         body.classList.toggle('eyes-open',piece==='ojos');
         cenicientoFrame.classList.remove('sonrisa-visible');cenicientoFrame.classList.add('sonrisa-transition');body.classList.add('sonrisa-open');
-        anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=({ceniciento:'CENICIENTO · leer o escuchar',ojos:'EN TUS OJOS',sonrisa:'EN TUS LABIOS',cabello:'TU CABELLO',piel:'TU PIEL',estrella:'SIGUIENDO UNA TARJETA',epilogo:'A FUEGO LENTO · EPÍLOGO'})[piece];
+        anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=({ceniciento:'CENICIENTO · leer o escuchar',ojos:'EN TUS OJOS',sonrisa:'EN TUS LABIOS',cabello:'TU CABELLO',piel:'TU PIEL',estrella:'SIGUIENDO UNA TARJETA',epilogo:'A FUEGO LENTO · EPÍLOGO',interludio:'IBA A LLEVARTE FLORES · INTERLUDIO'})[piece];
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
         prologueActive=asPrologue;
@@ -1309,7 +1313,7 @@ body.journey-started main{padding-bottom:130px}
         cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
         setJourney(piece);
         body.classList.add('journey-started');
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261008-nitidez30'+(asPrologue?'&prologue=1':'');
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261008-flores'+(asPrologue?'&prologue=1':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openCeniciento=()=>openPoem('ceniciento');
@@ -1353,6 +1357,7 @@ body.journey-started main{padding-bottom:130px}
       const openPiel=()=>openPoem('piel');
       const openEstrella=()=>openPoem('estrella');
       const openEpilogue=()=>openPoem('epilogo');
+      document.getElementById('anaInterlude').addEventListener('click',()=>openPoem('interludio'));
       for(const id of ['anaEpilogue','readEpilogue'])document.getElementById(id).addEventListener('click',openEpilogue);
       document.getElementById('anaSonrisa').addEventListener('click',openSonrisa);
       document.getElementById('anaOjos').addEventListener('click',openOjos);
@@ -1375,7 +1380,7 @@ body.journey-started main{padding-bottom:130px}
       document.getElementById('anaVoice').addEventListener('click',()=>{showAnaText();recording.currentTime=0;openVoice();});
       const syncPoemRoute=()=>{
         const piece=window.location.hash.slice(1);
-        if(['epilogo','estrella','cabello','piel','ojos','sonrisa','ceniciento'].includes(piece))openPoem(piece);
+        if(['epilogo','interludio','estrella','cabello','piel','ojos','sonrisa','ceniciento'].includes(piece))openPoem(piece);
         else if(!cenicientoFrame.hidden)returnToAna('home',false);
       };
       window.addEventListener('popstate',syncPoemRoute);
@@ -1383,6 +1388,7 @@ body.journey-started main{padding-bottom:130px}
       window.addEventListener('message',event=>{
         if(event.origin!==window.location.origin || event.source!==cenicientoFrame.contentWindow || event.data?.channel!=='ceniciento-music-v1'||cenicientoFrame.hidden)return;
         const data=event.data;
+        if(data.type==='interlude-ended'&&poemRoute==='interludio'){openPoem('epilogo');return;}
         if(data.type==='ana'&&poemRoute==='estrella'){returnToAna('ana');return;}
         if(data.type==='home'||data.type==='close'){returnToAna(data.type);return;}
         if(data.type==='level' && Number.isFinite(data.level)){
@@ -1407,8 +1413,8 @@ body.journey-started main{padding-bottom:130px}
       });
 
 
-      const journeyPieces=['estrella','elegia','ojos','sonrisa','cabello','piel','epilogo'];
-      const journeyTitles=['Prólogo · Siguiendo una tarjeta','Elegía breve para Ana Klaudya','En tus ojos','En tus labios','Tu cabello','Tu piel','Epílogo · A fuego lento'];
+      const journeyPieces=['estrella','elegia','ojos','sonrisa','cabello','piel','interludio','epilogo'];
+      const journeyTitles=['Prólogo · Siguiendo una tarjeta','Elegía breve para Ana Klaudya','En tus ojos','En tus labios','Tu cabello','Tu piel','Interludio · Iba a llevarte flores','Epílogo · A fuego lento'];
       const journeyNav=document.getElementById('journeyNav');
       const journeyPrevious=document.getElementById('journeyPrevious'),journeyNext=document.getElementById('journeyNext');
       const journeyIndex=document.getElementById('journeyIndex');

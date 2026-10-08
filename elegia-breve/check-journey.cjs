@@ -39,7 +39,7 @@ run(25000);assert.equal(nav.hidden,false,'All poem controls appear on the final 
 assert(!source.includes('id="portraitEpilogue"'),'No duplicate epilogue button on the portrait');
 assert(!source.includes('anaCeniciento'),'Ceniciento has no button or handler in Ana navigation');
 const navigation=source.match(/<nav[^>]*id="anaNavigation"[\s\S]*?<\/nav>/)[0];
-assert.equal((navigation.match(/<button\b/g)||[]).length,8,'Ana has eight controls for its seven pieces');
+assert.equal((navigation.match(/<button\b/g)||[]).length,9,'Ana has nine controls for its seven poems and visual interlude');
 // The portrait question works for touch/keyboard click events without mouse fields.
 body.classList.add('portrait-revealed','voice-open');get('voiceDialog').show();
 get('cenicientoLink').emit('click',{preventDefault(){}});assertPiece('ceniciento');
@@ -62,7 +62,7 @@ frame.emit('load');run(350);assert(frame.classList.contains('sonrisa-visible'));
 // Repeated touch clicks cannot create multiple exit transitions.
 for(const reducedMotion of [false,true]){
  reduced=reducedMotion;
- for(const [piece,id] of [['ojos','anaOjos'],['sonrisa','anaSonrisa'],['cabello','anaCabello'],['piel','anaPiel'],['estrella','anaEstrella'],['epilogo','anaEpilogue'],['ceniciento','cenicientoLink']]){
+ for(const [piece,id] of [['ojos','anaOjos'],['sonrisa','anaSonrisa'],['cabello','anaCabello'],['piel','anaPiel'],['estrella','anaEstrella'],['interludio','anaInterlude'],['epilogo','anaEpilogue'],['ceniciento','cenicientoLink']]){
   get(id).click();assertPiece(piece);frame.emit('load');run(350);
   message('home','https://other.test');assert(!frame.classList.contains('sonrisa-leaving'));
   message(piece==='ceniciento'?'close':'home');message('home');
@@ -75,6 +75,13 @@ for(const reducedMotion of [false,true]){
   assert.equal(music.paused,false);
  }
 }
+// Only a completed active interlude can navigate automatically to the epilogue.
+get('anaInterlude').click();assertPiece('interludio');
+assert(frame.classList.contains('interlude-transition'));
+message('interlude-ended','https://other.test');assertPiece('interludio');
+message('interlude-ended');assertPiece('epilogo');
+assert.equal(music.paused,false);assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
+get('anaPiel').click();message('interlude-ended');assertPiece('piel');
 // Going back, then immediately forward, cancels the obsolete return.
 reduced=false;get('anaOjos').click();route('');const interrupted=[...timers.values()].find(t=>t.ms===2100).fn;
 route('ojos');interrupted();assertPiece('ojos');
@@ -87,11 +94,11 @@ get('anaEstrella').click();assertPiece('estrella');
 assert.equal(get('journeyPrevious').disabled,true);
 get('journeyNext').click();run(2100);assert.equal(frame.hidden,true);
 assert(body.classList.contains('reading-ready'));
-for(const piece of ['ojos','sonrisa','cabello','piel','epilogo']){
+for(const piece of ['ojos','sonrisa','cabello','piel','interludio','epilogo']){
  get('journeyNext').click();assertPiece(piece);
 }
 assert.equal(get('journeyNext').disabled,true);
-for(const piece of ['piel','cabello','sonrisa','ojos']){
+for(const piece of ['interludio','piel','cabello','sonrisa','ojos']){
  get('journeyPrevious').click();assertPiece(piece);
 }
 get('journeyPrevious').click();run(2100);assert.equal(frame.hidden,true);
@@ -124,5 +131,5 @@ assert.equal(music.currentTime,51);
 assert(source.includes('poemas de Paco Olmo de Males'));
 assert(source.includes('▶ Comenzar'));
 assert(!source.includes("renderWorld();\\n      ensureAmbientMusic();"));
-console.log('PASS: sequential navigation, seven return routes, repeated touches, Back/Forward, index, one-click voice with four-second fade, cancellation, reduced motion and uninterrupted music');
+console.log('PASS: sequential navigation, eight return routes, repeated touches, Back/Forward, index, one-click voice with four-second fade, cancellation, reduced motion and uninterrupted music');
 })().catch(error=>{console.error(error);process.exitCode=1;});
