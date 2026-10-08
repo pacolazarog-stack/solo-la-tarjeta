@@ -3,6 +3,7 @@ const source=fs.readFileSync(__dirname+'/index.html','utf8');
 const nodes=new Map(),frames=new Map(),timers=new Map(),messages=[];let id=0;
 class Node{
  constructor(){this.handlers={};this.style={};this.classes=new Set();this.classList={toggle:(name,on)=>on?this.classes.add(name):this.classes.delete(name)};}
+ setAttribute(name,value){this[name]=value;}
  addEventListener(event,fn){this.handlers[event]=fn;}
  fire(event){this.handlers[event]?.();}
 }
@@ -36,6 +37,9 @@ step(53600);assert.equal(active(),1);assert(shots.every(shot=>Number(shot.style.
 step(53800);assert(Number(shots[1].style.opacity)>0);assert.equal(Number(shots[0].style.opacity),0);
 win.fire('pagehide');assert.equal(frames.size,0);
 assert.equal((source.match(/href="storyboard.png"/g)||[]).length,6);
+assert.equal((source.match(/clipPathUnits="userSpaceOnUse"/g)||[]).length,6,'Every shot clips the artwork at its own image bounds');
+assert(!source.includes('<header>'),'No signature over the film');
+assert(source.includes('aria-label="Volver a ver"'),'Icon controls keep their accessible names');
 assert(!/<audio|\.play\(/.test(source),'Music stays in the parent player');
 assert(source.includes('const fadeIn=[600,260,100,380,450,500]'));
 assert(source.includes('const outgoing=(until-90)/fadeOut[index]'));
