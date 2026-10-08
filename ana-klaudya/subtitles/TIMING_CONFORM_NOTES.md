@@ -24,7 +24,7 @@ Subtitle timing for the final festival master must be generated from the actual 
 - Prefer compression of transition holds before altering poem delivery.
 - Keep the long pause before the second **“the warmth”** in the Elegy.
 - In **Your Hair**, preserve the delayed ending **“I take / a little longer.”**
-- In **Your Skin**, preserve the pause before the imagined caress, **“I would like to know that smoothness…”**.
+- In **Your Skin**, preserve the still hand, the air between them and the pause before **“I do not cross it.”** No contact takes place.
 - Preserve comic timing in the Epilogue, especially:
   - “—Stir, poet.”
   - “—The stew, Paco.”
