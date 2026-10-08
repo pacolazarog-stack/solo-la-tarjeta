@@ -6,17 +6,16 @@
 <meta name="theme-color" content="#080706">
 <title>Iba a llevarte flores · Interludio de Ana Klaudya</title>
 <script>
-if(window.parent===window)location.replace('../elegia-breve/?v=20261008-flores#interludio');
+if(window.parent===window)location.replace('../elegia-breve/?v=20261008-flores-ritmo#interludio');
 </script>
 <style>
 :root{color-scheme:dark}*{box-sizing:border-box}[hidden]{display:none!important}
 body{margin:0;background:#080706;color:#eadbc8;font-family:Georgia,'Times New Roman',serif;min-height:100svh;display:flex;flex-direction:column}
 header{padding:22px 5vw;font:10px/1.5 system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#bca78d}
 main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 3vw 110px}
-h1{font-size:clamp(21px,3.3vw,38px);font-weight:400;margin:12px 0 26px;letter-spacing:.015em}
-h1 span{display:block;font:10px/1.8 system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#bca78d;margin-bottom:6px}
-.stage{width:min(100%,1250px);aspect-ratio:16/9;position:relative;overflow:hidden;background:#080706}
-.shot{position:absolute;inset:0;opacity:0;transition:opacity .5s ease-in-out;width:100%;height:100%;pointer-events:none}
+h1{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.stage{width:min(100%,1250px,calc(177.778svh - 480px));aspect-ratio:16/9;position:relative;overflow:hidden;background:#080706}
+.shot{position:absolute;inset:0;opacity:0;transition:opacity var(--fade,.4s) ease-in-out;width:100%;height:100%;pointer-events:none}
 .shot.active{opacity:1}
 .controls{display:flex;gap:12px;align-items:center;margin-top:20px}
 button{background:transparent;color:#eadbc8;border:1px solid #79654d;border-radius:30px;min-height:44px;padding:10px 19px;font:12px/1.5 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
@@ -30,15 +29,15 @@ button:focus-visible{outline:2px solid #eadbc8;outline-offset:4px}
 <body data-publication="web">
 <header>Paco Olmo de Males · flag</header>
 <main>
-<h1><span>Interludio</span>Iba a llevarte flores</h1>
+<h1>Interludio · Iba a llevarte flores</h1>
 <div class="stage" role="img" aria-label="Un ramo descomunal llega a la puerta, se estropea al entrar y acaba en una olla; un pétalo junto a una cebolla da paso a A fuego lento.">
 <!-- The six views display the supplied storyboard without its layout or timing labels. -->
-<svg class="shot" viewBox="18 139 483 262" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
-<svg class="shot" viewBox="530 139 489 262" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
-<svg class="shot" viewBox="1046 139 467 262" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
-<svg class="shot" viewBox="18 568 483 251" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
-<svg class="shot" viewBox="530 568 489 251" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
-<svg class="shot" viewBox="1046 568 467 251" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
+<svg class="shot" style="--fade:0.5s" viewBox="18 139 483 262" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
+<svg class="shot" style="--fade:0.3s" viewBox="530 139 489 262" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
+<svg class="shot" style="--fade:0.12s" viewBox="1046 139 467 262" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
+<svg class="shot" style="--fade:0.4s" viewBox="18 622 483 197" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
+<svg class="shot" style="--fade:0.5s" viewBox="530 568 489 251" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
+<svg class="shot" style="--fade:0.6s" viewBox="1046 568 467 251" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
 </div>
 <div class="controls"><button id="pause" type="button" disabled>Pausar</button><button id="replay" type="button" disabled>Volver a ver</button></div>
 <p class="status" id="status" role="status">Cargando las imágenes.</p>
@@ -46,7 +45,8 @@ button:focus-visible{outline:2px solid #eadbc8;outline-offset:4px}
 <script>
 const shots=[...document.querySelectorAll('.shot')];
 const pause=document.getElementById('pause'),replay=document.getElementById('replay'),status=document.getElementById('status');
-const cueStarts=[0,2500,5000,7000,10000,12500],duration=15000;
+// Arrival lingers; hesitation and the accident rush; the damaged bouquet and final petal breathe.
+const cueStarts=[0,3600,5000,5800,9600,12000],duration=15000;
 const inheritedMusic=window.parent!==window&&new URLSearchParams(location.search).get('music')==='parent';
 const sendMusic=type=>{if(inheritedMusic)window.parent.postMessage({channel:'ceniciento-music-v1',type},location.origin)};
 let elapsed=0,last=0,frame=0,introTimer=null,running=false,ready=false,finished=false;
