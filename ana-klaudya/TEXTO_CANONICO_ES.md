@@ -5,10 +5,10 @@
 Siguiendo una tarjeta,  
 encontré un lugar.  
 Al detenerme allí,  
-empezó a ser mi hogar:  
-todavía sin llave,  
+empezó a ser mi hogar  
+(todavía sin llave,  
 pero ya imaginaba  
-mis pasos al volver.
+mis pasos al volver).
 
 Siguiendo a un ángel,  
 llegué hasta ti.
