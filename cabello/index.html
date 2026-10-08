@@ -51,11 +51,23 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 
 #backAna{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;touch-action:manipulation}
 @media(max-width:760px){header{position:sticky;top:0;z-index:50;align-items:center;padding:8px 4vw;background:rgba(12,12,18,.88);backdrop-filter:blur(8px)}}
+
+/* Navigation is hosted by Ana so its music remains in one player. */
+header #backAna{display:none!important}
+header{padding:18px 5vw;font-size:10px;opacity:.7}
+.rule{display:none}
+.poem{border-left:0;padding-left:0}
+main{padding-bottom:140px;gap:6vw}
+.controls button{box-shadow:none;min-height:44px}
+@media(max-width:760px){main{padding:15px 5vw 130px}.intro{padding-top:0}.poem{border-top:0;margin-top:36px;line-height:1.85}.stanza{margin-bottom:36px}.music-controls{max-width:none}.signature{margin-bottom:30px}.phrase{line-height:1.85}}
+@media(prefers-reduced-motion:reduce){header,.kicker,.status,.signature,footer,.music-controls,h1,.phrase{animation:none!important}}
+
 </style>
+<script src="../ana-klaudya/publication.js"></script>
 </head>
-<body>
+<body data-publication="web">
 <div class="detail-background" aria-hidden="true"><svg viewBox="1010 680 210 230" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><image href="../elegia-breve/ana-klaudya-fotografia.jpg" width="1228" height="2048"/></svg></div>
-<header><span>flag · poesía</span><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></header>
+<header><span>Paco Olmo de Males · flag</span><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></header>
 <main>
 <section class="intro" aria-labelledby="title">
 <div class="kicker">Un destello · un poema</div>

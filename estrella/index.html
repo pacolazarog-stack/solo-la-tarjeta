@@ -105,9 +105,23 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 
 #backAna{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;touch-action:manipulation}
 @media(max-width:760px){header{position:sticky;top:0;z-index:50;align-items:center;padding:8px 4vw;background:rgba(12,12,18,.88);backdrop-filter:blur(8px)}}
+
+/* Navigation is hosted by Ana so its music remains in one player. */
+header #backAna{display:none!important}
+header{padding:18px 5vw;font-size:10px;opacity:.7}
+.rule{display:none}
+.poem{border-left:0;padding-left:0}
+main{padding-bottom:140px;gap:6vw}
+.controls button{box-shadow:none;min-height:44px}
+@media(max-width:760px){main{padding:15px 5vw 130px}.intro{padding-top:0}.poem{border-top:0;margin-top:36px;line-height:1.85}.stanza{margin-bottom:36px}.music-controls{max-width:none}.signature{margin-bottom:30px}.phrase{line-height:1.85}}
+@media(prefers-reduced-motion:reduce){header,.kicker,.status,.signature,footer,.music-controls,h1,.phrase{animation:none!important}}
+
+
+.phrase:nth-child(2){margin-top:5vh;margin-bottom:8vh;line-height:2}
 </style>
+<script src="../ana-klaudya/publication.js"></script>
 </head>
-<body>
+<body data-publication="web">
 <div class="detail-background" aria-hidden="true"><img src="umbral.jpg?v=20261006-sin-estrella-fija" alt="" decoding="async"><div class="celestial-scene" id="celestialScene"><div class="world-comet" id="worldComet"><span class="world-comet-tail"></span><span class="world-comet-core"></span></div><div class="world-final-moon" id="homeMoon">
       <span class="final-crescent"></span>
       <svg viewBox="0 0 100 100" aria-hidden="true">
@@ -125,7 +139,7 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
         <circle class="yin-outline" cx="50" cy="50" r="49" fill="none" stroke="rgba(250,249,238,.48)" stroke-width="1"/>
       </svg>
 </div></div></div>
-<header><span>flag · poesía</span><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></header>
+<header><span>Paco Olmo de Males · flag</span><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></header>
 <main>
 <section class="intro" aria-labelledby="title">
 <div class="kicker">Prólogo · Ana Klaudya</div>

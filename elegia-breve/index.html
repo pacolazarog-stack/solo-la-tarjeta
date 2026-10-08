@@ -739,10 +739,35 @@
       .scroll-cue{animation:none}
     }
   body.eyes-open *,body.eyes-open *::before,body.eyes-open *::after{animation-play-state:paused!important}
+
+/* Recorrido y lectura en vertical. */
+.journey-nav[hidden]{display:none!important}
+.journey-nav{position:fixed;z-index:160;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:6px;background:#f5f3ed;color:#173f32;border:1px solid #b8c0b8;border-radius:999px;box-shadow:0 3px 20px #0002;max-width:calc(100% - 24px)}
+.journey-nav button{min-height:44px;min-width:74px;margin:0;padding:10px 14px;border:0;border-radius:999px;background:transparent;color:inherit;font:14px/1.2 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+.journey-nav button:disabled{opacity:.35;cursor:default}
+.journey-nav button:focus-visible,.entry-button:focus-visible{outline:2px solid #375548;outline-offset:3px}
+.journey-index{width:min(540px,calc(100% - 28px));max-height:85svh;border:1px solid #bec5bc;border-radius:18px;padding:24px;background:#f5f3ed;color:#201d19;z-index:170;overflow:auto}
+.journey-index::backdrop{background:#101a15aa}
+.journey-index h2{font:normal 26px/1.2 Georgia,serif;margin:0 0 22px}
+.journey-index .ana-navigation{position:static;transform:none;width:100%;max-width:none;max-height:none;box-shadow:none;border:0;padding:0;border-radius:0;background:transparent;display:grid;gap:8px}
+.journey-index .ana-navigation[hidden]{display:none}
+.journey-index .entry-button{text-align:left;font:15px/1.4 system-ui,sans-serif;letter-spacing:0;text-transform:none;box-shadow:none;border-radius:8px;border-color:#ced3cb;padding:12px;min-height:44px}
+.journey-index-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;font:13px/1.4 system-ui,sans-serif}
+.journey-index-links a{color:#375548;min-height:44px;display:flex;align-items:center}
+.journey-index-close{float:right;min-width:44px;min-height:44px;background:transparent;border:0;color:inherit;font:22px system-ui;cursor:pointer}
+.entry{background:#eef1e9;backdrop-filter:none}
+.entry-flag{font:italic 16px/1.5 Georgia,serif;letter-spacing:0;color:#415248}
+body.journey-started main{padding-bottom:130px}
+.epilogue-invitation{display:none!important}
+@media(max-width:480px){.journey-nav button{min-width:68px;padding:10px 12px;font-size:13px}.entry-title{font-size:clamp(27px,8vw,42px)}.voice-dialog{top:auto;bottom:78px;max-height:45svh;padding:18px}body.voice-open main{width:calc(100% - 34px);margin:auto}.voice-dialog h2{font-size:20px}.voice-launch{min-height:44px}}
+@media(prefers-reduced-motion:reduce){.world *,.question-beat{animation:none!important}.portrait-finale,.portrait-finale img{transition:none!important}}
+@media print{.journey-nav,.journey-index{display:none!important}}
+
 </style>
+<script src="../ana-klaudya/publication.js"></script>
 </head>
 
-<body class="locked">
+<body class="locked" data-publication="web">
   <audio id="voiceMusic" preload="auto" loop src="ana-klaudya.m4a"></audio>
   <audio id="nameAudio" preload="auto" src="nombre.m4a"></audio>
 
@@ -764,25 +789,35 @@
     </div>
   </div>
 
-  <nav class="ana-navigation" id="anaNavigation" aria-label="Navegar entre las obras" hidden>
-    <button class="entry-button" id="anaRead" type="button">Leer Ana</button>
-    <button class="entry-button" id="anaVoice" type="button">Escuchar Ana</button>
-    <button class="entry-button" id="anaSonrisa" type="button">En tus labios</button>
-    <button class="entry-button" id="anaOjos" type="button">En tus ojos</button>
-    <button class="entry-button" id="anaCabello" type="button">Tu cabello</button>
-    <button class="entry-button" id="anaPiel" type="button">Tu piel</button>
-    <button class="entry-button" id="anaEstrella" type="button">Prólogo · Siguiendo una tarjeta</button>
-    <button class="entry-button flambe-button" id="anaEpilogue" type="button">Epílogo · A fuego lento</button>
-  </nav>
+<dialog class="journey-index" id="journeyIndex" aria-labelledby="journeyIndexTitle">
+<button class="journey-index-close" id="journeyIndexClose" type="button" aria-label="Cerrar índice">×</button>
+<h2 id="journeyIndexTitle">ANA KLAUDYA</h2>
+<nav class="ana-navigation" id="anaNavigation" aria-label="Piezas de Ana Klaudya">
+<button class="entry-button" id="anaEstrella" type="button">Prólogo · Siguiendo una tarjeta</button>
+<button class="entry-button" id="anaRead" type="button">Elegía breve para Ana Klaudya</button>
+<button class="entry-button" id="anaOjos" type="button">En tus ojos</button>
+<button class="entry-button" id="anaSonrisa" type="button">En tus labios</button>
+<button class="entry-button" id="anaCabello" type="button">Tu cabello</button>
+<button class="entry-button" id="anaPiel" type="button">Tu piel</button>
+<button class="entry-button flambe-button" id="anaEpilogue" type="button">Epílogo · A fuego lento</button>
+<button class="entry-button" id="anaVoice" type="button">▶ Escuchar la elegía</button>
+</nav>
+<div class="journey-index-links"><a href="../ana-klaudya/acerca/" target="_blank" rel="noopener">Acerca del proyecto ↗</a><a href="../ana-klaudya-festival/" target="_blank" rel="noopener">Jurados y festivales ↗</a></div>
+</dialog>
+<nav class="journey-nav" id="journeyNav" aria-label="Recorrido de la obra" hidden>
+<button id="journeyPrevious" type="button">Anterior</button>
+<button id="journeyIndexOpen" type="button" aria-haspopup="dialog">Índice</button>
+<button id="journeyNext" type="button">Siguiente</button>
+</nav>
 
   <iframe id="cenicientoFrame" class="ceniciento-frame" title="Ceniciento" allow="autoplay" hidden></iframe>
 
   <div class="entry" id="entry" role="dialog" aria-modal="true" aria-label="Entrada a Ana Klaudya">
     <div class="entry-inner">
       <p class="entry-title">ANA KLAUDYA</p>
-      <p class="entry-flag">flag</p>
+      <p class="entry-flag">poemas de Paco Olmo de Males</p>
       <div class="entry-actions">
-        <button class="entry-button" id="entryButton" type="button">Entrar</button>
+        <button class="entry-button" id="entryButton" type="button">▶ Comenzar</button>
       </div>
     </div>
   </div>
@@ -972,7 +1007,7 @@
       };
       const restoreAmbient=()=>{
         showMusicLevel(ambientLevel);
-        if(musicEnabled.checked){
+        if(soundStarted && musicEnabled.checked){
           fadeMusicTo(ambientLevel);
           ensureAmbientMusic();
         }else fadeMusicTo(0);
@@ -1146,6 +1181,7 @@
       };
 
       const beginPrelude=(nameReady)=>{
+        setJourney('elegia');
         cancelAnaPrelude();
         body.classList.add('prelude');
         entry.classList.add('is-open');
@@ -1176,24 +1212,13 @@
         },14000);
       };
 
-      entryButton.addEventListener('click',async()=>{
+      entryButton.addEventListener('click',()=>{
         if(entryButton.disabled)return;
-        const request=++anaEntryRequest;
         entryButton.disabled=true;
-        const [started,nameReady]=await Promise.all([startSound(),primeNameAudio()]);
-
-        if(request!==anaEntryRequest)return;
-        if(started){
-          if(prologuePlayed)beginPrelude(nameReady);
-          else{
-            prologueNameReady=nameReady;
-            entry.classList.add('is-open');
-            openPoem('estrella',true);
-          }
-        }else{
-          entryButton.disabled=false;
-          entryButton.textContent='Volver a intentar';
-        }
+        body.classList.add('journey-started','sound-ready');
+        entry.classList.add('is-open');
+        if(prologuePlayed){beginPrelude(false);setJourney('elegia');}
+        else {prologueNameReady=false;openPoem('estrella',true);}
       });
 
       soundToggle.addEventListener('click',async()=>{
@@ -1211,8 +1236,7 @@
         if(!voiceDialog.open){
           body.classList.add('voice-open');voiceDialog.show();
         }
-        // Start in the same user gesture, keeping the existing music fade.
-        if(recording.paused && !voicePending && !voicePriming)playRecording();
+        // Opening the voice controls never starts playback.
       };
       document.getElementById('voiceLaunch').addEventListener('click',()=>openVoice());
       voicePlay.addEventListener('click',()=>{
@@ -1268,6 +1292,7 @@
         // Unload narration only; the music remains in this document.
         cenicientoFrame.removeAttribute('src');
         anaNavigation.hidden=false;body.classList.add('ana-navigation-ready');
+        setJourney('elegia');
       };
       const openPoem=(piece,asPrologue=false)=>{
         if(poemRoute===piece&&!cenicientoFrame.hidden&&!sonrisaLeaving)return;
@@ -1281,7 +1306,9 @@
         prologueActive=asPrologue;
         cenicientoFrame.hidden=false;
         cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261008-inciso-sin-punto'+(asPrologue?'&prologue=1':'');
+        setJourney(piece);
+        body.classList.add('journey-started');
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261008-recorrido'+(asPrologue?'&prologue=1':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openCeniciento=()=>openPoem('ceniciento');
@@ -1302,7 +1329,7 @@
           if(mode==='ana'){
             prologuePlayed=true;prologueActive=false;entry.classList.add('is-open');
           }else{
-            entry.classList.remove('is-open');entryButton.textContent='Entrar';
+            entry.classList.remove('is-open');entryButton.textContent='▶ Comenzar';
           }
         }
         cenicientoFrame.classList.remove('sonrisa-visible');
@@ -1312,6 +1339,7 @@
           closeCeniciento();
           if(updateHistory)window.history.replaceState(null,'',window.location.pathname+window.location.search);
           if(mode==='home'||mode==='ana')window.scrollTo({top:0,left:0,behavior:'auto'});
+          if(mode==='text')showAnaText();
           if(mode==='ana'){
             anaNavigation.hidden=true;body.classList.remove('ana-navigation-ready');
             beginPrelude(prologueNameReady);
@@ -1331,6 +1359,7 @@
       document.getElementById('anaPiel').addEventListener('click',openPiel);
       document.getElementById('anaEstrella').addEventListener('click',openEstrella);
       const showAnaText=()=>{
+        setJourney('elegia');body.classList.add('journey-started','sound-ready');
         cancelAnaPrelude();
         if(!cenicientoFrame.hidden){closeCeniciento();window.history.replaceState(null,'',window.location.pathname+window.location.search);}
         resetPortraitFinale();
@@ -1375,6 +1404,38 @@
           poemRevealTimer=setTimeout(()=>{if(transition===poemTransition&&!cenicientoFrame.hidden&&!sonrisaLeaving)cenicientoFrame.classList.add('sonrisa-visible');},350);
         }
       });
+
+
+      const journeyPieces=['estrella','elegia','ojos','sonrisa','cabello','piel','epilogo'];
+      const journeyTitles=['Prólogo · Siguiendo una tarjeta','Elegía breve para Ana Klaudya','En tus ojos','En tus labios','Tu cabello','Tu piel','Epílogo · A fuego lento'];
+      const journeyNav=document.getElementById('journeyNav');
+      const journeyPrevious=document.getElementById('journeyPrevious'),journeyNext=document.getElementById('journeyNext');
+      const journeyIndex=document.getElementById('journeyIndex');
+      let journeyPiece='estrella';
+      function setJourney(piece){
+        if(piece==='ceniciento'){journeyNav.hidden=true;return;}
+        const i=journeyPieces.indexOf(piece);if(i<0)return;
+        journeyPiece=piece;journeyNav.hidden=false;
+        journeyPrevious.disabled=i===0;journeyNext.disabled=i===journeyPieces.length-1;
+        journeyPrevious.setAttribute('aria-label',i>0?'Anterior: '+journeyTitles[i-1]:'Principio del recorrido');
+        journeyNext.setAttribute('aria-label',i<journeyPieces.length-1?'Siguiente: '+journeyTitles[i+1]:'Final del recorrido');
+        journeyNav.setAttribute('aria-label','Recorrido · '+journeyTitles[i]);
+      }
+      function goJourney(piece){
+        if(!journeyPieces.includes(piece))return;
+        if(journeyIndex.open)journeyIndex.close();
+        if(piece==='elegia'){
+          if(!cenicientoFrame.hidden)returnToAna('text');else showAnaText();
+        }else openPoem(piece);
+      }
+      journeyPrevious.addEventListener('click',()=>goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)-1]));
+      journeyNext.addEventListener('click',()=>goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)+1]));
+      document.getElementById('journeyIndexOpen').addEventListener('click',()=>{
+        anaNavigation.hidden=false;journeyIndex.showModal();
+        document.getElementById('journeyIndexClose').focus();
+      });
+      document.getElementById('journeyIndexClose').addEventListener('click',()=>journeyIndex.close());
+      anaNavigation.addEventListener('click',event=>{if(event.target.closest('button'))journeyIndex.close();});
 
       const startWarmPrelude=()=>{
         if(warmPhase!==0) return;
@@ -1516,7 +1577,6 @@
 
       syncSoundToggle();
       renderWorld();
-      ensureAmbientMusic();
       syncPoemRoute();
     })();
   </script>
