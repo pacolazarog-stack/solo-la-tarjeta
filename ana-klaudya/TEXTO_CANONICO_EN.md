@@ -1,15 +1,16 @@
 # ANA KLAUDYA
 
-*flag*
-
 ## Prologue · Following a Card
 
 Following a card,  
 I found a place.  
 When I stopped there,  
-it began to feel like home.
+it began to feel like home:  
+still without a key,  
+but I was already imagining  
+my footsteps on returning.
 
-Following an angel,  
+Following my angel,  
 I came to you.
 
 When I was yang,  
@@ -23,7 +24,7 @@ looking at you is enough.
 ## A Brief Elegy for Ana Klaudya
 
 There was in her face  
-a quiet beauty  
+a quiet beauty,  
 the kind that never asks  
 to be noticed.
 
@@ -34,8 +35,7 @@ with a care
 that accentuates  
 without correcting.
 
-And then she spoke.
-
+And then she spoke.  
 Brazil remained intact  
 in the way she spoke:  
 the warm weight of the vowels,  
@@ -50,8 +50,7 @@ was still missing
 her voice.
 
 Then came  
-the embrace.
-
+the embrace.  
 I do not know how long it lasted  
 or who moved closer first.  
 I remember only  
@@ -62,8 +61,8 @@ that private injustice
 memory sometimes commits:  
 from an entire afternoon  
 it keeps intact  
-a face  
-and, from an entire embrace,
+a face,  
+and from an entire embrace,
 
 the  
 warmth.
@@ -82,10 +81,9 @@ falls out of order.
 
 Your eyelids half-close.
 
-Something of mine  
-remains in view.
-
-And I do not look away.
+I do not know how much of me  
+you have already seen.  
+And I do not lower my eyes.
 
 ---
 
@@ -93,19 +91,17 @@ And I do not look away.
 
 I was going to tell you something.
 
-Your smile starts at the corners of your mouth:  
-barely a movement,  
+Your smile begins at the corners of your mouth:  
+a slight movement,  
 and I am already looking at you  
-beyond prudence.
+beyond all prudence.
 
-I smile too.
-
+The gesture spreads across your face.  
+I smile too.  
 You still have not said a word.
 
-I search for the sentence.  
-You smile again.
-
-I remain on your lips,  
+You smile again  
+and I remain on your lips,  
 never reaching the words.
 
 ---
@@ -118,9 +114,8 @@ light glides across it
 without lightening it.
 
 It falls across your shoulder  
-and takes its time becoming still.
-
-You return to your words,  
+and takes its time becoming still.  
+You return to your words;  
 but one strand prolongs  
 the turning of your face.
 
@@ -129,36 +124,30 @@ The gesture bares your neck
 and leaves between the strands  
 a crack of light.
 
-You let it go.
-
-The strand falls back into place.
-
-You keep talking.
+You keep talking.  
+The strand falls back into place.  
+I take  
+a little longer.
 
 ---
 
 ## Your Skin
 
-Your skin has that bronze tone.
-
+Your skin has that bronze tone.  
 In the bend of your elbow  
 the colour deepens.
 
-The light lingers on your shoulder,  
-travels down your arm  
-and reaches the hand  
-that accompanies your voice.
-
+Your hand accompanies your voice.  
 You move your fingers  
-and a fleeting brightness  
-glides over your knuckles.
+and the light passes  
+from one knuckle to another.
 
-My hand remains still.
-
-Between your skin and mine  
-there is barely air.
-
-I do not cross it.
+I would like to know that smoothness  
+with more than my eyes:  
+to rest my hand gently,  
+leave it there  
+and feel your skin  
+warming mine.
 
 ---
 
@@ -183,7 +172,7 @@ goes still in my hand.
 
 —Stir, poet.
 
-I forgot the stew.  
+I had forgotten the stew.  
 I was looking for a word  
 for the way you smile.
 
@@ -198,8 +187,7 @@ I keep looking at you.
 —Salt.
 
 You set out two plates.  
-I carry the stew to the table.
-
+I carry the stew to the table.  
 You move the papers aside  
 to make room for it.
 

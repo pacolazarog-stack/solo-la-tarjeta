@@ -4,9 +4,9 @@ Obra multimedia de **flag** · 2026.
 
 ## Estado canónico
 
-- Texto español: **canónico e intocable**.
-- Traducción inglesa: versión literaria estable para subtítulos y dossier internacional.
-- Valoración homogénea recuperada: **9,55/10**.
+- Texto español: **edición canónica cerrada el 08/10/2026**, actualizada por indicación del autor. Siete piezas y **130 versos**.
+- Traducción inglesa: alineada con la edición española del **08/10/2026**; base literaria para los subtítulos del montaje final.
+- Valoración literaria orientativa del conjunto actual: **9,4/10**.
 - Destino: circuito internacional de videopoesía 2027.
 - **CENICIENTO no forma parte de ANA KLAUDYA.** Permanece como obra autónoma e independiente dentro del repositorio.
 - La versión web es **interactiva y de duración abierta**.
@@ -59,9 +59,9 @@ Los antiguos objetivos **05:58** y **06:48** quedan expresamente descartados com
 - La música comienza alta y desciende al entrar la voz.
 - Los ojos ganan nitidez de manera gradual, **sin latido ni zoom**.
 - Fundidos lentos hacia la fotografía y cierre con interrogante.
-- El interrogante final **ya no enlaza con CENICIENTO**.
+- El máster lineal termina dentro de **ANA KLAUDYA**. En la web interactiva, el interrogante conserva el acceso a **CENICIENTO**, obra autónoma.
 - La voz **no se acelera** para adaptar la obra a límites de festival.
-- Se preservan el segundo **«el calor»**, **«Mi mano sigue quieta»** y el tempo cómico del epílogo.
+- Se preservan el segundo **«el calor»**, **«Yo tardo / un poco más»**, la caricia deseada de **«Tu piel»** y el tempo cómico del epílogo.
 - No se eliminan versos del texto canónico para alcanzar la duración objetivo.
 - Antes de presentar la obra deben quedar documentados el permiso de imagen de Ana Klaudya y, cuando corresponda, los derechos de autor de las fotografías.
 

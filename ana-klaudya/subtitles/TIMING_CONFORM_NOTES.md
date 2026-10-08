@@ -4,7 +4,9 @@
 
 The canonical web work is interactive and has **no single fixed running time**. A linear festival master is now planned with an editorial target of **09:27**, pending final render and measurement of the encoded MP4.
 
-The former 05:58 and 06:48 subtitle maps are **historical compression studies only**. They must not be described as the running time of ANA KLAUDYA.
+The Spanish and English canonical texts were updated on **2026-10-08**. New subtitles must follow this edition.
+
+The former 05:58 and 06:48 subtitle maps are **historical compression studies only**, based on an earlier text edition. They must not be described as the running time of ANA KLAUDYA.
 
 ## Linear master
 
@@ -21,7 +23,8 @@ Subtitle timing for the final festival master must be generated from the actual 
 - Do not remove canonical verses merely to satisfy an external duration limit.
 - Prefer compression of transition holds before altering poem delivery.
 - Keep the long pause before the second **“the warmth”** in the Elegy.
-- Preserve a perceptible pause before **“My hand remains still.”**
+- In **Your Hair**, preserve the delayed ending **“I take / a little longer.”**
+- In **Your Skin**, preserve the pause before the imagined caress, **“I would like to know that smoothness…”**.
 - Preserve comic timing in the Epilogue, especially:
   - “—Stir, poet.”
   - “—The stew, Paco.”

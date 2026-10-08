@@ -38,7 +38,7 @@ get('cenicientoFrame').hidden=true;
 (async()=>{
  vm.runInNewContext(script,context);await flush();
  const calls=get('voiceMusic').playCalls;get('voiceMusic').currentTime=47.5;
- for(const [piece,id,title] of [['cabello','anaCabello','TU CABELLO'],['piel','anaPiel','TU PIEL'],['estrella','anaEstrella','SIGUIENDO UNA ESTRELLA'],['epilogo','anaEpilogue','A FUEGO LENTO · EPÍLOGO']]){
+ for(const [piece,id,title] of [['cabello','anaCabello','TU CABELLO'],['piel','anaPiel','TU PIEL'],['estrella','anaEstrella','SIGUIENDO UNA TARJETA'],['epilogo','anaEpilogue','A FUEGO LENTO · EPÍLOGO']]){
   get(id).click();await flush();
   assert.equal(context.document.title,title);
   assert.equal(get('cenicientoFrame').hidden,false);
@@ -69,8 +69,8 @@ get('cenicientoFrame').hidden=true;
   const items=new Map(),childTimers=new Map(),messages=[];let seq=0;
   const node=id=>{if(!items.has(id))items.set(id,new Element(id));return items.get(id);};
   const pattern=['estrella','epilogo'].includes(piece)?/class="phrase hidden-phrase(?: ending(?: final-stanza)?)?" aria-hidden="true" data-wait="(\d+)">([\s\S]*?)<\/p>/g:/class="line(?: ending)?" data-wait="(\d+)">([^<]+)/g;
-  const lines=[...child.matchAll(pattern)].map((m,i)=>{const e=node('line'+i);e.dataset={wait:m[1]};e.textContent=m[2].replace(/<br>\s*/g,' ');if(['estrella','epilogo'].includes(piece)){if(piece==='estrella')assert.equal((m[2].match(/<br>/g)||[]).length,1,'Each complete sentence retains its two verses');e.classList.add('hidden-phrase');e.setAttribute('aria-hidden','true');}return e;});
-  assert.equal(lines.length,piece==='estrella'?5:['cabello','epilogo'].includes(piece)?16:17);
+  const lines=[...child.matchAll(pattern)].map((m,i)=>{const e=node('line'+i);e.dataset={wait:m[1]};e.textContent=m[2].replace(/<br>\s*/g,' ').replace(/<[^>]+>/g,'');if(['estrella','epilogo'].includes(piece)){e.classList.add('hidden-phrase');e.setAttribute('aria-hidden','true');}return e;});
+  assert.equal(lines.length,piece==='estrella'?6:piece==='cabello'?17:piece==='piel'?13:16);
   if(piece==='epilogo'){
    assert.equal(lines[0].textContent,'Yo iba a escribirte un poema. Tú me diste una cebolla.');
    assert.equal(lines[9].textContent,'—Al puchero, Paco.');
@@ -78,8 +78,8 @@ get('cenicientoFrame').hidden=true;
    assert.equal([...child.matchAll(pattern)].reduce((n,m)=>n+1+(m[2].match(/<br>/g)||[]).length,0),29);
   }
   if(piece==='estrella'){
-   assert.deepEqual(lines.map(l=>l.textContent),['Siguiendo una estrella, encontré un lugar.','Al detenerme allí, empezó a ser mi hogar.','Siguiendo a mi ángel, llegué hasta ti.','Cuando era yang, buscaba el yin.','Ahora que soy yin, me basta con mirarte.']);
-   assert(child.includes('id="poem" aria-label="Siguiendo una estrella" hidden'));
+   assert.deepEqual(lines.map(l=>l.textContent),['Siguiendo una tarjeta, encontré un lugar.','Al detenerme allí, empezó a ser mi hogar: todavía sin llave, pero ya imaginaba mis pasos al volver.','Siguiendo a mi ángel, llegué hasta ti.','Cuando era yang, buscaba el yin.','Ahora que soy yin,','me basta con mirarte.']);
+   assert(child.includes('id="poem" aria-label="Siguiendo una tarjeta" hidden'));
    assert(!child.includes('id="full"'),'No full-poem button can bypass the lunar gate');
   }
   const parent={postMessage(data){messages.push(data);}},events={};
@@ -118,17 +118,17 @@ get('cenicientoFrame').hidden=true;
    assert(lines.slice(1).every(l=>l.classList.contains('hidden-phrase')));
    assert(lines.slice(1).every(l=>l.getAttribute('aria-hidden')==='true'));
    node('paced').click();assert.equal(node('paced').textContent,'Continuar');
-   const runReading=()=>{const pending=[...childTimers.entries()].find(([,t])=>t.ms>=6200 && t.ms<=7000);assert(pending);childTimers.delete(pending[0]);pending[1].fn();};
+   const runReading=()=>{const pending=[...childTimers.entries()].find(([,t])=>[3200,6200,6500,7000,12000].includes(t.ms));assert(pending);childTimers.delete(pending[0]);pending[1].fn();};
    node('paced').click();assert(!lines[1].classList.contains('hidden-phrase'));
    // The timer fallback must not reveal an extra phrase once transitionend opened the gate.
-   [...childTimers.values()].find(t=>t.ms===40100).fn();assert(lines[2].classList.contains('hidden-phrase'));
-   for(let i=2;i<5;i++){runReading();assert(!lines[i].classList.contains('hidden-phrase'));}
+   [...childTimers.values()].find(t=>t.ms===20100).fn();assert(lines[2].classList.contains('hidden-phrase'));
+   for(let i=2;i<lines.length;i++){runReading();assert(!lines[i].classList.contains('hidden-phrase'));}
    runReading();assert.equal(node('paced').textContent,'Volver a leer');assert.equal(node('signature').hidden,false);
    assert.equal(node('continueAna').hidden,false);node('continueAna').click();assert.equal(messages.at(-1).type,'ana');
    node('paced').click();assert.equal(node('poem').hidden,true);assert.equal(node('paced').disabled,true);
    assert(!node('celestialScene').classList.contains('is-home'));assert(!node('worldComet').classList.contains('is-active'));
    [...childTimers.values()].find(t=>t.ms===300).fn();
-   [...childTimers.values()].find(t=>t.ms===40100).fn();
+   [...childTimers.values()].find(t=>t.ms===20100).fn();
    assert.equal(node('poem').hidden,false,'The timer fallback opens the gate if transitionend is unavailable');
    assert(lines.slice(1).every(l=>l.classList.contains('hidden-phrase')));
   }else if(piece==='epilogo'){

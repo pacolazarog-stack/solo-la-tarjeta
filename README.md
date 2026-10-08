@@ -19,4 +19,4 @@ La documentación canónica y de festivales se conserva en [`ana-klaudya/`](./an
 - subtítulos para corte Midwest 06:48;
 - notas de conformado y versión Weimar.
 
-El texto español queda fijado como **canónico e intocable**. Las adaptaciones internacionales afectan a subtítulos, montaje, silencios y transiciones, no a la voz mediante aceleración mecánica.
+El texto español y su traducción inglesa quedan actualizados a la **edición canónica cerrada el 08/10/2026**, con siete piezas y **130 versos**. Las adaptaciones internacionales afectan a subtítulos, montaje, silencios y transiciones, no a la voz mediante aceleración mecánica.

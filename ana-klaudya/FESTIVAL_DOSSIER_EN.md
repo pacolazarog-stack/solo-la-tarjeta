@@ -24,6 +24,10 @@ The film is built around progressive revelation. Eyes become clearer without pul
 
 The purpose is not to describe a woman exhaustively. It is to record the changing distance between looking and being looked at, between imagining someone and discovering that the other person is also looking back.
 
+## Current text edition
+
+The Spanish original and English literary translation reflect the author-approved edition closed on **8 October 2026**: seven pieces, 130 Spanish verses. The historical short subtitle studies have not been conformed to this edition.
+
 ## Canonical structure
 
 1. Prologue · Following a Card
@@ -57,7 +61,7 @@ Key principles:
 - preserve the complete canonical Spanish text;
 - no mechanical voice acceleration;
 - retain the second “the warmth” / «el calor» as a structural climax;
-- retain “My hand remains still.” / «Mi mano sigue quieta» as an independent beat;
+- retain the delayed “I take / a little longer” ending in **Your Hair**, and the imagined caress in **Your Skin**;
 - preserve the comic pauses of the Epilogue;
 - final portrait and unresolved question remain self-contained;
 - **CENICIENTO is not part of ANA KLAUDYA and is not part of the festival master.**
