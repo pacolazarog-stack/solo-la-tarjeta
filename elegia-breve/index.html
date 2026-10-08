@@ -347,7 +347,8 @@
     body.ceniciento-open:not(.sonrisa-open) > :not(iframe):not(audio):not(script){visibility:hidden}
     .portrait-question{
       position:absolute;left:30%;top:44%;transform:translate(-50%,-50%);
-      display:grid;place-items:center;width:48px;height:48px;border-radius:50%;
+      display:grid;place-items:center;width:64px;height:64px;border-radius:50%;
+      padding:0;border:0;background:transparent;touch-action:manipulation;z-index:1;
       color:#342719;font:400 2rem/1 Georgia,"Times New Roman",serif;text-decoration:none;cursor:pointer;
       opacity:0;visibility:hidden;pointer-events:none;
       transition:opacity 3s ease 25s,visibility 0s linear 25s;
@@ -760,7 +761,7 @@
     <div class="portrait-image-area">
       <div class="portrait-image-wrap">
         <img id="anaPortrait" src="ana-klaudya-fotografia.jpg" alt="Ana Klaudya" decoding="async">
-        <a id="cenicientoLink" class="portrait-question" href="../ceniciento/" aria-label="Descubrir Ceniciento"><span class="question-beat" aria-hidden="true">?</span></a>
+        <button id="cenicientoLink" class="portrait-question" type="button" aria-label="Descubrir Ceniciento"><span class="question-beat" aria-hidden="true">?</span></button>
       </div>
     </div>
     <button class="entry-button portrait-epilogue flambe-button" id="portraitEpilogue" type="button">Epílogo · A fuego lento →</button>
@@ -1280,10 +1281,8 @@
         cenicientoFrame.src='../'+piece+'/?music=parent&v=20261008-un-angel'+(asPrologue?'&prologue=1':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
-      document.getElementById('cenicientoLink').addEventListener('click',event=>{
-        if(event.button>0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-        event.preventDefault();openPoem('ceniciento');
-      });
+      const openCeniciento=()=>openPoem('ceniciento');
+      document.getElementById('cenicientoLink').addEventListener('click',openCeniciento);
       const returnToAna=(mode='home',updateHistory=true)=>{
         if(cenicientoFrame.hidden||sonrisaLeaving)return;
         cancelPoemTransition();cancelAnaPrelude();
@@ -1341,7 +1340,7 @@
       };
       document.getElementById('anaRead').addEventListener('click',showAnaText);
       document.getElementById('anaVoice').addEventListener('click',()=>{showAnaText();recording.currentTime=0;openVoice();});
-      document.getElementById('anaCeniciento').addEventListener('click',()=>document.getElementById('cenicientoLink').click());
+      document.getElementById('anaCeniciento').addEventListener('click',openCeniciento);
       const syncPoemRoute=()=>{
         const piece=window.location.hash.slice(1);
         if(['epilogo','estrella','cabello','piel','ojos','sonrisa','ceniciento'].includes(piece))openPoem(piece);

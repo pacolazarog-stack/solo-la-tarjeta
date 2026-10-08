@@ -27,7 +27,15 @@ const run=ms=>{const match=[...timers].find(([,t])=>t.ms===ms);assert(match,'Mis
 const route=(piece,type='popstate')=>{location.hash=piece?'#'+piece:'';fire(type);};
 const assertPiece=piece=>{assert.equal(frame.hidden,false);assert(frame.src.includes('../'+piece+'/?music=parent'));assert.equal(location.hash,'#'+piece);};
 vm.runInNewContext(script,context);
-const music=get('voiceMusic');music.currentTime=51;const plays=music.playCalls;
+const music=get('voiceMusic');music.currentTime=51;music.paused=false;const plays=music.playCalls;
+// The portrait question works for touch/keyboard click events without mouse fields.
+body.classList.add('portrait-revealed','voice-open');get('voiceDialog').show();
+get('cenicientoLink').emit('click',{preventDefault(){}});assertPiece('ceniciento');
+assert.equal(get('voiceDialog').open,false);
+assert.equal(music.paused,false);assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
+message('close');run(7100);assert.equal(nav.hidden,false);
+// Navigation must work independently of the portrait control's visibility or click method.
+get('cenicientoLink').click=()=>{throw Error('Navigation must not proxy the portrait button');};
 // Browser back/forward and fragment navigation must switch an already open iframe.
 get('anaCabello').click();assertPiece('cabello');
 route('piel');assertPiece('piel');
@@ -53,6 +61,7 @@ for(const reducedMotion of [false,true]){
   assert(!body.classList.contains('sonrisa-open'));assert(!root.classList.contains('ceniciento-open'));
   assert.equal(get('entryButton').disabled,false);
   assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
+  assert.equal(music.paused,false);
  }
 }
 // Going back, then immediately forward, cancels the obsolete return.

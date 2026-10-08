@@ -78,7 +78,7 @@ get('cenicientoFrame').hidden=true;
    assert.equal([...child.matchAll(pattern)].reduce((n,m)=>n+1+(m[2].match(/<br>/g)||[]).length,0),29);
   }
   if(piece==='estrella'){
-   assert.deepEqual(lines.map(l=>l.textContent),['Siguiendo una tarjeta, encontré un lugar.','Al detenerme allí, empezó a ser mi hogar: todavía sin llave, pero ya imaginaba mis pasos al volver.','Siguiendo a mi ángel, llegué hasta ti.','Cuando era yang, buscaba el yin.','Ahora que soy yin,','me basta con mirarte.']);
+   assert.deepEqual(lines.map(l=>l.textContent),['Siguiendo una tarjeta, encontré un lugar.','Al detenerme allí, empezó a ser mi hogar: todavía sin llave, pero ya imaginaba mis pasos al volver.','Siguiendo a un ángel, llegué hasta ti.','Cuando era yang, buscaba el yin.','Ahora que soy yin,','me basta con mirarte.']);
    assert(child.includes('id="poem" aria-label="Siguiendo una tarjeta" hidden'));
    assert(!child.includes('id="full"'),'No full-poem button can bypass the lunar gate');
   }
