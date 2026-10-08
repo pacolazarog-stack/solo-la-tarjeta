@@ -96,9 +96,27 @@ for(const piece of ['piel','cabello','sonrisa','ojos']){
 }
 get('journeyPrevious').click();run(7100);assert.equal(frame.hidden,true);
 const narrationPlays=get('recording').playCalls||0;
+(async()=>{
 get('anaVoice').click();assert.equal(get('voiceDialog').open,true);
-assert.equal(get('recording').playCalls||0,narrationPlays,'Opening voice does not play it');
+assert.equal(get('recording').playCalls,narrationPlays+1,'Choosing voice primes playback in the same gesture');
+get('voiceLaunch').click();
+assert.equal(get('recording').playCalls,narrationPlays+1,'A repeated voice click does not queue another start');
+await Promise.resolve();
+assert.equal(get('recording').paused,true,'The first word waits for the music fade');
+assert.equal(get('recording').currentTime,0,'The first word is preserved');
+assert.equal([...timers.values()].filter(t=>t.ms===4000).length,1,'One four-second fade before narration');
+run(4000);await Promise.resolve();
+assert.equal(get('recording').paused,false,'One voice selection starts narration after the fade');
+assert.equal(get('recording').playCalls,narrationPlays+2);
+get('recording').emit('play');assert.equal(get('voicePlay').textContent,'Pausar');
 get('voiceClose').click();
+assert.equal(get('recording').paused,true);
+const launchPlays=get('recording').playCalls;
+get('voiceLaunch').click();await Promise.resolve();
+assert.equal(get('recording').playCalls,launchPlays+1,'The central Voice button also starts the fade');
+assert.equal([...timers.values()].filter(t=>t.ms===4000).length,1);
+get('voiceClose').click();
+assert.equal([...timers.values()].filter(t=>t.ms===4000).length,0,'Closing cancels pending narration');
 const musicPlays=music.playCalls||0;
 get('entryButton').click();assertPiece('estrella');
 assert.equal(music.playCalls||0,musicPlays,'Begin does not start sound');
@@ -106,4 +124,5 @@ assert.equal(music.currentTime,51);
 assert(source.includes('poemas de Paco Olmo de Males'));
 assert(source.includes('▶ Comenzar'));
 assert(!source.includes("renderWorld();\\n      ensureAmbientMusic();"));
-console.log('PASS: sequential navigation, seven return routes, repeated touches, Back/Forward, index, opt-in audio, reduced motion and uninterrupted music');
+console.log('PASS: sequential navigation, seven return routes, repeated touches, Back/Forward, index, one-click voice with four-second fade, cancellation, reduced motion and uninterrupted music');
+})().catch(error=>{console.error(error);process.exitCode=1;});
