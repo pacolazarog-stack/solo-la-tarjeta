@@ -4,7 +4,7 @@ Obra multimedia de **flag** · 2026.
 
 ## Estado canónico
 
-- Texto español: **edición canónica cerrada el 08/10/2026**, actualizada por indicación del autor. Siete piezas y **130 versos**.
+- Texto español: **edición canónica cerrada el 08/10/2026**, actualizada por indicación del autor. Siete piezas y **131 versos**.
 - Traducción inglesa: alineada con la edición española del **08/10/2026**; base literaria para los subtítulos del montaje final.
 - Valoración literaria orientativa del conjunto actual: **9,4/10**.
 - Destino: circuito internacional de videopoesía 2027.
@@ -61,7 +61,7 @@ Los antiguos objetivos **05:58** y **06:48** quedan expresamente descartados com
 - Fundidos lentos hacia la fotografía y cierre con interrogante.
 - El máster lineal termina dentro de **ANA KLAUDYA**. En la web interactiva, el interrogante conserva el acceso a **CENICIENTO**, obra autónoma.
 - La voz **no se acelera** para adaptar la obra a límites de festival.
-- Se preservan el segundo **«el calor»**, **«Yo tardo / un poco más»**, la caricia deseada de **«Tu piel»** y el tempo cómico del epílogo.
+- Se preservan el segundo **«el calor»**, **«Yo tardo / un poco más»**, el aire sin atravesar de **«Tu piel»** y el tempo cómico del epílogo.
 - No se eliminan versos del texto canónico para alcanzar la duración objetivo.
 - Antes de presentar la obra deben quedar documentados el permiso de imagen de Ana Klaudya y, cuando corresponda, los derechos de autor de las fotografías.
 
