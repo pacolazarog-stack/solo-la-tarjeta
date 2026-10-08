@@ -319,8 +319,6 @@
     .ceniciento-frame.sonrisa-leaving{pointer-events:none}
     .epilogue-invitation{margin:18svh 0 0}
     .epilogue-invitation[hidden]{display:none}
-    .portrait-epilogue{position:absolute;right:max(24px,env(safe-area-inset-right));bottom:max(32px,env(safe-area-inset-bottom));pointer-events:none;opacity:0;visibility:hidden;transition:opacity 3s ease 25s,visibility 0s linear 25s}
-    body.portrait-revealed .portrait-epilogue{opacity:1;visibility:visible;pointer-events:auto}
     .flambe-button,.flambe-button:hover,.flambe-button:focus-visible{
       isolation:isolate;overflow:hidden;color:#321609;border-color:#ed993d;
       background:linear-gradient(115deg,#ffe19a,#ffad50 24%,#f79548 48%,#ffcf68 72%,#ffe19a);
@@ -328,7 +326,7 @@
       box-shadow:0 0 16px rgba(255,150,51,.34),0 7px 25px rgba(184,72,16,.24);
       animation:flambeSurface 18s ease-in-out infinite;
     }
-    .flambe-button:not(.portrait-epilogue){position:relative}
+    .flambe-button{position:relative}
     .flambe-button::before{
       content:"";position:absolute;inset:-55% -15% -35%;z-index:-1;pointer-events:none;
       background:radial-gradient(ellipse at 12% 95%,#ffe5a3 0 12%,transparent 32%),radial-gradient(ellipse at 38% 105%,#ffd275 0 18%,transparent 40%),radial-gradient(ellipse at 65% 95%,#fff0b6 0 12%,transparent 33%),radial-gradient(ellipse at 90% 105%,#ffc869 0 18%,transparent 40%);
@@ -764,7 +762,6 @@
         <button id="cenicientoLink" class="portrait-question" type="button" aria-label="Descubrir Ceniciento"><span class="question-beat" aria-hidden="true">?</span></button>
       </div>
     </div>
-    <button class="entry-button portrait-epilogue flambe-button" id="portraitEpilogue" type="button">Epílogo · A fuego lento →</button>
   </div>
 
   <nav class="ana-navigation" id="anaNavigation" aria-label="Navegar entre las obras" hidden>
@@ -917,8 +914,15 @@
           if(!anaPortrait.naturalWidth) return;
           portraitFinale.setAttribute('aria-hidden','false');
           body.classList.add('portrait-revealed');
+          anaNavigation.hidden=true;
+          body.classList.remove('ana-navigation-ready');
           clearTimeout(portraitRevealTimer);
-          portraitRevealTimer=setTimeout(()=>{questionGrowthActive=true;},25000);
+          portraitRevealTimer=setTimeout(()=>{
+            if(!body.classList.contains('portrait-revealed') || !cenicientoFrame.hidden)return;
+            questionGrowthActive=true;
+            anaNavigation.hidden=false;
+            body.classList.add('ana-navigation-ready');
+          },25000);
         };
         if(anaPortrait.complete) reveal();
         else anaPortrait.addEventListener('load',reveal,{once:true});
@@ -1321,7 +1325,7 @@
       const openPiel=()=>openPoem('piel');
       const openEstrella=()=>openPoem('estrella');
       const openEpilogue=()=>openPoem('epilogo');
-      for(const id of ['anaEpilogue','readEpilogue','portraitEpilogue'])document.getElementById(id).addEventListener('click',openEpilogue);
+      for(const id of ['anaEpilogue','readEpilogue'])document.getElementById(id).addEventListener('click',openEpilogue);
       document.getElementById('anaSonrisa').addEventListener('click',openSonrisa);
       document.getElementById('anaOjos').addEventListener('click',openOjos);
       document.getElementById('anaCabello').addEventListener('click',openCabello);

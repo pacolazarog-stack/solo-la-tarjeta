@@ -28,9 +28,17 @@ const route=(piece,type='popstate')=>{location.hash=piece?'#'+piece:'';fire(type
 const assertPiece=piece=>{assert.equal(frame.hidden,false);assert(frame.src.includes('../'+piece+'/?music=parent'));assert.equal(location.hash,'#'+piece);};
 vm.runInNewContext(script,context);
 const music=get('voiceMusic');music.currentTime=51;music.paused=false;const plays=music.playCalls;
+// The full navigation returns when the final photograph finishes fading in.
+nav.hidden=true;get('anaPortrait').complete=true;get('anaPortrait').naturalWidth=1228;
+get('recording').emit('ended');assert(body.classList.contains('portrait-revealed'));
+assert.equal(nav.hidden,true,'Controls wait for the portrait fade');
+const stalePortrait=[...timers.values()].find(t=>t.ms===25000).fn;
+run(25000);assert.equal(nav.hidden,false,'All poem controls appear on the final photograph');
+assert(!source.includes('id="portraitEpilogue"'),'No duplicate epilogue button on the portrait');
 // The portrait question works for touch/keyboard click events without mouse fields.
 body.classList.add('portrait-revealed','voice-open');get('voiceDialog').show();
 get('cenicientoLink').emit('click',{preventDefault(){}});assertPiece('ceniciento');
+stalePortrait();assert.equal(nav.hidden,true,'A late portrait callback cannot show navigation over Ceniciento');
 assert.equal(get('voiceDialog').open,false);
 assert.equal(music.paused,false);assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
 message('close');run(7100);assert.equal(nav.hidden,false);
