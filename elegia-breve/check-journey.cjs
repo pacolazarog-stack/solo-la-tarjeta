@@ -46,7 +46,7 @@ get('cenicientoLink').emit('click',{preventDefault(){}});assertPiece('ceniciento
 stalePortrait();assert.equal(nav.hidden,true,'A late portrait callback cannot show navigation over Ceniciento');
 assert.equal(get('voiceDialog').open,false);
 assert.equal(music.paused,false);assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
-message('close');run(7100);assert.equal(nav.hidden,false);
+message('close');run(2100);assert.equal(nav.hidden,false);
 // Browser back/forward and fragment navigation must switch an already open iframe.
 get('anaCabello').click();assertPiece('cabello');
 route('piel');assertPiece('piel');
@@ -54,7 +54,7 @@ route('ojos','hashchange');assertPiece('ojos');
 const active=frame.src;fire('popstate');fire('hashchange');assert.equal(frame.src,active);
 // A queued fade callback must not reveal or unload a newer screen.
 frame.emit('load');const staleReveal=[...timers.values()].find(t=>t.ms===350).fn;
-message('home');const staleExit=[...timers.values()].find(t=>t.ms===7100).fn;
+message('home');const staleExit=[...timers.values()].find(t=>t.ms===2100).fn;
 assert(frame.classList.contains('sonrisa-leaving'));
 route('sonrisa');assertPiece('sonrisa');staleExit();staleReveal();assertPiece('sonrisa');
 assert(!frame.classList.contains('sonrisa-visible'));
@@ -66,7 +66,7 @@ for(const reducedMotion of [false,true]){
   get(id).click();assertPiece(piece);frame.emit('load');run(350);
   message('home','https://other.test');assert(!frame.classList.contains('sonrisa-leaving'));
   message(piece==='ceniciento'?'close':'home');message('home');
-  const delay=reduced?220:7100;
+  const delay=reduced?220:2100;
   assert.equal([...timers.values()].filter(t=>t.ms===delay).length,1);
   run(delay);assert.equal(frame.hidden,true);assert.equal(nav.hidden,false);
   assert(!body.classList.contains('sonrisa-open'));assert(!root.classList.contains('ceniciento-open'));
@@ -76,16 +76,16 @@ for(const reducedMotion of [false,true]){
  }
 }
 // Going back, then immediately forward, cancels the obsolete return.
-reduced=false;get('anaOjos').click();route('');const interrupted=[...timers.values()].find(t=>t.ms===7100).fn;
+reduced=false;get('anaOjos').click();route('');const interrupted=[...timers.values()].find(t=>t.ms===2100).fn;
 route('ojos');interrupted();assertPiece('ojos');
-message('home');run(7100);get('anaRead').click();assert(body.classList.contains('reading-ready'));assert(get('entry').classList.contains('is-open'));
+message('home');run(2100);get('anaRead').click();assert(body.classList.contains('reading-ready'));assert(get('entry').classList.contains('is-open'));
 assert(source.includes('.ceniciento-frame.sonrisa-leaving{pointer-events:none}'));
 assert(source.includes('min-height:44px;touch-action:manipulation'));
 // The sequential route covers the seven poems without including Ceniciento.
 get('journeyIndexOpen').click();assert.equal(get('journeyIndex').open,true);
 get('anaEstrella').click();assertPiece('estrella');
 assert.equal(get('journeyPrevious').disabled,true);
-get('journeyNext').click();run(7100);assert.equal(frame.hidden,true);
+get('journeyNext').click();run(2100);assert.equal(frame.hidden,true);
 assert(body.classList.contains('reading-ready'));
 for(const piece of ['ojos','sonrisa','cabello','piel','epilogo']){
  get('journeyNext').click();assertPiece(piece);
@@ -94,7 +94,7 @@ assert.equal(get('journeyNext').disabled,true);
 for(const piece of ['piel','cabello','sonrisa','ojos']){
  get('journeyPrevious').click();assertPiece(piece);
 }
-get('journeyPrevious').click();run(7100);assert.equal(frame.hidden,true);
+get('journeyPrevious').click();run(2100);assert.equal(frame.hidden,true);
 const narrationPlays=get('recording').playCalls||0;
 (async()=>{
 get('anaVoice').click();assert.equal(get('voiceDialog').open,true);

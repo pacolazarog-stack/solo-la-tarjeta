@@ -338,7 +338,7 @@
     @keyframes flambeFlames{0%,100%{transform:translate(-3%,5%) scaleY(.92)}50%{transform:translate(3%,-4%) scaleY(1.12)}}
     @media(prefers-reduced-motion:reduce){.flambe-button,.flambe-button::before{animation:none}}
     @media(forced-colors:active){.flambe-button,.flambe-button:hover,.flambe-button:focus-visible{animation:none;background:ButtonFace;color:ButtonText;border:1px solid ButtonText;box-shadow:none;text-shadow:none}.flambe-button::before,.flambe-button::after{display:none}}
-    .ceniciento-frame.sonrisa-transition{opacity:0;transition:opacity 7s ease-in-out;background:transparent}
+    .ceniciento-frame.sonrisa-transition{opacity:0;transition:opacity 2s ease-in-out;background:transparent}
     .ceniciento-frame.sonrisa-transition.sonrisa-visible{opacity:1}
     @media(prefers-reduced-motion:reduce){.ceniciento-frame.sonrisa-transition{transition-duration:.2s}}
     html.ceniciento-open,body.ceniciento-open{overflow:hidden}
@@ -1334,7 +1334,7 @@ body.journey-started main{padding-bottom:130px}
           }
         }
         cenicientoFrame.classList.remove('sonrisa-visible');
-        const duration=window.matchMedia('(prefers-reduced-motion: reduce)').matches?220:7100;
+        const duration=window.matchMedia('(prefers-reduced-motion: reduce)').matches?220:2100;
         poemExitTimer=setTimeout(()=>{
           if(transition!==poemTransition)return;
           closeCeniciento();
