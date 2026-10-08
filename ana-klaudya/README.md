@@ -8,7 +8,7 @@ Obra multimedia de **flag** · 2026.
 - Traducción inglesa: alineada con la edición española del **08/10/2026**; base literaria para los subtítulos del montaje final.
 - Valoración literaria orientativa del conjunto actual: **9,4/10**.
 - Destino: circuito internacional de videopoesía 2027.
-- **CENICIENTO no forma parte de ANA KLAUDYA.** Permanece como obra autónoma e independiente dentro del repositorio.
+- **CENICIENTO no forma parte de ANA KLAUDYA.** Permanece como obra autónoma e independiente dentro del repositorio. Su único acceso desde ANA es el interrogante de la foto final; no aparece en la barra de navegación de sus poemas.
 - La versión web es **interactiva y de duración abierta**.
 - El **máster lineal de festival** queda fijado provisionalmente con objetivo editorial de **09:27**, pendiente de render final y medición exacta del MP4.
 
@@ -69,3 +69,4 @@ Los antiguos objetivos **05:58** y **06:48** quedan expresamente descartados com
 
 Versión pública actual:  
 https://pacolazarog-stack.github.io/solo-la-tarjeta/elegia-breve/
+

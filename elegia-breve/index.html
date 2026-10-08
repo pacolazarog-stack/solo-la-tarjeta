@@ -767,7 +767,6 @@
   <nav class="ana-navigation" id="anaNavigation" aria-label="Navegar entre las obras" hidden>
     <button class="entry-button" id="anaRead" type="button">Leer Ana</button>
     <button class="entry-button" id="anaVoice" type="button">Escuchar Ana</button>
-    <button class="entry-button" id="anaCeniciento" type="button">Ceniciento</button>
     <button class="entry-button" id="anaSonrisa" type="button">En tus labios</button>
     <button class="entry-button" id="anaOjos" type="button">En tus ojos</button>
     <button class="entry-button" id="anaCabello" type="button">Tu cabello</button>
@@ -1344,7 +1343,6 @@
       };
       document.getElementById('anaRead').addEventListener('click',showAnaText);
       document.getElementById('anaVoice').addEventListener('click',()=>{showAnaText();recording.currentTime=0;openVoice();});
-      document.getElementById('anaCeniciento').addEventListener('click',openCeniciento);
       const syncPoemRoute=()=>{
         const piece=window.location.hash.slice(1);
         if(['epilogo','estrella','cabello','piel','ojos','sonrisa','ceniciento'].includes(piece))openPoem(piece);

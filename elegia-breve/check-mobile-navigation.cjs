@@ -35,6 +35,9 @@ assert.equal(nav.hidden,true,'Controls wait for the portrait fade');
 const stalePortrait=[...timers.values()].find(t=>t.ms===25000).fn;
 run(25000);assert.equal(nav.hidden,false,'All poem controls appear on the final photograph');
 assert(!source.includes('id="portraitEpilogue"'),'No duplicate epilogue button on the portrait');
+assert(!source.includes('anaCeniciento'),'Ceniciento has no button or handler in Ana navigation');
+const navigation=source.match(/<nav[^>]*id="anaNavigation"[\s\S]*?<\/nav>/)[0];
+assert.equal((navigation.match(/<button\b/g)||[]).length,8,'Ana has eight controls for its seven pieces');
 // The portrait question works for touch/keyboard click events without mouse fields.
 body.classList.add('portrait-revealed','voice-open');get('voiceDialog').show();
 get('cenicientoLink').emit('click',{preventDefault(){}});assertPiece('ceniciento');
@@ -42,8 +45,6 @@ stalePortrait();assert.equal(nav.hidden,true,'A late portrait callback cannot sh
 assert.equal(get('voiceDialog').open,false);
 assert.equal(music.paused,false);assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
 message('close');run(7100);assert.equal(nav.hidden,false);
-// Navigation must work independently of the portrait control's visibility or click method.
-get('cenicientoLink').click=()=>{throw Error('Navigation must not proxy the portrait button');};
 // Browser back/forward and fragment navigation must switch an already open iframe.
 get('anaCabello').click();assertPiece('cabello');
 route('piel');assertPiece('piel');
@@ -59,7 +60,7 @@ frame.emit('load');run(350);assert(frame.classList.contains('sonrisa-visible'));
 // Repeated touch clicks cannot create multiple exit transitions.
 for(const reducedMotion of [false,true]){
  reduced=reducedMotion;
- for(const [piece,id] of [['ojos','anaOjos'],['sonrisa','anaSonrisa'],['cabello','anaCabello'],['piel','anaPiel'],['estrella','anaEstrella'],['epilogo','anaEpilogue'],['ceniciento','anaCeniciento']]){
+ for(const [piece,id] of [['ojos','anaOjos'],['sonrisa','anaSonrisa'],['cabello','anaCabello'],['piel','anaPiel'],['estrella','anaEstrella'],['epilogo','anaEpilogue'],['ceniciento','cenicientoLink']]){
   get(id).click();assertPiece(piece);frame.emit('load');run(350);
   message('home','https://other.test');assert(!frame.classList.contains('sonrisa-leaving'));
   message(piece==='ceniciento'?'close':'home');message('home');
