@@ -172,7 +172,6 @@ buscaba el <em>yin</em>.</p>
 <p class="phrase hidden-phrase" aria-hidden="true" data-wait="3200">Ahora que soy <em>yin</em>,</p>
 <p class="phrase hidden-phrase ending final-stanza" aria-hidden="true" data-wait="7000">me basta con mirarte.</p>
 <div class="signature" id="signature" hidden>flag</div>
-<button class="primary" id="continueAna" type="button" hidden>Entrar en Ana Klaudya →</button>
 </article>
 </main>
 <footer>Siguiendo una tarjeta · octubre de 2026</footer>
@@ -184,7 +183,7 @@ let celestialTimers=[];
 let moonReady=false;
 function beginCelestialJourney(delay=7200){
  celestialTimers.forEach(clearTimeout);celestialTimers=[];
- clear();moonReady=false;mode='waiting';index=0;poem.hidden=true;signature.hidden=true;continueAna.hidden=true;
+ clear();moonReady=false;mode='waiting';index=0;poem.hidden=true;signature.hidden=true;
  phrases.forEach(phrase=>{phrase.classList.add('hidden-phrase');phrase.setAttribute('aria-hidden','true')});
  paced.disabled=true;paced.textContent='Esperando a la luna';status.textContent='La luna se está formando.';
  celestialScene.classList.add('is-resetting');
@@ -229,8 +228,6 @@ window.addEventListener('message',event=>{
 if(inheritedMusic)sendMusic('ready');
 const phrases=[...document.querySelectorAll('.phrase')];
 const poem=document.getElementById('poem'),signature=document.getElementById('signature');
-const continueAna=document.getElementById('continueAna');
-continueAna.addEventListener('click',()=>{if(mode==='done')sendMusic('ana')});
 const paced=document.getElementById('paced'),status=document.getElementById('status');
 let timer=null,index=0,mode='waiting';
 function clear(){clearTimeout(timer);timer=null}
@@ -241,7 +238,7 @@ function completeMoon(){
 }
 function reveal(){
  if(!moonReady || mode!=='playing')return;
- if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';signature.hidden=false;continueAna.hidden=false;return}
+ if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';signature.hidden=false;return}
  const phrase=phrases[index++];phrase.classList.remove('hidden-phrase');phrase.removeAttribute('aria-hidden');
  timer=setTimeout(reveal,Number(phrase.dataset.wait));
 }
