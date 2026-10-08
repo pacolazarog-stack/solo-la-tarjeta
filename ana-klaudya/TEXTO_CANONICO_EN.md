@@ -137,17 +137,21 @@ Your skin has that bronze tone.
 In the bend of your elbow  
 the colour deepens.
 
-Your hand accompanies your voice.  
-You move your fingers  
-and the light passes  
-from one knuckle to another.
+The light lingers on your shoulder,  
+travels down your arm  
+and reaches the hand  
+that accompanies your voice.
 
-I would like to know that smoothness  
-with more than my eyes:  
-to rest my hand gently,  
-leave it there  
-and feel your skin  
-warming mine.
+You move your fingers  
+and a fleeting brightness  
+glides over your knuckles.
+
+My hand remains still.
+
+Between your skin and mine  
+there is only air.
+
+I do not cross it.
 
 ---
 
