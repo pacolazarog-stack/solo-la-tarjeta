@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#080706">
 <title>Iba a llevarte flores · Interludio de Ana Klaudya</title>
 <script>
-if(window.parent===window)location.replace('../elegia-breve/?v=20261008-flores-ritmo#interludio');
+if(window.parent===window)location.replace('../elegia-breve/?v=20261008-flores-cine#interludio');
 </script>
 <style>
 :root{color-scheme:dark}*{box-sizing:border-box}[hidden]{display:none!important}
@@ -14,8 +14,8 @@ body{margin:0;background:#080706;color:#eadbc8;font-family:Georgia,'Times New Ro
 header{padding:22px 5vw;font:10px/1.5 system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#bca78d}
 main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 3vw 110px}
 h1{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-.stage{width:min(100%,1250px,calc(177.778svh - 480px));aspect-ratio:16/9;position:relative;overflow:hidden;background:#080706}
-.shot{position:absolute;inset:0;opacity:0;transition:opacity var(--fade,.4s) ease-in-out;width:100%;height:100%;pointer-events:none}
+.stage{width:min(100%,1250px,calc(177.778svh - 480px));aspect-ratio:16/9;position:relative;overflow:hidden;background:#000}
+.shot{position:absolute;inset:0;opacity:0;transition:none;width:100%;height:100%;pointer-events:none}
 .shot.active{opacity:1}
 .controls{display:flex;gap:12px;align-items:center;margin-top:20px}
 button{background:transparent;color:#eadbc8;border:1px solid #79654d;border-radius:30px;min-height:44px;padding:10px 19px;font:12px/1.5 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
@@ -32,12 +32,12 @@ button:focus-visible{outline:2px solid #eadbc8;outline-offset:4px}
 <h1>Interludio · Iba a llevarte flores</h1>
 <div class="stage" role="img" aria-label="Un ramo descomunal llega a la puerta, se estropea al entrar y acaba en una olla; un pétalo junto a una cebolla da paso a A fuego lento.">
 <!-- The six views display the supplied storyboard without its layout or timing labels. -->
-<svg class="shot" style="--fade:0.5s" viewBox="18 139 483 262" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
-<svg class="shot" style="--fade:0.3s" viewBox="530 139 489 262" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
-<svg class="shot" style="--fade:0.12s" viewBox="1046 139 467 262" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
-<svg class="shot" style="--fade:0.4s" viewBox="18 622 483 197" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
-<svg class="shot" style="--fade:0.5s" viewBox="530 568 489 251" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
-<svg class="shot" style="--fade:0.6s" viewBox="1046 568 467 251" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
+<svg class="shot" viewBox="18 139 483 262" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
+<svg class="shot" viewBox="530 139 489 262" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
+<svg class="shot" viewBox="1046 139 467 262" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
+<svg class="shot" viewBox="18 622 483 197" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
+<svg class="shot" viewBox="530 568 489 251" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
+<svg class="shot" viewBox="1046 568 467 251" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><image href="storyboard.png" width="1536" height="1024"/></svg>
 </div>
 <div class="controls"><button id="pause" type="button" disabled>Pausar</button><button id="replay" type="button" disabled>Volver a ver</button></div>
 <p class="status" id="status" role="status">Cargando las imágenes.</p>
@@ -47,10 +47,21 @@ const shots=[...document.querySelectorAll('.shot')];
 const pause=document.getElementById('pause'),replay=document.getElementById('replay'),status=document.getElementById('status');
 // Arrival lingers; hesitation and the accident rush; the damaged bouquet and final petal breathe.
 const cueStarts=[0,3600,5000,5800,9600,12000],duration=15000;
+const fadeIn=[600,260,100,380,450,500],fadeOut=[360,130,180,420,400,600];
+const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const inheritedMusic=window.parent!==window&&new URLSearchParams(location.search).get('music')==='parent';
 const sendMusic=type=>{if(inheritedMusic)window.parent.postMessage({channel:'ceniciento-music-v1',type},location.origin)};
 let elapsed=0,last=0,frame=0,introTimer=null,running=false,ready=false,finished=false;
-function render(){const index=cueStarts.reduce((found,start,i)=>elapsed>=start?i:found,0);shots.forEach((shot,i)=>shot.classList.toggle('active',i===index));}
+function render(){
+ const index=cueStarts.reduce((found,start,i)=>elapsed>=start?i:found,0);
+ const into=elapsed-cueStarts[index],until=(cueStarts[index+1]??duration)-elapsed;
+ // Each image fades out completely; a short darkness separates it from the next.
+ const incoming=(into-(index===0?0:80))/fadeIn[index];
+ const outgoing=(until-90)/fadeOut[index];
+ const amount=reducedMotion?1:Math.max(0,Math.min(1,incoming,outgoing));
+ const opacity=amount*amount*(3-2*amount);
+ shots.forEach((shot,i)=>{shot.classList.toggle('active',i===index);shot.style.opacity=String(i===index?opacity:0);});
+}
 function stop(){running=false;clearTimeout(introTimer);introTimer=null;cancelAnimationFrame(frame);frame=0;last=0;}
 function tick(now){
  if(!running)return;
@@ -61,7 +72,7 @@ function tick(now){
 }
 function start(){if(!ready||running)return;clearTimeout(introTimer);introTimer=null;running=true;last=0;render();pause.textContent='Pausar';status.textContent='';frame=requestAnimationFrame(tick);}
 function reset(){stop();elapsed=0;finished=false;render();start();}
-pause.addEventListener('click',()=>{if(running){stop();pause.textContent='Continuar';status.textContent='Una pausa, a tu elección.';}else if(finished)reset();else start();});
+pause.addEventListener('click',()=>{if(running||introTimer!==null){stop();pause.textContent='Continuar';status.textContent='Una pausa, a tu elección.';}else if(finished)reset();else start();});
 replay.addEventListener('click',reset);
 document.addEventListener('visibilitychange',()=>{last=0;});
 window.addEventListener('pagehide',stop);

@@ -82,6 +82,13 @@ message('interlude-ended','https://other.test');assertPiece('interludio');
 message('interlude-ended');assertPiece('epilogo');
 assert.equal(music.paused,false);assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
 get('anaPiel').click();message('interlude-ended');assertPiece('piel');
+// The interlude keeps its narrative place and can be skipped without restarting music.
+get('anaPiel').click();assertPiece('piel');assert.equal(get('journeySkipInterlude').hidden,false);
+get('journeySkipInterlude').click();assertPiece('epilogo');assert.equal(get('journeySkipInterlude').hidden,true);
+get('anaInterlude').click();assert.equal(get('journeySkipInterlude').hidden,false);
+get('journeySkipInterlude').click();assertPiece('epilogo');
+assert.equal(music.paused,false);assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
+assert(source.includes('entry-button petal-button'));
 // Going back, then immediately forward, cancels the obsolete return.
 reduced=false;get('anaOjos').click();route('');const interrupted=[...timers.values()].find(t=>t.ms===2100).fn;
 route('ojos');interrupted();assertPiece('ojos');
