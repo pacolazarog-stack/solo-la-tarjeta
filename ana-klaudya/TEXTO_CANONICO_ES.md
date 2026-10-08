@@ -10,7 +10,7 @@ todavía sin llave,
 pero ya imaginaba  
 mis pasos al volver.
 
-Siguiendo a mi ángel,  
+Siguiendo a un ángel,  
 llegué hasta ti.
 
 Cuando era yang,  

@@ -10,7 +10,7 @@ still without a key,
 but I was already imagining  
 my footsteps on returning.
 
-Following my angel,  
+Following an angel,  
 I came to you.
 
 When I was yang,  
