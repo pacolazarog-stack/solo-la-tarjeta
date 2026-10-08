@@ -21,7 +21,7 @@ This is not a measurement of the interactive web version, whose duration is open
 | 05:48 | 05:53 | 00:05 | Crossfade / musical bridge. |
 | 05:53 | 06:39 | 00:46 | **Tu cabello.** Progressive definition; canonical ending: «Sigues hablando. / El mechón vuelve a su sitio. / Yo tardo / un poco más.» |
 | 06:39 | 06:44 | 00:05 | Crossfade / musical bridge. |
-| 06:44 | 07:34 | 00:50 | **Tu piel.** Preserve the transition from the light passing over the knuckles to the **imagined caress**, ending «va entibiando la mía». |
+| 06:44 | 07:34 | 00:50 | **Tu piel.** Preserve the transition from the light passing over the knuckles to the **unfulfilled desire**, ending «Mi mano sigue quieta. / Entre tu piel y la mía / queda apenas el aire. / No lo atravieso.». |
 | 07:34 | 07:40 | 00:06 | Warm transition into the Epilogue. |
 | 07:40 | 08:57 | 01:17 | **Epílogo · A fuego lento.** Preserve the existing paced reading and comic timing. |
 | 08:57 | 09:27 | 00:30 | Final portrait, unresolved question, music release and end credit. **No link or transition to CENICIENTO.** |
@@ -44,14 +44,14 @@ A 09:27 master therefore reflects the actual character of ANA KLAUDYA much bette
 - Eyes: progressive focus only; no pulse, blink or zoom.
 - Music should withdraw when voice enters rather than underline every emotional beat.
 - Preserve the second **«el calor»** as a structural climax.
-- Preserve the desired, unfulfilled caress in **Tu piel**; no contact is asserted as an event.
+- Preserve the air between the two hands in **Tu piel** and the final «No lo atravieso.»; no contact is asserted as an event.
 - Preserve the comic silence of **«—Al puchero, Paco. / —Sal.»** and **«—El pan, poeta.»**
 - Final question remains unresolved and self-contained inside ANA KLAUDYA.
 - **CENICIENTO is not part of this master.**
 
 ## Text edition · 2026-10-08
 
-The Spanish and English canonical files now reflect the closed seven-piece edition (130 Spanish verses). The timecodes above remain an editorial proposal, not measured timings. Conform each section to the current text and rendered voice before picture lock.
+The Spanish and English canonical files now reflect the closed seven-piece edition (131 Spanish verses). The timecodes above remain an editorial proposal, not measured timings. Conform each section to the current text and rendered voice before picture lock.
 
 ## Validation still required
 
