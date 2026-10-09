@@ -9,6 +9,15 @@ Parallel international edition for submission to the New Media Writing Prize.
 - Spanish master: frozen and untouched.
 - Rule: no change to timing, visual dramaturgy, interlude logic, Cotán cue, final flower transition, audio behavior or navigation architecture unless a specific international-access issue requires it.
 
+### Implementation status
+
+English localization is now active on the international branch through two branch-only layers:
+
+- `ana-klaudya/nmwp-en.js` localizes interface copy, navigation, controls, dynamic status messages, accessibility labels, project/festival copy and canonical poem text;
+- `ana-klaudya/nmwp-en-canonical.js` locks route-specific canonical English headings, correct line order where Spanish and English syntax differ, and completes root navigation/accessibility labels.
+
+The branch version of `ana-klaudya/publication.js` only loads these international-localization layers. The Spanish `main` version remains unchanged. No timing, interlude, Cotán, flower-transition, image, sound or poem-reveal logic has been changed for localization.
+
 ## Canonical critical principle
 
 **ANA KLAUDYA is a multimedia poetic work of fragmentary structure in which multiple ways of looking attempt, without ever fully succeeding, to contain a presence. Each piece reveals a part and simultaneously demonstrates that the part is not enough.**
@@ -79,7 +88,7 @@ The international edition must preserve the current Spanish-master dramaturgy ex
 6. the epilogue continues over that background;
 7. the final unresolved-poem state remains pinned as in the master;
 8. the delayed transition to *Flowers.* is preserved;
-9. no shared/global script is to be altered merely to localize copy.
+9. the Spanish-master shared/global script is not altered for localization; international localization is layered only on this branch.
 
 ## Localization rule
 
