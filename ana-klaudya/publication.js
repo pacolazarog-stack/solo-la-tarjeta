@@ -38,3 +38,49 @@
     document.body.replaceChildren();const notice=document.createElement('p');notice.className='publication-notice';notice.textContent='La obra no está disponible. Vuelve a intentarlo más tarde.';document.body.append(notice);
   }).finally(()=>document.documentElement.classList.remove('publication-pending'));
 })();
+
+/* A fuego lento only: Cotán enters at the exact cue “—Empieza por aquí.”.
+   This is deliberately isolated from the visual interlude and from the
+   existing left-to-right typing of the two opening verses. */
+(() => {
+  if(!/\/epilogo\/(?:index\.html)?$/.test(location.pathname))return;
+  const script=document.currentScript;
+  const cotanUrl=new URL('../epilogo/cotan-imperative.webp?v=20261009-empieza',script.src);
+  const ready=new Promise(resolve=>document.readyState==='loading'?document.addEventListener('DOMContentLoaded',resolve,{once:true}):resolve());
+  ready.then(()=>{
+    const imperative=document.getElementById('openingImperative');
+    const phrase=imperative?.closest('.phrase');
+    if(!phrase)return;
+
+    const css=document.createElement('style');
+    css.textContent=`
+      #cotan-imperative-backdrop{
+        position:fixed;inset:0;z-index:-1;pointer-events:none;
+        background:#000 center bottom/cover no-repeat;
+        background-image:url("${cotanUrl.href}");
+        opacity:0;visibility:hidden;
+        transition:opacity 1800ms ease;
+      }
+      body.cotan-imperative-active #cotan-imperative-backdrop{
+        opacity:1;visibility:visible;
+      }
+      body.cotan-imperative-active::before{opacity:.10!important;}
+      .without-images #cotan-imperative-backdrop{display:none!important;}
+      @media(prefers-reduced-motion:reduce){#cotan-imperative-backdrop{transition:none;}}
+      @media print{#cotan-imperative-backdrop{display:none!important;}}
+    `;
+    document.head.append(css);
+
+    const backdrop=document.createElement('div');
+    backdrop.id='cotan-imperative-backdrop';
+    backdrop.setAttribute('aria-hidden','true');
+    document.body.append(backdrop);
+
+    const sync=()=>{
+      const visible=!phrase.classList.contains('hidden-phrase')&&phrase.getAttribute('aria-hidden')!=='true';
+      document.body.classList.toggle('cotan-imperative-active',visible);
+    };
+    new MutationObserver(sync).observe(phrase,{attributes:true,attributeFilter:['class','aria-hidden']});
+    sync();
+  });
+})();
