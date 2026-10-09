@@ -98,11 +98,11 @@ main{padding-bottom:140px;gap:6vw}
 @media(prefers-reduced-motion:reduce){header,.kicker,.status,.signature,footer,.music-controls,h1,.phrase{animation:none!important}}
 
 /* The same letterforms move from charcoal on the photograph to a lasting flame. */
-:root{--fire-low:#f16e28;--fire-mid:#ffc65b;--fire-high:#fff2b6;--fire-edge:rgba(5,28,33,.9);--fire-glow:rgba(255,119,31,.64);--coal-guard:rgba(255,245,220,0)}
+:root{--fire-low:#f16e28;--fire-mid:#ffc65b;--fire-high:#fff2b6;--fire-edge:rgba(5,28,33,.9);--fire-glow:rgba(255,119,31,.64);--fire-plume:rgba(255,76,15,.4);--coal-guard:rgba(255,245,220,0)}
 @keyframes livingFlame{
- 0%,100%{background-position:50% 100%;filter:drop-shadow(0 1px 1px #041c21) drop-shadow(0 -2px 3px var(--fire-glow))}
- 35%{background-position:50% 38%;filter:drop-shadow(0 1px 1px #041c21) drop-shadow(0 -4px 5px var(--fire-glow))}
- 68%{background-position:50% 68%;filter:drop-shadow(0 1px 1px #041c21) drop-shadow(0 -3px 4px var(--fire-glow))}
+ 0%,100%{background-position:50% 100%;filter:drop-shadow(0 1px 1px #041c21) drop-shadow(0 -3px 4px var(--fire-glow)) drop-shadow(0 -7px 6px var(--fire-plume))}
+ 35%{background-position:50% 38%;filter:drop-shadow(0 1px 1px #041c21) drop-shadow(0 -6px 6px var(--fire-glow)) drop-shadow(0 -12px 8px var(--fire-plume))}
+ 68%{background-position:50% 68%;filter:drop-shadow(0 1px 1px #041c21) drop-shadow(0 -4px 5px var(--fire-glow)) drop-shadow(0 -9px 7px var(--fire-plume))}
 }
 h1,.phrase,.opening-verse{
  color:var(--fire-mid);text-shadow:0 1px 1px #041c21,0 -2px 5px var(--fire-glow);
@@ -120,6 +120,10 @@ h1,.phrase,.opening-verse{
 body.opening-preview .opening-verse{
  animation:none;filter:none;background-position:50% 100%;
  text-shadow:0 0 1px var(--coal-guard);
+}
+body.opening-preview:not(.opening-ignited) .opening-verse{
+ color:#130b07;-webkit-text-fill-color:#130b07;background:none;text-shadow:none;
+ -webkit-text-stroke:.2px rgba(255,245,220,.35);
 }
 body.opening-preview.opening-ignited .opening-verse{
  text-shadow:none;animation:livingFlame 6.8s ease-in-out infinite;
@@ -265,6 +269,7 @@ if(openingPreview){
   for(const [property,target] of [['--fire-low',[241,110,40]],['--fire-mid',[255,198,91]],['--fire-high',[255,242,182]]])document.body.style.setProperty(property,tint(target));
   document.body.style.setProperty('--fire-edge',fire===0?'rgba(255,245,220,.45)':'rgba(5,28,33,.9)');
   document.body.style.setProperty('--fire-glow','rgba(255,119,31,'+(.64*fire)+')');
+  document.body.style.setProperty('--fire-plume','rgba(255,76,15,'+(.4*fire)+')');
   document.body.style.setProperty('--coal-guard','rgba(255,245,220,'+(.85*(1-fire))+')');
   if(fire>0)document.body.classList.add('opening-ignited');else document.body.classList.remove('opening-ignited');
  };

@@ -45,6 +45,7 @@ scenario('');scenario('seen');scenario('preview');
 assert(/filter 7\.5s/.test(fs.readFileSync(__dirname+'/../piel/index.html','utf8')));
 assert(source.includes('h1,.phrase,.opening-verse{'),'Preview and poem share the warm typography');
 assert(source.includes('animation:livingFlame 6.8s ease-in-out infinite'),'Flame persists throughout the poem');
+assert(source.includes('color:#130b07;-webkit-text-fill-color:#130b07;background:none;text-shadow:none;'),'Charcoal letters use opaque black, without a light shadow masking the fill');
 assert(!source.includes('background:transparent;overflow:hidden'),'Preview keeps the same scrollbar gutter as the complete poem');
 assert(!source.includes('.poem>.phrase:not(:first-child){display:none}'),'Hidden phrases reserve the same layout in both screens');
 console.log('PASS: direct entry, continuation, exact epilogue preview, guarded sequential verse reveal, no duplicate timing or music restart, replay and skin clarity');
