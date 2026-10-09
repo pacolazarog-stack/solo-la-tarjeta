@@ -26,7 +26,7 @@ The purpose is not to describe a woman exhaustively. It is to record the changin
 
 ## Current text edition
 
-The Spanish original and English literary translation reflect the author-approved edition closed on **8 October 2026**: seven pieces, 131 Spanish verses. The historical short subtitle studies have not been conformed to this edition.
+The Spanish original and English literary translation reflect the author-approved edition closed on **9 October 2026**: seven pieces, 128 Spanish verses. The historical short subtitle studies have not been conformed to this edition.
 
 ## Canonical structure
 
@@ -92,3 +92,4 @@ This wording must be revised against the final production inventory before any f
 Candidate festivals must now be evaluated against a film of approximately **09:27**, not against the obsolete 05:58 / 06:48 studies. Any festival whose current maximum duration is below the final master runtime should be treated as incompatible with the canonical linear version unless a separate, artistically justified short cut is intentionally produced.
 
 The Spanish canonical text is not to be altered merely to fit a festival limit. English remains a literary subtitle/translation layer.
+

@@ -4,8 +4,8 @@ Obra multimedia de **flag** · 2026.
 
 ## Estado canónico
 
-- Texto español: **edición canónica cerrada el 08/10/2026**, actualizada por indicación del autor. Siete piezas y **131 versos**.
-- Traducción inglesa: alineada con la edición española del **08/10/2026**; base literaria para los subtítulos del montaje final.
+- Texto español: **edición canónica cerrada el 09/10/2026**, actualizada por indicación del autor. Siete piezas y **128 versos**.
+- Traducción inglesa: alineada con la edición española del **09/10/2026**; base literaria para los subtítulos del montaje final.
 - Valoración literaria orientativa del conjunto actual: **9,4/10**.
 - Destino: circuito internacional de videopoesía 2027.
 - **CENICIENTO no forma parte de ANA KLAUDYA.** Permanece como obra autónoma e independiente dentro del repositorio. Su único acceso desde ANA es el interrogante de la foto final; no aparece en la barra de navegación de sus poemas.

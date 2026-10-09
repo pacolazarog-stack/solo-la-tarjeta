@@ -21,7 +21,7 @@ This is not a measurement of the interactive web version, whose duration is open
 | 05:48 | 05:53 | 00:05 | Crossfade / musical bridge. |
 | 05:53 | 06:39 | 00:46 | **Tu cabello.** Progressive definition; canonical ending: «Sigues hablando. / El mechón vuelve a su sitio. / Yo tardo / un poco más.» |
 | 06:39 | 06:44 | 00:05 | Crossfade / musical bridge. |
-| 06:44 | 07:34 | 00:50 | **Tu piel.** Preserve the transition from the light passing over the knuckles to the **unfulfilled desire**, ending «Mi mano sigue quieta. / Entre tu piel y la mía / queda apenas el aire. / No lo atravieso.». |
+| 06:44 | 07:34 | 00:50 | **Tu piel.** Preserve the transition from the light passing over the knuckles to the **unfulfilled desire**, ending «Mi mano sigue quieta. / Entre la tuya y la mía / queda apenas el aire. / No lo atravieso.». |
 | 07:34 | 07:40 | 00:06 | Warm transition into the Epilogue. |
 | 07:40 | 08:57 | 01:17 | **Epílogo · A fuego lento.** Preserve the existing paced reading and comic timing. |
 | 08:57 | 09:27 | 00:30 | Final portrait, unresolved question, music release and end credit. **No link or transition to CENICIENTO.** |
@@ -51,8 +51,9 @@ A 09:27 master therefore reflects the actual character of ANA KLAUDYA much bette
 
 ## Text edition · 2026-10-08
 
-The Spanish and English canonical files now reflect the closed seven-piece edition (131 Spanish verses). The timecodes above remain an editorial proposal, not measured timings. Conform each section to the current text and rendered voice before picture lock.
+The Spanish and English canonical files now reflect the closed seven-piece edition (128 Spanish verses). The timecodes above remain an editorial proposal, not measured timings. Conform each section to the current text and rendered voice before picture lock.
 
 ## Validation still required
 
 Before submission, render or record this linear version and measure the final encoded file. The definitive festival duration is the actual MP4 runtime, not this planning document.
+

@@ -137,18 +137,14 @@ Tu piel tiene ese tono de bronce.
 En el pliegue del codo  
 el color se hace más hondo.
 
-La luz se demora en tu hombro,  
-desciende por el brazo  
-y alcanza la mano  
-que acompaña tu voz.
-
+Hablas.  
 Mueves los dedos  
-y una claridad fugaz  
-se desliza por tus nudillos.
+y la luz pasa  
+de un nudillo a otro.
 
 Mi mano sigue quieta.
 
-Entre tu piel y la mía  
+Entre la tuya y la mía  
 queda apenas el aire.
 
 No lo atravieso.

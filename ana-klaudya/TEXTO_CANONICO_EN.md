@@ -137,18 +137,14 @@ Your skin has that bronze tone.
 In the bend of your elbow  
 the colour deepens.
 
-The light lingers on your shoulder,  
-travels down your arm  
-and reaches the hand  
-that accompanies your voice.
-
+You speak.  
 You move your fingers  
-and a fleeting brightness  
-glides over your knuckles.
+and the light passes  
+from one knuckle to another.
 
 My hand remains still.
 
-Between your skin and mine  
+Between yours and mine  
 there is only air.
 
 I do not cross it.
