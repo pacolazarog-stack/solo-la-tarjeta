@@ -71,18 +71,15 @@ calor.
 
 ## En tus ojos
 
-Antes de que sonrías,  
-tus ojos  
-ya me detienen.
+Tus párpados se entornan.
 
 Bajo tu mirada  
 se me desordena  
 la cara que traía.
 
-Tus párpados se entornan.
-
 No sé cuánto de mí  
-has visto ya.  
+has visto ya.
+
 Y no bajo los ojos.
 
 ---
@@ -133,15 +130,12 @@ un poco más.
 
 ## Tu piel
 
-En el pliegue del codo  
-el color se hace más hondo.
+Mi mano sigue quieta.
 
 Hablas.  
 Mueves los dedos  
 y la luz pasa  
 de un nudillo a otro.
-
-Mi mano sigue quieta.
 
 Entre la tuya y la mía  
 queda apenas el aire.

@@ -71,18 +71,15 @@ warmth.
 
 ## In Your Eyes
 
-Before you smile,  
-your eyes  
-have already stopped me.
+Your eyelids half-close.
 
 Under your gaze,  
 the face I came in with  
 falls out of order.
 
-Your eyelids half-close.
-
 I do not know how much of me  
-you have already seen.  
+you have already seen.
+
 And I do not lower my eyes.
 
 ---
@@ -133,15 +130,12 @@ a little longer.
 
 ## Your Skin
 
-In the bend of your elbow  
-the colour deepens.
+My hand remains still.
 
 You speak.  
 You move your fingers  
 and the light passes  
 from one knuckle to another.
-
-My hand remains still.
 
 Between yours and mine  
 there is only air.

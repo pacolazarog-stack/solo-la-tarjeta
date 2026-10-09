@@ -26,7 +26,7 @@ The purpose is not to describe a woman exhaustively. It is to record the changin
 
 ## Current text edition
 
-The Spanish original and English literary translation reflect the author-approved edition closed on **9 October 2026**: seven pieces, 127 Spanish verses. The historical short subtitle studies have not been conformed to this edition.
+The Spanish original and English literary translation reflect the author-approved edition closed on **9 October 2026**: seven pieces, 122 Spanish verses. The historical short subtitle studies have not been conformed to this edition.
 
 ## Canonical structure
 
