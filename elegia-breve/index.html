@@ -778,8 +778,7 @@ body.journey-started main{padding-bottom:130px}
 .petal-mark{display:inline-flex;flex:none;width:25px;height:25px}.petal-mark svg{display:block;width:100%;height:100%}
 .journey-nav{flex-wrap:wrap;justify-content:center}
 .journey-nav button[hidden]{display:none}
-.journey-nav #journeySkipInterlude{background:#efdfc7;color:#573e2d}
-@media(forced-colors:active){.petal-button,.journey-index .entry-button.petal-button{background:ButtonFace;color:ButtonText;border:1px solid ButtonText}.petal-mark{display:none}.journey-nav #journeySkipInterlude{background:ButtonFace;color:ButtonText}}
+@media(forced-colors:active){.petal-button,.journey-index .entry-button.petal-button{background:ButtonFace;color:ButtonText;border:1px solid ButtonText}.petal-mark{display:none}}
 
 
 html.poem-route-loading,html.poem-route-loading body{background:#080706}
@@ -834,7 +833,6 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
 <button id="journeyPrevious" type="button">Anterior</button>
 <button id="journeyIndexOpen" type="button" aria-haspopup="dialog">Índice</button>
 <button id="journeyNext" type="button">Siguiente</button>
-<button id="journeySkipInterlude" type="button" aria-label="Ir al epílogo sin ver el interludio" hidden>Epílogo ↗</button>
 </nav>
 
   <div id="poemBackdrop" class="poem-backdrop" aria-hidden="true" hidden></div>
@@ -1345,7 +1343,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
         setJourney(piece);
         body.classList.add('journey-started');
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261008-fundido-largo-epilogo-directo'+(asPrologue?'&prologue=1':'');
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-nitidez15-nav3'+(asPrologue?'&prologue=1':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openCeniciento=()=>openPoem('ceniciento');
@@ -1451,13 +1449,11 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       const journeyNav=document.getElementById('journeyNav');
       const journeyPrevious=document.getElementById('journeyPrevious'),journeyNext=document.getElementById('journeyNext');
       const journeyIndex=document.getElementById('journeyIndex');
-      const journeySkipInterlude=document.getElementById('journeySkipInterlude');
       let journeyPiece='estrella';
       function setJourney(piece){
         if(piece==='ceniciento'){journeyNav.hidden=true;return;}
         const i=journeyPieces.indexOf(piece);if(i<0)return;
         journeyPiece=piece;journeyNav.hidden=false;
-        journeySkipInterlude.hidden=piece!=='piel'&&piece!=='interludio';
         journeyPrevious.disabled=i===0;journeyNext.disabled=i===journeyPieces.length-1;
         journeyPrevious.setAttribute('aria-label',i>0?'Anterior: '+journeyTitles[i-1]:'Principio del recorrido');
         journeyNext.setAttribute('aria-label',i<journeyPieces.length-1?'Siguiente: '+journeyTitles[i+1]:'Final del recorrido');
@@ -1472,7 +1468,6 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       }
       journeyPrevious.addEventListener('click',()=>goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)-1]));
       journeyNext.addEventListener('click',()=>goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)+1]));
-      journeySkipInterlude.addEventListener('click',()=>goJourney('epilogo'));
       document.getElementById('journeyIndexOpen').addEventListener('click',()=>{
         anaNavigation.hidden=false;journeyIndex.showModal();
         document.getElementById('journeyIndexClose').focus();

@@ -82,11 +82,11 @@ message('interlude-ended','https://other.test');assertPiece('interludio');
 message('interlude-ended');assertPiece('epilogo');
 assert.equal(music.paused,false);assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
 get('anaPiel').click();message('interlude-ended');assertPiece('piel');
-// The interlude keeps its narrative place and can be skipped without restarting music.
-get('anaPiel').click();assertPiece('piel');assert.equal(get('journeySkipInterlude').hidden,false);
-get('journeySkipInterlude').click();assertPiece('epilogo');assert.equal(get('journeySkipInterlude').hidden,true);
-get('anaInterlude').click();assert.equal(get('journeySkipInterlude').hidden,false);
-get('journeySkipInterlude').click();assertPiece('epilogo');
+// The interlude keeps its narrative place with only the three navigation controls.
+get('anaPiel').click();assertPiece('piel');
+assert(!source.includes('journeySkipInterlude'),'No extra epilogue shortcut');
+get('journeyNext').click();assertPiece('interludio');
+get('journeyNext').click();assertPiece('epilogo');
 assert.equal(music.paused,false);assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
 assert(source.includes('entry-button petal-button'));
 // Every relation between subpages is direct and keeps Ana behind an opaque cover.
