@@ -341,7 +341,7 @@
     @keyframes flambeFlames{0%,100%{transform:translate(-3%,5%) scaleY(.92)}50%{transform:translate(3%,-4%) scaleY(1.12)}}
     @media(prefers-reduced-motion:reduce){.flambe-button,.flambe-button::before{animation:none}}
     @media(forced-colors:active){.flambe-button,.flambe-button:hover,.flambe-button:focus-visible{animation:none;background:ButtonFace;color:ButtonText;border:1px solid ButtonText;box-shadow:none;text-shadow:none}.flambe-button::before,.flambe-button::after{display:none}}
-    .ceniciento-frame.sonrisa-transition{opacity:0;transition:opacity 2s ease-in-out;background:transparent}
+    .ceniciento-frame.sonrisa-transition{opacity:0;transition:opacity 2s ease-in-out;background:#080706}
     .ceniciento-frame.sonrisa-transition.sonrisa-visible{opacity:1}
     @media(prefers-reduced-motion:reduce){.ceniciento-frame.sonrisa-transition{transition-duration:.2s}}
     html.ceniciento-open,body.ceniciento-open{overflow:hidden}
@@ -1387,7 +1387,13 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         setJourney(piece);
         body.classList.add('journey-started');
         if(keepOpening)cenicientoFrame.contentWindow.postMessage({channel:'ceniciento-music-v1',type:'continue-epilogue'},window.location.origin);
-        else cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-pausa-flores'+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'');
+        else cenicientoFrame.src='../'+piece+'/?music=parent&v=20261010-nmwp-frame-reveal'+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'');
+        // Reveal the frame even if a large image or audio resource delays its full load event.
+        const openingTransition=poemTransition;
+        clearTimeout(poemRevealTimer);
+        poemRevealTimer=setTimeout(()=>{
+          if(openingTransition===poemTransition&&!cenicientoFrame.hidden&&!sonrisaLeaving)cenicientoFrame.classList.add('sonrisa-visible');
+        },piece==='epilogo'?0:700);
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openCeniciento=()=>openPoem('ceniciento');
