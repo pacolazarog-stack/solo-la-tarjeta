@@ -21,7 +21,7 @@
     const musicWrap=musicEnabled?.closest('label');
     if(musicWrap){
       for(const node of musicWrap.childNodes){
-        if(node.nodeType===Node.TEXT_NODE&&node.nodeValue.trim())node.nodeValue=' Accompany with music';
+        if(node.nodeType===Node.TEXT_NODE&&node.nodeValue.trim()&&node.nodeValue!==' Accompany with music')node.nodeValue=' Accompany with music';
       }
     }
 
