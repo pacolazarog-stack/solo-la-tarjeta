@@ -37,45 +37,11 @@
   }).catch(()=>{
     document.body.replaceChildren();const notice=document.createElement('p');notice.className='publication-notice';notice.textContent='La obra no está disponible. Vuelve a intentarlo más tarde.';document.body.append(notice);
   }).finally(()=>document.documentElement.classList.remove('publication-pending'));
-})();
 
-/* Cotán is isolated to the epilogue. The existing interlude and opening typing are untouched. */
-(() => {
-  if(!/\/epilogo\/(?:index\.html)?$/.test(location.pathname))return;
-  const script=document.currentScript;
-  const imageUrl=new URL('../epilogo/cotan-imperative.webp?v=20261009-body-final',script.src).href;
-  const ready=new Promise(resolve=>document.readyState==='loading'?document.addEventListener('DOMContentLoaded',resolve,{once:true}):resolve());
-  ready.then(()=>{
-    const imperative=document.getElementById('openingImperative');
-    const phrase=imperative?.closest('.phrase');
-    if(!imperative||!phrase)return;
-
-    const css=document.createElement('style');
-    css.textContent=`
-      body.cotan-body-active{
-        background-color:#000!important;
-        background-image:url("${imageUrl}")!important;
-        background-repeat:no-repeat!important;
-        background-position:center bottom!important;
-        background-size:100vw auto!important;
-        background-attachment:fixed!important;
-      }
-      body.cotan-body-active>.detail-background{opacity:0!important;visibility:hidden!important;}
-      body.cotan-body-active::before{opacity:.08!important;}
-      @media(max-width:760px){body.cotan-body-active{background-size:auto 46vh!important;background-position:center bottom!important;}}
-      @media print{body.cotan-body-active{background-image:none!important;}}
-    `;
-    document.head.append(css);
-
-    let active=false;
-    const activate=()=>{
-      if(active)return;
-      const visible=!phrase.classList.contains('hidden-phrase')&&phrase.getAttribute('aria-hidden')!=='true';
-      const started=(imperative.style.opacity&&imperative.style.opacity!=='0') || (imperative.style.clipPath&&imperative.style.clipPath!=='inset(-24px 100% -24px -20px)');
-      if(visible&&started){active=true;document.body.classList.add('cotan-body-active');}
-    };
-    new MutationObserver(activate).observe(phrase,{attributes:true,attributeFilter:['class','aria-hidden']});
-    new MutationObserver(activate).observe(imperative,{attributes:true,attributeFilter:['style','aria-hidden']});
-    requestAnimationFrame(activate);
-  });
+  if(/\/epilogo\/(?:index\.html)?$/.test(location.pathname)){
+    ready.then(()=>{
+      const cotan=document.getElementById('cotanBackdrop');
+      if(cotan) cotan.src=new URL('../epilogo/cotan-final-20261009-2.webp?v=20261009-definitivo',script.src).href;
+    });
+  }
 })();
