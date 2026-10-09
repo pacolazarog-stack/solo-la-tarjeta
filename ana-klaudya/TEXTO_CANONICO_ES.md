@@ -133,7 +133,6 @@ un poco más.
 
 ## Tu piel
 
-Tu piel tiene ese tono de bronce.  
 En el pliegue del codo  
 el color se hace más hondo.
 

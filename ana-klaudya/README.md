@@ -4,7 +4,7 @@ Obra multimedia de **flag** · 2026.
 
 ## Estado canónico
 
-- Texto español: **edición canónica cerrada el 09/10/2026**, actualizada por indicación del autor. Siete piezas y **128 versos**.
+- Texto español: **edición canónica cerrada el 09/10/2026**, actualizada por indicación del autor. Siete piezas y **127 versos**.
 - Traducción inglesa: alineada con la edición española del **09/10/2026**; base literaria para los subtítulos del montaje final.
 - Valoración literaria orientativa del conjunto actual: **9,4/10**.
 - Destino: circuito internacional de videopoesía 2027.

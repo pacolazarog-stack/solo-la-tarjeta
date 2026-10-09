@@ -133,7 +133,6 @@ a little longer.
 
 ## Your Skin
 
-Your skin has that bronze tone.  
 In the bend of your elbow  
 the colour deepens.
 

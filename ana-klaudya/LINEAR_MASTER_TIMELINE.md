@@ -51,7 +51,7 @@ A 09:27 master therefore reflects the actual character of ANA KLAUDYA much bette
 
 ## Text edition · 2026-10-08
 
-The Spanish and English canonical files now reflect the closed seven-piece edition (128 Spanish verses). The timecodes above remain an editorial proposal, not measured timings. Conform each section to the current text and rendered voice before picture lock.
+The Spanish and English canonical files now reflect the closed seven-piece edition (127 Spanish verses). The timecodes above remain an editorial proposal, not measured timings. Conform each section to the current text and rendered voice before picture lock.
 
 ## Validation still required
 
