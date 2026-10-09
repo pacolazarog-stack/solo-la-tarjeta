@@ -86,3 +86,5 @@ https://pacolazarog-stack.github.io/solo-la-tarjeta/elegia-breve/
 - Ceniciento conserva una sola firma al final de cada modalidad, sin firmas sobre la entrada ni la lectura.
 
 - Los dos versos iniciales del epílogo se escriben de izquierda a derecha, en negro y negrita, sobre la cebolla y el pan: el primero a los 17 segundos y el segundo a los 20,5. Entre los segundos 23,5 y 27 se encienden; del segundo 26 al 30 la imagen se funde al mismo fondo cálido del epílogo. «—Empieza por aquí.» continúa con el mismo efecto de display, sin recargar la página ni apagar los dos versos anteriores. La tipografía encendida continúa en todo el epílogo, con un borde oscuro de tono complementario para conservar contraste.
+
+- En «A fuego lento», la columna izquierda (título, lectura y música) comienza oculta y aparece según avanzan las frases, con fundidos lineales de cuatro segundos. Reserva su lugar desde el inicio; los versos no cambian de posición. Los controles permanecen inactivos mientras son invisibles.

@@ -18,6 +18,9 @@ function scenario(openingMode){
  const uiEvents={};
  const context={document:{body:new Element(),getElementById:get,querySelector:()=>new Element(),querySelectorAll:()=>phrases},window:{parent,innerHeight:936,scrollY:0,scrollTo:options=>scrolls.push(options),matchMedia:()=>({matches:false}),addEventListener(type,fn){if(type==='message')handlers.push(fn);else uiEvents[type]=fn}},location:{origin:'https://example.test',search:'?music=parent'+(openingMode?'&opening='+openingMode:'')},URLSearchParams,getComputedStyle:()=>({top:'24px'}),requestAnimationFrame(fn){frames.set(++id,fn);return id},cancelAnimationFrame:key=>frames.delete(key),setTimeout(fn,ms){timers.set(++id,{fn,ms});return id},clearTimeout:key=>timers.delete(key)};
  vm.runInNewContext(script,context);
+ const intro=get('epilogueIntro');
+ assert.equal(Number(intro.style['--intro-progress']),continuing?1/(phrases.length-1):0,'The whole left column begins hidden and follows reading progress');
+ assert.equal(intro.inert,true,'Invisible controls cannot receive focus or clicks');
  assert(!phrases[0].classes.has('hidden-phrase'),'Opening remains readable in the poem');
  if(preview){
   assert.equal(timers.size,0,'Preview never advances the poem behind the interlude');
@@ -41,6 +44,7 @@ function scenario(openingMode){
   control('reset');assert.equal(get('openingFirst').attrs['aria-hidden'],'true');assert(!context.document.body.classes.has('opening-ignited'),'Explicit replay restores charcoal letters');
   emit(context.location.origin,parent,[1,1],1);
   const opening=phrases[0];control('continue');
+  const firstIntro=Number(intro.style['--intro-progress']);assert(firstIntro>0&&firstIntro<1,'The column begins a gradual reveal when the poem starts');
   assert(!context.document.body.classes.has('opening-preview'));
   assert.equal(phrases[0],opening,'The original opening node is reused');
   assert(!opening.classes.has('hidden-phrase'),'The anchor is never hidden during continuation');
@@ -52,7 +56,8 @@ function scenario(openingMode){
   assert.equal(context.document.body.style['--opening-background'],'1','The final backdrop is already complete when the epilogue takes over');
   assert.equal([...timers.values()][0].ms,3200);
   const activeTimer=[...timers.keys()][0];control('continue');assert.equal([...timers.keys()][0],activeTimer,'Duplicate continuation cannot restart the poem');
-  get('full').click();get('paced').click();assert(!opening.classes.has('hidden-phrase'));assert.equal([...timers.values()][0].ms,3200,'Reading again preserves the opening anchor');
+  const nextCue=[...timers][0];timers.delete(nextCue[0]);nextCue[1].fn();assert(Number(intro.style['--intro-progress'])>firstIntro);assert.equal(intro.inert,false,'Controls become accessible as the column emerges');
+  get('full').click();assert.equal(Number(intro.style['--intro-progress']),1);get('paced').click();assert.equal(Number(intro.style['--intro-progress']),1,'Replaying does not extinguish the visible column');assert(!opening.classes.has('hidden-phrase'));assert.equal([...timers.values()][0].ms,3200,'Reading again preserves the opening anchor');
   while(scrolls.length===0){const [key,entry]=[...timers][0];assert(entry,'Closing cue must be reachable');timers.delete(key);entry.fn()}
   assert.equal(scrolls.length,1);assert.equal(scrolls[0].top,363.68,'The closing preserves the photographed space beneath the anchor');
   assert(get('poem').classes.has('is-closing'),'Earlier stanzas, including para que quepa, are hidden during the closing');
@@ -82,4 +87,5 @@ assert(source.includes('.opening-verse,.imperative{font-weight:700}'),'Opening s
 assert(source.includes('.imperative{transition:none}'),'The imperative types crisp letters without a paragraph fade');
 assert(source.includes('.closing-scene .ending{font-size:calc(1em + 1pt);font-weight:700;font-style:italic;'),'The last line is one typographic point larger, bold and italic');
 assert(!source.includes("detailBackground.classList.remove('is-clear')"),'Continuation never restarts or darkens the already completed backdrop');
+assert(source.includes('.intro{opacity:var(--intro-progress,0);transition:opacity 4s linear}'),'The complete column emerges slowly without moving the poem');
 console.log('PASS: direct entry, continuation, exact epilogue preview, guarded sequential verse reveal, no duplicate timing or music restart, replay and skin clarity');

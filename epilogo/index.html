@@ -145,6 +145,10 @@ body.opening-preview.opening-ignited .opening-verse{
 .opening-verse,.imperative{font-weight:700}
 .imperative{transition:none}
 .opening-verse,.display-verse{display:inline-block;white-space:nowrap}
+.intro{opacity:var(--intro-progress,0);transition:opacity 4s linear}
+.intro:not(.is-readable){pointer-events:none}
+@media(prefers-reduced-motion:reduce){.intro{transition:none}}
+@media print{.intro{opacity:1!important}}
 .poem-flow{display:flow-root;clip-path:inset(var(--reading-clip,0px) -32px -32px -32px)}
 .poem.is-closing .poem-flow>.phrase{visibility:hidden!important;opacity:0!important}
 .closing-scene{padding-top:16px;min-height:calc(100svh - 24px - 3.7em - 44px)}
@@ -164,7 +168,7 @@ body{transition:background-color 1.2s ease}
 <div class="detail-background" aria-hidden="true"></div>
 <nav hidden aria-label="Volver a Ana"><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></nav>
 <main>
-<section class="intro" aria-labelledby="title">
+<section class="intro" id="epilogueIntro" aria-labelledby="title" aria-hidden="true" inert>
 <div class="kicker">Epílogo · Ana Klaudya</div>
 <h1 id="title">A fuego<br><em>lento.</em></h1>
 <div class="rule" aria-hidden="true"></div>
@@ -270,6 +274,14 @@ function typeDisplay(verses){
  displayFrame=requestAnimationFrame(tick);
 }
 let timer=null,index=0,mode='waiting',ready=false,openingLocked=continuingOpening;
+const epilogueIntro=document.getElementById('epilogueIntro');let introProgress=0;
+function revealIntro(progress){
+ introProgress=Math.max(introProgress,Math.max(0,Math.min(1,progress)));
+ epilogueIntro.style.setProperty('--intro-progress',String(introProgress));
+ const readable=introProgress>=.12;epilogueIntro.inert=!readable;
+ epilogueIntro.setAttribute('aria-hidden',String(!readable));epilogueIntro.classList.toggle('is-readable',readable);
+}
+revealIntro(0);
 const closingStart=document.getElementById('closingStart');
 const poemFlow=document.getElementById('poemFlow');let maskFrame=0;
 function updateReadingMask(){
@@ -292,6 +304,7 @@ function reveal(){
  if(!ready || mode!=='playing')return;
  if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';flowerCoda.hidden=false;signature.hidden=false;flowerCoda.scrollIntoView({block:'start',behavior:'instant'});return}
  const phrase=phrases[index++];showPhrase(phrase);if(phrase===phrases[0]){openingLocked=true;typeDisplay(openingVerses)}else if(phrase===phrases[1])typeDisplay([imperativeVerse]);
+ revealIntro((index-1)/(phrases.length-1));
  if(phrase===closingStart)alignClosing();
  updateReadingMask();
  timer=setTimeout(reveal,Number(phrase.dataset.wait));
@@ -307,7 +320,7 @@ paced.addEventListener('click',()=>{
 });
 full.addEventListener('click',()=>{
  if(!ready)return;
- clear();finishDisplay();openingVerses.forEach(verse=>displayProgress(verse,1));displayProgress(imperativeVerse,1);mode='full';phrases.forEach(showPhrase);flowerCoda.hidden=false;signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';updateReadingMask();
+ clear();finishDisplay();openingVerses.forEach(verse=>displayProgress(verse,1));displayProgress(imperativeVerse,1);mode='full';phrases.forEach(showPhrase);flowerCoda.hidden=false;signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';revealIntro(1);updateReadingMask();
 });
 ready=true;poem.hidden=false;paced.disabled=false;full.disabled=false;
 updateReadingMask();
