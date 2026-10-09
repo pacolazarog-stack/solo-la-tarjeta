@@ -2,13 +2,14 @@ const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/st
 const source=fs.readFileSync(__dirname+'/index.html','utf8');
 const nodes=new Map(),frames=new Map(),timers=new Map(),messages=[],openingMessages=[];let id=0;
 class Node{
- constructor(){this.handlers={};this.style={};this.classes=new Set();this.classList={toggle:(name,on)=>on?this.classes.add(name):this.classes.delete(name)};}
+ constructor(){this.handlers={};this.style={};this.classes=new Set();this.classList={add:(...names)=>names.forEach(name=>this.classes.add(name)),remove:(...names)=>names.forEach(name=>this.classes.delete(name)),toggle:(name,on)=>on?this.classes.add(name):this.classes.delete(name)};}
  setAttribute(name,value){this[name]=value;}
  removeAttribute(name){delete this[name];}
  addEventListener(event,fn){this.handlers[event]=fn;}
  fire(event,data){this.handlers[event]?.(data);}
 }
 const shots=Array.from({length:6},()=>new Node()),doc=new Node(),win=new Node();
+doc.body=new Node();
 doc.querySelectorAll=()=>shots;doc.getElementById=key=>{if(!nodes.has(key)){const node=new Node();if(key==='epilogueOpening')node.contentWindow={postMessage:data=>openingMessages.push(data)};nodes.set(key,node)}return nodes.get(key)};
 doc.hidden=false;win.matchMedia=()=>({matches:false});win.parent={postMessage:data=>messages.push(data)};
 const images=[],origin='https://example.test';
@@ -16,6 +17,7 @@ const context={document:doc,window:win,location:{origin,search:'?music=parent'},
 vm.runInNewContext(source.match(/<script>\s*const shots=[\s\S]*?<\/script>/)[0].replace(/^<script>|<\/script>$/g,''),context);
 const step=time=>{const [key,fn]=[...frames][0];frames.delete(key);fn(time);};
 const active=()=>shots.findIndex(shot=>shot.classes.has('active'));
+win.fire('message',{origin,source:nodes.get('epilogueOpening').contentWindow,data:{channel:'ana-opening-v1',type:'ready'}});
 images[0].fire('load');assert.equal(timers.size,0,'Wait for the new planet before starting');images[1].fire('load');assert.equal(timers.size,0,'Wait for the onion before starting');images[2].fire('load');assert([...timers.values()].some(t=>t.ms===850));
 nodes.get('pause').fire('click');assert.equal(timers.size,0,'Pause cancels the pending intro');
 assert.equal(frames.size,0);nodes.get('pause').fire('click');
@@ -49,7 +51,7 @@ step(58400);assert.equal(Number(shots[5].style.opacity),1);
 step(59400);assert.equal(fire(),1);assert.equal(frames.size,1);
 step(60900);assert.equal(Number(shots[5].style.opacity),.5);assert.equal(Number(nodes.get('epilogueOpening').style.opacity),1,'Letters stay lit while only the background fades');
 step(63400);assert.equal(frames.size,0);assert.equal(Number(shots[5].style.opacity),0);assert.deepEqual(levels(),[1,1]);assert.equal(fire(),1);
-const completion=messages.filter(m=>m.type==='interlude-ended');assert.equal(completion.length,1);assert.equal(completion[0].openingShown,true);
+const completion=messages.filter(m=>m.type==='interlude-ended');assert.equal(completion.length,1);assert.equal(completion[0].openingShown,true);assert.equal(completion[0].persistentOpening,true);
 nodes.get('replay').fire('click');assert.deepEqual(levels(),[0,0]);step(50000);assert.equal(active(),0);
 step(50600);assert.equal(Number(shots[0].style.opacity),1);
 step(52710);assert(shots.every(shot=>Number(shot.style.opacity)===0),'Previous shot is fully dark before the next cue');
@@ -75,4 +77,16 @@ const previousMessages=openingMessages.length,state={channel:'ceniciento-music-v
 win.fire('message',{origin:'https://other.test',source:win.parent,data:state});assert.equal(openingMessages.length,previousMessages);
 win.fire('message',{origin,source:{},data:state});assert.equal(openingMessages.length,previousMessages);
 win.fire('message',{origin,source:win.parent,data:state});assert.equal(openingMessages.at(-1),state,'Preview inherits the exact music-control state and layout');
+const continuation={channel:'ceniciento-music-v1',type:'continue-epilogue'};
+win.fire('message',{origin:'https://other.test',source:win.parent,data:continuation});
+win.fire('message',{origin,source:{},data:continuation});
+assert(!doc.body.classes.has('epilogue-active'));
+win.fire('message',{origin,source:win.parent,data:continuation});
+assert(doc.body.classes.has('epilogue-active'),'The existing epilogue becomes interactive without reloading');
+assert.equal(openingMessages.filter(m=>m.type==='continue').length,1);
+win.fire('message',{origin,source:win.parent,data:continuation});
+assert.equal(openingMessages.filter(m=>m.type==='continue').length,1,'Duplicate navigation does not restart reading');
+const level={channel:'ceniciento-music-v1',type:'level',level:.64},count=messages.length;
+win.fire('message',{origin,source:{},data:level});assert.equal(messages.length,count);
+win.fire('message',{origin,source:nodes.get('epilogueOpening').contentWindow,data:level});assert.equal(messages.at(-1),level,'Promoted epilogue controls continue to reach the shared music player');
 console.log('PASS: matched world/onion dissolve, black opening verses, gradual ignition, lit text through a five-second background fade, pause/resume, hidden tab pause, replay and continuation');

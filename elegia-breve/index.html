@@ -1343,7 +1343,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         if(!cenicientoFrame.contentWindow || cenicientoFrame.hidden) return;
         cenicientoFrame.contentWindow.postMessage({channel:'ceniciento-music-v1',type:'state',pulseTime:(pulseField.getAnimations?.()[0]?.currentTime||0),level:musicLimit(),enabled:musicEnabled.checked && !voiceMusic.muted,playing:!voiceMusic.paused},window.location.origin);
       };
-      let sonrisaLeaving=false, poemRoute='', poemTransition=0;
+      let sonrisaLeaving=false, poemRoute='', poemTransition=0, interludePreviewReady=false;
       let poemExitTimer=null, poemRevealTimer=null;
       const cancelPoemTransition=()=>{
         poemTransition++;
@@ -1357,7 +1357,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         cancelPoemTransition();
         if(prologueActive){prologueActive=false;entry.classList.remove('is-open');}
         entryButton.disabled=false;
-        poemRoute='';
+        poemRoute='';interludePreviewReady=false;
         poemBackdrop.hidden=true;
         cenicientoFrame.hidden=true;cenicientoFrame.classList.remove('sonrisa-transition','sonrisa-visible','interlude-transition');body.classList.remove('sonrisa-open','ceniciento-open','eyes-open');root.classList.remove('ceniciento-open');document.title='ANA KLAUDYA';
         // Unload narration only; the music remains in this document.
@@ -1365,7 +1365,8 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         anaNavigation.hidden=false;body.classList.add('ana-navigation-ready');
         setJourney('elegia');
       };
-      const openPoem=(piece,asPrologue=false,continuingOpening=false)=>{
+      const openPoem=(piece,asPrologue=false,continuingOpening=false,reuseOpening=false)=>{
+        const keepOpening=piece==='epilogo'&&poemRoute==='interludio'&&(interludePreviewReady||(reuseOpening&&continuingOpening));
         clearTimeout(finalPortraitTimer);finalPortraitTimer=null;
         if(poemRoute===piece&&!cenicientoFrame.hidden&&!sonrisaLeaving)return;
         // Keep Ana covered throughout every child-to-child navigation and load.
@@ -1374,9 +1375,9 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         const briefFade=piece==='interludio'||poemRoute==='interludio';
         cancelPoemTransition();cancelAnaPrelude();
         cenicientoFrame.classList.toggle('interlude-transition',briefFade);
-        poemRoute=piece;
+        poemRoute=piece;interludePreviewReady=false;
         body.classList.toggle('eyes-open',piece==='ojos');
-        cenicientoFrame.classList.remove('sonrisa-visible');cenicientoFrame.classList.add('sonrisa-transition');body.classList.add('sonrisa-open');
+        if(!keepOpening)cenicientoFrame.classList.remove('sonrisa-visible');cenicientoFrame.classList.add('sonrisa-transition');body.classList.add('sonrisa-open');
         anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=({ceniciento:'CENICIENTO · leer o escuchar',ojos:'EN TUS OJOS',sonrisa:'EN TUS LABIOS',cabello:'TU CABELLO',piel:'TU PIEL',estrella:'SIGUIENDO UNA TARJETA',epilogo:'A FUEGO LENTO · EPÍLOGO',interludio:'IBA A LLEVARTE FLORES · INTERLUDIO'})[piece];
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
@@ -1385,7 +1386,8 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
         setJourney(piece);
         body.classList.add('journey-started');
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-negro-y-flama'+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'');
+        if(keepOpening)cenicientoFrame.contentWindow.postMessage({channel:'ceniciento-music-v1',type:'continue-epilogue'},window.location.origin);
+        else cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-ancla-permanente'+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openCeniciento=()=>openPoem('ceniciento');
@@ -1461,7 +1463,8 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       window.addEventListener('message',event=>{
         if(event.origin!==window.location.origin || event.source!==cenicientoFrame.contentWindow || event.data?.channel!=='ceniciento-music-v1'||cenicientoFrame.hidden)return;
         const data=event.data;
-        if(data.type==='interlude-ended'&&poemRoute==='interludio'){openPoem('epilogo',false,data.openingShown===true);return;}
+        if(data.type==='interlude-preview-ready'&&poemRoute==='interludio'){interludePreviewReady=true;sendCenicientoMusicState();return;}
+        if(data.type==='interlude-ended'&&poemRoute==='interludio'){openPoem('epilogo',false,data.openingShown===true,data.persistentOpening===true);return;}
         if(data.type==='ana'&&poemRoute==='estrella'){returnToAna('ana');return;}
         if(data.type==='home'||data.type==='close'){returnToAna(data.type);return;}
         if(data.type==='level' && Number.isFinite(data.level)){

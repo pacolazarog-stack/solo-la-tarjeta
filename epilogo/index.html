@@ -138,6 +138,12 @@ body.opening-preview.opening-ignited .opening-verse{
  h1,.phrase,.opening-verse{animation:none!important;filter:none;background:none;color:#000;-webkit-text-fill-color:#000;-webkit-text-stroke:0;text-shadow:none}
 }
 
+/* The opening remains an anchor; only the following phrases progress. */
+.opening-phrase{position:sticky;top:24px;z-index:5;transition:none}
+body:not(.opening-preview) .opening-phrase::before{content:"";position:absolute;inset:-12px -8px -12px;z-index:-1;background:#18110b;box-shadow:0 8px 16px #18110b}
+.imperative{font-weight:600}
+body{transition:background-color 1.2s ease}
+
 .flower-coda{min-height:100svh;display:grid;place-items:center;margin:0;padding:100px 8vw;background:#fff;color:#26332d;color-scheme:light;text-shadow:none}
 .flower-coda p{margin:0;font:400 clamp(26px,4vw,40px)/1.5 Georgia,'Times New Roman',serif;letter-spacing:0}
 .closing-signature{margin:0;padding:30px 8vw 100px;background:#fff;color:#667068;text-align:center;animation:none!important;-webkit-text-fill-color:currentColor}
@@ -170,7 +176,7 @@ body.opening-preview.opening-ignited .opening-verse{
 <article class="poem" id="poem" aria-label="A fuego lento" hidden>
 <p class="phrase opening-phrase hidden-phrase" aria-hidden="true" data-wait="4800"><span class="opening-verse" id="openingFirst">Yo iba a escribirte un poema.</span><br>
 <span class="opening-verse" id="openingSecond">Tú me diste una cebolla.</span></p>
-<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3200">—Empieza por aquí.</p>
+<p class="phrase imperative hidden-phrase" aria-hidden="true" data-wait="3200">—Empieza por aquí.</p>
 <p class="phrase hidden-phrase" aria-hidden="true" data-wait="5200">A los dos minutos<br>
 ya me habías hecho llorar<br>
 sin romperme el corazón.</p>
@@ -231,18 +237,18 @@ const openingMode=new URLSearchParams(location.search).get('opening');
 const continuingOpening=openingMode==='seen',openingPreview=openingMode==='preview';
 const poem=document.getElementById('poem'),signature=document.getElementById('signature'),flowerCoda=document.getElementById('flowerCoda');
 const paced=document.getElementById('paced'),full=document.getElementById('full'),status=document.getElementById('status');
-let timer=null,index=0,mode='waiting',ready=false;
+let timer=null,index=0,mode='waiting',ready=false,openingLocked=continuingOpening;
 function clear(){clearTimeout(timer);timer=null}
 function hidePhrase(phrase){phrase.classList.add('hidden-phrase');phrase.setAttribute('aria-hidden','true')}
 function showPhrase(phrase){phrase.classList.remove('hidden-phrase');phrase.removeAttribute('aria-hidden')}
 function reveal(){
  if(!ready || mode!=='playing')return;
  if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';flowerCoda.hidden=false;signature.hidden=false;return}
- const phrase=phrases[index++];showPhrase(phrase);
+ const phrase=phrases[index++];showPhrase(phrase);if(phrase===phrases[0])openingLocked=true;
  timer=setTimeout(reveal,Number(phrase.dataset.wait));
 }
 function beginReading(fromInterlude=false){
- clear();index=fromInterlude?1:0;flowerCoda.hidden=true;signature.hidden=true;phrases.forEach(hidePhrase);mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';if(fromInterlude)showPhrase(phrases[0]);reveal();
+ clear();const keepOpening=fromInterlude||openingLocked;index=keepOpening?1:0;flowerCoda.hidden=true;signature.hidden=true;phrases.forEach((phrase,i)=>{if(i!==0||!keepOpening)hidePhrase(phrase)});mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';if(keepOpening)showPhrase(phrases[0]);reveal();
 }
 paced.addEventListener('click',()=>{
  if(!ready)return;
@@ -259,12 +265,13 @@ if(openingPreview){
  document.body.classList.add('opening-preview');
  showPhrase(phrases[0]);status.textContent='Deja respirar cada frase.';paced.textContent='Pausar';mode='preview';
  const openingVerses=[document.getElementById('openingFirst'),document.getElementById('openingSecond')];
+ let openingFire=0;
  const applyOpening=(levels,ignition=0)=>{
   openingVerses.forEach((verse,i)=>{
-   const value=Math.max(0,Math.min(1,Number(levels[i])||0));verse.style.opacity=String(value);
+   const value=Math.max(Number(verse.style.opacity)||0,Math.max(0,Math.min(1,Number(levels[i])||0)));verse.style.opacity=String(value);
    if(value>0)verse.removeAttribute('aria-hidden');else verse.setAttribute('aria-hidden','true');
   });
-  const fire=Math.max(0,Math.min(1,Number(ignition)||0)),coal=[19,11,7];
+  const fire=Math.max(openingFire,Math.max(0,Math.min(1,Number(ignition)||0))),coal=[19,11,7];openingFire=fire;
   const tint=target=>'rgb('+target.map((value,i)=>Math.round(coal[i]+(value-coal[i])*fire)).join(',')+')';
   for(const [property,target] of [['--fire-low',[241,110,40]],['--fire-mid',[255,198,91]],['--fire-high',[255,242,182]]])document.body.style.setProperty(property,tint(target));
   document.body.style.setProperty('--fire-edge',fire===0?'rgba(255,245,220,.45)':'rgba(5,28,33,.9)');
@@ -274,9 +281,22 @@ if(openingPreview){
   if(fire>0)document.body.classList.add('opening-ignited');else document.body.classList.remove('opening-ignited');
  };
  applyOpening([0,0]);
+ let continued=false;
  window.addEventListener('message',event=>{
-  if(event.origin!==location.origin || event.source!==window.parent || event.data?.channel!=='ana-opening-v1' || event.data.type!=='progress' || !Array.isArray(event.data.levels))return;
-  applyOpening(event.data.levels,event.data.ignition);
+  if(event.origin!==location.origin || event.source!==window.parent || event.data?.channel!=='ana-opening-v1')return;
+  if(event.data.type==='continue'&&!continued){
+   continued=true;openingLocked=true;applyOpening([1,1],1);
+   document.body.classList.remove('opening-preview');
+   detailBackground.classList.remove('is-clear');
+   requestAnimationFrame(()=>requestAnimationFrame(()=>detailBackground.classList.add('is-clear')));
+   beginReading(true);return;
+  }
+  if(continued)return;
+  if(event.data.type==='reset'){
+   openingVerses.forEach(verse=>{verse.style.opacity='0';verse.setAttribute('aria-hidden','true')});
+   openingLocked=false;openingFire=0;applyOpening([0,0]);return;
+  }
+  if(event.data.type==='progress'&&Array.isArray(event.data.levels))applyOpening(event.data.levels,event.data.ignition);
  });
  window.parent.postMessage({channel:'ana-opening-v1',type:'ready'},location.origin);
 }else beginReading(continuingOpening);

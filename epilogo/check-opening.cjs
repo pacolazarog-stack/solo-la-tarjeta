@@ -30,16 +30,27 @@ function scenario(openingMode){
   assert.equal(context.document.body.style['--fire-high'],'rgb(137,127,95)','Ignition is gradual');
   emit(context.location.origin,parent,[1,1],1);
   assert.equal(context.document.body.style['--fire-high'],'rgb(255,242,182)','The final flame uses the same palette as the epilogue');
-  emit(context.location.origin,parent,[0,0]);assert.equal(get('openingFirst').attrs['aria-hidden'],'true');
-  assert(!context.document.body.classes.has('opening-ignited'),'Replay restores charcoal letters');
+  emit(context.location.origin,parent,[0,0]);assert.equal(get('openingFirst').style.opacity,'1','Late progress cannot extinguish the anchor');
+  assert(context.document.body.classes.has('opening-ignited'));
+  const control=type=>handlers.forEach(fn=>fn({origin:context.location.origin,source:parent,data:{channel:'ana-opening-v1',type}}));
+  control('reset');assert.equal(get('openingFirst').attrs['aria-hidden'],'true');assert(!context.document.body.classes.has('opening-ignited'),'Explicit replay restores charcoal letters');
+  emit(context.location.origin,parent,[1,1],1);
+  const opening=phrases[0];control('continue');
+  assert(!context.document.body.classes.has('opening-preview'));
+  assert.equal(phrases[0],opening,'The original opening node is reused');
+  assert(!opening.classes.has('hidden-phrase'),'The anchor is never hidden during continuation');
+  assert(!phrases[1].classes.has('hidden-phrase'),'Empieza por aquí is the first new phrase');
+  assert.equal([...timers.values()][0].ms,3200);
+  const activeTimer=[...timers.keys()][0];control('continue');assert.equal([...timers.keys()][0],activeTimer,'Duplicate continuation cannot restart the poem');
+  get('full').click();get('paced').click();assert(!opening.classes.has('hidden-phrase'));assert.equal([...timers.values()][0].ms,3200,'Reading again preserves the opening anchor');
   return;
  }
  assert.equal(phrases[1].classes.has('hidden-phrase'),!continuing);
  assert.equal([...timers.values()][0].ms,continuing?3200:4800,'Continue at the next phrase, without replaying the onion opening');
  assert(!messages.some(m=>m.type==='start'),'The shared music is never restarted at the handoff');
  get('full').click();assert.equal(timers.size,0);assert.equal(get('flowerCoda').hidden,false);
- get('paced').click();assert.equal([...timers.values()][0].ms,4800,'A deliberate replay restores the opening');
- assert(phrases[1].classes.has('hidden-phrase'));assert.equal(get('flowerCoda').hidden,true);
+ get('paced').click();assert.equal([...timers.values()][0].ms,3200,'Reading again preserves the opening and starts at the imperative');
+ assert(!phrases[1].classes.has('hidden-phrase'));assert.equal(get('flowerCoda').hidden,true);
 }
 scenario('');scenario('seen');scenario('preview');
 assert(/filter 7\.5s/.test(fs.readFileSync(__dirname+'/../piel/index.html','utf8')));

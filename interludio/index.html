@@ -24,7 +24,9 @@ button{background:transparent;color:#eadbc8;border:1px solid #79654d;border-radi
 button:focus-visible{outline:2px solid #eadbc8;outline-offset:4px}
 @media(max-width:760px){main{padding:0 0 120px}h1{margin-bottom:24px;text-align:center}.stage{width:100%;aspect-ratio:16/10}.controls{margin-top:25px}}
 @media(prefers-reduced-motion:reduce){.shot{transition:none}}
- .epilogue-opening{position:fixed;inset:0;z-index:4;width:100%;height:100%;border:0;background:transparent;pointer-events:none;opacity:1}
+ body.epilogue-active main{display:none}
+body.epilogue-active .epilogue-opening{pointer-events:auto}
+.epilogue-opening{position:fixed;inset:0;z-index:4;width:100%;height:100%;border:0;background:transparent;pointer-events:none;opacity:1}
 </style>
 <script src="../ana-klaudya/publication.js"></script>
 </head>
@@ -43,7 +45,7 @@ button:focus-visible{outline:2px solid #eadbc8;outline-offset:4px}
 <div class="controls"><button id="pause" type="button" aria-label="Pausar" title="Pausar" data-state="playing" disabled><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg><svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 3 15 9-15 9z"/></svg></button><button id="replay" type="button" aria-label="Volver a ver" title="Volver a ver" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7V2L0 7l5 5V9a7 7 0 1 1-1 7l-2 1a9 9 0 1 0 3-10z"/></svg></button></div>
 <p class="status" id="status" role="status">Cargando las imágenes.</p>
 </main>
-<iframe class="epilogue-opening" id="epilogueOpening" title="Entrada de A fuego lento" src="../epilogo/?music=parent&amp;opening=preview&amp;v=20261009-negro-y-flama"></iframe>
+<iframe class="epilogue-opening" id="epilogueOpening" title="Entrada de A fuego lento" src="../epilogo/?music=parent&amp;opening=preview&amp;v=20261009-ancla-permanente"></iframe>
 <script>
 const shots=[...document.querySelectorAll('.shot')];
 const moonBridge=document.getElementById('moonBridge');
@@ -57,7 +59,7 @@ const openingStarts=[17000,24000],openingFade=1600,ignitionStart=28000,ignitionE
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const inheritedMusic=window.parent!==window&&new URLSearchParams(location.search).get('music')==='parent';
 const sendMusic=(type,details={})=>{if(inheritedMusic)window.parent.postMessage({channel:'ceniciento-music-v1',type,...details},location.origin)};
-let elapsed=0,last=0,frame=0,introTimer=null,running=false,ready=false,finished=false;
+let elapsed=0,last=0,frame=0,introTimer=null,running=false,ready=false,finished=false,openingReady=false,promoted=false;
 const smoothAmount=value=>{const t=Math.max(0,Math.min(1,value));return t*t*(3-2*t)};
 function render(){
  const sceneFade=reducedMotion?(elapsed>=duration?0:1):1-smoothAmount((elapsed-outroStart)/(duration-outroStart));
@@ -88,11 +90,11 @@ function tick(now){
  if(!running)return;
  if(last&&!document.hidden)elapsed+=now-last;
  last=now;render();
- if(elapsed>=duration){stop();finished=true;setPauseLabel('Continuar',true);status.textContent='A fuego lento.';sendMusic('interlude-ended',{openingShown:true});return;}
+ if(elapsed>=duration){stop();finished=true;setPauseLabel('Continuar',true);status.textContent='A fuego lento.';sendMusic('interlude-ended',{openingShown:true,persistentOpening:openingReady});return;}
  frame=requestAnimationFrame(tick);
 }
 function start(){if(!ready||running)return;clearTimeout(introTimer);introTimer=null;running=true;last=0;render();setPauseLabel('Pausar');status.textContent='';frame=requestAnimationFrame(tick);}
-function reset(){stop();elapsed=0;finished=false;render();start();}
+function reset(){stop();elapsed=0;finished=false;epilogueOpening.contentWindow?.postMessage({channel:'ana-opening-v1',type:'reset'},location.origin);render();start();}
 pause.addEventListener('click',()=>{if(running||introTimer!==null){stop();setPauseLabel('Continuar',true);status.textContent='Una pausa, a tu elección.';}else if(finished)reset();else start();});
 replay.addEventListener('click',reset);
 document.addEventListener('visibilitychange',()=>{last=0;});
@@ -108,10 +110,18 @@ epilogueOpening.addEventListener('load',()=>render());
 window.addEventListener('message',event=>{
  if(event.origin!==location.origin)return;
  if(event.source===epilogueOpening.contentWindow && event.data?.channel==='ana-opening-v1' && event.data.type==='ready'){
-  render();sendMusic('ready');return;
+  openingReady=true;render();sendMusic('ready');sendMusic('interlude-preview-ready');return;
  }
- if(event.source===window.parent && event.data?.channel==='ceniciento-music-v1' && event.data.type==='state'){
-  epilogueOpening.contentWindow?.postMessage(event.data,location.origin);
+ if(event.source===epilogueOpening.contentWindow && event.data?.channel==='ceniciento-music-v1'){
+  if(['ready','home','close','level','enabled','start'].includes(event.data.type))window.parent.postMessage(event.data,location.origin);
+  return;
+ }
+ if(event.source===window.parent && event.data?.channel==='ceniciento-music-v1'){
+  if(event.data.type==='continue-epilogue'&&openingReady&&!promoted){
+   stop();promoted=true;document.body.classList.add('epilogue-active');
+   epilogueOpening.contentWindow?.postMessage({channel:'ana-opening-v1',type:'continue'},location.origin);return;
+  }
+  if(event.data.type==='state')epilogueOpening.contentWindow?.postMessage(event.data,location.origin);
  }
 });
 sendMusic('ready');

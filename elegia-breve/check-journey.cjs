@@ -1,7 +1,7 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const source=fs.readFileSync(process.argv[2]||__dirname+'/index.html','utf8');
 const script=source.match(/<script>([\s\S]*?)<\/script>/)[1];
-const nodes=new Map(),timers=new Map(),events={};let sequence=0,reduced=false;
+const nodes=new Map(),timers=new Map(),events={},frameMessages=[];let sequence=0,reduced=false;
 class Element{
  constructor(id){this.id=id;this.handlers={};this.paused=true;this.currentTime=0;this.value=id==='musicLevel'?'80':'';this.checked=id==='musicEnabled';this.hidden=id==='cenicientoFrame';this.style={setProperty(){}};const classes=new Set();this.classList={add(...v){v.forEach(x=>classes.add(x));},remove(...v){v.forEach(x=>classes.delete(x));},contains:v=>classes.has(v),toggle(v,on){if(on)classes.add(v);else classes.delete(v);}};}
  addEventListener(type,fn){(this.handlers[type]??=[]).push(fn);}
@@ -20,7 +20,7 @@ class Element{
 }
 const get=id=>{if(!nodes.has(id))nodes.set(id,new Element(id));return nodes.get(id);};
 const root=get('root'),frame=get('cenicientoFrame'),body=get('body'),nav=get('anaNavigation');
-root.scrollHeight=2000;frame.contentWindow={postMessage(){}};
+root.scrollHeight=2000;frame.contentWindow={postMessage:data=>frameMessages.push(data)};
 const location={origin:'https://example.test',pathname:'/elegia-breve/',search:'',hash:''};
 const fire=type=>{for(const fn of events[type]??[])fn();};
 const context={document:{documentElement:root,body,getElementById:get,querySelectorAll(){return[];}},window:{location,innerHeight:640,scrollY:0,matchMedia:()=>({matches:reduced}),history:{pushState(s,t,hash){location.hash=hash;},replaceState(){location.hash='';}},addEventListener(type,fn){(events[type]??=[]).push(fn);},scrollTo(){}},URLSearchParams,Math,Promise,Float32Array,requestAnimationFrame(){return 1;},cancelAnimationFrame(){},setTimeout(fn,ms){const id=++sequence;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);}};
@@ -95,6 +95,17 @@ assert(!frame.src.includes('opening=seen'),'Skipping the opening keeps the norma
 assert.equal(music.paused,false);assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
 get('anaPiel').click();message('interlude-ended');assertPiece('piel');
 // The interlude keeps its narrative place with only the three navigation controls.
+for(const manual of [false,true]){
+ get('anaInterlude').click();frame.emit('load');run(350);
+ const existingSource=frame.src,continuations=frameMessages.filter(m=>m.type==='continue-epilogue').length;
+ message('interlude-preview-ready');
+ if(manual)get('journeyNext').click();else message('interlude-ended',location.origin,{openingShown:true,persistentOpening:true});
+ assert.equal(location.hash,'#epilogo');assert.equal(frame.src,existingSource,'Both automatic and manual handoff preserve the actual opening document');
+ assert(frame.classList.contains('sonrisa-visible'),'No opacity transition can extinguish the verses');
+ assert.equal(frameMessages.filter(m=>m.type==='continue-epilogue').length,continuations+1);
+ assert.equal(music.currentTime,51);assert.equal(music.paused,false);
+ get('journeyPrevious').click();assertPiece('interludio');
+}
 get('anaPiel').click();assertPiece('piel');
 assert(!source.includes('journeySkipInterlude'),'No extra epilogue shortcut');
 get('journeyNext').click();assertPiece('interludio');
