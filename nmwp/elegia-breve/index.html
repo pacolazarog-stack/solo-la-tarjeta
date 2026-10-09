@@ -1,0 +1,1670 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#eef1e9">
+  <meta property="og:title" content="ANA KLAUDYA">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="es_ES">
+  <title>ANA KLAUDYA</title>
+  <script data-poem-entry>
+  if(['estrella','ojos','sonrisa','cabello','piel','interludio','epilogo','ceniciento'].includes(window.location.hash.slice(1))){document.documentElement.classList.add('poem-route-loading');}
+  </script>
+
+  <style>
+    :root{
+      --paper:#eef1e9;
+      --ink:#201d19;
+      --green:0;
+      --deep:0;
+      --billiard:0;
+      --warm:0;
+      --pulse-duration:1.85s;
+      --question-current:.22;--question-first:.22;--question-next:.22;
+      --heat-r:205;
+      --heat-g:118;
+      --heat-b:86;
+      --heat-glow:0;
+      color-scheme:light;
+    }
+
+    *{box-sizing:border-box}
+
+    html{
+      width:100%;
+      background:var(--paper);
+      scroll-behavior:smooth;
+      overflow-x:clip;
+    }
+
+    body{
+      margin:0;
+      width:100%;
+      min-height:100%;
+      overflow-x:clip;
+      color:var(--ink);
+      background:var(--paper);
+      font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia,"Times New Roman",serif;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    body.locked{
+      overflow:hidden;
+      overscroll-behavior:none;
+      touch-action:none;
+    }
+
+    /* ESCENARIO ÚNICO */
+    .world{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      overflow:hidden;
+      isolation:isolate;
+      background:
+        radial-gradient(80% 52% at 50% 12%,rgba(255,255,255,.74),transparent 72%),
+        linear-gradient(to bottom,#f2f4ee 0%,#e9efe8 58%,#dfe9e1 100%);
+    }
+
+    .layer{
+      position:absolute;
+      inset:0;
+    }
+
+    .layer-green{
+      opacity:var(--green);
+      background:
+        radial-gradient(110% 82% at 50% 96%,rgba(80,128,98,.70) 0%,rgba(53,107,80,.60) 38%,rgba(30,78,59,.45) 68%,transparent 100%),
+        linear-gradient(to bottom,rgba(227,237,230,.16),rgba(38,89,67,.28));
+      transition:opacity .18s linear;
+    }
+
+    .layer-deep{
+      opacity:var(--deep);
+      background:
+        radial-gradient(88% 58% at 50% 78%,rgba(53,103,77,.24),transparent 70%),
+        linear-gradient(to bottom,#dce7df 0%,#9fb8a7 54%,#456e59 100%);
+      transition:opacity .18s linear;
+    }
+
+    .layer-billiard{
+      opacity:var(--billiard);
+      background:
+        radial-gradient(88% 66% at 50% 82%,rgba(18,112,68,.90) 0%,rgba(10,82,51,.92) 47%,rgba(4,55,36,.96) 100%),
+        linear-gradient(to bottom,#185f3f 0%,#0f4d34 56%,#063925 100%);
+      transition:opacity .18s linear;
+    }
+
+    /* CALOR ENVOLVENTE, NO ABRASIVO */
+    .layer-warm{
+      z-index:3;
+      opacity:var(--warm);
+      background:
+        radial-gradient(52% 40% at 50% 54%,
+          rgba(255,211,151,.34) 0%,
+          rgba(236,170,114,.28) 40%,
+          rgba(207,130,101,.16) 66%,
+          transparent 86%),
+        radial-gradient(108% 84% at 50% 88%,
+          rgba(208,140,105,.62) 0%,
+          rgba(190,121,96,.60) 44%,
+          rgba(165,104,90,.54) 72%,
+          rgba(139,91,84,.44) 100%),
+        linear-gradient(to bottom,#d6aa87 0%,#cb9078 44%,#a2756b 100%);
+      transition:opacity 1.05s cubic-bezier(.18,.72,.2,1);
+      animation:warmBreath var(--pulse-duration) linear infinite;
+      will-change:opacity,filter;
+    }
+
+    @keyframes warmBreath{
+      0%,100%{filter:brightness(1) saturate(.94)}
+      10%{filter:brightness(1.045) saturate(.99)}
+      18%{filter:brightness(1.01) saturate(.95)}
+      33%{filter:brightness(1.035) saturate(.98)}
+      44%{filter:brightness(1) saturate(.94)}
+    }
+
+    .grain{
+      z-index:5;
+      opacity:.055;
+      background-image:
+        radial-gradient(circle at 20% 30%,rgba(51,44,37,.20) 0 .55px,transparent .7px),
+        radial-gradient(circle at 71% 64%,rgba(51,44,37,.16) 0 .55px,transparent .7px);
+      background-size:8px 8px,13px 13px;
+      mix-blend-mode:multiply;
+    }
+
+    /* LATIDO CONTINUO DESDE LA PORTADA */
+    .pulse-field{
+      z-index:4;
+      animation:pulseField var(--pulse-duration) linear infinite;
+      will-change:opacity,filter;
+    }
+
+    .pulse-field::before,
+    .pulse-field::after{
+      content:"";
+      position:absolute;
+      inset:-10%;
+      border-radius:50%;
+      pointer-events:none;
+    }
+
+    .pulse-field::before{
+      background:
+        radial-gradient(82% 66% at 50% 52%,
+          rgba(35,100,69,.30) 0%,
+          rgba(43,106,75,.20) 38%,
+          rgba(36,91,66,.09) 65%,
+          rgba(36,91,66,0) 82%);
+      animation:pulseA var(--pulse-duration) ease-in-out infinite;
+    }
+
+    .pulse-field::after{
+      background:
+        radial-gradient(94% 74% at 50% 57%,
+          rgba(114,153,107,.17) 0%,
+          rgba(65,116,85,.11) 42%,
+          rgba(28,78,56,.05) 70%,
+          rgba(28,78,56,0) 86%);
+      animation:pulseB var(--pulse-duration) ease-in-out infinite;
+    }
+
+    @keyframes pulseField{
+      0%,100%{opacity:.42;filter:saturate(1) brightness(1)}
+      10%{opacity:.78;filter:saturate(1.08) brightness(.965)}
+      18%{opacity:.47;filter:saturate(1.01) brightness(1)}
+      33%{opacity:.69;filter:saturate(1.06) brightness(.978)}
+      44%{opacity:.45;filter:saturate(1) brightness(1)}
+    }
+
+    @keyframes pulseA{
+      0%,100%{opacity:.28;transform:scale(1)}
+      10%{opacity:.66;transform:scale(1.025)}
+      18%{opacity:.31;transform:scale(1.004)}
+      33%{opacity:.56;transform:scale(1.018)}
+      44%{opacity:.29;transform:scale(1)}
+    }
+
+    @keyframes pulseB{
+      0%,100%{opacity:.18;transform:scale(1.005)}
+      10%{opacity:.40;transform:scale(1.035)}
+      18%{opacity:.20;transform:scale(1.009)}
+      33%{opacity:.34;transform:scale(1.026)}
+      44%{opacity:.18;transform:scale(1.005)}
+    }
+
+    /* PORTADA */
+    .entry{
+      position:fixed;
+      inset:0;
+      z-index:50;
+      display:grid;
+      place-items:center;
+      background:rgba(238,241,233,.48);
+      -webkit-backdrop-filter:blur(5px);
+      backdrop-filter:blur(5px);
+      transition:opacity 1.1s ease,visibility 1.1s ease;
+    }
+
+    .entry.is-open{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+
+    .entry-inner{
+      display:grid;
+      justify-items:center;
+      gap:18px;
+      padding:26px;
+      text-align:center;
+    }
+
+    .entry-title{
+      margin:0;
+      font-size:clamp(1.95rem,5vw,3.15rem);
+      line-height:1;
+      font-weight:500;
+      letter-spacing:.045em;
+    }
+
+    .entry-flag{
+      margin:0;
+      font:400 .69rem/1 Arial,Helvetica,sans-serif;
+      letter-spacing:.29em;
+      color:rgba(32,29,25,.42);
+    }
+
+    .entry-button{
+      appearance:none;
+      margin-top:4px;
+      border:1px solid rgba(23,63,50,.24);
+      border-radius:999px;
+      padding:.82em 1.72em;
+      background:rgba(248,247,239,.90);
+      color:#173f32;
+      font:500 .76rem/1 Arial,Helvetica,sans-serif;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+      cursor:pointer;
+      box-shadow:0 8px 28px rgba(8,49,32,.08);
+      transition:transform .25s ease,box-shadow .25s ease,background .25s ease;
+    }
+
+    .entry-button:hover,
+    .entry-button:focus-visible{
+      transform:translateY(-1px);
+      background:rgba(250,249,242,.96);
+      box-shadow:0 10px 34px rgba(8,49,32,.13);
+      outline:none;
+    }
+
+    .entry-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+    .voice-launch{
+      position:absolute;left:50%;top:50svh;z-index:36;margin:0;
+      transform:translate(-50%,-50%);
+      opacity:0;visibility:hidden;pointer-events:none;
+      transition:opacity 1.4s ease,visibility 1.4s ease,background .25s ease,box-shadow .25s ease;
+    }
+    .voice-launch:hover,.voice-launch:focus-visible{transform:translate(-50%,calc(-50% - 1px))}
+    body.reading-ready .voice-launch{opacity:1;visibility:visible;pointer-events:auto}
+    .voice-dialog{
+      position:fixed;top:0;bottom:0;left:auto;right:max(16px,env(safe-area-inset-right));
+      z-index:40;
+      margin:auto 0;height:fit-content;
+      width:min(440px,calc(100% - 32px));max-height:calc(100svh - 32px);
+      padding:32px 24px;border:1px solid rgba(23,63,50,.22);border-radius:20px;
+      background:#eef1e9;color:#201d19;text-align:center;
+      box-shadow:0 20px 80px rgba(8,49,32,.2);overflow:auto;
+    }
+    .voice-dialog::backdrop{background:transparent}
+    .voice-dialog h2{margin:0;font-size:clamp(1.55rem,6vw,2rem);font-weight:500;letter-spacing:.045em}
+    .voice-caption{margin:14px 0 24px;color:#375548}
+    .voice-dialog audio{display:block;width:100%;margin:18px 0}
+    .voice-dialog audio:not([controls]){display:none}
+    .voice-status{min-height:1.4em;font:400 .85rem/1.4 Arial,Helvetica,sans-serif;color:#375548}
+    .voice-mix[hidden]{display:none}
+    .voice-mix{margin:22px 0;padding:16px;border:1px solid rgba(23,63,50,.16);border-radius:12px;text-align:left;font:400 .88rem/1.5 Arial,Helvetica,sans-serif}
+    .voice-mix label{display:flex;align-items:center;gap:10px}
+    .voice-mix input[type="checkbox"]{width:18px;height:18px;accent-color:#375548}
+    .voice-mix input[type="range"]{width:100%;margin:12px 0 0;accent-color:#375548}
+    .voice-mix p{margin:4px 0 0;color:#375548;font-size:.78rem}
+    .music-level{display:flex;justify-content:space-between;margin-top:12px}
+    body.voice-open .voice-launch{visibility:hidden;pointer-events:none}
+    body.voice-open main{width:calc(100% - 504px);margin-left:24px;margin-right:480px}
+    .portrait-finale{
+      position:fixed;inset:0;z-index:12;pointer-events:none;
+      background:#1b1711;opacity:0;visibility:hidden;
+      transition:opacity 12s ease,visibility 12s ease;
+    }
+    .portrait-image-area{
+      position:absolute;inset:0 auto 0 0;width:100vw;display:flex;align-items:center;justify-content:center;
+    }
+    .portrait-image-wrap{position:relative;width:min(100%,59.9609375svh);aspect-ratio:1228/2048}
+    .portrait-finale img{
+      display:block;width:100%;height:100%;object-fit:contain;
+      opacity:0;transition:opacity 20s ease-in-out 4s;
+    }
+    .ana-navigation{position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;width:max-content;max-width:calc(100% - 28px);padding:10px;border:1px solid rgba(23,63,50,.2);border-radius:22px;background:rgba(238,241,233,.94);box-shadow:0 8px 30px rgba(0,0,0,.15)}
+    .ana-navigation[hidden]{display:none}.ana-navigation .entry-button{min-height:44px;touch-action:manipulation;margin:0;padding:.85em 1.2em;letter-spacing:.08em;font-size:.68rem}
+    .ana-navigation{max-height:45svh;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
+    body.ana-navigation-ready main{padding-bottom:100px}
+    .ceniciento-frame{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#100e0d}
+    .ceniciento-frame[hidden]{display:none}
+    .ceniciento-frame.sonrisa-leaving{pointer-events:none}
+    .epilogue-invitation{margin:18svh 0 0}
+    .epilogue-invitation[hidden]{display:none}
+    .flambe-button,.flambe-button:hover,.flambe-button:focus-visible{
+      isolation:isolate;overflow:hidden;color:#321609;border-color:#ed993d;
+      background:linear-gradient(115deg,#ffe19a,#ffad50 24%,#f79548 48%,#ffcf68 72%,#ffe19a);
+      background-size:280% 100%;text-shadow:0 1px 0 rgba(255,239,178,.4);
+      box-shadow:0 0 16px rgba(255,150,51,.34),0 7px 25px rgba(184,72,16,.24);
+      animation:flambeSurface 18s ease-in-out infinite;
+    }
+    .flambe-button{position:relative}
+    .flambe-button::before{
+      content:"";position:absolute;inset:-55% -15% -35%;z-index:-1;pointer-events:none;
+      background:radial-gradient(ellipse at 12% 95%,#ffe5a3 0 12%,transparent 32%),radial-gradient(ellipse at 38% 105%,#ffd275 0 18%,transparent 40%),radial-gradient(ellipse at 65% 95%,#fff0b6 0 12%,transparent 33%),radial-gradient(ellipse at 90% 105%,#ffc869 0 18%,transparent 40%);
+      opacity:.75;transform-origin:center bottom;animation:flambeFlames 8s ease-in-out infinite;
+    }
+    .flambe-button::after{content:"";position:absolute;inset:1px;z-index:-1;pointer-events:none;border-radius:inherit;border:1px solid rgba(255,237,160,.55);background:linear-gradient(180deg,rgba(255,238,181,.2),transparent 60%)}
+    .flambe-button:focus-visible{outline:2px solid #773414;outline-offset:4px}
+    @keyframes flambeSurface{0%,100%{background-position:0% 50%;box-shadow:0 0 16px rgba(255,150,51,.34),0 7px 25px rgba(184,72,16,.24)}50%{background-position:100% 50%;box-shadow:0 0 23px rgba(255,161,59,.5),0 7px 30px rgba(190,80,18,.32)}}
+    @keyframes flambeFlames{0%,100%{transform:translate(-3%,5%) scaleY(.92)}50%{transform:translate(3%,-4%) scaleY(1.12)}}
+    @media(prefers-reduced-motion:reduce){.flambe-button,.flambe-button::before{animation:none}}
+    @media(forced-colors:active){.flambe-button,.flambe-button:hover,.flambe-button:focus-visible{animation:none;background:ButtonFace;color:ButtonText;border:1px solid ButtonText;box-shadow:none;text-shadow:none}.flambe-button::before,.flambe-button::after{display:none}}
+    .ceniciento-frame.sonrisa-transition{opacity:0;transition:opacity 2s ease-in-out;background:transparent}
+    .ceniciento-frame.sonrisa-transition.sonrisa-visible{opacity:1}
+    @media(prefers-reduced-motion:reduce){.ceniciento-frame.sonrisa-transition{transition-duration:.2s}}
+    html.ceniciento-open,body.ceniciento-open{overflow:hidden}
+    body.ceniciento-open:not(.sonrisa-open) > :not(iframe):not(audio):not(script){visibility:hidden}
+    .portrait-question{
+      position:absolute;left:30%;top:44%;transform:translate(-50%,-50%);
+      display:grid;place-items:center;width:64px;height:64px;border-radius:50%;
+      padding:0;border:0;background:transparent;touch-action:manipulation;z-index:1;
+      color:#342719;font:400 2rem/1 Georgia,"Times New Roman",serif;text-decoration:none;cursor:pointer;
+      opacity:0;visibility:hidden;pointer-events:none;
+      transition:opacity 3s ease 25s,visibility 0s linear 25s;
+    }
+    .question-beat{
+      display:grid;place-items:center;width:48px;height:48px;border-radius:50%;
+      border:1px solid rgba(255,246,225,.65);background:rgba(238,241,233,.92);
+      box-shadow:0 5px 22px rgba(0,0,0,.24);pointer-events:none;
+      animation:questionHeartbeat var(--pulse-duration) linear infinite;will-change:transform;
+    }
+    @keyframes questionHeartbeat{
+      0%{transform:scale(var(--question-current))}
+      10%{transform:scale(calc(var(--question-first) * 1.12))}
+      18%{transform:scale(var(--question-first))}
+      33%{transform:scale(calc(var(--question-next) * 1.08))}
+      44%,100%{transform:scale(var(--question-next))}
+    }
+    .portrait-question:hover .question-beat{background:#fff9ec}
+    .portrait-question:focus-visible{outline:3px solid #fff9ec;outline-offset:4px}
+    body.voice-open .portrait-image-area{width:100vw}
+    body.portrait-revealed .voice-dialog{opacity:0;pointer-events:none;transition:opacity 10s ease}
+    body.portrait-revealed .voice-launch{opacity:0;visibility:hidden;pointer-events:none}
+    body.portrait-revealed .portrait-finale{opacity:1;visibility:visible}
+    body.portrait-revealed .portrait-finale img{opacity:1}
+    body.portrait-revealed .portrait-question{opacity:1;visibility:visible;pointer-events:auto}
+    body.reading-ready.portrait-revealed main{opacity:0;visibility:hidden;transition:opacity 6s ease,visibility 6s ease}
+    @media(max-width:900px){
+      body.voice-open .voice-dialog{position:relative;top:auto;bottom:auto;right:auto;margin:24px 16px 0 auto}
+      body.voice-open main{width:calc(100% - 34px);margin:0 auto;padding-top:20svh}
+      body.voice-open .portrait-image-area{width:100vw}
+    }
+
+    /* PRELUDIO ANA -> KLAUDYA */
+    .name-prelude{
+      position:fixed;
+      inset:0;
+      z-index:25;
+      display:grid;
+      place-items:center;
+      pointer-events:none;
+      opacity:0;
+      visibility:hidden;
+      transition:opacity 1.4s ease,visibility 1.4s ease;
+    }
+
+    body.prelude .name-prelude{
+      opacity:1;
+      visibility:visible;
+    }
+
+    .name-line{
+      margin:0;
+      width:max-content;
+      max-width:calc(100vw - 44px);
+      text-align:center;
+      font-size:clamp(2rem,4.8vw,3rem);
+      line-height:1.15;
+      font-weight:500;
+      letter-spacing:.012em;
+    }
+
+    .name-ana,
+    .name-klaudya{
+      display:inline-block;
+      opacity:0;
+      filter:blur(5px);
+      transition:
+        opacity 2.15s cubic-bezier(.2,.7,.2,1),
+        filter 2.15s ease,
+        transform 2.15s cubic-bezier(.2,.7,.2,1);
+    }
+
+    .name-ana{transform:translateX(-9px)}
+    .name-klaudya{margin-left:.34em;transform:translateX(12px)}
+
+    .name-prelude.show-ana .name-ana,
+    .name-prelude.show-klaudya .name-klaudya{
+      opacity:1;
+      filter:blur(0);
+      transform:none;
+    }
+
+    .name-prelude.fade{opacity:0!important}
+
+    /* AUDIO */
+    .sound-toggle{
+      position:fixed;
+      left:max(14px,env(safe-area-inset-left));
+      bottom:max(14px,env(safe-area-inset-bottom));
+      z-index:35;
+      width:42px;
+      height:42px;
+      border:1px solid rgba(23,63,50,.19);
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      padding:0;
+      background:rgba(247,246,236,.76);
+      color:#173f32;
+      cursor:pointer;
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      -webkit-backdrop-filter:blur(10px);
+      backdrop-filter:blur(10px);
+      box-shadow:0 5px 22px rgba(8,49,32,.08);
+      transition:opacity .55s ease,transform .4s ease;
+    }
+
+    body.sound-ready .sound-toggle{
+      opacity:.72;
+      visibility:visible;
+      pointer-events:auto;
+    }
+
+    .sound-toggle:hover,
+    .sound-toggle:focus-visible{
+      opacity:1!important;
+      transform:scale(1.05);
+      outline:none;
+    }
+
+    .sound-toggle svg{width:19px;height:19px}
+    .sound-off{display:none}
+    .sound-toggle.is-muted .sound-on{display:none}
+    .sound-toggle.is-muted .sound-off{display:block}
+    .sound-toggle path,.sound-toggle circle{
+      fill:none;
+      stroke:currentColor;
+      stroke-width:1.55;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    /* LECTURA */
+    main{
+      position:relative;
+      z-index:10;
+      width:min(calc(100% - 42px),760px);
+      margin:0 auto;
+      padding:62svh 0 22svh;
+      opacity:0;
+      visibility:hidden;
+      transition:opacity 1.7s ease,visibility 1.7s ease;
+    }
+
+    body.reading-ready main{
+      opacity:1;
+      visibility:visible;
+    }
+
+    .poem{
+      width:min(100%,39ch);
+      margin:0 auto;
+      font-size:clamp(1.28rem,2.75vw,1.72rem);
+      line-height:1.48;
+      letter-spacing:.003em;
+    }
+
+    .line{
+      --gap:10svh;
+      display:block;
+      width:max-content;
+      max-width:100%;
+      margin-top:var(--gap);
+      opacity:0;
+      transform:translateY(.55em);
+      filter:blur(.48px);
+      transition:
+        opacity 1.45s cubic-bezier(.2,.7,.2,1),
+        transform 1.45s cubic-bezier(.2,.7,.2,1),
+        filter 1.3s ease,
+        color .18s linear,
+        text-shadow .18s linear;
+    }
+
+    .line:first-child{margin-top:0}
+
+    .line.is-shown{
+      opacity:1;
+      transform:none;
+      filter:none;
+    }
+
+    /* RESPIRACIÓN DEL POEMA */
+    .g-close{--gap:7svh}
+    .g-soft{--gap:11svh}
+    .g-comma{--gap:15svh}
+    .g-sentence{--gap:24svh}
+    .g-turn{--gap:34svh}
+    .g-deep{--gap:46svh}
+
+    .g-opening-2{--gap:22svh}
+    .g-eyes-2{--gap:48svh}
+    .g-subraya-2{--gap:28svh}
+
+    .g-music-2a{--gap:14svh}
+    .g-music-2b{--gap:14svh}
+
+    .g-reflection-open{--gap:108svh}
+    .g-reflection-thought{--gap:30svh}
+    .g-reflection-suspense{--gap:22svh}
+    .g-reflection-voice{--gap:38svh}
+
+    .g-embrace-a{--gap:48svh}
+    .g-embrace-b{--gap:20svh}
+    .g-embrace-c{--gap:62svh}
+    .g-embrace-d{--gap:38svh}
+
+    /* Preserve the final reveal space without a repeated signature. */
+    .poem::after{content:"";display:block;height:120svh;pointer-events:none}
+
+    .voice-word{
+      position:relative;
+      white-space:nowrap;
+    }
+
+    .voice-word::after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:-.12em;
+      height:1px;
+      background:linear-gradient(90deg,rgba(35,90,52,.30),rgba(111,142,85,.18));
+      transform:scaleX(.72);
+      transform-origin:left;
+    }
+
+    .heat-one{
+      color:#9d5a2a;
+      text-shadow:0 0 10px rgba(213,113,32,.08);
+    }
+
+    /* CIERRE: "el" -> "calor."; keep its space when the words become fixed. */
+    .heat-anchor{
+      display:block;
+      padding-top:58svh;
+      min-height:calc(58svh + 2.08em);
+      font-size:clamp(2.25rem,5.8vw,3.85rem);
+    }
+    .heat-final{
+      position:relative;
+      --gap:0;
+      margin-bottom:0;
+      font-size:clamp(2.25rem,5.8vw,3.85rem);
+      line-height:1.04;
+      font-weight:500;
+      letter-spacing:.012em;
+      color:rgb(var(--heat-r) var(--heat-g) var(--heat-b));
+      -webkit-text-stroke:.25px rgba(255,224,192,.18);
+      text-shadow:
+        0 0 2px rgba(75,38,34,.62),
+        0 0 calc(1px + 5px * var(--heat-glow)) rgba(255,170,104,calc(.05 + .26 * var(--heat-glow))),
+        0 -1px calc(2px + 9px * var(--heat-glow)) rgba(255,222,158,calc(.04 + .20 * var(--heat-glow))),
+        0 2px calc(1px + 4px * var(--heat-glow)) rgba(112,61,55,calc(.06 + .18 * var(--heat-glow)));
+    }
+
+    .heat-final.is-shown{
+      position:fixed;
+      left:50%;
+      top:50%;
+      z-index:24;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      margin:0;
+      transform:translate(-50%,-50%)!important;
+      max-width:calc(100vw - 32px);
+      text-align:center;
+      line-height:.84;
+      pointer-events:none;
+    }
+
+    .heat-part{
+      display:block;
+      width:max-content;
+      line-height:.84;
+      opacity:0;
+      filter:blur(5px);
+      transition:
+        opacity 2.15s cubic-bezier(.2,.7,.2,1),
+        filter 2.15s ease,
+        transform 2.15s cubic-bezier(.2,.7,.2,1);
+    }
+
+    .heat-el{
+      transform:translateX(-12px);
+    }
+
+    .heat-calor{
+      margin-top:-.16em;
+      transform:translateX(14px);
+    }
+
+    .heat-final.is-shown .heat-el,
+    .heat-final.show-calor .heat-calor{
+      opacity:1;
+      filter:blur(0);
+      transform:none;
+    }
+
+    .heat-final.is-burning{
+      animation:heatBreath 1.25s ease-in-out infinite alternate;
+    }
+
+    @keyframes heatBreath{
+      0%{filter:brightness(1) saturate(1)}
+      52%{filter:brightness(1.06) saturate(1.05)}
+      100%{filter:brightness(1.02) saturate(1.10)}
+    }
+
+    .signature{
+      font-family:Arial,Helvetica,sans-serif;
+      font-size:.68rem;
+      letter-spacing:.19em;
+      color:rgba(32,29,25,.38);
+    }
+
+    .scroll-cue{
+      position:fixed;
+      left:50%;
+      bottom:5.2svh;
+      z-index:18;
+      width:8px;
+      height:8px;
+      border-right:1px solid rgba(32,29,25,.34);
+      border-bottom:1px solid rgba(32,29,25,.34);
+      transform:translateX(-50%) rotate(45deg);
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transition:opacity .7s ease,visibility .7s ease;
+      animation:cue 2.4s ease-in-out infinite;
+    }
+
+    body.reading-ready:not(.has-scrolled) .scroll-cue{
+      opacity:.62;
+      visibility:visible;
+    }
+
+    @keyframes cue{
+      0%,100%{translate:0 0}
+      50%{translate:0 7px}
+    }
+
+    @media(max-width:640px){
+      main{
+        width:min(calc(100% - 34px),760px);
+        padding-top:64svh;
+      }
+
+      .poem{
+        width:min(100%,31ch);
+        font-size:clamp(1.18rem,5.2vw,1.48rem);
+        line-height:1.5;
+      }
+
+      .g-close{--gap:8svh}
+      .g-soft{--gap:12svh}
+      .g-comma{--gap:16svh}
+      .g-sentence{--gap:25svh}
+      .g-turn{--gap:35svh}
+      .g-deep{--gap:47svh}
+
+      .g-opening-2{--gap:24svh}
+      .g-eyes-2{--gap:50svh}
+      .g-subraya-2{--gap:32svh}
+      .g-music-2a{--gap:16svh}
+      .g-music-2b{--gap:16svh}
+
+      .g-reflection-open{--gap:100svh}
+      .g-reflection-thought{--gap:28svh}
+      .g-reflection-suspense{--gap:20svh}
+      .g-reflection-voice{--gap:36svh}
+
+      .g-embrace-a{--gap:50svh}
+      .g-embrace-b{--gap:22svh}
+      .g-embrace-c{--gap:66svh}
+      .g-embrace-d{--gap:40svh}
+
+      .heat-final{
+        --gap:54svh;
+        font-size:clamp(2.15rem,9.5vw,3.25rem);
+      }
+
+      .poem::after{height:112svh}
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      .entry,.name-prelude,.name-ana,.name-klaudya,.line,.heat-part,.sound-toggle,main{transition-duration:.01ms}
+      .pulse-field,.pulse-field::before,.pulse-field::after,.question-beat{animation-duration:3.8s}
+      .layer-warm{animation:none}
+      .heat-final.is-burning{animation:none}
+      .scroll-cue{animation:none}
+    }
+  body.eyes-open *,body.eyes-open *::before,body.eyes-open *::after{animation-play-state:paused!important}
+
+/* Recorrido y lectura en vertical. */
+.journey-nav[hidden]{display:none!important}
+.journey-nav{position:fixed;z-index:160;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:6px;background:#f5f3ed;color:#173f32;border:1px solid #b8c0b8;border-radius:999px;box-shadow:0 3px 20px #0002;max-width:calc(100% - 24px)}
+.journey-nav button{min-height:44px;min-width:74px;margin:0;padding:10px 14px;border:0;border-radius:999px;background:transparent;color:inherit;font:14px/1.2 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+.journey-nav button:disabled{opacity:.35;cursor:default}
+.journey-nav button:focus-visible,.entry-button:focus-visible{outline:2px solid #375548;outline-offset:3px}
+.journey-index{box-sizing:border-box;width:min(540px,calc(100% - 24px));max-height:calc(100svh - 24px);border:1px solid #596457;border-radius:18px;padding:44px 16px 12px;background:#19231d;color:#f0eadf;z-index:170;overflow:auto}
+.journey-index::backdrop{background:#101a15aa}
+.journey-index .ana-navigation{position:static;transform:none;width:100%;max-width:none;max-height:none;overflow:visible;box-shadow:none;border:0;padding:0;border-radius:0;background:transparent;display:grid;grid-template-columns:minmax(0,1fr);gap:5px}
+.journey-index .ana-navigation[hidden]{display:none}
+.journey-index .entry-button{text-align:left;font:14px/1.3 system-ui,sans-serif;letter-spacing:0;text-transform:none;box-shadow:none;border-radius:8px;border-color:#ced3cb;padding:8px 12px;min-height:44px}
+/* Cada entrada anticipa la imagen y el tono de su pieza. */
+.journey-index .entry-button.piece-button{position:relative;isolation:isolate;overflow:hidden;width:100%;margin:0;min-height:44px;padding:8px 12px;display:flex;align-items:center;background:var(--piece-tone,#26342d);border-color:var(--piece-border,#637065);color:#fff7e9;text-shadow:0 1px 3px #0008;animation:none}
+.piece-button .piece-art{position:absolute;z-index:-2;inset:0 0 0 auto;width:60%;height:100%;pointer-events:none;opacity:.94}
+.piece-button .piece-art svg{display:block;width:100%;height:100%}
+.piece-button .piece-label{position:relative;max-width:82%;font-weight:500}
+.piece-button .piece-shade{position:absolute;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(90deg,var(--piece-tone) 0%,var(--piece-tone) 35%,var(--piece-veil) 65%,transparent 100%)}
+#anaEstrella{--piece-tone:#172837;--piece-veil:#172837d9;--piece-border:#526479}
+#anaRead{--piece-tone:#493827;--piece-veil:#493827d9;--piece-border:#8d7153}
+#anaOjos{--piece-tone:#263d32;--piece-veil:#263d32d9;--piece-border:#657d69}
+#anaSonrisa{--piece-tone:#4f2d38;--piece-veil:#4f2d38d9;--piece-border:#997180}
+#anaCabello{--piece-tone:#201e1c;--piece-veil:#201e1cd9;--piece-border:#716253}
+#anaPiel{--piece-tone:#5a3b28;--piece-veil:#5a3b28d9;--piece-border:#a1805b}
+#anaInterlude{--piece-tone:#493c38;--piece-veil:#493c38d9;--piece-border:#a78878}
+#anaVoice{--piece-tone:#233b40;--piece-veil:#233b40d9;--piece-border:#658388}
+.journey-index .entry-button.petal-button.piece-button{background:var(--piece-tone);border-color:var(--piece-border);color:#fff7e9}
+.journey-index .piece-button:hover,.journey-index .piece-button:focus-visible{background:var(--piece-tone);border-color:#dfc69b;box-shadow:0 0 0 1px #dfc69b;transform:translateY(-1px)}
+.journey-index .entry-button.flambe-button{width:100%;margin:0;min-height:44px;padding:8px 12px;display:flex;align-items:center;border-color:#ed993d;color:#321609;font-weight:500}
+.journey-index .entry-button:focus-visible{outline:2px solid #dfc69b;outline-offset:3px}
+@media(max-width:480px){.journey-index{padding-left:12px;padding-right:12px}.journey-index .entry-button.piece-button,.journey-index .entry-button.flambe-button{padding:8px 10px}}
+@media(max-height:650px){.journey-index .ana-navigation{grid-template-columns:repeat(2,minmax(0,1fr))}.journey-index .piece-button .piece-label{max-width:100%}.journey-index .piece-button .piece-art{opacity:.6}.journey-index .piece-button .piece-shade{background:linear-gradient(90deg,var(--piece-tone),var(--piece-veil))}.journey-index #anaVoice{grid-column:1/-1}}
+@media(min-width:600px) and (max-height:650px){.journey-index{width:min(720px,calc(100% - 24px))}.journey-index .ana-navigation{grid-template-columns:repeat(3,minmax(0,1fr))}.journey-index #anaVoice{grid-column:auto}}
+@media(prefers-reduced-motion:reduce){.journey-index .entry-button{animation:none;transition:none;transform:none}}
+@media(forced-colors:active){.piece-button .piece-art,.piece-button .piece-shade{display:none}.journey-index .entry-button.piece-button,.journey-index .entry-button.petal-button.piece-button,.journey-index .entry-button.flambe-button{background:ButtonFace;color:ButtonText;text-shadow:none;border-color:ButtonText}.journey-index .entry-button:focus-visible{outline-color:Highlight}}
+.journey-index-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px;font:12px/1.3 system-ui,sans-serif}
+.journey-index-links a{color:#d5dfcf;min-height:44px;display:flex;align-items:center}
+.journey-index-close{position:absolute;top:0;right:6px;min-width:44px;min-height:44px;background:transparent;border:0;color:inherit;font:22px system-ui;cursor:pointer}
+.entry{background:#eef1e9;backdrop-filter:none}
+.entry-flag{font:italic 16px/1.5 Georgia,serif;letter-spacing:0;color:#415248}
+body.journey-started main{padding-bottom:130px}
+.epilogue-invitation{display:none!important}
+@media(max-width:480px){.journey-nav button{min-width:68px;padding:10px 12px;font-size:13px}.entry-title{font-size:clamp(27px,8vw,42px)}.voice-dialog{top:auto;bottom:78px;max-height:45svh;padding:18px}body.voice-open main{width:calc(100% - 34px);margin:auto}.voice-dialog h2{font-size:20px}.voice-launch{min-height:44px}}
+@media(prefers-reduced-motion:reduce){.world *,.question-beat{animation:none!important}.portrait-finale,.portrait-finale img{transition:none!important}}
+@media print{.journey-nav,.journey-index{display:none!important}}
+
+.ceniciento-frame.sonrisa-transition.interlude-transition{transition-duration:.5s}
+
+/* Petals bridge the quiet body poems and the amber of the epilogue. */
+.petal-button,.journey-index .entry-button.petal-button{
+ position:relative;display:flex;align-items:center;gap:9px;color:#4e3b32;border-color:#c9ac8c;
+ background:linear-gradient(115deg,#f4eee3 0%,#ead6cf 40%,#ecd8ba 76%,#f4dfa9 100%);
+ box-shadow:inset 0 1px 0 #fff8;
+}
+.petal-button:hover,.petal-button:focus-visible{background:linear-gradient(115deg,#f9f1e6,#edd4ce 40%,#f3d8ab);border-color:#aa8464}
+.petal-mark{display:inline-flex;flex:none;width:25px;height:25px}.petal-mark svg{display:block;width:100%;height:100%}
+.journey-nav{flex-wrap:wrap;justify-content:center}
+.journey-nav button[hidden]{display:none}
+@media(forced-colors:active){.petal-button,.journey-index .entry-button.petal-button{background:ButtonFace;color:ButtonText;border:1px solid ButtonText}.petal-mark{display:none}}
+
+
+html.poem-route-loading,html.poem-route-loading body{background:#080706}
+html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;background:#080706;pointer-events:none}
+.poem-backdrop{position:fixed;inset:0;z-index:95;background:#080706;opacity:1;pointer-events:none;transition:none}
+.poem-backdrop[hidden]{display:none!important}
+.poem-backdrop.is-leaving{opacity:0;transition:opacity 2s ease-in-out}
+@media(prefers-reduced-motion:reduce){.poem-backdrop.is-leaving{transition-duration:.2s}}
+</style>
+<script src="../ana-klaudya/publication.js"></script>
+</head>
+
+<body class="locked" data-publication="web">
+  <audio id="voiceMusic" preload="auto" loop src="ana-klaudya.m4a"></audio>
+  <audio id="nameAudio" preload="auto" src="nombre.m4a"></audio>
+
+  <div class="world" aria-hidden="true">
+    <div class="layer layer-green"></div>
+    <div class="layer layer-deep"></div>
+    <div class="layer layer-billiard"></div>
+    <div class="layer layer-warm"></div>
+    <div class="layer pulse-field" id="pulseField"></div>
+    <div class="layer grain"></div>
+  </div>
+
+  <div class="portrait-finale" id="portraitFinale" aria-hidden="true">
+    <div class="portrait-image-area">
+      <div class="portrait-image-wrap">
+        <img id="anaPortrait" src="ana-klaudya-fotografia.jpg" alt="Ana Klaudya" decoding="async">
+        <button id="cenicientoLink" class="portrait-question" type="button" aria-label="Descubrir Ceniciento"><span class="question-beat" aria-hidden="true">?</span></button>
+      </div>
+    </div>
+  </div>
+
+<dialog class="journey-index" id="journeyIndex" aria-label="Índice de Ana Klaudya">
+<button class="journey-index-close" id="journeyIndexClose" type="button" aria-label="Cerrar índice">×</button>
+<nav class="ana-navigation" id="anaNavigation" aria-label="Piezas de Ana Klaudya">
+<button class="entry-button piece-button" id="anaEstrella" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="0 0 300 64" preserveAspectRatio="xMaxYMid slice"><image href="../estrella/umbral.jpg" width="300" height="200" y="-70"/><g transform="translate(251 32)"><circle r="23" fill="#ece8d8"/><path d="M0-23a23 23 0 0 1 0 46a11.5 11.5 0 0 1 0-23a11.5 11.5 0 0 0 0-23" fill="#17202a"/><circle cy="-11.5" r="3.3" fill="#17202a"/><circle cy="11.5" r="3.3" fill="#ece8d8"/></g></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">Prólogo · Siguiendo una tarjeta</span></button>
+<button class="entry-button piece-button" id="anaRead" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="610 760 600 640" preserveAspectRatio="xMaxYMid meet"><image href="ana-klaudya-fotografia.jpg" width="1228" height="2048"/></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">Elegía breve para Ana Klaudya</span></button>
+<button class="entry-button piece-button" id="anaOjos" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="705 835 320 140" preserveAspectRatio="xMidYMid slice"><image href="ana-klaudya-fotografia.jpg" width="1228" height="2048"/></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">En tus ojos</span></button>
+<button class="entry-button piece-button" id="anaSonrisa" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="680 1035 265 140" preserveAspectRatio="xMidYMid slice"><image href="ana-klaudya-fotografia.jpg" width="1228" height="2048"/></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">En tus labios</span></button>
+<button class="entry-button piece-button" id="anaCabello" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="1010 680 210 230" preserveAspectRatio="xMidYMid slice"><image href="ana-klaudya-fotografia.jpg" width="1228" height="2048"/></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">Tu cabello</span></button>
+<button class="entry-button piece-button" id="anaPiel" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="855 1090 180 420" preserveAspectRatio="xMidYMid slice"><image href="ana-klaudya-fotografia.jpg" width="1228" height="2048"/></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">Tu piel</span></button>
+<button class="entry-button petal-button piece-button" id="anaInterlude" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="15 103 487 297" preserveAspectRatio="xMidYMid slice"><image href="../interludio/mundo-flores.png" width="1536" height="1024"/></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">Interludio · Iba a llevarte flores</span></button>
+<button class="entry-button flambe-button" id="anaEpilogue" type="button">Epílogo · A fuego lento</button>
+<button class="entry-button piece-button" id="anaVoice" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="0 0 260 64" preserveAspectRatio="xMaxYMid slice"><g fill="none" stroke="#c6dfd8" stroke-width="2" stroke-linecap="round" opacity=".7"><path d="M18 29v6m10-12v18m10-22v26m10-16v6m10-25v44m10-33v22m10-15v8m10-27v46m10-35v24m10-19v14m10-10v6m10-24v42m10-28v14m10-11v8m10-28v48m10-34v20m10-18v16m10-12v8m10-20v32m10-23v14m10-10v6m10-17v28m10-22v16"/></g></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">▶ Escuchar la elegía</span></button>
+</nav>
+<div class="journey-index-links"><a href="../ana-klaudya/acerca/" target="_blank" rel="noopener">Acerca del proyecto ↗</a><a href="../ana-klaudya-festival/" target="_blank" rel="noopener">Jurados y festivales ↗</a></div>
+</dialog>
+<nav class="journey-nav" id="journeyNav" aria-label="Recorrido de la obra" hidden>
+<button id="journeyPrevious" type="button">Anterior</button>
+<button id="journeyIndexOpen" type="button" aria-haspopup="dialog">Índice</button>
+<button id="journeyNext" type="button">Siguiente</button>
+</nav>
+
+  <div id="poemBackdrop" class="poem-backdrop" aria-hidden="true" hidden></div>
+  <iframe id="cenicientoFrame" class="ceniciento-frame" title="Ceniciento" allow="autoplay" hidden></iframe>
+
+  <div class="entry" id="entry" role="dialog" aria-modal="true" aria-label="Entrada a Ana Klaudya">
+    <div class="entry-inner">
+      <p class="entry-title">ANA KLAUDYA</p>
+      <p class="entry-flag">poemas de Paco Olmo de Males</p>
+      <div class="entry-actions">
+        <button class="entry-button" id="entryButton" type="button">▶ Comenzar</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="entry-button voice-launch" id="voiceLaunch" type="button" aria-haspopup="dialog">Voz</button>
+  <dialog class="voice-dialog" id="voiceDialog" aria-labelledby="voiceTitle">
+    <h2 id="voiceTitle">ANA KLAUDYA</h2>
+    <audio id="recording" controls controlslist="nodownload" preload="metadata" src="recitado.m4a" aria-label="Recitado de Ana Klaudya">
+      Tu navegador no admite la reproducción de audio.
+    </audio>
+    <div class="voice-mix" hidden>
+      <label><input id="musicEnabled" type="checkbox" checked> Acompañar con música</label>
+      <div class="music-level"><label for="musicLevel">Nivel de música</label><output id="musicLevelValue" for="musicLevel">80 %</output></div>
+      <input id="musicLevel" type="range" min="0" max="80" value="80" step="1" aria-label="Nivel de música">
+    </div>
+    <p class="voice-status" id="voiceStatus" role="status" aria-live="polite"></p>
+    <div class="entry-actions">
+      <button class="entry-button" id="voicePlay" type="button">Activar voz</button>
+      <button class="entry-button" id="voiceClose" type="button">Volver</button>
+    </div>
+  </dialog>
+
+  <div class="name-prelude" id="namePrelude" aria-hidden="true">
+    <p class="name-line"><span class="name-ana">Ana</span><span class="name-klaudya">Klaudya</span></p>
+  </div>
+
+  <button class="sound-toggle" id="soundToggle" type="button" aria-label="Silenciar sonido" aria-pressed="false" title="Sonido">
+    <svg class="sound-on" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M9 18V6l9-2v12"></path>
+      <circle cx="6.5" cy="18" r="2.5"></circle>
+      <circle cx="15.5" cy="16" r="2.5"></circle>
+    </svg>
+    <svg class="sound-off" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 6l12 12"></path>
+      <path d="M9 18V6l9-2v8"></path>
+    </svg>
+  </button>
+
+  <div class="scroll-cue" aria-hidden="true"></div>
+
+  <main id="reading">
+    <div class="poem">
+      <span class="line" data-stage="face">Había en su rostro</span>
+      <span class="line g-opening-2">una belleza serena,</span>
+      <span class="line g-comma">de las que no reclaman</span>
+      <span class="line g-close">hacerse notar.</span>
+
+      <span class="line g-eyes-2">La hondura de los ojos,</span>
+      <span class="line g-comma">el trazo de la boca,</span>
+      <span class="line g-comma">el cabello dispuesto</span>
+      <span class="line g-close">con un cuidado</span>
+      <span class="line g-soft">que subraya</span>
+      <span class="line g-subraya-2">sin corregir.</span>
+
+      <span class="line g-turn" id="voiceStart" data-stage="voice">Y luego habló.</span>
+      <span class="line g-sentence">Brasil seguía intacto</span>
+      <span class="line g-close">en su manera de decir:</span>
+      <span class="line g-comma">el peso tibio de las vocales,</span>
+      <span class="line g-comma">la sílaba demorada,</span>
+      <span class="line g-comma">una música</span>
+      <span class="line g-music-2a">que se negaba</span>
+      <span class="line g-music-2b">a disimular.</span>
+
+      <span class="line g-reflection-open">Entonces comprendí</span>
+      <span class="line g-reflection-thought">que a la luz de aquel rostro</span>
+      <span class="line g-reflection-suspense">le faltaba todavía</span>
+      <span class="line g-reflection-voice">la <span class="voice-word">voz</span>.</span>
+
+      <span class="line g-deep" id="embraceStart" data-stage="embrace">Después vino</span>
+      <span class="line g-close">el abrazo.</span>
+      <span class="line g-embrace-a">Ignoro cuánto duró</span>
+      <span class="line g-embrace-b">o quién se acercó primero.</span>
+      <span class="line g-embrace-c">Solo recuerdo</span>
+      <span class="line g-embrace-d heat-one">el calor.</span>
+
+      <span class="line g-deep" id="memoryStart" data-stage="memory">Y quedó también</span>
+      <span class="line g-soft">esa íntima injusticia</span>
+      <span class="line g-comma">que a veces comete la memoria:</span>
+      <span class="line g-sentence">de toda una tarde</span>
+      <span class="line g-close">retiene intacto</span>
+      <span class="line g-soft">un rostro,</span>
+      <span class="line g-deep">y de todo un abrazo,</span>
+
+      <span class="heat-anchor" id="finalHeatAnchor">
+        <span class="line heat-final" id="finalHeat">
+          <span class="heat-part heat-el">el</span>
+          <span class="heat-part heat-calor">calor.</span>
+        </span>
+      </span>
+
+      <div class="epilogue-invitation" id="epilogueInvitation" hidden><button class="entry-button flambe-button" id="readEpilogue" type="button">Epílogo · A fuego lento →</button></div>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const body = document.body;
+      const entry = document.getElementById('entry');
+      const entryButton = document.getElementById('entryButton');
+      const namePrelude = document.getElementById('namePrelude');
+      const pulseField = document.getElementById('pulseField');
+      const soundtrack = document.getElementById('voiceMusic');
+      const soundToggle = document.getElementById('soundToggle');
+      const voiceDialog = document.getElementById('voiceDialog');
+      const recording = document.getElementById('recording');
+      const voicePlay = document.getElementById('voicePlay');
+      const voiceStatus = document.getElementById('voiceStatus');
+      const nameAudio = document.getElementById('nameAudio');
+      const voiceMusic = document.getElementById('voiceMusic');
+      const musicEnabled = document.getElementById('musicEnabled');
+      const musicLevel = document.getElementById('musicLevel');
+      const anaPortrait=document.getElementById('anaPortrait');
+      const portraitFinale=document.getElementById('portraitFinale');
+      let completedVoicePasses=0, listeningStart=null, listeningEnd=0;
+      let listenedRanges=[], portraitRequested=false, portraitRevealTimer=null;
+      let questionGrowthActive=false,questionGrowth=.22,questionNext=.22;
+      let finalCalorTimer=null,finalPortraitTimer=null;
+      const growQuestionOnHeartbeat=()=>{
+        if(!questionGrowthActive || !body.classList.contains('portrait-revealed') || body.classList.contains('ceniciento-open'))return;
+        questionGrowth=questionNext;questionNext=Math.min(1,questionGrowth+.12);
+        root.style.setProperty('--question-current',questionGrowth.toFixed(3));
+        root.style.setProperty('--question-first',Math.min(1,questionGrowth+.06).toFixed(3));
+        root.style.setProperty('--question-next',questionNext.toFixed(3));
+      };
+      const revealPortrait=()=>{
+        if(body.classList.contains('portrait-revealed')) return;
+        portraitRequested=true;
+        const reveal=()=>{
+          if(!anaPortrait.naturalWidth) return;
+          portraitFinale.setAttribute('aria-hidden','false');
+          body.classList.add('portrait-revealed');
+          anaNavigation.hidden=true;
+          body.classList.remove('ana-navigation-ready');
+          clearTimeout(portraitRevealTimer);
+          portraitRevealTimer=setTimeout(()=>{
+            if(!body.classList.contains('portrait-revealed') || !cenicientoFrame.hidden)return;
+            questionGrowthActive=true;
+            anaNavigation.hidden=false;
+            body.classList.add('ana-navigation-ready');
+          },25000);
+        };
+        if(anaPortrait.complete) reveal();
+        else anaPortrait.addEventListener('load',reveal,{once:true});
+      };
+      let mixContext=null, musicGain=null;
+      let ambientLevel=Number(musicLevel.value)/100;
+      let nameFrame=0, namePriming=false;
+      let voicePending=false, voicePriming=false, voiceAllowed=false;
+      let voiceTimer=null, voiceRequest=0;
+      const TRANSITION_SECONDS=4;
+      const musicLimit=()=>Number(musicLevel.value)/100;
+      const voiceBedLimit=()=>musicLimit()*.8;
+      const showMusicLevel=level=>{
+        musicLevel.value=String(Math.round(level*100));
+        document.getElementById('musicLevelValue').textContent=musicLevel.value+' %';
+      };
+      const fadeMusicTo=(target,seconds=TRANSITION_SECONDS)=>{
+        if(musicGain){
+          const gain=musicGain.gain,now=mixContext.currentTime;
+          if(gain.cancelAndHoldAtTime) gain.cancelAndHoldAtTime(now);
+          else {const value=gain.value;gain.cancelScheduledValues(now);gain.setValueAtTime(value,now);}
+          gain.linearRampToValueAtTime(target,now+seconds);
+        }else voiceMusic.volume=target;
+      };
+      const prepareMix=()=>{
+        if(!mixContext){
+          const Context=window.AudioContext || window.webkitAudioContext;
+          if(!Context) return false;
+          mixContext=new Context();
+          musicGain=mixContext.createGain();musicGain.gain.value=voiceMusic.paused ? 0 : voiceMusic.volume;
+          mixContext.createMediaElementSource(recording).connect(mixContext.destination);
+          mixContext.createMediaElementSource(nameAudio).connect(mixContext.destination);
+          mixContext.createMediaElementSource(voiceMusic).connect(musicGain).connect(mixContext.destination);
+          voiceMusic.volume=1;
+        }
+        if(mixContext.state==='suspended') mixContext.resume().catch(()=>{});
+        return true;
+      };
+      const ambientButtons=show=>{if(show){body.classList.add('sound-ready');syncSoundToggle();}};
+      const ensureAmbientMusic=()=>{
+        if(!musicEnabled.checked) return Promise.resolve(false);
+        voiceMusic.muted=false;
+        if(!mixContext) voiceMusic.volume=musicLimit();
+        const playback=voiceMusic.paused ? voiceMusic.play() : Promise.resolve();
+        return playback.then(()=>{
+          ambientButtons(false);soundStarted=true;body.classList.add('sound-ready');syncSoundToggle();return true;
+        }).catch(()=>{ambientButtons(true);return false;});
+      };
+      const restoreAmbient=()=>{
+        showMusicLevel(ambientLevel);
+        if(soundStarted && musicEnabled.checked){
+          fadeMusicTo(ambientLevel);
+          ensureAmbientMusic();
+        }else fadeMusicTo(0);
+      };
+      const cancelVoiceStart=()=>{
+        voiceRequest++;
+        clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
+        voicePlay.textContent='Activar voz';voiceStatus.textContent='';restoreAmbient();
+      };
+      const playRecording=()=>{
+        if(voicePending) return;
+        const request=++voiceRequest,playhead=recording.ended ? 0 : recording.currentTime;
+        const muted=recording.muted;
+        prepareMix();
+        voicePending=true;voicePriming=true;voiceAllowed=false;
+        voicePlay.textContent='Cancelar';
+        voiceStatus.textContent='La música desciende suavemente…';
+        if(musicEnabled.checked && voiceMusic.paused && musicGain){
+          musicGain.gain.cancelScheduledValues(mixContext.currentTime);
+          musicGain.gain.setValueAtTime(musicLimit(),mixContext.currentTime);
+        }
+        ensureAmbientMusic();
+        // Unlock media playback in this user gesture, preserving the first word.
+        recording.muted=true;
+        recording.play().then(()=>{
+          recording.pause();recording.currentTime=playhead;recording.muted=muted;voicePriming=false;
+          if(request!==voiceRequest) return;
+          if(musicEnabled.checked){
+            const target=voiceBedLimit();
+            fadeMusicTo(target);
+            showMusicLevel(target);
+          }
+          voiceTimer=setTimeout(()=>{
+            if(request!==voiceRequest || !voiceDialog.open) return;
+            voiceTimer=null;voicePending=false;voiceAllowed=true;
+            recording.play().catch(()=>{
+              voiceAllowed=false;voicePlay.textContent='Activar voz';restoreAmbient();
+              voiceStatus.textContent='Pulsa Activar voz para volver a intentarlo.';
+            });
+          },musicEnabled.checked ? TRANSITION_SECONDS*1000 : 0);
+        }).catch(()=>{
+          recording.muted=muted;voicePriming=false;voicePending=false;voiceAllowed=false;
+          voicePlay.textContent='Activar voz';restoreAmbient();
+          voiceStatus.textContent='Pulsa Activar voz para iniciar la grabación.';
+        });
+      };
+      const startMix=()=>{
+        if(voicePending || recording.paused || voicePriming) return;
+        if(!musicEnabled.checked){fadeMusicTo(0);return;}
+        if(!prepareMix()) return;
+        ensureAmbientMusic();
+      };
+            musicEnabled.addEventListener('change',()=>{
+        if(musicEnabled.checked){
+          prepareMix();fadeMusicTo(musicLimit());ensureAmbientMusic();startMix();
+        }else {fadeMusicTo(0);ambientButtons(false);}
+      });
+      musicLevel.addEventListener('input',()=>{
+        ambientLevel=musicLimit();
+        document.getElementById('musicLevelValue').textContent=musicLevel.value+' %';
+        fadeMusicTo(musicEnabled.checked ? musicLimit() : 0,.5);
+      });
+      recording.addEventListener('playing',startMix);
+      recording.addEventListener('contextmenu',event=>event.preventDefault());
+      const saveListenedRange=()=>{
+        if(listeningStart!==null && listeningEnd>listeningStart){
+          listenedRanges.push([listeningStart,listeningEnd]);
+        }
+        listeningStart=null;
+      };
+      recording.addEventListener('playing',()=>{
+        if(voicePriming || voicePending) return;
+        listeningStart=recording.currentTime;listeningEnd=listeningStart;
+      });
+      recording.addEventListener('timeupdate',()=>{
+        if(listeningStart===null || voicePriming || recording.seeking) return;
+        listeningEnd=recording.currentTime;
+      });
+      recording.addEventListener('seeking',saveListenedRange);
+      recording.addEventListener('seeked',()=>{
+        if(recording.paused || voicePriming || voicePending) return;
+        listeningStart=recording.currentTime;listeningEnd=listeningStart;
+      });
+      recording.addEventListener('pause',()=>{
+        if(voicePriming || voicePending || recording.seeking) return;
+        if(listeningStart!==null) listeningEnd=recording.currentTime;
+        saveListenedRange();
+      });
+      const finishVoicePass=()=>{
+        if(listeningStart!==null) listeningEnd=recording.currentTime;
+        saveListenedRange();
+        completedVoicePasses++;
+        // Give the last two verses a visible pause before the photograph.
+        finalHeat.classList.add('is-shown');
+        startFinalSequence();
+        clearTimeout(finalPortraitTimer);
+        finalPortraitTimer=setTimeout(()=>{
+          finalPortraitTimer=null;
+          if(cenicientoFrame.hidden && body.classList.contains('reading-ready'))revealPortrait();
+        },finalHeat.classList.contains('show-calor') ? 4000 : 8500);
+        listenedRanges=[];listeningStart=null;
+      };
+      const resetPortraitFinale=()=>{
+        clearTimeout(finalCalorTimer);clearTimeout(finalPortraitTimer);
+        finalCalorTimer=null;finalPortraitTimer=null;finalSequenceStarted=false;
+        finalHeat.classList.remove('is-shown','show-calor','is-burning');
+        warmPhase=0;warmTakeover=0;root.style.setProperty('--warm','0');
+        document.getElementById('epilogueInvitation').hidden=true;
+        clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
+        portraitRequested=false;completedVoicePasses=0;
+        questionGrowthActive=false;questionGrowth=.22;questionNext=.22;
+        for(const key of ['--question-current','--question-first','--question-next'])root.style.setProperty(key,'.22');
+        body.classList.remove('portrait-revealed');
+        portraitFinale.setAttribute('aria-hidden','true');
+        listenedRanges=[];listeningStart=null;
+      };
+      const syncNameWords=()=>{
+        if(namePriming || !body.classList.contains('prelude')) return;
+        if(nameAudio.currentTime>=.19) namePrelude.classList.add('show-ana');
+        if(nameAudio.currentTime>=4.79) namePrelude.classList.add('show-klaudya');
+        if(!nameAudio.paused) nameFrame=requestAnimationFrame(syncNameWords);
+      };
+      const primeNameAudio=()=>{
+        namePriming=true;nameAudio.muted=true;
+        return nameAudio.play().then(()=>{
+          nameAudio.pause();nameAudio.currentTime=0;nameAudio.muted=false;namePriming=false;return true;
+        }).catch(()=>{nameAudio.muted=false;namePriming=false;return false;});
+      };
+      nameAudio.addEventListener('playing',()=>{
+        if(!namePriming){cancelAnimationFrame(nameFrame);syncNameWords();}
+      });
+      nameAudio.addEventListener('ended',()=>{
+        cancelAnimationFrame(nameFrame);nameFrame=0;
+      });
+      const lines = [...document.querySelectorAll('.line')];
+      const voiceStart = document.getElementById('voiceStart');
+      const embraceStart = document.getElementById('embraceStart');
+      const memoryStart = document.getElementById('memoryStart');
+      const finalHeat = document.getElementById('finalHeat');
+
+      let anaEntryRequest=0;
+      const anaPreludeTimers=new Set();
+      const cancelAnaPrelude=()=>{
+        anaEntryRequest++;
+        for(const timer of anaPreludeTimers)clearTimeout(timer);
+        anaPreludeTimers.clear();
+      };
+      const preludeTimeout=(fn,delay)=>{
+        const timer=setTimeout(()=>{anaPreludeTimers.delete(timer);fn();},delay);
+        anaPreludeTimers.add(timer);
+      };
+      let soundStarted=false;
+      let prologuePlayed=false, prologueActive=false, prologueNameReady=false;
+      let readingReady=false;
+      let hasScrolled=false;
+      let releaseY=0;
+      let ticking=false;
+
+      let finalSequenceStarted=false;
+      let warmTakeover=0;
+      let warmPhase=0;
+
+      const clamp=value=>Math.min(1,Math.max(0,value));
+      const smooth=t=>t*t*t*(t*(t*6-15)+10);
+      const ramp=(value,start,end)=>smooth(clamp((value-start)/Math.max(.0001,end-start)));
+
+      const syncSoundToggle=()=>{
+        const active=soundStarted && !soundtrack.paused && !soundtrack.muted;
+        soundToggle.classList.toggle('is-muted',soundtrack.muted || !active);
+        soundToggle.setAttribute('aria-pressed',String(!active));
+        soundToggle.setAttribute('aria-label',active?'Silenciar sonido':'Activar sonido');
+      };
+
+      const startSound=()=>{
+        musicEnabled.checked=true;
+        prepareMix();
+        if(voiceMusic.paused && musicGain){
+          musicGain.gain.cancelScheduledValues(mixContext.currentTime);
+          musicGain.gain.setValueAtTime(musicLimit(),mixContext.currentTime);
+        }else fadeMusicTo(musicLimit(),.6);
+        return ensureAmbientMusic();
+      };
+
+      const beginPrelude=(nameReady)=>{
+        setJourney('elegia');
+        cancelAnaPrelude();
+        body.classList.add('prelude');
+        entry.classList.add('is-open');
+        namePrelude.classList.remove('show-ana','show-klaudya','fade');
+
+        if(nameReady){
+          preludeTimeout(()=>{
+            nameAudio.play().catch(()=>{
+              preludeTimeout(()=>namePrelude.classList.add('show-ana'),190);
+              preludeTimeout(()=>namePrelude.classList.add('show-klaudya'),4790);
+              restoreAmbient();
+            });
+          },2410);
+        }else{
+          preludeTimeout(()=>namePrelude.classList.add('show-ana'),2600);
+          preludeTimeout(()=>namePrelude.classList.add('show-klaudya'),7200);
+        }
+        preludeTimeout(()=>namePrelude.classList.add('fade'),12500);
+
+        preludeTimeout(()=>{
+          body.classList.remove('locked','prelude');
+          body.classList.add('reading-ready');
+          namePrelude.classList.add('fade');
+          window.scrollTo({top:0,left:0,behavior:'auto'});
+          releaseY=window.scrollY;
+          readingReady=true;
+          hasScrolled=false;
+        },14000);
+      };
+
+      entryButton.addEventListener('click',()=>{
+        if(entryButton.disabled)return;
+        entryButton.disabled=true;
+        body.classList.add('journey-started','sound-ready');
+        entry.classList.add('is-open');
+        if(prologuePlayed){beginPrelude(false);setJourney('elegia');}
+        else {prologueNameReady=false;openPoem('estrella',true);}
+      });
+
+      soundToggle.addEventListener('click',async()=>{
+        if(!soundStarted || soundtrack.paused){
+          const started=await startSound();
+          if(!started) return;
+        }else{
+          soundtrack.muted=!soundtrack.muted;
+        }
+        syncSoundToggle();
+      });
+
+      const openVoice=()=>{
+        if(!readingReady) return;
+        if(!voiceDialog.open){
+          body.classList.add('voice-open');voiceDialog.show();
+        }
+        // A voice selection starts listening with the existing music fade and delay.
+        if(recording.paused && !voicePending) playRecording();
+      };
+      document.getElementById('voiceLaunch').addEventListener('click',()=>openVoice());
+      voicePlay.addEventListener('click',()=>{
+        if(voicePending) cancelVoiceStart();
+        else if(recording.paused) playRecording();
+        else recording.pause();
+      });
+      document.getElementById('voiceClose').addEventListener('click',()=>voiceDialog.close());
+      voiceDialog.addEventListener('close',()=>{
+        if(body.classList.contains('ceniciento-open')){recording.pause();body.classList.remove('voice-open');return;}
+        cancelVoiceStart();recording.pause();body.classList.remove('voice-open');restoreAmbient();
+      });
+      recording.addEventListener('play',()=>{
+        if(voicePriming) return;
+        if(!voiceAllowed){recording.pause();playRecording();return;}
+        voicePlay.textContent='Pausar';voiceStatus.textContent='';startMix();
+      });
+      recording.addEventListener('pause',()=>{
+        if(voicePriming || voicePending || body.classList.contains('ceniciento-open')) return;
+        voiceAllowed=false;voicePlay.textContent='Activar voz';restoreAmbient();
+      });
+      recording.addEventListener('ended',()=>{
+        finishVoicePass();
+        voiceAllowed=false;voicePlay.textContent='Volver a escuchar';
+        voiceStatus.textContent='Fin de la grabación.';restoreAmbient();
+      });
+      recording.addEventListener('error',()=>{
+        cancelVoiceStart();
+        voiceStatus.textContent='No se ha podido cargar el audio. Puedes volver a intentarlo.';
+      });
+
+      const cenicientoFrame=document.getElementById('cenicientoFrame');
+      const poemBackdrop=document.getElementById('poemBackdrop');
+      const anaNavigation=document.getElementById('anaNavigation');
+      const sendCenicientoMusicState=()=>{
+        if(!cenicientoFrame.contentWindow || cenicientoFrame.hidden) return;
+        cenicientoFrame.contentWindow.postMessage({channel:'ceniciento-music-v1',type:'state',pulseTime:(pulseField.getAnimations?.()[0]?.currentTime||0),level:musicLimit(),enabled:musicEnabled.checked && !voiceMusic.muted,playing:!voiceMusic.paused},window.location.origin);
+      };
+      let sonrisaLeaving=false, poemRoute='', poemTransition=0, interludePreviewReady=false;
+      let poemExitTimer=null, poemRevealTimer=null;
+      const cancelPoemTransition=()=>{
+        poemTransition++;
+        clearTimeout(poemExitTimer);clearTimeout(poemRevealTimer);
+        poemExitTimer=null;poemRevealTimer=null;sonrisaLeaving=false;
+        cenicientoFrame.classList.remove('sonrisa-leaving');
+        poemBackdrop.classList.remove('is-leaving');
+        cenicientoFrame.removeAttribute('aria-busy');
+      };
+      const closeCeniciento=()=>{
+        cancelPoemTransition();
+        if(prologueActive){prologueActive=false;entry.classList.remove('is-open');}
+        entryButton.disabled=false;
+        poemRoute='';interludePreviewReady=false;
+        poemBackdrop.hidden=true;
+        cenicientoFrame.hidden=true;cenicientoFrame.classList.remove('sonrisa-transition','sonrisa-visible','interlude-transition');body.classList.remove('sonrisa-open','ceniciento-open','eyes-open');root.classList.remove('ceniciento-open');document.title='ANA KLAUDYA';
+        // Unload narration only; the music remains in this document.
+        cenicientoFrame.removeAttribute('src');
+        anaNavigation.hidden=false;body.classList.add('ana-navigation-ready');
+        setJourney('elegia');
+      };
+      const openPoem=(piece,asPrologue=false,continuingOpening=false,reuseOpening=false)=>{
+        const keepOpening=piece==='epilogo'&&poemRoute==='interludio'&&(interludePreviewReady||(reuseOpening&&continuingOpening));
+        clearTimeout(finalPortraitTimer);finalPortraitTimer=null;
+        if(poemRoute===piece&&!cenicientoFrame.hidden&&!sonrisaLeaving)return;
+        // Keep Ana covered throughout every child-to-child navigation and load.
+        poemBackdrop.hidden=false;
+        root.classList.remove('poem-route-loading');
+        const briefFade=piece==='interludio'||poemRoute==='interludio';
+        cancelPoemTransition();cancelAnaPrelude();
+        cenicientoFrame.classList.toggle('interlude-transition',briefFade);
+        poemRoute=piece;interludePreviewReady=false;
+        body.classList.toggle('eyes-open',piece==='ojos');
+        if(!keepOpening)cenicientoFrame.classList.remove('sonrisa-visible');else cenicientoFrame.classList.add('sonrisa-visible');cenicientoFrame.classList.add('sonrisa-transition');body.classList.add('sonrisa-open');
+        anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=({ceniciento:'CENICIENTO · leer o escuchar',ojos:'EN TUS OJOS',sonrisa:'EN TUS LABIOS',cabello:'TU CABELLO',piel:'TU PIEL',estrella:'SIGUIENDO UNA TARJETA',epilogo:'A FUEGO LENTO · EPÍLOGO',interludio:'IBA A LLEVARTE FLORES · INTERLUDIO'})[piece];
+        voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
+        recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
+        prologueActive=asPrologue;
+        cenicientoFrame.hidden=false;
+        cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
+        setJourney(piece);
+        body.classList.add('journey-started');
+        if(keepOpening)cenicientoFrame.contentWindow.postMessage({channel:'ceniciento-music-v1',type:'continue-epilogue'},window.location.origin);
+        else cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-pausa-flores'+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'');
+        if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
+      };
+      const openCeniciento=()=>openPoem('ceniciento');
+      document.getElementById('cenicientoLink').addEventListener('click',openCeniciento);
+      const returnToAna=(mode='home',updateHistory=true)=>{
+        if(cenicientoFrame.hidden||sonrisaLeaving)return;
+        cancelPoemTransition();cancelAnaPrelude();
+        const transition=poemTransition;
+        sonrisaLeaving=true;
+        poemBackdrop.classList.add('is-leaving');
+        cenicientoFrame.classList.add('sonrisa-leaving');
+        cenicientoFrame.setAttribute('aria-busy','true');
+        if(mode==='ana'||mode==='home'){
+          resetPortraitFinale();
+          body.classList.add('locked');body.classList.remove('reading-ready','prelude','portrait-revealed');
+          readingReady=false;hasScrolled=false;
+          namePrelude.classList.add('fade');portraitFinale.setAttribute('aria-hidden','true');
+          entryButton.disabled=true;
+          if(mode==='ana'){
+            prologuePlayed=true;prologueActive=false;entry.classList.add('is-open');
+          }else{
+            entry.classList.remove('is-open');entryButton.textContent='▶ Comenzar';
+          }
+        }
+        cenicientoFrame.classList.remove('sonrisa-visible');
+        const duration=window.matchMedia('(prefers-reduced-motion: reduce)').matches?220:2100;
+        poemExitTimer=setTimeout(()=>{
+          if(transition!==poemTransition)return;
+          closeCeniciento();
+          if(updateHistory)window.history.replaceState(null,'',window.location.pathname+window.location.search);
+          if(mode==='home'||mode==='ana')window.scrollTo({top:0,left:0,behavior:'auto'});
+          if(mode==='text')showAnaText();
+          if(mode==='ana'){
+            anaNavigation.hidden=true;body.classList.remove('ana-navigation-ready');
+            beginPrelude(prologueNameReady);
+          }
+        },duration);
+      };
+      const openSonrisa=()=>openPoem('sonrisa');
+      const openOjos=()=>openPoem('ojos');
+      const openCabello=()=>openPoem('cabello');
+      const openPiel=()=>openPoem('piel');
+      const openEstrella=()=>openPoem('estrella');
+      const openEpilogue=()=>openPoem('epilogo');
+      document.getElementById('anaInterlude').addEventListener('click',()=>openPoem('interludio'));
+      for(const id of ['anaEpilogue','readEpilogue'])document.getElementById(id).addEventListener('click',openEpilogue);
+      document.getElementById('anaSonrisa').addEventListener('click',openSonrisa);
+      document.getElementById('anaOjos').addEventListener('click',openOjos);
+      document.getElementById('anaCabello').addEventListener('click',openCabello);
+      document.getElementById('anaPiel').addEventListener('click',openPiel);
+      document.getElementById('anaEstrella').addEventListener('click',openEstrella);
+      const showAnaText=()=>{
+        setJourney('elegia');body.classList.add('journey-started','sound-ready');
+        cancelAnaPrelude();
+        if(!cenicientoFrame.hidden){closeCeniciento();window.history.replaceState(null,'',window.location.pathname+window.location.search);}
+        resetPortraitFinale();
+        if(voiceDialog.open)voiceDialog.close();
+        cancelVoiceStart();recording.pause();nameAudio.pause();
+        entry.classList.add('is-open');body.classList.remove('locked','prelude','portrait-revealed');
+        portraitFinale.setAttribute('aria-hidden','true');namePrelude.classList.add('fade');
+        body.classList.add('reading-ready');readingReady=true;hasScrolled=true;
+        window.scrollTo({top:window.innerHeight*.25,left:0,behavior:'auto'});releaseY=window.scrollY;revealLines();
+      };
+      document.getElementById('anaRead').addEventListener('click',showAnaText);
+      document.getElementById('anaVoice').addEventListener('click',()=>{showAnaText();recording.currentTime=0;openVoice();});
+      const syncPoemRoute=()=>{
+        const piece=window.location.hash.slice(1);
+        if(['epilogo','interludio','estrella','cabello','piel','ojos','sonrisa','ceniciento'].includes(piece))openPoem(piece);
+        else if(!cenicientoFrame.hidden)returnToAna('home',false);
+      };
+      window.addEventListener('popstate',syncPoemRoute);
+      window.addEventListener('hashchange',syncPoemRoute);
+      window.addEventListener('message',event=>{
+        if(event.origin!==window.location.origin || event.source!==cenicientoFrame.contentWindow || event.data?.channel!=='ceniciento-music-v1'||cenicientoFrame.hidden)return;
+        const data=event.data;
+        if(data.type==='interlude-preview-ready'&&poemRoute==='interludio'){interludePreviewReady=true;sendCenicientoMusicState();return;}
+        if(data.type==='interlude-ended'&&poemRoute==='interludio'){openPoem('epilogo',false,data.openingShown===true,data.persistentOpening===true);return;}
+        if(data.type==='ana'&&poemRoute==='estrella'){returnToAna('ana');return;}
+        if(data.type==='home'||data.type==='close'){returnToAna(data.type);return;}
+        if(data.type==='level' && Number.isFinite(data.level)){
+          const level=Math.max(0,Math.min(.8,data.level));ambientLevel=level;showMusicLevel(level);fadeMusicTo(musicEnabled.checked?level:0,.5);
+        }
+        if(data.type==='enabled'){
+          musicEnabled.checked=!!data.enabled;voiceMusic.muted=false;
+          if(musicEnabled.checked){prepareMix();fadeMusicTo(musicLimit(),.5);ensureAmbientMusic();}
+          else fadeMusicTo(0,.5);
+        }
+        if(data.type==='start')ensureAmbientMusic().then(sendCenicientoMusicState);
+        sendCenicientoMusicState();
+      });
+      cenicientoFrame.addEventListener('load',()=>{
+        sendCenicientoMusicState();
+        if(body.classList.contains('sonrisa-open')&&!sonrisaLeaving){
+          cenicientoFrame.getBoundingClientRect();
+          const transition=poemTransition;
+          clearTimeout(poemRevealTimer);
+          poemRevealTimer=setTimeout(()=>{if(transition===poemTransition&&!cenicientoFrame.hidden&&!sonrisaLeaving)cenicientoFrame.classList.add('sonrisa-visible');},poemRoute==='epilogo'?0:350);
+        }
+      });
+
+
+      const journeyPieces=['estrella','elegia','ojos','sonrisa','cabello','piel','interludio','epilogo'];
+      const journeyTitles=['Prólogo · Siguiendo una tarjeta','Elegía breve para Ana Klaudya','En tus ojos','En tus labios','Tu cabello','Tu piel','Interludio · Iba a llevarte flores','Epílogo · A fuego lento'];
+      const journeyNav=document.getElementById('journeyNav');
+      const journeyPrevious=document.getElementById('journeyPrevious'),journeyNext=document.getElementById('journeyNext');
+      const journeyIndex=document.getElementById('journeyIndex');
+      let journeyPiece='estrella';
+      function setJourney(piece){
+        if(piece==='ceniciento'){journeyNav.hidden=true;return;}
+        const i=journeyPieces.indexOf(piece);if(i<0)return;
+        journeyPiece=piece;journeyNav.hidden=false;
+        journeyPrevious.disabled=i===0;journeyNext.disabled=i===journeyPieces.length-1;
+        journeyPrevious.setAttribute('aria-label',i>0?'Anterior: '+journeyTitles[i-1]:'Principio del recorrido');
+        journeyNext.setAttribute('aria-label',i<journeyPieces.length-1?'Siguiente: '+journeyTitles[i+1]:'Final del recorrido');
+        journeyNav.setAttribute('aria-label','Recorrido · '+journeyTitles[i]);
+      }
+      function goJourney(piece){
+        if(!journeyPieces.includes(piece))return;
+        if(journeyIndex.open)journeyIndex.close();
+        if(piece==='elegia'){
+          if(!cenicientoFrame.hidden)returnToAna('text');else showAnaText();
+        }else openPoem(piece);
+      }
+      journeyPrevious.addEventListener('click',()=>goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)-1]));
+      journeyNext.addEventListener('click',()=>goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)+1]));
+      document.getElementById('journeyIndexOpen').addEventListener('click',()=>{
+        anaNavigation.hidden=false;journeyIndex.showModal();
+        document.getElementById('journeyIndexClose').focus();
+      });
+      document.getElementById('journeyIndexClose').addEventListener('click',()=>journeyIndex.close());
+      anaNavigation.addEventListener('click',event=>{if(event.target.closest('button'))journeyIndex.close();});
+
+      const startWarmPrelude=()=>{
+        if(warmPhase!==0) return;
+        warmPhase=1;
+        warmTakeover=Math.max(warmTakeover,.05);
+        root.style.setProperty('--warm',warmTakeover.toFixed(3));
+      };
+
+      const intensifyWarmWithCalor=()=>{
+        warmPhase=2;
+        warmTakeover=Math.max(warmTakeover,.15);
+        root.style.setProperty('--warm',warmTakeover.toFixed(3));
+      };
+
+      pulseField.addEventListener('animationiteration',event=>{
+        if(event.animationName!=='pulseField') return;
+        growQuestionOnHeartbeat();
+        if(warmPhase===0) return;
+
+        const step=warmPhase===1 ? .025 : .045;
+        warmTakeover=Math.min(.92,warmTakeover+step);
+        root.style.setProperty('--warm',warmTakeover.toFixed(3));
+      });
+
+      const startFinalSequence=()=>{
+        if(finalSequenceStarted) return;
+        finalSequenceStarted=true;
+
+        /* "el": primera señal térmica, preparación */
+        startWarmPrelude();
+
+        /* "calor.": revelación; desde aquí cada pulso pesa más */
+        finalCalorTimer=setTimeout(()=>{
+          finalCalorTimer=null;
+          finalHeat.classList.add('show-calor');
+          intensifyWarmWithCalor();
+          document.getElementById('epilogueInvitation').hidden=false;
+        },4500);
+      };
+
+      const revealLines=()=>{
+        if(!readingReady || !hasScrolled) return;
+
+        const revealY=window.innerHeight*.48;
+
+        lines.forEach(line=>{
+          if(line.classList.contains('is-shown')) return;
+
+          const rect=line.getBoundingClientRect();
+
+          if(rect.top<=revealY && (rect.bottom>0 || line===finalHeat)){
+            line.classList.add('is-shown');
+
+            if(line===finalHeat){
+              startFinalSequence();
+            }
+          }
+        });
+      };
+
+      const stageProgress=element=>{
+        const rect=element.getBoundingClientRect();
+        return ramp(window.innerHeight-rect.top,0,window.innerHeight*1.25);
+      };
+
+      const renderWorld=()=>{
+        if(!readingReady){
+          root.style.setProperty('--green','0');
+          root.style.setProperty('--deep','0');
+          root.style.setProperty('--billiard','0');
+          root.style.setProperty('--warm',warmTakeover.toFixed(3));
+          return;
+        }
+
+        const voice=stageProgress(voiceStart);
+        const embrace=stageProgress(embraceStart);
+        const memory=stageProgress(memoryStart);
+        const finalStage=stageProgress(finalHeat);
+
+        const greenBase=Math.min(.58,.10+voice*.34+embrace*.14);
+        const deepBase=Math.min(.46,embrace*.25+memory*.21);
+        const billiardBase=Math.min(.76,memory*.34+finalStage*.42);
+
+        const warmFade=1-warmTakeover*.62;
+        const green=greenBase*warmFade;
+        const deep=deepBase*(1-warmTakeover*.46);
+        const billiard=billiardBase*(1-warmTakeover*.68);
+
+        root.style.setProperty('--green',green.toFixed(3));
+        root.style.setProperty('--deep',deep.toFixed(3));
+        root.style.setProperty('--billiard',billiard.toFixed(3));
+        root.style.setProperty('--warm',warmTakeover.toFixed(3));
+
+        const heatRect=finalHeat.getBoundingClientRect();
+        const heat=smooth(clamp((window.innerHeight*.88-heatRect.top)/(window.innerHeight*.48)));
+
+        let r,g,b;
+
+        if(heat<.48){
+          const t=heat/.48;
+          r=Math.round(205+(220-205)*t);
+          g=Math.round(118+(142-118)*t);
+          b=Math.round(86+(110-86)*t);
+        }else{
+          const t=(heat-.48)/.52;
+          r=Math.round(220+(232-220)*t);
+          g=Math.round(142+(156-142)*t);
+          b=Math.round(110+(126-110)*t);
+        }
+
+        root.style.setProperty('--heat-r',String(r));
+        root.style.setProperty('--heat-g',String(g));
+        root.style.setProperty('--heat-b',String(b));
+        root.style.setProperty('--heat-glow',heat.toFixed(3));
+
+        finalHeat.classList.toggle(
+          'is-burning',
+          warmPhase>0 && finalHeat.classList.contains('is-shown')
+        );
+      };
+
+      const onScroll=()=>{
+        if(readingReady && !hasScrolled && Math.abs(window.scrollY-releaseY)>4){
+          hasScrolled=true;
+          body.classList.add('has-scrolled');
+        }
+
+        if(!ticking){
+          ticking=true;
+          requestAnimationFrame(()=>{
+            revealLines();
+            renderWorld();
+            ticking=false;
+          });
+        }
+      };
+
+      window.addEventListener('scroll',onScroll,{passive:true});
+      window.addEventListener('resize',onScroll);
+
+      syncSoundToggle();
+      renderWorld();
+      syncPoemRoute();
+    })();
+  </script>
+</body>
+</html>
+
+

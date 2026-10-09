@@ -1,0 +1,12 @@
+{
+  "reviewStatus": "pending",
+  "publicName": true,
+  "images": true,
+  "web": true,
+  "jury": false,
+  "screening": false,
+  "promotion": false,
+  "videoUrl": null,
+  "subtitlesUrl": null,
+  "contact": null
+}

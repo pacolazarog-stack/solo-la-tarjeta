@@ -1,0 +1,49 @@
+name: Publicar SOLO LA TARJETA
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+      - name: Aplicar canon de ANA KLAUDYA
+        run: python3 ana-klaudya/apply_canonical_site.py
+      - name: Preparar voz de Ceniciento
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          parts = sorted(Path('ceniciento/voz-parts').glob('*.bin'))
+          if len(parts) != 14:
+              raise RuntimeError('Faltan partes de la voz de Ceniciento')
+          audio = b''.join(part.read_bytes() for part in parts)
+          if hashlib.sha256(audio).hexdigest() != '5bf334d4dcfcffa240d455719795ee9687293395467b93b220219fb8b158d55b':
+              raise RuntimeError('La grabación no coincide con el audio completo')
+          Path('ceniciento/ceniciento-voz-completa.mp3').write_bytes(audio)
+          PY
+      - name: Empaquetar sitio
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4
