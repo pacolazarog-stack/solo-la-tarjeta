@@ -559,7 +559,8 @@
     .g-embrace-c{--gap:62svh}
     .g-embrace-d{--gap:38svh}
 
-    .g-final-signature{--gap:120svh}
+    /* Preserve the final reveal space without a repeated signature. */
+    .poem::after{content:"";display:block;height:120svh;pointer-events:none}
 
     .voice-word{
       position:relative;
@@ -730,7 +731,7 @@
         font-size:clamp(2.15rem,9.5vw,3.25rem);
       }
 
-      .g-final-signature{--gap:112svh}
+      .poem::after{height:112svh}
     }
 
     @media(prefers-reduced-motion:reduce){
@@ -980,6 +981,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       let completedVoicePasses=0, listeningStart=null, listeningEnd=0;
       let listenedRanges=[], portraitRequested=false, portraitRevealTimer=null;
       let questionGrowthActive=false,questionGrowth=.22,questionNext=.22;
+      let finalCalorTimer=null,finalPortraitTimer=null;
       const growQuestionOnHeartbeat=()=>{
         if(!questionGrowthActive || !body.classList.contains('portrait-revealed') || body.classList.contains('ceniciento-open'))return;
         questionGrowth=questionNext;questionNext=Math.min(1,questionGrowth+.12);
@@ -1146,10 +1148,21 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         if(listeningStart!==null) listeningEnd=recording.currentTime;
         saveListenedRange();
         completedVoicePasses++;
-        revealPortrait();
+        // Give the last two verses a visible pause before the photograph.
+        finalHeat.classList.add('is-shown');
+        startFinalSequence();
+        clearTimeout(finalPortraitTimer);
+        finalPortraitTimer=setTimeout(()=>{
+          finalPortraitTimer=null;
+          if(cenicientoFrame.hidden && body.classList.contains('reading-ready'))revealPortrait();
+        },finalHeat.classList.contains('show-calor') ? 4000 : 8500);
         listenedRanges=[];listeningStart=null;
       };
       const resetPortraitFinale=()=>{
+        clearTimeout(finalCalorTimer);clearTimeout(finalPortraitTimer);
+        finalCalorTimer=null;finalPortraitTimer=null;finalSequenceStarted=false;
+        finalHeat.classList.remove('is-shown','show-calor','is-burning');
+        warmPhase=0;warmTakeover=0;root.style.setProperty('--warm','0');
         document.getElementById('epilogueInvitation').hidden=true;
         clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
         portraitRequested=false;completedVoicePasses=0;
@@ -1345,6 +1358,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         setJourney('elegia');
       };
       const openPoem=(piece,asPrologue=false)=>{
+        clearTimeout(finalPortraitTimer);finalPortraitTimer=null;
         if(poemRoute===piece&&!cenicientoFrame.hidden&&!sonrisaLeaving)return;
         // Keep Ana covered throughout every child-to-child navigation and load.
         poemBackdrop.hidden=false;
@@ -1526,7 +1540,8 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         startWarmPrelude();
 
         /* "calor.": revelación; desde aquí cada pulso pesa más */
-        setTimeout(()=>{
+        finalCalorTimer=setTimeout(()=>{
+          finalCalorTimer=null;
           finalHeat.classList.add('show-calor');
           intensifyWarmWithCalor();
           document.getElementById('epilogueInvitation').hidden=false;

@@ -30,7 +30,15 @@ vm.runInNewContext(script,context);
 const music=get('voiceMusic');music.currentTime=51;music.paused=false;const plays=music.playCalls;
 // The full navigation returns when the final photograph finishes fading in.
 nav.hidden=true;get('anaPortrait').complete=true;get('anaPortrait').naturalWidth=1228;
-get('recording').emit('ended');assert(body.classList.contains('portrait-revealed'));
+body.classList.add('reading-ready');
+assert(source.includes('.poem::after{content:"";display:block;height:120svh'),'Final verses remain reachable without the old signature');
+get('recording').emit('ended');
+assert(get('finalHeat').classList.contains('is-shown'),'el appears at the end of the recording');
+assert(!get('finalHeat').classList.contains('show-calor'),'calor waits for its own pause');
+assert(!body.classList.contains('portrait-revealed'),'The photograph waits for the final verses');
+run(4500);assert(get('finalHeat').classList.contains('show-calor'),'calor appears after el');
+assert(!body.classList.contains('portrait-revealed'),'calor stays visible before the photograph');
+run(8500);assert(body.classList.contains('portrait-revealed'));
 assert.equal(nav.hidden,true,'Controls wait for the portrait fade');
 const stalePortrait=[...timers.values()].find(t=>t.ms===25000).fn;
 run(25000);assert.equal(nav.hidden,false,'All poem controls appear on the final photograph');
