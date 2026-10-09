@@ -1,15 +1,15 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const source=fs.readFileSync(__dirname+'/index.html','utf8');
-const nodes=new Map(),frames=new Map(),timers=new Map(),messages=[];let id=0;
+const nodes=new Map(),frames=new Map(),timers=new Map(),messages=[],openingMessages=[];let id=0;
 class Node{
  constructor(){this.handlers={};this.style={};this.classes=new Set();this.classList={toggle:(name,on)=>on?this.classes.add(name):this.classes.delete(name)};}
  setAttribute(name,value){this[name]=value;}
  removeAttribute(name){delete this[name];}
  addEventListener(event,fn){this.handlers[event]=fn;}
- fire(event){this.handlers[event]?.();}
+ fire(event,data){this.handlers[event]?.(data);}
 }
 const shots=Array.from({length:6},()=>new Node()),doc=new Node(),win=new Node();
-doc.querySelectorAll=()=>shots;doc.getElementById=key=>{if(!nodes.has(key))nodes.set(key,new Node());return nodes.get(key)};
+doc.querySelectorAll=()=>shots;doc.getElementById=key=>{if(!nodes.has(key)){const node=new Node();if(key==='epilogueOpening')node.contentWindow={postMessage:data=>openingMessages.push(data)};nodes.set(key,node)}return nodes.get(key)};
 doc.hidden=false;win.matchMedia=()=>({matches:false});win.parent={postMessage:data=>messages.push(data)};
 const images=[],origin='https://example.test';
 const context={document:doc,window:win,location:{origin,search:'?music=parent'},URLSearchParams,Image:function(){const image=new Node();images.push(image);return image;},requestAnimationFrame(fn){frames.set(++id,fn);return id;},cancelAnimationFrame(key){frames.delete(key);},setTimeout(fn,ms){timers.set(++id,{fn,ms});return id;},clearTimeout(key){timers.delete(key);}};
@@ -32,20 +32,20 @@ step(37400);assert.equal(active(),4);
 step(38700);assert.equal(active(),5);
 step(41300);assert.equal(frames.size,1,'The final image remains for the opening verses');
 assert.equal(messages.filter(m=>m.type==='interlude-ended').length,0);
-const first=nodes.get('openingFirst'),second=nodes.get('openingSecond');
-assert.equal(first['aria-hidden'],'true');assert.equal(second['aria-hidden'],'true');
-step(42400);assert.equal(first['aria-hidden'],undefined);assert.equal(Number(first.style.opacity),0);
-step(44000);assert.equal(Number(first.style.opacity),1);assert.equal(Number(second.style.opacity),0);
+const levels=()=>Array.from(openingMessages.filter(m=>m.type==='progress').at(-1).levels);
+assert.deepEqual(levels(),[0,0]);
+step(42400);assert.deepEqual(levels(),[0,0]);
+step(44000);assert.deepEqual(levels(),[1,0]);
 assert.equal(Number(shots[5].style.opacity),1,'The first verse is printed over the onion and bread');
-step(49400);assert.equal(second['aria-hidden'],undefined);assert.equal(Number(second.style.opacity),0);
-step(51000);assert.equal(Number(first.style.opacity),1);assert.equal(Number(second.style.opacity),1);
+step(49400);assert.deepEqual(levels(),[1,0]);
+step(51000);assert.deepEqual(levels(),[1,1]);
 nodes.get('pause').fire('click');assert.equal(frames.size,0,'The two verses can be held together');
 nodes.get('pause').fire('click');step(51000);
 step(56400);assert.equal(Number(shots[5].style.opacity),1);
 step(57900);assert.equal(Number(shots[5].style.opacity),.5);assert.equal(Number(nodes.get('epilogueOpening').style.opacity),.5);
 step(59400);assert.equal(frames.size,0);assert.equal(Number(shots[5].style.opacity),0);
 const completion=messages.filter(m=>m.type==='interlude-ended');assert.equal(completion.length,1);assert.equal(completion[0].openingShown,true);
-nodes.get('replay').fire('click');assert.equal(first['aria-hidden'],'true');assert.equal(second['aria-hidden'],'true');step(50000);assert.equal(active(),0);
+nodes.get('replay').fire('click');assert.deepEqual(levels(),[0,0]);step(50000);assert.equal(active(),0);
 step(50600);assert.equal(Number(shots[0].style.opacity),1);
 step(52710);assert(shots.every(shot=>Number(shot.style.opacity)===0),'Previous shot is fully dark before the next cue');
 step(52800);assert.equal(active(),1);assert(shots.every(shot=>Number(shot.style.opacity)===0),'No image overlaps the cut through darkness');
@@ -64,4 +64,10 @@ assert.equal(images[2].src,'cebolla-pan.png');assert(source.includes('matrix(1.2
 assert(source.includes('clip-path:inset(50%)'), 'Title is available to screen readers without staying on screen');
 assert(source.includes('morphStart=10700,morphEnd=15900'));assert(source.includes('openingStarts=[17000,24000]'),'The verses enter seven seconds apart');
 assert(source.includes('id="worldWithoutMoon"'),'The moon moves independently of the world');
+assert(source.includes('opening=preview'),'Opening uses the real epilogue layout and typography');
+assert(!source.includes('opening-lines'),'No independently positioned or styled text overlay');
+const previousMessages=openingMessages.length,state={channel:'ceniciento-music-v1',type:'state',playing:true,level:.8,enabled:true};
+win.fire('message',{origin:'https://other.test',source:win.parent,data:state});assert.equal(openingMessages.length,previousMessages);
+win.fire('message',{origin,source:{},data:state});assert.equal(openingMessages.length,previousMessages);
+win.fire('message',{origin,source:win.parent,data:state});assert.equal(openingMessages.at(-1),state,'Preview inherits the exact music-control state and layout');
 console.log('PASS: matched world/onion dissolve, sequential opening verses over the final image, three-second fade, pause/resume, hidden tab pause, replay and one continuation message');

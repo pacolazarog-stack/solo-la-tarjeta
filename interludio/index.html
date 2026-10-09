@@ -24,10 +24,7 @@ button{background:transparent;color:#eadbc8;border:1px solid #79654d;border-radi
 button:focus-visible{outline:2px solid #eadbc8;outline-offset:4px}
 @media(max-width:760px){main{padding:0 0 120px}h1{margin-bottom:24px;text-align:center}.stage{width:100%;aspect-ratio:16/10}.controls{margin-top:25px}}
 @media(prefers-reduced-motion:reduce){.shot{transition:none}}
-.opening-lines{position:absolute;inset:auto 7% 7%;z-index:4;display:flex;flex-direction:column;gap:clamp(18px,3vw,36px);isolation:isolate;pointer-events:none;color:#fff5e7;font-size:clamp(18px,2.8vw,36px);line-height:1.5;text-shadow:0 2px 7px #000,0 0 22px #000;opacity:0}
-.opening-lines::before{content:"";position:absolute;inset:-50px -8vw -12vh;z-index:-1;background:linear-gradient(0deg,rgba(8,7,6,.78),rgba(8,7,6,.18) 65%,transparent)}
-.opening-lines p{margin:0;opacity:0}
-@media(max-width:760px){.opening-lines{inset:auto 6% 7%;font-size:clamp(18px,4.2vw,27px);gap:18px}}
+ .epilogue-opening{position:fixed;inset:0;z-index:4;width:100%;height:100%;border:0;background:transparent;pointer-events:none;opacity:1}
 </style>
 <script src="../ana-klaudya/publication.js"></script>
 </head>
@@ -42,19 +39,15 @@ button:focus-visible{outline:2px solid #eadbc8;outline-offset:4px}
 <svg class="shot" viewBox="15 541 487 322" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop4" clipPathUnits="userSpaceOnUse"><rect x="15" y="541" width="487" height="322"/></clipPath></defs><image href="mundo-flores.png" width="1536" height="1024" clip-path="url(#shotCrop4)"/></svg>
 <svg class="shot" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop5" clipPathUnits="userSpaceOnUse"><rect x="0" y="0" width="1536" height="1024"/></clipPath><clipPath id="moonCrop" clipPathUnits="userSpaceOnUse"><circle cx="1348" cy="318" r="148"/></clipPath><mask id="worldWithoutMoon" maskUnits="userSpaceOnUse" x="0" y="0" width="1536" height="1024"><rect width="1536" height="1024" fill="white"/><circle cx="1348" cy="318" r="148" fill="black"/></mask></defs><g clip-path="url(#shotCrop5)"><image href="mundo-flores-yin-yang.png" width="1536" height="1024" mask="url(#worldWithoutMoon)"/><g id="moonBridge"><image href="mundo-flores-yin-yang.png" width="1536" height="1024" clip-path="url(#moonCrop)"/></g></g></svg>
 <svg class="shot" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop6" clipPathUnits="userSpaceOnUse"><rect x="0" y="0" width="1536" height="1024"/></clipPath></defs><g clip-path="url(#shotCrop6)"><image href="cebolla-pan.png" width="1536" height="1024" transform="matrix(1.24 0 0 1.32 -260 -190)"/></g></svg>
-<div class="opening-lines" id="epilogueOpening" aria-label="Entrada de A fuego lento">
-<p id="openingFirst" aria-hidden="true">Yo iba a escribirte un poema.</p>
-<p id="openingSecond" aria-hidden="true">Tú me diste una cebolla.</p>
-</div>
 </div>
 <div class="controls"><button id="pause" type="button" aria-label="Pausar" title="Pausar" data-state="playing" disabled><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg><svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 3 15 9-15 9z"/></svg></button><button id="replay" type="button" aria-label="Volver a ver" title="Volver a ver" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7V2L0 7l5 5V9a7 7 0 1 1-1 7l-2 1a9 9 0 1 0 3-10z"/></svg></button></div>
 <p class="status" id="status" role="status">Cargando las imágenes.</p>
 </main>
+<iframe class="epilogue-opening" id="epilogueOpening" title="Entrada de A fuego lento" src="../epilogo/?music=parent&amp;opening=preview&amp;v=20261009-misma-tipografia"></iframe>
 <script>
 const shots=[...document.querySelectorAll('.shot')];
 const moonBridge=document.getElementById('moonBridge');
 const epilogueOpening=document.getElementById('epilogueOpening');
-const openingVerses=[document.getElementById('openingFirst'),document.getElementById('openingSecond')];
 const pause=document.getElementById('pause'),replay=document.getElementById('replay'),status=document.getElementById('status');
 // The flower opens, scale accelerates, the impossible garden lingers, and the onion returns us to the table.
 const cueStarts=[0,2800,4600,6300,9300,13300],duration=34000;
@@ -69,11 +62,7 @@ const smoothAmount=value=>{const t=Math.max(0,Math.min(1,value));return t*t*(3-2
 function render(){
  const sceneFade=reducedMotion?(elapsed>=duration?0:1):1-smoothAmount((elapsed-outroStart)/(duration-outroStart));
  epilogueOpening.style.opacity=String(sceneFade);
- openingVerses.forEach((verse,i)=>{
-  const visible=elapsed>=openingStarts[i]&&elapsed<duration;
-  verse.style.opacity=String(reducedMotion?(visible?1:0):smoothAmount((elapsed-openingStarts[i])/openingFade));
-  if(visible)verse.removeAttribute('aria-hidden');else verse.setAttribute('aria-hidden','true');
- });
+ epilogueOpening.contentWindow?.postMessage({channel:'ana-opening-v1',type:'progress',levels:openingStarts.map(start=>reducedMotion?(elapsed>=start&&elapsed<duration?1:0):smoothAmount((elapsed-start)/openingFade))},location.origin);
  moonBridge.setAttribute('transform','translate(0 0)');
  const index=cueStarts.reduce((found,start,i)=>elapsed>=start?i:found,0);
  const into=elapsed-cueStarts[index],until=(cueStarts[index+1]??duration)-elapsed;
@@ -115,6 +104,16 @@ for(const path of ['mundo-flores.png','mundo-flores-yin-yang.png','cebolla-pan.p
  image.addEventListener('error',()=>{status.textContent='No se han podido cargar las imágenes. Puedes continuar al epílogo con Siguiente.';},{once:true});
  image.src=path;
 }
+epilogueOpening.addEventListener('load',()=>render());
+window.addEventListener('message',event=>{
+ if(event.origin!==location.origin)return;
+ if(event.source===epilogueOpening.contentWindow && event.data?.channel==='ana-opening-v1' && event.data.type==='ready'){
+  render();sendMusic('ready');return;
+ }
+ if(event.source===window.parent && event.data?.channel==='ceniciento-music-v1' && event.data.type==='state'){
+  epilogueOpening.contentWindow?.postMessage(event.data,location.origin);
+ }
+});
 sendMusic('ready');
 </script>
 </body>

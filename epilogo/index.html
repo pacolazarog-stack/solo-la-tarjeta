@@ -65,9 +65,16 @@ h1{font-size:clamp(48px,6.5vw,82px)}
 header,.kicker,.status,.signature,footer,.music-controls{animation:simmerInk 48s ease-in-out infinite}
 header a{color:inherit}
 h1{color:#ffd88a}h1 em{color:inherit}
-.phrase{color:#ffd4a2}
+.phrase,.opening-verse{color:#ffd4a2}
+.opening-phrase{background:none!important;animation:none!important}
+.opening-verse{font:inherit;letter-spacing:inherit;line-height:inherit}
+body.opening-preview{background:transparent;overflow:hidden}
+body.opening-preview::before,body.opening-preview .detail-background{display:none}
+body.opening-preview .intro{visibility:hidden}
+body.opening-preview .poem>.phrase:not(:first-child){display:none}
+body.opening-preview .opening-verse{opacity:0}
 @supports ((background-clip:text) or (-webkit-background-clip:text)){
- h1,.phrase{
+ h1,.phrase,.opening-verse{
   background-image:linear-gradient(115deg,#ffe1a0 0%,#ffc078 25%,#f3a08a 50%,#f2c39b 75%,#ffe1a0 100%);
   background-size:220% 100%;background-position:0% 50%;
   background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
@@ -121,8 +128,8 @@ main{padding-bottom:140px;gap:6vw}
 </div>
 </section>
 <article class="poem" id="poem" aria-label="A fuego lento" hidden>
-<p class="phrase hidden-phrase" aria-hidden="true" data-wait="4800">Yo iba a escribirte un poema.<br>
-Tú me diste una cebolla.</p>
+<p class="phrase opening-phrase hidden-phrase" aria-hidden="true" data-wait="4800"><span class="opening-verse" id="openingFirst">Yo iba a escribirte un poema.</span><br>
+<span class="opening-verse" id="openingSecond">Tú me diste una cebolla.</span></p>
 <p class="phrase hidden-phrase" aria-hidden="true" data-wait="3200">—Empieza por aquí.</p>
 <p class="phrase hidden-phrase" aria-hidden="true" data-wait="5200">A los dos minutos<br>
 ya me habías hecho llorar<br>
@@ -180,7 +187,8 @@ window.addEventListener('message',event=>{
 });
 if(inheritedMusic)sendMusic('ready');
 const phrases=[...document.querySelectorAll('.phrase')];
-const continuingOpening=new URLSearchParams(location.search).get('opening')==='seen';
+const openingMode=new URLSearchParams(location.search).get('opening');
+const continuingOpening=openingMode==='seen',openingPreview=openingMode==='preview';
 const poem=document.getElementById('poem'),signature=document.getElementById('signature'),flowerCoda=document.getElementById('flowerCoda');
 const paced=document.getElementById('paced'),full=document.getElementById('full'),status=document.getElementById('status');
 let timer=null,index=0,mode='waiting',ready=false;
@@ -206,7 +214,22 @@ full.addEventListener('click',()=>{
  if(!ready)return;
  clear();mode='full';phrases.forEach(showPhrase);flowerCoda.hidden=false;signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';
 });
-ready=true;poem.hidden=false;paced.disabled=false;full.disabled=false;beginReading(continuingOpening);
+ready=true;poem.hidden=false;paced.disabled=false;full.disabled=false;
+if(openingPreview){
+ document.body.classList.add('opening-preview');
+ showPhrase(phrases[0]);status.textContent='Deja respirar cada frase.';paced.textContent='Pausar';mode='preview';
+ const openingVerses=[document.getElementById('openingFirst'),document.getElementById('openingSecond')];
+ const applyOpening=levels=>openingVerses.forEach((verse,i)=>{
+  const value=Math.max(0,Math.min(1,Number(levels[i])||0));verse.style.opacity=String(value);
+  if(value>0)verse.removeAttribute('aria-hidden');else verse.setAttribute('aria-hidden','true');
+ });
+ applyOpening([0,0]);
+ window.addEventListener('message',event=>{
+  if(event.origin!==location.origin || event.source!==window.parent || event.data?.channel!=='ana-opening-v1' || event.data.type!=='progress' || !Array.isArray(event.data.levels))return;
+  applyOpening(event.data.levels);
+ });
+ window.parent.postMessage({channel:'ana-opening-v1',type:'ready'},location.origin);
+}else beginReading(continuingOpening);
 </script>
 </body>
 </html>
