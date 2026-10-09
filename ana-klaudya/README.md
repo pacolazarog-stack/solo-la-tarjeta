@@ -4,7 +4,7 @@ Obra multimedia de **flag** · 2026.
 
 ## Estado canónico
 
-- Texto español: **edición canónica cerrada el 09/10/2026**, actualizada por indicación del autor. Siete piezas y **122 versos**.
+- Texto español: **edición canónica cerrada el 09/10/2026**, actualizada por indicación del autor. Siete piezas y **123 versos**.
 - Traducción inglesa: alineada con la edición española del **09/10/2026**; base literaria para los subtítulos del montaje final.
 - Valoración literaria orientativa del conjunto actual: **9,4/10**.
 - Destino: circuito internacional de videopoesía 2027.
@@ -22,7 +22,7 @@ Obra multimedia de **flag** · 2026.
 6. **Tu piel**
 7. Epílogo · **A fuego lento**
 
-Después del epílogo: coda visual independiente, una pantalla blanca sin título con **«Flores.»**. La única firma aparece después de esta coda. El texto de los siete poemas conserva sus 122 versos.
+Después del epílogo: coda visual independiente, una pantalla blanca sin título con **«Flores.»**. La única firma aparece después de esta coda. El texto de los siete poemas conserva sus 123 versos.
 
 ## Archivos
 

@@ -13,6 +13,8 @@ my footsteps on returning)
 Following an angel,  
 I came to you.
 
+It still surprises me.
+
 When I was yang,  
 I searched for yin.
 

@@ -13,6 +13,8 @@ mis pasos al volver)
 Siguiendo a un ángel,  
 llegué hasta ti.
 
+Todavía me sorprende.
+
 Cuando era yang,  
 buscaba el yin.
 

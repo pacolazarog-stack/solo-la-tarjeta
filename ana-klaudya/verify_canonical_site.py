@@ -55,15 +55,15 @@ def verify():
         assert parser.lines == expected, (slug, parser.lines, expected)
         counts.append(len(expected))
         print(f"PASS {title}: {len(expected)} versos")
-    assert counts == [13, 37, 7, 11, 17, 8, 29], counts
-    assert sum(counts) == 122
+    assert counts == [14, 37, 7, 11, 17, 8, 29], counts
+    assert sum(counts) == 123
     english = (ROOT / "ana-klaudya/TEXTO_CANONICO_EN.md").read_text(encoding="utf-8")
     english_counts = []
     for section in re.split(r"^## .+\n", english, flags=re.M)[1:]:
         lines = [line for line in section.splitlines() if line.strip() and line.strip() not in ("---", "*flag*")]
         english_counts.append(len(lines))
     assert english_counts == counts, (english_counts, counts)
-    print("PASS 122 Spanish verses; seven aligned English sections")
+    print("PASS 123 Spanish verses; seven aligned English sections")
 
 if __name__ == "__main__":
     verify()

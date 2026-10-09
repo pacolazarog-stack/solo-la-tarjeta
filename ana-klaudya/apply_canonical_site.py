@@ -42,13 +42,22 @@ def phrase_html(stanzas, prologue=False):
         first = stanzas[0]
         if len(first) != 7:
             raise ValueError("The prologue opening must have seven canonical verses")
-        groups = [first[:2], first[2:], *stanzas[1:3], stanzas[3][:1], stanzas[3][1:]]
+        last = stanzas[-1]
+        if len(last) != 2:
+            raise ValueError("The prologue ending must have two canonical verses")
+        middle = stanzas[1:-1]
+        groups = [first[:2], first[2:], *middle, last[:1], last[1:]]
+        waits = [6200, 12000] + [
+            4000 if len(stanza) == 1 else
+            6500 if stanza[0].startswith("Cuando era ") else 6200
+            for stanza in middle
+        ] + [3200, 7000]
     blocks = []
     for index, lines in enumerate(groups):
         final = index == len(groups) - 1
         classes = "phrase hidden-phrase" + (" ending final-stanza" if prologue and final else "")
         if prologue:
-            delay = [6200, 12000, 6200, 6500, 3200, 7000][index]
+            delay = waits[index]
             text = "<br>\n".join(escape(line).replace("yang", "<em>yang</em>").replace("yin", "<em>yin</em>") for line in lines)
         else:
             # Retain the epilogue's existing individual phrase waits below.
