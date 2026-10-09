@@ -39,9 +39,6 @@
   }).finally(()=>document.documentElement.classList.remove('publication-pending'));
 })();
 
-/* A fuego lento only: Cotán enters at the exact cue “—Empieza por aquí.”.
-   This is deliberately isolated from the visual interlude and from the
-   existing left-to-right typing of the two opening verses. */
 (() => {
   if(!/\/epilogo\/(?:index\.html)?$/.test(location.pathname))return;
   const script=document.currentScript;
