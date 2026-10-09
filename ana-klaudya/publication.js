@@ -1,10 +1,12 @@
 (() => {
   const script=document.currentScript;
   const root=new URL('./',script.src);
-  const nmwp=document.createElement('script');
-  nmwp.src=new URL('nmwp-en.js',root).href;
-  nmwp.async=false;
-  document.head.append(nmwp);
+  for(const file of ['nmwp-en.js','nmwp-en-canonical.js']){
+    const locale=document.createElement('script');
+    locale.src=new URL(file,root).href;
+    locale.async=false;
+    document.head.append(locale);
+  }
   document.documentElement.classList.add('publication-pending');
   const style=document.createElement('style');
   style.textContent='.publication-pending body{visibility:hidden}.without-images .portrait-finale img,.without-images .detail-background svg,.without-images .detail-background img{display:none!important}.without-name .name-prelude{display:none!important}.publication-notice{max-width:42rem;margin:15vh auto;padding:30px;font:18px/1.6 system-ui;background:#f5f3ed;color:#201d19}';
