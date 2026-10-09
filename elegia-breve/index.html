@@ -1368,7 +1368,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       const openPoem=(piece,asPrologue=false,continuingOpening=false,reuseOpening=false)=>{
         const keepOpening=piece==='epilogo'&&poemRoute==='interludio'&&(interludePreviewReady||(reuseOpening&&continuingOpening));
         clearTimeout(finalPortraitTimer);finalPortraitTimer=null;
-        if(poemRoute===piece&&!cenicientoFrame.hidden&&!sonrisaLeaving)return;
+        if(poemRoute===piece&&!cenicientoFrame.hidden&&!sonrisaLeaving&&!(asPrologue&&!prologueActive))return;
         // Keep Ana covered throughout every child-to-child navigation and load.
         poemBackdrop.hidden=false;
         root.classList.remove('poem-route-loading');
