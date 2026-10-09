@@ -752,7 +752,7 @@
 .journey-index{width:min(540px,calc(100% - 28px));max-height:85svh;border:1px solid #bec5bc;border-radius:18px;padding:24px;background:#f5f3ed;color:#201d19;z-index:170;overflow:auto}
 .journey-index::backdrop{background:#101a15aa}
 .journey-index h2{font:normal 26px/1.2 Georgia,serif;margin:0 0 22px}
-.journey-index .ana-navigation{position:static;transform:none;width:100%;max-width:none;max-height:none;box-shadow:none;border:0;padding:0;border-radius:0;background:transparent;display:grid;gap:8px}
+.journey-index .ana-navigation{position:static;transform:none;width:100%;max-width:none;max-height:none;box-shadow:none;border:0;padding:0;border-radius:0;background:transparent;display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
 .journey-index .ana-navigation[hidden]{display:none}
 .journey-index .entry-button{text-align:left;font:15px/1.4 system-ui,sans-serif;letter-spacing:0;text-transform:none;box-shadow:none;border-radius:8px;border-color:#ced3cb;padding:12px;min-height:44px}
 /* Cada entrada anticipa la imagen y el tono de su pieza. */
@@ -769,12 +769,13 @@
 #anaPiel{--piece-tone:#5a3b28;--piece-veil:#5a3b28d9;--piece-border:#a1805b}
 #anaInterlude{--piece-tone:#493c38;--piece-veil:#493c38d9;--piece-border:#a78878}
 #anaVoice{--piece-tone:#233b40;--piece-veil:#233b40d9;--piece-border:#658388}
+.journey-index .entry-button.petal-button.piece-button{background:var(--piece-tone);border-color:var(--piece-border);color:#fff7e9}
 .journey-index .piece-button:hover,.journey-index .piece-button:focus-visible{background:var(--piece-tone);border-color:#dfc69b;box-shadow:0 0 0 1px #dfc69b;transform:translateY(-1px)}
 .journey-index .entry-button.flambe-button{width:100%;margin:0;min-height:64px;padding:14px 16px;display:flex;align-items:center;border-color:#ed993d;color:#321609;font-weight:500}
 .journey-index .entry-button:focus-visible{outline:2px solid #173f32;outline-offset:3px}
 @media(max-width:480px){.journey-index{box-sizing:border-box;padding:18px}.journey-index .entry-button.piece-button,.journey-index .entry-button.flambe-button{padding:12px;min-height:68px}.piece-button .piece-label{max-width:75%}}
 @media(prefers-reduced-motion:reduce){.journey-index .entry-button{animation:none;transition:none;transform:none}}
-@media(forced-colors:active){.piece-button .piece-art,.piece-button .piece-shade{display:none}.journey-index .entry-button.piece-button,.journey-index .entry-button.flambe-button{background:ButtonFace;color:ButtonText;text-shadow:none;border-color:ButtonText}.journey-index .entry-button:focus-visible{outline-color:Highlight}}
+@media(forced-colors:active){.piece-button .piece-art,.piece-button .piece-shade{display:none}.journey-index .entry-button.piece-button,.journey-index .entry-button.petal-button.piece-button,.journey-index .entry-button.flambe-button{background:ButtonFace;color:ButtonText;text-shadow:none;border-color:ButtonText}.journey-index .entry-button:focus-visible{outline-color:Highlight}}
 .journey-index-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;font:13px/1.4 system-ui,sans-serif}
 .journey-index-links a{color:#375548;min-height:44px;display:flex;align-items:center}
 .journey-index-close{float:right;min-width:44px;min-height:44px;background:transparent;border:0;color:inherit;font:22px system-ui;cursor:pointer}
