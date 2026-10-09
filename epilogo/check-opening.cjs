@@ -8,11 +8,11 @@ class Element{
 }
 function scenario(openingMode){
  const continuing=openingMode==='seen',preview=openingMode==='preview';
- const nodes=new Map(),timers=new Map(),messages=[],handlers=[];let id=0;
- const get=k=>{if(!nodes.has(k))nodes.set(k,new Element());return nodes.get(k)};
+ const nodes=new Map(),timers=new Map(),frames=new Map(),messages=[],handlers=[];let id=0;
+ const get=k=>{if(!nodes.has(k)){const node=new Element();node.textContent=({openingFirst:'Yo iba a escribirte un poema.',openingSecond:'Tú me diste una cebolla.',openingImperative:'—Empieza por aquí.'})[k]||'';nodes.set(k,node)}return nodes.get(k)};
  const phrases=[...source.matchAll(/<p class="phrase[^>]*data-wait="(\d+)"/g)].map(m=>{const el=new Element();el.dataset={wait:m[1]};return el});
  const parent={postMessage:m=>messages.push(m)};
- const context={document:{body:new Element(),getElementById:get,querySelector:()=>new Element(),querySelectorAll:()=>phrases},window:{parent,addEventListener(type,fn){if(type==='message')handlers.push(fn)}},location:{origin:'https://example.test',search:'?music=parent'+(openingMode?'&opening='+openingMode:'')},URLSearchParams,requestAnimationFrame:()=>1,setTimeout(fn,ms){timers.set(++id,{fn,ms});return id},clearTimeout:key=>timers.delete(key)};
+ const context={document:{body:new Element(),getElementById:get,querySelector:()=>new Element(),querySelectorAll:()=>phrases},window:{parent,matchMedia:()=>({matches:false}),addEventListener(type,fn){if(type==='message')handlers.push(fn)}},location:{origin:'https://example.test',search:'?music=parent'+(openingMode?'&opening='+openingMode:'')},URLSearchParams,requestAnimationFrame(fn){frames.set(++id,fn);return id},cancelAnimationFrame:key=>frames.delete(key),setTimeout(fn,ms){timers.set(++id,{fn,ms});return id},clearTimeout:key=>timers.delete(key)};
  vm.runInNewContext(script,context);
  assert(!phrases[0].classes.has('hidden-phrase'),'Opening remains readable in the poem');
  if(preview){
@@ -22,6 +22,7 @@ function scenario(openingMode){
   const emit=(origin,sender,levels,ignition=0)=>handlers.forEach(fn=>fn({origin,source:sender,data:{channel:'ana-opening-v1',type:'progress',levels,ignition}}));
   emit('https://other.test',parent,[1,1]);assert.equal(get('openingFirst').style.opacity,'0');
   emit(context.location.origin,{},[1,1]);assert.equal(get('openingFirst').style.opacity,'0');
+  emit(context.location.origin,parent,[.5,0]);assert.equal(get('openingFirst').style.opacity,'1');assert.match(get('openingFirst').style.clipPath,/inset\(-24px 5\d/,'Characters are revealed from the left, without dimming the text');
   emit(context.location.origin,parent,[1,0]);assert.equal(get('openingFirst').style.opacity,'1');assert.equal(get('openingSecond').style.opacity,'0');
   emit(context.location.origin,parent,[1,1]);assert.equal(get('openingSecond').style.opacity,'1');
   assert.equal(context.document.body.style['--fire-high'],'rgb(19,11,7)','The photo starts with black letters');
@@ -40,6 +41,11 @@ function scenario(openingMode){
   assert.equal(phrases[0],opening,'The original opening node is reused');
   assert(!opening.classes.has('hidden-phrase'),'The anchor is never hidden during continuation');
   assert(!phrases[1].classes.has('hidden-phrase'),'Empieza por aquí is the first new phrase');
+  assert.equal(get('openingImperative').style.opacity,'0','The imperative starts its own display reveal');
+  const advance=time=>{for(const [key,fn] of [...frames]){frames.delete(key);fn(time)}};
+  advance(100);advance(500);assert.equal(get('openingImperative').style.opacity,'1');assert.notEqual(get('openingImperative').style.clipPath,'none','Imperative is partially typed');
+  advance(1500);assert.equal(get('openingImperative').style.clipPath,'none');
+  assert.equal(context.document.body.style['--opening-background'],'1','The final backdrop is already complete when the epilogue takes over');
   assert.equal([...timers.values()][0].ms,3200);
   const activeTimer=[...timers.keys()][0];control('continue');assert.equal([...timers.keys()][0],activeTimer,'Duplicate continuation cannot restart the poem');
   get('full').click();get('paced').click();assert(!opening.classes.has('hidden-phrase'));assert.equal([...timers.values()][0].ms,3200,'Reading again preserves the opening anchor');
@@ -59,4 +65,6 @@ assert(source.includes('animation:livingFlame 6.8s ease-in-out infinite'),'Flame
 assert(source.includes('color:#130b07;-webkit-text-fill-color:#130b07;background:none;text-shadow:none;'),'Charcoal letters use opaque black, without a light shadow masking the fill');
 assert(!source.includes('background:transparent;overflow:hidden'),'Preview keeps the same scrollbar gutter as the complete poem');
 assert(!source.includes('.poem>.phrase:not(:first-child){display:none}'),'Hidden phrases reserve the same layout in both screens');
+assert(source.includes('.opening-verse,.imperative{font-weight:700}'),'Opening stays bold before and after ignition');
+assert(!source.includes("detailBackground.classList.remove('is-clear')"),'Continuation never restarts or darkens the already completed backdrop');
 console.log('PASS: direct entry, continuation, exact epilogue preview, guarded sequential verse reveal, no duplicate timing or music restart, replay and skin clarity');
