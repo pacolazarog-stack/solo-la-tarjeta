@@ -145,13 +145,13 @@ body.opening-preview.opening-ignited .opening-verse{
 .opening-verse,.imperative{font-weight:700}
 .imperative{transition:none}
 .opening-verse,.display-verse{display:inline-block;white-space:nowrap}
-.intro{opacity:var(--intro-progress,0);transition:opacity 4s linear}
+.intro{opacity:var(--intro-progress,0);transition:opacity 2s linear}
 .intro:not(.is-readable){pointer-events:none}
 @media(prefers-reduced-motion:reduce){.intro{transition:none}}
 @media print{.intro{opacity:1!important}}
 .poem-flow{display:flow-root;clip-path:inset(var(--reading-clip,0px) -32px -32px -32px)}
 .poem.is-closing .poem-flow>.phrase{visibility:hidden!important;opacity:0!important}
-.closing-scene{padding-top:16px;min-height:calc(100svh - 24px - 3.7em - 44px)}
+.closing-scene{overflow-anchor:none;padding-top:16px;min-height:calc(100svh - 24px - 3.7em - 44px)}
 .closing-scene .ending{font-size:calc(1em + 1pt);font-weight:700;font-style:italic;line-height:1.85;margin-top:0}
 @media print{.poem-flow{clip-path:none}.poem.is-closing .poem-flow>.phrase{visibility:visible!important;opacity:1!important}}
 body{transition:background-color 1.2s ease}
@@ -278,7 +278,7 @@ const epilogueIntro=document.getElementById('epilogueIntro');let introProgress=0
 function revealIntro(progress){
  introProgress=Math.max(introProgress,Math.max(0,Math.min(1,progress)));
  epilogueIntro.style.setProperty('--intro-progress',String(introProgress));
- const readable=introProgress>=.12;epilogueIntro.inert=!readable;
+ const readable=introProgress>=.24;epilogueIntro.inert=!readable;
  epilogueIntro.setAttribute('aria-hidden',String(!readable));epilogueIntro.classList.toggle('is-readable',readable);
 }
 revealIntro(0);
@@ -295,7 +295,7 @@ function alignClosing(){
  const anchor=phrases[0].getBoundingClientRect(),closing=closingStart.getBoundingClientRect();
  const inset=Number.parseFloat(getComputedStyle(phrases[0]).top)||24;
  const breath=Math.max(44,window.innerHeight*.12);
- window.scrollTo({top:window.scrollY+closing.top-inset-anchor.height-breath,left:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+ window.scrollTo({top:window.scrollY+closing.top-inset-anchor.height-breath,left:0,behavior:'instant'});
 }
 function clear(){clearTimeout(timer);timer=null}
 function hidePhrase(phrase){phrase.classList.add('hidden-phrase');phrase.setAttribute('aria-hidden','true')}
@@ -303,9 +303,8 @@ function showPhrase(phrase){phrase.classList.remove('hidden-phrase');phrase.remo
 function reveal(){
  if(!ready || mode!=='playing')return;
  if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';flowerCoda.hidden=false;signature.hidden=false;flowerCoda.scrollIntoView({block:'start',behavior:'instant'});return}
- const phrase=phrases[index++];showPhrase(phrase);if(phrase===phrases[0]){openingLocked=true;typeDisplay(openingVerses)}else if(phrase===phrases[1])typeDisplay([imperativeVerse]);
- revealIntro((index-1)/(phrases.length-1));
- if(phrase===closingStart)alignClosing();
+ const phrase=phrases[index++];if(phrase===closingStart)alignClosing();showPhrase(phrase);if(phrase===phrases[0]){openingLocked=true;typeDisplay(openingVerses)}else if(phrase===phrases[1])typeDisplay([imperativeVerse]);
+ revealIntro(2*(index-1)/(phrases.length-1));
  updateReadingMask();
  timer=setTimeout(reveal,Number(phrase.dataset.wait));
 }

@@ -1387,7 +1387,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         setJourney(piece);
         body.classList.add('journey-started');
         if(keepOpening)cenicientoFrame.contentWindow.postMessage({channel:'ceniciento-music-v1',type:'continue-epilogue'},window.location.origin);
-        else cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-columna-progresiva'+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'');
+        else cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-cierre-estatico'+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openCeniciento=()=>openPoem('ceniciento');
