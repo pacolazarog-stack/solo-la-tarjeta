@@ -40,6 +40,11 @@ jobs:
               raise RuntimeError('La grabación no coincide con el audio completo')
           Path('ceniciento/ceniciento-voz-completa.mp3').write_bytes(audio)
           PY
+      - name: Replicar voz en la edición internacional
+        run: |
+          if [ -d nmwp-international/ceniciento ]; then
+            cp ceniciento/ceniciento-voz-completa.mp3 nmwp-international/ceniciento/ceniciento-voz-completa.mp3
+          fi
       - name: Empaquetar sitio
         uses: actions/upload-pages-artifact@v3
         with:

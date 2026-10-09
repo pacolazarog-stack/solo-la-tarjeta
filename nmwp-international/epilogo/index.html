@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="theme-color" content="#101010">
+<title>A fuego lento · Epílogo de Ana Klaudya</title>
+<script>
+if(window.parent===window && new URLSearchParams(location.search).get('music')!=='parent'){
+location.replace('../elegia-breve/?v=epilogo-20261006#epilogo');
+}
+</script>
+<style>
+:root{color-scheme:dark;--ink:#fff3df;--rose:#e8cc9d;--gold:#d4b177;--muted:#cfbb9f}
+*{box-sizing:border-box}
+body{margin:0;background:#18110b;color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100svh}
+body{isolation:isolate}
+.detail-background{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;}.detail-background svg{position:absolute;inset:0;width:100%;height:100%;filter:blur(18px);transition:filter 60s ease-in-out}.detail-background.is-clear svg{filter:blur(0) contrast(1.04)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(16,16,16,.55),rgba(16,16,16,.38) 48%,rgba(16,16,16,.58)),radial-gradient(ellipse at 50% 45%,transparent,#10101066);z-index:-1;opacity:1;transition:opacity 60s ease-in-out}
+body.detail-clear:before{opacity:.65}
+header{max-width:1180px;margin:auto;padding:28px 6vw;display:flex;justify-content:space-between;gap:20px;font:11px/1.5 system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase}
+a{color:var(--muted);text-decoration:none}a:hover{color:var(--ink)}
+main{max-width:1160px;margin:0 auto;padding:45px 6vw 80px;display:grid;grid-template-columns:.8fr 1.2fr;gap:7vw;align-items:start}
+.intro{position:sticky;top:60px;padding-top:40px}
+.kicker{font:11px/1.8 system-ui,sans-serif;letter-spacing:.26em;color:var(--gold);text-transform:uppercase}
+h1{font-weight:400;font-size:clamp(55px,7vw,95px);letter-spacing:-.05em;line-height:1.02;margin:22px 0 24px}
+h1 em{font-weight:400;color:var(--rose)}
+.rule{width:56px;height:1px;background:var(--gold);margin:30px 0}
+.subtitle{font-size:19px;line-height:1.6;color:var(--muted);max-width:260px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:35px}
+button{font:12px/1.4 system-ui,sans-serif;letter-spacing:.03em;color:var(--ink);background:transparent;border:1px solid #725662;border-radius:30px;padding:13px 18px;min-height:44px;cursor:pointer}
+button:hover{background:#e9b5be16}button:focus-visible,a:focus-visible{outline:2px solid var(--rose);outline-offset:5px}
+button.primary{background:var(--rose);color:#24151d;border-color:var(--rose)}
+.status{min-height:22px;margin-top:15px;color:var(--muted);font:12px/1.5 system-ui,sans-serif}
+.poem{border-left:1px solid #c8ae8338;padding:35px 0 25px 38px;text-shadow:0 2px 6px #000,0 0 18px #101010;font-size:clamp(20px,2.3vw,27px);line-height:1.7;letter-spacing:-.015em}
+.stanza{margin:0 0 38px}
+.line{display:block;transition:opacity .8s ease,filter .8s ease}
+.line.hidden-line{opacity:0;filter:blur(5px)}
+.accent{color:var(--rose)}.ending{font-style:italic;color:var(--rose)}
+.signature{font:12px/1.5 system-ui,sans-serif;letter-spacing:.25em;color:var(--gold);margin-top:45px}
+footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:10px/1.6 system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase}
+@media(max-width:760px){header{padding:22px 7vw}main{display:block;padding:15px 7vw 40px}.intro{position:static;padding-top:10px}h1{font-size:64px}.subtitle{max-width:none}.controls{margin-top:24px}.poem{padding:22px 0 0;border-left:none;border-top:1px solid #c8ae8338;margin-top:30px;font-size:clamp(18px,4.8vw,25px)}.stanza{margin-bottom:28px}footer{padding:0 7vw 25px}}
+@media(prefers-reduced-motion:reduce){.line{transition:none}.line.hidden-line{filter:none}}
+@media print{body{background:white;color:black}body:after,body:before,.detail-background,header,.controls,.status,footer{display:none}main{display:block;padding:0}.intro{position:static;padding:0}h1{font-size:32px}h1 em,.kicker,.subtitle,.accent,.ending,.signature{color:black}.rule{display:none}.poem{border:0;padding:0;font-size:16px}.line.hidden-line{opacity:1;filter:none}}
+.music-controls{display:grid;gap:13px;margin-top:24px;color:var(--muted);font:12px/1.5 system-ui,sans-serif;max-width:260px}.music-controls button{justify-self:start}.music-controls button[hidden]{display:none}.music-controls input{accent-color:var(--rose)}.music-controls label{display:flex;gap:10px;align-items:center}.music-controls input[type=range]{width:100%;min-height:28px}.music-controls output{margin-left:auto}@media print{.music-controls{display:none}}
+
+@media(prefers-reduced-motion:reduce){ .detail-background,.detail-background svg{animation:none!important}.detail-background svg{transition:none;filter:none}}
+/* El fondo solo cambia de nitidez una vez: sin latido ni zoom. */
+.detail-background,.detail-background svg,body::before,body::after{animation:none!important;transform:none!important}
+[hidden]{display:none!important}
+button:disabled{opacity:.45;cursor:default}
+h1{font-size:clamp(48px,6.5vw,82px)}
+.detail-background{background:radial-gradient(ellipse at 18% 80%,#9c5d2a55,transparent 60%),radial-gradient(ellipse at 80% 5%,#be985429,transparent 65%),linear-gradient(140deg,#302113,#18110b 70%);opacity:.3;transition:opacity 7s ease-in-out}
+.detail-background.is-clear{opacity:1}
+.phrase{margin:0 0 44px;line-height:1.85;transition:opacity 1.2s ease;opacity:1}
+.verse-breath{display:inline-block;padding-top:.65em}
+.phrase.hidden-phrase{visibility:hidden;opacity:0}
+.ending{margin-top:60px}
+@media(max-width:760px){h1{font-size:clamp(45px,12vw,64px)}.phrase{margin-bottom:36px}}
+@media(prefers-reduced-motion:reduce){.detail-background,.phrase{transition:none}}
+/* El color se templa como una brasa: sin cambiar la forma de las letras. */
+@keyframes simmerInk{0%,100%{color:#ebc68d}35%{color:#efb591}70%{color:#ddaaa0}}
+@keyframes simmerColors{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+header,.kicker,.status,.signature,footer,.music-controls{animation:simmerInk 48s ease-in-out infinite}
+header a{color:inherit}
+h1{color:#ffd88a}h1 em{color:inherit}
+.phrase,.opening-verse{color:#ffd4a2}
+.opening-phrase{background:none!important;animation:none!important}
+.opening-verse{font:inherit;letter-spacing:inherit;line-height:inherit}
+body.opening-preview{--opening-background:0;background-color:rgba(24,17,11,var(--opening-background));transition:none}
+body.opening-preview::before{opacity:var(--opening-background);transition:none}
+body.opening-preview .detail-background{opacity:var(--opening-background);transition:none}
+body.opening-preview .intro{visibility:hidden}
+body.opening-preview .opening-verse{opacity:0}
+@supports ((background-clip:text) or (-webkit-background-clip:text)){
+ h1,.phrase,.opening-verse{
+  background-image:linear-gradient(115deg,#ffe1a0 0%,#ffc078 25%,#f3a08a 50%,#f2c39b 75%,#ffe1a0 100%);
+  background-size:220% 100%;background-position:0% 50%;
+  background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  text-shadow:none;animation:simmerColors 64s ease-in-out infinite;
+ }
+ h1{background-image:linear-gradient(120deg,#ffe0a0,#ffbd69 30%,#f6977f 60%,#ffd38a);animation-duration:48s}
+}
+@media(prefers-reduced-motion:reduce){header,.kicker,.status,.signature,footer,.music-controls,h1,.phrase{animation:none}}
+@media print{header,.kicker,.status,.signature,footer,.music-controls,h1,h1 em,.phrase{animation:none;background:none;color:#000;-webkit-text-fill-color:currentColor}}
+@media(forced-colors:active){header,.kicker,.status,.signature,footer,.music-controls,h1,h1 em,.phrase{animation:none;background:none;color:CanvasText;-webkit-text-fill-color:currentColor}}
+#backAna{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;touch-action:manipulation}
+@media(max-width:760px){header{position:sticky;top:0;z-index:50;align-items:center;padding:8px 4vw;background:rgba(12,12,18,.88);backdrop-filter:blur(8px)}}
+
+/* Navigation is hosted by Ana so its music remains in one player. */
+header #backAna{display:none!important}
+header{padding:18px 5vw;font-size:10px;opacity:.7}
+.rule{display:none}
+.poem{border-left:0;padding-left:0}
+main{padding-bottom:140px;gap:6vw}
+.controls button{box-shadow:none;min-height:44px}
+@media(max-width:760px){main{padding:15px 5vw 130px}.intro{padding-top:0}.poem{border-top:0;margin-top:36px;line-height:1.85}.stanza{margin-bottom:36px}.music-controls{max-width:none}.signature{margin-bottom:30px}.phrase{line-height:1.85}}
+@media(prefers-reduced-motion:reduce){header,.kicker,.status,.signature,footer,.music-controls,h1,.phrase{animation:none!important}}
+
+/* The same letterforms move from charcoal on the photograph to a lasting flame. */
+:root{--fire-low:#f16e28;--fire-mid:#ffc65b;--fire-high:#fff2b6;--fire-edge:rgba(5,28,33,.9);--fire-glow:rgba(255,119,31,.64);--fire-plume:rgba(255,76,15,.4);--coal-guard:rgba(255,245,220,0)}
+@keyframes livingFlame{
+ 0%,100%{background-position:50% 100%;filter:drop-shadow(0 1px 1px #041c21) drop-shadow(0 -3px 4px var(--fire-glow)) drop-shadow(0 -7px 6px var(--fire-plume))}
+ 35%{background-position:50% 38%;filter:drop-shadow(0 1px 1px #041c21) drop-shadow(0 -6px 6px var(--fire-glow)) drop-shadow(0 -12px 8px var(--fire-plume))}
+ 68%{background-position:50% 68%;filter:drop-shadow(0 1px 1px #041c21) drop-shadow(0 -4px 5px var(--fire-glow)) drop-shadow(0 -9px 7px var(--fire-plume))}
+}
+h1,.phrase,.opening-verse{
+ color:var(--fire-mid);text-shadow:0 1px 1px #041c21,0 -2px 5px var(--fire-glow);
+ -webkit-text-stroke:.35px var(--fire-edge);
+}
+@supports ((background-clip:text) or (-webkit-background-clip:text)){
+ h1,.phrase,.opening-verse{
+  background-image:linear-gradient(0deg,var(--fire-low) 0%,var(--fire-mid) 30%,var(--fire-high) 52%,var(--fire-mid) 72%,var(--fire-low) 100%);
+  background-size:100% 220%;background-clip:text;-webkit-background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;text-shadow:none;
+  animation:livingFlame 6.8s ease-in-out infinite;
+ }
+}
+.opening-phrase{filter:none; -webkit-text-stroke:0}
+body.opening-preview .opening-verse{
+ animation:none;filter:none;background-position:50% 100%;
+ text-shadow:0 0 1px var(--coal-guard);
+}
+body.opening-preview:not(.opening-ignited) .opening-verse{
+ color:#130b07;-webkit-text-fill-color:#130b07;background:none;text-shadow:none;
+ -webkit-text-stroke:.2px rgba(255,245,220,.35);
+}
+body.opening-preview.opening-ignited .opening-verse{
+ text-shadow:none;animation:livingFlame 6.8s ease-in-out infinite;
+}
+@media(prefers-reduced-motion:reduce){
+ h1,.phrase,.opening-verse,body.opening-preview.opening-ignited .opening-verse{animation:none!important;filter:none}
+}
+@media(forced-colors:active){
+ h1,.phrase,.opening-verse{animation:none!important;filter:none;background:none;color:CanvasText;-webkit-text-fill-color:CanvasText;-webkit-text-stroke:0;text-shadow:none}
+}
+@media print{
+ h1,.phrase,.opening-verse{animation:none!important;filter:none;background:none;color:#000;-webkit-text-fill-color:#000;-webkit-text-stroke:0;text-shadow:none}
+}
+
+/* The opening remains an anchor; only the following phrases progress. */
+.opening-phrase{position:sticky;top:24px;z-index:5;transition:none}
+.opening-phrase::before{content:"";position:absolute;inset:-12px -8px -12px;z-index:-1;background:#18110b;box-shadow:0 8px 16px #18110b;opacity:var(--opening-background,1)}
+.opening-verse,.imperative{font-weight:700}
+.imperative{transition:none}
+.opening-verse,.display-verse{display:inline-block;white-space:nowrap}
+.intro{opacity:var(--intro-progress,0);transition:opacity 2s linear}
+.intro:not(.is-readable){pointer-events:none}
+@media(prefers-reduced-motion:reduce){.intro{transition:none}}
+@media print{.intro{opacity:1!important}}
+.poem-flow{display:flow-root;clip-path:inset(var(--reading-clip,0px) -32px -32px -32px)}
+.poem.is-closing .poem-flow>.phrase{visibility:hidden!important;opacity:0!important}
+.closing-slot{min-height:calc(100svh - 24px - 3.7em - 44px)}
+.closing-scene{overflow-anchor:none;padding-top:16px}
+.closing-scene.is-pinned{position:fixed;top:var(--closing-top);left:var(--closing-left);width:var(--closing-width);z-index:4}
+@media print{.closing-slot{min-height:0}.closing-scene.is-pinned{position:static;width:auto}}
+.closing-scene .ending{font-size:calc(1em + 1pt);font-weight:700;font-style:italic;line-height:1.85;margin-top:0}
+@media print{.poem-flow{clip-path:none}.poem.is-closing .poem-flow>.phrase{visibility:visible!important;opacity:1!important}}
+body{transition:background-color 1.2s ease}
+
+/* Cotán is the actual epilogue background from the imperative onward. */
+body.cotan-on{
+ background-color:#000!important;
+ background-image:url('cotan-imperative.webp?v=20261009-body-final')!important;
+ background-repeat:no-repeat!important;
+ background-position:center bottom!important;
+ background-size:100vw auto!important;
+ background-attachment:fixed!important;
+}
+body.cotan-on>.detail-background{opacity:0!important;visibility:hidden!important}
+body.cotan-on::before{opacity:0!important}
+@media print{body.cotan-on{background-image:none!important}}
+
+.flower-coda{min-height:100svh;display:grid;place-items:center;margin:0;padding:100px 8vw;background:#fff;color:#26332d;color-scheme:light;text-shadow:none}
+.flower-coda p{margin:0;font:400 clamp(26px,4vw,40px)/1.5 Georgia,'Times New Roman',serif;letter-spacing:0}
+.closing-signature{margin:0;padding:30px 8vw 100px;background:#fff;color:#667068;text-align:center;animation:none!important;-webkit-text-fill-color:currentColor}
+.flower-coda[hidden],.closing-signature[hidden]{display:none}
+@media print{.flower-coda{break-before:page;break-after:page;min-height:90vh}.closing-signature{padding:0}}
+</style>
+<script src="../ana-klaudya/publication.js?v=20261009-body-final"></script>
+</head>
+<body data-publication="web">
+<div class="detail-background" aria-hidden="true"></div>
+<nav hidden aria-label="Volver a Ana"><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></nav>
+<main>
+<section class="intro" id="epilogueIntro" aria-labelledby="title" aria-hidden="true" inert>
+<div class="kicker">Epílogo · Ana Klaudya</div>
+<h1 id="title">A fuego<br><em>lento.</em></h1>
+<div class="rule" aria-hidden="true"></div>
+
+<div class="controls">
+<button class="primary" id="paced" type="button" disabled>Entrando</button>
+<button id="full" type="button" disabled>Poema completo</button>
+</div>
+<p class="status" id="status" role="status">Deja entrar la luz.</p>
+<div class="music-controls">
+<button id="musicStart" type="button">Activar música</button>
+<label><input id="musicEnabled" type="checkbox" checked> Música de fondo</label>
+<label for="musicLevel">Volumen <output id="musicValue">30 %</output></label>
+<input id="musicLevel" type="range" min="0" max="80" value="30">
+</div>
+</section>
+<article class="poem" id="poem" aria-label="A fuego lento" hidden>
+<p class="phrase opening-phrase hidden-phrase" aria-hidden="true" data-wait="4800"><span class="opening-verse" id="openingFirst">Yo iba a escribirte un poema.</span><br>
+<span class="opening-verse" id="openingSecond">Tú me diste una cebolla.</span></p>
+<div class="poem-flow" id="poemFlow">
+<p class="phrase imperative hidden-phrase" aria-hidden="true" data-wait="3200"><span class="display-verse" id="openingImperative">—Empieza por aquí.</span></p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="5200">A los dos minutos<br>
+ya me habías hecho llorar<br>
+sin romperme el corazón.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6800">Tarareas algo en portugués<br>
+mientras el aceite se calienta.<br>
+<span class="verse-breath">Yo sigo el ritmo con el pie.</span><br>
+La cuchara<br>
+se me queda quieta.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3200">—Remueve, poeta.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="5500">Se me había olvidado el puchero.<br>
+Estaba buscando una palabra<br>
+para el modo en que sonríes.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3000">Me acercas la cuchara.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3200">—Prueba. ¿Qué le falta?</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3200">Me quedo mirándote.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3200">—Al puchero, Paco.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="4000">—Sal.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Tú pones dos platos.<br>
+Yo llevo el puchero a la mesa.<br>
+Apartas los papeles<br>
+para que quepa.</p>
+</div>
+<div class="closing-slot">
+<section class="closing-scene" id="closingScene" aria-label="Cierre de A fuego lento">
+<p class="phrase hidden-phrase" id="closingStart" aria-hidden="true" data-wait="4200">El poema sigue sin terminar.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="4600">Me pides el pan.<br>
+Yo te doy la mano.</p>
+<p class="phrase hidden-phrase" aria-hidden="true" data-wait="3500">—El pan, poeta.</p>
+<p class="phrase hidden-phrase ending" aria-hidden="true" data-wait="10500">Lo alcanzo con la otra.</p>
+</section>
+</div>
+</article>
+</main>
+<section class="flower-coda" id="flowerCoda" aria-label="Coda visual" hidden>
+<p><em>Flores.</em></p>
+</section>
+<div class="signature closing-signature" id="signature" hidden>flag</div>
+
+<script>
+const detailBackground=document.querySelector('.detail-background');
+requestAnimationFrame(()=>requestAnimationFrame(()=>detailBackground.classList.add('is-clear')));
+const inheritedMusic=window.parent!==window && new URLSearchParams(location.search).get('music')==='parent';
+const musicLevel=document.getElementById('musicLevel'),musicEnabled=document.getElementById('musicEnabled'),musicValue=document.getElementById('musicValue'),musicStart=document.getElementById('musicStart');
+const sendMusic=type=>window.parent.postMessage({channel:'ceniciento-music-v1',type,level:Number(musicLevel.value)/100,enabled:musicEnabled.checked},location.origin);
+musicLevel.addEventListener('input',()=>{musicValue.textContent=musicLevel.value+' %';sendMusic('level')});
+musicEnabled.addEventListener('change',()=>sendMusic('enabled'));
+musicStart.addEventListener('click',()=>{musicEnabled.checked=true;sendMusic('enabled');sendMusic('start')});
+document.getElementById('backAna').addEventListener('click',event=>{
+ if(!inheritedMusic || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)return;
+ event.preventDefault();sendMusic('home');
+});
+window.addEventListener('message',event=>{
+ if(event.origin!==location.origin || event.source!==window.parent || event.data?.channel!=='ceniciento-music-v1' || event.data.type!=='state')return;
+
+ musicLevel.value=String(Math.round(Math.max(0,Math.min(.8,Number(event.data.level)||0))*100));
+ musicValue.textContent=musicLevel.value+' %';musicEnabled.checked=!!event.data.enabled;
+ musicStart.hidden=!musicEnabled.checked || !!event.data.playing;
+});
+if(inheritedMusic)sendMusic('ready');
+const phrases=[...document.querySelectorAll('.phrase')];
+const openingMode=new URLSearchParams(location.search).get('opening');
+const continuingOpening=openingMode==='seen',openingPreview=openingMode==='preview';
+const poem=document.getElementById('poem'),signature=document.getElementById('signature'),flowerCoda=document.getElementById('flowerCoda');
+const paced=document.getElementById('paced'),full=document.getElementById('full'),status=document.getElementById('status');
+const openingVerses=[document.getElementById('openingFirst'),document.getElementById('openingSecond')],imperativeVerse=document.getElementById('openingImperative');
+const reducedDisplay=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const displayCounts=new WeakMap();let displayFrame=0,displayTargets=[];
+function displayProgress(verse,progress){
+ const text=verse.textContent||'',count=Math.max(displayCounts.get(verse)||0,Math.floor(text.length*Math.max(0,Math.min(1,progress))));
+ if(displayCounts.get(verse)===count)return;
+ displayCounts.set(verse,count);verse.style.opacity=count>0?'1':'0';
+ if(count>0)verse.removeAttribute('aria-hidden');else verse.setAttribute('aria-hidden','true');
+ if(count===text.length){verse.style.clipPath='none';return}
+ let right=(100*(1-count/Math.max(1,text.length)))+'%';
+ if(document.createRange&&verse.firstChild){const range=document.createRange();range.setStart(verse.firstChild,0);range.setEnd(verse.firstChild,count);right='calc(100% - '+range.getBoundingClientRect().width+'px)'}
+ verse.style.clipPath='inset(-24px '+right+' -24px -20px)';
+}
+function finishDisplay(){cancelAnimationFrame(displayFrame);displayFrame=0;displayTargets.forEach(verse=>displayProgress(verse,1));displayTargets=[]}
+function typeDisplay(verses){
+ finishDisplay();displayTargets=verses;let started=null;
+ verses.forEach(verse=>{displayCounts.delete(verse);displayProgress(verse,0)});
+ if(reducedDisplay){finishDisplay();return}
+ function tick(now){if(started===null)started=now;let offset=0;verses.forEach(verse=>{const duration=(verse.textContent||'').length*48;displayProgress(verse,(now-started-offset)/duration);offset+=duration+420});if(now-started<offset-420)displayFrame=requestAnimationFrame(tick);else finishDisplay()}
+ displayFrame=requestAnimationFrame(tick);
+}
+let timer=null,index=0,mode='waiting',ready=false,openingLocked=continuingOpening;
+const epilogueIntro=document.getElementById('epilogueIntro');let introProgress=0;
+function revealIntro(progress){
+ introProgress=Math.max(introProgress,Math.max(0,Math.min(1,progress)));
+ epilogueIntro.style.setProperty('--intro-progress',String(introProgress));
+ const readable=introProgress>=.24;epilogueIntro.inert=!readable;
+ epilogueIntro.setAttribute('aria-hidden',String(!readable));epilogueIntro.classList.toggle('is-readable',readable);
+}
+revealIntro(0);
+const closingStart=document.getElementById('closingStart');
+const closingScene=document.getElementById('closingScene');let closingPinned=false;
+function releaseClosing(){closingPinned=false;closingScene.classList.remove('is-pinned')}
+function pinClosing(){
+ const anchor=phrases[0].getBoundingClientRect(),column=poem.getBoundingClientRect();
+ const inset=Number.parseFloat(getComputedStyle(phrases[0]).top)||24;
+ const breath=Math.max(44,window.innerHeight*.12);
+ closingScene.style.setProperty('--closing-top',(inset+anchor.height+breath-16)+'px');
+ closingScene.style.setProperty('--closing-left',column.left+'px');
+ closingScene.style.setProperty('--closing-width',column.width+'px');
+ closingPinned=true;closingScene.classList.add('is-pinned');
+}
+const poemFlow=document.getElementById('poemFlow');let maskFrame=0;
+function updateReadingMask(){
+ const anchor=phrases[0].getBoundingClientRect(),flow=poemFlow.getBoundingClientRect();
+ poemFlow.style.setProperty('--reading-clip',Math.max(0,anchor.bottom+16-flow.top)+'px');
+ poem.classList.toggle('is-closing',closingPinned||!closingStart.classList.contains('hidden-phrase')&&closingStart.getBoundingClientRect().top<window.innerHeight*.75);
+}
+function scheduleReadingMask(){if(!maskFrame)maskFrame=requestAnimationFrame(()=>{maskFrame=0;updateReadingMask()})}
+window.addEventListener('scroll',scheduleReadingMask,{passive:true});window.addEventListener('resize',()=>{if(closingPinned)pinClosing();scheduleReadingMask()});
+function alignClosing(){
+ const anchor=phrases[0].getBoundingClientRect(),closing=closingStart.getBoundingClientRect();
+ const inset=Number.parseFloat(getComputedStyle(phrases[0]).top)||24;
+ const breath=Math.max(44,window.innerHeight*.12);
+ window.scrollTo({top:window.scrollY+closing.top-inset-anchor.height-breath,left:0,behavior:'instant'});
+ pinClosing();
+}
+function clear(){clearTimeout(timer);timer=null}
+function hidePhrase(phrase){phrase.classList.add('hidden-phrase');phrase.setAttribute('aria-hidden','true')}
+function showPhrase(phrase){phrase.classList.remove('hidden-phrase');phrase.removeAttribute('aria-hidden')}
+function reveal(){
+ if(!ready || mode!=='playing')return;
+ if(index===phrases.length){releaseClosing();mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';flowerCoda.hidden=false;signature.hidden=false;flowerCoda.scrollIntoView({block:'start',behavior:'instant'});return}
+ const phrase=phrases[index++];if(phrase===closingStart)alignClosing();showPhrase(phrase);
+ if(phrase===phrases[0]){openingLocked=true;typeDisplay(openingVerses)}
+ else if(phrase===phrases[1]){document.body.classList.add('cotan-on');typeDisplay([imperativeVerse])}
+ revealIntro(2*(index-1)/(phrases.length-1));
+ updateReadingMask();
+ timer=setTimeout(reveal,Number(phrase.dataset.wait));
+}
+function beginReading(fromInterlude=false){
+ clear();releaseClosing();const keepOpening=fromInterlude||openingLocked;index=keepOpening?1:0;flowerCoda.hidden=true;signature.hidden=true;phrases.forEach((phrase,i)=>{if(i!==0||!keepOpening)hidePhrase(phrase)});mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';if(keepOpening)showPhrase(phrases[0]);reveal();
+}
+paced.addEventListener('click',()=>{
+ if(!ready)return;
+ if(mode==='playing'){clear();finishDisplay();mode='paused';paced.textContent='Continuar';status.textContent='Una pausa, a tu elección.';return}
+ if(mode==='paused'){mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';reveal();return}
+ beginReading();
+});
+full.addEventListener('click',()=>{
+ if(!ready)return;
+ clear();releaseClosing();finishDisplay();openingVerses.forEach(verse=>displayProgress(verse,1));displayProgress(imperativeVerse,1);document.body.classList.add('cotan-on');mode='full';phrases.forEach(showPhrase);flowerCoda.hidden=false;signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';revealIntro(1);updateReadingMask();
+});
+ready=true;poem.hidden=false;paced.disabled=false;full.disabled=false;
+updateReadingMask();
+if(openingPreview){
+ document.body.classList.add('opening-preview');
+ showPhrase(phrases[0]);status.textContent='Deja respirar cada frase.';paced.textContent='Pausar';mode='preview';
+ let openingFire=0;
+ const applyOpening=(levels,ignition=0)=>{
+  openingVerses.forEach((verse,i)=>{
+   displayProgress(verse,Number(levels[i])||0);
+  });
+  const fire=Math.max(openingFire,Math.max(0,Math.min(1,Number(ignition)||0))),coal=[19,11,7];openingFire=fire;
+  const tint=target=>'rgb('+target.map((value,i)=>Math.round(coal[i]+(value-coal[i])*fire)).join(',')+')';
+  for(const [property,target] of [['--fire-low',[241,110,40]],['--fire-mid',[255,198,91]],['--fire-high',[255,242,182]]])document.body.style.setProperty(property,tint(target));
+  document.body.style.setProperty('--fire-edge',fire===0?'rgba(255,245,220,.45)':'rgba(5,28,33,.9)');
+  document.body.style.setProperty('--fire-glow','rgba(255,119,31,'+(.64*fire)+')');
+  document.body.style.setProperty('--fire-plume','rgba(255,76,15,'+(.4*fire)+')');
+  document.body.style.setProperty('--coal-guard','rgba(255,245,220,'+(.85*(1-fire))+')');
+  if(fire>0)document.body.classList.add('opening-ignited');else document.body.classList.remove('opening-ignited');
+ };
+ applyOpening([0,0]);
+ let continued=false;
+ window.addEventListener('message',event=>{
+  if(event.origin!==location.origin || event.source!==window.parent || event.data?.channel!=='ana-opening-v1')return;
+  if(event.data.type==='continue'&&!continued){
+   continued=true;openingLocked=true;applyOpening([1,1],1);document.body.style.setProperty('--opening-background','1');
+   document.body.classList.add('cotan-on');
+   document.body.classList.remove('opening-preview');
+   detailBackground.classList.add('is-clear');
+   beginReading(true);return;
+  }
+  if(continued)return;
+  if(event.data.type==='reset'){
+   document.body.classList.remove('cotan-on');
+   openingVerses.forEach(verse=>{displayCounts.delete(verse);displayProgress(verse,0)});document.body.style.setProperty('--opening-background','0');
+   openingLocked=false;openingFire=0;applyOpening([0,0]);return;
+  }
+  if(event.data.type==='progress'&&Array.isArray(event.data.levels)){applyOpening(event.data.levels,event.data.ignition);document.body.style.setProperty('--opening-background',String(Math.max(0,Math.min(1,Number(event.data.backdrop)||0))))}
+ });
+ window.parent.postMessage({channel:'ana-opening-v1',type:'ready'},location.origin);
+}else beginReading(continuingOpening);
+</script>
+</body>
+</html>

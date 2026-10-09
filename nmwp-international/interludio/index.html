@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080706">
+<title>Iba a llevarte flores · Interludio de Ana Klaudya</title>
+<script>
+if(window.parent===window)location.replace('../elegia-breve/?v=20261008-fundido-largo-epilogo-directo#interludio');
+</script>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:#080706;color:#eadbc8;font-family:Georgia,'Times New Roman',serif;min-height:100svh;display:flex;flex-direction:column}
+main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 3vw 110px}
+h1,.status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.stage{width:min(100%,1250px,calc(177.778svh - 480px));aspect-ratio:16/9;position:relative;overflow:hidden;background:#000}
+.shot{position:absolute;inset:0;opacity:0;transition:none;width:100%;height:100%;pointer-events:none}
+.shot.active{opacity:1}
+.controls{display:flex;gap:12px;align-items:center;margin-top:20px}
+.controls button{display:grid;place-items:center;width:44px;padding:10px}
+.controls svg{display:block;width:19px;height:19px;fill:currentColor}
+#pause .play-icon{display:none}#pause[data-state="paused"] .pause-icon{display:none}#pause[data-state="paused"] .play-icon{display:block}
+button{background:transparent;color:#eadbc8;border:1px solid #79654d;border-radius:30px;min-height:44px;padding:10px 19px;font:12px/1.5 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+button:focus-visible{outline:2px solid #eadbc8;outline-offset:4px}
+@media(max-width:760px){main{padding:0 0 120px}h1{margin-bottom:24px;text-align:center}.stage{width:100%;aspect-ratio:16/10}.controls{margin-top:25px}}
+@media(prefers-reduced-motion:reduce){.shot{transition:none}}
+ body.epilogue-active main{display:none}
+body.epilogue-active .epilogue-opening{pointer-events:auto}
+.epilogue-opening{position:fixed;inset:0;z-index:4;width:100%;height:100%;border:0;background:transparent;pointer-events:none;opacity:1}
+</style>
+<script src="../ana-klaudya/publication.js"></script>
+</head>
+<body data-publication="web">
+<main>
+<h1>Interludio · Iba a llevarte flores</h1>
+<div class="stage" role="group" aria-label="Un pétalo con gotas da paso a una calle florida, una ciudad, un paisaje y un planeta cubierto de flores junto a una luna yin yang; el planeta se transforma suavemente en una cebolla y la luna yin yang desciende hasta convertirse en un trozo de pan sobre la mesa y abre A fuego lento.">
+<!-- The six views display the supplied storyboard without its layout or timing labels. -->
+<svg class="shot" viewBox="15 103 487 297" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop1" clipPathUnits="userSpaceOnUse"><rect x="15" y="103" width="487" height="297"/></clipPath></defs><image href="mundo-flores.png" width="1536" height="1024" clip-path="url(#shotCrop1)"/></svg>
+<svg class="shot" viewBox="524 103 487 297" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop2" clipPathUnits="userSpaceOnUse"><rect x="524" y="103" width="487" height="297"/></clipPath></defs><image href="mundo-flores.png" width="1536" height="1024" clip-path="url(#shotCrop2)"/></svg>
+<svg class="shot" viewBox="1034 103 487 297" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop3" clipPathUnits="userSpaceOnUse"><rect x="1034" y="103" width="487" height="297"/></clipPath></defs><image href="mundo-flores.png" width="1536" height="1024" clip-path="url(#shotCrop3)"/></svg>
+<svg class="shot" viewBox="15 541 487 322" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop4" clipPathUnits="userSpaceOnUse"><rect x="15" y="541" width="487" height="322"/></clipPath></defs><image href="mundo-flores.png" width="1536" height="1024" clip-path="url(#shotCrop4)"/></svg>
+<svg class="shot" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop5" clipPathUnits="userSpaceOnUse"><rect x="0" y="0" width="1536" height="1024"/></clipPath><clipPath id="moonCrop" clipPathUnits="userSpaceOnUse"><circle cx="1348" cy="318" r="148"/></clipPath><mask id="worldWithoutMoon" maskUnits="userSpaceOnUse" x="0" y="0" width="1536" height="1024"><rect width="1536" height="1024" fill="white"/><circle cx="1348" cy="318" r="148" fill="black"/></mask></defs><g clip-path="url(#shotCrop5)"><image href="mundo-flores-yin-yang.png" width="1536" height="1024" mask="url(#worldWithoutMoon)"/><g id="moonBridge"><image href="mundo-flores-yin-yang.png" width="1536" height="1024" clip-path="url(#moonCrop)"/></g></g></svg>
+<svg class="shot" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop6" clipPathUnits="userSpaceOnUse"><rect x="0" y="0" width="1536" height="1024"/></clipPath></defs><g clip-path="url(#shotCrop6)"><image href="cebolla-pan.png" width="1536" height="1024" transform="matrix(1.24 0 0 1.32 -260 -190)"/></g></svg>
+</div>
+<div class="controls"><button id="pause" type="button" aria-label="Pausar" title="Pausar" data-state="playing" disabled><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg><svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 3 15 9-15 9z"/></svg></button><button id="replay" type="button" aria-label="Volver a ver" title="Volver a ver" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7V2L0 7l5 5V9a7 7 0 1 1-1 7l-2 1a9 9 0 1 0 3-10z"/></svg></button></div>
+<p class="status" id="status" role="status">Cargando las imágenes.</p>
+</main>
+<iframe class="epilogue-opening" id="epilogueOpening" title="Entrada de A fuego lento" src="../epilogo/?music=parent&amp;opening=preview&amp;v=20261009-cotan-body-final"></iframe>
+<script>
+const shots=[...document.querySelectorAll('.shot')];
+const moonBridge=document.getElementById('moonBridge');
+const epilogueOpening=document.getElementById('epilogueOpening');
+const pause=document.getElementById('pause'),replay=document.getElementById('replay'),status=document.getElementById('status');
+// The flower opens, scale accelerates, the impossible garden lingers, and the onion returns us to the table.
+const cueStarts=[0,2800,4600,6300,9300,13300],duration=30000;
+const fadeIn=[600,260,100,380,450,500],fadeOut=[360,130,180,420,400,600];
+const morphStart=10700,morphEnd=15900;
+const openingStarts=[17000,20500],openingFade=1600,ignitionStart=23500,ignitionEnd=27000,outroStart=26000;
+const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const inheritedMusic=window.parent!==window&&new URLSearchParams(location.search).get('music')==='parent';
+const sendMusic=(type,details={})=>{if(inheritedMusic)window.parent.postMessage({channel:'ceniciento-music-v1',type,...details},location.origin)};
+let elapsed=0,last=0,frame=0,introTimer=null,running=false,ready=false,finished=false,openingReady=false,promoted=false;
+const smoothAmount=value=>{const t=Math.max(0,Math.min(1,value));return t*t*(3-2*t)};
+function render(){
+ const sceneFade=reducedMotion?(elapsed>=duration?0:1):1-smoothAmount((elapsed-outroStart)/(duration-outroStart));
+ epilogueOpening.style.opacity='1';
+ epilogueOpening.contentWindow?.postMessage({channel:'ana-opening-v1',type:'progress',backdrop:1-sceneFade,ignition:reducedMotion?(elapsed>=ignitionEnd?1:0):smoothAmount((elapsed-ignitionStart)/(ignitionEnd-ignitionStart)),levels:openingStarts.map(start=>reducedMotion?(elapsed>=start?1:0):Math.max(0,Math.min(1,(elapsed-start)/openingFade)))},location.origin);
+ moonBridge.setAttribute('transform','translate(0 0)');
+ const index=cueStarts.reduce((found,start,i)=>elapsed>=start?i:found,0);
+ const into=elapsed-cueStarts[index],until=(cueStarts[index+1]??duration)-elapsed;
+ // The first four cuts pass through darkness; the last pair shares one matched frame.
+ if(elapsed>=morphStart){
+  const t=Math.max(0,Math.min(1,(elapsed-morphStart)/(morphEnd-morphStart)));
+  const blend=reducedMotion?(elapsed>=morphEnd?1:0):t*t*(3-2*t);
+  const descent=Math.min(1,t*2),settle=descent*descent*(3-2*descent);
+  moonBridge.setAttribute('transform',`translate(${-27*settle} ${131*settle})`);
+  // Keep the world opaque underneath the incoming onion to avoid a luminance dip.
+  shots.forEach((shot,i)=>{shot.classList.toggle('active',i===index);shot.style.opacity=String(sceneFade*(i===4?(blend<1?1:0):i===5?blend:0));});
+  return;
+ }
+ const incoming=(into-(index===0?0:80))/fadeIn[index];
+ const outgoing=(until-90)/fadeOut[index];
+ const amount=reducedMotion?1:Math.max(0,Math.min(1,incoming,outgoing));
+ const opacity=amount*amount*(3-2*amount);
+ shots.forEach((shot,i)=>{shot.classList.toggle('active',i===index);shot.style.opacity=String(i===index?opacity:0);});
+}
+function setPauseLabel(label,paused=false){pause.setAttribute('aria-label',label);pause.setAttribute('title',label);pause.setAttribute('data-state',paused?'paused':'playing');}
+function stop(){running=false;clearTimeout(introTimer);introTimer=null;cancelAnimationFrame(frame);frame=0;last=0;}
+function tick(now){
+ if(!running)return;
+ if(last&&!document.hidden)elapsed+=now-last;
+ last=now;render();
+ if(elapsed>=duration){stop();finished=true;setPauseLabel('Continuar',true);status.textContent='A fuego lento.';sendMusic('interlude-ended',{openingShown:true,persistentOpening:openingReady});return;}
+ frame=requestAnimationFrame(tick);
+}
+function start(){if(!ready||running)return;clearTimeout(introTimer);introTimer=null;running=true;last=0;render();setPauseLabel('Pausar');status.textContent='';frame=requestAnimationFrame(tick);}
+function reset(){stop();elapsed=0;finished=false;epilogueOpening.contentWindow?.postMessage({channel:'ana-opening-v1',type:'reset'},location.origin);render();start();}
+pause.addEventListener('click',()=>{if(running||introTimer!==null){stop();setPauseLabel('Continuar',true);status.textContent='Una pausa, a tu elección.';}else if(finished)reset();else start();});
+replay.addEventListener('click',reset);
+document.addEventListener('visibilitychange',()=>{last=0;});
+window.addEventListener('pagehide',stop);
+let loadedImages=0;
+for(const path of ['mundo-flores.png','mundo-flores-yin-yang.png','cebolla-pan.png']){
+ const image=new Image();
+ image.addEventListener('load',()=>{if(++loadedImages===3){ready=true;pause.disabled=false;replay.disabled=false;introTimer=setTimeout(start,850);}},{once:true});
+ image.addEventListener('error',()=>{status.textContent='No se han podido cargar las imágenes. Puedes continuar al epílogo con Siguiente.';},{once:true});
+ image.src=path;
+}
+epilogueOpening.addEventListener('load',()=>render());
+window.addEventListener('message',event=>{
+ if(event.origin!==location.origin)return;
+ if(event.source===epilogueOpening.contentWindow && event.data?.channel==='ana-opening-v1' && event.data.type==='ready'){
+  openingReady=true;render();sendMusic('ready');sendMusic('interlude-preview-ready');return;
+ }
+ if(event.source===epilogueOpening.contentWindow && event.data?.channel==='ceniciento-music-v1'){
+  if(['ready','home','close','level','enabled','start'].includes(event.data.type))window.parent.postMessage(event.data,location.origin);
+  return;
+ }
+ if(event.source===window.parent && event.data?.channel==='ceniciento-music-v1'){
+  if(event.data.type==='continue-epilogue'&&openingReady&&!promoted){
+   stop();promoted=true;document.body.classList.add('epilogue-active');
+   epilogueOpening.contentWindow?.postMessage({channel:'ana-opening-v1',type:'continue'},location.origin);return;
+  }
+  if(event.data.type==='state')epilogueOpening.contentWindow?.postMessage(event.data,location.origin);
+ }
+});
+sendMusic('ready');
+</script>
+</body>
+</html>
