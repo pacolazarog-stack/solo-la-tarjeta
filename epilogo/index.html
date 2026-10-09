@@ -145,8 +145,11 @@ body.opening-preview.opening-ignited .opening-verse{
 .opening-verse,.imperative{font-weight:700}
 .imperative{transition:none}
 .opening-verse,.display-verse{display:inline-block;white-space:nowrap}
+.poem-flow{display:flow-root;clip-path:inset(var(--reading-clip,0px) -32px -32px -32px)}
+.poem.is-closing .poem-flow>.phrase{visibility:hidden!important;opacity:0!important}
 .closing-scene{padding-top:16px;min-height:calc(100svh - 24px - 3.7em - 44px)}
-.closing-scene .ending{font-size:1em;font-weight:700;font-style:italic;line-height:1.85;margin-top:0}
+.closing-scene .ending{font-size:calc(1em + 1pt);font-weight:700;font-style:italic;line-height:1.85;margin-top:0}
+@media print{.poem-flow{clip-path:none}.poem.is-closing .poem-flow>.phrase{visibility:visible!important;opacity:1!important}}
 body{transition:background-color 1.2s ease}
 
 .flower-coda{min-height:100svh;display:grid;place-items:center;margin:0;padding:100px 8vw;background:#fff;color:#26332d;color-scheme:light;text-shadow:none}
@@ -181,6 +184,7 @@ body{transition:background-color 1.2s ease}
 <article class="poem" id="poem" aria-label="A fuego lento" hidden>
 <p class="phrase opening-phrase hidden-phrase" aria-hidden="true" data-wait="4800"><span class="opening-verse" id="openingFirst">Yo iba a escribirte un poema.</span><br>
 <span class="opening-verse" id="openingSecond">Tú me diste una cebolla.</span></p>
+<div class="poem-flow" id="poemFlow">
 <p class="phrase imperative hidden-phrase" aria-hidden="true" data-wait="3200"><span class="display-verse" id="openingImperative">—Empieza por aquí.</span></p>
 <p class="phrase hidden-phrase" aria-hidden="true" data-wait="5200">A los dos minutos<br>
 ya me habías hecho llorar<br>
@@ -210,7 +214,7 @@ Yo te doy la mano.</p>
 <p class="phrase hidden-phrase" aria-hidden="true" data-wait="3500">—El pan, poeta.</p>
 <p class="phrase hidden-phrase ending" aria-hidden="true" data-wait="5500">Lo alcanzo con la otra.</p>
 </section>
-
+</div>
 </article>
 </main>
 <section class="flower-coda" id="flowerCoda" aria-label="Coda visual" hidden>
@@ -267,6 +271,14 @@ function typeDisplay(verses){
 }
 let timer=null,index=0,mode='waiting',ready=false,openingLocked=continuingOpening;
 const closingStart=document.getElementById('closingStart');
+const poemFlow=document.getElementById('poemFlow');let maskFrame=0;
+function updateReadingMask(){
+ const anchor=phrases[0].getBoundingClientRect(),flow=poemFlow.getBoundingClientRect();
+ poemFlow.style.setProperty('--reading-clip',Math.max(0,anchor.bottom+16-flow.top)+'px');
+ poem.classList.toggle('is-closing',!closingStart.classList.contains('hidden-phrase')&&closingStart.getBoundingClientRect().top<window.innerHeight*.75);
+}
+function scheduleReadingMask(){if(!maskFrame)maskFrame=requestAnimationFrame(()=>{maskFrame=0;updateReadingMask()})}
+window.addEventListener('scroll',scheduleReadingMask,{passive:true});window.addEventListener('resize',scheduleReadingMask);
 function alignClosing(){
  const anchor=phrases[0].getBoundingClientRect(),closing=closingStart.getBoundingClientRect();
  const inset=Number.parseFloat(getComputedStyle(phrases[0]).top)||24;
@@ -280,6 +292,7 @@ function reveal(){
  if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';flowerCoda.hidden=false;signature.hidden=false;return}
  const phrase=phrases[index++];showPhrase(phrase);if(phrase===phrases[0]){openingLocked=true;typeDisplay(openingVerses)}else if(phrase===phrases[1])typeDisplay([imperativeVerse]);
  if(phrase===closingStart)alignClosing();
+ updateReadingMask();
  timer=setTimeout(reveal,Number(phrase.dataset.wait));
 }
 function beginReading(fromInterlude=false){
@@ -293,9 +306,10 @@ paced.addEventListener('click',()=>{
 });
 full.addEventListener('click',()=>{
  if(!ready)return;
- clear();finishDisplay();openingVerses.forEach(verse=>displayProgress(verse,1));displayProgress(imperativeVerse,1);mode='full';phrases.forEach(showPhrase);flowerCoda.hidden=false;signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';
+ clear();finishDisplay();openingVerses.forEach(verse=>displayProgress(verse,1));displayProgress(imperativeVerse,1);mode='full';phrases.forEach(showPhrase);flowerCoda.hidden=false;signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';updateReadingMask();
 });
 ready=true;poem.hidden=false;paced.disabled=false;full.disabled=false;
+updateReadingMask();
 if(openingPreview){
  document.body.classList.add('opening-preview');
  showPhrase(phrases[0]);status.textContent='Deja respirar cada frase.';paced.textContent='Pausar';mode='preview';
