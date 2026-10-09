@@ -10,30 +10,113 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Restore current narration and bump cache
+      - name: Restore Ceniciento and apply Solo transition v5
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import hashlib, re
 
+          # Preserve the current Ceniciento narration.
           p = Path('ceniciento/index.html')
           s = p.read_text(encoding='utf-8')
           old = "MASTER='CENICIENTO_completo.m4a?v=20261010'"
           new = "MASTER='ceniciento-voz-completa.mp3?v=20261010-audio-restored'"
-          if old not in s and new not in s:
+          if old in s:
+              s = s.replace(old, new)
+              p.write_text(s, encoding='utf-8')
+          elif new not in s:
               raise RuntimeError('No se encontró la referencia de audio esperada en ceniciento/index.html')
-          s = s.replace(old, new)
-          p.write_text(s, encoding='utf-8')
 
           q = Path('elegia-breve/index.html')
-          t = q.read_text(encoding='utf-8')
-          t = t.replace('20261010-ceniciento-score40-v2', '20261010-ceniciento-score40-v3-audio')
+          t = q.read_text(encoding='utf-8').replace('20261010-ceniciento-score40-v2', '20261010-ceniciento-score40-v3-audio')
           q.write_text(t, encoding='utf-8')
+
+          # Narrative-universe v5: stronger card, direct entry, and soundtrack fade.
+          n = Path('narrative-universe.js')
+          u = n.read_text(encoding='utf-8')
+          u = u.replace("const VERSION='20261010-4';", "const VERSION='20261010-5';")
+
+          u = re.sub(r"\.ou-card\{[^}]*\}", ".ou-card{position:fixed;z-index:74;left:max(26px,4.2vw);bottom:10.5vh;width:116px;height:72px;padding:0;border:1px solid rgba(27,31,36,.72);border-radius:9px;background:linear-gradient(145deg,rgba(58,64,72,.98),rgba(24,28,34,.98));box-shadow:0 12px 34px rgba(0,0,0,.34),0 0 0 1px rgba(255,255,255,.12) inset,0 0 24px rgba(173,143,79,.18);opacity:.96;filter:none;transform:rotate(-5deg);cursor:pointer;transition:opacity .45s ease,transform .45s ease,box-shadow .45s ease;animation:ouCardHint 5.5s ease-in-out infinite}", u, count=1)
+          u = re.sub(r"\.ou-card::before\{[^}]*\}", ".ou-card::before{content:\"\";position:absolute;left:16px;top:16px;width:26px;height:19px;border-radius:4px;background:linear-gradient(135deg,#c69f46,#f0d88b 48%,#ad8738);box-shadow:inset 0 0 0 1px rgba(73,53,17,.42),0 1px 4px rgba(0,0,0,.22)}", u, count=1)
+          u = re.sub(r"\.ou-card::after\{[^}]*\}", ".ou-card::after{content:\"\";position:absolute;left:16px;right:16px;bottom:15px;height:3px;border-radius:2px;background:rgba(240,239,235,.82);box-shadow:0 -10px 0 rgba(240,239,235,.28),0 -20px 0 rgba(240,239,235,.12)}", u, count=1)
+          u = re.sub(r"\.ou-card:hover,.ou-card:focus-visible\{[^}]*\}", ".ou-card:hover,.ou-card:focus-visible{opacity:1;transform:rotate(-2deg) translateY(-4px) scale(1.06);box-shadow:0 16px 42px rgba(0,0,0,.40),0 0 0 1px rgba(255,255,255,.16) inset,0 0 34px rgba(199,164,88,.34);outline:none;animation:none}", u, count=1)
+          if '@keyframes ouCardHint' not in u:
+              u = u.replace("  .ou-active-text{", "  @keyframes ouCardHint{0%,72%,100%{transform:rotate(-5deg) scale(1);box-shadow:0 12px 34px rgba(0,0,0,.34),0 0 0 1px rgba(255,255,255,.12) inset,0 0 24px rgba(173,143,79,.18)}82%{transform:rotate(-4deg) scale(1.035);box-shadow:0 15px 40px rgba(0,0,0,.39),0 0 0 1px rgba(255,255,255,.16) inset,0 0 34px rgba(199,164,88,.34)}}\n  .ou-transition{position:fixed;inset:0;z-index:9999;background:rgba(18,17,16,0);pointer-events:none;transition:background 1.15s ease}.ou-transition.ou-on{background:rgba(18,17,16,.94)}\n  .ou-active-text{", 1)
+          u = u.replace("@media(max-width:700px){.ou-card{left:16px;bottom:10vh;width:70px;height:43px}", "@media(max-width:700px){.ou-card{left:18px;bottom:9vh;width:92px;height:57px}", 1)
+
+          if 'function requestSoloTransition()' not in u:
+              helper = r'''
+function transitionVeil(){
+  let veil=document.querySelector('.ou-transition');
+  if(!veil){veil=document.createElement('div');veil.className='ou-transition';veil.setAttribute('aria-hidden','true');document.body.appendChild(veil);}
+  requestAnimationFrame(()=>requestAnimationFrame(()=>veil.classList.add('ou-on')));
+}
+function fadeAudioElement(audio,duration=1150){
+  if(!audio || audio.paused || audio.muted || audio.volume<=.001)return Promise.resolve();
+  const start=audio.volume, begun=performance.now();
+  return new Promise(resolve=>{
+    const tick=now=>{
+      const p=Math.min(1,(now-begun)/duration);
+      audio.volume=Math.max(0,start*(1-p));
+      if(p<1)requestAnimationFrame(tick);else{try{audio.pause();}catch(_){}resolve();}
+    };
+    requestAnimationFrame(tick);
+  });
+}
+function fadeCurrentAudio(duration=1150){return Promise.allSettled([...document.querySelectorAll('audio')].map(a=>fadeAudioElement(a,duration)));}
+function soloUrl(){return rootPath+'?origen=tarjeta&auto=1&v='+VERSION;}
+function performSoloTransition(url=soloUrl()){
+  save({cardFound:true});transitionVeil();fadeCurrentAudio(1150);after(1050,()=>topGo(url));
+}
+function requestSoloTransition(){
+  save({cardFound:true});
+  if(window.parent!==window){
+    try{window.parent.postMessage({channel:'oras-universe-v2',type:'solo-transition',url:soloUrl()},location.origin);return;}catch(_){}
+  }
+  performSoloTransition();
+}
+addEventListener('message',event=>{
+  if(!page.ana || event.origin!==location.origin || event.data?.channel!=='oras-universe-v2' || event.data.type!=='solo-transition')return;
+  performSoloTransition(event.data.url||soloUrl());
+});
+'''
+              u = u.replace('function addCard(){', helper + '\nfunction addCard(){', 1)
+
+          old_handler = """  card.addEventListener('click',()=>{\n    save({cardFound:true});\n    topGo(rootPath+'?origen=tarjeta&v='+VERSION);\n  });"""
+          if old_handler in u:
+              u = u.replace(old_handler, "  card.addEventListener('click',requestSoloTransition);", 1)
+          elif "card.addEventListener('click',requestSoloTransition);" not in u:
+              raise RuntimeError('No se encontró el manejador de la tarjeta')
+
+          if "const params=new URLSearchParams(location.search);" not in u:
+              u = u.replace("function setupSolo(){\n  activateSoloSymbols();", """function setupSolo(){
+  const params=new URLSearchParams(location.search);
+  if(params.get('auto')==='1' || params.has('origen')){
+    after(90,()=>{
+      const enter=document.getElementById('enterButton');
+      if(enter && !document.body.classList.contains('entered'))enter.click();
+    });
+  }
+  activateSoloSymbols();""", 1)
+          n.write_text(u, encoding='utf-8')
+
+          root = Path('index.html')
+          r = root.read_text(encoding='utf-8').replace('fadeSoundTo(SOUND_LEVEL,1200);','fadeSoundTo(SOUND_LEVEL,2200);')
+          root.write_text(r, encoding='utf-8')
+
+          for html in Path('.').rglob('*.html'):
+              text = html.read_text(encoding='utf-8')
+              newer = re.sub(r'narrative-universe\.js\?v=20261010-\d+', 'narrative-universe.js?v=20261010-5', text)
+              if newer != text:
+                  html.write_text(newer, encoding='utf-8')
           PY
-      - name: Commit
+      - name: Restore workflow definition and commit
         run: |
+          git checkout HEAD^ -- .github/workflows/restore-ceniciento-audio.yml
+          rm -f .github/workflows/solo-transition-v5.yml trigger-solo-transition-v5.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ceniciento/index.html elegia-breve/index.html
+          git add -A
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "Restore current Ceniciento narration"
+          git commit -m "Strengthen card and fade directly into Solo la Tarjeta"
           git push
