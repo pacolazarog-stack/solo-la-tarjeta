@@ -755,6 +755,26 @@
 .journey-index .ana-navigation{position:static;transform:none;width:100%;max-width:none;max-height:none;box-shadow:none;border:0;padding:0;border-radius:0;background:transparent;display:grid;gap:8px}
 .journey-index .ana-navigation[hidden]{display:none}
 .journey-index .entry-button{text-align:left;font:15px/1.4 system-ui,sans-serif;letter-spacing:0;text-transform:none;box-shadow:none;border-radius:8px;border-color:#ced3cb;padding:12px;min-height:44px}
+/* Cada entrada anticipa la imagen y el tono de su pieza. */
+.journey-index .entry-button.piece-button{position:relative;isolation:isolate;overflow:hidden;width:100%;margin:0;min-height:64px;padding:14px 16px;display:flex;align-items:center;background:var(--piece-tone,#26342d);border-color:var(--piece-border,#637065);color:#fff7e9;text-shadow:0 1px 3px #0008;animation:none}
+.piece-button .piece-art{position:absolute;z-index:-2;inset:0 0 0 auto;width:60%;height:100%;pointer-events:none;opacity:.94}
+.piece-button .piece-art svg{display:block;width:100%;height:100%}
+.piece-button .piece-label{position:relative;max-width:72%;font-weight:500}
+.piece-button .piece-shade{position:absolute;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(90deg,var(--piece-tone) 0%,var(--piece-tone) 35%,var(--piece-veil) 65%,transparent 100%)}
+#anaEstrella{--piece-tone:#172837;--piece-veil:#172837d9;--piece-border:#526479}
+#anaRead{--piece-tone:#493827;--piece-veil:#493827d9;--piece-border:#8d7153}
+#anaOjos{--piece-tone:#263d32;--piece-veil:#263d32d9;--piece-border:#657d69}
+#anaSonrisa{--piece-tone:#4f2d38;--piece-veil:#4f2d38d9;--piece-border:#997180}
+#anaCabello{--piece-tone:#201e1c;--piece-veil:#201e1cd9;--piece-border:#716253}
+#anaPiel{--piece-tone:#5a3b28;--piece-veil:#5a3b28d9;--piece-border:#a1805b}
+#anaInterlude{--piece-tone:#493c38;--piece-veil:#493c38d9;--piece-border:#a78878}
+#anaVoice{--piece-tone:#233b40;--piece-veil:#233b40d9;--piece-border:#658388}
+.journey-index .piece-button:hover,.journey-index .piece-button:focus-visible{background:var(--piece-tone);border-color:#dfc69b;box-shadow:0 0 0 1px #dfc69b;transform:translateY(-1px)}
+.journey-index .entry-button.flambe-button{width:100%;margin:0;min-height:64px;padding:14px 16px;display:flex;align-items:center;border-color:#ed993d;color:#321609;font-weight:500}
+.journey-index .entry-button:focus-visible{outline:2px solid #173f32;outline-offset:3px}
+@media(max-width:480px){.journey-index{box-sizing:border-box;padding:18px}.journey-index .entry-button.piece-button,.journey-index .entry-button.flambe-button{padding:12px;min-height:68px}.piece-button .piece-label{max-width:75%}}
+@media(prefers-reduced-motion:reduce){.journey-index .entry-button{animation:none;transition:none;transform:none}}
+@media(forced-colors:active){.piece-button .piece-art,.piece-button .piece-shade{display:none}.journey-index .entry-button.piece-button,.journey-index .entry-button.flambe-button{background:ButtonFace;color:ButtonText;text-shadow:none;border-color:ButtonText}.journey-index .entry-button:focus-visible{outline-color:Highlight}}
 .journey-index-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;font:13px/1.4 system-ui,sans-serif}
 .journey-index-links a{color:#375548;min-height:44px;display:flex;align-items:center}
 .journey-index-close{float:right;min-width:44px;min-height:44px;background:transparent;border:0;color:inherit;font:22px system-ui;cursor:pointer}
@@ -817,15 +837,15 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
 <button class="journey-index-close" id="journeyIndexClose" type="button" aria-label="Cerrar índice">×</button>
 <h2 id="journeyIndexTitle">ANA KLAUDYA</h2>
 <nav class="ana-navigation" id="anaNavigation" aria-label="Piezas de Ana Klaudya">
-<button class="entry-button" id="anaEstrella" type="button">Prólogo · Siguiendo una tarjeta</button>
-<button class="entry-button" id="anaRead" type="button">Elegía breve para Ana Klaudya</button>
-<button class="entry-button" id="anaOjos" type="button">En tus ojos</button>
-<button class="entry-button" id="anaSonrisa" type="button">En tus labios</button>
-<button class="entry-button" id="anaCabello" type="button">Tu cabello</button>
-<button class="entry-button" id="anaPiel" type="button">Tu piel</button>
-<button class="entry-button petal-button" id="anaInterlude" type="button"><span class="petal-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><g fill="#d8a39a" opacity=".8"><ellipse cx="20" cy="10" rx="6" ry="10"/><ellipse cx="20" cy="10" rx="6" ry="10" transform="rotate(72 20 20)"/><ellipse cx="20" cy="10" rx="6" ry="10" transform="rotate(144 20 20)"/><ellipse cx="20" cy="10" rx="6" ry="10" transform="rotate(216 20 20)"/><ellipse cx="20" cy="10" rx="6" ry="10" transform="rotate(288 20 20)"/></g><circle cx="20" cy="20" r="4" fill="#b99252"/></svg></span>Interludio · Iba a llevarte flores</button>
+<button class="entry-button piece-button" id="anaEstrella" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="0 0 300 64" preserveAspectRatio="xMaxYMid slice"><image href="../estrella/umbral.jpg" width="300" height="200" y="-70"/><g transform="translate(251 32)"><circle r="23" fill="#ece8d8"/><path d="M0-23a23 23 0 0 1 0 46a11.5 11.5 0 0 1 0-23a11.5 11.5 0 0 0 0-23" fill="#17202a"/><circle cy="-11.5" r="3.3" fill="#17202a"/><circle cy="11.5" r="3.3" fill="#ece8d8"/></g></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">Prólogo · Siguiendo una tarjeta</span></button>
+<button class="entry-button piece-button" id="anaRead" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="610 760 600 640" preserveAspectRatio="xMaxYMid meet"><image href="ana-klaudya-fotografia.jpg" width="1228" height="2048"/></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">Elegía breve para Ana Klaudya</span></button>
+<button class="entry-button piece-button" id="anaOjos" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="705 835 320 140" preserveAspectRatio="xMidYMid slice"><image href="ana-klaudya-fotografia.jpg" width="1228" height="2048"/></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">En tus ojos</span></button>
+<button class="entry-button piece-button" id="anaSonrisa" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="680 1035 265 140" preserveAspectRatio="xMidYMid slice"><image href="ana-klaudya-fotografia.jpg" width="1228" height="2048"/></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">En tus labios</span></button>
+<button class="entry-button piece-button" id="anaCabello" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="1010 680 210 230" preserveAspectRatio="xMidYMid slice"><image href="ana-klaudya-fotografia.jpg" width="1228" height="2048"/></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">Tu cabello</span></button>
+<button class="entry-button piece-button" id="anaPiel" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="855 1090 180 420" preserveAspectRatio="xMidYMid slice"><image href="ana-klaudya-fotografia.jpg" width="1228" height="2048"/></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">Tu piel</span></button>
+<button class="entry-button petal-button piece-button" id="anaInterlude" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="15 103 487 297" preserveAspectRatio="xMidYMid slice"><image href="../interludio/mundo-flores.png" width="1536" height="1024"/></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">Interludio · Iba a llevarte flores</span></button>
 <button class="entry-button flambe-button" id="anaEpilogue" type="button">Epílogo · A fuego lento</button>
-<button class="entry-button" id="anaVoice" type="button">▶ Escuchar la elegía</button>
+<button class="entry-button piece-button" id="anaVoice" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="0 0 260 64" preserveAspectRatio="xMaxYMid slice"><g fill="none" stroke="#c6dfd8" stroke-width="2" stroke-linecap="round" opacity=".7"><path d="M18 29v6m10-12v18m10-22v26m10-16v6m10-25v44m10-33v22m10-15v8m10-27v46m10-35v24m10-19v14m10-10v6m10-24v42m10-28v14m10-11v8m10-28v48m10-34v20m10-18v16m10-12v8m10-20v32m10-23v14m10-10v6m10-17v28m10-22v16"/></g></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">▶ Escuchar la elegía</span></button>
 </nav>
 <div class="journey-index-links"><a href="../ana-klaudya/acerca/" target="_blank" rel="noopener">Acerca del proyecto ↗</a><a href="../ana-klaudya-festival/" target="_blank" rel="noopener">Jurados y festivales ↗</a></div>
 </dialog>
