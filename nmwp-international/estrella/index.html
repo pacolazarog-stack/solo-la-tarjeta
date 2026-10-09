@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="theme-color" content="#090e19">
-<title>Siguiendo una tarjeta</title>
+<title>Following a Card</title>
 <script>
 if(window.parent===window && new URLSearchParams(location.search).get('music')!=='parent'){
 location.replace('../elegia-breve/?v=ana-134-20261007#estrella');
@@ -139,25 +139,25 @@ main{padding-bottom:140px;gap:6vw}
         <circle class="yin-outline" cx="50" cy="50" r="49" fill="none" stroke="rgba(250,249,238,.48)" stroke-width="1"/>
       </svg>
 </div></div></div>
-<nav hidden aria-label="Volver a Ana"><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></nav>
+<nav hidden aria-label="Back to Ana"><a href="../elegia-breve/" id="backAna">Ana home ↗</a></nav>
 <main>
 <section class="intro" aria-labelledby="title">
-<div class="kicker">Prólogo · Ana Klaudya</div>
-<h1 id="title">Siguiendo<br><em>una tarjeta.</em></h1>
+<div class="kicker">Prologue · Ana Klaudya</div>
+<h1 id="title">Following<br><em>a Card.</em></h1>
 <div class="rule" aria-hidden="true"></div>
 
 <div class="controls">
-<button class="primary" id="paced" type="button" disabled>Esperando a la luna</button>
+<button class="primary" id="paced" type="button" disabled>Waiting for the moon</button>
 </div>
-<p class="status" id="status" role="status">La luna se está formando.</p>
+<p class="status" id="status" role="status">The moon is taking shape.</p>
 <div class="music-controls">
-<button id="musicStart" type="button">Activar música</button>
-<label><input id="musicEnabled" type="checkbox" checked> Música de fondo</label>
-<label for="musicLevel">Volumen <output id="musicValue">30 %</output></label>
+<button id="musicStart" type="button">Play music</button>
+<label><input id="musicEnabled" type="checkbox" checked> Background music</label>
+<label for="musicLevel">Volume <output id="musicValue">30 %</output></label>
 <input id="musicLevel" type="range" min="0" max="80" value="30">
 </div>
 </section>
-<article class="poem" id="poem" aria-label="Siguiendo una tarjeta" hidden>
+<article class="poem" id="poem" aria-label="Following a Card" hidden>
 <p class="phrase hidden-phrase" aria-hidden="true" data-wait="6200">Siguiendo una tarjeta,<br>
 encontré un lugar.</p>
 <p class="phrase hidden-phrase" aria-hidden="true" data-wait="12000">Al detenerme allí,<br>
@@ -185,7 +185,7 @@ function beginCelestialJourney(delay=3600){
  celestialTimers.forEach(clearTimeout);celestialTimers=[];
  clear();moonReady=false;mode='waiting';index=0;poem.hidden=true;
  phrases.forEach(phrase=>{phrase.classList.add('hidden-phrase');phrase.setAttribute('aria-hidden','true')});
- paced.disabled=true;paced.textContent='Esperando a la luna';status.textContent='La luna se está formando.';
+ paced.disabled=true;paced.textContent='Waiting for the moon';status.textContent='The moon is taking shape.';
  celestialScene.classList.add('is-resetting');
  celestialScene.classList.remove('is-awake','is-home');worldComet.classList.remove('is-active');
  void celestialScene.offsetWidth;
@@ -234,18 +234,18 @@ function clear(){clearTimeout(timer);timer=null}
 function completeMoon(){
  if(moonReady || mode!=='waiting')return;
  moonReady=true;poem.hidden=false;paced.disabled=false;
- mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';reveal();
+ mode='playing';paced.textContent='Pause';status.textContent='Let each line breathe.';reveal();
 }
 function reveal(){
  if(!moonReady || mode!=='playing')return;
- if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';return}
+ if(index===phrases.length){mode='done';paced.textContent='Read again';status.textContent='Silence.';return}
  const phrase=phrases[index++];phrase.classList.remove('hidden-phrase');phrase.removeAttribute('aria-hidden');
  timer=setTimeout(reveal,Number(phrase.dataset.wait));
 }
 paced.addEventListener('click',()=>{
  if(!moonReady)return;
- if(mode==='playing'){clear();mode='paused';paced.textContent='Continuar';status.textContent='Una pausa, a tu elección.';return}
- if(mode==='paused'){mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';reveal();return}
+ if(mode==='playing'){clear();mode='paused';paced.textContent='Continue';status.textContent='A pause, if you choose.';return}
+ if(mode==='paused'){mode='playing';paced.textContent='Pause';status.textContent='Let each line breathe.';reveal();return}
  beginCelestialJourney(150);
 });
 beginCelestialJourney();
