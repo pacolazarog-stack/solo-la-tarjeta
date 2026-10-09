@@ -282,14 +282,15 @@ window.addEventListener('scroll',scheduleReadingMask,{passive:true});window.addE
 function alignClosing(){
  const anchor=phrases[0].getBoundingClientRect(),closing=closingStart.getBoundingClientRect();
  const inset=Number.parseFloat(getComputedStyle(phrases[0]).top)||24;
- window.scrollTo({top:window.scrollY+closing.top-inset-anchor.height-44,left:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+ const breath=Math.max(44,window.innerHeight*.12);
+ window.scrollTo({top:window.scrollY+closing.top-inset-anchor.height-breath,left:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
 }
 function clear(){clearTimeout(timer);timer=null}
 function hidePhrase(phrase){phrase.classList.add('hidden-phrase');phrase.setAttribute('aria-hidden','true')}
 function showPhrase(phrase){phrase.classList.remove('hidden-phrase');phrase.removeAttribute('aria-hidden')}
 function reveal(){
  if(!ready || mode!=='playing')return;
- if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';flowerCoda.hidden=false;signature.hidden=false;return}
+ if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';flowerCoda.hidden=false;signature.hidden=false;flowerCoda.scrollIntoView({block:'start',behavior:'instant'});return}
  const phrase=phrases[index++];showPhrase(phrase);if(phrase===phrases[0]){openingLocked=true;typeDisplay(openingVerses)}else if(phrase===phrases[1])typeDisplay([imperativeVerse]);
  if(phrase===closingStart)alignClosing();
  updateReadingMask();

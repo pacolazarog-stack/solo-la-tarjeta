@@ -6,6 +6,7 @@ class Element{
  setAttribute(k,v){this.attrs[k]=v} removeAttribute(k){delete this.attrs[k]}
  addEventListener(k,fn){this.handlers[k]=fn} click(){this.handlers.click?.({preventDefault(){}})}
  getBoundingClientRect(){return this.rect||{top:600,height:100,bottom:700}}
+ scrollIntoView(options){this.scrollOptions=options}
 }
 function scenario(openingMode){
  const continuing=openingMode==='seen',preview=openingMode==='preview';
@@ -53,11 +54,14 @@ function scenario(openingMode){
   const activeTimer=[...timers.keys()][0];control('continue');assert.equal([...timers.keys()][0],activeTimer,'Duplicate continuation cannot restart the poem');
   get('full').click();get('paced').click();assert(!opening.classes.has('hidden-phrase'));assert.equal([...timers.values()][0].ms,3200,'Reading again preserves the opening anchor');
   while(scrolls.length===0){const [key,entry]=[...timers][0];assert(entry,'Closing cue must be reachable');timers.delete(key);entry.fn()}
-  assert.equal(scrolls.length,1);assert.equal(scrolls[0].top,432,'The closing starts below the anchor with space; the previous verse sits behind it');
+  assert.equal(scrolls.length,1);assert.equal(scrolls[0].top,363.68,'The closing preserves the photographed space beneath the anchor');
   assert(get('poem').classes.has('is-closing'),'Earlier stanzas, including para que quepa, are hidden during the closing');
   phrases[0].rect={top:24,bottom:124,height:100};get('poemFlow').rect={top:-1000};get('closingStart').rect={top:200};uiEvents.scroll();advance(2000);
   assert.equal(get('poemFlow').style['--reading-clip'],'1140px','All flowing text is clipped below the anchor, including text above its top edge');
   get('closingStart').rect={top:2000};uiEvents.scroll();advance(2100);assert(!get('poem').classes.has('is-closing'),'Scrolling back restores earlier stanzas');
+  while(timers.size){const [key,entry]=[...timers][0];assert.equal(get('flowerCoda').hidden,true,'Closing holds intact until its last cue expires');timers.delete(key);entry.fn()}
+  assert.equal(get('flowerCoda').scrollOptions.behavior,'instant','The last cue cuts directly to Flores without scrolling through another frame');
+  assert.equal(get('flowerCoda').scrollOptions.block,'start');
   return;
  }
  assert.equal(phrases[1].classes.has('hidden-phrase'),!continuing);
