@@ -66,5 +66,6 @@ assert(source.includes('color:#130b07;-webkit-text-fill-color:#130b07;background
 assert(!source.includes('background:transparent;overflow:hidden'),'Preview keeps the same scrollbar gutter as the complete poem');
 assert(!source.includes('.poem>.phrase:not(:first-child){display:none}'),'Hidden phrases reserve the same layout in both screens');
 assert(source.includes('.opening-verse,.imperative{font-weight:700}'),'Opening stays bold before and after ignition');
+assert(source.includes('.imperative{transition:none}'),'The imperative types crisp letters without a paragraph fade');
 assert(!source.includes("detailBackground.classList.remove('is-clear')"),'Continuation never restarts or darkens the already completed backdrop');
 console.log('PASS: direct entry, continuation, exact epilogue preview, guarded sequential verse reveal, no duplicate timing or music restart, replay and skin clarity');
