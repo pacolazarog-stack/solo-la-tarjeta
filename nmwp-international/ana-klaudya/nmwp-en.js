@@ -28,6 +28,10 @@
     ['En tus','In Your'],['ojos.','Eyes.'],['labios.','Lips.'],['Tu','Your'],['cabello.','Hair.'],['piel.','Skin.'],
     ['A fuego','Over a'],['lento.','Low Flame.'],['Siguiendo una','Following a'],['tarjeta.','Card.'],
 
+    // Prologue · left panel
+    ['Prólogo · Ana Klaudya','Prologue · Ana Klaudya'],
+    ['Esperando a la luna','Waiting for the moon'],['La luna se está formando.','The moon is taking shape.'],
+
     // Core interface
     ['poemas de Paco Olmo de Males','poems by Paco Olmo de Males'],
     ['▶ Comenzar','▶ Begin'],['Voz','Voice'],['Activar voz','Play voice'],['Volver','Back'],['Volver a escuchar','Listen again'],
