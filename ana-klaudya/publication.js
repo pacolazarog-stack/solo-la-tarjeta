@@ -37,11 +37,4 @@
   }).catch(()=>{
     document.body.replaceChildren();const notice=document.createElement('p');notice.className='publication-notice';notice.textContent='La obra no está disponible. Vuelve a intentarlo más tarde.';document.body.append(notice);
   }).finally(()=>document.documentElement.classList.remove('publication-pending'));
-
-  if(/\/epilogo\/(?:index\.html)?$/.test(location.pathname)){
-    ready.then(()=>{
-      const cotan=document.getElementById('cotanBackdrop');
-      if(cotan) cotan.src=new URL('../epilogo/cotan-final-20261009-2.webp?v=20261009-definitivo',script.src).href;
-    });
-  }
 })();
