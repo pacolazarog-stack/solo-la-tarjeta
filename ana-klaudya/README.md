@@ -22,10 +22,13 @@ Obra multimedia de **flag** · 2026.
 6. **Tu piel**
 7. Epílogo · **A fuego lento**
 
+Después del epílogo: coda visual independiente, una pantalla blanca sin título con **«Flores.»**. La única firma aparece después de esta coda. El texto de los siete poemas conserva sus 127 versos.
+
 ## Archivos
 
 - [`TEXTO_CANONICO_ES.md`](./TEXTO_CANONICO_ES.md) — original español íntegro.
 - [`TEXTO_CANONICO_EN.md`](./TEXTO_CANONICO_EN.md) — traducción literaria inglesa.
+- [`CODA_VISUAL.md`](./CODA_VISUAL.md) — palabra final y presentación visual, independiente del epílogo.
 - [`LINEAR_MASTER_TIMELINE.md`](./LINEAR_MASTER_TIMELINE.md) — escaleta cinematográfica del máster lineal, objetivo **09:27**.
 - [`FESTIVAL_DOSSIER_EN.md`](./FESTIVAL_DOSSIER_EN.md) — logline, sinopsis, artist statement, créditos y declaración IA de trabajo.
 - [`subtitles/ANA_KLAUDYA_EN_CADENCE_5m58_PROVISIONAL.srt`](./subtitles/ANA_KLAUDYA_EN_CADENCE_5m58_PROVISIONAL.srt) — **estudio abreviado antiguo**, no duración canónica.

@@ -91,6 +91,11 @@ main{padding-bottom:140px;gap:6vw}
 @media(max-width:760px){main{padding:15px 5vw 130px}.intro{padding-top:0}.poem{border-top:0;margin-top:36px;line-height:1.85}.stanza{margin-bottom:36px}.music-controls{max-width:none}.signature{margin-bottom:30px}.phrase{line-height:1.85}}
 @media(prefers-reduced-motion:reduce){header,.kicker,.status,.signature,footer,.music-controls,h1,.phrase{animation:none!important}}
 
+.flower-coda{min-height:100svh;display:grid;place-items:center;margin:0;padding:100px 8vw;background:#fff;color:#26332d;color-scheme:light;text-shadow:none}
+.flower-coda p{margin:0;font:400 clamp(26px,4vw,40px)/1.5 Georgia,'Times New Roman',serif;letter-spacing:0}
+.closing-signature{margin:0;padding:30px 8vw 100px;background:#fff;color:#667068;text-align:center;animation:none!important;-webkit-text-fill-color:currentColor}
+.flower-coda[hidden],.closing-signature[hidden]{display:none}
+@media print{.flower-coda{break-before:page;break-after:page;min-height:90vh}.closing-signature{padding:0}}
 </style>
 <script src="../ana-klaudya/publication.js"></script>
 </head>
@@ -145,9 +150,13 @@ para que quepa.</p>
 Yo te doy la mano.</p>
 <p class="phrase hidden-phrase" aria-hidden="true" data-wait="3500">—El pan, poeta.</p>
 <p class="phrase hidden-phrase ending" aria-hidden="true" data-wait="5500">Lo alcanzo con la otra.</p>
-<div class="signature" id="signature" hidden>flag</div>
+
 </article>
 </main>
+<section class="flower-coda" id="flowerCoda" aria-label="Coda visual" hidden>
+<p>Flores.</p>
+</section>
+<div class="signature closing-signature" id="signature" hidden>flag</div>
 
 <script>
 const detailBackground=document.querySelector('.detail-background');
@@ -171,7 +180,7 @@ window.addEventListener('message',event=>{
 });
 if(inheritedMusic)sendMusic('ready');
 const phrases=[...document.querySelectorAll('.phrase')];
-const poem=document.getElementById('poem'),signature=document.getElementById('signature');
+const poem=document.getElementById('poem'),signature=document.getElementById('signature'),flowerCoda=document.getElementById('flowerCoda');
 const paced=document.getElementById('paced'),full=document.getElementById('full'),status=document.getElementById('status');
 let timer=null,index=0,mode='waiting',ready=false;
 function clear(){clearTimeout(timer);timer=null}
@@ -179,12 +188,12 @@ function hidePhrase(phrase){phrase.classList.add('hidden-phrase');phrase.setAttr
 function showPhrase(phrase){phrase.classList.remove('hidden-phrase');phrase.removeAttribute('aria-hidden')}
 function reveal(){
  if(!ready || mode!=='playing')return;
- if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';signature.hidden=false;return}
+ if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';flowerCoda.hidden=false;signature.hidden=false;return}
  const phrase=phrases[index++];showPhrase(phrase);
  timer=setTimeout(reveal,Number(phrase.dataset.wait));
 }
 function beginReading(){
- clear();index=0;signature.hidden=true;phrases.forEach(hidePhrase);mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';reveal();
+ clear();index=0;flowerCoda.hidden=true;signature.hidden=true;phrases.forEach(hidePhrase);mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';reveal();
 }
 paced.addEventListener('click',()=>{
  if(!ready)return;
@@ -194,7 +203,7 @@ paced.addEventListener('click',()=>{
 });
 full.addEventListener('click',()=>{
  if(!ready)return;
- clear();mode='full';phrases.forEach(showPhrase);signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';
+ clear();mode='full';phrases.forEach(showPhrase);flowerCoda.hidden=false;signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';
 });
 ready=true;poem.hidden=false;paced.disabled=false;full.disabled=false;beginReading();
 </script>
