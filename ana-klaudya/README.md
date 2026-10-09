@@ -84,3 +84,5 @@ https://pacolazarog-stack.github.io/solo-la-tarjeta/elegia-breve/
 - Imágenes tratadas o generadas con ChatGPT y Copilot.
 - Concepto, selección y edición final: Paco Olmo de Males.
 - Ceniciento conserva una sola firma al final de cada modalidad, sin firmas sobre la entrada ni la lectura.
+
+- Los dos versos iniciales del epílogo aparecen en negro sobre la cebolla y el pan; entre los segundos 28 y 34 se encienden, mientras la imagen se funde al oscuro entre los segundos 33 y 38. La tipografía encendida continúa en todo el epílogo, con un borde oscuro de tono complementario para conservar contraste.

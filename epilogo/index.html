@@ -97,6 +97,43 @@ main{padding-bottom:140px;gap:6vw}
 @media(max-width:760px){main{padding:15px 5vw 130px}.intro{padding-top:0}.poem{border-top:0;margin-top:36px;line-height:1.85}.stanza{margin-bottom:36px}.music-controls{max-width:none}.signature{margin-bottom:30px}.phrase{line-height:1.85}}
 @media(prefers-reduced-motion:reduce){header,.kicker,.status,.signature,footer,.music-controls,h1,.phrase{animation:none!important}}
 
+/* The same letterforms move from charcoal on the photograph to a lasting flame. */
+:root{--fire-low:#f16e28;--fire-mid:#ffc65b;--fire-high:#fff2b6;--fire-edge:rgba(5,28,33,.9);--fire-glow:rgba(255,119,31,.64);--coal-guard:rgba(255,245,220,0)}
+@keyframes livingFlame{
+ 0%,100%{background-position:50% 100%;filter:drop-shadow(0 1px 1px #041c21) drop-shadow(0 -2px 3px var(--fire-glow))}
+ 35%{background-position:50% 38%;filter:drop-shadow(0 1px 1px #041c21) drop-shadow(0 -4px 5px var(--fire-glow))}
+ 68%{background-position:50% 68%;filter:drop-shadow(0 1px 1px #041c21) drop-shadow(0 -3px 4px var(--fire-glow))}
+}
+h1,.phrase,.opening-verse{
+ color:var(--fire-mid);text-shadow:0 1px 1px #041c21,0 -2px 5px var(--fire-glow);
+ -webkit-text-stroke:.35px var(--fire-edge);
+}
+@supports ((background-clip:text) or (-webkit-background-clip:text)){
+ h1,.phrase,.opening-verse{
+  background-image:linear-gradient(0deg,var(--fire-low) 0%,var(--fire-mid) 30%,var(--fire-high) 52%,var(--fire-mid) 72%,var(--fire-low) 100%);
+  background-size:100% 220%;background-clip:text;-webkit-background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;text-shadow:none;
+  animation:livingFlame 6.8s ease-in-out infinite;
+ }
+}
+.opening-phrase{filter:none; -webkit-text-stroke:0}
+body.opening-preview .opening-verse{
+ animation:none;filter:none;background-position:50% 100%;
+ text-shadow:0 0 1px var(--coal-guard);
+}
+body.opening-preview.opening-ignited .opening-verse{
+ text-shadow:none;animation:livingFlame 6.8s ease-in-out infinite;
+}
+@media(prefers-reduced-motion:reduce){
+ h1,.phrase,.opening-verse,body.opening-preview.opening-ignited .opening-verse{animation:none!important;filter:none}
+}
+@media(forced-colors:active){
+ h1,.phrase,.opening-verse{animation:none!important;filter:none;background:none;color:CanvasText;-webkit-text-fill-color:CanvasText;-webkit-text-stroke:0;text-shadow:none}
+}
+@media print{
+ h1,.phrase,.opening-verse{animation:none!important;filter:none;background:none;color:#000;-webkit-text-fill-color:#000;-webkit-text-stroke:0;text-shadow:none}
+}
+
 .flower-coda{min-height:100svh;display:grid;place-items:center;margin:0;padding:100px 8vw;background:#fff;color:#26332d;color-scheme:light;text-shadow:none}
 .flower-coda p{margin:0;font:400 clamp(26px,4vw,40px)/1.5 Georgia,'Times New Roman',serif;letter-spacing:0}
 .closing-signature{margin:0;padding:30px 8vw 100px;background:#fff;color:#667068;text-align:center;animation:none!important;-webkit-text-fill-color:currentColor}
@@ -218,14 +255,23 @@ if(openingPreview){
  document.body.classList.add('opening-preview');
  showPhrase(phrases[0]);status.textContent='Deja respirar cada frase.';paced.textContent='Pausar';mode='preview';
  const openingVerses=[document.getElementById('openingFirst'),document.getElementById('openingSecond')];
- const applyOpening=levels=>openingVerses.forEach((verse,i)=>{
-  const value=Math.max(0,Math.min(1,Number(levels[i])||0));verse.style.opacity=String(value);
-  if(value>0)verse.removeAttribute('aria-hidden');else verse.setAttribute('aria-hidden','true');
- });
+ const applyOpening=(levels,ignition=0)=>{
+  openingVerses.forEach((verse,i)=>{
+   const value=Math.max(0,Math.min(1,Number(levels[i])||0));verse.style.opacity=String(value);
+   if(value>0)verse.removeAttribute('aria-hidden');else verse.setAttribute('aria-hidden','true');
+  });
+  const fire=Math.max(0,Math.min(1,Number(ignition)||0)),coal=[19,11,7];
+  const tint=target=>'rgb('+target.map((value,i)=>Math.round(coal[i]+(value-coal[i])*fire)).join(',')+')';
+  for(const [property,target] of [['--fire-low',[241,110,40]],['--fire-mid',[255,198,91]],['--fire-high',[255,242,182]]])document.body.style.setProperty(property,tint(target));
+  document.body.style.setProperty('--fire-edge',fire===0?'rgba(255,245,220,.45)':'rgba(5,28,33,.9)');
+  document.body.style.setProperty('--fire-glow','rgba(255,119,31,'+(.64*fire)+')');
+  document.body.style.setProperty('--coal-guard','rgba(255,245,220,'+(.85*(1-fire))+')');
+  if(fire>0)document.body.classList.add('opening-ignited');else document.body.classList.remove('opening-ignited');
+ };
  applyOpening([0,0]);
  window.addEventListener('message',event=>{
   if(event.origin!==location.origin || event.source!==window.parent || event.data?.channel!=='ana-opening-v1' || event.data.type!=='progress' || !Array.isArray(event.data.levels))return;
-  applyOpening(event.data.levels);
+  applyOpening(event.data.levels,event.data.ignition);
  });
  window.parent.postMessage({channel:'ana-opening-v1',type:'ready'},location.origin);
 }else beginReading(continuingOpening);

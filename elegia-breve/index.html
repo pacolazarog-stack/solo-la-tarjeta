@@ -1385,7 +1385,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
         setJourney(piece);
         body.classList.add('journey-started');
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-misma-posicion'+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'');
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-versos-en-llamas'+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openCeniciento=()=>openPoem('ceniciento');
