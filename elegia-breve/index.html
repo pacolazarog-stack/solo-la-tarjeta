@@ -1558,7 +1558,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
 
           const rect=line.getBoundingClientRect();
 
-          if(rect.top<=revealY && rect.bottom>0){
+          if(rect.top<=revealY && (rect.bottom>0 || line===finalHeat)){
             line.classList.add('is-shown');
 
             if(line===finalHeat){
