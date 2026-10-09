@@ -93,16 +93,16 @@ I was going to tell you something.
 
 Your smile begins at the corners of your mouth:  
 a slight movement,  
-and I am already looking at you  
-beyond all prudence.
+and I forget  
+how I was going to begin.
 
 The gesture spreads across your face.  
 I smile too.  
 You still have not said a word.
 
-You smile again  
-and I remain on your lips,  
-never reaching the words.
+You smile again.  
+What I was going to tell you  
+can wait.
 
 ---
 

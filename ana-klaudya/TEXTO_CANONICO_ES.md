@@ -93,16 +93,16 @@ Iba a decirte algo.
 
 Tu sonrisa comienza en las comisuras:  
 un leve movimiento  
-y ya te estoy mirando  
-más allá de toda prudencia.
+y se me olvida  
+cómo iba a empezar.
 
 El gesto se extiende por tu rostro.  
 Yo también sonrío.  
 Todavía no has dicho nada.
 
-Vuelves a sonreír  
-y me quedo en tus labios,  
-sin llegar a las palabras.
+Vuelves a sonreír.  
+Lo que iba a decirte  
+puede esperar.
 
 ---
 
