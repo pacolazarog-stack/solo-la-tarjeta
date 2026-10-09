@@ -5,7 +5,7 @@ class Element{
  constructor(){this.hidden=true;this.handlers={};this.attrs={};this.style={setProperty(k,v){this[k]=v}};this.classes=new Set(['hidden-phrase']);this.classList={add:c=>this.classes.add(c),remove:c=>this.classes.delete(c),contains:c=>this.classes.has(c),toggle:(c,on)=>on?this.classes.add(c):this.classes.delete(c)};}
  setAttribute(k,v){this.attrs[k]=v} removeAttribute(k){delete this.attrs[k]}
  addEventListener(k,fn){this.handlers[k]=fn} click(){this.handlers.click?.({preventDefault(){}})}
- getBoundingClientRect(){return this.rect||{top:600,height:100,bottom:700}}
+ getBoundingClientRect(){return this.rect||{top:600,height:100,bottom:700,left:620,width:500}}
  scrollIntoView(options){this.scrollOptions=options}
 }
 function scenario(openingMode){
@@ -59,12 +59,15 @@ function scenario(openingMode){
   const nextCue=[...timers][0];timers.delete(nextCue[0]);nextCue[1].fn();assert(Number(intro.style['--intro-progress'])>firstIntro);assert.equal(intro.inert,false,'Controls become accessible as the column emerges');
   get('full').click();assert.equal(Number(intro.style['--intro-progress']),1);get('paced').click();assert.equal(Number(intro.style['--intro-progress']),1,'Replaying does not extinguish the visible column');assert(!opening.classes.has('hidden-phrase'));assert.equal([...timers.values()][0].ms,3200,'Reading again preserves the opening anchor');
   while(scrolls.length===0){const [key,entry]=[...timers][0];assert(entry,'Closing cue must be reachable');timers.delete(key);entry.fn()}
+  assert(get('closingScene').classes.has('is-pinned'),'The whole closing is fixed to the viewport before it appears');
+  assert.equal(get('closingScene').style['--closing-top'],'220.32px');
   assert.equal(scrolls.length,1);assert.equal(scrolls[0].behavior,'instant','The closing is positioned before its first line fades in, with no drift');assert.equal(scrolls[0].top,363.68,'The closing preserves the photographed space beneath the anchor');
   assert(get('poem').classes.has('is-closing'),'Earlier stanzas, including para que quepa, are hidden during the closing');
   phrases[0].rect={top:24,bottom:124,height:100};get('poemFlow').rect={top:-1000};get('closingStart').rect={top:200};uiEvents.scroll();advance(2000);
   assert.equal(get('poemFlow').style['--reading-clip'],'1140px','All flowing text is clipped below the anchor, including text above its top edge');
-  get('closingStart').rect={top:2000};uiEvents.scroll();advance(2100);assert(!get('poem').classes.has('is-closing'),'Scrolling back restores earlier stanzas');
+  get('closingStart').rect={top:2000};uiEvents.scroll();advance(2100);assert(get('poem').classes.has('is-closing'),'Scrolling cannot move the pinned closing or restore earlier text during its reading');
   while(timers.size){const [key,entry]=[...timers][0];assert.equal(get('flowerCoda').hidden,true,'Closing holds intact until its last cue expires');timers.delete(key);entry.fn()}
+  assert(!get('closingScene').classes.has('is-pinned'),'The fixed closing is released only at the cut to Flores');
   assert.equal(get('flowerCoda').scrollOptions.behavior,'instant','The last cue cuts directly to Flores without scrolling through another frame');
   assert.equal(get('flowerCoda').scrollOptions.block,'start');
   return;

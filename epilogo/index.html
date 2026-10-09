@@ -151,7 +151,10 @@ body.opening-preview.opening-ignited .opening-verse{
 @media print{.intro{opacity:1!important}}
 .poem-flow{display:flow-root;clip-path:inset(var(--reading-clip,0px) -32px -32px -32px)}
 .poem.is-closing .poem-flow>.phrase{visibility:hidden!important;opacity:0!important}
-.closing-scene{overflow-anchor:none;padding-top:16px;min-height:calc(100svh - 24px - 3.7em - 44px)}
+.closing-slot{min-height:calc(100svh - 24px - 3.7em - 44px)}
+.closing-scene{overflow-anchor:none;padding-top:16px}
+.closing-scene.is-pinned{position:fixed;top:var(--closing-top);left:var(--closing-left);width:var(--closing-width);z-index:4}
+@media print{.closing-slot{min-height:0}.closing-scene.is-pinned{position:static;width:auto}}
 .closing-scene .ending{font-size:calc(1em + 1pt);font-weight:700;font-style:italic;line-height:1.85;margin-top:0}
 @media print{.poem-flow{clip-path:none}.poem.is-closing .poem-flow>.phrase{visibility:visible!important;opacity:1!important}}
 body{transition:background-color 1.2s ease}
@@ -211,7 +214,9 @@ para el modo en que sonríes.</p>
 Yo llevo el puchero a la mesa.<br>
 Apartas los papeles<br>
 para que quepa.</p>
-<section class="closing-scene" aria-label="Cierre de A fuego lento">
+</div>
+<div class="closing-slot">
+<section class="closing-scene" id="closingScene" aria-label="Cierre de A fuego lento">
 <p class="phrase hidden-phrase" id="closingStart" aria-hidden="true" data-wait="4200">El poema sigue sin terminar.</p>
 <p class="phrase hidden-phrase" aria-hidden="true" data-wait="4600">Me pides el pan.<br>
 Yo te doy la mano.</p>
@@ -283,33 +288,45 @@ function revealIntro(progress){
 }
 revealIntro(0);
 const closingStart=document.getElementById('closingStart');
+const closingScene=document.getElementById('closingScene');let closingPinned=false;
+function releaseClosing(){closingPinned=false;closingScene.classList.remove('is-pinned')}
+function pinClosing(){
+ const anchor=phrases[0].getBoundingClientRect(),column=poem.getBoundingClientRect();
+ const inset=Number.parseFloat(getComputedStyle(phrases[0]).top)||24;
+ const breath=Math.max(44,window.innerHeight*.12);
+ closingScene.style.setProperty('--closing-top',(inset+anchor.height+breath-16)+'px');
+ closingScene.style.setProperty('--closing-left',column.left+'px');
+ closingScene.style.setProperty('--closing-width',column.width+'px');
+ closingPinned=true;closingScene.classList.add('is-pinned');
+}
 const poemFlow=document.getElementById('poemFlow');let maskFrame=0;
 function updateReadingMask(){
  const anchor=phrases[0].getBoundingClientRect(),flow=poemFlow.getBoundingClientRect();
  poemFlow.style.setProperty('--reading-clip',Math.max(0,anchor.bottom+16-flow.top)+'px');
- poem.classList.toggle('is-closing',!closingStart.classList.contains('hidden-phrase')&&closingStart.getBoundingClientRect().top<window.innerHeight*.75);
+ poem.classList.toggle('is-closing',closingPinned||!closingStart.classList.contains('hidden-phrase')&&closingStart.getBoundingClientRect().top<window.innerHeight*.75);
 }
 function scheduleReadingMask(){if(!maskFrame)maskFrame=requestAnimationFrame(()=>{maskFrame=0;updateReadingMask()})}
-window.addEventListener('scroll',scheduleReadingMask,{passive:true});window.addEventListener('resize',scheduleReadingMask);
+window.addEventListener('scroll',scheduleReadingMask,{passive:true});window.addEventListener('resize',()=>{if(closingPinned)pinClosing();scheduleReadingMask()});
 function alignClosing(){
  const anchor=phrases[0].getBoundingClientRect(),closing=closingStart.getBoundingClientRect();
  const inset=Number.parseFloat(getComputedStyle(phrases[0]).top)||24;
  const breath=Math.max(44,window.innerHeight*.12);
  window.scrollTo({top:window.scrollY+closing.top-inset-anchor.height-breath,left:0,behavior:'instant'});
+ pinClosing();
 }
 function clear(){clearTimeout(timer);timer=null}
 function hidePhrase(phrase){phrase.classList.add('hidden-phrase');phrase.setAttribute('aria-hidden','true')}
 function showPhrase(phrase){phrase.classList.remove('hidden-phrase');phrase.removeAttribute('aria-hidden')}
 function reveal(){
  if(!ready || mode!=='playing')return;
- if(index===phrases.length){mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';flowerCoda.hidden=false;signature.hidden=false;flowerCoda.scrollIntoView({block:'start',behavior:'instant'});return}
+ if(index===phrases.length){releaseClosing();mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';flowerCoda.hidden=false;signature.hidden=false;flowerCoda.scrollIntoView({block:'start',behavior:'instant'});return}
  const phrase=phrases[index++];if(phrase===closingStart)alignClosing();showPhrase(phrase);if(phrase===phrases[0]){openingLocked=true;typeDisplay(openingVerses)}else if(phrase===phrases[1])typeDisplay([imperativeVerse]);
  revealIntro(2*(index-1)/(phrases.length-1));
  updateReadingMask();
  timer=setTimeout(reveal,Number(phrase.dataset.wait));
 }
 function beginReading(fromInterlude=false){
- clear();const keepOpening=fromInterlude||openingLocked;index=keepOpening?1:0;flowerCoda.hidden=true;signature.hidden=true;phrases.forEach((phrase,i)=>{if(i!==0||!keepOpening)hidePhrase(phrase)});mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';if(keepOpening)showPhrase(phrases[0]);reveal();
+ clear();releaseClosing();const keepOpening=fromInterlude||openingLocked;index=keepOpening?1:0;flowerCoda.hidden=true;signature.hidden=true;phrases.forEach((phrase,i)=>{if(i!==0||!keepOpening)hidePhrase(phrase)});mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';if(keepOpening)showPhrase(phrases[0]);reveal();
 }
 paced.addEventListener('click',()=>{
  if(!ready)return;
@@ -319,7 +336,7 @@ paced.addEventListener('click',()=>{
 });
 full.addEventListener('click',()=>{
  if(!ready)return;
- clear();finishDisplay();openingVerses.forEach(verse=>displayProgress(verse,1));displayProgress(imperativeVerse,1);mode='full';phrases.forEach(showPhrase);flowerCoda.hidden=false;signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';revealIntro(1);updateReadingMask();
+ clear();releaseClosing();finishDisplay();openingVerses.forEach(verse=>displayProgress(verse,1));displayProgress(imperativeVerse,1);mode='full';phrases.forEach(showPhrase);flowerCoda.hidden=false;signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';revealIntro(1);updateReadingMask();
 });
 ready=true;poem.hidden=false;paced.disabled=false;full.disabled=false;
 updateReadingMask();
