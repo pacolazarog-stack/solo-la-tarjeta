@@ -749,17 +749,16 @@
 .journey-nav button{min-height:44px;min-width:74px;margin:0;padding:10px 14px;border:0;border-radius:999px;background:transparent;color:inherit;font:14px/1.2 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
 .journey-nav button:disabled{opacity:.35;cursor:default}
 .journey-nav button:focus-visible,.entry-button:focus-visible{outline:2px solid #375548;outline-offset:3px}
-.journey-index{width:min(540px,calc(100% - 28px));max-height:85svh;border:1px solid #bec5bc;border-radius:18px;padding:24px;background:#f5f3ed;color:#201d19;z-index:170;overflow:auto}
+.journey-index{box-sizing:border-box;width:min(540px,calc(100% - 24px));max-height:calc(100svh - 24px);border:1px solid #bec5bc;border-radius:18px;padding:44px 16px 12px;background:#f5f3ed;color:#201d19;z-index:170;overflow:auto}
 .journey-index::backdrop{background:#101a15aa}
-.journey-index h2{font:normal 26px/1.2 Georgia,serif;margin:0 0 22px}
-.journey-index .ana-navigation{position:static;transform:none;width:100%;max-width:none;max-height:none;box-shadow:none;border:0;padding:0;border-radius:0;background:transparent;display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.journey-index .ana-navigation{position:static;transform:none;width:100%;max-width:none;max-height:none;overflow:visible;box-shadow:none;border:0;padding:0;border-radius:0;background:transparent;display:grid;grid-template-columns:minmax(0,1fr);gap:5px}
 .journey-index .ana-navigation[hidden]{display:none}
-.journey-index .entry-button{text-align:left;font:15px/1.4 system-ui,sans-serif;letter-spacing:0;text-transform:none;box-shadow:none;border-radius:8px;border-color:#ced3cb;padding:12px;min-height:44px}
+.journey-index .entry-button{text-align:left;font:14px/1.3 system-ui,sans-serif;letter-spacing:0;text-transform:none;box-shadow:none;border-radius:8px;border-color:#ced3cb;padding:8px 12px;min-height:44px}
 /* Cada entrada anticipa la imagen y el tono de su pieza. */
-.journey-index .entry-button.piece-button{position:relative;isolation:isolate;overflow:hidden;width:100%;margin:0;min-height:64px;padding:14px 16px;display:flex;align-items:center;background:var(--piece-tone,#26342d);border-color:var(--piece-border,#637065);color:#fff7e9;text-shadow:0 1px 3px #0008;animation:none}
+.journey-index .entry-button.piece-button{position:relative;isolation:isolate;overflow:hidden;width:100%;margin:0;min-height:44px;padding:8px 12px;display:flex;align-items:center;background:var(--piece-tone,#26342d);border-color:var(--piece-border,#637065);color:#fff7e9;text-shadow:0 1px 3px #0008;animation:none}
 .piece-button .piece-art{position:absolute;z-index:-2;inset:0 0 0 auto;width:60%;height:100%;pointer-events:none;opacity:.94}
 .piece-button .piece-art svg{display:block;width:100%;height:100%}
-.piece-button .piece-label{position:relative;max-width:72%;font-weight:500}
+.piece-button .piece-label{position:relative;max-width:82%;font-weight:500}
 .piece-button .piece-shade{position:absolute;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(90deg,var(--piece-tone) 0%,var(--piece-tone) 35%,var(--piece-veil) 65%,transparent 100%)}
 #anaEstrella{--piece-tone:#172837;--piece-veil:#172837d9;--piece-border:#526479}
 #anaRead{--piece-tone:#493827;--piece-veil:#493827d9;--piece-border:#8d7153}
@@ -771,14 +770,16 @@
 #anaVoice{--piece-tone:#233b40;--piece-veil:#233b40d9;--piece-border:#658388}
 .journey-index .entry-button.petal-button.piece-button{background:var(--piece-tone);border-color:var(--piece-border);color:#fff7e9}
 .journey-index .piece-button:hover,.journey-index .piece-button:focus-visible{background:var(--piece-tone);border-color:#dfc69b;box-shadow:0 0 0 1px #dfc69b;transform:translateY(-1px)}
-.journey-index .entry-button.flambe-button{width:100%;margin:0;min-height:64px;padding:14px 16px;display:flex;align-items:center;border-color:#ed993d;color:#321609;font-weight:500}
+.journey-index .entry-button.flambe-button{width:100%;margin:0;min-height:44px;padding:8px 12px;display:flex;align-items:center;border-color:#ed993d;color:#321609;font-weight:500}
 .journey-index .entry-button:focus-visible{outline:2px solid #173f32;outline-offset:3px}
-@media(max-width:480px){.journey-index{box-sizing:border-box;padding:18px}.journey-index .entry-button.piece-button,.journey-index .entry-button.flambe-button{padding:12px;min-height:68px}.piece-button .piece-label{max-width:75%}}
+@media(max-width:480px){.journey-index{padding-left:12px;padding-right:12px}.journey-index .entry-button.piece-button,.journey-index .entry-button.flambe-button{padding:8px 10px}}
+@media(max-height:650px){.journey-index .ana-navigation{grid-template-columns:repeat(2,minmax(0,1fr))}.journey-index .piece-button .piece-label{max-width:100%}.journey-index .piece-button .piece-art{opacity:.6}.journey-index .piece-button .piece-shade{background:linear-gradient(90deg,var(--piece-tone),var(--piece-veil))}.journey-index #anaVoice{grid-column:1/-1}}
+@media(min-width:600px) and (max-height:650px){.journey-index{width:min(720px,calc(100% - 24px))}.journey-index .ana-navigation{grid-template-columns:repeat(3,minmax(0,1fr))}.journey-index #anaVoice{grid-column:auto}}
 @media(prefers-reduced-motion:reduce){.journey-index .entry-button{animation:none;transition:none;transform:none}}
 @media(forced-colors:active){.piece-button .piece-art,.piece-button .piece-shade{display:none}.journey-index .entry-button.piece-button,.journey-index .entry-button.petal-button.piece-button,.journey-index .entry-button.flambe-button{background:ButtonFace;color:ButtonText;text-shadow:none;border-color:ButtonText}.journey-index .entry-button:focus-visible{outline-color:Highlight}}
-.journey-index-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;font:13px/1.4 system-ui,sans-serif}
+.journey-index-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px;font:12px/1.3 system-ui,sans-serif}
 .journey-index-links a{color:#375548;min-height:44px;display:flex;align-items:center}
-.journey-index-close{float:right;min-width:44px;min-height:44px;background:transparent;border:0;color:inherit;font:22px system-ui;cursor:pointer}
+.journey-index-close{position:absolute;top:0;right:6px;min-width:44px;min-height:44px;background:transparent;border:0;color:inherit;font:22px system-ui;cursor:pointer}
 .entry{background:#eef1e9;backdrop-filter:none}
 .entry-flag{font:italic 16px/1.5 Georgia,serif;letter-spacing:0;color:#415248}
 body.journey-started main{padding-bottom:130px}
@@ -834,9 +835,8 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
     </div>
   </div>
 
-<dialog class="journey-index" id="journeyIndex" aria-labelledby="journeyIndexTitle">
+<dialog class="journey-index" id="journeyIndex" aria-label="Índice de Ana Klaudya">
 <button class="journey-index-close" id="journeyIndexClose" type="button" aria-label="Cerrar índice">×</button>
-<h2 id="journeyIndexTitle">ANA KLAUDYA</h2>
 <nav class="ana-navigation" id="anaNavigation" aria-label="Piezas de Ana Klaudya">
 <button class="entry-button piece-button" id="anaEstrella" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="0 0 300 64" preserveAspectRatio="xMaxYMid slice"><image href="../estrella/umbral.jpg" width="300" height="200" y="-70"/><g transform="translate(251 32)"><circle r="23" fill="#ece8d8"/><path d="M0-23a23 23 0 0 1 0 46a11.5 11.5 0 0 1 0-23a11.5 11.5 0 0 0 0-23" fill="#17202a"/><circle cy="-11.5" r="3.3" fill="#17202a"/><circle cy="11.5" r="3.3" fill="#ece8d8"/></g></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">Prólogo · Siguiendo una tarjeta</span></button>
 <button class="entry-button piece-button" id="anaRead" type="button"><span class="piece-art" aria-hidden="true"><svg viewBox="610 760 600 640" preserveAspectRatio="xMaxYMid meet"><image href="ana-klaudya-fotografia.jpg" width="1228" height="2048"/></svg></span><span class="piece-shade" aria-hidden="true"></span><span class="piece-label">Elegía breve para Ana Klaudya</span></button>
@@ -1364,7 +1364,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
         setJourney(piece);
         body.classList.add('journey-started');
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-nitidez15-nav3'+(asPrologue?'&prologue=1':'');
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-indice-limpio'+(asPrologue?'&prologue=1':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openCeniciento=()=>openPoem('ceniciento');

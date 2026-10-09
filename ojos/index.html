@@ -67,7 +67,7 @@ main{padding-bottom:140px;gap:6vw}
 </head>
 <body data-publication="web">
 <div class="eye-background" aria-hidden="true"><img src="./ojos-ana.svg" alt="" decoding="async"></div>
-<header><span>Paco Olmo de Males · flag</span><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></header>
+<nav hidden aria-label="Volver a Ana"><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></nav>
 <main>
 <section class="intro" aria-labelledby="title">
 <div class="kicker">Una mirada · un poema</div>
@@ -108,7 +108,7 @@ main{padding-bottom:140px;gap:6vw}
 <div class="signature">flag</div>
 </article>
 </main>
-<footer>En tus ojos · octubre de 2026</footer>
+
 <script>
 const eyeBackground=document.querySelector('.eye-background'),eyePhoto=eyeBackground.querySelector('img');
 const clarifyEyes=()=>{requestAnimationFrame(()=>requestAnimationFrame(()=>{setTimeout(()=>{eyeBackground.classList.add('is-clear');document.body.classList.add('eyes-clear')},350)}));};
