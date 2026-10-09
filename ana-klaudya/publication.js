@@ -42,54 +42,43 @@
 (() => {
   if(!/\/epilogo\/(?:index\.html)?$/.test(location.pathname))return;
   const script=document.currentScript;
-  const cotanUrl=new URL('../epilogo/cotan-imperative.webp?v=20261009-empieza-visible',script.src);
+  const cotanUrl=new URL('../epilogo/cotan-imperative.webp?v=20261009-empieza-2',script.src);
+  const preload=new Image();preload.src=cotanUrl.href;
   const ready=new Promise(resolve=>document.readyState==='loading'?document.addEventListener('DOMContentLoaded',resolve,{once:true}):resolve());
   ready.then(()=>{
     const imperative=document.getElementById('openingImperative');
     const phrase=imperative?.closest('.phrase');
-    if(!phrase)return;
+    const background=document.querySelector('.detail-background');
+    if(!phrase||!background)return;
     const css=document.createElement('style');
     css.textContent=`
-      #cotan-imperative-backdrop{
-        position:fixed;
-        inset:0;
-        z-index:0;
-        pointer-events:none;
-        background-color:#000;
+      body.cotan-imperative-active .detail-background{
+        position:fixed!important;inset:0!important;z-index:0!important;
+        opacity:1!important;visibility:visible!important;pointer-events:none!important;
+        overflow:hidden!important;background:#000!important;filter:none!important;
+        transition:none!important;
+      }
+      body.cotan-imperative-active .detail-background::after{
+        content:"";position:absolute;inset:0;
         background-image:url("${cotanUrl.href}");
-        background-repeat:no-repeat;
-        background-position:center bottom;
-        background-size:100vw auto;
-        opacity:0;
-        visibility:hidden;
-        transition:opacity 1800ms ease;
+        background-repeat:no-repeat;background-position:center bottom;
+        background-size:cover;opacity:1;
       }
-      body.cotan-imperative-active #cotan-imperative-backdrop{
-        opacity:1;
-        visibility:visible;
+      body.cotan-imperative-active::before{opacity:0!important;}
+      body.cotan-imperative-active main,
+      body.cotan-imperative-active nav,
+      body.cotan-imperative-active .flower-coda,
+      body.cotan-imperative-active .closing-signature{
+        position:relative;z-index:2!important;
       }
-      body.cotan-imperative-active::before{opacity:.10!important;}
-      body>main,
-      body>nav,
-      body>.flower-coda,
-      body>.closing-signature{
-        position:relative;
-        z-index:2;
-      }
-      .without-images #cotan-imperative-backdrop{display:none!important;}
-      @media(prefers-reduced-motion:reduce){#cotan-imperative-backdrop{transition:none;}}
-      @media print{#cotan-imperative-backdrop{display:none!important;}}
+      @media print{body.cotan-imperative-active .detail-background::after{display:none!important;}}
     `;
     document.head.append(css);
-    const backdrop=document.createElement('div');
-    backdrop.id='cotan-imperative-backdrop';
-    backdrop.setAttribute('aria-hidden','true');
-    document.body.append(backdrop);
-    const sync=()=>{
+    const activate=()=>{
       const visible=!phrase.classList.contains('hidden-phrase')&&phrase.getAttribute('aria-hidden')!=='true';
-      document.body.classList.toggle('cotan-imperative-active',visible);
+      if(visible)document.body.classList.add('cotan-imperative-active');
     };
-    new MutationObserver(sync).observe(phrase,{attributes:true,attributeFilter:['class','aria-hidden']});
-    sync();
+    new MutationObserver(activate).observe(phrase,{attributes:true,attributeFilter:['class','aria-hidden']});
+    activate();
   });
 })();
