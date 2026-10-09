@@ -1,7 +1,7 @@
 (() => {
   const script=document.currentScript;
   const root=new URL('./',script.src);
-  for(const file of ['nmwp-en.js','nmwp-en-canonical.js']){
+  for(const file of ['nmwp-en.js','nmwp-en-canonical.js','nmwp-start-fallback.js']){
     const locale=document.createElement('script');
     locale.src=new URL(file,root).href;
     locale.async=false;
