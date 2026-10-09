@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-1';
+const VERSION='20261010-2';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
 const path=location.pathname.replace(/\/+$/,'') || '/';
@@ -50,14 +50,14 @@ function installBaseStyles(){
   style.textContent=`
   .ou-ghost{position:fixed;z-index:72;max-width:min(35rem,72vw);margin:0;padding:0;color:currentColor;font:italic 400 clamp(.72rem,1.25vw,.93rem)/1.45 Georgia,"Times New Roman",serif;letter-spacing:.015em;opacity:0;pointer-events:none;filter:blur(.08px);text-shadow:none;transition:opacity 1.8s ease;mix-blend-mode:normal}
   .ou-ghost.ou-on{opacity:.32}.ou-ghost.ou-fade{opacity:0}.ou-ghost.ou-left{left:max(18px,3.5vw);top:18vh;text-align:left}.ou-ghost.ou-right{right:max(18px,3.5vw);top:28vh;text-align:right}.ou-ghost.ou-low{right:max(18px,4vw);bottom:15vh;text-align:right}
-  .ou-card{position:fixed;z-index:68;left:max(17px,3.2vw);bottom:14vh;width:52px;height:32px;padding:0;border:0;border-radius:4px;background:linear-gradient(145deg,rgba(185,190,196,.25),rgba(83,91,101,.20));box-shadow:0 2px 12px rgba(0,0,0,.12),inset 0 0 0 1px rgba(255,255,255,.12);opacity:.13;filter:blur(.75px);transform:rotate(-7deg);cursor:pointer;transition:opacity .9s ease,filter .9s ease,transform .9s ease}
-  .ou-card::before{content:"";position:absolute;left:9px;top:9px;width:12px;height:8px;border-radius:2px;background:rgba(218,195,136,.38);box-shadow:inset 0 0 0 1px rgba(80,67,42,.10)}
-  .ou-card::after{content:"";position:absolute;left:9px;right:9px;bottom:7px;height:1px;background:rgba(255,255,255,.28)}
-  .ou-card:hover,.ou-card:focus-visible{opacity:.34;filter:blur(.12px);transform:rotate(-5deg) translateY(-1px);outline:none}
-  .ou-active-text{cursor:pointer;transition:opacity .45s ease,text-shadow .45s ease}.ou-active-text:hover,.ou-active-text:focus-visible{opacity:.78;text-shadow:0 0 14px currentColor;outline:none}
-  .ou-eiffel{display:inline-grid;place-items:center;width:19px;height:28px;margin-left:.55em;padding:0;border:0;background:transparent;color:inherit;opacity:.19;vertical-align:-.55em;cursor:pointer;transition:opacity .6s ease,transform .6s ease}.ou-eiffel:hover,.ou-eiffel:focus-visible{opacity:.52;transform:translateY(-1px);outline:none}.ou-eiffel svg{width:100%;height:100%;display:block}
+  .ou-card{position:fixed;z-index:68;left:max(17px,3.2vw);bottom:14vh;width:56px;height:35px;padding:0;border:0;border-radius:5px;background:linear-gradient(145deg,rgba(205,210,216,.42),rgba(83,91,101,.31));box-shadow:0 3px 15px rgba(0,0,0,.16),inset 0 0 0 1px rgba(255,255,255,.18);opacity:.34;filter:blur(.18px);transform:rotate(-7deg);cursor:pointer;transition:opacity .9s ease,filter .9s ease,transform .9s ease}
+  .ou-card::before{content:"";position:absolute;left:9px;top:9px;width:13px;height:9px;border-radius:2px;background:rgba(218,195,136,.52);box-shadow:inset 0 0 0 1px rgba(80,67,42,.12)}
+  .ou-card::after{content:"";position:absolute;left:9px;right:9px;bottom:7px;height:1px;background:rgba(255,255,255,.38)}
+  .ou-card:hover,.ou-card:focus-visible{opacity:.72;filter:blur(0);transform:rotate(-4deg) translateY(-2px);outline:none}
+  .ou-active-text{cursor:pointer;text-decoration-line:underline;text-decoration-style:dotted;text-decoration-thickness:.055em;text-underline-offset:.19em;text-decoration-color:currentColor;transition:opacity .45s ease,text-shadow .45s ease}.ou-active-text:hover,.ou-active-text:focus-visible{opacity:.72;text-shadow:0 0 14px currentColor;outline:none}
+  .ou-eiffel{display:inline-grid;place-items:center;width:22px;height:31px;margin-left:.58em;padding:0;border:0;background:transparent;color:inherit;opacity:.38;vertical-align:-.58em;cursor:pointer;transition:opacity .6s ease,transform .6s ease}.ou-eiffel:hover,.ou-eiffel:focus-visible{opacity:.82;transform:translateY(-1px);outline:none}.ou-eiffel svg{width:100%;height:100%;display:block}
   .ou-return{position:fixed;z-index:80;left:50%;bottom:6.2svh;transform:translateX(-50%);appearance:none;border:0;background:none;color:#fffaf1;padding:.5em 1em;font:italic 400 clamp(1.05rem,2.4vw,1.35rem)/1 Georgia,"Times New Roman",serif;letter-spacing:.035em;opacity:0;visibility:hidden;cursor:pointer;transition:opacity 2.4s ease,visibility 2.4s ease;text-shadow:0 2px 18px rgba(0,0,0,.9)}.ou-return.ou-visible{opacity:.72;visibility:visible}.ou-return:hover,.ou-return:focus-visible{opacity:1;outline:none}
-  @media(max-width:700px){.ou-card{left:16px;bottom:12vh;width:46px;height:29px}.ou-ghost{max-width:68vw}.ou-ghost.ou-left{left:16px;top:14vh}.ou-ghost.ou-right{right:16px;top:21vh}.ou-ghost.ou-low{right:16px;bottom:13vh}}
+  @media(max-width:700px){.ou-card{left:16px;bottom:12vh;width:50px;height:31px}.ou-ghost{max-width:68vw}.ou-ghost.ou-left{left:16px;top:14vh}.ou-ghost.ou-right{right:16px;top:21vh}.ou-ghost.ou-low{right:16px;bottom:13vh}}
   `;
   document.head.appendChild(style);
 }
@@ -82,8 +82,8 @@ function addCard(){
   const card=document.createElement('button');
   card.type='button';
   card.className='ou-card';
-  card.setAttribute('aria-label','Tarjeta');
-  card.title='';
+  card.setAttribute('aria-label','Solo la tarjeta');
+  card.title='Solo la tarjeta';
   card.addEventListener('click',()=>{
     save({cardFound:true});
     topGo(rootPath+'?origen=tarjeta&v='+VERSION);
@@ -118,15 +118,15 @@ function installEiffel(){
   b.type='button';
   b.className='ou-eiffel';
   b.setAttribute('aria-label','Torre Eiffel');
+  b.title='París';
   b.innerHTML='<svg viewBox="0 0 24 40" aria-hidden="true"><path d="M12 2 L5.2 34 M12 2 L18.8 34 M8.2 20 H15.8 M6.3 29 H17.7 M4 37 H20 M9.4 12 H14.6" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round"/><path d="M9.3 37 Q12 31.5 14.7 37" fill="none" stroke="currentColor" stroke-width="1.05"/></svg>';
   b.addEventListener('click',e=>{e.stopPropagation();topGo(rootPath+'elegia-breve/#estrella');});
   target.appendChild(b);
 }
 
 function activateSoloSymbols(){
-  if(!state.soloComplete)return;
   makeClickable(pByExact('Los ojos de estatua.'),rootPath+'elegia-breve/#ojos','Ojos de estatua');
-  psContaining('reloj').forEach(p=>makeClickable(p,rootPath+'elegia-breve/#ceniciento','Reloj'));
+  psContaining('reloj').forEach(p=>makeClickable(p,rootPath+'elegia-breve/#ceniciento','Reloj · Ceniciento'));
   installEiffel();
 }
 
@@ -134,17 +134,16 @@ function finishSolo(){
   if(state.soloComplete)return;
   save({soloComplete:true});
   state=readState();
-  activateSoloSymbols();
   ghost('Una casualidad rara vez termina donde parece.','after-solo',{where:'low',delay:2600,hold:6500});
 }
 
 function setupSolo(){
+  activateSoloSymbols();
   if(state.cardFound){
     ghost('Hay historias que empiezan antes.','before-story',{where:'left',delay:2500,hold:6500});
   }
-  if(state.soloComplete){
-    activateSoloSymbols();
-    if(state.anaComplete)ghost('Todo esto ocurrió después.','all-after',{where:'right',delay:6000,hold:6400});
+  if(state.soloComplete && state.anaComplete){
+    ghost('Todo esto ocurrió después.','all-after',{where:'right',delay:6000,hold:6400});
   }
   let armed=false;
   const checkEnd=()=>{
@@ -157,6 +156,7 @@ function setupSolo(){
 }
 
 function setupAna(){
+  addCard();
   const q=document.getElementById('cenicientoLink');
   if(q){
     let hinted=false;
@@ -238,7 +238,7 @@ function setupCeniciento(){
 function init(){
   installBaseStyles();
   state=readState();
-  if(page.ojos||page.sonrisa||page.epilogo)addCard();
+  if(page.ana||page.ojos||page.sonrisa||page.epilogo)addCard();
   if(page.solo)setupSolo();
   if(page.ana)setupAna();
   if(page.ceniciento)setupCeniciento();
