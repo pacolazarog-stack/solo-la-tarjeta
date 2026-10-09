@@ -39,46 +39,62 @@
   }).finally(()=>document.documentElement.classList.remove('publication-pending'));
 })();
 
+/* Cotán is completely isolated from the interlude. It enters only when
+   “—Empieza por aquí.” becomes visible in the epilogue. */
 (() => {
   if(!/\/epilogo\/(?:index\.html)?$/.test(location.pathname))return;
   const script=document.currentScript;
-  const cotanUrl=new URL('../epilogo/cotan-imperative.webp?v=20261009-empieza-2',script.src);
-  const preload=new Image();preload.src=cotanUrl.href;
+  const cotanUrl=new URL('../epilogo/cotan-imperative.webp?v=20261009-cierre-real',script.src);
   const ready=new Promise(resolve=>document.readyState==='loading'?document.addEventListener('DOMContentLoaded',resolve,{once:true}):resolve());
   ready.then(()=>{
     const imperative=document.getElementById('openingImperative');
     const phrase=imperative?.closest('.phrase');
-    const background=document.querySelector('.detail-background');
-    if(!phrase||!background)return;
+    if(!imperative||!phrase)return;
+
     const css=document.createElement('style');
     css.textContent=`
-      body.cotan-imperative-active .detail-background{
-        position:fixed!important;inset:0!important;z-index:0!important;
-        opacity:1!important;visibility:visible!important;pointer-events:none!important;
-        overflow:hidden!important;background:#000!important;filter:none!important;
-        transition:none!important;
+      #cotan-imperative-image{
+        position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;
+        object-fit:cover!important;object-position:center bottom!important;
+        z-index:1!important;pointer-events:none!important;
+        opacity:0!important;visibility:hidden!important;
+        transition:opacity 1800ms ease!important;
       }
-      body.cotan-imperative-active .detail-background::after{
-        content:"";position:absolute;inset:0;
-        background-image:url("${cotanUrl.href}");
-        background-repeat:no-repeat;background-position:center bottom;
-        background-size:cover;opacity:1;
+      body.cotan-imperative-active #cotan-imperative-image{
+        opacity:1!important;visibility:visible!important;
       }
       body.cotan-imperative-active::before{opacity:0!important;}
-      body.cotan-imperative-active main,
-      body.cotan-imperative-active nav,
-      body.cotan-imperative-active .flower-coda,
-      body.cotan-imperative-active .closing-signature{
-        position:relative;z-index:2!important;
+      body.cotan-imperative-active>.detail-background{opacity:0!important;visibility:hidden!important;}
+      body.cotan-imperative-active>main,
+      body.cotan-imperative-active>nav,
+      body.cotan-imperative-active>.flower-coda,
+      body.cotan-imperative-active>.closing-signature{
+        position:relative!important;z-index:2!important;
       }
-      @media print{body.cotan-imperative-active .detail-background::after{display:none!important;}}
+      .without-images #cotan-imperative-image{display:none!important;}
+      @media(prefers-reduced-motion:reduce){#cotan-imperative-image{transition:none!important;}}
+      @media print{#cotan-imperative-image{display:none!important;}}
     `;
     document.head.append(css);
+
+    const image=document.createElement('img');
+    image.id='cotan-imperative-image';
+    image.alt='';
+    image.setAttribute('aria-hidden','true');
+    image.decoding='async';
+    image.src=cotanUrl.href;
+    document.body.prepend(image);
+
+    let activated=false;
     const activate=()=>{
+      if(activated)return;
       const visible=!phrase.classList.contains('hidden-phrase')&&phrase.getAttribute('aria-hidden')!=='true';
-      if(visible)document.body.classList.add('cotan-imperative-active');
+      const typed=imperative.style.opacity==='1'||imperative.style.clipPath||imperative.getBoundingClientRect().width>0&&visible;
+      if(visible&&typed){activated=true;document.body.classList.add('cotan-imperative-active');}
     };
     new MutationObserver(activate).observe(phrase,{attributes:true,attributeFilter:['class','aria-hidden']});
-    activate();
+    new MutationObserver(activate).observe(imperative,{attributes:true,attributeFilter:['style','aria-hidden']});
+    const watch=()=>{activate();if(!activated)requestAnimationFrame(watch)};
+    requestAnimationFrame(watch);
   });
 })();
