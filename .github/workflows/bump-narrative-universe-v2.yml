@@ -1,0 +1,39 @@
+name: Bump narrative universe loader v2
+on:
+  push:
+    branches: ["main"]
+permissions:
+  contents: write
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bump loader query
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          pages = [
+              Path('index.html'),
+              Path('elegia-breve/index.html'),
+              Path('ojos/index.html'),
+              Path('sonrisa/index.html'),
+              Path('epilogo/index.html'),
+              Path('estrella/index.html'),
+              Path('ceniciento/index.html'),
+          ]
+          old = 'narrative-universe.js?v=20261010-1'
+          new = 'narrative-universe.js?v=20261010-2'
+          for path in pages:
+              text = path.read_text(encoding='utf-8')
+              if old in text:
+                  path.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+      - name: Commit bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html elegia-breve/index.html ojos/index.html sonrisa/index.html epilogo/index.html estrella/index.html ceniciento/index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Load narrative universe v2"
+          git push
