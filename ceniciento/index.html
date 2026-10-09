@@ -45,7 +45,7 @@ const voice=$('voice'),music=$('music'),screen=$('screen'),status=$('status'),en
 const ageA=$('ageA'),ageB=$('ageB'),bgA=$('bgA'),bgB=$('bgB'),seek=$('seek'),time=$('time');
 const pause=$('pause'),restart=$('restart'),switchBtn=$('switch'),back=$('back'),cont=$('continue'),clarityStatus=$('clarityStatus');
 const musicLevel=$('musicLevel'),musicEnabled=$('musicEnabled'),musicValue=$('musicValue'),musicStart=$('musicStart');
-const EXPECTED=864.156735,MASTER='CENICIENTO_completo.m4a?v=20261010';
+const EXPECTED=864.156735,MASTER='ceniciento-voz-completa.mp3?v=20261010-audio-restored';
 const inheritedMusic=window.parent!==window&&new URLSearchParams(location.search).get('music')==='parent';
 const sendMusic=type=>window.parent.postMessage({channel:'ceniciento-music-v1',type,level:Number(musicLevel.value)/100,enabled:musicEnabled.checked},location.origin);
 function updateMusic(){const level=Math.max(0,Math.min(.8,Number(musicLevel.value)/100));musicValue.textContent=Math.round(level*100)+' %';if(!inheritedMusic){music.volume=level;music.muted=!musicEnabled.checked}}
