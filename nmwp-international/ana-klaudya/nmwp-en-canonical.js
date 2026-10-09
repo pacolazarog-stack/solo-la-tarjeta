@@ -69,6 +69,10 @@
       if(h1)h1.innerHTML='Over a<br><em>Low Flame.</em>';
     }else if(path.includes('/estrella/')){
       document.title='Following a Card';
+      if(h1&&h1.innerHTML!=='Following<br><em>a Card.</em>')h1.innerHTML='Following<br><em>a Card.</em>';
+      setText(document.querySelector('.kicker'),'Prologue · Ana Klaudya');
+      setAttr(document.querySelector('.poem'),'aria-label','Following a Card');
+      setAttr(document.querySelector('nav'),'aria-label','Back to Ana');
     }
     localizeRoot();
 
