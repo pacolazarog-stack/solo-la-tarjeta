@@ -79,13 +79,13 @@ def apply():
         if slug == "elegia-breve":
             # The unaltered Elegy is laid out with scene anchors and voice cues.
             continue
-        match = re.search(r'(<article class="poem"[^>]*>)([\s\S]*?)(<div class="signature"[^>]*>)', source)
+        match = re.search(r'(<article class="poem"[^>]*>)([\s\S]*?)(</article>)', source)
         if not match:
             raise ValueError(f"Missing poem article in {path}")
         if slug == "estrella":
             content = "\n" + "\n".join(phrase_html(poems[title], prologue=True)) + "\n"
         elif slug == "epilogo":
-            # Its text is already canonical; preserve authored comic timings.
+            # Its text is already canonical; preserve comic timings and the final signature.
             continue
         else:
             content = "\n" + line_html(poems[title]) + "\n"
