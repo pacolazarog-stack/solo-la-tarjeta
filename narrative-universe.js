@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-2';
+const VERSION='20261010-3';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
 const path=location.pathname.replace(/\/+$/,'') || '/';
@@ -50,14 +50,14 @@ function installBaseStyles(){
   style.textContent=`
   .ou-ghost{position:fixed;z-index:72;max-width:min(35rem,72vw);margin:0;padding:0;color:currentColor;font:italic 400 clamp(.72rem,1.25vw,.93rem)/1.45 Georgia,"Times New Roman",serif;letter-spacing:.015em;opacity:0;pointer-events:none;filter:blur(.08px);text-shadow:none;transition:opacity 1.8s ease;mix-blend-mode:normal}
   .ou-ghost.ou-on{opacity:.32}.ou-ghost.ou-fade{opacity:0}.ou-ghost.ou-left{left:max(18px,3.5vw);top:18vh;text-align:left}.ou-ghost.ou-right{right:max(18px,3.5vw);top:28vh;text-align:right}.ou-ghost.ou-low{right:max(18px,4vw);bottom:15vh;text-align:right}
-  .ou-card{position:fixed;z-index:68;left:max(17px,3.2vw);bottom:14vh;width:56px;height:35px;padding:0;border:0;border-radius:5px;background:linear-gradient(145deg,rgba(205,210,216,.42),rgba(83,91,101,.31));box-shadow:0 3px 15px rgba(0,0,0,.16),inset 0 0 0 1px rgba(255,255,255,.18);opacity:.34;filter:blur(.18px);transform:rotate(-7deg);cursor:pointer;transition:opacity .9s ease,filter .9s ease,transform .9s ease}
-  .ou-card::before{content:"";position:absolute;left:9px;top:9px;width:13px;height:9px;border-radius:2px;background:rgba(218,195,136,.52);box-shadow:inset 0 0 0 1px rgba(80,67,42,.12)}
-  .ou-card::after{content:"";position:absolute;left:9px;right:9px;bottom:7px;height:1px;background:rgba(255,255,255,.38)}
-  .ou-card:hover,.ou-card:focus-visible{opacity:.72;filter:blur(0);transform:rotate(-4deg) translateY(-2px);outline:none}
+  .ou-card{position:fixed;z-index:68;left:max(22px,4vw);bottom:11vh;width:82px;height:50px;padding:0;border:1px solid rgba(77,82,88,.42);border-radius:7px;background:linear-gradient(145deg,rgba(224,226,229,.92),rgba(126,133,142,.72));box-shadow:0 7px 24px rgba(0,0,0,.22),inset 0 0 0 1px rgba(255,255,255,.42);opacity:.76;filter:blur(0);transform:rotate(-6deg);cursor:pointer;transition:opacity .6s ease,filter .6s ease,transform .6s ease,box-shadow .6s ease}
+  .ou-card::before{content:"";position:absolute;left:13px;top:13px;width:19px;height:14px;border-radius:3px;background:linear-gradient(135deg,#d7bd75,#f0dda2);box-shadow:inset 0 0 0 1px rgba(85,67,30,.28),0 1px 2px rgba(0,0,0,.14)}
+  .ou-card::after{content:"";position:absolute;left:13px;right:13px;bottom:11px;height:2px;border-radius:2px;background:rgba(255,255,255,.72);box-shadow:0 -7px 0 rgba(255,255,255,.28)}
+  .ou-card:hover,.ou-card:focus-visible{opacity:1;filter:blur(0);transform:rotate(-3deg) translateY(-3px) scale(1.04);box-shadow:0 10px 30px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.52);outline:none}
   .ou-active-text{cursor:pointer;text-decoration-line:underline;text-decoration-style:dotted;text-decoration-thickness:.055em;text-underline-offset:.19em;text-decoration-color:currentColor;transition:opacity .45s ease,text-shadow .45s ease}.ou-active-text:hover,.ou-active-text:focus-visible{opacity:.72;text-shadow:0 0 14px currentColor;outline:none}
   .ou-eiffel{display:inline-grid;place-items:center;width:22px;height:31px;margin-left:.58em;padding:0;border:0;background:transparent;color:inherit;opacity:.38;vertical-align:-.58em;cursor:pointer;transition:opacity .6s ease,transform .6s ease}.ou-eiffel:hover,.ou-eiffel:focus-visible{opacity:.82;transform:translateY(-1px);outline:none}.ou-eiffel svg{width:100%;height:100%;display:block}
   .ou-return{position:fixed;z-index:80;left:50%;bottom:6.2svh;transform:translateX(-50%);appearance:none;border:0;background:none;color:#fffaf1;padding:.5em 1em;font:italic 400 clamp(1.05rem,2.4vw,1.35rem)/1 Georgia,"Times New Roman",serif;letter-spacing:.035em;opacity:0;visibility:hidden;cursor:pointer;transition:opacity 2.4s ease,visibility 2.4s ease;text-shadow:0 2px 18px rgba(0,0,0,.9)}.ou-return.ou-visible{opacity:.72;visibility:visible}.ou-return:hover,.ou-return:focus-visible{opacity:1;outline:none}
-  @media(max-width:700px){.ou-card{left:16px;bottom:12vh;width:50px;height:31px}.ou-ghost{max-width:68vw}.ou-ghost.ou-left{left:16px;top:14vh}.ou-ghost.ou-right{right:16px;top:21vh}.ou-ghost.ou-low{right:16px;bottom:13vh}}
+  @media(max-width:700px){.ou-card{left:16px;bottom:10vh;width:70px;height:43px}.ou-ghost{max-width:68vw}.ou-ghost.ou-left{left:16px;top:14vh}.ou-ghost.ou-right{right:16px;top:21vh}.ou-ghost.ou-low{right:16px;bottom:13vh}}
   `;
   document.head.appendChild(style);
 }
