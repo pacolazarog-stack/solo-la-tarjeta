@@ -23,6 +23,12 @@
     const nav=document.getElementById('anaNavigation');
     const entry=document.getElementById('entry');
 
+    // Keep the entry button usable while the entry overlay is still visible.
+    // Direct hash routes can preload this fallback before the reader presses BEGIN.
+    if(entry&&!entry.classList.contains('is-open')){
+      if(button)button.disabled=false;
+      return;
+    }
     if(button)button.disabled=true;
     body.classList.add('journey-started','sound-ready','sonrisa-open','ceniciento-open');
     root.classList.add('ceniciento-open');
@@ -35,8 +41,10 @@
     frame.classList.add('sonrisa-transition','sonrisa-visible');
     frame.setAttribute('title',titleFor(piece));
 
-    if(!frame.getAttribute('src')){
-      frame.src='../'+piece+'/?music=parent&v=20261009-nmwp-route-fix'+(asPrologue?'&prologue=1':'');
+    const currentSrc=frame.getAttribute('src')||'';
+    const needsPrologue=piece==='estrella'&&asPrologue&&!/[?&]prologue=1(?:&|$)/.test(currentSrc);
+    if(!currentSrc||needsPrologue){
+      frame.src='../'+piece+'/?music=parent&v=20261010-nmwp-begin-fix'+(asPrologue?'&prologue=1':'');
     }
 
     document.title=titleFor(piece);
@@ -50,7 +58,11 @@
     if(button.dataset.nmwpFallback!=='1'){
       button.dataset.nmwpFallback='1';
       button.addEventListener('click',()=>{
-        setTimeout(()=>forceRouteVisible('estrella',true),40);
+        setTimeout(()=>{
+          const entry=document.getElementById('entry');
+          if(entry)entry.classList.add('is-open');
+          forceRouteVisible('estrella',true);
+        },40);
       },true);
     }
 
