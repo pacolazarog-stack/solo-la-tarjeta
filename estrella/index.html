@@ -16,8 +16,8 @@ location.replace('../elegia-breve/?v=ana-134-20261007#estrella');
 *{box-sizing:border-box}
 body{margin:0;background:#090e19;color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100svh}
 body{isolation:isolate}
-.detail-background{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;}.detail-background img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:35% center;filter:blur(6px);transition:filter 36s ease-in-out}.detail-background.is-clear img{filter:blur(0) contrast(1.04)} 
-body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(9,14,25,.55),rgba(9,14,25,.38) 48%,rgba(9,14,25,.58)),radial-gradient(ellipse at 50% 45%,transparent,#090e1966);z-index:-1;opacity:1;transition:opacity 36s ease-in-out}
+.detail-background{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;}.detail-background img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:35% center;filter:blur(6px);transition:filter 18s ease-in-out}.detail-background.is-clear img{filter:blur(0) contrast(1.04)} 
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(9,14,25,.55),rgba(9,14,25,.38) 48%,rgba(9,14,25,.58)),radial-gradient(ellipse at 50% 45%,transparent,#090e1966);z-index:-1;opacity:1;transition:opacity 18s ease-in-out}
 body.detail-clear:before{opacity:.65}
 header{max-width:1180px;margin:auto;padding:28px 6vw;display:flex;justify-content:space-between;gap:20px;font:11px/1.5 system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase}
 a{color:var(--muted);text-decoration:none}a:hover{color:var(--ink)}
@@ -57,12 +57,12 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 @media(max-width:760px){.final-stanza{margin-top:48px}}
 .detail-background,.detail-background img,body::before,body::after{animation:none!important;transform:none!important}
 .world-comet{position:absolute;inset:0;z-index:2;opacity:.85;pointer-events:none;overflow:visible}
-.world-comet.is-active{animation:cometField 12.8s linear forwards}
+.world-comet.is-active{animation:cometField 6.4s linear forwards}
 .world-comet-core,.world-comet-tail{position:absolute;left:50%;top:5%;pointer-events:none;will-change:left,top,transform,opacity}
 .world-comet-core{width:10px;height:10px;border-radius:50%;background:rgba(255,249,231,.99);box-shadow:0 0 10px rgba(255,249,231,.98),0 0 26px rgba(255,239,194,.78),0 0 62px rgba(255,224,150,.38);filter:blur(.12px);transform:translate(-50%,-50%) scale(.74)}
 .world-comet-tail{width:340px;height:3px;opacity:0;transform-origin:right center;transform:translate(-100%,-50%) rotate(var(--comet-angle,12deg)) scaleX(.12);background:linear-gradient(to left,rgba(255,247,218,0) 0%,rgba(255,244,210,.10) 15%,rgba(255,239,196,.30) 38%,rgba(255,233,176,.72) 70%,rgba(255,247,233,.96) 100%);border-radius:999px;filter:blur(.7px);box-shadow:0 0 12px rgba(255,236,184,.25),0 0 34px rgba(255,223,152,.16)}
-.world-comet.is-active .world-comet-core{animation:cometCore 12.8s cubic-bezier(.35,.02,.22,1) forwards}
-.world-comet.is-active .world-comet-tail{animation:cometTail 12.8s cubic-bezier(.35,.02,.22,1) forwards}
+.world-comet.is-active .world-comet-core{animation:cometCore 6.4s cubic-bezier(.35,.02,.22,1) forwards}
+.world-comet.is-active .world-comet-tail{animation:cometTail 6.4s cubic-bezier(.35,.02,.22,1) forwards}
 @keyframes cometField{0%{opacity:.85}8%{opacity:1}18%{opacity:1}46%{opacity:1}74%{opacity:.92}100%{opacity:0}}
 @keyframes cometCore{
   0%{left:50%;top:5%;transform:translate(-50%,-50%) scale(.72)}
@@ -86,15 +86,15 @@ footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:1
 
 /* La misma estrella y la misma luna de Solo la tarjeta. */
 .celestial-scene{position:absolute;inset:0;z-index:1;pointer-events:none}
-.world-final-moon{position:absolute;left:82%;top:14%;width:clamp(82px,9vw,122px);aspect-ratio:1;border-radius:50%;z-index:3;opacity:0;overflow:hidden;background:#08101e;transform:translate(-50%,-50%) rotate(-7deg);box-shadow:0 0 18px rgba(215,225,249,.22),0 0 48px rgba(215,225,249,.12);transition:opacity 4s ease,transform 14s ease,box-shadow 20s ease}
+.world-final-moon{position:absolute;left:82%;top:14%;width:clamp(82px,9vw,122px);aspect-ratio:1;border-radius:50%;z-index:3;opacity:0;overflow:hidden;background:#08101e;transform:translate(-50%,-50%) rotate(-7deg);box-shadow:0 0 18px rgba(215,225,249,.22),0 0 48px rgba(215,225,249,.12);transition:opacity 2s ease,transform 7s ease,box-shadow 10s ease}
 .is-awake .world-final-moon{opacity:1;transform:translate(-50%,-50%) rotate(0)}
 .is-home .world-final-moon{box-shadow:0 0 22px rgba(244,222,176,.3),0 0 65px rgba(255,220,157,.17)}
-.final-crescent{position:absolute;inset:0;border-radius:50%;opacity:1;background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);transition:opacity 9.5s ease}
+.final-crescent{position:absolute;inset:0;border-radius:50%;opacity:1;background:radial-gradient(circle at 40% 42%,#fff 0%,#faf9ee 58%,#e1e5ef 100%);transition:opacity 4.75s ease}
 .final-crescent::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:#08101e}
 .world-final-moon svg{position:absolute;inset:0;width:100%;height:100%;display:block}
-.yin-body,.yin-outline{opacity:0;transition:opacity 9.5s ease}
-.yin-dots{opacity:0;transition:opacity 8.7s ease .8s}
-.yin-dots circle{transform-box:fill-box;transform-origin:center;transform:scale(.46);transition:transform 8.7s ease .8s}
+.yin-body,.yin-outline{opacity:0;transition:opacity 4.75s ease}
+.yin-dots{opacity:0;transition:opacity 4.35s ease .4s}
+.yin-dots circle{transform-box:fill-box;transform-origin:center;transform:scale(.46);transition:transform 4.35s ease .4s}
 .is-home .final-crescent{opacity:0}
 .is-home .yin-body,.is-home .yin-outline,.is-home .yin-dots{opacity:1}
 .is-home .yin-dots circle{transform:scale(1)}
@@ -180,7 +180,7 @@ const celestialScene=document.getElementById('celestialScene');
 const worldComet=document.getElementById('worldComet');
 let celestialTimers=[];
 let moonReady=false;
-function beginCelestialJourney(delay=7200){
+function beginCelestialJourney(delay=3600){
  celestialTimers.forEach(clearTimeout);celestialTimers=[];
  clear();moonReady=false;mode='waiting';index=0;poem.hidden=true;
  phrases.forEach(phrase=>{phrase.classList.add('hidden-phrase');phrase.setAttribute('aria-hidden','true')});
@@ -193,8 +193,8 @@ function beginCelestialJourney(delay=7200){
  celestialTimers=[setTimeout(()=>{
   worldComet.classList.add('is-active');
   celestialScene.classList.add('is-awake','is-home');
-  // The last lunar transition is the 20-second glow. Never reveal text early.
-  celestialTimers.push(setTimeout(completeMoon,20100));
+  // The last lunar transition is the 10-second glow. Never reveal text early.
+  celestialTimers.push(setTimeout(completeMoon,10050));
  },delay)];
 }
 document.getElementById('homeMoon').addEventListener('transitionend',event=>{
@@ -202,7 +202,7 @@ document.getElementById('homeMoon').addEventListener('transitionend',event=>{
 });
 const detailBackground=document.querySelector('.detail-background');
 const detailPhoto=new Image();
-const clarifyDetail=()=>{requestAnimationFrame(()=>requestAnimationFrame(()=>{setTimeout(()=>{detailBackground.classList.add('is-clear');document.body.classList.add('detail-clear')},350)}));};
+const clarifyDetail=()=>{requestAnimationFrame(()=>requestAnimationFrame(()=>{setTimeout(()=>{detailBackground.classList.add('is-clear');document.body.classList.add('detail-clear')},175)}));};
 detailPhoto.addEventListener('load',clarifyDetail,{once:true});
 detailPhoto.src='umbral.jpg?v=20261006-sin-estrella-fija';
 const inheritedMusic=window.parent!==window && new URLSearchParams(location.search).get('music')==='parent';
@@ -245,7 +245,7 @@ paced.addEventListener('click',()=>{
  if(!moonReady)return;
  if(mode==='playing'){clear();mode='paused';paced.textContent='Continuar';status.textContent='Una pausa, a tu elección.';return}
  if(mode==='paused'){mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';reveal();return}
- beginCelestialJourney(300);
+ beginCelestialJourney(150);
 });
 beginCelestialJourney();
 </script>
