@@ -584,10 +584,16 @@
       text-shadow:0 0 10px rgba(213,113,32,.08);
     }
 
-    /* CIERRE: "el" -> "calor." */
+    /* CIERRE: "el" -> "calor."; keep its space when the words become fixed. */
+    .heat-anchor{
+      display:block;
+      padding-top:58svh;
+      min-height:calc(58svh + 2.08em);
+      font-size:clamp(2.25rem,5.8vw,3.85rem);
+    }
     .heat-final{
       position:relative;
-      --gap:58svh;
+      --gap:0;
       margin-bottom:0;
       font-size:clamp(2.25rem,5.8vw,3.85rem);
       line-height:1.04;
@@ -949,9 +955,11 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       <span class="line g-soft">un rostro,</span>
       <span class="line g-deep">y de todo un abrazo,</span>
 
-      <span class="line heat-final" id="finalHeat">
-        <span class="heat-part heat-el">el</span>
-        <span class="heat-part heat-calor">calor.</span>
+      <span class="heat-anchor" id="finalHeatAnchor">
+        <span class="line heat-final" id="finalHeat">
+          <span class="heat-part heat-el">el</span>
+          <span class="heat-part heat-calor">calor.</span>
+        </span>
       </span>
 
       <div class="epilogue-invitation" id="epilogueInvitation" hidden><button class="entry-button flambe-button" id="readEpilogue" type="button">Epílogo · A fuego lento →</button></div>
@@ -1377,7 +1385,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
         setJourney(piece);
         body.classList.add('journey-started');
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-prologo-sorpresa'+(asPrologue?'&prologue=1':'');
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-ojos15-cierre-estable'+(asPrologue?'&prologue=1':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openCeniciento=()=>openPoem('ceniciento');

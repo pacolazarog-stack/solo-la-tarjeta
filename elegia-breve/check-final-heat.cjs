@@ -28,6 +28,8 @@ const route=(piece,type='popstate')=>{location.hash=piece?'#'+piece:'';fire(type
 const assertPiece=piece=>{assert.equal(frame.hidden,false);assert.equal(get('poemBackdrop').hidden,false,'Ana is covered throughout navigation between pieces');assert(!get('poemBackdrop').classList.contains('is-leaving'),'No fading cover can expose Ana during a child route');assert(frame.src.includes('../'+piece+'/?music=parent'));assert.equal(location.hash,'#'+piece);};
 vm.runInNewContext(script,context);
 
+assert(source.includes('id="finalHeatAnchor"'),'The fixed closing words retain a permanent flow anchor');
+assert(source.includes('min-height:calc(58svh + 2.08em)'),'The anchor retains both the pause and the closing word height');
 get('anaPortrait').complete=true;get('anaPortrait').naturalWidth=1228;
 get('anaRead').click();
 assert(!get('finalHeat').classList.contains('is-shown'),'The closing verses wait until reached');
