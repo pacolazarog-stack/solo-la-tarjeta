@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-3';
+const VERSION='20261010-4';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
 const path=location.pathname.replace(/\/+$/,'') || '/';
@@ -54,8 +54,8 @@ function installBaseStyles(){
   .ou-card::before{content:"";position:absolute;left:13px;top:13px;width:19px;height:14px;border-radius:3px;background:linear-gradient(135deg,#d7bd75,#f0dda2);box-shadow:inset 0 0 0 1px rgba(85,67,30,.28),0 1px 2px rgba(0,0,0,.14)}
   .ou-card::after{content:"";position:absolute;left:13px;right:13px;bottom:11px;height:2px;border-radius:2px;background:rgba(255,255,255,.72);box-shadow:0 -7px 0 rgba(255,255,255,.28)}
   .ou-card:hover,.ou-card:focus-visible{opacity:1;filter:blur(0);transform:rotate(-3deg) translateY(-3px) scale(1.04);box-shadow:0 10px 30px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.52);outline:none}
-  .ou-active-text{cursor:pointer;text-decoration-line:underline;text-decoration-style:dotted;text-decoration-thickness:.055em;text-underline-offset:.19em;text-decoration-color:currentColor;transition:opacity .45s ease,text-shadow .45s ease}.ou-active-text:hover,.ou-active-text:focus-visible{opacity:.72;text-shadow:0 0 14px currentColor;outline:none}
-  .ou-eiffel{display:inline-grid;place-items:center;width:22px;height:31px;margin-left:.58em;padding:0;border:0;background:transparent;color:inherit;opacity:.38;vertical-align:-.58em;cursor:pointer;transition:opacity .6s ease,transform .6s ease}.ou-eiffel:hover,.ou-eiffel:focus-visible{opacity:.82;transform:translateY(-1px);outline:none}.ou-eiffel svg{width:100%;height:100%;display:block}
+  .ou-active-text{cursor:pointer;font-weight:600;text-decoration-line:underline;text-decoration-style:dotted;text-decoration-thickness:.105em;text-underline-offset:.22em;text-decoration-color:rgba(112,72,38,.78);transition:opacity .45s ease,text-shadow .45s ease,color .45s ease}.ou-active-text:hover,.ou-active-text:focus-visible{color:#6f4d31;opacity:1;text-shadow:0 0 12px rgba(112,72,38,.18);outline:none}.ou-active-text:hover,.ou-active-text:focus-visible{opacity:.72;text-shadow:0 0 14px currentColor;outline:none}
+  .ou-eiffel{display:inline-grid;place-items:center;width:27px;height:37px;margin-left:.62em;padding:0;border:0;background:transparent;color:inherit;opacity:.64;vertical-align:-.62em;cursor:pointer;filter:drop-shadow(0 1px 3px rgba(0,0,0,.14));transition:opacity .6s ease,transform .6s ease}.ou-eiffel:hover,.ou-eiffel:focus-visible{opacity:1;transform:translateY(-2px) scale(1.04);outline:none}.ou-eiffel svg{width:100%;height:100%;display:block}
   .ou-return{position:fixed;z-index:80;left:50%;bottom:6.2svh;transform:translateX(-50%);appearance:none;border:0;background:none;color:#fffaf1;padding:.5em 1em;font:italic 400 clamp(1.05rem,2.4vw,1.35rem)/1 Georgia,"Times New Roman",serif;letter-spacing:.035em;opacity:0;visibility:hidden;cursor:pointer;transition:opacity 2.4s ease,visibility 2.4s ease;text-shadow:0 2px 18px rgba(0,0,0,.9)}.ou-return.ou-visible{opacity:.72;visibility:visible}.ou-return:hover,.ou-return:focus-visible{opacity:1;outline:none}
   @media(max-width:700px){.ou-card{left:16px;bottom:10vh;width:70px;height:43px}.ou-ghost{max-width:68vw}.ou-ghost.ou-left{left:16px;top:14vh}.ou-ghost.ou-right{right:16px;top:21vh}.ou-ghost.ou-low{right:16px;bottom:13vh}}
   `;
