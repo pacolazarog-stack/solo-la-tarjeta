@@ -159,14 +159,18 @@ body.opening-preview.opening-ignited .opening-verse{
 @media print{.poem-flow{clip-path:none}.poem.is-closing .poem-flow>.phrase{visibility:visible!important;opacity:1!important}}
 body{transition:background-color 1.2s ease}
 
-/* Cotán: present in the document from the start, but invisible until the imperative cue. */
-#cotanBackdrop{position:fixed;inset:0;width:100vw;height:100vh;object-fit:cover;object-position:center bottom;z-index:0;pointer-events:none;opacity:0;visibility:hidden;transition:opacity 1.8s ease}
-body.cotan-on #cotanBackdrop{opacity:1;visibility:visible}
+/* Cotán is the actual epilogue background from the imperative onward. */
+body.cotan-on{
+ background-color:#000!important;
+ background-image:url('cotan-imperative.webp?v=20261009-body-final')!important;
+ background-repeat:no-repeat!important;
+ background-position:center bottom!important;
+ background-size:100vw auto!important;
+ background-attachment:fixed!important;
+}
 body.cotan-on>.detail-background{opacity:0!important;visibility:hidden!important}
 body.cotan-on::before{opacity:0!important}
-body.cotan-on>main,body.cotan-on>nav,body.cotan-on>.flower-coda,body.cotan-on>.closing-signature{position:relative;z-index:2}
-@media(prefers-reduced-motion:reduce){#cotanBackdrop{transition:none}}
-@media print{#cotanBackdrop{display:none!important}}
+@media print{body.cotan-on{background-image:none!important}}
 
 .flower-coda{min-height:100svh;display:grid;place-items:center;margin:0;padding:100px 8vw;background:#fff;color:#26332d;color-scheme:light;text-shadow:none}
 .flower-coda p{margin:0;font:400 clamp(26px,4vw,40px)/1.5 Georgia,'Times New Roman',serif;letter-spacing:0}
@@ -174,10 +178,9 @@ body.cotan-on>main,body.cotan-on>nav,body.cotan-on>.flower-coda,body.cotan-on>.c
 .flower-coda[hidden],.closing-signature[hidden]{display:none}
 @media print{.flower-coda{break-before:page;break-after:page;min-height:90vh}.closing-signature{padding:0}}
 </style>
-<script src="../ana-klaudya/publication.js?v=20261009-cotan-inline-final"></script>
+<script src="../ana-klaudya/publication.js?v=20261009-body-final"></script>
 </head>
 <body data-publication="web">
-<img id="cotanBackdrop" src="cotan-imperative.webp?v=20261009-cotan-inline-final" alt="" aria-hidden="true">
 <div class="detail-background" aria-hidden="true"></div>
 <nav hidden aria-label="Volver a Ana"><a href="../elegia-breve/" id="backAna">Inicio de Ana ↗</a></nav>
 <main>
@@ -375,6 +378,7 @@ if(openingPreview){
   if(event.origin!==location.origin || event.source!==window.parent || event.data?.channel!=='ana-opening-v1')return;
   if(event.data.type==='continue'&&!continued){
    continued=true;openingLocked=true;applyOpening([1,1],1);document.body.style.setProperty('--opening-background','1');
+   document.body.classList.add('cotan-on');
    document.body.classList.remove('opening-preview');
    detailBackground.classList.add('is-clear');
    beginReading(true);return;
