@@ -1,0 +1,50 @@
+name: Make narrative card visible v3
+on:
+  push:
+    branches: ["main"]
+    paths: [".github/workflows/make-card-visible-v3.yml"]
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make card unmistakably visible and bump cache
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('narrative-universe.js')
+          s = p.read_text(encoding='utf-8')
+          replacements = {
+            "const VERSION='20261010-2';": "const VERSION='20261010-3';",
+            ".ou-card{position:fixed;z-index:68;left:max(17px,3.2vw);bottom:14vh;width:56px;height:35px;padding:0;border:0;border-radius:5px;background:linear-gradient(145deg,rgba(205,210,216,.42),rgba(83,91,101,.31));box-shadow:0 3px 15px rgba(0,0,0,.16),inset 0 0 0 1px rgba(255,255,255,.18);opacity:.34;filter:blur(.18px);transform:rotate(-7deg);cursor:pointer;transition:opacity .9s ease,filter .9s ease,transform .9s ease}": ".ou-card{position:fixed;z-index:68;left:max(22px,4vw);bottom:11vh;width:82px;height:50px;padding:0;border:1px solid rgba(77,82,88,.42);border-radius:7px;background:linear-gradient(145deg,rgba(224,226,229,.92),rgba(126,133,142,.72));box-shadow:0 7px 24px rgba(0,0,0,.22),inset 0 0 0 1px rgba(255,255,255,.42);opacity:.76;filter:blur(0);transform:rotate(-6deg);cursor:pointer;transition:opacity .6s ease,filter .6s ease,transform .6s ease,box-shadow .6s ease}",
+            ".ou-card::before{content:\"\";position:absolute;left:9px;top:9px;width:13px;height:9px;border-radius:2px;background:rgba(218,195,136,.52);box-shadow:inset 0 0 0 1px rgba(80,67,42,.12)}": ".ou-card::before{content:\"\";position:absolute;left:13px;top:13px;width:19px;height:14px;border-radius:3px;background:linear-gradient(135deg,#d7bd75,#f0dda2);box-shadow:inset 0 0 0 1px rgba(85,67,30,.28),0 1px 2px rgba(0,0,0,.14)}",
+            ".ou-card::after{content:\"\";position:absolute;left:9px;right:9px;bottom:7px;height:1px;background:rgba(255,255,255,.38)}": ".ou-card::after{content:\"\";position:absolute;left:13px;right:13px;bottom:11px;height:2px;border-radius:2px;background:rgba(255,255,255,.72);box-shadow:0 -7px 0 rgba(255,255,255,.28)}",
+            ".ou-card:hover,.ou-card:focus-visible{opacity:.72;filter:blur(0);transform:rotate(-4deg) translateY(-2px);outline:none}": ".ou-card:hover,.ou-card:focus-visible{opacity:1;filter:blur(0);transform:rotate(-3deg) translateY(-3px) scale(1.04);box-shadow:0 10px 30px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.52);outline:none}",
+            "@media(max-width:700px){.ou-card{left:16px;bottom:12vh;width:50px;height:31px}": "@media(max-width:700px){.ou-card{left:16px;bottom:10vh;width:70px;height:43px}"
+          }
+          for old,new in replacements.items():
+              if old not in s:
+                  raise RuntimeError('Expected card/version fragment not found: '+old[:80])
+              s = s.replace(old,new,1)
+          p.write_text(s, encoding='utf-8')
+
+          pages = [Path('index.html'),Path('elegia-breve/index.html'),Path('ojos/index.html'),Path('sonrisa/index.html'),Path('epilogo/index.html'),Path('estrella/index.html'),Path('ceniciento/index.html')]
+          for page in pages:
+              t=page.read_text(encoding='utf-8')
+              old='narrative-universe.js?v=20261010-2'
+              new='narrative-universe.js?v=20261010-3'
+              if old in t:
+                  t=t.replace(old,new)
+                  page.write_text(t,encoding='utf-8')
+          PY
+      - name: Remove one-shot workflow and commit
+        run: |
+          rm .github/workflows/make-card-visible-v3.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add narrative-universe.js index.html elegia-breve/index.html ojos/index.html sonrisa/index.html epilogo/index.html estrella/index.html ceniciento/index.html .github/workflows/make-card-visible-v3.yml
+          git commit -m "Make Solo la Tarjeta card clearly visible"
+          git push
