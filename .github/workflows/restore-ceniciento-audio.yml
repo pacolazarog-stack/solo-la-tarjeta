@@ -1,0 +1,33 @@
+name: Restore Ceniciento audio
+on:
+  push:
+    branches: ["main"]
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore current narration and bump cache
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('ceniciento/index.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace("MASTER='CENICIENTO_completo.m4a?v=20261010'", "MASTER='ceniciento-voz-completa.mp3?v=20261010-audio-restored'")
+          p.write_text(s, encoding='utf-8')
+
+          q = Path('ana-klaudya/index.html')
+          t = q.read_text(encoding='utf-8')
+          t = t.replace('20261010-ceniciento-score40-v2', '20261010-ceniciento-score40-v3-audio')
+          q.write_text(t, encoding='utf-8')
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ceniciento/index.html ana-klaudya/index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Restore current Ceniciento narration"
+          git push
