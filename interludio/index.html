@@ -24,13 +24,17 @@ button{background:transparent;color:#eadbc8;border:1px solid #79654d;border-radi
 button:focus-visible{outline:2px solid #eadbc8;outline-offset:4px}
 @media(max-width:760px){main{padding:0 0 120px}h1{margin-bottom:24px;text-align:center}.stage{width:100%;aspect-ratio:16/10}.controls{margin-top:25px}}
 @media(prefers-reduced-motion:reduce){.shot{transition:none}}
+.opening-lines{position:absolute;inset:auto 7% 7%;z-index:4;display:flex;flex-direction:column;gap:clamp(18px,3vw,36px);isolation:isolate;pointer-events:none;color:#fff5e7;font-size:clamp(18px,2.8vw,36px);line-height:1.5;text-shadow:0 2px 7px #000,0 0 22px #000;opacity:0}
+.opening-lines::before{content:"";position:absolute;inset:-50px -8vw -12vh;z-index:-1;background:linear-gradient(0deg,rgba(8,7,6,.78),rgba(8,7,6,.18) 65%,transparent)}
+.opening-lines p{margin:0;opacity:0}
+@media(max-width:760px){.opening-lines{inset:auto 6% 7%;font-size:clamp(18px,4.2vw,27px);gap:18px}}
 </style>
 <script src="../ana-klaudya/publication.js"></script>
 </head>
 <body data-publication="web">
 <main>
 <h1>Interludio · Iba a llevarte flores</h1>
-<div class="stage" role="img" aria-label="Un pétalo con gotas da paso a una calle florida, una ciudad, un paisaje y un planeta cubierto de flores junto a una luna yin yang; el planeta se transforma suavemente en una cebolla y la luna yin yang desciende hasta convertirse en un trozo de pan sobre la mesa y abre A fuego lento.">
+<div class="stage" role="group" aria-label="Un pétalo con gotas da paso a una calle florida, una ciudad, un paisaje y un planeta cubierto de flores junto a una luna yin yang; el planeta se transforma suavemente en una cebolla y la luna yin yang desciende hasta convertirse en un trozo de pan sobre la mesa y abre A fuego lento.">
 <!-- The six views display the supplied storyboard without its layout or timing labels. -->
 <svg class="shot" viewBox="15 103 487 297" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop1" clipPathUnits="userSpaceOnUse"><rect x="15" y="103" width="487" height="297"/></clipPath></defs><image href="mundo-flores.png" width="1536" height="1024" clip-path="url(#shotCrop1)"/></svg>
 <svg class="shot" viewBox="524 103 487 297" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop2" clipPathUnits="userSpaceOnUse"><rect x="524" y="103" width="487" height="297"/></clipPath></defs><image href="mundo-flores.png" width="1536" height="1024" clip-path="url(#shotCrop2)"/></svg>
@@ -38,6 +42,10 @@ button:focus-visible{outline:2px solid #eadbc8;outline-offset:4px}
 <svg class="shot" viewBox="15 541 487 322" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop4" clipPathUnits="userSpaceOnUse"><rect x="15" y="541" width="487" height="322"/></clipPath></defs><image href="mundo-flores.png" width="1536" height="1024" clip-path="url(#shotCrop4)"/></svg>
 <svg class="shot" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop5" clipPathUnits="userSpaceOnUse"><rect x="0" y="0" width="1536" height="1024"/></clipPath><clipPath id="moonCrop" clipPathUnits="userSpaceOnUse"><circle cx="1348" cy="318" r="148"/></clipPath><mask id="worldWithoutMoon" maskUnits="userSpaceOnUse" x="0" y="0" width="1536" height="1024"><rect width="1536" height="1024" fill="white"/><circle cx="1348" cy="318" r="148" fill="black"/></mask></defs><g clip-path="url(#shotCrop5)"><image href="mundo-flores-yin-yang.png" width="1536" height="1024" mask="url(#worldWithoutMoon)"/><g id="moonBridge"><image href="mundo-flores-yin-yang.png" width="1536" height="1024" clip-path="url(#moonCrop)"/></g></g></svg>
 <svg class="shot" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><clipPath id="shotCrop6" clipPathUnits="userSpaceOnUse"><rect x="0" y="0" width="1536" height="1024"/></clipPath></defs><g clip-path="url(#shotCrop6)"><image href="cebolla-pan.png" width="1536" height="1024" transform="matrix(1.24 0 0 1.32 -260 -190)"/></g></svg>
+<div class="opening-lines" id="epilogueOpening" aria-label="Entrada de A fuego lento">
+<p id="openingFirst" aria-hidden="true">Yo iba a escribirte un poema.</p>
+<p id="openingSecond" aria-hidden="true">Tú me diste una cebolla.</p>
+</div>
 </div>
 <div class="controls"><button id="pause" type="button" aria-label="Pausar" title="Pausar" data-state="playing" disabled><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg><svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 3 15 9-15 9z"/></svg></button><button id="replay" type="button" aria-label="Volver a ver" title="Volver a ver" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7V2L0 7l5 5V9a7 7 0 1 1-1 7l-2 1a9 9 0 1 0 3-10z"/></svg></button></div>
 <p class="status" id="status" role="status">Cargando las imágenes.</p>
@@ -45,27 +53,38 @@ button:focus-visible{outline:2px solid #eadbc8;outline-offset:4px}
 <script>
 const shots=[...document.querySelectorAll('.shot')];
 const moonBridge=document.getElementById('moonBridge');
+const epilogueOpening=document.getElementById('epilogueOpening');
+const openingVerses=[document.getElementById('openingFirst'),document.getElementById('openingSecond')];
 const pause=document.getElementById('pause'),replay=document.getElementById('replay'),status=document.getElementById('status');
 // The flower opens, scale accelerates, the impossible garden lingers, and the onion returns us to the table.
-const cueStarts=[0,2800,4600,6300,9300,13300],duration=15900;
+const cueStarts=[0,2800,4600,6300,9300,13300],duration=34000;
 const fadeIn=[600,260,100,380,450,500],fadeOut=[360,130,180,420,400,600];
 const morphStart=10700,morphEnd=15900;
+const openingStarts=[17000,24000],openingFade=1600,outroStart=31000;
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const inheritedMusic=window.parent!==window&&new URLSearchParams(location.search).get('music')==='parent';
-const sendMusic=type=>{if(inheritedMusic)window.parent.postMessage({channel:'ceniciento-music-v1',type},location.origin)};
+const sendMusic=(type,details={})=>{if(inheritedMusic)window.parent.postMessage({channel:'ceniciento-music-v1',type,...details},location.origin)};
 let elapsed=0,last=0,frame=0,introTimer=null,running=false,ready=false,finished=false;
+const smoothAmount=value=>{const t=Math.max(0,Math.min(1,value));return t*t*(3-2*t)};
 function render(){
+ const sceneFade=reducedMotion?(elapsed>=duration?0:1):1-smoothAmount((elapsed-outroStart)/(duration-outroStart));
+ epilogueOpening.style.opacity=String(sceneFade);
+ openingVerses.forEach((verse,i)=>{
+  const visible=elapsed>=openingStarts[i]&&elapsed<duration;
+  verse.style.opacity=String(reducedMotion?(visible?1:0):smoothAmount((elapsed-openingStarts[i])/openingFade));
+  if(visible)verse.removeAttribute('aria-hidden');else verse.setAttribute('aria-hidden','true');
+ });
  moonBridge.setAttribute('transform','translate(0 0)');
  const index=cueStarts.reduce((found,start,i)=>elapsed>=start?i:found,0);
  const into=elapsed-cueStarts[index],until=(cueStarts[index+1]??duration)-elapsed;
  // The first four cuts pass through darkness; the last pair shares one matched frame.
- if(!reducedMotion&&elapsed>=morphStart){
+ if(elapsed>=morphStart){
   const t=Math.max(0,Math.min(1,(elapsed-morphStart)/(morphEnd-morphStart)));
-  const blend=t*t*(3-2*t);
+  const blend=reducedMotion?(elapsed>=morphEnd?1:0):t*t*(3-2*t);
   const descent=Math.min(1,t*2),settle=descent*descent*(3-2*descent);
   moonBridge.setAttribute('transform',`translate(${-27*settle} ${131*settle})`);
   // Keep the world opaque underneath the incoming onion to avoid a luminance dip.
-  shots.forEach((shot,i)=>{shot.classList.toggle('active',i===index);shot.style.opacity=String(i===4?(blend<1?1:0):i===5?blend:0);});
+  shots.forEach((shot,i)=>{shot.classList.toggle('active',i===index);shot.style.opacity=String(sceneFade*(i===4?(blend<1?1:0):i===5?blend:0));});
   return;
  }
  const incoming=(into-(index===0?0:80))/fadeIn[index];
@@ -80,7 +99,7 @@ function tick(now){
  if(!running)return;
  if(last&&!document.hidden)elapsed+=now-last;
  last=now;render();
- if(elapsed>=duration){stop();finished=true;setPauseLabel('Continuar',true);status.textContent='A fuego lento.';sendMusic('interlude-ended');return;}
+ if(elapsed>=duration){stop();finished=true;setPauseLabel('Continuar',true);status.textContent='A fuego lento.';sendMusic('interlude-ended',{openingShown:true});return;}
  frame=requestAnimationFrame(tick);
 }
 function start(){if(!ready||running)return;clearTimeout(introTimer);introTimer=null;running=true;last=0;render();setPauseLabel('Pausar');status.textContent='';frame=requestAnimationFrame(tick);}

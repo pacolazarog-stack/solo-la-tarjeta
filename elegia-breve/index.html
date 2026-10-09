@@ -1365,7 +1365,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         anaNavigation.hidden=false;body.classList.add('ana-navigation-ready');
         setJourney('elegia');
       };
-      const openPoem=(piece,asPrologue=false)=>{
+      const openPoem=(piece,asPrologue=false,continuingOpening=false)=>{
         clearTimeout(finalPortraitTimer);finalPortraitTimer=null;
         if(poemRoute===piece&&!cenicientoFrame.hidden&&!sonrisaLeaving)return;
         // Keep Ana covered throughout every child-to-child navigation and load.
@@ -1385,7 +1385,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
         setJourney(piece);
         body.classList.add('journey-started');
-        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-ojos15-cierre-estable'+(asPrologue?'&prologue=1':'');
+        cenicientoFrame.src='../'+piece+'/?music=parent&v=20261009-cebolla-versos'+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
       const openCeniciento=()=>openPoem('ceniciento');
@@ -1461,7 +1461,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       window.addEventListener('message',event=>{
         if(event.origin!==window.location.origin || event.source!==cenicientoFrame.contentWindow || event.data?.channel!=='ceniciento-music-v1'||cenicientoFrame.hidden)return;
         const data=event.data;
-        if(data.type==='interlude-ended'&&poemRoute==='interludio'){openPoem('epilogo');return;}
+        if(data.type==='interlude-ended'&&poemRoute==='interludio'){openPoem('epilogo',false,data.openingShown===true);return;}
         if(data.type==='ana'&&poemRoute==='estrella'){returnToAna('ana');return;}
         if(data.type==='home'||data.type==='close'){returnToAna(data.type);return;}
         if(data.type==='level' && Number.isFinite(data.level)){

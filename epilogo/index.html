@@ -180,6 +180,7 @@ window.addEventListener('message',event=>{
 });
 if(inheritedMusic)sendMusic('ready');
 const phrases=[...document.querySelectorAll('.phrase')];
+const continuingOpening=new URLSearchParams(location.search).get('opening')==='seen';
 const poem=document.getElementById('poem'),signature=document.getElementById('signature'),flowerCoda=document.getElementById('flowerCoda');
 const paced=document.getElementById('paced'),full=document.getElementById('full'),status=document.getElementById('status');
 let timer=null,index=0,mode='waiting',ready=false;
@@ -192,8 +193,8 @@ function reveal(){
  const phrase=phrases[index++];showPhrase(phrase);
  timer=setTimeout(reveal,Number(phrase.dataset.wait));
 }
-function beginReading(){
- clear();index=0;flowerCoda.hidden=true;signature.hidden=true;phrases.forEach(hidePhrase);mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';reveal();
+function beginReading(fromInterlude=false){
+ clear();index=fromInterlude?1:0;flowerCoda.hidden=true;signature.hidden=true;phrases.forEach(hidePhrase);mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';if(fromInterlude)showPhrase(phrases[0]);reveal();
 }
 paced.addEventListener('click',()=>{
  if(!ready)return;
@@ -205,7 +206,7 @@ full.addEventListener('click',()=>{
  if(!ready)return;
  clear();mode='full';phrases.forEach(showPhrase);flowerCoda.hidden=false;signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';
 });
-ready=true;poem.hidden=false;paced.disabled=false;full.disabled=false;beginReading();
+ready=true;poem.hidden=false;paced.disabled=false;full.disabled=false;beginReading(continuingOpening);
 </script>
 </body>
 </html>

@@ -4,6 +4,7 @@ const nodes=new Map(),frames=new Map(),timers=new Map(),messages=[];let id=0;
 class Node{
  constructor(){this.handlers={};this.style={};this.classes=new Set();this.classList={toggle:(name,on)=>on?this.classes.add(name):this.classes.delete(name)};}
  setAttribute(name,value){this[name]=value;}
+ removeAttribute(name){delete this[name];}
  addEventListener(event,fn){this.handlers[event]=fn;}
  fire(event){this.handlers[event]?.();}
 }
@@ -29,9 +30,22 @@ step(31700);assert.equal(active(),3);
 step(34700);assert.equal(active(),4);
 step(37400);assert.equal(active(),4);
 step(38700);assert.equal(active(),5);
-step(41300);assert.equal(frames.size,0);
-assert.equal(messages.filter(m=>m.type==='interlude-ended').length,1);
-nodes.get('replay').fire('click');step(50000);assert.equal(active(),0);
+step(41300);assert.equal(frames.size,1,'The final image remains for the opening verses');
+assert.equal(messages.filter(m=>m.type==='interlude-ended').length,0);
+const first=nodes.get('openingFirst'),second=nodes.get('openingSecond');
+assert.equal(first['aria-hidden'],'true');assert.equal(second['aria-hidden'],'true');
+step(42400);assert.equal(first['aria-hidden'],undefined);assert.equal(Number(first.style.opacity),0);
+step(44000);assert.equal(Number(first.style.opacity),1);assert.equal(Number(second.style.opacity),0);
+assert.equal(Number(shots[5].style.opacity),1,'The first verse is printed over the onion and bread');
+step(49400);assert.equal(second['aria-hidden'],undefined);assert.equal(Number(second.style.opacity),0);
+step(51000);assert.equal(Number(first.style.opacity),1);assert.equal(Number(second.style.opacity),1);
+nodes.get('pause').fire('click');assert.equal(frames.size,0,'The two verses can be held together');
+nodes.get('pause').fire('click');step(51000);
+step(56400);assert.equal(Number(shots[5].style.opacity),1);
+step(57900);assert.equal(Number(shots[5].style.opacity),.5);assert.equal(Number(nodes.get('epilogueOpening').style.opacity),.5);
+step(59400);assert.equal(frames.size,0);assert.equal(Number(shots[5].style.opacity),0);
+const completion=messages.filter(m=>m.type==='interlude-ended');assert.equal(completion.length,1);assert.equal(completion[0].openingShown,true);
+nodes.get('replay').fire('click');assert.equal(first['aria-hidden'],'true');assert.equal(second['aria-hidden'],'true');step(50000);assert.equal(active(),0);
 step(50600);assert.equal(Number(shots[0].style.opacity),1);
 step(52710);assert(shots.every(shot=>Number(shot.style.opacity)===0),'Previous shot is fully dark before the next cue');
 step(52800);assert.equal(active(),1);assert(shots.every(shot=>Number(shot.style.opacity)===0),'No image overlaps the cut through darkness');
@@ -48,6 +62,6 @@ assert(source.includes('const outgoing=(until-90)/fadeOut[index]'));
 assert(source.includes('viewBox="15 541 487 322"'), 'The caption scene excludes layout and timing labels');
 assert.equal(images[2].src,'cebolla-pan.png');assert(source.includes('matrix(1.24 0 0 1.32 -260 -190)'),'The onion is matched to the world silhouette');assert.equal(images[0].src,'mundo-flores.png');assert.equal(images[1].src,'mundo-flores-yin-yang.png');assert.equal((source.match(/href="mundo-flores-yin-yang.png"/g)||[]).length,2);
 assert(source.includes('clip-path:inset(50%)'), 'Title is available to screen readers without staying on screen');
-assert(source.includes('morphStart=10700,morphEnd=15900'));assert(!source.includes('finalOpacity'),'No trailing darkness or hold before the epilogue');
+assert(source.includes('morphStart=10700,morphEnd=15900'));assert(source.includes('openingStarts=[17000,24000]'),'The verses enter seven seconds apart');
 assert(source.includes('id="worldWithoutMoon"'),'The moon moves independently of the world');
-console.log('PASS: six cues over 15.9 seconds with a 5.2-second final dissolve, brief dark fades plus a matched world-to-onion dissolve, pause/resume, hidden tab pause, replay, cleanup and one guarded completion message');
+console.log('PASS: matched world/onion dissolve, sequential opening verses over the final image, three-second fade, pause/resume, hidden tab pause, replay and one continuation message');

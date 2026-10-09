@@ -57,6 +57,9 @@ Los antiguos objetivos **05:58** y **06:48** quedan expresamente descartados com
 
 ## Decisiones audiovisuales fijadas
 
+- El último plano del interludio conserva la cebolla y el pan mientras aparecen los dos primeros versos del epílogo a los 17 y 24 segundos. Se funde desde el segundo 31 hasta el 34 y continúa directamente en «A fuego lento», conservando impresos esos versos y avanzando a «—Empieza por aquí». La pista musical no se reinicia.
+- «Tu piel» gana nitidez en 7,5 segundos.
+
 - Portada mínima: **ANA KLAUDYA · flag · Entrar**.
 - Preludio antes del avance al poema.
 - La música comienza alta y desciende al entrar la voz.
@@ -73,3 +76,11 @@ Los antiguos objetivos **05:58** y **06:48** quedan expresamente descartados com
 Versión pública actual:  
 https://pacolazarog-stack.github.io/solo-la-tarjeta/elegia-breve/
 
+
+## Créditos de herramientas declarados por el autor
+
+- Textos desarrollados con intervención de ChatGPT, Gemini y Copilot.
+- Música generada con Suno, en una pista independiente de la voz.
+- Imágenes tratadas o generadas con ChatGPT y Copilot.
+- Concepto, selección y edición final: Paco Olmo de Males.
+- Ceniciento conserva una sola firma al final de cada modalidad, sin firmas sobre la entrada ni la lectura.

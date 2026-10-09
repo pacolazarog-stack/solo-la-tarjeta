@@ -24,7 +24,7 @@ root.scrollHeight=2000;frame.contentWindow={postMessage(){}};
 const location={origin:'https://example.test',pathname:'/elegia-breve/',search:'',hash:''};
 const fire=type=>{for(const fn of events[type]??[])fn();};
 const context={document:{documentElement:root,body,getElementById:get,querySelectorAll(){return[];}},window:{location,innerHeight:640,scrollY:0,matchMedia:()=>({matches:reduced}),history:{pushState(s,t,hash){location.hash=hash;},replaceState(){location.hash='';}},addEventListener(type,fn){(events[type]??=[]).push(fn);},scrollTo(){}},URLSearchParams,Math,Promise,Float32Array,requestAnimationFrame(){return 1;},cancelAnimationFrame(){},setTimeout(fn,ms){const id=++sequence;timers.set(id,{fn,ms});return id;},clearTimeout(id){timers.delete(id);}};
-const message=(type,origin=location.origin)=>{for(const fn of events.message)fn({origin,source:frame.contentWindow,data:{channel:'ceniciento-music-v1',type}});};
+const message=(type,origin=location.origin,details={},sender=frame.contentWindow)=>{for(const fn of events.message)fn({origin,source:sender,data:{channel:'ceniciento-music-v1',type,...details}});};
 const run=ms=>{const match=[...timers].find(([,t])=>t.ms===ms);assert(match,'Missing timer '+ms);timers.delete(match[0]);match[1].fn();};
 const route=(piece,type='popstate')=>{location.hash=piece?'#'+piece:'';fire(type);};
 const assertPiece=piece=>{assert.equal(frame.hidden,false);assert.equal(get('poemBackdrop').hidden,false,'Ana is covered throughout navigation between pieces');assert(!get('poemBackdrop').classList.contains('is-leaving'),'No fading cover can expose Ana during a child route');assert(frame.src.includes('../'+piece+'/?music=parent'));assert.equal(location.hash,'#'+piece);};
@@ -87,7 +87,11 @@ for(const reducedMotion of [false,true]){
 get('anaInterlude').click();assertPiece('interludio');
 assert(frame.classList.contains('interlude-transition'));
 message('interlude-ended','https://other.test');assertPiece('interludio');
-message('interlude-ended');assertPiece('epilogo');
+message('interlude-ended',location.origin,{openingShown:true},{});assertPiece('interludio');
+message('interlude-ended',location.origin,{openingShown:true});assertPiece('epilogo');
+assert(frame.src.includes('&opening=seen'),'A completed opening continues after its two verses');
+get('anaInterlude').click();message('interlude-ended');assertPiece('epilogo');
+assert(!frame.src.includes('opening=seen'),'Skipping the opening keeps the normal epilogue entry');
 assert.equal(music.paused,false);assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
 get('anaPiel').click();message('interlude-ended');assertPiece('piel');
 // The interlude keeps its narrative place with only the three navigation controls.

@@ -83,9 +83,7 @@ Before any submission using identifiable photographs or video of Ana Klaudya, th
 
 ## AI disclosure · working version
 
-AI-assisted tools were used in selected stages of the audiovisual production. The poetry, artistic concept, structure, sequencing and final editorial decisions are by the author. All uses of generative or AI-assisted tools are identified in the production documentation and credits.
-
-This wording must be revised against the final production inventory before any festival submission.
+The texts were developed with the involvement of ChatGPT, Gemini and Copilot. Music was generated with Suno. Images were processed or generated with ChatGPT and Copilot. The author is responsible for the artistic concept, selection, structure, sequencing and final editorial decisions.
 
 ## Festival route · pending current-rule verification
 
