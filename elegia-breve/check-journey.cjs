@@ -95,6 +95,9 @@ assert(!frame.src.includes('opening=seen'),'Skipping the opening keeps the norma
 assert.equal(music.paused,false);assert.equal(music.currentTime,51);assert.equal(music.playCalls,plays);
 get('anaPiel').click();message('interlude-ended');assertPiece('piel');
 // The interlude keeps its narrative place with only the three navigation controls.
+get('anaInterlude').click();assert(!frame.classList.contains('sonrisa-visible'));
+message('interlude-preview-ready');get('journeyNext').click();
+assert(frame.classList.contains('sonrisa-visible'),'A quick manual advance reveals the preserved frame even before its initial fade timer');
 for(const manual of [false,true]){
  get('anaInterlude').click();frame.emit('load');run(350);
  const existingSource=frame.src,continuations=frameMessages.filter(m=>m.type==='continue-epilogue').length;

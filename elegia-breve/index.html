@@ -1377,7 +1377,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         cenicientoFrame.classList.toggle('interlude-transition',briefFade);
         poemRoute=piece;interludePreviewReady=false;
         body.classList.toggle('eyes-open',piece==='ojos');
-        if(!keepOpening)cenicientoFrame.classList.remove('sonrisa-visible');cenicientoFrame.classList.add('sonrisa-transition');body.classList.add('sonrisa-open');
+        if(!keepOpening)cenicientoFrame.classList.remove('sonrisa-visible');else cenicientoFrame.classList.add('sonrisa-visible');cenicientoFrame.classList.add('sonrisa-transition');body.classList.add('sonrisa-open');
         anaNavigation.hidden=true;body.classList.add('ceniciento-open');root.classList.add('ceniciento-open');document.title=({ceniciento:'CENICIENTO · leer o escuchar',ojos:'EN TUS OJOS',sonrisa:'EN TUS LABIOS',cabello:'TU CABELLO',piel:'TU PIEL',estrella:'SIGUIENDO UNA TARJETA',epilogo:'A FUEGO LENTO · EPÍLOGO',interludio:'IBA A LLEVARTE FLORES · INTERLUDIO'})[piece];
         voiceRequest++;clearTimeout(voiceTimer);voiceTimer=null;voicePending=false;voiceAllowed=false;
         recording.pause();nameAudio.pause();if(voiceDialog.open)voiceDialog.close();
