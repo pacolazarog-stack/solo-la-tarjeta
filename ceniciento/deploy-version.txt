@@ -1,0 +1,6 @@
+CENICIENTO · despliegue canónico
+fecha: 2026-10-10
+audio: ceniciento-voz-completa.mp3
+partitura: 40 pantallas
+transición inicial de definición: 10 s
+cache iframe: 20261010-ceniciento-score40-v3-audio
