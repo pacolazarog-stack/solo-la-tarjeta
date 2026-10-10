@@ -5,8 +5,8 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Paquete archivístico vigente:** versión 27; conserva el código publicado en `main` mediante el commit `e9877adc27ee90d7b8595f4616ea7c79f8ecbc18`  
-**Módulo compartido:** `narrative-universe.js`, versión `20261010-15`  
+**Paquete archivístico vigente:** versión 28; conserva el código publicado en `main` mediante el commit `7387caaa463fc07febac6c1028ac8e4049f23e96`  
+**Módulo compartido:** `narrative-universe.js`, versión `20261010-17`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
 > Este documento reúne información contextual, bibliográfica y técnica para prensa, investigación, programación de festivales y preservación. No debe incorporarse a las páginas de las obras ni presentarse como parte de su recorrido narrativo.
@@ -99,7 +99,7 @@ Ejemplo con la fecha canónica registrada para *ANA KLAUDYA*:
 
 ### Cita del código fuente archivado
 
-> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 27, auditoría integral y corrección del cierre de CENICIENTO. Código del commit `pacolazarog-stack/solo-la-tarjeta`, commit de código `e9877adc27ee90d7b8595f4616ea7c79f8ecbc18`; módulo compartido `20261010-15`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
+> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 28, lectura fotográfica de CENICIENTO y espacio de convergencia propuesto. Código del commit `pacolazarog-stack/solo-la-tarjeta`, commit de código `7387caaa463fc07febac6c1028ac8e4049f23e96`; módulo compartido `20261010-17`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
 
 Para citas académicas, conviene especificar la pieza, el modo de acceso (lectura o escucha), la URL y la fecha de consulta. Si se cita un verso, añadir el nombre de la pieza y el identificador o encabezado de sección disponible en la edición consultada. No asignar números de verso que la obra no muestre.
 
@@ -355,3 +355,23 @@ La revisión confirma HTML en español, controles con nombres accesibles, navega
 **Pendiente archivístico:** las páginas revisadas no incluyen JSON-LD ni metadatos Dublin Core. La identificación de autoría, fecha de cierre, número de edición y linaje de versión se documenta en este dossier y en el archivo de código, pero aún no se publica como metadato estructurado legible por máquinas en las páginas. La recomendación es añadirlo en el aparato head de cada obra sin mostrar explicaciones de la arquitectura al lector.
 
 **Publicación:** código y pruebas en main, commit e9877adc27ee90d7b8595f4616ea7c79f8ecbc18; paquete integral: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (27).md](https://github.com/pacolazarog-stack/solo-la-tarjeta/blob/main/TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(27).md).
+
+
+
+## 26. Lectura fotográfica de CENICIENTO y EL ESPEJO · versión 28
+
+> **Cada descubrimiento no abre una obra nueva; cambia el significado de una obra ya visitada.**
+
+El modo de lectura de CENICIENTO sitúa ahora el texto sobre la secuencia fotográfica que ocupa el fondo. La secuencia avanza con el desplazamiento por el texto y hace visible la transformación de Paco, incluido el cambio de su cabello. El retrato independiente que antes ocupaba la parte superior desaparece en este modo para que la fotografía de fondo pueda ocupar toda la pantalla, especialmente en móvil. Una capa oscura translúcida, tipografía clara y sombra de texto preservan contraste. El modo de voz conserva su secuencia basada en tiempo. No se ha cambiado el texto canónico ni la navegación.
+
+### EL ESPEJO: definición editorial provisional
+
+La idea se registra como una superficie de convergencia —una habitación de colapso para las tres trayectorias— y no como cuarta obra, página de menú o enlace. Su razón de existir es hacer coincidir resonancias ya presentes y dejar al lector realizar la conexión. Por ello, no se añaden botones, indicaciones, voz, movimiento ni explicación. Las frases propuestas en el intercambio quedan como materiales de trabajo, no como texto aprobado. El intervalo de 150–400 palabras también queda como orientación provisional, sin redactar contenido nuevo hasta definir la composición.
+
+### Verificación
+
+Se ejecutaron de nuevo las siete pruebas automatizadas; todas pasan. La comprobación de CENICIENTO verifica que el fondo permanece nítido en lectura, que la placa del texto es translúcida y que el avance de la fotografía depende del desplazamiento de lectura. Los enlaces del módulo se actualizaron para evitar caché. La prueba no sustituye una inspección visual en dispositivos físicos.
+
+La observación archivística del apartado anterior sigue vigente: las páginas aún carecen de JSON-LD y Dublin Core; el estado guardado en localStorage es local al navegador. La documentación continúa fuera de la experiencia narrativa.
+
+Publicación: código y pruebas en main, commit 7387caaa463fc07febac6c1028ac8e4049f23e96; fuente integral: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (28).md](https://github.com/pacolazarog-stack/solo-la-tarjeta/blob/main/TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(28).md).
