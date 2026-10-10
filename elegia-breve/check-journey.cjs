@@ -178,5 +178,12 @@ assert.deepEqual(phraseInventory,['Hay historias que empiezan antes.','El origen
 assert(!/ghost\(['\"]/.test(universe),'All ghost copy comes from the four-item phrase inventory');
 assert(!/function (?:makeSymbolic|wrapToken|activateSoloSymbols|showSoloEndNav)/.test(universe),'Narrative echoes and the end-of-story menu are not navigation controls');
 assert(!/elegia-breve\/#(?:ojos|estrella|epilogo|ceniciento)|Ir a Ceniciento|Volver a Ana Klaudya/.test(universe),'No symbolic shortcut or second menu creates an extra door');
+assert(universe.includes("width:112px;height:70px"),'The card has a clear mobile-sized target');
+assert(universe.includes('@media(hover:none) and (pointer:coarse){.ou-card{animation:none'),'The card is recognizable without hover or pulsing on touch devices');
+assert(universe.includes('min-width:100px;min-height:48px'),'The return control has a thumb-sized target');
+assert(source.includes('width:80px;height:80px;transition:opacity 2.5s ease 10s'),'The question is visible and easy to tap on mobile');
+assert(source.includes('aria-label="Interrogante"'),'The question keeps its ambiguity in the accessible name');
+assert(source.includes('@media(hover:none) and (pointer:coarse){.question-beat{animation:none}}'),'The question does not depend on an animated cue on touch devices');
+assert(universe.includes('new IntersectionObserver(entries=>{')&&universe.includes("const lastLine=document.querySelector('main article p.story-line:last-of-type')"),'Solo completion follows the last observed line');
 console.log('PASS: sequential navigation, eight return routes, repeated touches, Back/Forward, index, one-click voice with four-second fade, cancellation, reduced motion and uninterrupted music');
 })().catch(error=>{console.error(error);process.exitCode=1;});

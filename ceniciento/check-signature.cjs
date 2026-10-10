@@ -20,4 +20,7 @@ assert(shared.includes("returnedFromCeniciento:true"),'Returning stores the narr
 assert(shared.includes("topGo(rootPath+'elegia-breve/?v='+VERSION)"),'volver returns to Ana Klaudya');
 assert(shared.includes("if(voice)voice.addEventListener('ended',complete)"),'Voice completion reveals the return door');
 assert(shared.includes("document.body.classList.contains('read')"),'Reading completion is also supported');
+assert(shared.includes("const signature=document.querySelector('#readerText + .signature')"),'The reading return waits for the last line and signature');
+assert(shared.includes("{rootMargin:'0px 0px -10% 0px',threshold:.25}"),'Ceniciento completion follows the visible ending on mobile');
+assert(shared.includes("document.body.classList.contains('revealing')"),'The ending cannot complete during the entry reveal');
 console.log('PASS: canonical text, withheld signature, final voice cue, reading completion and volver route');

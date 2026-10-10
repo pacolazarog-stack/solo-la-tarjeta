@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -348,14 +348,14 @@
     body.ceniciento-open:not(.sonrisa-open) > :not(iframe):not(audio):not(script){visibility:hidden}
     .portrait-question{
       position:absolute;left:30%;top:44%;transform:translate(-50%,-50%);
-      display:grid;place-items:center;width:64px;height:64px;border-radius:50%;
+      display:grid;place-items:center;width:72px;height:72px;border-radius:50%;
       padding:0;border:0;background:transparent;touch-action:manipulation;z-index:1;
       color:#342719;font:400 2rem/1 Georgia,"Times New Roman",serif;text-decoration:none;cursor:pointer;
       opacity:0;visibility:hidden;pointer-events:none;
       transition:opacity 3s ease 25s,visibility 0s linear 25s;
     }
     .question-beat{
-      display:grid;place-items:center;width:48px;height:48px;border-radius:50%;
+      display:grid;place-items:center;width:52px;height:52px;border-radius:50%;
       border:1px solid rgba(255,246,225,.65);background:rgba(238,241,233,.92);
       box-shadow:0 5px 22px rgba(0,0,0,.24);pointer-events:none;
       animation:questionHeartbeat var(--pulse-duration) linear infinite;will-change:transform;
@@ -381,6 +381,11 @@
       body.voice-open main{width:calc(100% - 34px);margin:0 auto;padding-top:20svh}
       body.voice-open .portrait-image-area{width:100vw}
     }
+    @media(max-width:700px){
+      .portrait-question{width:80px;height:80px;transition:opacity 2.5s ease 10s,visibility 0s linear 10s}
+      .question-beat{width:56px;height:56px}
+    }
+    @media(hover:none) and (pointer:coarse){.question-beat{animation:none}}
 
     /* PRELUDIO ANA -> KLAUDYA */
     .name-prelude{
@@ -835,7 +840,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
     <div class="portrait-image-area">
       <div class="portrait-image-wrap">
         <img id="anaPortrait" src="ana-klaudya-fotografia.jpg" alt="Ana Klaudya" decoding="async">
-        <button id="cenicientoLink" class="portrait-question" type="button" aria-label="Descubrir Ceniciento"><span class="question-beat" aria-hidden="true">?</span></button>
+        <button id="cenicientoLink" class="portrait-question" type="button" aria-label="Interrogante"><span class="question-beat" aria-hidden="true">?</span></button>
       </div>
     </div>
   </div>
@@ -1661,6 +1666,6 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       syncPoemRoute();
     })();
   </script>
-<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-8"></script>
+<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-9"></script>
 </body>
 </html>
