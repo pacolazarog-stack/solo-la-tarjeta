@@ -178,11 +178,11 @@ assert.deepEqual(phraseInventory,['Hay historias que empiezan antes.','El origen
 assert(!/ghost\(['\"]/.test(universe),'All ghost copy comes from the four-item phrase inventory');
 assert(!/function (?:makeSymbolic|wrapToken|activateSoloSymbols)/.test(universe),'Narrative echoes remain outside navigation controls');
 assert(/function showSoloEndNav\(\)[\s\S]*?ana\.href=rootPath\+'elegia-breve\/'[\s\S]*?nav\.append\(ana\)/.test(universe),'The Solo ending offers only the return to Ana');
-assert(/function showSoloEndNav\(\)[\s\S]*?if\(state\.cenicientoUnlocked\)\{[\s\S]*?ceniciento\.href/.test(universe),'Solo opens Ceniciento only after a question-mark reading unlocks it');
-assert(/if\(state\.cenicientoUnlocked\)\{[\s\S]*?ceniciento\.href=rootPath\+'ceniciento\//.test(universe),'Solo gains a Ceniciento button only after its qualified unlock flag is set');
-assert(/function addUnlockedAnaDoors\(\)[\s\S]*?if\(!state\.cenicientoUnlocked\)return[\s\S]*?textContent='SOLO LA TARJETA'[\s\S]*?textContent='CENICIENTO'/.test(universe),'Ana gains both reciprocal work buttons only after a qualified Ceniciento reading');
-assert(universe.includes('if(state.cenicientoUnlocked)showSoloEndNav();'),'Unlocked cross-navigation remains available on later Solo visits');
-assert(universe.includes('if(state.cenicientoUnlocked&&!(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete))requestAnimationFrame(()=>requestAnimationFrame(revealNav))'),'Ceniciento cross-navigation remains available on later visits except while its one-time convergence room is pending');
+assert(/function showSoloEndNav\(\)[\s\S]*?if\(state\.cenicientoComplete\)\{[\s\S]*?ceniciento\.href/.test(universe),'Solo opens Ceniciento only after its first complete reading');
+assert(/if\(state\.cenicientoComplete\)\{[\s\S]*?ceniciento\.href=rootPath\+'ceniciento\//.test(universe),'Solo gains direct cross-navigation only after Ceniciento is complete');
+assert(/function addUnlockedAnaDoors\(\)[\s\S]*?if\(!state\.cenicientoComplete\)return[\s\S]*?textContent='SOLO LA TARJETA'[\s\S]*?textContent='CENICIENTO'/.test(universe),'Ana gains reciprocal work buttons only after Ceniciento is complete');
+assert(universe.includes('if(state.cenicientoComplete)showSoloEndNav();'),'Completed cross-navigation remains available on later Solo visits');
+assert(universe.includes('if(state.cenicientoComplete&&!(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete))requestAnimationFrame(()=>requestAnimationFrame(revealNav))'),'Ceniciento cross-navigation appears after its completed reading, except while Mirror is pending');
 assert(universe.includes("new URLSearchParams(location.search).get('via')==='question'")&&universe.includes("unlock?{cenicientoUnlocked:true}:{}"),'Only a completed Ceniciento visit carrying the interrogante origin can create the first unlock');
 assert(/const openCeniciento=\(\)=>openPoem\('ceniciento',false,false,false,'question'\)/.test(fs.readFileSync(path.join(__dirname,'index.html'),'utf8')),'The ANA question-mark route explicitly marks its Ceniciento entry');
 assert(universe.includes('min-height:52px'),'End buttons have thumb-sized mobile targets');
