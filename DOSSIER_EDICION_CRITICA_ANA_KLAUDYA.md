@@ -5,8 +5,8 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Paquete archivístico vigente:** versión 26; conserva el código publicado en `main` mediante el commit `eda9a2183f9b9548f5d4b159d1dbf689202b6e59`  
-**Módulo compartido:** `narrative-universe.js`, versión `20261010-14`  
+**Paquete archivístico vigente:** versión 27; conserva el código publicado en `main` mediante el commit `e9877adc27ee90d7b8595f4616ea7c79f8ecbc18`  
+**Módulo compartido:** `narrative-universe.js`, versión `20261010-15`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
 > Este documento reúne información contextual, bibliográfica y técnica para prensa, investigación, programación de festivales y preservación. No debe incorporarse a las páginas de las obras ni presentarse como parte de su recorrido narrativo.
@@ -99,7 +99,7 @@ Ejemplo con la fecha canónica registrada para *ANA KLAUDYA*:
 
 ### Cita del código fuente archivado
 
-> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 26, navegación recíproca tras completar CENICIENTO. Código del commit `pacolazarog-stack/solo-la-tarjeta`, commit de código `eda9a2183f9b9548f5d4b159d1dbf689202b6e59`; módulo compartido `20261010-14`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
+> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 27, auditoría integral y corrección del cierre de CENICIENTO. Código del commit `pacolazarog-stack/solo-la-tarjeta`, commit de código `e9877adc27ee90d7b8595f4616ea7c79f8ecbc18`; módulo compartido `20261010-15`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
 
 Para citas académicas, conviene especificar la pieza, el modo de acceso (lectura o escucha), la URL y la fecha de consulta. Si se cita un verso, añadir el nombre de la pieza y el identificador o encabezado de sección disponible en la edición consultada. No asignar números de verso que la obra no muestre.
 
@@ -297,3 +297,61 @@ El primer final de lectura o escucha de *CENICIENTO* activa un estado persistent
 Después del desbloqueo, las lecturas sucesivas ofrecen navegación entre las tres obras: el índice de *ANA KLAUDYA* muestra accesos a *SOLO LA TARJETA* y *CENICIENTO*; el pie de *SOLO LA TARJETA* muestra accesos a *ANA KLAUDYA* y *CENICIENTO*; y *CENICIENTO* muestra accesos a las otras dos. En *SOLO LA TARJETA*, los botones se sitúan en el flujo tras el contenido para dejar libre la imagen de Cotán y la tarjeta. En *ANA KLAUDYA*, los accesos se ubican dentro del índice. El estado permanece en el dispositivo y no se transmite.
 
 El módulo compartido se actualiza a `20261010-14`. Las siete pruebas CJS pasan. Código publicado en `main` mediante `eda9a2183f9b9548f5d4b159d1dbf689202b6e59`; archivo fuente integral: [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (26).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(26).md).
+
+
+## 25. Criterio rector y auditoría integral · versión 27
+
+> **Cada descubrimiento no abre una obra nueva; cambia el significado de una obra ya visitada.**
+
+Éste es el criterio rector de la trilogía y de la revisión de su implementación. Una puerta se justifica cuando habilita una relectura, no por el mero hecho de añadir una ruta. Las tres transiciones base son tarjeta → *SOLO LA TARJETA*, interrogante → *CENICIENTO* y «volver» → *ANA KLAUDYA*. Antes de completar *CENICIENTO*, el interrogante de *ANA KLAUDYA* es la única vía de acceso a esa obra. Al completar su lectura o escucha por primera vez, el sistema guarda el desbloqueo y habilita navegación recíproca en las visitas posteriores. Los motivos restantes —ojos de estatua, Torre Eiffel, reloj, pan, cebolla y tarjeta anulada— permanecen como ecos sin destino de navegación.
+
+### Resultado editorial
+
+El criterio se mantiene coherente: *SOLO LA TARJETA* convierte la tarjeta en origen; *CENICIENTO* desplaza la mirada hacia quien observa a Paco; «volver» devuelve al lector a *ANA KLAUDYA* con una lectura transformada. La interfaz no explica esa relación. Se conservan exactamente cuatro frases fantasma: «Hay historias que empiezan antes», «El origen suele parecer insignificante», «Falta una versión de la historia» y «Nadie regresa al mismo lugar». No se añadieron nuevas obras, símbolos, rutas ni frases.
+
+### Hallazgos y correcciones de implementación
+
+La auditoría detectó que la primera finalización de *CENICIENTO* almacenaba el estado de finalización y luego lo consultaba como si ya existiera antes de esa lectura. Esto impedía distinguir la primera experiencia de las visitas posteriores y anulaba la pausa prevista antes de presentar las salidas. Se corrigió capturando el estado previo: la primera vez, los controles aparecen 6,2 segundos después del cierre; en lecturas posteriores, aparecen al entrar en la pieza.
+
+La salida de *CENICIENTO* hacia *SOLO LA TARJETA* ya no pierde el estado de retorno. Ambos destinos desde *CENICIENTO* registran que la lectura fue completada y que el lector vuelve al sistema; al regresar a *ANA KLAUDYA*, queda disponible la frase «Nadie regresa al mismo lugar». La entrada a *CENICIENTO* sigue dependiendo del interrogante antes de su primer cierre.
+
+Los botones del cierre de *CENICIENTO* pasan al flujo normal bajo el texto en el modo de lectura. En el modo de voz, el verso final y el indicador reciben espacio libre cuando aparecen los controles. Esta corrección atiende la superposición móvil sin cubrir la tarjeta ni el fondo de Cotán en *SOLO LA TARJETA*. Las rutas desbloqueadas quedan en el índice de *ANA KLAUDYA*, al final de *SOLO LA TARJETA* y en el cierre de *CENICIENTO*, fuera de la superficie del texto o imagen principal.
+
+### Verificación y límites
+
+Se ejecutaron las siete comprobaciones automatizadas del paquete: navegación móvil; recorrido y estados entre obras; cierre de *SOLO LA TARJETA*; estructura de la pieza; secuencia del interludio; apertura del epílogo; y lectura, firma y salidas de *CENICIENTO*. Las siete pasan. Las pruebas verifican comportamiento del código, condiciones de ruta, tamaño táctil y reglas CSS relevantes. No equivalen a una prueba visual en todos los modelos de teléfono; por ello, la verificación física de encuadres y fondos sigue siendo una comprobación editorial recomendada.
+
+La revisión confirma HTML en español, controles con nombres accesibles, navegación táctil sin dependencia de hover, prefers-reduced-motion, observación de finales de lectura con IntersectionObserver y alternativas de scroll, y estado persistente local. CENICIENTO usa aria-live="polite" para su superficie de lectura. El estado guardado en localStorage no se sincroniza entre dispositivos.
+
+**Pendiente archivístico:** las páginas revisadas no incluyen JSON-LD ni metadatos Dublin Core. La identificación de autoría, fecha de cierre, número de edición y linaje de versión se documenta en este dossier y en el archivo de código, pero aún no se publica como metadato estructurado legible por máquinas en las páginas. La recomendación es añadirlo en el aparato head de cada obra sin mostrar explicaciones de la arquitectura al lector.
+
+**Publicación:** código y pruebas en main, commit e9877adc27ee90d7b8595f4616ea7c79f8ecbc18; paquete integral: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (27).md](https://github.com/pacolazarog-stack/solo-la-tarjeta/blob/main/TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(27).md).
+
+
+## 25. Criterio rector y auditoría integral · versión 27
+
+> **Cada descubrimiento no abre una obra nueva; cambia el significado de una obra ya visitada.**
+
+Éste es el criterio rector de la trilogía y de la revisión de su implementación. Una puerta se justifica cuando habilita una relectura, no por el mero hecho de añadir una ruta. Las tres transiciones base son tarjeta → *SOLO LA TARJETA*, interrogante → *CENICIENTO* y «volver» → *ANA KLAUDYA*. Antes de completar *CENICIENTO*, el interrogante de *ANA KLAUDYA* es la única vía de acceso a esa obra. Al completar su lectura o escucha por primera vez, el sistema guarda el desbloqueo y habilita navegación recíproca en las visitas posteriores. Los motivos restantes —ojos de estatua, Torre Eiffel, reloj, pan, cebolla y tarjeta anulada— permanecen como ecos sin destino de navegación.
+
+### Resultado editorial
+
+El criterio se mantiene coherente: *SOLO LA TARJETA* convierte la tarjeta en origen; *CENICIENTO* desplaza la mirada hacia quien observa a Paco; «volver» devuelve al lector a *ANA KLAUDYA* con una lectura transformada. La interfaz no explica esa relación. Se conservan exactamente cuatro frases fantasma: «Hay historias que empiezan antes», «El origen suele parecer insignificante», «Falta una versión de la historia» y «Nadie regresa al mismo lugar». No se añadieron nuevas obras, símbolos, rutas ni frases.
+
+### Hallazgos y correcciones de implementación
+
+La auditoría detectó que la primera finalización de *CENICIENTO* almacenaba el estado de finalización y luego lo consultaba como si ya existiera antes de esa lectura. Esto impedía distinguir la primera experiencia de las visitas posteriores y anulaba la pausa prevista antes de presentar las salidas. Se corrigió capturando el estado previo: la primera vez, los controles aparecen 6,2 segundos después del cierre; en lecturas posteriores, aparecen al entrar en la pieza.
+
+La salida de *CENICIENTO* hacia *SOLO LA TARJETA* ya no pierde el estado de retorno. Ambos destinos desde *CENICIENTO* registran que la lectura fue completada y que el lector vuelve al sistema; al regresar a *ANA KLAUDYA*, queda disponible la frase «Nadie regresa al mismo lugar». La entrada a *CENICIENTO* sigue dependiendo del interrogante antes de su primer cierre.
+
+Los botones del cierre de *CENICIENTO* pasan al flujo normal bajo el texto en el modo de lectura. En el modo de voz, el verso final y el indicador reciben espacio libre cuando aparecen los controles. Esta corrección atiende la superposición móvil sin cubrir la tarjeta ni el fondo de Cotán en *SOLO LA TARJETA*. Las rutas desbloqueadas quedan en el índice de *ANA KLAUDYA*, al final de *SOLO LA TARJETA* y en el cierre de *CENICIENTO*, fuera de la superficie del texto o imagen principal.
+
+### Verificación y límites
+
+Se ejecutaron las siete comprobaciones automatizadas del paquete: navegación móvil; recorrido y estados entre obras; cierre de *SOLO LA TARJETA*; estructura de la pieza; secuencia del interludio; apertura del epílogo; y lectura, firma y salidas de *CENICIENTO*. Las siete pasan. Las pruebas verifican comportamiento del código, condiciones de ruta, tamaño táctil y reglas CSS relevantes. No equivalen a una prueba visual en todos los modelos de teléfono; por ello, la verificación física de encuadres y fondos sigue siendo una comprobación editorial recomendada.
+
+La revisión confirma HTML en español, controles con nombres accesibles, navegación táctil sin dependencia de hover, prefers-reduced-motion, observación de finales de lectura con IntersectionObserver y alternativas de scroll, y estado persistente local. CENICIENTO usa aria-live="polite" para su superficie de lectura. El estado guardado en localStorage no se sincroniza entre dispositivos.
+
+**Pendiente archivístico:** las páginas revisadas no incluyen JSON-LD ni metadatos Dublin Core. La identificación de autoría, fecha de cierre, número de edición y linaje de versión se documenta en este dossier y en el archivo de código, pero aún no se publica como metadato estructurado legible por máquinas en las páginas. La recomendación es añadirlo en el aparato head de cada obra sin mostrar explicaciones de la arquitectura al lector.
+
+**Publicación:** código y pruebas en main, commit e9877adc27ee90d7b8595f4616ea7c79f8ecbc18; paquete integral: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (27).md](https://github.com/pacolazarog-stack/solo-la-tarjeta/blob/main/TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(27).md).
