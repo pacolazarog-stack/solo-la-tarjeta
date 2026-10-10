@@ -1,6 +1,6 @@
 # SOLO LA TARJETA
 
-Proyecto multimedia de **flag**.
+Proyecto multimedia.
 
 ## Obras
 
