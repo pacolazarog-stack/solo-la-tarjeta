@@ -2,24 +2,23 @@ const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('n
 const page=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
 const mirror=fs.readFileSync(path.join(__dirname,'el-espejo.js'),'utf8');
 const shared=fs.readFileSync(path.join(__dirname,'../narrative-universe.js'),'utf8');
-const literals=mirror.slice(mirror.indexOf('const scenes=['),mirror.indexOf('\n];'));
-assert.equal((literals.match(/^\`/gm)||[]).length,32,'EL ESPEJO contains exactly 32 scenes');
+const ana=fs.readFileSync(path.join(__dirname,'../elegia-breve/index.html'),'utf8');
+assert.equal((mirror.match(/^`/gm)||[]).length,32,'EL ESPEJO contains exactly 32 scenes');
 assert(mirror.includes('new Set([14,15,17,26,30])'),'Five convergence scenes pause for reader action');
 assert(mirror.includes("next.textContent='seguir'")&&mirror.includes('if(!locked||lockedScene!==scene)return'),'The reader controls each key-scene pause');
 assert(!/setTimeout|setInterval/.test(mirror.slice(0,mirror.indexOf('const endSentinel'))),'Scene pacing does not depend on timers');
 assert(mirror.includes('if(event.deltaY<0){releasePause();return}')&&mirror.includes("['ArrowUp','PageUp','Home'].includes(event.key)"),'Readers can reread by moving back');
 assert(page.includes('<main id="mirror" aria-label="EL ESPEJO" hidden></main>'),'The convergence remains hidden until its narrative condition');
-assert(page.includes('src="el-espejo.js?v=20261010-21"'),'The mirror script uses its current cache version');
-assert(shared.includes('state.cenicientoUnlocked&&state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete'),'The convergence only begins after the three works are complete');
-assert(shared.includes("new CustomEvent('oras:mirror-start')"),'EL ESPEJO remains a reading layer, without a separate route');
-assert(shared.includes("save({mirrorReadComplete:true})"),'The convergence is recorded only after it finishes');
-assert(shared.includes("finalScene.appendChild(nav)")&&shared.includes('nav.hidden=false')&&shared.includes('revealNav()'),'The end of EL ESPEJO reveals its two direct exits in the final scene');
-assert(shared.includes('body.mirror .ou-ceniciento-endnav')&&shared.includes('.ou-card-exit'),'The exits are visible inside the convergence and Solo uses a card button');
-assert(!shared.includes("new CustomEvent('oras:mirror-return')")&&!mirror.includes('function beginReturn')&&!mirror.includes("type:'mirror-return'"),'The ending no longer navigates automatically or uses a status flag');
-assert(shared.includes("ret.textContent='ANA KLAUDYA'")&&shared.includes("solo.textContent='SOLO LA TARJETA'"),'The only final destinations are ANA KLAUDYA and SOLO LA TARJETA');
-assert(shared.includes('if(state.returnedFromCeniciento)ghost(GHOSTS.return'),'The return phrase only appears after the reader chooses Ana directly');
-assert(!fs.readFileSync(path.join(__dirname,'../elegia-breve/index.html'),'utf8').includes("data.type==='mirror-return'"),'The Ana host no longer contains automatic-return handling');
+assert(page.includes('data-oras-mirror="true" src="el-espejo.js?v=20261010-22"'),'The mirror script is registered for shared startup');
+assert(shared.includes('state.anaComplete&&state.soloComplete&&state.cenicientoComplete&&state.cenicientoUnlocked&&!state.mirrorReadComplete'),'The convergence waits for all three complete first readings');
+assert(shared.includes("completePiece('anaComplete')")&&shared.includes("completePiece('cenicientoComplete'")&&shared.includes('maybeStartMirror();'),'Every piece completion checks for the convergence, regardless of reading order');
+assert(shared.includes("save({mirrorReadComplete:true,returnedFromCeniciento:true})"),'Finishing EL ESPEJO records completion and return');
+assert(shared.includes("topGo(rootPath+'elegia-breve/?v='+VERSION)")&&shared.includes("type:'mirror-return'"),'EL ESPEJO returns automatically to the beginning of ANA KLAUDYA');
+assert(ana.includes("data.type==='mirror-return'){returnToAna('home');return;}"),'The Ana host closes embedded Mirror and restores its opening');
+assert(shared.includes("box.className='ou-reading-checklist'")&&shared.includes('data-piece="solo"><span>SOLO LA TARJETA</span>')&&shared.includes("row.setAttribute('aria-label'"),'A single compact accessible checklist tracks the three pieces');
+assert(!page.includes('id="continue"')&&!page.includes('cont.onclick'),'Read and Voice have no second start button');
+assert(page.includes("voice.play().then(loop)"),'Voice playback starts directly from the mode selection');
 assert.equal((shared.match(/Hay historias que empiezan antes\.|El origen suele parecer insignificante\.|Falta una versión de la historia\.|Nadie regresa al mismo lugar\./g)||[]).length,4,'The four ghost phrases remain unchanged');
 const pages=['../index.html','../elegia-breve/index.html','../ojos/index.html','../sonrisa/index.html','../estrella/index.html','../epilogo/index.html','index.html'];
-for(const f of pages){const s=fs.readFileSync(path.join(__dirname,f),'utf8');assert(s.includes('narrative-universe.js?v=20261010-21'),`${f} points to shared module version 21`)}
-console.log('PASS: 32 scenes, reader-controlled pauses, question-mark gating, two final exits, and four ghost phrases');
+for(const f of pages){const s=fs.readFileSync(path.join(__dirname,f),'utf8');assert(s.includes('narrative-universe.js?v=20261010-22'),`${f} points to shared module version 22`)}
+console.log('PASS: 32-scene convergence, completion gate, automatic return, checklist, and one-tap reading start');
