@@ -429,3 +429,16 @@ Tras la primera lectura válida quedan habilitadas las salidas recíprocas entre
 **Verificación:** pasan las ocho comprobaciones automatizadas, incluidas las nuevas aserciones de procedencia de la ruta y de ausencia del botón previo al desbloqueo. Las referencias del módulo compartido se actualizaron a `20261010-20`.
 
 **Publicación de código:** `main`, commit `a8cb9ec4edc196326d3743a0da31aadfc62254ef`. El código español completo queda archivado en la versión 32.
+
+
+## 31. Continuidad de la secuencia de envejecimiento fotográfico · versión 33
+
+> **Cada descubrimiento no abre una obra nueva; cambia el significado de una obra ya visitada.**
+
+La lectura fotográfica de CENICIENTO conserva sus diez imágenes, pero el avance ya no reparte por igual el recorrido entre todos los fotogramas. La progresión dedica más espacio de lectura a los cambios de edad más visibles y menos a las variaciones leves. En el modo lectura, la opacidad de los dos fotogramas se calcula directamente desde el scroll, sin una transición CSS adicional que se retrase y produzca estelas o saltos. Las imágenes se precargan y decodifican antes de usarse; si la lectura empieza antes de que acabe la carga, al terminar ésta la imagen se sincroniza con la posición actual del texto, sin reiniciarse al primer retrato.
+
+El modo de voz mantiene la sincronización temporal existente. No se han cambiado las fotografías, el texto, la navegación ni EL ESPEJO.
+
+**Verificación:** pasan las ocho pruebas automatizadas. La prueba de CENICIENTO ahora verifica la distribución no uniforme de las edades, la eliminación de las transiciones de opacidad en scroll y la sincronización de imágenes ya decodificadas. La secuencia se inspeccionó visualmente mediante una hoja de contacto de los diez fotogramas; aún conviene comprobar el resultado de desplazamiento en un teléfono físico.
+
+**Publicación de código:** `main`, commit `968609929af08757b540b9750000f922e4ec3dbd`. Archivo integral actualizado: versión 33.
