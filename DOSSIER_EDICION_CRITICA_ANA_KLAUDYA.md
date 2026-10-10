@@ -15,7 +15,7 @@
 
 El conjunto comprende tres obras digitales en español: *ANA KLAUDYA*, *SOLO LA TARJETA* y *CENICIENTO*. Cada pieza puede recorrerse como una obra autónoma. En conjunto admiten una lectura retrospectiva: al descubrir otras piezas, ciertos elementos de las anteriores adquieren nuevos sentidos.
 
-La arquitectura de navegación de la edición descrita aquí contiene tres puertas entre obras:
+La edición descrita aquí conserva tres señales narrativas entre obras: tarjeta, interrogante y «volver». Al completar *SOLO LA TARJETA*, aparecen además dos botones convencionales de salida —a *ANA KLAUDYA* y *CENICIENTO*— para que el visitante pueda continuar sin buscar una puerta nueva. Los motivos secundarios no abren destinos.
 
 | Señal en la obra | Destino |
 | --- | --- |
