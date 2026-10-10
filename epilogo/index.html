@@ -38,11 +38,10 @@ button.primary{background:var(--rose);color:#24151d;border-color:var(--rose)}
 .line{display:block;transition:opacity .8s ease,filter .8s ease}
 .line.hidden-line{opacity:0;filter:blur(5px)}
 .accent{color:var(--rose)}.ending{font-style:italic;color:var(--rose)}
-.signature{font:12px/1.5 system-ui,sans-serif;letter-spacing:.25em;color:var(--gold);margin-top:45px}
 footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:10px/1.6 system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase}
 @media(max-width:760px){header{padding:22px 7vw}main{display:block;padding:15px 7vw 40px}.intro{position:static;padding-top:10px}h1{font-size:64px}.subtitle{max-width:none}.controls{margin-top:24px}.poem{padding:22px 0 0;border-left:none;border-top:1px solid #c8ae8338;margin-top:30px;font-size:clamp(18px,4.8vw,25px)}.stanza{margin-bottom:28px}footer{padding:0 7vw 25px}}
 @media(prefers-reduced-motion:reduce){.line{transition:none}.line.hidden-line{filter:none}}
-@media print{body{background:white;color:black}body:after,body:before,.detail-background,header,.controls,.status,footer{display:none}main{display:block;padding:0}.intro{position:static;padding:0}h1{font-size:32px}h1 em,.kicker,.subtitle,.accent,.ending,.signature{color:black}.rule{display:none}.poem{border:0;padding:0;font-size:16px}.line.hidden-line{opacity:1;filter:none}}
+@media print{body{background:white;color:black}body:after,body:before,.detail-background,header,.controls,.status,footer{display:none}main{display:block;padding:0}.intro{position:static;padding:0}h1{font-size:32px}h1 em,.kicker,.subtitle,.accent,.ending,.rule{display:none}.poem{border:0;padding:0;font-size:16px}.line.hidden-line{opacity:1;filter:none}}
 .music-controls{display:grid;gap:13px;margin-top:24px;color:var(--muted);font:12px/1.5 system-ui,sans-serif;max-width:260px}.music-controls button{justify-self:start}.music-controls button[hidden]{display:none}.music-controls input{accent-color:var(--rose)}.music-controls label{display:flex;gap:10px;align-items:center}.music-controls input[type=range]{width:100%;min-height:28px}.music-controls output{margin-left:auto}@media print{.music-controls{display:none}}
 
 @media(prefers-reduced-motion:reduce){ .detail-background,.detail-background svg{animation:none!important}.detail-background svg{transition:none;filter:none}}
@@ -62,7 +61,7 @@ h1{font-size:clamp(48px,6.5vw,82px)}
 /* El color se templa como una brasa: sin cambiar la forma de las letras. */
 @keyframes simmerInk{0%,100%{color:#ebc68d}35%{color:#efb591}70%{color:#ddaaa0}}
 @keyframes simmerColors{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-header,.kicker,.status,.signature,footer,.music-controls{animation:simmerInk 48s ease-in-out infinite}
+header,.kicker,.status,,footer,.music-controls{animation:simmerInk 48s ease-in-out infinite}
 header a{color:inherit}
 h1{color:#ffd88a}h1 em{color:inherit}
 .phrase,.opening-verse{color:#ffd4a2}
@@ -82,9 +81,9 @@ body.opening-preview .opening-verse{opacity:0}
  }
  h1{background-image:linear-gradient(120deg,#ffe0a0,#ffbd69 30%,#f6977f 60%,#ffd38a);animation-duration:48s}
 }
-@media(prefers-reduced-motion:reduce){header,.kicker,.status,.signature,footer,.music-controls,h1,.phrase{animation:none}}
-@media print{header,.kicker,.status,.signature,footer,.music-controls,h1,h1 em,.phrase{animation:none;background:none;color:#000;-webkit-text-fill-color:currentColor}}
-@media(forced-colors:active){header,.kicker,.status,.signature,footer,.music-controls,h1,h1 em,.phrase{animation:none;background:none;color:CanvasText;-webkit-text-fill-color:currentColor}}
+@media(prefers-reduced-motion:reduce){header,.kicker,.status,,footer,.music-controls,h1,.phrase{animation:none}}
+@media print{header,.kicker,.status,,footer,.music-controls,h1,h1 em,.phrase{animation:none;background:none;color:#000;-webkit-text-fill-color:currentColor}}
+@media(forced-colors:active){header,.kicker,.status,,footer,.music-controls,h1,h1 em,.phrase{animation:none;background:none;color:CanvasText;-webkit-text-fill-color:currentColor}}
 #backAna{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;touch-action:manipulation}
 @media(max-width:760px){header{position:sticky;top:0;z-index:50;align-items:center;padding:8px 4vw;background:rgba(12,12,18,.88);backdrop-filter:blur(8px)}}
 
@@ -95,8 +94,8 @@ header{padding:18px 5vw;font-size:10px;opacity:.7}
 .poem{border-left:0;padding-left:0}
 main{padding-bottom:140px;gap:6vw}
 .controls button{box-shadow:none;min-height:44px}
-@media(max-width:760px){main{padding:15px 5vw 130px}.intro{padding-top:0}.poem{border-top:0;margin-top:36px;line-height:1.85}.stanza{margin-bottom:36px}.music-controls{max-width:none}.signature{margin-bottom:30px}.phrase{line-height:1.85}}
-@media(prefers-reduced-motion:reduce){header,.kicker,.status,.signature,footer,.music-controls,h1,.phrase{animation:none!important}}
+@media(max-width:760px){main{padding:15px 5vw 130px}.intro{padding-top:0}.poem{border-top:0;margin-top:36px;line-height:1.85}.stanza{margin-bottom:36px}.music-controls{max-width:none}.phrase{line-height:1.85}}
+@media(prefers-reduced-motion:reduce){header,.kicker,.status,,footer,.music-controls,h1,.phrase{animation:none!important}}
 
 /* The same letterforms move from charcoal on the photograph to a lasting flame. */
 :root{--fire-low:#f16e28;--fire-mid:#ffc65b;--fire-high:#fff2b6;--fire-edge:rgba(5,28,33,.9);--fire-glow:rgba(255,119,31,.64);--fire-plume:rgba(255,76,15,.4);--coal-guard:rgba(255,245,220,0)}
@@ -174,9 +173,8 @@ body.cotan-on::before{opacity:0!important}
 
 .flower-coda{min-height:100svh;display:grid;place-items:center;margin:0;padding:100px 8vw;background:#fff;color:#26332d;color-scheme:light;text-shadow:none}
 .flower-coda p{margin:0;font:400 clamp(26px,4vw,40px)/1.5 Georgia,'Times New Roman',serif;letter-spacing:0}
-.closing-signature{margin:0;padding:30px 8vw 100px;background:#fff;color:#667068;text-align:center;animation:none!important;-webkit-text-fill-color:currentColor}
-.flower-coda[hidden],.closing-signature[hidden]{display:none}
-@media print{.flower-coda{break-before:page;break-after:page;min-height:90vh}.closing-signature{padding:0}}
+.flower-coda[hidden]{display:none}
+@media print{.flower-coda{break-before:page;break-after:page;min-height:90vh}}
 
 /* Portada móvil compacta: el poema gana pantalla sin perder sus controles. */
 @media(max-width:760px){
@@ -196,8 +194,7 @@ body.cotan-on::before{opacity:0!important}
   .music-controls input[type=range]{width:100%;min-height:24px}
   .poem{margin-top:14px;padding-top:0;font-size:clamp(18px,4.8vw,23px);line-height:1.68}
   .stanza{margin-bottom:24px}
-  .signature{margin-top:26px}
-}
+  }
 @media(max-height:700px) and (max-width:760px){
   main{padding-top:5px}
   h1{font-size:clamp(34px,8.8vw,48px)}
@@ -270,8 +267,6 @@ Yo te doy la mano.</p>
 <section class="flower-coda" id="flowerCoda" aria-label="Coda visual" hidden>
 <p><em>Flores.</em></p>
 </section>
-<div class="signature closing-signature" id="signature" hidden>flag</div>
-
 <script>
 const detailBackground=document.querySelector('.detail-background');
 requestAnimationFrame(()=>requestAnimationFrame(()=>detailBackground.classList.add('is-clear')));
@@ -296,7 +291,7 @@ if(inheritedMusic)sendMusic('ready');
 const phrases=[...document.querySelectorAll('.phrase')];
 const openingMode=new URLSearchParams(location.search).get('opening');
 const continuingOpening=openingMode==='seen',openingPreview=openingMode==='preview';
-const poem=document.getElementById('poem'),signature=document.getElementById('signature'),flowerCoda=document.getElementById('flowerCoda');
+const poem=document.getElementById('poem'),flowerCoda=document.getElementById('flowerCoda');
 const paced=document.getElementById('paced'),full=document.getElementById('full'),status=document.getElementById('status');
 const openingVerses=[document.getElementById('openingFirst'),document.getElementById('openingSecond')],imperativeVerse=document.getElementById('openingImperative');
 const reducedDisplay=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -360,7 +355,7 @@ function hidePhrase(phrase){phrase.classList.add('hidden-phrase');phrase.setAttr
 function showPhrase(phrase){phrase.classList.remove('hidden-phrase');phrase.removeAttribute('aria-hidden')}
 function reveal(){
  if(!ready || mode!=='playing')return;
- if(index===phrases.length){releaseClosing();mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';flowerCoda.hidden=false;signature.hidden=false;flowerCoda.scrollIntoView({block:'start',behavior:'instant'});return}
+ if(index===phrases.length){releaseClosing();mode='done';paced.textContent='Volver a leer';status.textContent='Silencio.';flowerCoda.hidden=false;flowerCoda.scrollIntoView({block:'start',behavior:'instant'});return}
  const phrase=phrases[index++];if(phrase===closingStart)alignClosing();showPhrase(phrase);
  if(phrase===phrases[0]){openingLocked=true;typeDisplay(openingVerses)}
  else if(phrase===phrases[1]){document.body.classList.add('cotan-on');typeDisplay([imperativeVerse])}
@@ -369,7 +364,7 @@ function reveal(){
  timer=setTimeout(reveal,Number(phrase.dataset.wait));
 }
 function beginReading(fromInterlude=false){
- clear();releaseClosing();const keepOpening=fromInterlude||openingLocked;index=keepOpening?1:0;flowerCoda.hidden=true;signature.hidden=true;phrases.forEach((phrase,i)=>{if(i!==0||!keepOpening)hidePhrase(phrase)});mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';if(keepOpening)showPhrase(phrases[0]);reveal();
+ clear();releaseClosing();const keepOpening=fromInterlude||openingLocked;index=keepOpening?1:0;flowerCoda.hidden=true;phrases.forEach((phrase,i)=>{if(i!==0||!keepOpening)hidePhrase(phrase)});mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada frase.';if(keepOpening)showPhrase(phrases[0]);reveal();
 }
 paced.addEventListener('click',()=>{
  if(!ready)return;
@@ -379,7 +374,7 @@ paced.addEventListener('click',()=>{
 });
 full.addEventListener('click',()=>{
  if(!ready)return;
- clear();releaseClosing();finishDisplay();openingVerses.forEach(verse=>displayProgress(verse,1));displayProgress(imperativeVerse,1);document.body.classList.add('cotan-on');mode='full';phrases.forEach(showPhrase);flowerCoda.hidden=false;signature.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';revealIntro(1);updateReadingMask();
+ clear();releaseClosing();finishDisplay();openingVerses.forEach(verse=>displayProgress(verse,1));displayProgress(imperativeVerse,1);document.body.classList.add('cotan-on');mode='full';phrases.forEach(showPhrase);flowerCoda.hidden=false;paced.textContent='Leer con pausas';status.textContent='A tu ritmo.';revealIntro(1);updateReadingMask();
 });
 ready=true;poem.hidden=false;paced.disabled=false;full.disabled=false;
 updateReadingMask();
@@ -422,6 +417,6 @@ if(openingPreview){
  window.parent.postMessage({channel:'ana-opening-v1',type:'ready'},location.origin);
 }else beginReading(continuingOpening);
 </script>
-<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-22"></script>
+<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-23"></script>
 </body>
 </html>
