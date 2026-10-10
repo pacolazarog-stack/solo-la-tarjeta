@@ -5,8 +5,8 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Paquete archivístico vigente:** versión 28; conserva el código publicado en `main` mediante el commit `7387caaa463fc07febac6c1028ac8e4049f23e96`  
-**Módulo compartido:** `narrative-universe.js`, versión `20261010-17`  
+**Paquete archivístico vigente:** versión 35; código y pruebas publicados en `main`, commit `a45b14f4aadccf14d85a470d71401cac0739ca3d`  
+**Módulo compartido:** `narrative-universe.js`, versión `20261010-22`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
 > Este documento reúne información contextual, bibliográfica y técnica para prensa, investigación, programación de festivales y preservación. No debe incorporarse a las páginas de las obras ni presentarse como parte de su recorrido narrativo.
@@ -461,3 +461,16 @@ El criterio rector continúa siendo:
 **Verificación:** pasan ocho pruebas automatizadas de navegación, lectura, CENICIENTO, EL ESPEJO, voz y secuencias relacionadas; los nueve archivos se validaron como WebP completos de 768 × 1024 píxeles. La prueba en un móvil físico queda pendiente.
 
 **Publicación de código y fotogramas:** `main`, commit `a55730e47c85e877d6d0889308319c646018e754`. Módulo compartido: `20261010-21`. Archivo integral: versión 34.
+
+
+## 33. Inicio directo, lista de lecturas y convergencia automática · versión 35
+
+Al pulsar «Leer» o «Voz», CENICIENTO inicia inmediatamente el modo elegido: ya no aparece un segundo botón para comenzar. La voz se solicita dentro de la interacción inicial del lector.
+
+El acceso inicial a CENICIENTO continúa limitado al interrogante de ANA KLAUDYA. Una vez que CENICIENTO ha sido leído o escuchado por completo, quedan disponibles las rutas recíprocas para lecturas posteriores. La convergencia se activa cuando ANA KLAUDYA, SOLO LA TARJETA y CENICIENTO registran sus primeras lecturas completas; no depende del orden. EL ESPEJO se inicia automáticamente al terminar la tercera pieza y devuelve al visitante al comienzo de ANA KLAUDYA. El regreso queda coordinado con el marco de CENICIENTO cuando éste se abre desde la obra anfitriona.
+
+Se incorpora una lista única, compacta y plegable de las tres lecturas obligatorias. Se muestra después de la primera lectura completada, comunica el estado con etiquetas accesibles y evita cubrir la tarjeta en móviles; en el modo de lectura de CENICIENTO se integra al final del flujo. No expone las rutas ocultas ni convierte los ecos simbólicos en controles.
+
+**Criterio rector:** cada descubrimiento no abre una obra nueva; cambia el significado de una obra ya visitada.
+
+**Verificación:** pasan ocho pruebas automatizadas y la validación sintáctica de los scripts inline principales. No se ha realizado aún una prueba física en móvil. Código y pruebas publicados en `main`, commit `a45b14f4aadccf14d85a470d71401cac0739ca3d`.
