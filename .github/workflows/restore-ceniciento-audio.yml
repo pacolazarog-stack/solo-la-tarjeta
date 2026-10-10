@@ -25,15 +25,15 @@ jobs:
           s = s.replace(old, new)
           p.write_text(s, encoding='utf-8')
 
-          # Shared universe controls: card and reading counter on the left in portrait.
+          # Shared universe controls in portrait: reading counter left, card right.
           n = Path('narrative-universe.js')
           u = n.read_text(encoding='utf-8')
           u = u.replace("const VERSION='20261010-29';", "const VERSION='20261011-30';")
           marker = "  @media(hover:none) and (pointer:coarse){"
           portrait = r'''  @media(max-width:700px) and (orientation:portrait){
-    .ou-card{left:max(10px,env(safe-area-inset-left))!important;right:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 12px)!important;width:94px!important;height:58px!important;transform:rotate(-4deg)}
+    .ou-card{right:max(10px,env(safe-area-inset-right))!important;left:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 12px)!important;width:94px!important;height:58px!important;transform:rotate(4deg)}
     .ou-card::before{left:13px!important;top:12px!important;width:23px!important;height:17px!important}.ou-card::after{left:13px!important;right:13px!important;bottom:11px!important}
-    .ou-reading-checklist{left:max(10px,env(safe-area-inset-left))!important;right:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 82px)!important}
+    .ou-reading-checklist{left:max(10px,env(safe-area-inset-left))!important;right:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 18px)!important}
     .ou-reading-checklist summary{margin-left:0!important;padding:5px 8px!important;border-color:rgba(255,255,255,.20)!important;background:rgba(12,12,12,.38)!important;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
     .ou-reading-checklist ul{left:0!important;right:auto!important}
   }
@@ -44,15 +44,14 @@ jobs:
               u = u.replace(marker, portrait + marker, 1)
           n.write_text(u, encoding='utf-8')
 
-          # ANA KLAUDYA mobile portrait: transparent linear controls on the right,
-          # leaving a dedicated left lane for the card and counter.
+          # ANA KLAUDYA mobile portrait: transparent linear controls above the lower row.
           q = Path('elegia-breve/index.html')
           t = q.read_text(encoding='utf-8')
           t = t.replace('20261010-ceniciento-score40-v2', '20261010-ceniciento-score40-v3-audio')
           nav_anchor = '.journey-nav button[hidden]{display:none}\n'
           nav_portrait = r'''@media(max-width:700px) and (orientation:portrait){
-  .journey-nav{left:auto;right:max(10px,env(safe-area-inset-right));bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:none;width:calc(100% - 132px);max-width:360px;height:48px;padding:0;border:0;border-top:1px solid rgba(255,250,241,.46);border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
-  .journey-nav button{min-height:48px;padding:7px 5px;border:0;border-radius:0;background:transparent;box-shadow:none;font-size:13px;text-shadow:0 1px 4px rgba(0,0,0,.9)}
+  .journey-nav{left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));bottom:calc(82px + env(safe-area-inset-bottom,0px));transform:none;width:auto;max-width:none;height:46px;padding:0;border:0;border-top:1px solid rgba(255,250,241,.46);border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .journey-nav button{min-height:46px;padding:7px 5px;border:0;border-radius:0;background:transparent;box-shadow:none;font-size:13px;text-shadow:0 1px 4px rgba(0,0,0,.9)}
   .journey-nav button+button{border-left:1px solid rgba(255,250,241,.26)}
 }
 '''
