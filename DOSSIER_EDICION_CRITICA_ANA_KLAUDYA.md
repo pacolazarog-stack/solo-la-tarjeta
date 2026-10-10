@@ -442,3 +442,22 @@ El modo de voz mantiene la sincronización temporal existente. No se han cambiad
 **Verificación:** pasan las ocho pruebas automatizadas. La prueba de CENICIENTO ahora verifica la distribución no uniforme de las edades, la eliminación de las transiciones de opacidad en scroll y la sincronización de imágenes ya decodificadas. La secuencia se inspeccionó visualmente mediante una hoja de contacto de los diez fotogramas; aún conviene comprobar el resultado de desplazamiento en un teléfono físico.
 
 **Publicación de código:** `main`, commit `968609929af08757b540b9750000f922e4ec3dbd`. Archivo integral actualizado: versión 33.
+
+
+## 32. Recuperación de la secuencia fotográfica estable y salidas directas · versión 34
+
+> **Cada descubrimiento no abre una obra nueva; cambia el significado de una obra ya visitada.**
+
+Se restituye la secuencia completa de nueve retratos de Paco que estaba en la revisión estable del 6 de octubre de 2026 (`84c5dc3693a578eecc84f50f0128405a9df9eb2e`), también conservada sin cambios en la revisión del 9 de octubre. Los nueve archivos WebP se publican como activos independientes y se precargan antes de habilitar los modos de lectura y voz. Ambos modos usan el mismo avance lineal y los mismos retratos. Se retiran los puntos desiguales de distribución y las transiciones de opacidad que hacían vibrar la mezcla y dejaban huecos entre imágenes.
+
+En modo lectura, CENICIENTO vuelve a mostrar el texto sobre la fotografía de fondo; el oscurecimiento baja para que el cambio de cabello y edad siga visible detrás del texto. Los nueve fotogramas se sincronizan al scroll y la narración con el mismo cálculo lineal, sin retardo CSS.
+
+Al terminar EL ESPEJO aparecen dos salidas directas: ANA KLAUDYA y una tarjeta a SOLO LA TARJETA. Se elimina el retorno automático. Tras la primera lectura válida de CENICIENTO por el interrogante, los accesos recíprocos entre las tres piezas permanecen disponibles en lecturas posteriores. No aparecen etiquetas visibles de completado o desbloqueo; el estado requerido se mantiene internamente.
+
+El criterio rector continúa siendo:
+
+> **Cada descubrimiento no abre una obra nueva; cambia el significado de una obra ya visitada.**
+
+**Verificación:** pasan ocho pruebas automatizadas de navegación, lectura, CENICIENTO, EL ESPEJO, voz y secuencias relacionadas; los nueve archivos se validaron como WebP completos de 768 × 1024 píxeles. La prueba en un móvil físico queda pendiente.
+
+**Publicación de código y fotogramas:** `main`, commit `a55730e47c85e877d6d0889308319c646018e754`. Módulo compartido: `20261010-21`. Archivo integral: versión 34.
