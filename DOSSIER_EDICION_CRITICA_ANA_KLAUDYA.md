@@ -375,3 +375,22 @@ Se ejecutaron de nuevo las siete pruebas automatizadas; todas pasan. La comproba
 La observación archivística del apartado anterior sigue vigente: las páginas aún carecen de JSON-LD y Dublin Core; el estado guardado en localStorage es local al navegador. La documentación continúa fuera de la experiencia narrativa.
 
 Publicación: código y pruebas en main, commit 7387caaa463fc07febac6c1028ac8e4049f23e96; fuente integral: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (28).md](https://github.com/pacolazarog-stack/solo-la-tarjeta/blob/main/TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(28).md).
+
+
+## 27. Secuencia convergente de EL ESPEJO · versión 29
+
+> **Cada descubrimiento no abre una obra nueva; cambia el significado de una obra ya visitada.**
+
+La propuesta de 32 fragmentos se integra como una estancia final de lectura, no como cuarta obra, URL independiente ni nueva puerta. Sólo aparece al final de CENICIENTO cuando el estado local confirma que ANA KLAUDYA, SOLO LA TARJETA y CENICIENTO han sido completadas. Se presenta una sola vez por navegador. Si la lectura se interrumpe antes del fragmento final, la estancia no se marca como completada y puede aparecer de nuevo.
+
+Cada fragmento ocupa una pantalla y avanza con el desplazamiento. Los fragmentos 14, 15, 17, 26 y 30 detienen el avance hasta que el lector elige «seguir»: la pausa es manual, no un temporizador. La secuencia no incorpora voz, música, animación explicativa, mapa, título de menú ni enlace a otra página. Al llegar al final se habilitan las salidas de CENICIENTO ya existentes: «volver» a ANA KLAUDYA y SOLO LA TARJETA. El acceso inicial a CENICIENTO continúa reservado al interrogante; una lectura completada permite los enlaces recíprocos en recorridos posteriores.
+
+Los 32 fragmentos son una composición de convergencia nueva, distinta de las cuatro frases fantasma. Estas últimas permanecen en su inventario canónico de cuatro; la composición no se registra como frases fantasma ni cambia sus ubicaciones. Los motivos de la tarjeta, la mirada, el reloj, el pan, la cebolla y el regreso funcionan como resonancias. El texto narrativo original de las tres piezas permanece intacto.
+
+### Implementación y verificación
+
+La sala está contenida en la página de CENICIENTO y se crea desde `ceniciento/el-espejo.js`; no se añade un enlace con destino EL ESPEJO. El módulo compartido espera el estado de lectura de las tres piezas y registra la finalización de la estancia para que no se repita después de completada. Las escenas usan ajuste de desplazamiento, objetivos de lectura accesibles y pausas por acción explícita. El contenido se conserva en español exactamente como fue propuesto.
+
+Las siete pruebas anteriores y la nueva comprobación `ceniciento/check-espejo.cjs` pasan: ocho en total. La prueba nueva verifica el recuento de 32 escenas, la lista exacta de pausas, el disparador tras completar las tres piezas, la persistencia, la ausencia de temporizadores y el mantenimiento de las cuatro frases fantasma. La inspección automatizada no sustituye la validación visual en teléfonos físicos.
+
+La versión 29 añade al archivo completo las fuentes actualizadas, el script de EL ESPEJO y su comprobación automatizada. Código y pruebas publicados en `main` mediante el commit `25edbd10e0455f5f36c0e33d588853b97dd855db`; fuente integral: [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (29).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(29).md). La documentación continúa fuera de la experiencia narrativa.
