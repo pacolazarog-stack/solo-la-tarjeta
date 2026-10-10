@@ -44,9 +44,9 @@ new="""function showSoloEndNav(){
   index.href=rootPath+'elegia-breve/?indice=1&v='+VERSION;index.target='_top';index.textContent='Índice';
   index.setAttribute('aria-label','Abrir el índice de ANA KLAUDYA');
 
-  const forward=document.createElement('button');
-  forward.type='button';forward.textContent='Adelante';forward.setAttribute('aria-label','Ir adelante');
-  forward.addEventListener('click',()=>history.forward());
+  const forward=document.createElement('a');
+  forward.href=rootPath+'elegia-breve/?v='+VERSION;forward.target='_top';forward.textContent='Adelante';
+  forward.setAttribute('aria-label','Continuar a ANA KLAUDYA');
 
   nav.append(back,index,forward);
   document.body.appendChild(nav);
