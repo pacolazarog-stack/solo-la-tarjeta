@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-5';
+const VERSION='20261010-6';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
 const path=location.pathname.replace(/\/+$/,'') || '/';
@@ -47,8 +47,8 @@ function installBaseStyles(){
   .ou-card:hover,.ou-card:focus-visible{opacity:1;transform:rotate(-2deg) translateY(-4px) scale(1.065);box-shadow:0 18px 46px rgba(0,0,0,.42),inset 0 0 0 1px rgba(255,255,255,.15),0 0 40px rgba(213,174,91,.40);outline:none;animation:none}
   @keyframes ouCardHint{0%,70%,100%{transform:rotate(-5deg) scale(1)}82%{transform:rotate(-4deg) scale(1.045)}}
   .ou-transition{position:fixed;inset:0;z-index:9999;background:rgba(16,15,14,0);pointer-events:none;transition:background 1.25s ease}.ou-transition.ou-on{background:rgba(16,15,14,.95)}
-  .ou-active-text{cursor:pointer;font-weight:600;text-decoration-line:underline;text-decoration-style:dotted;text-decoration-thickness:.105em;text-underline-offset:.22em;text-decoration-color:rgba(112,72,38,.78);transition:opacity .45s ease,text-shadow .45s ease,color .45s ease}.ou-active-text:hover,.ou-active-text:focus-visible{color:#6f4d31;opacity:1;text-shadow:0 0 12px rgba(112,72,38,.18);outline:none}
-  .ou-eiffel{display:inline-grid;place-items:center;width:27px;height:37px;margin-left:.62em;padding:0;border:0;background:transparent;color:inherit;opacity:.64;vertical-align:-.62em;cursor:pointer;filter:drop-shadow(0 1px 3px rgba(0,0,0,.14));transition:opacity .6s ease,transform .6s ease}.ou-eiffel:hover,.ou-eiffel:focus-visible{opacity:1;transform:translateY(-2px) scale(1.04);outline:none}.ou-eiffel svg{width:100%;height:100%;display:block}
+  .ou-symbolic{cursor:pointer;font:inherit;font-weight:inherit;color:inherit;text-decoration-line:underline;text-decoration-style:solid;text-decoration-thickness:.055em;text-underline-offset:.20em;text-decoration-color:transparent;transition:color .5s ease,text-decoration-color .5s ease,text-shadow .5s ease,opacity .5s ease}
+  .ou-symbolic:hover,.ou-symbolic:focus-visible{color:rgba(92,67,47,.92);text-decoration-color:rgba(92,67,47,.28);text-shadow:0 0 12px rgba(112,72,38,.08);outline:none}
   .ou-return{position:fixed;z-index:80;left:50%;bottom:6.2svh;transform:translateX(-50%);appearance:none;border:0;background:none;color:#fffaf1;padding:.5em 1em;font:italic 400 clamp(1.05rem,2.4vw,1.35rem)/1 Georgia,"Times New Roman",serif;letter-spacing:.035em;opacity:0;visibility:hidden;cursor:pointer;transition:opacity 2.4s ease,visibility 2.4s ease;text-shadow:0 2px 18px rgba(0,0,0,.9)}.ou-return.ou-visible{opacity:.72;visibility:visible}.ou-return:hover,.ou-return:focus-visible{opacity:1;outline:none}
   @media(max-width:700px){.ou-card{left:18px;bottom:9vh;width:92px;height:57px}.ou-card::before{left:13px;top:13px;width:22px;height:16px}.ou-card::after{left:13px;right:13px;bottom:12px}.ou-ghost{max-width:68vw}.ou-ghost.ou-left{left:16px;top:14vh}.ou-ghost.ou-right{right:16px;top:21vh}.ou-ghost.ou-low{right:16px;bottom:13vh}}
   @media(prefers-reduced-motion:reduce){.ou-card{animation:none}.ou-transition{transition:none}}
@@ -119,10 +119,10 @@ function addCard(){
   document.body.appendChild(card);
 }
 
-function makeClickable(el,destination,label){
-  if(!el || el.dataset.ouActive)return;
-  el.dataset.ouActive='1';
-  el.classList.add('ou-active-text');
+function makeSymbolic(el,destination,label){
+  if(!el || el.dataset.ouSymbolic)return;
+  el.dataset.ouSymbolic='1';
+  el.classList.add('ou-symbolic');
   el.tabIndex=0;
   el.setAttribute('role','link');
   if(label)el.setAttribute('aria-label',label);
@@ -131,25 +131,41 @@ function makeClickable(el,destination,label){
   el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
 }
 function pByExact(text){return [...document.querySelectorAll('p,span')].find(el=>el.textContent.trim()===text)||null;}
+function psByExact(text){return [...document.querySelectorAll('p,span')].filter(el=>el.textContent.trim()===text);}
 function psContaining(token){return [...document.querySelectorAll('p')].filter(el=>el.textContent.includes(token));}
-
-function installEiffel(){
-  if(document.querySelector('.ou-eiffel'))return;
-  const target=psContaining('París')[0];
-  if(!target)return;
-  const b=document.createElement('button');
-  b.type='button';
-  b.className='ou-eiffel';
-  b.setAttribute('aria-label','Torre Eiffel');
-  b.title='París';
-  b.innerHTML='<svg viewBox="0 0 24 40" aria-hidden="true"><path d="M12 2 L5.2 34 M12 2 L18.8 34 M8.2 20 H15.8 M6.3 29 H17.7 M4 37 H20 M9.4 12 H14.6" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round"/><path d="M9.3 37 Q12 31.5 14.7 37" fill="none" stroke="currentColor" stroke-width="1.05"/></svg>';
-  b.addEventListener('click',e=>{e.stopPropagation();topGo(rootPath+'elegia-breve/#estrella');});
-  target.appendChild(b);
+function wrapToken(root,token,destination,label){
+  if(!root || root.dataset.ouWrapped?.includes(token))return;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const nodes=[];
+  while(walker.nextNode())nodes.push(walker.currentNode);
+  let changed=false;
+  for(const node of nodes){
+    if(node.parentElement?.closest('a,button,.ou-symbolic'))continue;
+    const text=node.nodeValue||'';
+    if(!text.includes(token))continue;
+    const frag=document.createDocumentFragment();
+    const parts=text.split(token);
+    parts.forEach((part,i)=>{
+      if(part)frag.appendChild(document.createTextNode(part));
+      if(i<parts.length-1){
+        const span=document.createElement('span');
+        span.textContent=token;
+        makeSymbolic(span,destination,label);
+        frag.appendChild(span);
+      }
+    });
+    node.replaceWith(frag);changed=true;
+  }
+  if(changed)root.dataset.ouWrapped=((root.dataset.ouWrapped||'')+' '+token).trim();
 }
+
 function activateSoloSymbols(){
-  makeClickable(pByExact('Los ojos de estatua.'),rootPath+'elegia-breve/#ojos','Ojos de estatua');
-  psContaining('reloj').forEach(p=>makeClickable(p,rootPath+'elegia-breve/#ceniciento','Reloj · Ceniciento'));
-  installEiffel();
+  [...psByExact('Ojos de estatua.'),...psByExact('Los ojos de estatua.')]
+    .forEach(el=>makeSymbolic(el,rootPath+'elegia-breve/#ojos','Ojos de estatua'));
+  psContaining('París').forEach(el=>wrapToken(el,'París',rootPath+'elegia-breve/#estrella','París · Estrella'));
+  const annulled=document.getElementById('duskColorTurn') || pByExact('La tarjeta quedó anulada.');
+  makeSymbolic(annulled,rootPath+'elegia-breve/#epilogo','La tarjeta quedó anulada · Epílogo');
+  psContaining('reloj').forEach(el=>wrapToken(el,'reloj',rootPath+'elegia-breve/#ceniciento','reloj · Ceniciento'));
 }
 
 function finishSolo(){
