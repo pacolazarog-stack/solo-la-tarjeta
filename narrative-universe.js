@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-9';
+const VERSION='20261010-10';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
 const GHOSTS=Object.freeze({
@@ -56,10 +56,11 @@ function installBaseStyles(){
   .ou-symbolic{cursor:pointer;font:inherit;font-weight:inherit;color:inherit;text-decoration-line:underline;text-decoration-style:solid;text-decoration-thickness:.055em;text-underline-offset:.20em;text-decoration-color:transparent;transition:color .5s ease,text-decoration-color .5s ease,text-shadow .5s ease,opacity .5s ease}
   .ou-symbolic:hover,.ou-symbolic:focus-visible{color:rgba(92,67,47,.92);text-decoration-color:rgba(92,67,47,.28);text-shadow:0 0 12px rgba(112,72,38,.08);outline:none}
   .ou-return{position:fixed;z-index:80;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 12px);transform:translateX(-50%);display:grid;place-items:center;min-width:96px;min-height:48px;appearance:none;border:0;background:transparent;color:#fffaf1;padding:12px 20px;font:italic 400 clamp(1.05rem,2.4vw,1.35rem)/1 Georgia,"Times New Roman",serif;letter-spacing:.035em;opacity:0;visibility:hidden;cursor:pointer;touch-action:manipulation;transition:opacity 2.4s ease,visibility 2.4s ease;text-shadow:0 2px 18px rgba(0,0,0,.9)}.ou-return.ou-visible{opacity:.82;visibility:visible}.ou-return:hover,.ou-return:focus-visible{opacity:1;outline:none}.ou-return:focus-visible{outline:2px solid currentColor;outline-offset:3px}
-  .ou-solo-endnav{position:fixed;z-index:82;left:50%;bottom:6.2svh;transform:translateX(-50%) translateY(8px);display:flex;align-items:center;justify-content:center;gap:clamp(1.1rem,3vw,2.4rem);max-width:min(92vw,760px);opacity:0;visibility:hidden;transition:opacity 2s ease,transform 2s ease,visibility 2s ease;text-align:center}.ou-solo-endnav.ou-visible{opacity:.76;visibility:visible;transform:translateX(-50%) translateY(0)}.ou-solo-endnav a{color:#fffaf1;text-decoration:none;font:italic 400 clamp(.92rem,1.8vw,1.14rem)/1.25 Georgia,"Times New Roman",serif;letter-spacing:.025em;text-shadow:0 2px 18px rgba(0,0,0,.9);opacity:.78;transition:opacity .4s ease,text-shadow .4s ease}.ou-solo-endnav a:hover,.ou-solo-endnav a:focus-visible{opacity:1;text-shadow:0 2px 22px rgba(0,0,0,1);outline:none}.ou-solo-endnav .ou-sep{color:rgba(255,250,241,.34);font-size:.8em;pointer-events:none}
-  @media(max-width:700px){.ou-card{left:max(16px,env(safe-area-inset-left));bottom:calc(env(safe-area-inset-bottom,0px) + 18px);width:112px;height:70px}.ou-card::before{left:16px;top:15px;width:27px;height:19px}.ou-card::after{left:16px;right:16px;bottom:14px}.ou-ghost{max-width:68vw}.ou-ghost.ou-left{left:16px;top:14vh}.ou-ghost.ou-right{right:16px;top:21vh}.ou-ghost.ou-low{right:16px;bottom:13vh}.ou-return{bottom:calc(env(safe-area-inset-bottom,0px) + 10px);min-width:100px;min-height:48px}}
-  @media(hover:none) and (pointer:coarse){.ou-card{animation:none;box-shadow:0 15px 38px rgba(0,0,0,.4),0 0 0 2px rgba(241,217,139,.45),inset 0 0 0 1px rgba(255,255,255,.14)}.ou-card:active{transform:rotate(-2deg) scale(.97)}}
-  @media(prefers-reduced-motion:reduce){.ou-card{animation:none}.ou-transition{transition:none}}
+  .ou-solo-endnav{position:fixed;z-index:82;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%) translateY(8px);display:flex;align-items:center;justify-content:center;gap:12px;width:min(92vw,760px);opacity:0;visibility:hidden;transition:opacity .7s ease,transform .7s ease,visibility .7s ease;text-align:center}.ou-solo-endnav.ou-visible{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}.ou-solo-endnav a{box-sizing:border-box;display:flex;align-items:center;justify-content:center;min-width:48px;min-height:48px;padding:12px 20px;border:1px solid rgba(255,250,241,.28);border-radius:999px;background:rgba(12,12,12,.82);color:#fffaf1;text-decoration:none;font:italic 400 clamp(.96rem,1.8vw,1.14rem)/1.25 Georgia,"Times New Roman",serif;letter-spacing:.025em;text-shadow:0 2px 18px rgba(0,0,0,.9);opacity:.94;transition:opacity .25s ease,background-color .25s ease,border-color .25s ease}.ou-solo-endnav a:hover,.ou-solo-endnav a:focus-visible{opacity:1;background:rgba(28,26,23,.98);border-color:rgba(255,250,241,.72);outline:2px solid rgba(255,250,241,.82);outline-offset:3px}.ou-solo-endnav a:active{background:rgba(58,51,42,.98)}
+  @media(max-width:700px){.ou-solo-endnav{width:min(92vw,30rem);gap:10px}.ou-solo-endnav a{flex:1;padding:12px 14px}.ou-card{left:max(16px,env(safe-area-inset-left));bottom:calc(env(safe-area-inset-bottom,0px) + 18px);width:112px;height:70px}.ou-card::before{left:16px;top:15px;width:27px;height:19px}.ou-card::after{left:16px;right:16px;bottom:14px}.ou-ghost{max-width:68vw}.ou-ghost.ou-left{left:16px;top:14vh}.ou-ghost.ou-right{right:16px;top:21vh}.ou-ghost.ou-low{right:16px;bottom:13vh}.ou-return{bottom:calc(env(safe-area-inset-bottom,0px) + 10px);min-width:100px;min-height:48px}}
+  @media(max-width:520px){.ou-solo-endnav{flex-direction:column;align-items:stretch;width:min(88vw,22rem)}.ou-solo-endnav a{width:100%;flex:none}}
+  @media(hover:none) and (pointer:coarse){.ou-solo-endnav a{min-height:52px}.ou-card{animation:none;box-shadow:0 15px 38px rgba(0,0,0,.4),0 0 0 2px rgba(241,217,139,.45),inset 0 0 0 1px rgba(255,255,255,.14)}.ou-card:active{transform:rotate(-2deg) scale(.97)}}
+  @media(prefers-reduced-motion:reduce){.ou-card{animation:none}.ou-transition,.ou-solo-endnav,.ou-solo-endnav a{transition:none}}
   `;
   document.head.appendChild(style);
 }
@@ -127,12 +128,29 @@ function addCard(){
   document.body.appendChild(card);
 }
 
+function showSoloEndNav(){
+  if(document.querySelector('.ou-solo-endnav'))return;
+  const nav=document.createElement('nav');
+  nav.className='ou-solo-endnav';
+  nav.setAttribute('aria-label','Continuar desde SOLO LA TARJETA');
+  const ana=document.createElement('a');
+  ana.href=rootPath+'elegia-breve/';
+  ana.textContent='Volver a ANA KLAUDYA';
+  const ceniciento=document.createElement('a');
+  ceniciento.href=rootPath+'ceniciento/';
+  ceniciento.textContent='Ir a CENICIENTO';
+  nav.append(ana,ceniciento);
+  document.body.appendChild(nav);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>nav.classList.add('ou-visible')));
+}
+
 function finishSolo(){
   if(!state.soloComplete){
     save({soloComplete:true});
     state=readState();
   }
   ghost(GHOSTS.origin,'after-card-origin',{where:'right',delay:1800,hold:6200});
+  showSoloEndNav();
 }
 
 function setupSolo(){

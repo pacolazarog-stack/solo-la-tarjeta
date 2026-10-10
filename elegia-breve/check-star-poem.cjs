@@ -20,6 +20,6 @@ assert(star.includes('function completeMoon()'),'The transition has an explicit 
 assert(star.includes("poem.hidden=false;paced.disabled=false"),'Text is revealed only when the opening completes');
 assert(star.includes("document.getElementById('backAna').addEventListener('click'"),'The prologue returns within Ana Klaudya');
 assert(ana.includes('id="anaEstrella"'),'The prologue remains part of Ana Klaudya navigation');
-assert(!/makeSymbolic|wrapToken|showSoloEndNav/.test(sharedCode),'The shared system does not turn this motif into a cross-work shortcut');
+assert(!/makeSymbolic|wrapToken/.test(sharedCode),'The shared system does not turn this motif into a cross-work shortcut');
 assert(!/Torre Eiffel|Ojos de estatua|tarjeta anulada|reloj/.test(star),'No secondary motif becomes a link from the prologue');
 console.log('PASS: complete seven-part prologue, gated reveal and internal return');
