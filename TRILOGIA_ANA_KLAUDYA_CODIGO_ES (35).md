@@ -7,11 +7,11 @@
 **Módulo de enlace:** `narrative-universe.js`, versión `20261010-22`  
 **Commit fuente base:** `72fba7c115c38e78c5124001d6a6f8401db81257`  
 **Corte de la fuente base:** 10 de octubre de 2026.  
-**Estado:** código y pruebas de la versión 35 publicados en `main`; archivo de conservación integral en actualización.
+**Estado:** código, pruebas y archivo integral de la versión 35 publicados en `main`.
 
 Este archivo reúne el código español de las tres piezas, las páginas de *ANA KLAUDYA*, las comprobaciones y los textos fuente. La convergencia de 32 escenas de EL ESPEJO conserva cinco pausas manuales reversibles y no tiene URL ni puerta propia. Al completar la primera lectura íntegra de las tres piezas, en cualquier orden, EL ESPEJO comienza automáticamente en la última pieza leída y al finalizar devuelve al lector al inicio de ANA KLAUDYA. «Leer» y «Voz» empiezan con una sola selección; la entrada inicial a CENICIENTO sigue limitada al interrogante de ANA KLAUDYA. Los enlaces recíprocos, incluidos los de salida de SOLO LA TARJETA, aparecen después de completar CENICIENTO. Una lista plegable muestra el estado de las tres lecturas sin revelar el mapa narrativo. La versión 35 conserva la secuencia fotográfica estable de nueve retratos y el texto de CENICIENTO sobre la fotografía de fondo.
 
-Los archivos de código de esta edición se publicaron en `main` mediante el commit `a55730e47c85e877d6d0889308319c646018e754`. Los SHA de GitHub consignados en las secciones de archivo corresponden a los blobs finales; el commit consultado identifica la revisión publicada. El código HTML conserva estilos y scripts integrados. Los nueve retratos de la secuencia estable se guardan como activos WebP independientes y se enumeran al final.
+Los archivos de código y pruebas de esta edición se publicaron en `main` mediante el commit `181eda17be95a62ee0ac741dd8c66ea4dfd20c72`. Los SHA de GitHub consignados en las secciones de archivo corresponden a los blobs de la versión archivada; el commit identifica la revisión publicada. El código HTML conserva estilos y scripts integrados. Los nueve retratos de la secuencia estable se guardan como activos WebP independientes y se enumeran al final.
 
 ## Índice de archivos
 
