@@ -1,6 +1,7 @@
-const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
 const source=fs.readFileSync(process.argv[2]||__dirname+'/index.html','utf8');
 const script=source.match(/<script>([\s\S]*?)<\/script>/)[1];
+const universe=fs.readFileSync(path.join(__dirname,'../narrative-universe.js'),'utf8');
 const nodes=new Map(),timers=new Map(),events={},frameMessages=[];let sequence=0,reduced=false;
 class Element{
  constructor(id){this.id=id;this.handlers={};this.paused=true;this.currentTime=0;this.value=id==='musicLevel'?'80':'';this.checked=id==='musicEnabled';this.hidden=id==='cenicientoFrame';this.style={setProperty(){}};const classes=new Set();this.classList={add(...v){v.forEach(x=>classes.add(x));},remove(...v){v.forEach(x=>classes.delete(x));},contains:v=>classes.has(v),toggle(v,on){if(on)classes.add(v);else classes.delete(v);}};}
@@ -46,6 +47,7 @@ const stalePortrait=[...timers.values()].find(t=>t.ms===25000).fn;
 run(25000);assert.equal(nav.hidden,false,'All poem controls appear on the final photograph');
 assert(!source.includes('id="portraitEpilogue"'),'No duplicate epilogue button on the portrait');
 assert(!source.includes('anaCeniciento'),'Ceniciento has no button or handler in Ana navigation');
+assert(!source.includes('Acerca del proyecto')&&!source.includes('Jurados y festivales'),'Critical and festival documentation stays outside the reading interface');
 const navigation=source.match(/<nav[^>]*id="anaNavigation"[\s\S]*?<\/nav>/)[0];
 assert.equal((navigation.match(/<button\b/g)||[]).length,9,'Ana has nine controls for its seven poems and visual interlude');
 // The portrait question works for touch/keyboard click events without mouse fields.
@@ -171,5 +173,10 @@ assert.equal(music.currentTime,51);
 assert(source.includes('poemas de Paco Olmo de Males'));
 assert(source.includes('▶ Comenzar'));
 assert(!source.includes("renderWorld();\\n      ensureAmbientMusic();"));
+const phraseInventory=[...universe.matchAll(/^\s*(before|origin|absence|return):'([^']+)'/gm)].map(m=>m[2]);
+assert.deepEqual(phraseInventory,['Hay historias que empiezan antes.','El origen suele parecer insignificante.','Falta una versión de la historia.','Nadie regresa al mismo lugar.'],'The shared system keeps exactly the four approved ghost phrases');
+assert(!/ghost\(['\"]/.test(universe),'All ghost copy comes from the four-item phrase inventory');
+assert(!/function (?:makeSymbolic|wrapToken|activateSoloSymbols|showSoloEndNav)/.test(universe),'Narrative echoes and the end-of-story menu are not navigation controls');
+assert(!/elegia-breve\/#(?:ojos|estrella|epilogo|ceniciento)|Ir a Ceniciento|Volver a Ana Klaudya/.test(universe),'No symbolic shortcut or second menu creates an extra door');
 console.log('PASS: sequential navigation, eight return routes, repeated touches, Back/Forward, index, one-click voice with four-second fade, cancellation, reduced motion and uninterrupted music');
 })().catch(error=>{console.error(error);process.exitCode=1;});

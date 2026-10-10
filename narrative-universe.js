@@ -1,9 +1,15 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-7';
+const VERSION='20261010-8';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
+const GHOSTS=Object.freeze({
+  before:'Hay historias que empiezan antes.',
+  origin:'El origen suele parecer insignificante.',
+  absence:'Falta una versión de la historia.',
+  return:'Nadie regresa al mismo lugar.'
+});
 const path=location.pathname.replace(/\/+$/,'') || '/';
 const page={
   solo:path==='/solo-la-tarjeta' || path==='/solo-la-tarjeta/index.html',
@@ -120,90 +126,20 @@ function addCard(){
   document.body.appendChild(card);
 }
 
-function makeSymbolic(el,destination,label){
-  if(!el || el.dataset.ouSymbolic)return;
-  el.dataset.ouSymbolic='1';
-  el.classList.add('ou-symbolic');
-  el.tabIndex=0;
-  el.setAttribute('role','link');
-  if(label)el.setAttribute('aria-label',label);
-  const go=()=>topGo(destination);
-  el.addEventListener('click',go);
-  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
-}
-function pByExact(text){return [...document.querySelectorAll('p,span')].find(el=>el.textContent.trim()===text)||null;}
-function psByExact(text){return [...document.querySelectorAll('p,span')].filter(el=>el.textContent.trim()===text);}
-function psContaining(token){return [...document.querySelectorAll('p')].filter(el=>el.textContent.includes(token));}
-function wrapToken(root,token,destination,label){
-  if(!root || root.dataset.ouWrapped?.includes(token))return;
-  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
-  const nodes=[];
-  while(walker.nextNode())nodes.push(walker.currentNode);
-  let changed=false;
-  for(const node of nodes){
-    if(node.parentElement?.closest('a,button,.ou-symbolic'))continue;
-    const text=node.nodeValue||'';
-    if(!text.includes(token))continue;
-    const frag=document.createDocumentFragment();
-    const parts=text.split(token);
-    parts.forEach((part,i)=>{
-      if(part)frag.appendChild(document.createTextNode(part));
-      if(i<parts.length-1){
-        const span=document.createElement('span');
-        span.textContent=token;
-        makeSymbolic(span,destination,label);
-        frag.appendChild(span);
-      }
-    });
-    node.replaceWith(frag);changed=true;
-  }
-  if(changed)root.dataset.ouWrapped=((root.dataset.ouWrapped||'')+' '+token).trim();
-}
-
-function activateSoloSymbols(){
-  [...psByExact('Ojos de estatua.'),...psByExact('Los ojos de estatua.')]
-    .forEach(el=>makeSymbolic(el,rootPath+'elegia-breve/#ojos','Ojos de estatua'));
-  psContaining('París').forEach(el=>wrapToken(el,'París',rootPath+'elegia-breve/#estrella','París · Estrella'));
-  const annulled=document.getElementById('duskColorTurn') || pByExact('La tarjeta quedó anulada.');
-  makeSymbolic(annulled,rootPath+'elegia-breve/#epilogo','La tarjeta quedó anulada · Epílogo');
-  psContaining('reloj').forEach(el=>wrapToken(el,'reloj',rootPath+'elegia-breve/#ceniciento','reloj · Ceniciento'));
-}
-
-function showSoloEndNav(){
-  if(document.querySelector('.ou-solo-endnav'))return;
-  const nav=document.createElement('nav');
-  nav.className='ou-solo-endnav';
-  nav.setAttribute('aria-label','Continuar desde Solo la tarjeta');
-  const back=document.createElement('a');
-  back.href=rootPath+'elegia-breve/';
-  back.textContent='Volver a Ana Klaudya';
-  const sep=document.createElement('span');
-  sep.className='ou-sep';
-  sep.textContent='·';
-  const next=document.createElement('a');
-  next.href=rootPath+'ceniciento/';
-  next.textContent='Ir a Ceniciento';
-  nav.append(back,sep,next);
-  document.body.appendChild(nav);
-  after(900,()=>nav.classList.add('ou-visible'));
-}
-
 function finishSolo(){
   if(!state.soloComplete){
     save({soloComplete:true});
     state=readState();
-    ghost('Una casualidad rara vez termina donde parece.','after-solo',{where:'low',delay:2600,hold:6500});
   }
-  showSoloEndNav();
+  ghost(GHOSTS.origin,'after-card-origin',{where:'right',delay:1800,hold:6200});
 }
+
 function setupSolo(){
   after(30,()=>{
     const enter=document.getElementById('enterButton');
     if(enter && !document.body.classList.contains('entered'))enter.click();
   });
-  activateSoloSymbols();
-  if(state.cardFound)ghost('Hay historias que empiezan antes.','before-story',{where:'left',delay:2500,hold:6500});
-  if(state.soloComplete && state.anaComplete)ghost('Todo esto ocurrió después.','all-after',{where:'right',delay:6000,hold:6400});
+  if(state.cardFound)ghost(GHOSTS.before,'before-story',{where:'left',delay:2500,hold:6500});
   let armed=false;
   const checkEnd=()=>{
     if(armed)return;
@@ -215,21 +151,21 @@ function setupSolo(){
 }
 
 function setupAna(){
-  addCard();
   const q=document.getElementById('cenicientoLink');
   if(q){
     let hinted=false;
-    const hint=()=>{if(hinted)return;hinted=true;ghost('Falta una versión de la historia.','before-ceniciento',{where:'right',delay:250,hold:5200});};
+    const hint=()=>{
+      if(hinted)return;
+      hinted=true;
+      ghost(GHOSTS.absence,'before-ceniciento',{where:'right',delay:250,hold:5200});
+    };
     q.addEventListener('mouseenter',hint,{once:true});
     q.addEventListener('focus',hint,{once:true});
     q.addEventListener('touchstart',hint,{once:true,passive:true});
   }
   const finale=document.getElementById('portraitFinale');
   const markAna=()=>{
-    if(state.anaComplete)return;
-    save({anaComplete:true});state=readState();
-    ghost('No todo lo que se mira puede describirse.','after-ana-gaze',{where:'left',delay:4200,hold:6200});
-    if(state.soloComplete)ghost('Todo esto ocurrió después.','all-after',{where:'right',delay:12500,hold:6500});
+    if(!state.anaComplete){save({anaComplete:true});state=readState();}
   };
   if(finale){
     if(finale.classList.contains('is-visible'))markAna();
@@ -237,9 +173,8 @@ function setupAna(){
   }else{
     new MutationObserver(()=>{if(document.body.classList.contains('portrait-revealed'))markAna();}).observe(document.body,{attributes:true,attributeFilter:['class']});
   }
-  if(state.returnedFromCeniciento)ghost('Y también antes.','returned-before',{where:'left',delay:3500,hold:7500});
-  else if(state.cardFound)ghost('Hay historias que empiezan antes.','before-story',{where:'left',delay:4200,hold:6500});
-  if(state.soloComplete && !state.returnedFromCeniciento)ghost('Una casualidad rara vez termina donde parece.','after-solo',{where:'low',delay:9000,hold:6200});
+  if(state.returnedFromCeniciento)ghost(GHOSTS.return,'after-ceniciento-return',{where:'left',delay:1800,hold:7500});
+  else if(state.cardFound)ghost(GHOSTS.before,'before-story',{where:'left',delay:2500,hold:6500});
 }
 
 function setupCeniciento(){
@@ -255,15 +190,7 @@ function setupCeniciento(){
     clearTimeout(returnTimer);returnTimer=after(6200,()=>ret.classList.add('ou-visible'));
   };
   const voice=document.getElementById('voice');
-  if(voice){
-    let timeGhost=false,truthGhost=false;
-    voice.addEventListener('timeupdate',()=>{
-      const t=voice.currentTime||0;
-      if(!timeGhost && t>=485){timeGhost=true;ghost('El tiempo nunca desaparece.','inside-time',{where:'left',delay:0,hold:5200});}
-      if(!truthGhost && t>=674){truthGhost=true;ghost('No estaba ocurriendo lo que parecía.','inside-seeming',{where:'right',delay:0,hold:5200});}
-    });
-    voice.addEventListener('ended',complete);
-  }
+  if(voice)voice.addEventListener('ended',complete);
   let readDone=false;
   const readCheck=()=>{
     if(readDone || !document.body.classList.contains('read'))return;
