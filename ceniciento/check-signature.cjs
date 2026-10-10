@@ -17,8 +17,9 @@ assert(source.includes('padding:clamp(116px,18svh,148px) 0 20svh'),'Mobile readi
 assert(text.startsWith('# CENICIENTO')&&text.endsWith('al hombre que era.'),'The full canonical reading is present');
 assert(shared.includes("ret.href=rootPath+'elegia-breve/?v='+VERSION;ret.target='_top';ret.textContent='ANA KLAUDYA'"),'The completed work links directly to Ana');
 assert(shared.includes("solo.href=rootPath+'?origen=ceniciento&v='+VERSION;solo.target='_top';solo.textContent='SOLO LA TARJETA';solo.classList.add('ou-card-exit')"),'The completed work links to Solo with a card button');
-assert(shared.includes('save({mirrorReadComplete:true})')&&!shared.includes('save({mirrorReadComplete:true,returnedFromCeniciento:true})'),'Completing the convergence does not mark a return before the reader chooses Ana');
+assert(shared.includes('save({mirrorReadComplete:true,returnedFromCeniciento:true})'),'Completing the convergence records its automatic return to Ana');
 assert(shared.includes("solo.addEventListener('click',()=>save({cenicientoComplete:true,returnedFromCeniciento:true}))"),'The chosen direct exit is persisted without a visible completion flag');
 assert(shared.includes('state.cenicientoUnlocked')&&shared.includes('arrivedByQuestion'),'Ceniciento remains initially gated by the question mark');
-assert(source.includes('el-espejo.js?v=20261010-21')&&source.includes('narrative-universe.js?v=20261010-21'),'Ceniciento loads current cache versions');
-console.log('PASS: stable nine-frame progression, visible background in reading mode, Ceniciento access gate, and direct exits');
+assert(source.includes('el-espejo.js?v=20261010-22')&&source.includes('narrative-universe.js?v=20261010-22'),'Ceniciento loads current cache versions');
+assert(!source.includes('id="continue"')&&!source.includes('cont.onclick'),'Choosing Read or Voice starts without a second button');
+console.log('PASS: stable nine-frame progression, visible background, single-action reading start, Ceniciento gate, and automatic Mirror return');
