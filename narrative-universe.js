@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-17';
+const VERSION='20261010-18';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
 const GHOSTS=Object.freeze({
@@ -25,8 +25,8 @@ const page={
 };
 
 function readState(){
-  try{return Object.assign({cardFound:false,soloComplete:false,anaComplete:false,cenicientoComplete:false,returnedFromCeniciento:false,ghosts:{}},JSON.parse(localStorage.getItem(STORAGE)||'{}'));}
-  catch(_){return {cardFound:false,soloComplete:false,anaComplete:false,cenicientoComplete:false,returnedFromCeniciento:false,ghosts:{}};}
+  try{return Object.assign({cardFound:false,soloComplete:false,anaComplete:false,cenicientoComplete:false,mirrorReadComplete:false,returnedFromCeniciento:false,ghosts:{}},JSON.parse(localStorage.getItem(STORAGE)||'{}'));}
+  catch(_){return {cardFound:false,soloComplete:false,anaComplete:false,cenicientoComplete:false,mirrorReadComplete:false,returnedFromCeniciento:false,ghosts:{}};}
 }
 let state=readState();
 function save(patch={}){
@@ -243,14 +243,24 @@ function setupCeniciento(){
   nav.append(ret,solo);
   document.body.appendChild(nav);
   const revealNav=()=>{document.body.classList.add('ou-ceniciento-navigation-visible');nav.classList.add('ou-visible');};
-  if(state.cenicientoComplete)requestAnimationFrame(()=>requestAnimationFrame(revealNav));
+  if(state.cenicientoComplete&&!(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete))requestAnimationFrame(()=>requestAnimationFrame(revealNav));
   let returnTimer=0;
   const complete=()=>{
     const wasComplete=state.cenicientoComplete;
     if(!wasComplete){save({cenicientoComplete:true});state=readState();}
+    if(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete){
+      clearTimeout(returnTimer);
+      nav.classList.remove('ou-visible');
+      window.dispatchEvent(new CustomEvent('oras:mirror-start'));
+      return;
+    }
     if(wasComplete){revealNav();return;}
     clearTimeout(returnTimer);returnTimer=after(6200,revealNav);
   };
+  window.addEventListener('oras:mirror-end',()=>{
+    save({mirrorReadComplete:true});state=readState();
+    revealNav();
+  },{once:true});
   const voice=document.getElementById('voice');
   if(voice)voice.addEventListener('ended',complete);
   let readDone=false;
