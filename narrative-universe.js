@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-18';
+const VERSION='20261010-19';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
 const GHOSTS=Object.freeze({
@@ -57,6 +57,7 @@ function installBaseStyles(){
   .ou-symbolic:hover,.ou-symbolic:focus-visible{color:rgba(92,67,47,.92);text-decoration-color:rgba(92,67,47,.28);text-shadow:0 0 12px rgba(112,72,38,.08);outline:none}
   .ou-solo-endnav{position:relative;z-index:82;left:auto;bottom:auto;transform:translateY(8px);display:flex;align-items:center;justify-content:center;gap:12px;width:max-content;max-width:92vw;margin:2rem auto max(28px,env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .7s ease,transform .7s ease,visibility .7s ease;text-align:center}.ou-solo-endnav.ou-visible{opacity:1;visibility:visible;transform:translateY(0)}
   .ou-ceniciento-endnav{position:fixed;z-index:82;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%) translateY(8px);display:flex;align-items:center;justify-content:center;gap:12px;width:max-content;max-width:92vw;opacity:0;visibility:hidden;transition:opacity .7s ease,transform .7s ease,visibility .7s ease;text-align:center}.ou-ceniciento-endnav.ou-visible{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+  .ou-ceniciento-endnav[hidden]{display:none!important}
   body.read .ou-ceniciento-endnav{position:relative;left:auto;bottom:auto;transform:translateY(8px);margin:1rem auto 2rem}
   body.read .ou-ceniciento-endnav.ou-visible{transform:translateY(0)}
   body.voice.ou-ceniciento-navigation-visible .screen.final{bottom:calc(8.5svh + 84px)}
@@ -201,6 +202,7 @@ function setupSolo(){
 }
 
 function setupAna(){
+  window.addEventListener('oras:mirror-returned',()=>ghost(GHOSTS.return,'after-ceniciento-return',{where:'left',delay:250,hold:7500,force:true}),{once:true});
   addUnlockedAnaDoors();
   const q=document.getElementById('cenicientoLink');
   if(q){
@@ -251,6 +253,7 @@ function setupCeniciento(){
     if(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete){
       clearTimeout(returnTimer);
       nav.classList.remove('ou-visible');
+      nav.hidden=true;
       window.dispatchEvent(new CustomEvent('oras:mirror-start'));
       return;
     }
@@ -258,8 +261,10 @@ function setupCeniciento(){
     clearTimeout(returnTimer);returnTimer=after(6200,revealNav);
   };
   window.addEventListener('oras:mirror-end',()=>{
-    save({mirrorReadComplete:true});state=readState();
-    revealNav();
+    save({mirrorReadComplete:true,returnedFromCeniciento:true});state=readState();
+    nav.classList.remove('ou-visible');
+    nav.hidden=true;
+    window.dispatchEvent(new CustomEvent('oras:mirror-return'));
   },{once:true});
   const voice=document.getElementById('voice');
   if(voice)voice.addEventListener('ended',complete);
