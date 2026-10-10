@@ -5,7 +5,7 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Código fuente archivístico vigente en este dossier:** versión 18, publicada en `main` como commit de código `ac13094d015f28965f9890e3bc277cef2845637a`
+**Código fuente archivístico vigente en este dossier:** versión 19, publicada en `main` como commit de código `6527b9fd27dc0e9635ca255b4838ffb899349c2e`
 **Módulo compartido:** `narrative-universe.js`, versión `20261010-12`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
@@ -96,7 +96,7 @@ Ejemplo con la fecha canónica registrada para *ANA KLAUDYA*:
 
 ### Cita del código fuente archivado
 
-> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 18, corrección final del espacio de controles móviles. Repositorio `pacolazarog-stack/solo-la-tarjeta`, commit de código `ac13094d015f28965f9890e3bc277cef2845637a`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
+> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 19, portadas móviles compactas para ampliar la superficie de lectura. Repositorio `pacolazarog-stack/solo-la-tarjeta`, commit de código `6527b9fd27dc0e9635ca255b4838ffb899349c2e`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
 
 Para citas académicas, conviene especificar la pieza, el modo de acceso (lectura o escucha), la URL y la fecha de consulta. Si se cita un verso, añadir el nombre de la pieza y el identificador o encabezado de sección disponible en la edición consultada. No asignar números de verso que la obra no muestre.
 
@@ -219,3 +219,10 @@ Se añade una comprobación al control móvil para verificar la fila de navegaci
 La versión 18 sitúa la tarjeta 88 px por encima del borde inferior seguro del teléfono; la barra compacta «Anterior / Índice / Siguiente» permanece junto al borde inferior. Esta distancia deja al menos 12 px de separación respecto a la barra incluso cuando `safe-area-inset-bottom` vale cero. El relleno inferior de 240 px al final del recorrido permite llevar el último texto por encima de la tarjeta y de la navegación.
 
 La prueba móvil verifica la barra de una fila, el espacio de lectura y la posición de la tarjeta. Las siete comprobaciones CJS pasan. El código se publicó en `main` mediante `ac13094d015f28965f9890e3bc277cef2845637a`; el paquete archivístico 18 y este dossier se registran en el commit documental siguiente.
+
+
+## 16. Compactación de portadas móviles de la versión 19
+
+La versión 19 reduce en teléfonos el espacio de cabecera, el tamaño y los márgenes de los títulos, el espacio entre acciones y el bloque de sonido en las portadas de *ANA KLAUDYA*, sus poemas independientes, *CENICIENTO*. Los botones «Leer con pausas» y «Poema completo» se conservan; los controles de música siguen disponibles en un bloque compacto de dos columnas. El poema comienza antes y gana área visible sin alterar el texto ni añadir navegación. En pantallas bajas se aplica un ajuste adicional.
+
+Las siete comprobaciones CJS se ejecutaron y pasan. El código se publicó en `main` mediante `6527b9fd27dc0e9635ca255b4838ffb899349c2e`. El paquete de código español completo se conserva en [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (19).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(19).md); este dossier permanece fuera de la interfaz de lectura.
