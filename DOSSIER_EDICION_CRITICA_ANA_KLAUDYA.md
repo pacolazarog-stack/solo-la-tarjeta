@@ -401,3 +401,18 @@ La versión 29 añade al archivo completo las fuentes actualizadas, el script de
 La pausa de los fragmentos 14, 15, 17, 26 y 30 detiene únicamente el avance. El lector puede retroceder y releer sin liberar la pausa por delante; al regresar al fragmento, debe elegir «seguir». Así, el sistema conserva la detención dramática y permite la relectura sin convertir la pausa en un bloqueo de navegación. No hay temporizador ni nueva puerta.
 
 La prueba de EL ESPEJO se amplió para comprobar este comportamiento, además de las 32 escenas, las cinco pausas y el acceso condicionado a la finalización de las tres piezas. Las ocho comprobaciones automatizadas pasan. Código publicado en `main`, commit `d04e5a6b5ec6290c6e9f9003210d12360ff3847b`; archivo integral de código fuente: [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (30).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(30).md).
+
+
+## 29. EL ESPEJO como convergencia invisible y retorno automático · versión 31
+
+> **Cada descubrimiento no abre una obra nueva; cambia el significado de una obra ya visitada.**
+
+EL ESPEJO deja de funcionar como puerta o epílogo navegable. Sigue siendo una estancia de 32 fragmentos integrada en CENICIENTO y aparece únicamente al terminar esa lectura cuando ANA KLAUDYA y SOLO LA TARJETA ya están completas. No tiene URL, título de navegación ni botón de salida. Las pausas manuales de los fragmentos 14, 15, 17, 26 y 30 se conservan, con retroceso disponible para releer.
+
+Al alcanzar el final del fragmento 32, se registra la lectura de EL ESPEJO y el retorno desde CENICIENTO. Los botones de salida permanecen ocultos. La pantalla se funde a negro y vuelve automáticamente a ANA KLAUDYA; al completar el cierre aparece allí la frase de retorno «Nadie regresa al mismo lugar». En visitas posteriores, las salidas recíprocas entre ANA KLAUDYA, SOLO LA TARJETA y CENICIENTO siguen disponibles. La única entrada inicial a CENICIENTO continúa siendo el interrogante de ANA KLAUDYA. SOLO LA TARJETA no proporciona acceso a CENICIENTO.
+
+El cambio respeta el criterio rector y no crea una cuarta obra: la convergencia se produce como recompensa estructural de la lectura completa, no como contenido que el visitante busca o desbloquea mediante un control. Las cuatro frases fantasma y los textos canónicos permanecen sin cambios.
+
+**Verificación:** pasan las ocho comprobaciones automatizadas del recorrido y las comprobaciones de sintaxis JavaScript. No se realizó una nueva inspección visual en un teléfono físico; el fundido, la transición del marco y la ubicación exacta de la frase deben confirmarse en el dispositivo durante la siguiente prueba visual.
+
+**Publicación de código:** `main`, commit `1cfbeb24dfa71631171937c495b39642e41564b8`. El archivo integral de código fuente se publica como versión 31 junto con esta actualización documental.
