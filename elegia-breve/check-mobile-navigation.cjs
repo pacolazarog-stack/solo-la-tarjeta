@@ -89,6 +89,7 @@ message('home');run(2100);get('anaRead').click();assert(body.classList.contains(
 assert(source.includes('.ceniciento-frame.sonrisa-leaving{pointer-events:none}'));
 assert(source.includes('min-height:44px;touch-action:manipulation'));
 assert(source.includes('.journey-nav{box-sizing:border-box;width:min(calc(100% - 24px),420px);max-width:calc(100% - 24px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr))'),'Mobile reading controls stay in one compact, full-width row');
+assert(source.includes('@media(max-width:760px){.journey-nav{box-sizing:border-box;width:min(calc(100% - 24px),420px);max-width:calc(100% - 24px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));flex-wrap:nowrap;gap:4px;padding:4px;border-radius:16px}'),'Mobile controls remain one row on wider phones too');
 assert(source.includes('body.journey-started main{padding-bottom:240px}'),'The poem reserves space below its last line for fixed mobile controls');
 assert(shared.includes('@media(max-width:520px){.ou-solo-endnav{flex-direction:column;align-items:stretch;width:min(88vw,22rem)}.ou-solo-endnav a{width:100%;flex:none}.ou-card{bottom:calc(env(safe-area-inset-bottom,0px) + 88px)}}'),'The card sits above the mobile navigation controls');
 console.log('PASS: eight return routes, repeated clicks, Back/Forward, hash changes, stale fades, reduced motion and uninterrupted music');

@@ -795,6 +795,8 @@
 body.journey-started main{padding-bottom:130px}
 .epilogue-invitation{display:none!important}
 @media(max-width:480px){.journey-nav{box-sizing:border-box;width:min(calc(100% - 24px),420px);max-width:calc(100% - 24px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;border-radius:16px}.journey-nav button{min-width:0;min-height:48px;padding:8px 4px;white-space:nowrap;font-size:13px}body.journey-started main{padding-bottom:240px}.entry-title{font-size:clamp(27px,8vw,42px)}.voice-dialog{top:auto;bottom:78px;max-height:45svh;padding:18px}body.voice-open main{width:calc(100% - 34px);margin:auto}.voice-dialog h2{font-size:20px}.voice-launch{min-height:44px}}
+/* En móvil, los tres controles ocupan una sola fila también en pantallas de 481–760 px. */
+@media(max-width:760px){.journey-nav{box-sizing:border-box;width:min(calc(100% - 24px),420px);max-width:calc(100% - 24px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));flex-wrap:nowrap;gap:4px;padding:4px;border-radius:16px}.journey-nav button{box-sizing:border-box;width:100%;min-width:0;max-width:100%;min-height:48px;padding:8px 4px;white-space:nowrap;font-size:clamp(11px,3.4vw,13px)}}
 @media(prefers-reduced-motion:reduce){.world *,.question-beat{animation:none!important}.portrait-finale,.portrait-finale img{transition:none!important}}
 @media print{.journey-nav,.journey-index{display:none!important}}
 
