@@ -1,8 +1,8 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-23';
-const STORAGE='oras.universe.v1';
+const VERSION='20261010-24';
+const STORAGE='oras.universe.v2';
 const rootPath='/solo-la-tarjeta/';
 const GHOSTS=Object.freeze({
   before:'Hay historias que empiezan antes.',
@@ -24,17 +24,41 @@ const page={
   ceniciento:path.endsWith('/ceniciento')
 };
 
+function emptyState(){
+  return {journeyStartedAt:0,cardFound:false,soloComplete:false,anaComplete:false,cenicientoComplete:false,cenicientoUnlocked:false,mirrorReadComplete:false,returnedFromCeniciento:false,ghosts:{}};
+}
+let memoryState=null;
 function readState(){
-  try{return Object.assign({cardFound:false,soloComplete:false,anaComplete:false,cenicientoComplete:false,cenicientoUnlocked:false,mirrorReadComplete:false,returnedFromCeniciento:false,ghosts:{}},JSON.parse(localStorage.getItem(STORAGE)||'{}'));}
-  catch(_){return {cardFound:false,soloComplete:false,anaComplete:false,cenicientoComplete:false,cenicientoUnlocked:false,mirrorReadComplete:false,returnedFromCeniciento:false,ghosts:{}};}
+  let saved;
+  try{const raw=localStorage.getItem(STORAGE);saved=raw?JSON.parse(raw):memoryState;}
+  catch(_){saved=memoryState;}
+  if(!saved||!Number.isFinite(saved.journeyStartedAt)||saved.journeyStartedAt<=0)return emptyState();
+  const current=Object.assign(emptyState(),saved);
+  for(const key of ['cardFound','soloComplete','anaComplete','cenicientoComplete','cenicientoUnlocked','mirrorReadComplete','returnedFromCeniciento'])current[key]=saved[key]===true;
+  current.ghosts=saved.ghosts&&typeof saved.ghosts==='object'?saved.ghosts:{};
+  return current;
 }
 let state=readState();
 function save(patch={}){
-  state=Object.assign({},state,patch);
+  state=Object.assign({},readState(),patch);
   if(!state.ghosts)state.ghosts={};
+  memoryState=state;
   try{localStorage.setItem(STORAGE,JSON.stringify(state));}catch(_){}
   return state;
 }
+function beginJourney(){
+  state=readState();
+  if(!state.journeyStartedAt)save(Object.assign(emptyState(),{journeyStartedAt:Date.now()}));
+  ensureChecklist();
+}
+window.addEventListener('oras:reading-start',()=>{if(page.ana)beginJourney();});
+window.addEventListener('storage',event=>{
+  if(event.key!==STORAGE&&event.key!==null)return;
+  state=readState();ensureChecklist();
+  if(page.ana)addUnlockedAnaDoors();
+});
+window.addEventListener('pageshow',()=>{state=readState();ensureChecklist();});
+
 function markGhost(key){save({ghosts:Object.assign({},state.ghosts||{}, {[key]:true})});}
 function seenGhost(key){return !!(state.ghosts&&state.ghosts[key]);}
 function topGo(url){try{window.top.location.href=url;}catch(_){location.href=url;}}
@@ -58,6 +82,7 @@ function installBaseStyles(){
   .ou-solo-endnav{position:relative;z-index:82;left:auto;bottom:auto;transform:translateY(8px);display:flex;align-items:center;justify-content:center;gap:12px;width:max-content;max-width:92vw;margin:2rem auto max(28px,env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .7s ease,transform .7s ease,visibility .7s ease;text-align:center}.ou-solo-endnav.ou-visible{opacity:1;visibility:visible;transform:translateY(0)}
   .ou-ceniciento-endnav{position:fixed;z-index:82;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%) translateY(8px);display:flex;align-items:center;justify-content:center;gap:12px;width:max-content;max-width:92vw;opacity:0;visibility:hidden;transition:opacity .7s ease,transform .7s ease,visibility .7s ease;text-align:center}.ou-ceniciento-endnav.ou-visible{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
   .ou-ceniciento-endnav[hidden]{display:none!important}
+  .reading-end{display:block;height:1px;width:100%}
   .ou-reading-checklist{position:fixed;z-index:90;right:max(10px,env(safe-area-inset-right));bottom:calc(78px + env(safe-area-inset-bottom));color:#f7f1e8;font:.78rem/1.4 Georgia,"Times New Roman",serif}
   body.read .ou-reading-checklist{position:relative;right:auto;bottom:auto;display:block;width:max-content;max-width:calc(100% - 24px);margin:0 auto 5rem}
   .ou-reading-checklist summary{cursor:pointer;list-style:none;padding:7px 11px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:rgba(12,12,12,.84);touch-action:manipulation}
@@ -177,10 +202,7 @@ function showSoloEndNav(){
 }
 
 function finishSolo(){
-  if(!state.soloComplete){
-    save({soloComplete:true});
-    state=readState();
-  }
+  if(!completePiece('soloComplete'))return;
   ghost(GHOSTS.origin,'after-card-origin',{where:'right',delay:1800,hold:6200});
   showSoloEndNav();
   maybeStartMirror();
@@ -192,7 +214,7 @@ function ensureChecklist(){
   if(!box){box=document.createElement('details');box.className='ou-reading-checklist';box.setAttribute('aria-label','Estado de las lecturas');box.innerHTML='<summary>Lecturas</summary><ul><li data-piece="ana"><span>ANA KLAUDYA</span></li><li data-piece="solo"><span>SOLO LA TARJETA</span></li><li data-piece="ceniciento"><span>CENICIENTO</span></li></ul>';document.body.appendChild(box);}
   const current=readState();
   for(const [piece,key,label] of [['ana','anaComplete','ANA KLAUDYA'],['solo','soloComplete','SOLO LA TARJETA'],['ceniciento','cenicientoComplete','CENICIENTO']]){const row=box.querySelector(`[data-piece="${piece}"]`);row.dataset.done=String(!!current[key]);row.setAttribute('aria-label',`${label}: ${current[key]?'lectura completa':'pendiente'}`);}
-  box.hidden=!(current.anaComplete||current.soloComplete||current.cenicientoComplete);
+  box.hidden=!current.journeyStartedAt;
 }
 
 function launchMirror(){
@@ -208,9 +230,12 @@ function maybeStartMirror(){
   if(state.anaComplete&&state.soloComplete&&state.cenicientoComplete&&state.cenicientoUnlocked&&!state.mirrorReadComplete)launchMirror();
 }
 function completePiece(key,patch={}){
+  state=readState();
+  if(!state.journeyStartedAt)return false;
   if(!state[key]){save({[key]:true,...patch});state=readState();}
   else if(Object.keys(patch).some(k=>state[k]!==patch[k])){save(patch);state=readState();}
   ensureChecklist();maybeStartMirror();
+  return true;
 }
 
 window.addEventListener('oras:mirror-end',()=>{
@@ -278,16 +303,11 @@ function setupAna(){
     q.addEventListener('focus',hint,{once:true});
     q.addEventListener('touchstart',hint,{once:true,passive:true});
   }
-  const finale=document.getElementById('portraitFinale');
   const markAna=()=>{
-    completePiece('anaComplete');
+    if(document.body.classList.contains('portrait-revealed'))completePiece('anaComplete');
   };
-  if(finale){
-    if(finale.classList.contains('is-visible'))markAna();
-    new MutationObserver(()=>{if(finale.classList.contains('is-visible'))markAna();}).observe(finale,{attributes:true,attributeFilter:['class']});
-  }else{
-    new MutationObserver(()=>{if(document.body.classList.contains('portrait-revealed'))markAna();}).observe(document.body,{attributes:true,attributeFilter:['class']});
-  }
+  new MutationObserver(markAna).observe(document.body,{attributes:true,attributeFilter:['class']});
+  markAna();
   if(state.returnedFromCeniciento)ghost(GHOSTS.return,'after-ceniciento-return',{where:'left',delay:1800,hold:7500});
   else if(state.cardFound)ghost(GHOSTS.before,'before-story',{where:'left',delay:2500,hold:6500});
 }
@@ -301,10 +321,10 @@ function setupCeniciento(){
   nav.setAttribute('aria-label','Continuar después de CENICIENTO');
   const ret=document.createElement('a');
   ret.href=rootPath+'elegia-breve/?v='+VERSION;ret.target='_top';ret.textContent='ANA KLAUDYA';ret.setAttribute('aria-label','Abrir ANA KLAUDYA');
-  ret.addEventListener('click',()=>save({cenicientoComplete:true,returnedFromCeniciento:true}));
+  ret.addEventListener('click',()=>save({returnedFromCeniciento:true}));
   const solo=document.createElement('a');
   solo.href=rootPath+'?origen=ceniciento&v='+VERSION;solo.target='_top';solo.textContent='SOLO LA TARJETA';solo.classList.add('ou-card-exit');solo.setAttribute('aria-label','Abrir SOLO LA TARJETA');
-  solo.addEventListener('click',()=>save({cenicientoComplete:true,returnedFromCeniciento:true}));
+  solo.addEventListener('click',()=>save({returnedFromCeniciento:true}));
   nav.append(ret,solo);
   document.body.appendChild(nav);
   const revealNav=()=>{document.body.classList.add('ou-ceniciento-navigation-visible');nav.classList.add('ou-visible');};
@@ -312,6 +332,8 @@ function setupCeniciento(){
   let returnTimer=0;
   const arrivedByQuestion=new URLSearchParams(location.search).get('via')==='question';
   const complete=()=>{
+    state=readState();
+    if(!state.journeyStartedAt||(!state.cenicientoUnlocked&&!arrivedByQuestion))return;
     const wasUnlocked=state.cenicientoUnlocked;
     const unlock=wasUnlocked||arrivedByQuestion;
     completePiece('cenicientoComplete',unlock?{cenicientoUnlocked:true}:{});
@@ -334,7 +356,7 @@ function setupCeniciento(){
   const readingEnd=document.querySelector('#readerText + .reading-end');
   if('IntersectionObserver' in window && readingEnd){
     const endObserver=new IntersectionObserver(entries=>{
-      if(readDone || !document.body.classList.contains('read') || document.body.classList.contains('revealing'))return;
+      if(readDone || !document.getElementById('readerText')?.textContent.trim() || !document.body.classList.contains('read') || document.body.classList.contains('revealing'))return;
       if(entries.some(entry=>entry.isIntersecting)){readDone=true;endObserver.disconnect();complete();}
     },{rootMargin:'0px 0px -10% 0px',threshold:.25});
     endObserver.observe(readingEnd);

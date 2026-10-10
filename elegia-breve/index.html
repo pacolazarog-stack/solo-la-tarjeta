@@ -1256,6 +1256,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
 
       entryButton.addEventListener('click',()=>{
         if(entryButton.disabled)return;
+        window.dispatchEvent(new CustomEvent('oras:reading-start'));
         entryButton.disabled=true;
         body.classList.add('journey-started','sound-ready');
         entry.classList.add('is-open');
@@ -1641,6 +1642,6 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       syncPoemRoute();
     })();
   </script>
-<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-23"></script>
+<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-24"></script>
 </body>
 </html>

@@ -18,8 +18,8 @@ assert(text.startsWith('# CENICIENTO')&&text.endsWith('al hombre que era.'),'The
 assert(shared.includes("ret.href=rootPath+'elegia-breve/?v='+VERSION;ret.target='_top';ret.textContent='ANA KLAUDYA'"),'The completed work links directly to Ana');
 assert(shared.includes("solo.href=rootPath+'?origen=ceniciento&v='+VERSION;solo.target='_top';solo.textContent='SOLO LA TARJETA';solo.classList.add('ou-card-exit')"),'The completed work links to Solo with a card button');
 assert(shared.includes('save({mirrorReadComplete:true,returnedFromCeniciento:true})'),'Completing the convergence records its automatic return to Ana');
-assert(shared.includes("solo.addEventListener('click',()=>save({cenicientoComplete:true,returnedFromCeniciento:true}))"),'The chosen direct exit is persisted without a visible author mark');
+assert(shared.includes("solo.addEventListener('click',()=>save({returnedFromCeniciento:true}))"),'Navigation does not mark a reading complete');
 assert(shared.includes('state.cenicientoUnlocked')&&shared.includes('arrivedByQuestion'),'Ceniciento remains initially gated by the question mark');
-assert(source.includes('el-espejo.js?v=20261010-23')&&source.includes('narrative-universe.js?v=20261010-23'),'Ceniciento loads current cache versions');
+assert(source.includes('el-espejo.js?v=20261010-24')&&source.includes('narrative-universe.js?v=20261010-24'),'Ceniciento loads current cache versions');
 assert(!source.includes('id="continue"')&&!source.includes('cont.onclick'),'Choosing Read or Voice starts without a second button');
 console.log('PASS: stable nine-frame progression, visible background, single-action reading start, Ceniciento gate, and automatic Mirror return');
