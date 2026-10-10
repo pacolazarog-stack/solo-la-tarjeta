@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-27';
+const VERSION='20261010-28';
 const STORAGE='oras.universe.v2';
 const rootPath='/solo-la-tarjeta/';
 const GHOSTS=Object.freeze({
@@ -243,15 +243,20 @@ function completePiece(key,patch={}){
   return true;
 }
 
+function resetReadingCycle(){
+  save({anaComplete:false,soloComplete:false,cenicientoComplete:false,mirrorReadComplete:false,returnedFromCeniciento:true});
+  state=readState();ensureChecklist();
+}
+
 window.addEventListener('oras:mirror-end',()=>{
-  save({mirrorReadComplete:true,returnedFromCeniciento:true});state=readState();ensureChecklist();
+  resetReadingCycle();
   if(page.ana){topGo(rootPath+'elegia-breve/?v='+VERSION);return;}
   if(window.parent!==window){window.parent.postMessage({channel:'oras-universe-v2',type:'mirror-return'},location.origin);return;}
   topGo(rootPath+'elegia-breve/?v='+VERSION);
 });
 addEventListener('message',event=>{
   if(!page.ana||event.origin!==location.origin||event.source!==document.getElementById('cenicientoFrame')?.contentWindow||event.data?.channel!=='oras-universe-v2'||event.data.type!=='mirror-return')return;
-  save({mirrorReadComplete:true,returnedFromCeniciento:true});state=readState();
+  resetReadingCycle();
   ensureChecklist();ghost(GHOSTS.return,'after-mirror-return',{where:'left',delay:1200,hold:7500});
   window.dispatchEvent(new CustomEvent('oras:mirror-returned'));
 });
@@ -378,6 +383,7 @@ function setupCeniciento(){
 function init(){
   installBaseStyles();
   state=readState();
+  if(state.mirrorReadComplete)resetReadingCycle();
   if(page.ana||page.ojos||page.sonrisa||page.epilogo||page.estrella||page.cabello||page.piel||page.interludio)addCard();
   if(page.solo)setupSolo();
   if(page.ana)setupAna();

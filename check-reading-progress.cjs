@@ -92,6 +92,16 @@ function run(source){
     if(last==='ana')page.anaEnd();else if(last==='solo')page.end(page.lastLine);else page.voice.emit('ended');
     assert(!!page.document.querySelector('script[data-oras-mirror]'),'Mirror begins when the final piece is '+last);
   }
+  const finishedDb=new Map([['oras.universe.v2',JSON.stringify({journeyStartedAt:123,anaComplete:true,soloComplete:true,cenicientoComplete:true,cenicientoUnlocked:true,mirrorReadComplete:true})]]);
+  const freshCycle=boot(source,'/solo-la-tarjeta/elegia-breve/',finishedDb);
+  assert(freshCycle.box().summary.textContent==='Lecturas · 0/3','Completed old cycle resets to zero on return');
+  assert(freshCycle.state().cenicientoUnlocked,'Discovered direct doors remain available');
+  assert(!freshCycle.document.querySelector('script[data-oras-mirror]'),'Reset must not reopen Mirror');
+  freshCycle.anaEnd();
+  const resumeCycle=boot(source,'/solo-la-tarjeta/elegia-breve/',finishedDb);
+  assert(resumeCycle.box().summary.textContent==='Lecturas · 1/3','Reload preserves progress in the new cycle');
+  ceni.win.dispatchEvent({type:'oras:mirror-end'});
+  assert(ceni.box().summary.textContent==='Lecturas · 0/3'&&ceni.state().cenicientoUnlocked,'Finishing Mirror resets only cycle progress');
   const indexed=boot(source,'/solo-la-tarjeta/elegia-breve/index.html',new Map());indexed.start();
   assert(indexed.state().journeyStartedAt>0&&indexed.box().summary.textContent==='Lecturas · 0/3','Explicit index.html starts the same journey');
   const invalid=boot(source,'/solo-la-tarjeta/elegia-breve/',new Map([['oras.universe.v2',JSON.stringify({soloComplete:true,cenicientoComplete:true})]]));
