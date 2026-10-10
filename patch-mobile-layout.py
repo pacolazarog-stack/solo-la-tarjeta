@@ -2,12 +2,13 @@ from pathlib import Path
 
 VERSION_OLD = "20261010-29"
 VERSION_MID = "20261011-30"
-VERSION_NEW = "20261011-32"
+VERSION_PREV = "20261011-32"
+VERSION_NEW = "20261011-33"
 
 p = Path("narrative-universe.js")
 s = p.read_text(encoding="utf-8")
 
-s = s.replace("const VERSION='20261010-29';", "const VERSION='20261011-32';")
+s = s.replace("const VERSION='20261010-29';", "const VERSION='20261011-33';")
 
 s = s.replace(
     ".ou-card{position:fixed;z-index:74;left:max(26px,4.2vw);",
@@ -27,8 +28,8 @@ s = s.replace(
 )
 
 portrait = """  @media(max-width:700px) and (orientation:portrait){
-    .ou-card{right:max(10px,env(safe-area-inset-right))!important;left:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 10px)!important;width:94px!important;height:58px!important;transform:rotate(4deg)!important}
-    .ou-card::before{left:13px!important;top:12px!important;width:23px!important;height:17px!important}.ou-card::after{left:13px!important;right:13px!important;bottom:11px!important}
+    .ou-card{right:max(10px,env(safe-area-inset-right))!important;left:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 10px)!important;width:94px!important;height:58px!important;transform:rotate(4deg)!important;opacity:.46!important;background:transparent!important;box-shadow:0 3px 10px rgba(0,0,0,.10)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+    .ou-card::before{left:13px!important;top:12px!important;width:23px!important;height:17px!important;opacity:.62!important}.ou-card::after{left:13px!important;right:13px!important;bottom:11px!important;opacity:.55!important}
     .ou-reading-checklist{left:max(10px,env(safe-area-inset-left))!important;right:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 18px)!important}
     .ou-reading-checklist summary{margin-left:0!important;padding:5px 8px!important;border-color:rgba(255,255,255,.20)!important;background:rgba(12,12,12,.38)!important;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
     .ou-reading-checklist ul{left:0!important;right:auto!important}
@@ -44,7 +45,7 @@ p.write_text(s, encoding="utf-8")
 
 q = Path("elegia-breve/index.html")
 t = q.read_text(encoding="utf-8")
-for old in (VERSION_OLD, VERSION_MID, "20261011-31"):
+for old in (VERSION_OLD, VERSION_MID, "20261011-31", VERSION_PREV):
     t = t.replace(f"narrative-universe.js?v={old}", f"narrative-universe.js?v={VERSION_NEW}")
 
 nav_portrait = """@media(max-width:700px) and (orientation:portrait){
