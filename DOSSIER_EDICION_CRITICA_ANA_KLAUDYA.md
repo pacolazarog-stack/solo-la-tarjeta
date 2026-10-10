@@ -5,7 +5,7 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Código fuente archivístico vigente en este dossier:** versión 21, publicada en `main` como commit de código `e5461949f48ffaa4209c6e11b003c682730702f0`
+**Paquete archivístico vigente:** versión 22; conserva el código publicado en `main` mediante el commit `e5461949f48ffaa4209c6e11b003c682730702f0`
 **Módulo compartido:** `narrative-universe.js`, versión `20261010-12`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
@@ -96,7 +96,7 @@ Ejemplo con la fecha canónica registrada para *ANA KLAUDYA*:
 
 ### Cita del código fuente archivado
 
-> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 21, visibilidad del fondo COTÁN en móvil. Repositorio `pacolazarog-stack/solo-la-tarjeta`, commit de código `e5461949f48ffaa4209c6e11b003c682730702f0`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
+> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 22, criterio editorial de conservación móvil. Código del commit `pacolazarog-stack/solo-la-tarjeta`, commit de código `e5461949f48ffaa4209c6e11b003c682730702f0`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
 
 Para citas académicas, conviene especificar la pieza, el modo de acceso (lectura o escucha), la URL y la fecha de consulta. Si se cita un verso, añadir el nombre de la pieza y el identificador o encabezado de sección disponible en la edición consultada. No asignar números de verso que la obra no muestre.
 
@@ -108,7 +108,7 @@ Para citas académicas, conviene especificar la pieza, el modo de acceso (lectur
 - `ceniciento/texto.md`: texto de lectura de *CENICIENTO*.
 - `ceniciento/index.html`: interfaz de lectura/escucha y 59 señales de voz de *CENICIENTO*.
 - `ceniciento/narracion.txt`: material de narración asociado a *CENICIENTO*.
-- Archivo complementario vigente: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (18).md](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(18).md).
+- Archivo complementario vigente: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (22).md](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(22).md).
 
 ## 8. Separación editorial
 
@@ -247,3 +247,14 @@ La prueba móvil comprueba la translucidez de la navegación y la tarjeta compac
 La relectura decisiva procede de los propios textos y, en particular, de la relación entre *CENICIENTO* y *ANA KLAUDYA*. Las animaciones, los estados y las transiciones pueden acompañar la experiencia, pero no deben ser necesarios para que esa relación exista. Si al retirarlos la lectura retrospectiva permanece, la arquitectura narrativa se sostiene por sí misma.
 
 La edición móvil canónica conserva tres puertas entre obras —tarjeta, interrogante y «volver»—, cuatro frases fantasma y motivos secundarios que funcionan como ecos de memoria. Los accesos deben ser objetos táctiles claros y fáciles de hallar con el pulgar; los motivos resonantes no se convierten en navegación. El criterio no es añadir más controles, sino facilitar la lectura sin debilitar el misterio.
+
+
+## 20. Cierre editorial y conservación móvil · versión 22
+
+La revisión 22 no añade rutas, símbolos ni controles narrativos y no altera los poemas. Conserva como núcleo las tres puertas entre obras y las cuatro frases fantasma fijadas en este dossier. Los motivos secundarios —ojos de estatua, Torre Eiffel, reloj, pan, cebolla, tarjeta anulada y ausencia— sólo cuentan como ecos de memoria cuando están sostenidos por los textos; no se convierten en enlaces.
+
+El criterio principal es que la relectura nazca de los textos, sobre todo de la relación entre *CENICIENTO* y *ANA KLAUDYA*. Animaciones, estados y transiciones pueden acompañar el recorrido, pero al retirarlos debe permanecer la posibilidad de releer de otra manera lo ya leído. El código puede comprobar disparadores y accesibilidad; la transformación interpretativa requiere evaluación editorial de las obras completas.
+
+La edición móvil se diseña para lectura con pulgar, sin depender de hover, zoom ni objetivos diminutos. Las puertas deben ser reconocibles y táctiles, y los controles no deben tapar la tarjeta, el fondo COTÁN ni el texto. La reducción de información de portada sirve para ampliar la superficie útil de lectura e imagen, preservando contraste, áreas seguras y acceso por teclado o tecnologías de asistencia.
+
+La revisión documental actualiza este dossier y el archivo Markdown integral. No modifica el código publicado en el commit `e5461949f48ffaa4209c6e11b003c682730702f0`, ni constituye una nueva edición textual.
