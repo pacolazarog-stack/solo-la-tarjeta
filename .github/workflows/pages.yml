@@ -26,6 +26,7 @@ jobs:
       - name: Verificar progreso de lectura
         run: |
           node check-reading-progress.cjs
+          node ceniciento/check-mirror.cjs
           node check-publication-loading.cjs
       - name: Configurar Pages
         uses: actions/configure-pages@v5

@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-25';
+const VERSION='20261010-27';
 const STORAGE='oras.universe.v2';
 const rootPath='/solo-la-tarjeta/';
 const GHOSTS=Object.freeze({
@@ -93,7 +93,8 @@ function installBaseStyles(){
   .ou-reading-checklist [data-done="false"]{color:#c8c5bf}
   body.mirror .ou-reading-checklist{display:none}
   body.mirror>:not(#mirror):not(script):not(style){display:none!important}
-  body.mirror #mirror{position:fixed;z-index:100;inset:0;display:block;height:100svh;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y mandatory;background:#100e0d;color:#f7f1e8;scrollbar-width:none}
+  body.mirror{touch-action:pan-y}
+  body.mirror #mirror{opacity:1;visibility:visible;width:100%;max-width:none;margin:0;padding:0;transform:none;transition:none;touch-action:pan-y;position:fixed;z-index:100;inset:0;display:block;height:100svh;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y mandatory;background:#100e0d;color:#f7f1e8;scrollbar-width:none}
   body.mirror #mirror::-webkit-scrollbar{display:none}
   body.mirror .mirror-scene{position:relative;display:grid;place-items:center;min-height:100svh;padding:clamp(32px,8svh,76px) clamp(24px,7vw,90px);scroll-snap-align:start;scroll-snap-stop:always}
   body.mirror .mirror-copy{width:min(100%,65ch);margin:0 auto;text-align:center;font-size:clamp(1.22rem,3.4vw,2rem);line-height:1.5;white-space:pre-line;text-wrap:balance}
@@ -244,7 +245,7 @@ function completePiece(key,patch={}){
 
 window.addEventListener('oras:mirror-end',()=>{
   save({mirrorReadComplete:true,returnedFromCeniciento:true});state=readState();ensureChecklist();
-  if(page.ana){document.body.classList.remove('mirror');const mirror=document.getElementById('mirror');if(mirror)mirror.hidden=true;window.scrollTo(0,0);ghost(GHOSTS.return,'after-mirror-return',{where:'left',delay:1200,hold:7500});return;}
+  if(page.ana){topGo(rootPath+'elegia-breve/?v='+VERSION);return;}
   if(window.parent!==window){window.parent.postMessage({channel:'oras-universe-v2',type:'mirror-return'},location.origin);return;}
   topGo(rootPath+'elegia-breve/?v='+VERSION);
 });

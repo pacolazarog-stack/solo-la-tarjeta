@@ -11,7 +11,7 @@ assert(mirror.includes('if(event.deltaY<0){releasePause();return}')&&mirror.incl
 const closingMark=['fl','ag'].join('');
 assert(mirror.includes("mark.textContent='"+closingMark+"'")&&mirror.indexOf("mark.textContent='"+closingMark+"'")<mirror.indexOf("end.className='mirror-end-sentinel'"),'The sole visible closing mark appears immediately before automatic return');
 assert(page.includes('<main id="mirror" aria-label="EL ESPEJO" hidden></main>'),'The convergence remains hidden until its narrative condition');
-assert(page.includes('data-oras-mirror="true" src="el-espejo.js?v=20261010-25"'),'The mirror script is registered for shared startup');
+assert(page.includes('data-oras-mirror="true" src="el-espejo.js?v=20261010-27"'),'The mirror script is registered for shared startup');
 assert(shared.includes('state.anaComplete&&state.soloComplete&&state.cenicientoComplete&&state.cenicientoUnlocked&&!state.mirrorReadComplete'),'The convergence waits for all three complete first readings');
 assert(shared.includes("completePiece('anaComplete')")&&shared.includes("completePiece('cenicientoComplete'")&&shared.includes('maybeStartMirror();'),'Every piece completion checks for the convergence, regardless of reading order');
 assert(shared.includes("save({mirrorReadComplete:true,returnedFromCeniciento:true})"),'Finishing EL ESPEJO records completion and return');
@@ -22,5 +22,9 @@ assert(!page.includes('id="continue"')&&!page.includes('cont.onclick'),'Read and
 assert(page.includes("voice.play().then(loop)"),'Voice playback starts directly from the mode selection');
 assert.equal((shared.match(/Hay historias que empiezan antes\.|El origen suele parecer insignificante\.|Falta una versión de la historia\.|Nadie regresa al mismo lugar\./g)||[]).length,4,'The four ghost phrases remain unchanged');
 const pages=['../index.html','../elegia-breve/index.html','../ojos/index.html','../sonrisa/index.html','../estrella/index.html','../epilogo/index.html','index.html'];
-for(const f of pages){const s=fs.readFileSync(path.join(__dirname,f),'utf8');assert(s.includes('narrative-universe.js?v=20261010-25'),`${f} points to shared module version 24`)}
+for(const f of pages){const s=fs.readFileSync(path.join(__dirname,f),'utf8');assert(s.includes('narrative-universe.js?v=20261010-27'),`${f} points to shared module version 24`)}
 console.log('PASS: 32-scene convergence, completion gate, automatic return, checklist, and one-tap reading start');
+
+assert(!/\n\s*main\s*\{/.test(ana),'Ana reading visibility is scoped to #reading, not every main');
+assert(shared.includes('body.mirror #mirror{opacity:1;visibility:visible;width:100%;max-width:none;margin:0;padding:0;'),'Mirror overrides host visibility and dimensions');
+assert(shared.includes('body.mirror{touch-action:pan-y}'),'Locked entry must not block Mirror touch scrolling');

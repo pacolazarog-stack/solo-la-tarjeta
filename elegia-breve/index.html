@@ -294,7 +294,7 @@
     .voice-mix p{margin:4px 0 0;color:#375548;font-size:.78rem}
     .music-level{display:flex;justify-content:space-between;margin-top:12px}
     body.voice-open .voice-launch{visibility:hidden;pointer-events:none}
-    body.voice-open main{width:calc(100% - 504px);margin-left:24px;margin-right:480px}
+    body.voice-open #reading{width:calc(100% - 504px);margin-left:24px;margin-right:480px}
     .portrait-finale{
       position:fixed;inset:0;z-index:12;pointer-events:none;
       background:#1b1711;opacity:0;visibility:hidden;
@@ -311,7 +311,7 @@
     .ana-navigation{position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;width:max-content;max-width:calc(100% - 28px);padding:10px;border:1px solid rgba(23,63,50,.2);border-radius:22px;background:rgba(238,241,233,.94);box-shadow:0 8px 30px rgba(0,0,0,.15)}
     .ana-navigation[hidden]{display:none}.ana-navigation .entry-button{min-height:44px;touch-action:manipulation;margin:0;padding:.85em 1.2em;letter-spacing:.08em;font-size:.68rem}
     .ana-navigation{max-height:45svh;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
-    body.ana-navigation-ready main{padding-bottom:100px}
+    body.ana-navigation-ready #reading{padding-bottom:100px}
     .ceniciento-frame{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#100e0d}
     .ceniciento-frame[hidden]{display:none}
     .ceniciento-frame.sonrisa-leaving{pointer-events:none}
@@ -370,10 +370,10 @@
     body.portrait-revealed .portrait-finale{opacity:1;visibility:visible}
     body.portrait-revealed .portrait-finale img{opacity:1}
     body.portrait-revealed .portrait-question{opacity:1;visibility:visible;pointer-events:auto}
-    body.reading-ready.portrait-revealed main{opacity:0;visibility:hidden;transition:opacity 6s ease,visibility 6s ease}
+    body.reading-ready.portrait-revealed #reading{opacity:0;visibility:hidden;transition:opacity 6s ease,visibility 6s ease}
     @media(max-width:900px){
       body.voice-open .voice-dialog{position:relative;top:auto;bottom:auto;right:auto;margin:24px 16px 0 auto}
-      body.voice-open main{width:calc(100% - 34px);margin:0 auto;padding-top:20svh}
+      body.voice-open #reading{width:calc(100% - 34px);margin:0 auto;padding-top:20svh}
       body.voice-open .portrait-image-area{width:100vw}
     }
     @media(max-width:700px){
@@ -485,7 +485,7 @@
     }
 
     /* LECTURA */
-    main{
+    #reading{
       position:relative;
       z-index:10;
       width:min(calc(100% - 42px),760px);
@@ -496,7 +496,7 @@
       transition:opacity 1.7s ease,visibility 1.7s ease;
     }
 
-    body.reading-ready main{
+    body.reading-ready #reading{
       opacity:1;
       visibility:visible;
     }
@@ -690,7 +690,7 @@
     }
 
     @media(max-width:640px){
-      main{
+      #reading{
         width:min(calc(100% - 34px),760px);
         padding-top:64svh;
       }
@@ -734,7 +734,7 @@
 
     @media(prefers-reduced-motion:reduce){
       html{scroll-behavior:auto}
-      .entry,.name-prelude,.name-ana,.name-klaudya,.line,.heat-part,.sound-toggle,main{transition-duration:.01ms}
+      .entry,.name-prelude,.name-ana,.name-klaudya,.line,.heat-part,.sound-toggle,#reading{transition-duration:.01ms}
       .pulse-field,.pulse-field::before,.pulse-field::after,.question-beat{animation-duration:3.8s}
       .layer-warm{animation:none}
       .heat-final.is-burning{animation:none}
@@ -1646,6 +1646,6 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       syncPoemRoute();
     })();
   </script>
-<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-25"></script>
+<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-27"></script>
 </body>
 </html>
