@@ -178,6 +178,7 @@ assert.deepEqual(phraseInventory,['Hay historias que empiezan antes.','El origen
 assert(!/ghost\(['\"]/.test(universe),'All ghost copy comes from the four-item phrase inventory');
 assert(!/function (?:makeSymbolic|wrapToken|activateSoloSymbols)/.test(universe),'Narrative echoes remain outside navigation controls');
 assert(/function showSoloEndNav\(\)[\s\S]*?ana\.href=rootPath\+'elegia-breve\/'[\s\S]*?nav\.append\(ana\)/.test(universe),'The Solo ending offers only the return to Ana');
+assert(/function showSoloEndNav\(\)\{\s*if\(!state\.cenicientoComplete\)return/.test(universe),'Solo shows no cross-piece exit before Ceniciento has been completed');
 assert(/function showSoloEndNav\(\)[\s\S]*?if\(state\.cenicientoComplete\)\{[\s\S]*?ceniciento\.href/.test(universe),'Solo opens Ceniciento only after its first complete reading');
 assert(/if\(state\.cenicientoComplete\)\{[\s\S]*?ceniciento\.href=rootPath\+'ceniciento\//.test(universe),'Solo gains direct cross-navigation only after Ceniciento is complete');
 assert(/function addUnlockedAnaDoors\(\)[\s\S]*?if\(!state\.cenicientoComplete\)return[\s\S]*?textContent='SOLO LA TARJETA'[\s\S]*?textContent='CENICIENTO'/.test(universe),'Ana gains reciprocal work buttons only after Ceniciento is complete');
