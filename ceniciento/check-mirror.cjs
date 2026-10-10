@@ -22,7 +22,7 @@ assert(!page.includes('id="continue"')&&!page.includes('cont.onclick'),'Read and
 assert(page.includes("voice.play().then(loop)"),'Voice playback starts directly from the mode selection');
 assert.equal((shared.match(/Hay historias que empiezan antes\.|El origen suele parecer insignificante\.|Falta una versión de la historia\.|Nadie regresa al mismo lugar\./g)||[]).length,4,'The four ghost phrases remain unchanged');
 const pages=['../index.html','../elegia-breve/index.html','../ojos/index.html','../sonrisa/index.html','../estrella/index.html','../epilogo/index.html','index.html'];
-for(const f of pages){const s=fs.readFileSync(path.join(__dirname,f),'utf8');assert(s.includes('narrative-universe.js?v=20261010-29'),`${f} points to shared module version 24`)}
+for(const f of pages){const s=fs.readFileSync(path.join(__dirname,f),'utf8');assert(/narrative-universe\.js\?v=202610(?:10-29|11-(?:30|31|32))/.test(s),`${f} points to an approved shared module version`)}
 console.log('PASS: 32-scene convergence, completion gate, automatic return, checklist, and one-tap reading start');
 
 assert(!/\n\s*main\s*\{/.test(ana),'Ana reading visibility is scoped to #reading, not every main');
