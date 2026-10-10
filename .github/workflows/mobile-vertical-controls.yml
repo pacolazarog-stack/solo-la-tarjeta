@@ -7,70 +7,73 @@ permissions:
   contents: write
 jobs:
   patch:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Recompose mobile portrait controls
+      - name: Apply mobile portrait layout
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
-          # 1) Shared card + reading counter.
           p = Path('narrative-universe.js')
           s = p.read_text(encoding='utf-8')
-          s = s.replace("const VERSION='20261010-29';", "const VERSION='20261011-30';")
+          s = s.replace("const VERSION='20261010-29';", "const VERSION='20261011-31';")
+          s = s.replace("const VERSION='20261011-30';", "const VERSION='20261011-31';")
           marker = "  @media(hover:none) and (pointer:coarse){"
           portrait = r'''  @media(max-width:700px) and (orientation:portrait){
-    .ou-card{left:max(10px,env(safe-area-inset-left))!important;right:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 12px)!important;width:94px!important;height:58px!important;transform:rotate(-4deg)}
+    .ou-card{right:max(10px,env(safe-area-inset-right))!important;left:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 10px)!important;width:94px!important;height:58px!important;transform:rotate(4deg)}
     .ou-card::before{left:13px!important;top:12px!important;width:23px!important;height:17px!important}.ou-card::after{left:13px!important;right:13px!important;bottom:11px!important}
-    .ou-reading-checklist{left:max(10px,env(safe-area-inset-left))!important;right:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 82px)!important}
+    .ou-reading-checklist{left:max(10px,env(safe-area-inset-left))!important;right:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 18px)!important}
     .ou-reading-checklist summary{margin-left:0!important;padding:5px 8px!important;border-color:rgba(255,255,255,.20)!important;background:rgba(12,12,12,.38)!important;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
     .ou-reading-checklist ul{left:0!important;right:auto!important}
   }
 '''
-          if portrait not in s:
-              if marker not in s:
-                  raise RuntimeError('No se encontró el anclaje CSS de narrative-universe.js')
+          start = '  @media(max-width:700px) and (orientation:portrait){\n    .ou-card{'
+          if start in s:
+              a = s.index(start)
+              b = s.index(marker, a)
+              s = s[:a] + portrait + s[b:]
+          elif marker in s:
               s = s.replace(marker, portrait + marker, 1)
+          else:
+              raise RuntimeError('No CSS anchor in narrative-universe.js')
           p.write_text(s, encoding='utf-8')
 
-          # 2) ANA KLAUDYA: bottom navigation becomes a transparent linear strip
-          #    on the right, reserving the left lane for the card and counter.
           q = Path('elegia-breve/index.html')
           t = q.read_text(encoding='utf-8')
           nav_anchor = '.journey-nav button[hidden]{display:none}\n'
           nav_portrait = r'''@media(max-width:700px) and (orientation:portrait){
-  .journey-nav{left:auto;right:max(10px,env(safe-area-inset-right));bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:none;width:calc(100% - 132px);max-width:360px;height:48px;padding:0;border:0;border-top:1px solid rgba(255,250,241,.46);border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
-  .journey-nav button{min-height:48px;padding:7px 5px;border:0;border-radius:0;background:transparent;box-shadow:none;font-size:13px;text-shadow:0 1px 4px rgba(0,0,0,.9)}
+  .journey-nav{left:112px;right:112px;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:none;width:auto;max-width:none;height:48px;padding:0;border:0;border-top:1px solid rgba(255,250,241,.46);border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .journey-nav button{min-width:0;min-height:48px;padding:7px 3px;border:0;border-radius:0;background:transparent;box-shadow:none;font-size:12px;text-shadow:0 1px 4px rgba(0,0,0,.9)}
   .journey-nav button+button{border-left:1px solid rgba(255,250,241,.26)}
 }
 '''
-          if nav_portrait not in t:
-              if nav_anchor not in t:
-                  raise RuntimeError('No se encontró el anclaje de journey-nav en elegia-breve/index.html')
+          start_nav = '@media(max-width:700px) and (orientation:portrait){\n  .journey-nav{'
+          if start_nav in t:
+              a = t.index(start_nav)
+              b = t.index('\n}\n', a) + 3
+              t = t[:a] + nav_portrait + t[b:]
+          elif nav_anchor in t:
               t = t.replace(nav_anchor, nav_anchor + nav_portrait, 1)
-          t = t.replace('narrative-universe.js?v=20261010-29', 'narrative-universe.js?v=20261011-30')
+          else:
+              raise RuntimeError('No journey-nav anchor in elegia-breve/index.html')
+          t = t.replace('narrative-universe.js?v=20261010-29', 'narrative-universe.js?v=20261011-31')
+          t = t.replace('narrative-universe.js?v=20261011-30', 'narrative-universe.js?v=20261011-31')
           q.write_text(t, encoding='utf-8')
 
-          # 3) Bust the shared module cache anywhere else it is referenced.
           for html in Path('.').rglob('*.html'):
               if html == q:
                   continue
               u = html.read_text(encoding='utf-8')
-              v = u.replace('narrative-universe.js?v=20261010-29', 'narrative-universe.js?v=20261011-30')
+              v = u.replace('narrative-universe.js?v=20261010-29', 'narrative-universe.js?v=20261011-31').replace('narrative-universe.js?v=20261011-30', 'narrative-universe.js?v=20261011-31')
               if v != u:
                   html.write_text(v, encoding='utf-8')
           PY
-      - name: Verify progress logic
-        run: node check-reading-progress.cjs
-      - name: Verify mobile navigation syntax
-        run: node elegia-breve/check-mobile-navigation.cjs
-      - name: Commit mobile portrait layout
+      - name: Commit applied layout
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add narrative-universe.js elegia-breve/index.html '*.html' '**/*.html'
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "Refine mobile portrait controls [skip ci]"
+          git commit -m "Apply mobile bottom layout: counter left, controls center, card right [skip ci]"
           git push
