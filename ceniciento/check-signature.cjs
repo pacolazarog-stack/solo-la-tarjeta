@@ -15,6 +15,9 @@ assert(source.includes('background:rgba(8,7,7,.34);color:#fffaf1'),'Reading text
 assert(source.includes('.read:not(.revealing) .bg img{filter:blur(0)'),'Reading mode keeps the background photographs clear');
 assert(source.includes('function renderReadingProgress()')&&source.includes('setAge(clamp(position/max))'),'Scrolling the text advances the photographic age sequence');
 assert(source.includes("addEventListener('scroll',scheduleReadingProgress,{passive:true})"),'Reading progress follows touch scrolling');
+assert(source.includes('const AGE_STOPS=[0,.07,.14,.21,.29,.39,.53,.77,.92,1]')&&source.includes('function agePosition(p)'),'Uneven photographic age changes receive proportional reading distance');
+assert(source.includes('.read:not(.revealing) .bg img,.read:not(.revealing) .portrait img{transition:none}'),'Scroll-driven crossfades follow the reader position without delayed opacity transitions');
+assert(source.includes('await Promise.all(arr.map(src=>{const img=new Image();img.src=src;return img.decode()}))')&&source.includes("if(mode==='read')renderReadingProgress()"),'Decoded frames are ready before use and loading preserves the current reading position');
 assert(source.includes('padding:clamp(116px,18svh,148px) 0 20svh'),'Mobile reading clears the fixed top controls before the first text');
 assert(text.startsWith('# CENICIENTO'),'The canonical text file is identifiable');
 assert(text.endsWith('al hombre que era.'),'The full reading reaches the final line');
