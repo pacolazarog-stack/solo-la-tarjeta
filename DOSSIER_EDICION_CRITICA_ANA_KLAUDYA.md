@@ -3,7 +3,6 @@
 ## *ANA KLAUDYA · SOLO LA TARJETA · CENICIENTO*
 
 **Idioma:** español  
-**Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
 **Paquete archivístico vigente:** versión 35; código y pruebas publicados en `main`, commit `4e440e60a21732cd385deb2fd9cf563359973a4b`  
 **Módulo compartido:** `narrative-universe.js`, versión `20261010-22`  
@@ -91,15 +90,15 @@ La versión archivística 14 preserva los textos recibidos en la versión 13; lo
 
 ### Cita de una obra web
 
-> flag. *[Título de la obra]*. Edición digital en español, [fecha o versión indicada en la propia obra]. [URL de la obra]. Consultado el [fecha de consulta].
+> *[Título de la obra]*. Edición digital en español, [fecha o versión indicada en la propia obra]. [URL de la obra]. Consultado el [fecha de consulta].
 
 Ejemplo con la fecha canónica registrada para *ANA KLAUDYA*:
 
-> flag. *ANA KLAUDYA*. Edición digital canónica en español, cerrada el 9 de octubre de 2026. https://pacolazarog-stack.github.io/solo-la-tarjeta/elegia-breve/. Consultado el [fecha de consulta].
+> *ANA KLAUDYA*. Edición digital canónica en español, cerrada el 9 de octubre de 2026. https://pacolazarog-stack.github.io/solo-la-tarjeta/elegia-breve/. Consultado el [fecha de consulta].
 
 ### Cita del código fuente archivado
 
-> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 28, lectura fotográfica de CENICIENTO y espacio de convergencia propuesto. Código del commit `pacolazarog-stack/solo-la-tarjeta`, commit de código `7387caaa463fc07febac6c1028ac8e4049f23e96`; módulo compartido `20261010-17`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
+> *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 28, lectura fotográfica de CENICIENTO y espacio de convergencia propuesto. Código del commit `pacolazarog-stack/solo-la-tarjeta`, commit de código `7387caaa463fc07febac6c1028ac8e4049f23e96`; módulo compartido `20261010-17`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
 
 Para citas académicas, conviene especificar la pieza, el modo de acceso (lectura o escucha), la URL y la fecha de consulta. Si se cita un verso, añadir el nombre de la pieza y el identificador o encabezado de sección disponible en la edición consultada. No asignar números de verso que la obra no muestre.
 
@@ -196,7 +195,7 @@ La relectura de *SOLO LA TARJETA* hacia *ANA KLAUDYA* funciona como resonancia d
 
 La versión 15 toma el teléfono como soporte principal. Conserva las tres puertas y no añade rótulos de menú. La tarjeta pasa a 112 × 70 px en pantallas estrechas, respeta el área segura del dispositivo y mantiene un nombre accesible; el interrogante dispone de un área de toque de 80 × 80 px, aparece antes en móvil y deja de pulsar en dispositivos táctiles; «volver» cuenta con un área mínima de 100 × 48 px, situada de forma estable sobre el borde seguro inferior.
 
-El final de *SOLO LA TARJETA* y el cierre de lectura de *CENICIENTO* se activan al entrar en vista la última línea o la firma, mediante `IntersectionObserver`. Se conserva la alternativa basada en scroll para navegadores sin esa API. Las páginas afectadas ajustan el viewport para ocupar correctamente la pantalla y respetar las áreas seguras.
+El final de *SOLO LA TARJETA* y el cierre de lectura de *CENICIENTO* se activan al entrar en vista la última línea o el marcador de fin de lectura, mediante `IntersectionObserver`. Se conserva la alternativa basada en scroll para navegadores sin esa API. Las páginas afectadas ajustan el viewport para ocupar correctamente la pantalla y respetar las áreas seguras.
 
 Las siete comprobaciones CJS del paquete pasan, incluidas verificaciones de las zonas táctiles, el fin de lectura observado y la ausencia de nuevas rutas. El código se publicó en `main` el 10 de octubre de 2026 mediante el commit `79d073790dfdcf2bcbd2819cc2aa70bff06f9b0b`; la edición de conservación y este dossier se registran en el commit documental posterior.
 
@@ -285,7 +284,7 @@ Las siete comprobaciones CJS pasan, incluida la prueba móvil actualizada. El c�
 
 La entrada de navegación a *CENICIENTO* queda reservada al interrogante de *ANA KLAUDYA*. Se elimina el enlace «Ir a CENICIENTO» del final de *SOLO LA TARJETA*. En ese cierre sólo queda «Volver a ANA KLAUDYA».
 
-Al acabar *CENICIENTO*, sí se permite continuar hacia ambas piezas: «volver» conduce a *ANA KLAUDYA* y un segundo enlace conduce a *SOLO LA TARJETA*. Estos controles aparecen sólo cuando termina la lectura —firma observada o narración terminada— y tras la pausa prevista. Desde el marco de lectura de ANA, ambos enlaces abren los destinos en la ventana superior. El enlace hacia *SOLO LA TARJETA* no simula el descubrimiento de la tarjeta.
+Al acabar *CENICIENTO*, sí se permite continuar hacia ambas piezas: «volver» conduce a *ANA KLAUDYA* y un segundo enlace conduce a *SOLO LA TARJETA*. Estos controles aparecen sólo cuando termina la lectura —marcador de fin observado o narración terminada— y tras la pausa prevista. Desde el marco de lectura de ANA, ambos enlaces abren los destinos en la ventana superior. El enlace hacia *SOLO LA TARJETA* no simula el descubrimiento de la tarjeta.
 
 El cambio conserva las tres puertas de entrada definidas por la arquitectura y añade una salida poslectura desde *CENICIENTO* a *SOLO LA TARJETA*. No convierte motivos secundarios en controles. Se actualiza el identificador del módulo compartido para evitar que el navegador conserve una copia anterior. Las siete pruebas CJS pasan. Código publicado en `main` mediante `78e715f9f920cb7353ab4aca177377e6332a4b13`; archivo fuente integral: [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (25).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(25).md).
 
@@ -319,11 +318,11 @@ Los botones del cierre de *CENICIENTO* pasan al flujo normal bajo el texto en el
 
 ### Verificación y límites
 
-Se ejecutaron las siete comprobaciones automatizadas del paquete: navegación móvil; recorrido y estados entre obras; cierre de *SOLO LA TARJETA*; estructura de la pieza; secuencia del interludio; apertura del epílogo; y lectura, firma y salidas de *CENICIENTO*. Las siete pasan. Las pruebas verifican comportamiento del código, condiciones de ruta, tamaño táctil y reglas CSS relevantes. No equivalen a una prueba visual en todos los modelos de teléfono; por ello, la verificación física de encuadres y fondos sigue siendo una comprobación editorial recomendada.
+Se ejecutaron las siete comprobaciones automatizadas del paquete: navegación móvil; recorrido y estados entre obras; cierre de *SOLO LA TARJETA*; estructura de la pieza; secuencia del interludio; apertura del epílogo; y lectura y salidas de *CENICIENTO*. Las siete pasan. Las pruebas verifican comportamiento del código, condiciones de ruta, tamaño táctil y reglas CSS relevantes. No equivalen a una prueba visual en todos los modelos de teléfono; por ello, la verificación física de encuadres y fondos sigue siendo una comprobación editorial recomendada.
 
 La revisión confirma HTML en español, controles con nombres accesibles, navegación táctil sin dependencia de hover, prefers-reduced-motion, observación de finales de lectura con IntersectionObserver y alternativas de scroll, y estado persistente local. CENICIENTO usa aria-live="polite" para su superficie de lectura. El estado guardado en localStorage no se sincroniza entre dispositivos.
 
-**Pendiente archivístico:** las páginas revisadas no incluyen JSON-LD ni metadatos Dublin Core. La identificación de autoría, fecha de cierre, número de edición y linaje de versión se documenta en este dossier y en el archivo de código, pero aún no se publica como metadato estructurado legible por máquinas en las páginas. La recomendación es añadirlo en el aparato head de cada obra sin mostrar explicaciones de la arquitectura al lector.
+**Pendiente archivístico:** las páginas revisadas no incluyen JSON-LD ni metadatos Dublin Core. La fecha de cierre, el número de edición y el linaje de versión se documentan aquí y en el archivo de código; aún no se publican como metadatos estructurados legibles por máquinas en las páginas. La recomendación es añadirlo en el aparato head de cada obra sin mostrar explicaciones de la arquitectura al lector.
 
 **Publicación:** código y pruebas en main, commit e9877adc27ee90d7b8595f4616ea7c79f8ecbc18; paquete integral: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (27).md](https://github.com/pacolazarog-stack/solo-la-tarjeta/blob/main/TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(27).md).
 
@@ -348,11 +347,11 @@ Los botones del cierre de *CENICIENTO* pasan al flujo normal bajo el texto en el
 
 ### Verificación y límites
 
-Se ejecutaron las siete comprobaciones automatizadas del paquete: navegación móvil; recorrido y estados entre obras; cierre de *SOLO LA TARJETA*; estructura de la pieza; secuencia del interludio; apertura del epílogo; y lectura, firma y salidas de *CENICIENTO*. Las siete pasan. Las pruebas verifican comportamiento del código, condiciones de ruta, tamaño táctil y reglas CSS relevantes. No equivalen a una prueba visual en todos los modelos de teléfono; por ello, la verificación física de encuadres y fondos sigue siendo una comprobación editorial recomendada.
+Se ejecutaron las siete comprobaciones automatizadas del paquete: navegación móvil; recorrido y estados entre obras; cierre de *SOLO LA TARJETA*; estructura de la pieza; secuencia del interludio; apertura del epílogo; y lectura y salidas de *CENICIENTO*. Las siete pasan. Las pruebas verifican comportamiento del código, condiciones de ruta, tamaño táctil y reglas CSS relevantes. No equivalen a una prueba visual en todos los modelos de teléfono; por ello, la verificación física de encuadres y fondos sigue siendo una comprobación editorial recomendada.
 
 La revisión confirma HTML en español, controles con nombres accesibles, navegación táctil sin dependencia de hover, prefers-reduced-motion, observación de finales de lectura con IntersectionObserver y alternativas de scroll, y estado persistente local. CENICIENTO usa aria-live="polite" para su superficie de lectura. El estado guardado en localStorage no se sincroniza entre dispositivos.
 
-**Pendiente archivístico:** las páginas revisadas no incluyen JSON-LD ni metadatos Dublin Core. La identificación de autoría, fecha de cierre, número de edición y linaje de versión se documenta en este dossier y en el archivo de código, pero aún no se publica como metadato estructurado legible por máquinas en las páginas. La recomendación es añadirlo en el aparato head de cada obra sin mostrar explicaciones de la arquitectura al lector.
+**Pendiente archivístico:** las páginas revisadas no incluyen JSON-LD ni metadatos Dublin Core. La fecha de cierre, el número de edición y el linaje de versión se documentan aquí y en el archivo de código; aún no se publican como metadatos estructurados legibles por máquinas en las páginas. La recomendación es añadirlo en el aparato head de cada obra sin mostrar explicaciones de la arquitectura al lector.
 
 **Publicación:** código y pruebas en main, commit e9877adc27ee90d7b8595f4616ea7c79f8ecbc18; paquete integral: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (27).md](https://github.com/pacolazarog-stack/solo-la-tarjeta/blob/main/TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(27).md).
 
