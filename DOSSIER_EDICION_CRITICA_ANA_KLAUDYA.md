@@ -5,7 +5,7 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Código fuente archivístico vigente en este dossier:** versión 19, publicada en `main` como commit de código `6527b9fd27dc0e9635ca255b4838ffb899349c2e`
+**Código fuente archivístico vigente en este dossier:** versión 20, publicada en `main` como commit de código `23608494d4fdfe911d0492472db88485f5453128`
 **Módulo compartido:** `narrative-universe.js`, versión `20261010-12`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
@@ -96,7 +96,7 @@ Ejemplo con la fecha canónica registrada para *ANA KLAUDYA*:
 
 ### Cita del código fuente archivado
 
-> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 19, portadas móviles compactas para ampliar la superficie de lectura. Repositorio `pacolazarog-stack/solo-la-tarjeta`, commit de código `6527b9fd27dc0e9635ca255b4838ffb899349c2e`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
+> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 20, separación de la tarjeta y la navegación móvil. Repositorio `pacolazarog-stack/solo-la-tarjeta`, commit de código `23608494d4fdfe911d0492472db88485f5453128`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
 
 Para citas académicas, conviene especificar la pieza, el modo de acceso (lectura o escucha), la URL y la fecha de consulta. Si se cita un verso, añadir el nombre de la pieza y el identificador o encabezado de sección disponible en la edición consultada. No asignar números de verso que la obra no muestre.
 
@@ -226,3 +226,10 @@ La prueba móvil verifica la barra de una fila, el espacio de lectura y la posic
 La versión 19 reduce en teléfonos el espacio de cabecera, el tamaño y los márgenes de los títulos, el espacio entre acciones y el bloque de sonido en las portadas de *ANA KLAUDYA*, sus poemas independientes y *CENICIENTO*. Los botones «Leer con pausas» y «Poema completo» se conservan; los controles de música siguen disponibles en un bloque compacto de dos columnas. El poema comienza antes y gana área visible sin alterar el texto ni añadir navegación. En pantallas bajas se aplica un ajuste adicional.
 
 Las siete comprobaciones CJS se ejecutaron y pasan. El código se publicó en `main` mediante `6527b9fd27dc0e9635ca255b4838ffb899349c2e`. El paquete de código español completo se conserva en [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (19).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(19).md); este dossier permanece fuera de la interfaz de lectura.
+
+
+## 17. Separación de tarjeta y navegación móvil en la versión 20
+
+La captura recibida muestra que, en un teléfono con ancho CSS superior a 480 px, «Anterior / Índice / Siguiente» salta a dos filas y tapa parcialmente la tarjeta. La corrección aplica la fila de tres columnas a toda la gama móvil hasta 760 px, con ancho y tamaños de botón acotados. La tarjeta conserva su posición móvil, ahora separada de los tres controles.
+
+La comprobación `check-mobile-navigation.cjs` verifica la regla de una sola fila hasta 760 px. Las siete pruebas CJS pasan. El código se publicó en `main` mediante `23608494d4fdfe911d0492472db88485f5453128`; el código completo actualizado queda en [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (20).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(20).md).
