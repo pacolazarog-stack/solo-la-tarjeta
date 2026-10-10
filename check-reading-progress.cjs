@@ -4,16 +4,16 @@ function assert(value,message){if(!value)throw Error(message);}
 function boot(source,route,storage,options={}){
   const observations=[],mutations=[],events={},children=[];
   class Node{
-    constructor(tag='div'){this.tagName=tag;this.className='';this.dataset={};this.style={};this.hidden=false;this.children=[];this.listeners={};this.textContent='';this.attrs={};this.rows={};
+    constructor(tag='div'){this.tagName=tag;this.className='';this.dataset={};this.style={};this.hidden=false;this.children=[];this.listeners={};this.textContent='';this.attrs={};this.rows={};this.summary=null;
       this.classList={contains:n=>this.className.split(/\s+/).includes(n),add:(...ns)=>{this.className=[...new Set([...this.className.split(/\s+/).filter(Boolean),...ns])].join(' ');},remove:(...ns)=>{this.className=this.className.split(/\s+/).filter(n=>!ns.includes(n)).join(' ');}};
     }
-    set innerHTML(s){this.html=s;if(s.includes('data-piece="ana"'))for(const key of ['ana','solo','ceniciento'])this.rows[key]=new Node('li');}
+    set innerHTML(s){this.html=s;this.summary=new Node('summary');if(s.includes('data-piece="ana"'))for(const key of ['ana','solo','ceniciento'])this.rows[key]=new Node('li');}
     append(...ns){this.children.push(...ns);}
     appendChild(n){this.append(n);return n;}
     setAttribute(k,v){this.attrs[k]=String(v);}
     addEventListener(k,f){(this.listeners[k]??=[]).push(f);}
     emit(k,e={}){for(const fn of this.listeners[k]||[])fn(e);}
-    querySelector(s){const p=s.match(/data-piece="(\w+)"/);if(p)return this.rows[p[1]];return null;}
+    querySelector(s){if(s==='summary')return this.summary;const p=s.match(/data-piece="(\w+)"/);if(p)return this.rows[p[1]];return null;}
     querySelectorAll(){return [];}
     remove(){}
   }
@@ -59,6 +59,9 @@ function run(source){
   ana.start();
   assert(!ana.box().hidden,'Checklist is visible at the first Ana start');
   for(const key of ['ana','solo','ceniciento'])assert(ana.box().rows[key].dataset.done==='false','No inherited completed row: '+key);
+  assert(ana.box().summary.textContent==='Lecturas · 0/3','Initial visible counter must be zero');
+  assert(ana.box().rows.solo.textContent==='SOLO LA TARJETA · pendiente','Solo is visibly pending');
+  assert(ana.box().rows.ceniciento.textContent==='CENICIENTO · pendiente','Ceniciento is visibly pending');
   assert(ana.state().journeyStartedAt>0,'The journey has an explicit start');
   ana.anaEnd();
   assert(ana.state().anaComplete&&!ana.state().soloComplete&&!ana.state().cenicientoComplete,'Finishing Ana counts only Ana');
@@ -89,6 +92,8 @@ function run(source){
     if(last==='ana')page.anaEnd();else if(last==='solo')page.end(page.lastLine);else page.voice.emit('ended');
     assert(!!page.document.querySelector('script[data-oras-mirror]'),'Mirror begins when the final piece is '+last);
   }
+  const indexed=boot(source,'/solo-la-tarjeta/elegia-breve/index.html',new Map());indexed.start();
+  assert(indexed.state().journeyStartedAt>0&&indexed.box().summary.textContent==='Lecturas · 0/3','Explicit index.html starts the same journey');
   const invalid=boot(source,'/solo-la-tarjeta/elegia-breve/',new Map([['oras.universe.v2',JSON.stringify({soloComplete:true,cenicientoComplete:true})]]));
   invalid.start();assert(!invalid.state().soloComplete&&!invalid.state().cenicientoComplete,'Completion values without a valid journey start are discarded');
   const memory=boot(source,'/solo-la-tarjeta/elegia-breve/',new Map(),{blocked:true});memory.start();memory.anaEnd();

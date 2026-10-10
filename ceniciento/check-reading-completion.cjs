@@ -20,6 +20,6 @@ assert(shared.includes("solo.href=rootPath+'?origen=ceniciento&v='+VERSION;solo.
 assert(shared.includes('save({mirrorReadComplete:true,returnedFromCeniciento:true})'),'Completing the convergence records its automatic return to Ana');
 assert(shared.includes("solo.addEventListener('click',()=>save({returnedFromCeniciento:true}))"),'Navigation does not mark a reading complete');
 assert(shared.includes('state.cenicientoUnlocked')&&shared.includes('arrivedByQuestion'),'Ceniciento remains initially gated by the question mark');
-assert(source.includes('el-espejo.js?v=20261010-24')&&source.includes('narrative-universe.js?v=20261010-24'),'Ceniciento loads current cache versions');
+assert(source.includes('el-espejo.js?v=20261010-25')&&source.includes('narrative-universe.js?v=20261010-25'),'Ceniciento loads current cache versions');
 assert(!source.includes('id="continue"')&&!source.includes('cont.onclick'),'Choosing Read or Voice starts without a second button');
 console.log('PASS: stable nine-frame progression, visible background, single-action reading start, Ceniciento gate, and automatic Mirror return');

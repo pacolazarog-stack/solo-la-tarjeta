@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-24';
+const VERSION='20261010-25';
 const STORAGE='oras.universe.v2';
 const rootPath='/solo-la-tarjeta/';
 const GHOSTS=Object.freeze({
@@ -10,7 +10,7 @@ const GHOSTS=Object.freeze({
   absence:'Falta una versión de la historia.',
   return:'Nadie regresa al mismo lugar.'
 });
-const path=location.pathname.replace(/\/+$/,'') || '/';
+const path=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'') || '/';
 const page={
   solo:path==='/solo-la-tarjeta' || path==='/solo-la-tarjeta/index.html',
   ana:path.endsWith('/elegia-breve'),
@@ -89,6 +89,8 @@ function installBaseStyles(){
   .ou-reading-checklist summary::-webkit-details-marker{display:none}
   .ou-reading-checklist ul{margin:0 0 7px;padding:9px 12px;list-style:none;border:1px solid rgba(255,255,255,.18);border-radius:9px;background:rgba(12,12,12,.92)}
   .ou-reading-checklist li{white-space:nowrap}.ou-reading-checklist li+li{margin-top:5px}.ou-reading-checklist [data-done="true"]::before{content:"✓ ";color:#d8c18d}.ou-reading-checklist [data-done="false"]::before{content:"· ";opacity:.55}
+  .ou-reading-checklist[hidden]{display:none!important}
+  .ou-reading-checklist [data-done="false"]{color:#c8c5bf}
   body.mirror .ou-reading-checklist{display:none}
   body.mirror>:not(#mirror):not(script):not(style){display:none!important}
   body.mirror #mirror{position:fixed;z-index:100;inset:0;display:block;height:100svh;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y mandatory;background:#100e0d;color:#f7f1e8;scrollbar-width:none}
@@ -213,7 +215,9 @@ function ensureChecklist(){
   let box=document.querySelector('.ou-reading-checklist');
   if(!box){box=document.createElement('details');box.className='ou-reading-checklist';box.setAttribute('aria-label','Estado de las lecturas');box.innerHTML='<summary>Lecturas</summary><ul><li data-piece="ana"><span>ANA KLAUDYA</span></li><li data-piece="solo"><span>SOLO LA TARJETA</span></li><li data-piece="ceniciento"><span>CENICIENTO</span></li></ul>';document.body.appendChild(box);}
   const current=readState();
-  for(const [piece,key,label] of [['ana','anaComplete','ANA KLAUDYA'],['solo','soloComplete','SOLO LA TARJETA'],['ceniciento','cenicientoComplete','CENICIENTO']]){const row=box.querySelector(`[data-piece="${piece}"]`);row.dataset.done=String(!!current[key]);row.setAttribute('aria-label',`${label}: ${current[key]?'lectura completa':'pendiente'}`);}
+  for(const [piece,key,label] of [['ana','anaComplete','ANA KLAUDYA'],['solo','soloComplete','SOLO LA TARJETA'],['ceniciento','cenicientoComplete','CENICIENTO']]){const row=box.querySelector(`[data-piece="${piece}"]`);row.dataset.done=String(!!current[key]);row.textContent=`${label} · ${current[key]?'completa':'pendiente'}`;row.setAttribute('aria-label',`${label}: ${current[key]?'lectura completa':'pendiente'}`);}
+  const completed=['anaComplete','soloComplete','cenicientoComplete'].filter(key=>current[key]).length;
+  box.querySelector('summary').textContent=`Lecturas · ${completed}/3`;
   box.hidden=!current.journeyStartedAt;
 }
 
