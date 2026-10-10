@@ -4,8 +4,8 @@
 
 **Idioma:** español  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Paquete archivístico vigente:** versión 35; código y pruebas publicados en `main`, commit `4e440e60a21732cd385deb2fd9cf563359973a4b`  
-**Módulo compartido:** `narrative-universe.js`, versión `20261010-22`  
+**Paquete archivístico vigente:** versión 36; código y pruebas publicados en `main`, commit `89227c5c0656ac717abb2c4647252a9bd303caa7`; archivo integral actualizado en commit `305bb15aa09ca30cd81a75c91b1ce9ee94b35893`  
+**Módulo compartido:** `narrative-universe.js`, versión `20261010-23`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
 > Este documento reúne información contextual, bibliográfica y técnica para prensa, investigación, programación de festivales y preservación. No debe incorporarse a las páginas de las obras ni presentarse como parte de su recorrido narrativo.
