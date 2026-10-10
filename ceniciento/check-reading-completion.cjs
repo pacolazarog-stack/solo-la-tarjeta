@@ -1,0 +1,25 @@
+const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path');
+const source=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
+const text=fs.readFileSync(path.join(__dirname,'texto.md'),'utf8').trim();
+const shared=fs.readFileSync(path.join(__dirname,'../narrative-universe.js'),'utf8');
+assert(!source.includes('<p class="byline-removed">')&&source.includes('<span class="reading-end" aria-hidden="true"></span>'),"CENICIENTO has no byline and keeps an invisible reading-end marker");
+assert(source.includes("fetch('texto.md?v=16'"),'Reading mode loads the canonical text file');
+assert(source.includes('const AGE_FRAME_COUNT=9')&&source.includes('function agePosition(p){return clamp(p)*(frames.length-1)}'),'The full nine-frame historical sequence advances evenly');
+assert(source.includes("'frames-stable/'+String(i+1).padStart(2,'0')+'.webp?v=20261010-stable-sequence'")&&!source.includes('frames-v2/'),'The restored stable assets load in the correct order');
+assert(!source.includes('AGE_STOPS')&&!source.includes('transition:opacity .8s ease,filter .35s linear'),'There are no uneven stops or lagging opacity transitions');
+for(let i=1;i<=9;i++){const file=path.join(__dirname,'frames-stable',String(i).padStart(2,'0')+'.webp');const image=fs.readFileSync(file);assert(image.length>50000&&image.toString('ascii',0,4)==='RIFF'&&image.toString('ascii',8,12)==='WEBP',`Stable age frame ${i} is a complete WebP`)}
+assert(source.includes('.read:not(.revealing) .portrait{display:none}')&&source.includes('brightness(.92)'),'Reading shows the portrait sequence as a clear full-bleed background');
+assert(source.includes('background:rgba(8,7,7,.25);color:#fffaf1'),'The reading text sits over a translucent panel');
+assert(source.includes('function renderReadingProgress()')&&source.includes('setAge(clamp(position/max))'),'Touch scrolling synchronizes the photos with reading progress');
+assert(source.includes("if(mode==='read')renderReadingProgress()"),'Loading frames preserves the current reading position');
+assert(source.includes("if(mode==='voice')setAge(clamp((voice.currentTime||0)/(voice.duration||EXPECTED)))"),'Voice playback uses the same complete sequence');
+assert(source.includes('padding:clamp(116px,18svh,148px) 0 20svh'),'Mobile reading clears fixed top controls');
+assert(text.startsWith('# CENICIENTO')&&text.endsWith('al hombre que era.'),'The full canonical reading is present');
+assert(shared.includes("ret.href=rootPath+'elegia-breve/?v='+VERSION;ret.target='_top';ret.textContent='ANA KLAUDYA'"),'The completed work links directly to Ana');
+assert(shared.includes("solo.href=rootPath+'?origen=ceniciento&v='+VERSION;solo.target='_top';solo.textContent='SOLO LA TARJETA';solo.classList.add('ou-card-exit')"),'The completed work links to Solo with a card button');
+assert(shared.includes('save({mirrorReadComplete:true,returnedFromCeniciento:true})'),'Completing the convergence records its automatic return to Ana');
+assert(shared.includes("solo.addEventListener('click',()=>save({cenicientoComplete:true,returnedFromCeniciento:true}))"),'The chosen direct exit is persisted without a visible author mark');
+assert(shared.includes('state.cenicientoUnlocked')&&shared.includes('arrivedByQuestion'),'Ceniciento remains initially gated by the question mark');
+assert(source.includes('el-espejo.js?v=20261010-23')&&source.includes('narrative-universe.js?v=20261010-23'),'Ceniciento loads current cache versions');
+assert(!source.includes('id="continue"')&&!source.includes('cont.onclick'),'Choosing Read or Voice starts without a second button');
+console.log('PASS: stable nine-frame progression, visible background, single-action reading start, Ceniciento gate, and automatic Mirror return');
