@@ -1,0 +1,22 @@
+name: Force ANA universe cache refresh
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bump ANA universe script URL
+        run: |
+          python3 -c "from pathlib import Path; p=Path('elegia-breve/index.html'); s=p.read_text(encoding='utf-8'); s=s.replace('narrative-universe.js?v=20261010-29','narrative-universe.js?v=20261011-31').replace('narrative-universe.js?v=20261011-30','narrative-universe.js?v=20261011-31'); p.write_text(s,encoding='utf-8')"
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add elegia-breve/index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Bump ANA universe cache to corrected layout"
+          git push
