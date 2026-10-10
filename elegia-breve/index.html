@@ -1478,11 +1478,6 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         if(data.type==='interlude-preview-ready'&&poemRoute==='interludio'){interludePreviewReady=true;sendCenicientoMusicState();return;}
         if(data.type==='interlude-ended'&&poemRoute==='interludio'){openPoem('epilogo',false,data.openingShown===true,data.persistentOpening===true);return;}
         if(data.type==='ana'&&poemRoute==='estrella'){returnToAna('ana');return;}
-        if(data.type==='mirror-return'&&poemRoute==='ceniciento'){
-          returnToAna('home');
-          window.setTimeout(()=>window.dispatchEvent(new CustomEvent('oras:mirror-returned')),2250);
-          return;
-        }
         if(data.type==='home'||data.type==='close'){returnToAna(data.type);return;}
         if(data.type==='level' && Number.isFinite(data.level)){
           const level=Math.max(0,Math.min(.8,data.level));ambientLevel=level;showMusicLevel(level);fadeMusicTo(musicEnabled.checked?level:0,.5);
@@ -1681,6 +1676,6 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       syncPoemRoute();
     })();
   </script>
-<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-20"></script>
+<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-21"></script>
 </body>
 </html>

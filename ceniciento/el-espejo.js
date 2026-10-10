@@ -37,7 +37,7 @@ const scenes=[
 const pauseAt=new Set([14,15,17,26,30]);
 const mirror=document.getElementById('mirror');
 if(!mirror)return;
-let started=false,locked=false,lockedScene=null,finished=false,returning=false;
+let started=false,locked=false,lockedScene=null,finished=false;
 let lastTouchY=null;
 const sceneNodes=[];
 function addText(parent,text){
@@ -106,23 +106,5 @@ function start(){
   sceneNodes[0].focus({preventScroll:true});
 }
 window.addEventListener('oras:mirror-start',start);
-function beginReturn(){
-  if(returning)return;returning=true;
-  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const veil=document.createElement('div');
-  veil.className='mirror-exit-veil';veil.setAttribute('aria-hidden','true');
-  Object.assign(veil.style,{position:'fixed',inset:'0',zIndex:'9999',background:'#000',opacity:'0',transition:reduced?'none':'opacity 1.25s ease'});
-  document.body.append(veil);
-  requestAnimationFrame(()=>{veil.style.opacity='1'});
-  const delay=reduced?80:1350;
-  window.setTimeout(()=>{
-    if(window.parent!==window){
-      window.parent.postMessage({channel:'ceniciento-music-v1',type:'mirror-return'},location.origin);
-    }else{
-      window.location.assign('/solo-la-tarjeta/elegia-breve/?v=20261010-19');
-    }
-  },delay);
-}
-window.addEventListener('oras:mirror-return',beginReturn,{once:true});
-window.addEventListener('oras:mirror-reset',()=>{started=false;finished=false;returning=false;locked=false;lockedScene=null;mirror.hidden=true;document.body.classList.remove('mirror')});
+window.addEventListener('oras:mirror-reset',()=>{started=false;finished=false;locked=false;lockedScene=null;mirror.hidden=true;document.body.classList.remove('mirror')});
 })();

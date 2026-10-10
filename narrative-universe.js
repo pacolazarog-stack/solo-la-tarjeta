@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-20';
+const VERSION='20261010-21';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
 const GHOSTS=Object.freeze({
@@ -58,6 +58,12 @@ function installBaseStyles(){
   .ou-solo-endnav{position:relative;z-index:82;left:auto;bottom:auto;transform:translateY(8px);display:flex;align-items:center;justify-content:center;gap:12px;width:max-content;max-width:92vw;margin:2rem auto max(28px,env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .7s ease,transform .7s ease,visibility .7s ease;text-align:center}.ou-solo-endnav.ou-visible{opacity:1;visibility:visible;transform:translateY(0)}
   .ou-ceniciento-endnav{position:fixed;z-index:82;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%) translateY(8px);display:flex;align-items:center;justify-content:center;gap:12px;width:max-content;max-width:92vw;opacity:0;visibility:hidden;transition:opacity .7s ease,transform .7s ease,visibility .7s ease;text-align:center}.ou-ceniciento-endnav.ou-visible{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
   .ou-ceniciento-endnav[hidden]{display:none!important}
+  body.mirror .ou-ceniciento-endnav{position:relative;left:auto;bottom:auto;transform:none;z-index:auto;flex-wrap:wrap;width:min(100%,34rem);margin:clamp(24px,5vh,46px) auto 0;opacity:1;visibility:visible;gap:12px}
+  body.mirror .ou-ceniciento-endnav.ou-visible{transform:none}
+  .ou-ceniciento-endnav .ou-card-exit{min-width:180px;min-height:58px;padding:13px 22px;border:1px solid rgba(71,57,37,.42);border-radius:9px 5px 10px 6px;background:linear-gradient(145deg,#f1e6d2,#d9c9a9);color:#29231c;text-shadow:none;box-shadow:0 8px 22px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.4);letter-spacing:.045em}
+  .ou-ceniciento-endnav .ou-card-exit:hover,.ou-ceniciento-endnav .ou-card-exit:focus-visible{background:linear-gradient(145deg,#fff2db,#e5d3b1);border-color:#f1dfbc;outline:2px solid rgba(255,250,241,.82);outline-offset:3px}
+  body.mirror .mirror-scene.mirror-finished{display:flex;flex-direction:column;justify-content:center;align-items:center}
+  body.mirror .mirror-scene.mirror-finished .mirror-copy{margin:auto auto 0}
   body.read .ou-ceniciento-endnav{position:relative;left:auto;bottom:auto;transform:translateY(8px);margin:1rem auto 2rem}
   body.read .ou-ceniciento-endnav.ou-visible{transform:translateY(0)}
   body.voice.ou-ceniciento-navigation-visible .screen.final{bottom:calc(8.5svh + 84px)}
@@ -202,7 +208,6 @@ function setupSolo(){
 }
 
 function setupAna(){
-  window.addEventListener('oras:mirror-returned',()=>ghost(GHOSTS.return,'after-ceniciento-return',{where:'left',delay:250,hold:7500,force:true}),{once:true});
   addUnlockedAnaDoors();
   const q=document.getElementById('cenicientoLink');
   if(q){
@@ -238,10 +243,10 @@ function setupCeniciento(){
   nav.hidden=!state.cenicientoUnlocked;
   nav.setAttribute('aria-label','Continuar después de CENICIENTO');
   const ret=document.createElement('a');
-  ret.href=rootPath+'elegia-breve/?v='+VERSION;ret.target='_top';ret.textContent='volver';ret.setAttribute('aria-label','Volver a ANA KLAUDYA');
+  ret.href=rootPath+'elegia-breve/?v='+VERSION;ret.target='_top';ret.textContent='ANA KLAUDYA';ret.setAttribute('aria-label','Abrir ANA KLAUDYA');
   ret.addEventListener('click',()=>save({cenicientoComplete:true,returnedFromCeniciento:true}));
   const solo=document.createElement('a');
-  solo.href=rootPath+'?origen=ceniciento&v='+VERSION;solo.target='_top';solo.textContent='SOLO LA TARJETA';solo.setAttribute('aria-label','Abrir SOLO LA TARJETA');
+  solo.href=rootPath+'?origen=ceniciento&v='+VERSION;solo.target='_top';solo.textContent='SOLO LA TARJETA';solo.classList.add('ou-card-exit');solo.setAttribute('aria-label','Abrir SOLO LA TARJETA');
   solo.addEventListener('click',()=>save({cenicientoComplete:true,returnedFromCeniciento:true}));
   nav.append(ret,solo);
   document.body.appendChild(nav);
@@ -269,10 +274,11 @@ function setupCeniciento(){
     }
   };
   window.addEventListener('oras:mirror-end',()=>{
-    save({mirrorReadComplete:true,returnedFromCeniciento:true});state=readState();
-    nav.classList.remove('ou-visible');
-    nav.hidden=true;
-    window.dispatchEvent(new CustomEvent('oras:mirror-return'));
+    save({mirrorReadComplete:true});state=readState();
+    const finalScene=document.querySelector('#mirror .mirror-scene:last-child');
+    if(finalScene){finalScene.classList.add('mirror-finished');finalScene.appendChild(nav);}
+    nav.hidden=false;
+    revealNav();
   },{once:true});
   const voice=document.getElementById('voice');
   if(voice)voice.addEventListener('ended',complete);
