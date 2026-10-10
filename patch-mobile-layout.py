@@ -8,8 +8,9 @@ VERSIONS_OLD = (
     "20261011-33",
     "20261011-34",
     "20261011-35",
+    "20261011-36",
 )
-VERSION_NEW = "20261011-36"
+VERSION_NEW = "20261011-37"
 
 p = Path("narrative-universe.js")
 s = p.read_text(encoding="utf-8")
@@ -88,28 +89,19 @@ new_endnav = """function showSoloEndNav(){
   nav.className='ou-solo-endnav';
   nav.setAttribute('aria-label','Navegación al terminar SOLO LA TARJETA');
 
-  const makeButton=(label,aria,handler)=>{
-    const b=document.createElement('button');
-    b.type='button';
-    b.textContent=label;
-    b.setAttribute('aria-label',aria);
-    b.addEventListener('click',handler);
-    return b;
-  };
+  const forward=document.createElement('button');
+  forward.type='button';
+  forward.textContent='Adelante';
+  forward.setAttribute('aria-label','Ir adelante');
+  forward.addEventListener('click',()=>history.forward());
 
-  const back=makeButton('Atrás','Volver a la página anterior',()=>history.back());
-  const forward=makeButton('Adelante','Ir a la página siguiente del historial',()=>history.forward());
-  const index=makeButton('Índice','Abrir el índice de lecturas',()=>{
-    const box=document.querySelector('.ou-reading-checklist');
-    if(box){box.hidden=false;box.open=true;box.scrollIntoView({behavior:'smooth',block:'end'});}
-  });
-  const ana=document.createElement('a');
-  ana.href=rootPath+'elegia-breve/?v='+VERSION;
-  ana.target='_top';
-  ana.textContent='ANA KLAUDYA';
-  ana.setAttribute('aria-label','Ir a ANA KLAUDYA');
+  const home=document.createElement('a');
+  home.href=rootPath+'elegia-breve/?v='+VERSION;
+  home.target='_top';
+  home.textContent='Inicio';
+  home.setAttribute('aria-label','Volver al inicio de ANA KLAUDYA');
 
-  nav.append(back,forward,index,ana);
+  nav.append(forward,home);
   document.body.appendChild(nav);
   requestAnimationFrame(()=>requestAnimationFrame(()=>nav.classList.add('ou-visible')));
 }
