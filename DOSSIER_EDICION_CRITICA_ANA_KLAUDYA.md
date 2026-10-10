@@ -5,7 +5,7 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Paquete archivístico vigente:** versión 23; conserva el código publicado en `main` mediante el commit `e5461949f48ffaa4209c6e11b003c682730702f0`  
+**Paquete archivístico vigente:** versión 24; conserva el código publicado en `main` mediante el commit `c734c9fcd665c830690e4aa19f46e73baac30f78`  
 **Módulo compartido:** `narrative-universe.js`, versión `20261010-12`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
@@ -96,7 +96,7 @@ Ejemplo con la fecha canónica registrada para *ANA KLAUDYA*:
 
 ### Cita del código fuente archivado
 
-> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 23, puertas, resonancias y economía narrativa. Código del commit `pacolazarog-stack/solo-la-tarjeta`, commit de código `e5461949f48ffaa4209c6e11b003c682730702f0`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
+> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 24, corrección de visibilidad del fondo COTÁN en móvil. Código del commit `pacolazarog-stack/solo-la-tarjeta`, commit de código `c734c9fcd665c830690e4aa19f46e73baac30f78`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
 
 Para citas académicas, conviene especificar la pieza, el modo de acceso (lectura o escucha), la URL y la fecha de consulta. Si se cita un verso, añadir el nombre de la pieza y el identificador o encabezado de sección disponible en la edición consultada. No asignar números de verso que la obra no muestre.
 
@@ -108,7 +108,7 @@ Para citas académicas, conviene especificar la pieza, el modo de acceso (lectur
 - `ceniciento/texto.md`: texto de lectura de *CENICIENTO*.
 - `ceniciento/index.html`: interfaz de lectura/escucha y 59 señales de voz de *CENICIENTO*.
 - `ceniciento/narracion.txt`: material de narración asociado a *CENICIENTO*.
-- Archivo complementario vigente: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (23).md](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(23).md).
+- Archivo complementario vigente: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (24).md](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(24).md).
 
 ## 8. Separación editorial
 
@@ -269,3 +269,10 @@ La auditoría de ocho frases fantasma corresponde al paquete histórico de la ve
 La relectura fuerte debe nacer de los textos, en particular de la relación entre *ANA KLAUDYA* y *CENICIENTO*. JavaScript, animaciones, efectos y estado local pueden sostener la accesibilidad y continuidad del recorrido, pero no ser requisito para que el lector perciba una transformación de sentido. La documentación crítica fija este criterio fuera de la interfaz pública.
 
 La versión 23 es una actualización documental y archivística. No altera el código publicado en `e5461949f48ffaa4209c6e11b003c682730702f0` ni los textos canónicos.
+
+
+## 22. Corrección de visibilidad del fondo COTÁN en móvil · versión 24
+
+La captura móvil confirma que la barra inferior seguía presentándose como una placa casi opaca. La versión 24 reduce su fondo a una opacidad del 18 %, elimina el desenfoque que velaba la imagen y conserva el contraste de las etiquetas con sombra de texto. El estilo base adopta también la placa translúcida para evitar que el fondo claro opaque la fotografía en dispositivos cuyo viewport no active el corte móvil. La tarjeta compacta permanece sin cambios.
+
+Las siete comprobaciones CJS pasan, incluida la prueba móvil actualizada. El código se publicó en `main` mediante `c734c9fcd665c830690e4aa19f46e73baac30f78`; el archivo archivístico completo correspondiente es [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (24).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(24).md).
