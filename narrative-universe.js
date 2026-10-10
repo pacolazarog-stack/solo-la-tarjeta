@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-14';
+const VERSION='20261010-15';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
 const GHOSTS=Object.freeze({
@@ -57,6 +57,10 @@ function installBaseStyles(){
   .ou-symbolic:hover,.ou-symbolic:focus-visible{color:rgba(92,67,47,.92);text-decoration-color:rgba(92,67,47,.28);text-shadow:0 0 12px rgba(112,72,38,.08);outline:none}
   .ou-solo-endnav{position:relative;z-index:82;left:auto;bottom:auto;transform:translateY(8px);display:flex;align-items:center;justify-content:center;gap:12px;width:max-content;max-width:92vw;margin:2rem auto max(28px,env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .7s ease,transform .7s ease,visibility .7s ease;text-align:center}.ou-solo-endnav.ou-visible{opacity:1;visibility:visible;transform:translateY(0)}
   .ou-ceniciento-endnav{position:fixed;z-index:82;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%) translateY(8px);display:flex;align-items:center;justify-content:center;gap:12px;width:max-content;max-width:92vw;opacity:0;visibility:hidden;transition:opacity .7s ease,transform .7s ease,visibility .7s ease;text-align:center}.ou-ceniciento-endnav.ou-visible{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+  body.read .ou-ceniciento-endnav{position:relative;left:auto;bottom:auto;transform:translateY(8px);margin:1rem auto 2rem}
+  body.read .ou-ceniciento-endnav.ou-visible{transform:translateY(0)}
+  body.voice.ou-ceniciento-navigation-visible .screen.final{bottom:calc(8.5svh + 84px)}
+  body.voice.ou-ceniciento-navigation-visible .status{bottom:calc(env(safe-area-inset-bottom,0px) + 84px)}
   .ou-solo-endnav a,.ou-ceniciento-endnav a{box-sizing:border-box;display:flex;align-items:center;justify-content:center;min-width:48px;min-height:48px;padding:12px 20px;border:1px solid rgba(255,250,241,.28);border-radius:999px;background:rgba(12,12,12,.82);color:#fffaf1;text-decoration:none;font:italic 400 clamp(.96rem,1.8vw,1.14rem)/1.25 Georgia,"Times New Roman",serif;letter-spacing:.025em;text-shadow:0 2px 18px rgba(0,0,0,.9);opacity:.94;transition:opacity .25s ease,background-color .25s ease,border-color .25s ease}
   .ou-solo-endnav a:hover,.ou-solo-endnav a:focus-visible,.ou-ceniciento-endnav a:hover,.ou-ceniciento-endnav a:focus-visible{opacity:1;background:rgba(28,26,23,.98);border-color:rgba(255,250,241,.72);outline:2px solid rgba(255,250,241,.82);outline-offset:3px}.ou-solo-endnav a:active,.ou-ceniciento-endnav a:active{background:rgba(58,51,42,.98)}
   @media(max-width:700px){.ou-solo-endnav,.ou-ceniciento-endnav{gap:8px}.ou-solo-endnav a,.ou-ceniciento-endnav a{padding:11px 13px}.ou-card{left:max(16px,env(safe-area-inset-left));bottom:calc(env(safe-area-inset-bottom,0px) + 18px);width:112px;height:70px}.ou-card::before{left:16px;top:15px;width:27px;height:19px}.ou-card::after{left:16px;right:16px;bottom:14px}.ou-ghost{max-width:68vw}.ou-ghost.ou-left{left:16px;top:14vh}.ou-ghost.ou-right{right:16px;top:21vh}.ou-ghost.ou-low{right:16px;bottom:13vh}}
@@ -235,15 +239,17 @@ function setupCeniciento(){
   ret.addEventListener('click',()=>save({cenicientoComplete:true,returnedFromCeniciento:true}));
   const solo=document.createElement('a');
   solo.href=rootPath+'?origen=ceniciento&v='+VERSION;solo.target='_top';solo.textContent='SOLO LA TARJETA';solo.setAttribute('aria-label','Abrir SOLO LA TARJETA');
-  solo.addEventListener('click',()=>save({cenicientoComplete:true}));
+  solo.addEventListener('click',()=>save({cenicientoComplete:true,returnedFromCeniciento:true}));
   nav.append(ret,solo);
   document.body.appendChild(nav);
-  if(state.cenicientoComplete)requestAnimationFrame(()=>requestAnimationFrame(()=>nav.classList.add('ou-visible')));
+  const revealNav=()=>{document.body.classList.add('ou-ceniciento-navigation-visible');nav.classList.add('ou-visible');};
+  if(state.cenicientoComplete)requestAnimationFrame(()=>requestAnimationFrame(revealNav));
   let returnTimer=0;
   const complete=()=>{
-    if(!state.cenicientoComplete){save({cenicientoComplete:true});state=readState();}
-    if(state.cenicientoComplete){nav.classList.add('ou-visible');return;}
-    clearTimeout(returnTimer);returnTimer=after(6200,()=>nav.classList.add('ou-visible'));
+    const wasComplete=state.cenicientoComplete;
+    if(!wasComplete){save({cenicientoComplete:true});state=readState();}
+    if(wasComplete){revealNav();return;}
+    clearTimeout(returnTimer);returnTimer=after(6200,revealNav);
   };
   const voice=document.getElementById('voice');
   if(voice)voice.addEventListener('ended',complete);

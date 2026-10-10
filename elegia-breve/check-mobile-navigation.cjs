@@ -95,3 +95,6 @@ assert(source.includes('text-shadow:0 1px 3px rgba(0,0,0,.85)')&&source.includes
 assert(source.includes('body.journey-started main{padding-bottom:240px}'),'The poem reserves space below its last line for fixed mobile controls');
 assert(shared.includes('@media(max-width:520px){.ou-solo-endnav,.ou-ceniciento-endnav{max-width:92vw;gap:8px}.ou-solo-endnav a,.ou-ceniciento-endnav a{min-height:52px;padding:10px 12px}.ou-card{bottom:calc(env(safe-area-inset-bottom,0px) + 88px)}}'),'End navigation stays thumb-sized and the card clears the mobile navigation');
 console.log('PASS: eight return routes, repeated clicks, Back/Forward, hash changes, stale fades, reduced motion and uninterrupted music');
+
+assert(shared.includes('body.read .ou-ceniciento-endnav{position:relative;left:auto;bottom:auto'),'Ceniciento reading controls stay in document flow below the final line');
+assert(shared.includes('body.voice.ou-ceniciento-navigation-visible .screen.final{bottom:calc(8.5svh + 84px)}'),'Ceniciento voice controls do not cover the final line');

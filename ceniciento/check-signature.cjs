@@ -19,7 +19,11 @@ assert(shared.includes("ret.href=rootPath+'elegia-breve/?v='+VERSION;ret.target=
 assert(shared.includes("returnedFromCeniciento:true"),'Returning stores the narrative return state');
 assert(shared.includes("ret.href=rootPath+'elegia-breve/?v='+VERSION"),'volver returns to Ana Klaudya');
 assert(shared.includes("solo.href=rootPath+'?origen=ceniciento&v='+VERSION;solo.target='_top';solo.textContent='SOLO LA TARJETA'"),'After Ceniciento is complete, a second exit returns to Solo la tarjeta');
-assert(shared.includes("nav.className='ou-ceniciento-endnav'")&&shared.includes("returnTimer=after(6200,()=>nav.classList.add('ou-visible'))"),'Both exits wait until Ceniciento reading completion');
+assert(shared.includes("nav.className='ou-ceniciento-endnav'")&&shared.includes("const wasComplete=state.cenicientoComplete")&&shared.includes('returnTimer=after(6200,revealNav)'), 'First completion waits before showing exits; later readings show them immediately');
+assert(shared.includes("solo.addEventListener('click',()=>save({cenicientoComplete:true,returnedFromCeniciento:true}))"),'Both Ceniciento exits preserve the return state for Ana');
+assert(shared.includes("if(state.cenicientoComplete)requestAnimationFrame(()=>requestAnimationFrame(revealNav))"),'Previously completed Ceniciento restores reciprocal exits on later visits');
+assert(shared.includes('body.read .ou-ceniciento-endnav{position:relative;left:auto;bottom:auto'),'Reading-mode exits follow the text instead of covering the final line');
+assert(shared.includes('body.voice.ou-ceniciento-navigation-visible .screen.final{bottom:calc(8.5svh + 84px)}'),'Voice-mode navigation leaves the final line visible');
 assert(shared.includes("if(voice)voice.addEventListener('ended',complete)"),'Voice completion reveals the return door');
 assert(shared.includes("document.body.classList.contains('read')"),'Reading completion is also supported');
 assert(shared.includes("const signature=document.querySelector('#readerText + .signature')"),'The reading return waits for the last line and signature');
