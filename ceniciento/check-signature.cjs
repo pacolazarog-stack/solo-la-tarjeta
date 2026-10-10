@@ -15,9 +15,11 @@ assert(text.endsWith('al hombre que era.'),'The full reading reaches the final l
 assert.equal((source.match(/kind:'final'/g)||[]).length,1,'The voice has one final cue');
 assert(source.includes("text:'alguien había estado mirando\\nal hombre que era',n:40,kind:'final'"),'The final voice cue carries the ending');
 assert(shared.includes("oldBack.style.display='none'"),'The redundant back control is hidden in Ceniciento');
-assert(shared.includes("ret.textContent='volver'"),'The final return door is labelled volver');
+assert(shared.includes("ret.href=rootPath+'elegia-breve/?v='+VERSION;ret.target='_top';ret.textContent='volver'"),'The final return door is labelled volver and returns to the top-level Ana page');
 assert(shared.includes("returnedFromCeniciento:true"),'Returning stores the narrative return state');
-assert(shared.includes("topGo(rootPath+'elegia-breve/?v='+VERSION)"),'volver returns to Ana Klaudya');
+assert(shared.includes("ret.href=rootPath+'elegia-breve/?v='+VERSION"),'volver returns to Ana Klaudya');
+assert(shared.includes("solo.href=rootPath+'?origen=ceniciento&v='+VERSION;solo.target='_top';solo.textContent='SOLO LA TARJETA'"),'After Ceniciento is complete, a second exit returns to Solo la tarjeta');
+assert(shared.includes("nav.className='ou-ceniciento-endnav'")&&shared.includes("returnTimer=after(6200,()=>nav.classList.add('ou-visible'))"),'Both exits wait until Ceniciento reading completion');
 assert(shared.includes("if(voice)voice.addEventListener('ended',complete)"),'Voice completion reveals the return door');
 assert(shared.includes("document.body.classList.contains('read')"),'Reading completion is also supported');
 assert(shared.includes("const signature=document.querySelector('#readerText + .signature')"),'The reading return waits for the last line and signature');
