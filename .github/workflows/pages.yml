@@ -53,6 +53,9 @@ jobs:
       - name: Forzar letras blancas en Leer con pausa
         run: python3 patch-read-pause-contrast.py
 
+      - name: Reforzar contraste de PAUSAR y VOLVER
+        run: python3 patch-voice-dialog-contrast.py
+
       - name: Verificar progreso de lectura
         run: |
           node check-reading-progress.cjs
