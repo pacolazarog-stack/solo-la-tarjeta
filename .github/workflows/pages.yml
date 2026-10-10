@@ -38,6 +38,9 @@ jobs:
       - name: Aplicar disposición de controles
         run: python3 patch-mobile-layout.py
 
+      - name: Unificar navegación final de SOLO LA TARJETA
+        run: python3 patch-solo-endnav.py
+
       - name: Verificar progreso de lectura
         run: |
           node check-reading-progress.cjs
