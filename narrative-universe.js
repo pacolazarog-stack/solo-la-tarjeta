@@ -157,6 +157,7 @@ function addCard(){
 }
 
 function showSoloEndNav(){
+  if(!state.cenicientoComplete)return;
   if(document.querySelector('.ou-solo-endnav'))return;
   const nav=document.createElement('nav');
   nav.className='ou-solo-endnav';
