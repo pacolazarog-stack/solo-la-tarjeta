@@ -1,7 +1,7 @@
 from pathlib import Path
 
 VERSION_OLD='20261011-37'
-VERSION_NEW='20261011-39'
+VERSION_NEW='20261011-40'
 
 p=Path('narrative-universe.js')
 s=p.read_text(encoding='utf-8')
@@ -68,7 +68,7 @@ p.write_text(s,encoding='utf-8')
 for q in Path('.').rglob('*.html'):
     if '.git' in q.parts: continue
     t=q.read_text(encoding='utf-8')
-    for oldv in ('20261011-37','20261011-38'):
+    for oldv in ('20261011-37','20261011-38','20261011-39'):
         t=t.replace(f'narrative-universe.js?v={oldv}',f'narrative-universe.js?v={VERSION_NEW}')
     q.write_text(t,encoding='utf-8')
 
@@ -76,8 +76,12 @@ for q in Path('.').rglob('*.html'):
 ana=Path('elegia-breve/index.html')
 t=ana.read_text(encoding='utf-8')
 index_style="""<style id="oras-related-works-index">
-.journey-index .ou-related-work{width:100%;min-height:44px;margin:0;padding:8px 12px;text-align:left;border-radius:8px;color:#fff7e9;background:rgba(12,12,12,.10);border:1px solid rgba(255,255,255,.18);font:14px/1.3 system-ui,sans-serif;letter-spacing:0;text-transform:none;box-shadow:none}
-.journey-index .ou-related-work[disabled]{opacity:.36;cursor:not-allowed;filter:saturate(.45)}
+.journey-index .ou-related-work{width:100%;min-height:44px;margin:0!important;padding:8px 12px!important;text-align:left!important;border-radius:8px!important;font:14px/1.3 system-ui,sans-serif!important;letter-spacing:0!important;text-transform:none!important;box-shadow:none!important;color:#fff7e9!important;background:var(--piece-tone)!important;border:1px solid var(--piece-border)!important;text-shadow:0 1px 3px #0008!important}
+.journey-index #anaSoloWork{--piece-tone:#493827;--piece-veil:#493827d9;--piece-border:#8d7153}
+.journey-index #anaCenicientoWork{--piece-tone:#263d32;--piece-veil:#263d32d9;--piece-border:#657d69}
+.journey-index .ou-related-work:hover,.journey-index .ou-related-work:focus-visible{background:var(--piece-tone)!important;border-color:#dfc69b!important;box-shadow:0 0 0 1px #dfc69b!important;transform:translateY(-1px)}
+.journey-index .ou-related-work[disabled]{opacity:.34!important;cursor:not-allowed!important;filter:saturate(.28) brightness(.78)!important;transform:none!important;box-shadow:none!important}
+.journey-index .ou-related-work[disabled]:hover{border-color:var(--piece-border)!important;box-shadow:none!important}
 .journey-index .ou-related-separator{height:1px;margin:7px 0;background:rgba(255,255,255,.16)}
 </style>"""
 if 'id="oras-related-works-index"' not in t:
@@ -89,20 +93,29 @@ index_script="""<script id="oras-related-works-index-script">
   const ROOT='/solo-la-tarjeta/';
   const read=()=>{try{return JSON.parse(localStorage.getItem(STORAGE)||'{}')}catch(_){return {}}};
   const write=patch=>{const st=Object.assign({},read(),patch);try{localStorage.setItem(STORAGE,JSON.stringify(st))}catch(_){};return st};
-  const unlock=()=>{write({cenicientoUnlocked:true});refresh();};
+  const unlockFromQuestion=()=>{write({cenicientoQuestionUnlocked:true,cenicientoUnlocked:true});refresh();};
   let cenBtn=null;
-  const refresh=()=>{if(!cenBtn)return;const unlocked=read().cenicientoUnlocked===true;cenBtn.disabled=!unlocked;cenBtn.textContent=unlocked?'CENICIENTO':'CENICIENTO · bloqueado';cenBtn.setAttribute('aria-disabled',String(!unlocked));};
+  const refresh=()=>{
+    if(!cenBtn)return;
+    const unlocked=read().cenicientoQuestionUnlocked===true;
+    cenBtn.disabled=!unlocked;
+    cenBtn.textContent=unlocked?'CENICIENTO':'CENICIENTO · bloqueado';
+    cenBtn.setAttribute('aria-disabled',String(!unlocked));
+  };
   const init=()=>{
     const nav=document.getElementById('anaNavigation');
     if(nav&&!document.getElementById('anaSoloWork')){
       const sep=document.createElement('div');sep.className='ou-related-separator';sep.setAttribute('aria-hidden','true');
-      const solo=document.createElement('button');solo.type='button';solo.id='anaSoloWork';solo.className='entry-button ou-related-work';solo.textContent='SOLO LA TARJETA';solo.addEventListener('click',()=>{location.href=ROOT+'?origen=indice&v=20261011-39'});
-      cenBtn=document.createElement('button');cenBtn.type='button';cenBtn.id='anaCenicientoWork';cenBtn.className='entry-button ou-related-work';
-      cenBtn.addEventListener('click',()=>{if(!cenBtn.disabled)location.href=ROOT+'ceniciento/?v=20261011-39'});
+      const solo=document.createElement('button');solo.type='button';solo.id='anaSoloWork';solo.className='entry-button piece-button ou-related-work';solo.textContent='SOLO LA TARJETA';solo.addEventListener('click',()=>{location.href=ROOT+'?origen=indice&v=20261011-40'});
+      cenBtn=document.createElement('button');cenBtn.type='button';cenBtn.id='anaCenicientoWork';cenBtn.className='entry-button piece-button ou-related-work';
+      cenBtn.addEventListener('click',()=>{if(!cenBtn.disabled)location.href=ROOT+'ceniciento/?v=20261011-40'});
       nav.append(sep,solo,cenBtn);refresh();
-    }else cenBtn=document.getElementById('anaCenicientoWork');
+    }else{cenBtn=document.getElementById('anaCenicientoWork');refresh();}
     const q=document.getElementById('cenicientoLink');
-    if(q){q.addEventListener('click',unlock,true);q.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){unlock();}},true);}
+    if(q){
+      q.addEventListener('click',unlockFromQuestion,true);
+      q.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){unlockFromQuestion();}},true);
+    }
     if(new URLSearchParams(location.search).get('indice')==='1'){
       const dlg=document.getElementById('journeyIndex');
       if(dlg&&!dlg.open){try{dlg.showModal()}catch(_){dlg.setAttribute('open','')}}
