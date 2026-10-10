@@ -5,7 +5,7 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Código fuente archivístico vigente en este dossier:** versión 20, publicada en `main` como commit de código `23608494d4fdfe911d0492472db88485f5453128`
+**Código fuente archivístico vigente en este dossier:** versión 21, publicada en `main` como commit de código `e5461949f48ffaa4209c6e11b003c682730702f0`
 **Módulo compartido:** `narrative-universe.js`, versión `20261010-12`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
@@ -96,7 +96,7 @@ Ejemplo con la fecha canónica registrada para *ANA KLAUDYA*:
 
 ### Cita del código fuente archivado
 
-> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 20, separación de la tarjeta y la navegación móvil. Repositorio `pacolazarog-stack/solo-la-tarjeta`, commit de código `23608494d4fdfe911d0492472db88485f5453128`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
+> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 21, visibilidad del fondo COTÁN en móvil. Repositorio `pacolazarog-stack/solo-la-tarjeta`, commit de código `e5461949f48ffaa4209c6e11b003c682730702f0`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
 
 Para citas académicas, conviene especificar la pieza, el modo de acceso (lectura o escucha), la URL y la fecha de consulta. Si se cita un verso, añadir el nombre de la pieza y el identificador o encabezado de sección disponible en la edición consultada. No asignar números de verso que la obra no muestre.
 
@@ -233,3 +233,10 @@ Las siete comprobaciones CJS se ejecutaron y pasan. El código se publicó en `m
 La captura recibida muestra que, en un teléfono con ancho CSS superior a 480 px, «Anterior / Índice / Siguiente» salta a dos filas y tapa parcialmente la tarjeta. La corrección aplica la fila de tres columnas a toda la gama móvil hasta 760 px, con ancho y tamaños de botón acotados. La tarjeta conserva su posición móvil, ahora separada de los tres controles.
 
 La comprobación `check-mobile-navigation.cjs` verifica la regla de una sola fila hasta 760 px. Las siete pruebas CJS pasan. El código se publicó en `main` mediante `23608494d4fdfe911d0492472db88485f5453128`; el código completo actualizado queda en [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (20).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(20).md).
+
+
+## 18. Visibilidad del fondo COTÁN en móvil en la versión 21
+
+La barra inferior de navegación conserva una sola fila hasta 760 px y adopta un fondo oscuro translúcido con desenfoque leve; así la imagen de bodegón puede verse a través de los controles sin sacrificar legibilidad. La tarjeta flotante se reduce a 86 × 54 px y su placa también deja pasar parte de la fotografía. El contenido de la obra y la imagen permanecen intactos.
+
+La prueba móvil comprueba la translucidez de la navegación y la tarjeta compacta; las siete comprobaciones CJS pasan. El código se publicó en `main` mediante `e5461949f48ffaa4209c6e11b003c682730702f0`; el archivo fuente completo es [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (21).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(21).md).
