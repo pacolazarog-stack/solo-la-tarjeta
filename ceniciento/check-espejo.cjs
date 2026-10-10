@@ -7,10 +7,11 @@ assert.equal((literals.match(/^`/gm)||[]).length,32,'EL ESPEJO contains exactly 
 assert(mirror.includes('new Set([14,15,17,26,30])'),'The five convergence scenes require a reader-controlled pause');
 assert(mirror.includes("next.textContent='seguir'")&&mirror.includes('if(!locked||lockedScene!==scene)return'),'A deliberate action releases each key-scene pause');
 assert(!/setTimeout|setInterval/.test(mirror),'Scene pacing does not depend on timers');
+assert(mirror.includes('if(event.deltaY<0){releasePause();return}')&&mirror.includes("['ArrowUp','PageUp','Home'].includes(event.key)"),'The reader can move back to reread, then encounter the pause again on return');
 assert(mirror.includes('scroll-snap')===false,'Scroll snapping is defined in the page stylesheet, not script');
 assert(page.includes('scroll-snap-type:y mandatory')&&page.includes('scroll-snap-stop:always'),'Each scene occupies its own reading stop');
 assert(page.includes('<main id="mirror" aria-label="EL ESPEJO" hidden></main>'),'The convergence room is not exposed before its narrative condition');
-assert(page.includes('src="el-espejo.js?v=20261010-18"'),'The scene script is cache-versioned');
+assert(page.includes('src="el-espejo.js?v=20261010-19"'),'The scene script is cache-versioned');
 assert(shared.includes('state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete'),'The convergence only appears after all three pieces have been completed');
 assert(shared.includes("new CustomEvent('oras:mirror-start')"),'EL ESPEJO begins as a reading layer, without a new route or door');
 assert(shared.includes("new CustomEvent('oras:mirror-end')")||mirror.includes("new CustomEvent('oras:mirror-end')"),'Completing the final scene releases the existing Ceniciento exits');

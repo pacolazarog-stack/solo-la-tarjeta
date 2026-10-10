@@ -38,6 +38,7 @@ const pauseAt=new Set([14,15,17,26,30]);
 const mirror=document.getElementById('mirror');
 if(!mirror)return;
 let started=false,locked=false,lockedScene=null,finished=false;
+let lastTouchY=null;
 const sceneNodes=[];
 function addText(parent,text){
   text.split(/\n\n+/).forEach(block=>{
@@ -45,6 +46,12 @@ function addText(parent,text){
     block.split('\n').forEach((line,index)=>{if(index)p.append(document.createElement('br'));p.append(document.createTextNode(line))});
     parent.append(p);
   });
+}
+function releasePause(){
+  if(!locked)return;
+  const button=lockedScene?.querySelector('.mirror-continue');
+  if(button)button.hidden=true;
+  locked=false;lockedScene=null;
 }
 scenes.forEach((text,index)=>{
   const number=index+1,scene=document.createElement('section');
@@ -54,7 +61,7 @@ scenes.forEach((text,index)=>{
   const copy=document.createElement('div');copy.className='mirror-copy'+(number===32?' mirror-coda':'');addText(copy,text);scene.append(copy);
   if(pauseAt.has(number)){
     const next=document.createElement('button');next.type='button';next.className='mirror-continue';next.textContent='seguir';next.setAttribute('aria-label',`Continuar después del fragmento ${number}`);next.hidden=true;
-    next.addEventListener('click',()=>{if(!locked||lockedScene!==scene)return;locked=false;lockedScene=null;next.hidden=true;scene.focus({preventScroll:true})});scene.append(next);
+    next.addEventListener('click',()=>{if(!locked||lockedScene!==scene)return;releasePause();scene.focus({preventScroll:true})});scene.append(next);
   }
   if(number===32){const end=document.createElement('span');end.className='mirror-end-sentinel';end.setAttribute('aria-hidden','true');scene.append(end)}
   mirror.append(scene);sceneNodes.push(scene);
@@ -71,17 +78,30 @@ const pauseObserver=new IntersectionObserver(entries=>{
   }
 },{root:mirror,threshold:[.68,.9]});
 sceneNodes.filter(scene=>scene.dataset.pause==='true').forEach(scene=>pauseObserver.observe(scene));
-function preventWhilePaused(event){if(locked){event.preventDefault();event.stopPropagation()}}
-mirror.addEventListener('wheel',preventWhilePaused,{passive:false});
-mirror.addEventListener('touchmove',preventWhilePaused,{passive:false});
-mirror.addEventListener('keydown',event=>{if(!locked)return;if(['ArrowDown','PageDown',' ','End'].includes(event.key)){event.preventDefault();event.stopPropagation()}});
+mirror.addEventListener('wheel',event=>{
+  if(!locked)return;
+  if(event.deltaY<0){releasePause();return}
+  event.preventDefault();event.stopPropagation();
+},{passive:false});
+mirror.addEventListener('touchstart',event=>{lastTouchY=event.touches[0]?.clientY??null},{passive:true});
+mirror.addEventListener('touchmove',event=>{
+  if(!locked){lastTouchY=event.touches[0]?.clientY??null;return}
+  const y=event.touches[0]?.clientY??lastTouchY;
+  if(lastTouchY!==null&&y>lastTouchY){releasePause();lastTouchY=y;return}
+  event.preventDefault();event.stopPropagation();lastTouchY=y;
+},{passive:false});
+mirror.addEventListener('keydown',event=>{
+  if(!locked)return;
+  if(['ArrowUp','PageUp','Home'].includes(event.key)){releasePause();return}
+  if(['ArrowDown','PageDown',' ','End'].includes(event.key)){event.preventDefault();event.stopPropagation()}
+});
 const endSentinel=mirror.querySelector('.mirror-end-sentinel');
 new IntersectionObserver(entries=>{
   if(finished||!started||!entries.some(entry=>entry.isIntersecting))return;
   finished=true;window.dispatchEvent(new CustomEvent('oras:mirror-end'));
 },{root:mirror,threshold:.5}).observe(endSentinel);
 function start(){
-  if(started)return;started=true;finished=false;locked=false;lockedScene=null;
+  if(started)return;started=true;finished=false;locked=false;lockedScene=null;lastTouchY=null;
   mirror.hidden=false;document.body.classList.add('mirror');mirror.scrollTop=0;
   sceneNodes[0].focus({preventScroll:true});
 }
