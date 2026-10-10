@@ -24,7 +24,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Verificar progreso de lectura
-        run: node check-reading-progress.cjs
+        run: |
+          node check-reading-progress.cjs
+          node check-publication-loading.cjs
       - name: Configurar Pages
         uses: actions/configure-pages@v5
       - name: Aplicar canon de ANA KLAUDYA

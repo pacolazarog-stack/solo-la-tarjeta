@@ -13,10 +13,13 @@
   <meta property="og:locale" content="es_ES">
   <title>ANA KLAUDYA</title>
   <script data-poem-entry>
+  document.documentElement.classList.add("publication-pending");
   if(['estrella','ojos','sonrisa','cabello','piel','interludio','epilogo','ceniciento'].includes(window.location.hash.slice(1))){document.documentElement.classList.add('poem-route-loading');}
   </script>
 
   <style>
+    .publication-pending body{visibility:hidden}
+    .publication-pending::before{content:"Preparando la lectura…";position:fixed;inset:0;display:grid;place-items:center;background:#eef1e9;color:#201d19;z-index:2147483647;font:18px/1.5 Georgia,serif}
     :root{
       --paper:#eef1e9;
       --ink:#201d19;
@@ -793,8 +796,9 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
 @media(max-width:640px){
   .entry-inner{gap:10px;padding:14px 18px}
   .entry-title{font-size:clamp(1.7rem,8vw,2.45rem);letter-spacing:.035em}
+}
 </style>
-<script src="../ana-klaudya/publication.js"></script>
+<script defer src="../ana-klaudya/publication.js?v=20261010-26"></script>
 </head>
 
 <body class="locked" data-publication="web">

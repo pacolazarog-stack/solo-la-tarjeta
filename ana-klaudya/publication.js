@@ -3,10 +3,17 @@
   const root=new URL('./',script.src);
   document.documentElement.classList.add('publication-pending');
   const style=document.createElement('style');
-  style.textContent='.publication-pending body{visibility:hidden}.without-images .portrait-finale img,.without-images .detail-background svg,.without-images .detail-background img{display:none!important}.without-name .name-prelude{display:none!important}.publication-notice{max-width:42rem;margin:15vh auto;padding:30px;font:18px/1.6 system-ui;background:#f5f3ed;color:#201d19}';
+  style.textContent='.publication-pending body{visibility:hidden}.publication-pending::before{content:"Preparando la lectura…";position:fixed;inset:0;display:grid;place-items:center;background:#eef1e9;color:#201d19;z-index:2147483647;font:18px/1.5 Georgia,serif}.publication-notice button{display:block;margin:1rem auto 0;padding:.75rem 1.2rem;min-height:44px;font:inherit;cursor:pointer}.without-images .portrait-finale img,.without-images .detail-background svg,.without-images .detail-background img{display:none!important}.without-name .name-prelude{display:none!important}.publication-notice{max-width:42rem;margin:15vh auto;padding:30px;font:18px/1.6 system-ui;background:#f5f3ed;color:#201d19}';
   document.head.append(style);
+  const controller=new AbortController();
+  let deadline;
+  const timeout=new Promise((_,reject)=>{
+    deadline=setTimeout(()=>{controller.abort();reject(new Error('publication-timeout'));},8000);
+  });
   const ready=new Promise(resolve=>document.readyState==='loading'?document.addEventListener('DOMContentLoaded',resolve,{once:true}):resolve());
-  Promise.all([fetch(new URL('publication-settings.json',root),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('settings');return r.json();}),ready]).then(([policy])=>{
+  const settings=fetch(new URL('publication-settings.json',root),{cache:'no-store',signal:controller.signal}).then(r=>{if(!r.ok)throw Error('settings');return r.json();});
+  Promise.race([Promise.all([settings,ready]),timeout]).then(([policy])=>{
+    if(!policy||typeof policy.web!=='boolean'||typeof policy.images!=='boolean'||typeof policy.publicName!=='boolean')throw Error('invalid-settings');
     window.anaPublication=policy;
     if(document.body.dataset.publication==='web'&&!policy.web){
       for(const a of document.querySelectorAll('audio'))a.pause();
@@ -35,6 +42,13 @@
       }
     }
   }).catch(()=>{
-    document.body.replaceChildren();const notice=document.createElement('p');notice.className='publication-notice';notice.textContent='La obra no está disponible. Vuelve a intentarlo más tarde.';document.body.append(notice);
-  }).finally(()=>document.documentElement.classList.remove('publication-pending'));
+    const showFailure=()=>{
+      document.body.replaceChildren();
+      const notice=document.createElement('section');notice.className='publication-notice';notice.setAttribute('role','alert');
+      const message=document.createElement('p');message.textContent='No se ha podido cargar la lectura. Puedes volver a intentarlo.';
+      const retry=document.createElement('button');retry.type='button';retry.textContent='Reintentar';retry.addEventListener('click',()=>location.reload());
+      notice.append(message,retry);document.body.append(notice);
+    };
+    if(document.body)showFailure();else document.addEventListener('DOMContentLoaded',showFailure,{once:true});
+  }).finally(()=>{clearTimeout(deadline);document.documentElement.classList.remove('publication-pending');});
 })();
