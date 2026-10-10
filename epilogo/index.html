@@ -61,7 +61,7 @@ h1{font-size:clamp(48px,6.5vw,82px)}
 /* El color se templa como una brasa: sin cambiar la forma de las letras. */
 @keyframes simmerInk{0%,100%{color:#ebc68d}35%{color:#efb591}70%{color:#ddaaa0}}
 @keyframes simmerColors{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-header,.kicker,.status,,footer,.music-controls{animation:simmerInk 48s ease-in-out infinite}
+header,.kicker,.status,footer,.music-controls{animation:simmerInk 48s ease-in-out infinite}
 header a{color:inherit}
 h1{color:#ffd88a}h1 em{color:inherit}
 .phrase,.opening-verse{color:#ffd4a2}
@@ -81,9 +81,9 @@ body.opening-preview .opening-verse{opacity:0}
  }
  h1{background-image:linear-gradient(120deg,#ffe0a0,#ffbd69 30%,#f6977f 60%,#ffd38a);animation-duration:48s}
 }
-@media(prefers-reduced-motion:reduce){header,.kicker,.status,,footer,.music-controls,h1,.phrase{animation:none}}
-@media print{header,.kicker,.status,,footer,.music-controls,h1,h1 em,.phrase{animation:none;background:none;color:#000;-webkit-text-fill-color:currentColor}}
-@media(forced-colors:active){header,.kicker,.status,,footer,.music-controls,h1,h1 em,.phrase{animation:none;background:none;color:CanvasText;-webkit-text-fill-color:currentColor}}
+@media(prefers-reduced-motion:reduce){header,.kicker,.status,footer,.music-controls,h1,.phrase{animation:none}}
+@media print{header,.kicker,.status,footer,.music-controls,h1,h1 em,.phrase{animation:none;background:none;color:#000;-webkit-text-fill-color:currentColor}}
+@media(forced-colors:active){header,.kicker,.status,footer,.music-controls,h1,h1 em,.phrase{animation:none;background:none;color:CanvasText;-webkit-text-fill-color:currentColor}}
 #backAna{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;touch-action:manipulation}
 @media(max-width:760px){header{position:sticky;top:0;z-index:50;align-items:center;padding:8px 4vw;background:rgba(12,12,18,.88);backdrop-filter:blur(8px)}}
 
@@ -95,7 +95,7 @@ header{padding:18px 5vw;font-size:10px;opacity:.7}
 main{padding-bottom:140px;gap:6vw}
 .controls button{box-shadow:none;min-height:44px}
 @media(max-width:760px){main{padding:15px 5vw 130px}.intro{padding-top:0}.poem{border-top:0;margin-top:36px;line-height:1.85}.stanza{margin-bottom:36px}.music-controls{max-width:none}.phrase{line-height:1.85}}
-@media(prefers-reduced-motion:reduce){header,.kicker,.status,,footer,.music-controls,h1,.phrase{animation:none!important}}
+@media(prefers-reduced-motion:reduce){header,.kicker,.status,footer,.music-controls,h1,.phrase{animation:none!important}}
 
 /* The same letterforms move from charcoal on the photograph to a lasting flame. */
 :root{--fire-low:#f16e28;--fire-mid:#ffc65b;--fire-high:#fff2b6;--fire-edge:rgba(5,28,33,.9);--fire-glow:rgba(255,119,31,.64);--fire-plume:rgba(255,76,15,.4);--coal-guard:rgba(255,245,220,0)}
