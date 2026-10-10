@@ -744,8 +744,9 @@
 
 /* Recorrido y lectura en vertical. */
 .journey-nav[hidden]{display:none!important}
-.journey-nav{position:fixed;z-index:160;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:6px;background:rgba(16,15,14,.18);color:#fffaf1;border:1px solid rgba(255,250,241,.42);border-radius:999px;box-shadow:0 3px 16px rgba(0,0,0,.16);-webkit-backdrop-filter:none;backdrop-filter:none;max-width:calc(100% - 24px)}
-.journey-nav button{min-height:44px;min-width:74px;margin:0;padding:10px 14px;border:0;border-radius:999px;background:transparent;color:inherit;font:14px/1.2 system-ui,sans-serif;text-shadow:0 1px 3px rgba(0,0,0,.85);cursor:pointer;touch-action:manipulation}
+.journey-nav{position:fixed;z-index:160;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;align-items:stretch;gap:0;padding:0;width:min(480px,calc(100% - 24px));height:48px;background:transparent;color:#fffaf1;border:0;border-top:1px solid rgba(255,250,241,.42);border-radius:0;box-shadow:none;backdrop-filter:none}
+.journey-nav button{flex:1 1 0;min-width:0;min-height:48px;margin:0;padding:8px 6px;border:0;border-radius:0;background:transparent;color:inherit;font:14px/1.2 system-ui,sans-serif;text-shadow:0 1px 3px rgba(0,0,0,.85);cursor:pointer;touch-action:manipulation;white-space:nowrap}
+.journey-nav button+button{border-left:1px solid rgba(255,250,241,.24)}
 .journey-nav button:disabled{opacity:.35;cursor:default}
 .journey-nav button:focus-visible,.entry-button:focus-visible{outline:2px solid #375548;outline-offset:3px}
 .journey-index{box-sizing:border-box;width:min(540px,calc(100% - 24px));max-height:calc(100svh - 24px);border:1px solid #596457;border-radius:18px;padding:44px 16px 12px;background:#19231d;color:#f0eadf;z-index:170;overflow:auto}
@@ -780,7 +781,7 @@
 .entry{background:#eef1e9;backdrop-filter:none}
 .petal-button:hover,.petal-button:focus-visible{background:linear-gradient(115deg,#f9f1e6,#edd4ce 40%,#f3d8ab);border-color:#aa8464}
 .petal-mark{display:inline-flex;flex:none;width:25px;height:25px}.petal-mark svg{display:block;width:100%;height:100%}
-.journey-nav{flex-wrap:wrap;justify-content:center}
+.journey-nav{flex-wrap:nowrap;justify-content:center}
 .journey-nav button[hidden]{display:none}
 @media(forced-colors:active){.petal-button,.journey-index .entry-button.petal-button{background:ButtonFace;color:ButtonText;border:1px solid ButtonText}.petal-mark{display:none}}
 
@@ -1646,6 +1647,6 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       syncPoemRoute();
     })();
   </script>
-<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-28"></script>
+<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-29"></script>
 </body>
 </html>
