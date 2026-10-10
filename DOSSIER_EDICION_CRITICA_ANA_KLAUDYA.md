@@ -223,6 +223,6 @@ La prueba móvil verifica la barra de una fila, el espacio de lectura y la posic
 
 ## 16. Compactación de portadas móviles de la versión 19
 
-La versión 19 reduce en teléfonos el espacio de cabecera, el tamaño y los márgenes de los títulos, el espacio entre acciones y el bloque de sonido en las portadas de *ANA KLAUDYA*, sus poemas independientes, *CENICIENTO*. Los botones «Leer con pausas» y «Poema completo» se conservan; los controles de música siguen disponibles en un bloque compacto de dos columnas. El poema comienza antes y gana área visible sin alterar el texto ni añadir navegación. En pantallas bajas se aplica un ajuste adicional.
+La versión 19 reduce en teléfonos el espacio de cabecera, el tamaño y los márgenes de los títulos, el espacio entre acciones y el bloque de sonido en las portadas de *ANA KLAUDYA*, sus poemas independientes y *CENICIENTO*. Los botones «Leer con pausas» y «Poema completo» se conservan; los controles de música siguen disponibles en un bloque compacto de dos columnas. El poema comienza antes y gana área visible sin alterar el texto ni añadir navegación. En pantallas bajas se aplica un ajuste adicional.
 
 Las siete comprobaciones CJS se ejecutaron y pasan. El código se publicó en `main` mediante `6527b9fd27dc0e9635ca255b4838ffb899349c2e`. El paquete de código español completo se conserva en [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (19).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(19).md); este dossier permanece fuera de la interfaz de lectura.

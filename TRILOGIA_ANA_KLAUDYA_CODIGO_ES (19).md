@@ -9,7 +9,7 @@
 **Corte de la fuente base:** 10 de octubre de 2026.  
 **Estado:** código publicado en `main` mediante el commit `6527b9fd27dc0e9635ca255b4838ffb899349c2e`; archivo de conservación de la versión 19.
 
-Este archivo reúne el código de las tres piezas, las páginas de *ANA KLAUDYA*, las comprobaciones y los textos fuente en español. La revisión 19 conserva la navegación y compacta las portadas móviles de *ANA KLAUDYA*, sus poemas, *CENICIENTO*: reduce márgenes y títulos, reúne las opciones de lectura y mantiene los controles de sonido en un bloque compacto para ampliar la superficie útil de pantalla.
+Este archivo reúne el código de las tres piezas, las páginas de *ANA KLAUDYA*, las comprobaciones y los textos fuente en español. La revisión 19 conserva la navegación y compacta las portadas móviles de *ANA KLAUDYA*, sus poemas independientes y *CENICIENTO*: reduce márgenes y títulos, reúne las opciones de lectura y mantiene los controles de sonido en un bloque compacto para ampliar la superficie útil de pantalla.
 
 Los ocho archivos de código modificados en esta edición se publicaron en `main` mediante el commit `6527b9fd27dc0e9635ca255b4838ffb899349c2e`. Los SHA de GitHub consignados en las secciones de archivo corresponden a los blobs finales; el commit consultado identifica la revisión publicada. El código HTML conserva estilos y scripts integrados. Los recursos binarios se enumeran al final con sus referencias originales.
 
