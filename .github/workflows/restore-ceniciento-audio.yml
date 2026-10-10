@@ -10,30 +10,166 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Restore current narration and bump cache
+      - name: Restore narration and install symbolic narrative grammar
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
 
+          # Keep the current Ceniciento narration invariant.
           p = Path('ceniciento/index.html')
           s = p.read_text(encoding='utf-8')
-          old = "MASTER='CENICIENTO_completo.m4a?v=20261010'"
-          new = "MASTER='ceniciento-voz-completa.mp3?v=20261010-audio-restored'"
-          if old not in s and new not in s:
-              raise RuntimeError('No se encontró la referencia de audio esperada en ceniciento/index.html')
-          s = s.replace(old, new)
-          p.write_text(s, encoding='utf-8')
+          old_audio = "MASTER='CENICIENTO_completo.m4a?v=20261010'"
+          new_audio = "MASTER='ceniciento-voz-completa.mp3?v=20261010-audio-restored'"
+          if old_audio in s:
+              s = s.replace(old_audio, new_audio)
+              p.write_text(s, encoding='utf-8')
 
-          q = Path('elegia-breve/index.html')
-          t = q.read_text(encoding='utf-8')
-          t = t.replace('20261010-ceniciento-score40-v2', '20261010-ceniciento-score40-v3-audio')
-          q.write_text(t, encoding='utf-8')
+          n = Path('narrative-universe.js')
+          u = n.read_text(encoding='utf-8')
+          if "const VERSION='20261010-5';" in u:
+              u = u.replace("const VERSION='20261010-5';", "const VERSION='20261010-6';", 1)
+
+              old_css = "  .ou-active-text{cursor:pointer;font-weight:600;text-decoration-line:underline;text-decoration-style:dotted;text-decoration-thickness:.105em;text-underline-offset:.22em;text-decoration-color:rgba(112,72,38,.78);transition:opacity .45s ease,text-shadow .45s ease,color .45s ease}.ou-active-text:hover,.ou-active-text:focus-visible{color:#6f4d31;opacity:1;text-shadow:0 0 12px rgba(112,72,38,.18);outline:none}\n"
+              new_css = "  .ou-symbolic{cursor:pointer;font:inherit;font-weight:inherit;color:inherit;text-decoration-line:underline;text-decoration-style:solid;text-decoration-thickness:.055em;text-underline-offset:.20em;text-decoration-color:transparent;transition:color .5s ease,text-decoration-color .5s ease,text-shadow .5s ease,opacity .5s ease}.ou-symbolic:hover,.ou-symbolic:focus-visible{color:rgba(92,67,47,.92);text-decoration-color:rgba(92,67,47,.28);text-shadow:0 0 12px rgba(112,72,38,.08);outline:none}\n"
+              if old_css not in u:
+                  raise RuntimeError('No se encontró el estilo antiguo de conexiones')
+              u = u.replace(old_css, new_css, 1)
+
+              old_make = """function makeClickable(el,destination,label){
+  if(!el || el.dataset.ouActive)return;
+  el.dataset.ouActive='1';
+  el.classList.add('ou-active-text');
+  el.tabIndex=0;
+  el.setAttribute('role','link');
+  if(label)el.setAttribute('aria-label',label);
+  const go=()=>topGo(destination);
+  el.addEventListener('click',go);
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
+}
+function pByExact(text){return [...document.querySelectorAll('p,span')].find(el=>el.textContent.trim()===text)||null;}
+function psContaining(token){return [...document.querySelectorAll('p')].filter(el=>el.textContent.includes(token));}
+"""
+              new_make = """function makeSymbolic(el,destination,label){
+  if(!el || el.dataset.ouSymbolic)return;
+  el.dataset.ouSymbolic='1';
+  el.classList.add('ou-symbolic');
+  el.tabIndex=0;
+  el.setAttribute('role','link');
+  if(label)el.setAttribute('aria-label',label);
+  const go=()=>topGo(destination);
+  el.addEventListener('click',go);
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
+}
+function pByExact(text){return [...document.querySelectorAll('p,span')].find(el=>el.textContent.trim()===text)||null;}
+function psByExact(text){return [...document.querySelectorAll('p,span')].filter(el=>el.textContent.trim()===text);}
+function psContaining(token){return [...document.querySelectorAll('p')].filter(el=>el.textContent.includes(token));}
+function wrapToken(root,token,destination,label){
+  if(!root || root.dataset.ouWrapped?.includes(token))return;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const nodes=[];
+  while(walker.nextNode())nodes.push(walker.currentNode);
+  let changed=false;
+  for(const node of nodes){
+    if(node.parentElement?.closest('a,button,.ou-symbolic'))continue;
+    const text=node.nodeValue||'';
+    if(!text.includes(token))continue;
+    const frag=document.createDocumentFragment();
+    const parts=text.split(token);
+    parts.forEach((part,i)=>{
+      if(part)frag.appendChild(document.createTextNode(part));
+      if(i<parts.length-1){
+        const span=document.createElement('span');
+        span.textContent=token;
+        makeSymbolic(span,destination,label);
+        frag.appendChild(span);
+      }
+    });
+    node.replaceWith(frag);changed=true;
+  }
+  if(changed)root.dataset.ouWrapped=((root.dataset.ouWrapped||'')+' '+token).trim();
+}
+"""
+              if old_make not in u:
+                  raise RuntimeError('No se encontró makeClickable actual')
+              u = u.replace(old_make, new_make, 1)
+
+              old_activate = """function activateSoloSymbols(){
+  makeClickable(pByExact('Los ojos de estatua.'),rootPath+'elegia-breve/#ojos','Ojos de estatua');
+  psContaining('reloj').forEach(p=>makeClickable(p,rootPath+'elegia-breve/#ceniciento','Reloj · Ceniciento'));
+  installEiffel();
+}
+"""
+              new_activate = """function activateSoloSymbols(){
+  [...psByExact('Ojos de estatua.'),...psByExact('Los ojos de estatua.')]
+    .forEach(el=>makeSymbolic(el,rootPath+'elegia-breve/#ojos','Ojos de estatua'));
+  psContaining('París').forEach(el=>wrapToken(el,'París',rootPath+'elegia-breve/#estrella','París · Estrella'));
+  const annulled=document.getElementById('duskColorTurn') || pByExact('La tarjeta quedó anulada.');
+  makeSymbolic(annulled,rootPath+'elegia-breve/#epilogo','La tarjeta quedó anulada · Epílogo');
+  psContaining('reloj').forEach(el=>wrapToken(el,'reloj',rootPath+'elegia-breve/#ceniciento','reloj · Ceniciento'));
+}
+"""
+              if old_activate not in u:
+                  raise RuntimeError('No se encontró activateSoloSymbols actual')
+              u = u.replace(old_activate, new_activate, 1)
+              n.write_text(u, encoding='utf-8')
+
+          # New cache key on every route that participates in the universe.
+          for html in Path('.').rglob('*.html'):
+              text = html.read_text(encoding='utf-8')
+              newer = re.sub(r'narrative-universe\.js\?v=20261010-\d+', 'narrative-universe.js?v=20261010-6', text)
+              if newer != text:
+                  html.write_text(newer, encoding='utf-8')
           PY
-      - name: Commit
+
+          rm -f .github/workflows/symbolic-connections-v6.yml
+          cat > .github/workflows/restore-ceniciento-audio.yml <<'YAML'
+          name: Restore Ceniciento audio
+          on:
+            push:
+              branches: ["main"]
+            workflow_dispatch:
+          permissions:
+            contents: write
+          jobs:
+            patch:
+              runs-on: ubuntu-latest
+              steps:
+                - uses: actions/checkout@v4
+                - name: Restore current narration and bump cache
+                  run: |
+                    python3 - <<'PY'
+                    from pathlib import Path
+
+                    p = Path('ceniciento/index.html')
+                    s = p.read_text(encoding='utf-8')
+                    old = "MASTER='CENICIENTO_completo.m4a?v=20261010'"
+                    new = "MASTER='ceniciento-voz-completa.mp3?v=20261010-audio-restored'"
+                    if old not in s and new not in s:
+                        raise RuntimeError('No se encontró la referencia de audio esperada en ceniciento/index.html')
+                    s = s.replace(old, new)
+                    p.write_text(s, encoding='utf-8')
+
+                    q = Path('elegia-breve/index.html')
+                    t = q.read_text(encoding='utf-8')
+                    t = t.replace('20261010-ceniciento-score40-v2', '20261010-ceniciento-score40-v3-audio')
+                    q.write_text(t, encoding='utf-8')
+                    PY
+                - name: Commit
+                  run: |
+                    git config user.name "github-actions[bot]"
+                    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                    git add ceniciento/index.html elegia-breve/index.html
+                    if git diff --cached --quiet; then exit 0; fi
+                    git commit -m "Restore current Ceniciento narration"
+                    git push
+          YAML
+
+      - name: Commit symbolic grammar and restore maintenance workflow
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ceniciento/index.html elegia-breve/index.html
+          git add -A
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "Restore current Ceniciento narration"
+          git commit -m "Separate physical access from symbolic narrative links"
           git push
