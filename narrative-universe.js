@@ -331,13 +331,13 @@ function setupCeniciento(){
   const voice=document.getElementById('voice');
   if(voice)voice.addEventListener('ended',complete);
   let readDone=false;
-  const signature=document.querySelector('#readerText + .signature');
-  if('IntersectionObserver' in window && signature){
+  const readingEnd=document.querySelector('#readerText + .reading-end');
+  if('IntersectionObserver' in window && readingEnd){
     const endObserver=new IntersectionObserver(entries=>{
       if(readDone || !document.body.classList.contains('read') || document.body.classList.contains('revealing'))return;
       if(entries.some(entry=>entry.isIntersecting)){readDone=true;endObserver.disconnect();complete();}
     },{rootMargin:'0px 0px -10% 0px',threshold:.25});
-    endObserver.observe(signature);
+    endObserver.observe(readingEnd);
   }else{
     const readCheck=()=>{
       if(readDone || !document.body.classList.contains('read') || document.body.classList.contains('revealing'))return;
