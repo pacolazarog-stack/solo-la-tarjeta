@@ -8,6 +8,18 @@ base.onload=()=>{
   const style=document.createElement('style');
   style.id='mobile-portrait-layout-fix';
   style.textContent=`
+.ou-card{
+  right:max(16px,env(safe-area-inset-right))!important;
+  left:auto!important;
+  transform:rotate(4deg)!important;
+}
+.ou-reading-checklist{
+  left:max(10px,env(safe-area-inset-left))!important;
+  right:auto!important;
+}
+.ou-reading-checklist summary{margin-left:0!important}
+.ou-reading-checklist ul{left:0!important;right:auto!important}
+
 @media(max-width:700px) and (orientation:portrait){
   .ou-card{
     right:max(10px,env(safe-area-inset-right))!important;
