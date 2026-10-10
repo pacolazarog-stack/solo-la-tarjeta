@@ -27,11 +27,11 @@ s = s.replace(
 )
 
 portrait = """  @media(max-width:700px) and (orientation:portrait){
-    .ou-card{right:max(10px,env(safe-area-inset-right))!important;left:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 10px)!important;width:94px!important;height:58px!important;transform:rotate(4deg)!important}
+    .ou-card{left:max(10px,env(safe-area-inset-left))!important;right:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 10px)!important;width:94px!important;height:58px!important;transform:rotate(4deg)!important}
     .ou-card::before{left:13px!important;top:12px!important;width:23px!important;height:17px!important}.ou-card::after{left:13px!important;right:13px!important;bottom:11px!important}
-    .ou-reading-checklist{left:max(10px,env(safe-area-inset-left))!important;right:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 18px)!important}
+    .ou-reading-checklist{right:max(10px,env(safe-area-inset-right))!important;left:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 18px)!important}
     .ou-reading-checklist summary{margin-left:0!important;padding:5px 8px!important;border-color:rgba(255,255,255,.20)!important;background:rgba(12,12,12,.38)!important;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
-    .ou-reading-checklist ul{left:0!important;right:auto!important}
+    .ou-reading-checklist ul{right:0!important;left:auto!important}
   }
 """
 marker = "  @media(hover:none) and (pointer:coarse){"
