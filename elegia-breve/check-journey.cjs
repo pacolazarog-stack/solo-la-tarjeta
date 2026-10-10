@@ -34,7 +34,7 @@ const music=get('voiceMusic');music.currentTime=51;music.paused=false;const play
 // The full navigation returns when the final photograph finishes fading in.
 nav.hidden=true;get('anaPortrait').complete=true;get('anaPortrait').naturalWidth=1228;
 body.classList.add('reading-ready');
-assert(source.includes('.poem::after{content:"";display:block;height:120svh'),'Final verses remain reachable without the old signature');
+assert(source.includes('.poem::after{content:"";display:block;height:120svh'),'Final verses remain reachable without an end marker');
 get('recording').emit('ended');
 assert(get('finalHeat').classList.contains('is-shown'),'el appears at the end of the recording');
 assert(!get('finalHeat').classList.contains('show-calor'),'calor waits for its own pause');
