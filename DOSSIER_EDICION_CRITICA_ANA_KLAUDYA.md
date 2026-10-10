@@ -5,7 +5,7 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Paquete archivístico vigente:** versión 22; conserva el código publicado en `main` mediante el commit `e5461949f48ffaa4209c6e11b003c682730702f0`  
+**Paquete archivístico vigente:** versión 23; conserva el código publicado en `main` mediante el commit `e5461949f48ffaa4209c6e11b003c682730702f0`  
 **Módulo compartido:** `narrative-universe.js`, versión `20261010-12`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
@@ -96,7 +96,7 @@ Ejemplo con la fecha canónica registrada para *ANA KLAUDYA*:
 
 ### Cita del código fuente archivado
 
-> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 22, criterio editorial de conservación móvil. Código del commit `pacolazarog-stack/solo-la-tarjeta`, commit de código `e5461949f48ffaa4209c6e11b003c682730702f0`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
+> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 23, puertas, resonancias y economía narrativa. Código del commit `pacolazarog-stack/solo-la-tarjeta`, commit de código `e5461949f48ffaa4209c6e11b003c682730702f0`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
 
 Para citas académicas, conviene especificar la pieza, el modo de acceso (lectura o escucha), la URL y la fecha de consulta. Si se cita un verso, añadir el nombre de la pieza y el identificador o encabezado de sección disponible en la edición consultada. No asignar números de verso que la obra no muestre.
 
@@ -108,7 +108,7 @@ Para citas académicas, conviene especificar la pieza, el modo de acceso (lectur
 - `ceniciento/texto.md`: texto de lectura de *CENICIENTO*.
 - `ceniciento/index.html`: interfaz de lectura/escucha y 59 señales de voz de *CENICIENTO*.
 - `ceniciento/narracion.txt`: material de narración asociado a *CENICIENTO*.
-- Archivo complementario vigente: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (22).md](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(22).md).
+- Archivo complementario vigente: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (23).md](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(23).md).
 
 ## 8. Separación editorial
 
@@ -258,3 +258,14 @@ El criterio principal es que la relectura nazca de los textos, sobre todo de la 
 La edición móvil se diseña para lectura con pulgar, sin depender de hover, zoom ni objetivos diminutos. Las puertas deben ser reconocibles y táctiles, y los controles no deben tapar la tarjeta, el fondo COTÁN ni el texto. La reducción de información de portada sirve para ampliar la superficie útil de lectura e imagen, preservando contraste, áreas seguras y acceso por teclado o tecnologías de asistencia.
 
 La revisión documental actualiza este dossier y el archivo Markdown integral. No modifica el código publicado en el commit `e5461949f48ffaa4209c6e11b003c682730702f0`, ni constituye una nueva edición textual.
+
+
+## 21. Puertas, resonancias y economía narrativa · versión 23
+
+La edición distingue dos funciones. Las puertas cambian el recorrido entre obras: tarjeta → *SOLO LA TARJETA*; ? → *CENICIENTO*; «volver» → *ANA KLAUDYA*. Las resonancias cambian la memoria y la lectura, no la navegación. Ojos de estatua, Torre Eiffel, reloj, pan, cebolla y tarjeta anulada pueden permanecer en la experiencia móvil como motivos visibles, pero no como enlaces, botones ni controles. La regla retira su función interactiva, no obliga a borrar su presencia visual o textual.
+
+La auditoría de ocho frases fantasma corresponde al paquete histórico de la versión 13 y debe leerse en ese alcance. El código de la versión 22, preservado en el paquete actual, implementa las cuatro frases canónicas —«Hay historias que empiezan antes», «El origen suele parecer insignificante», «Falta una versión de la historia» y «Nadie regresa al mismo lugar»—; la prueba de inventario automatizada del módulo compartido verifica exactamente esas cuatro. No se debe trasladar el hallazgo histórico de la versión 13 al código vigente.
+
+La relectura fuerte debe nacer de los textos, en particular de la relación entre *ANA KLAUDYA* y *CENICIENTO*. JavaScript, animaciones, efectos y estado local pueden sostener la accesibilidad y continuidad del recorrido, pero no ser requisito para que el lector perciba una transformación de sentido. La documentación crítica fija este criterio fuera de la interfaz pública.
+
+La versión 23 es una actualización documental y archivística. No altera el código publicado en `e5461949f48ffaa4209c6e11b003c682730702f0` ni los textos canónicos.
