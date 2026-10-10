@@ -5,8 +5,8 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Código fuente archivístico vigente en este dossier:** versión 17, publicada en `main` como commit de código `3b14bda6c9d548316731fa9265a9069ca9186c1b`
-**Módulo compartido:** `narrative-universe.js`, versión `20261010-11`  
+**Código fuente archivístico vigente en este dossier:** versión 18, publicada en `main` como commit de código `ac13094d015f28965f9890e3bc277cef2845637a`
+**Módulo compartido:** `narrative-universe.js`, versión `20261010-12`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
 > Este documento reúne información contextual, bibliográfica y técnica para prensa, investigación, programación de festivales y preservación. No debe incorporarse a las páginas de las obras ni presentarse como parte de su recorrido narrativo.
@@ -96,7 +96,7 @@ Ejemplo con la fecha canónica registrada para *ANA KLAUDYA*:
 
 ### Cita del código fuente archivado
 
-> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 17, ajuste de navegación móvil basado en la versión 16. Repositorio `pacolazarog-stack/solo-la-tarjeta`, commit de código `3b14bda6c9d548316731fa9265a9069ca9186c1b`; módulo compartido `20261010-11`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
+> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 18, corrección final del espacio de controles móviles. Repositorio `pacolazarog-stack/solo-la-tarjeta`, commit de código `ac13094d015f28965f9890e3bc277cef2845637a`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
 
 Para citas académicas, conviene especificar la pieza, el modo de acceso (lectura o escucha), la URL y la fecha de consulta. Si se cita un verso, añadir el nombre de la pieza y el identificador o encabezado de sección disponible en la edición consultada. No asignar números de verso que la obra no muestre.
 
@@ -108,7 +108,7 @@ Para citas académicas, conviene especificar la pieza, el modo de acceso (lectur
 - `ceniciento/texto.md`: texto de lectura de *CENICIENTO*.
 - `ceniciento/index.html`: interfaz de lectura/escucha y 59 señales de voz de *CENICIENTO*.
 - `ceniciento/narracion.txt`: material de narración asociado a *CENICIENTO*.
-- Archivo complementario vigente: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (17).md](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(17).md).
+- Archivo complementario vigente: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (18).md](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(18).md).
 
 ## 8. Separación editorial
 
@@ -212,3 +212,10 @@ Se ejecutaron las siete comprobaciones CJS de la edición y todas pasaron. El c�
 La captura móvil recibida muestra la tarjeta y la navegación fija de lectura en *ANA KLAUDYA* ocupando la misma zona inferior; el texto final también queda detrás de esos controles. La versión 17 dispone la navegación «Anterior / Índice / Siguiente» como una barra compacta de tres columnas en teléfonos, coloca la tarjeta por encima de esa barra y reserva 240 px al final del contenido para permitir que el lector desplace el último texto hasta una zona despejada. La tarjeta y la barra respetan el área segura del dispositivo.
 
 Se añade una comprobación al control móvil para verificar la fila de navegación, el espacio de lectura y la separación vertical de la tarjeta. Las siete pruebas CJS pasan. El código se publicó en `main` mediante `3b14bda6c9d548316731fa9265a9069ca9186c1b`; el archivo archivístico completo de la versión 17 y este dossier se registran en el commit documental siguiente.
+
+
+## 15. Separación final de la tarjeta y la navegación móvil
+
+La versión 18 sitúa la tarjeta 88 px por encima del borde inferior seguro del teléfono; la barra compacta «Anterior / Índice / Siguiente» permanece junto al borde inferior. Esta distancia deja al menos 12 px de separación respecto a la barra incluso cuando `safe-area-inset-bottom` vale cero. El relleno inferior de 240 px al final del recorrido permite llevar el último texto por encima de la tarjeta y de la navegación.
+
+La prueba móvil verifica la barra de una fila, el espacio de lectura y la posición de la tarjeta. Las siete comprobaciones CJS pasan. El código se publicó en `main` mediante `ac13094d015f28965f9890e3bc277cef2845637a`; el paquete archivístico 18 y este dossier se registran en el commit documental siguiente.
