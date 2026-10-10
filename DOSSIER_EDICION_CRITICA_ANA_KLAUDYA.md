@@ -416,3 +416,16 @@ El cambio respeta el criterio rector y no crea una cuarta obra: la convergencia 
 **Verificación:** pasan las ocho comprobaciones automatizadas del recorrido y las comprobaciones de sintaxis JavaScript. No se realizó una nueva inspección visual en un teléfono físico; el fundido, la transición del marco y la ubicación exacta de la frase deben confirmarse en el dispositivo durante la siguiente prueba visual.
 
 **Publicación de código:** `main`, commit `1cfbeb24dfa71631171937c495b39642e41564b8`. El archivo integral de código fuente se publica como versión 31 junto con esta actualización documental.
+
+
+## 30. Desbloqueo de CENICIENTO exclusivamente desde el interrogante · versión 32
+
+> **Cada descubrimiento no abre una obra nueva; cambia el significado de una obra ya visitada.**
+
+El acceso a CENICIENTO sólo queda desbloqueado después de completar la pieza tras entrar desde el interrogante de ANA KLAUDYA. Abrir la URL directamente o que el navegador conserve un indicador antiguo de lectura no basta para mostrar botones de CENICIENTO en ANA KLAUDYA o SOLO LA TARJETA. La ruta del interrogante comunica el origen de la entrada al marco de lectura; el desbloqueo se guarda por separado del indicador general de lectura de CENICIENTO.
+
+Tras la primera lectura válida quedan habilitadas las salidas recíprocas entre las tres piezas en las lecturas sucesivas. La convergencia de EL ESPEJO también requiere ese desbloqueo válido, además de haber completado ANA KLAUDYA y SOLO LA TARJETA. Sus 32 fragmentos, las cinco pausas, el fundido final y el retorno automático no cambian.
+
+**Verificación:** pasan las ocho comprobaciones automatizadas, incluidas las nuevas aserciones de procedencia de la ruta y de ausencia del botón previo al desbloqueo. Las referencias del módulo compartido se actualizaron a `20261010-20`.
+
+**Publicación de código:** `main`, commit `a8cb9ec4edc196326d3743a0da31aadfc62254ef`. El código español completo queda archivado en la versión 32.
