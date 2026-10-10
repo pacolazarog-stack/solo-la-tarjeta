@@ -48,14 +48,13 @@ body.voice{height:100svh;overflow:hidden}body.read{overflow-x:hidden}
 <div id="reader" class="reader"><article><h1>CENICIENTO</h1><div id="readerText"></div><p class="signature">flag</p></article></div>
 <main id="mirror" aria-label="EL ESPEJO" hidden></main>
 <div id="entry" class="entry"><div class="card"><h1>CENICIENTO</h1><div class="mode"><button id="listen" disabled>Voz</button><button id="read" disabled>Leer</button></div><p>voz: partitura emocional · lectura: texto íntegro</p></div></div>
-<div class="reveal"><p id="clarityStatus">La imagen se aclara lentamente…</p><button id="continue" type="button" disabled>Comenzar</button></div>
 <audio id="music" preload="metadata" loop></audio><audio id="voice" preload="metadata" controlslist="nodownload"></audio>
 <script>
 (()=>{
 const $=id=>document.getElementById(id),root=document.documentElement,body=document.body;
 const voice=$('voice'),music=$('music'),screen=$('screen'),status=$('status'),entry=$('entry'),listen=$('listen'),read=$('read'),readerText=$('readerText');
 const ageA=$('ageA'),ageB=$('ageB'),bgA=$('bgA'),bgB=$('bgB'),seek=$('seek'),time=$('time');
-const pause=$('pause'),restart=$('restart'),switchBtn=$('switch'),back=$('back'),cont=$('continue'),clarityStatus=$('clarityStatus');
+const pause=$('pause'),restart=$('restart'),switchBtn=$('switch'),back=$('back');
 const musicLevel=$('musicLevel'),musicEnabled=$('musicEnabled'),musicValue=$('musicValue'),musicStart=$('musicStart');
 const EXPECTED=864.156735,MASTER='ceniciento-voz-completa.mp3?v=20261010-audio-restored';
 const inheritedMusic=window.parent!==window&&new URLSearchParams(location.search).get('music')==='parent';
@@ -88,10 +87,9 @@ addEventListener('scroll',scheduleReadingProgress,{passive:true});addEventListen
 function loop(){cancelAnimationFrame(raf);if(mode!=='voice'||paused)return;render();raf=requestAnimationFrame(loop)}
 function reset(){current=-1;renderCue(0);root.style.setProperty('--prog','0');setAge(0);seek.value='0';time.textContent='0:00 / '+fmt(voice.duration||EXPECTED)}
 function stop(){cancelAnimationFrame(raf);voice.pause();paused=true}
-function startClarity(){cancelAnimationFrame(clarityRAF);clarity=0;root.style.setProperty('--clarity','0');cont.disabled=true;clarityStatus.textContent='La imagen se aclara lentamente…';const start=performance.now(),dur=10000;const tick=now=>{const p=clamp((now-start)/dur),e=p*p*(3-2*p);clarity=e;root.style.setProperty('--clarity',e.toFixed(4));if(p<1)clarityRAF=requestAnimationFrame(tick);else{clarity=1;cont.disabled=false;clarityStatus.textContent='La imagen está clara. Continúa cuando quieras.'}};clarityRAF=requestAnimationFrame(tick)}
-function prepare(next){startMusic();stop();mode=next;body.className=(next==='voice'?'voice':'read')+' revealing';entry.classList.add('open');switchBtn.hidden=false;reset();scrollTo(0,0);startClarity();cont.textContent=next==='voice'?'Escuchar el cuento':'Leer el cuento';status.textContent='transición con música'}
+function startClarity(){cancelAnimationFrame(clarityRAF);clarity=0;root.style.setProperty('--clarity','0');const start=performance.now(),dur=10000;const tick=now=>{const p=clamp((now-start)/dur),e=p*p*(3-2*p);clarity=e;root.style.setProperty('--clarity',e.toFixed(4));if(p<1)clarityRAF=requestAnimationFrame(tick);else clarity=1};clarityRAF=requestAnimationFrame(tick)}
+function prepare(next){startMusic();stop();mode=next;body.className=next;entry.classList.add('open');switchBtn.hidden=false;reset();scrollTo(0,0);startClarity();if(next==='voice'){pause.disabled=false;paused=false;pause.textContent='Pausa';status.textContent='narración completa';voice.currentTime=0;voice.play().then(loop).catch(()=>{paused=true;pause.disabled=true;status.textContent='No se pudo iniciar la voz.'})}else{status.textContent='lectura sin voz';requestAnimationFrame(renderReadingProgress)}}
 listen.onclick=()=>prepare('voice');read.onclick=()=>prepare('read');
-cont.onclick=()=>{if(clarity<1)return;body.classList.remove('revealing');if(mode==='voice'){voice.currentTime=0;paused=false;pause.textContent='Pausa';status.textContent='narración completa';voice.play().then(loop).catch(()=>{paused=true;pause.textContent='Seguir'})}else{status.textContent='lectura sin voz';requestAnimationFrame(renderReadingProgress)}};
 pause.onclick=()=>{if(mode!=='voice'||body.classList.contains('revealing'))return;if(paused){if(voice.ended||voice.currentTime>=(voice.duration||EXPECTED)-.2)voice.currentTime=0;paused=false;pause.textContent='Pausa';voice.play().then(loop)}else{paused=true;pause.textContent='Seguir';cancelAnimationFrame(raf);voice.pause()}};
 restart.onclick=()=>{if(mode!=='voice')return;voice.currentTime=0;paused=false;pause.textContent='Pausa';voice.play().then(loop);render()};
 switchBtn.onclick=()=>{stop();body.className='';entry.classList.remove('open');switchBtn.hidden=true;mode=null;reset();status.textContent='listo'};
@@ -100,7 +98,7 @@ voice.ontimeupdate=render;voice.onseeked=render;voice.onended=()=>{cancelAnimati
 Promise.allSettled([loadText(),loadFrames()]).then(check);
 })();
 </script>
-<script src="el-espejo.js?v=20261010-21"></script>
-<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-21"></script>
+<script data-oras-mirror="true" src="el-espejo.js?v=20261010-22"></script>
+<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-22"></script>
 </body>
 </html>
