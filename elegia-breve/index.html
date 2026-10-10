@@ -556,7 +556,7 @@
     .g-embrace-c{--gap:62svh}
     .g-embrace-d{--gap:38svh}
 
-    /* Preserve the final reveal space without a repeated signature. */
+    /* Preserve the final reveal space after the last verse. */
     .poem::after{content:"";display:block;height:120svh;pointer-events:none}
 
     .voice-word{
@@ -659,15 +659,7 @@
       52%{filter:brightness(1.06) saturate(1.05)}
       100%{filter:brightness(1.02) saturate(1.10)}
     }
-
-    .signature{
-      font-family:Arial,Helvetica,sans-serif;
-      font-size:.68rem;
-      letter-spacing:.19em;
-      color:rgba(32,29,25,.38);
-    }
-
-    .scroll-cue{
+.scroll-cue{
       position:fixed;
       left:50%;
       bottom:5.2svh;
