@@ -21,14 +21,12 @@ jobs:
           s=p.read_text(encoding='utf-8')
           s=s.replace("const VERSION='20261010-5';","const VERSION='20261010-6';",1)
 
-          # Symbolic connections must look like literature at rest, not links.
           s=re.sub(
             r"  \.ou-active-text\{[^\n]*\n?",
             "  .ou-symbolic{cursor:pointer;font:inherit;font-weight:inherit;color:inherit;text-decoration-line:underline;text-decoration-style:solid;text-decoration-thickness:.055em;text-underline-offset:.20em;text-decoration-color:transparent;transition:color .5s ease,text-decoration-color .5s ease,text-shadow .5s ease,opacity .5s ease}.ou-symbolic:hover,.ou-symbolic:focus-visible{color:rgba(92,67,47,.92);text-decoration-color:rgba(92,67,47,.28);text-shadow:0 0 12px rgba(112,72,38,.08);outline:none}\n",
             s,
             count=1
           )
-          # Remove any leftover duplicate hover rule from the old active-link treatment.
           s=re.sub(r"\.ou-active-text:hover[^\n]*\n?","",s)
 
           old_make="""function makeClickable(el,destination,label){
@@ -96,25 +94,19 @@ function wrapToken(root,token,destination,label){
 }
 """
           new_activate="""function activateSoloSymbols(){
-  // Conexiones simbólicas: existen dentro del texto y sólo se revelan al reconocerlas.
   [...psByExact('Ojos de estatua.'),...psByExact('Los ojos de estatua.')]
     .forEach(el=>makeSymbolic(el,rootPath+'elegia-breve/#ojos','Ojos de estatua'));
-
   psContaining('París').forEach(el=>wrapToken(el,'París',rootPath+'elegia-breve/#estrella','París · Estrella'));
-
   const annulled=document.getElementById('duskColorTurn') || pByExact('La tarjeta quedó anulada.');
   makeSymbolic(annulled,rootPath+'elegia-breve/#epilogo','La tarjeta quedó anulada · Epílogo');
-
   psContaining('reloj').forEach(el=>wrapToken(el,'reloj',rootPath+'elegia-breve/#ceniciento','reloj · Ceniciento'));
 }
 """
           if old_activate not in s:
             raise RuntimeError('No se encontró activateSoloSymbols actual')
           s=s.replace(old_activate,new_activate,1)
-
           p.write_text(s,encoding='utf-8')
 
-          # Force every route to load the new grammar and retire the Eiffel icon by cache invalidation.
           for html in Path('.').rglob('*.html'):
             text=html.read_text(encoding='utf-8')
             new=re.sub(r'narrative-universe\.js\?v=20261010-\d+', 'narrative-universe.js?v=20261010-6', text)
@@ -129,3 +121,4 @@ function wrapToken(root,token,destination,label){
           git add -A
           git commit -m "Separate physical access from symbolic narrative links"
           git push
+# trigger
