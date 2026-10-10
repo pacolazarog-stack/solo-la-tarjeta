@@ -50,6 +50,9 @@ jobs:
       - name: Ocultar invitación flotante redundante al epílogo
         run: python3 patch-hide-epilogue-invitation.py
 
+      - name: Forzar letras blancas en Leer con pausa
+        run: python3 patch-read-pause-contrast.py
+
       - name: Verificar progreso de lectura
         run: |
           node check-reading-progress.cjs
