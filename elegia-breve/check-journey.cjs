@@ -170,7 +170,7 @@ const musicPlays=music.playCalls||0;
 get('entryButton').click();assertPiece('estrella');
 assert.equal(music.playCalls||0,musicPlays,'Begin does not start sound');
 assert.equal(music.currentTime,51);
-assert(source.includes('poemas de Paco Olmo de Males'));
+assert(!source.includes('entry-flag')&&!source.includes('poemas de Paco Olmo de Males'),'The ANA KLAUDYA cover carries no byline');
 assert(source.includes('▶ Comenzar'));
 assert(!source.includes("renderWorld();\\n      ensureAmbientMusic();"));
 const phraseInventory=[...universe.matchAll(/^\s*(before|origin|absence|return):'([^']+)'/gm)].map(m=>m[2]);
