@@ -5,8 +5,8 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Código fuente archivístico vigente en este dossier:** versión 15, publicada en `main` como commit `79d073790dfdcf2bcbd2819cc2aa70bff06f9b0b`
-**Módulo compartido:** `narrative-universe.js`, versión `20261010-9`  
+**Código fuente archivístico vigente en este dossier:** versión 16, publicada en `main` como commit de código `50313d6b562e199222942bb4c103107ac48b28b4`
+**Módulo compartido:** `narrative-universe.js`, versión `20261010-10`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
 > Este documento reúne información contextual, bibliográfica y técnica para prensa, investigación, programación de festivales y preservación. No debe incorporarse a las páginas de las obras ni presentarse como parte de su recorrido narrativo.
@@ -96,7 +96,7 @@ Ejemplo con la fecha canónica registrada para *ANA KLAUDYA*:
 
 ### Cita del código fuente archivado
 
-> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 15, revisión móvil basada en la versión 14. Repositorio `pacolazarog-stack/solo-la-tarjeta`, commit de código `79d073790dfdcf2bcbd2819cc2aa70bff06f9b0b`; módulo compartido `20261010-9`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
+> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 16, corrección del cierre móvil basada en la versión 15. Repositorio `pacolazarog-stack/solo-la-tarjeta`, commit de código `50313d6b562e199222942bb4c103107ac48b28b4`; módulo compartido `20261010-10`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
 
 Para citas académicas, conviene especificar la pieza, el modo de acceso (lectura o escucha), la URL y la fecha de consulta. Si se cita un verso, añadir el nombre de la pieza y el identificador o encabezado de sección disponible en la edición consultada. No asignar números de verso que la obra no muestre.
 
@@ -108,7 +108,7 @@ Para citas académicas, conviene especificar la pieza, el modo de acceso (lectur
 - `ceniciento/texto.md`: texto de lectura de *CENICIENTO*.
 - `ceniciento/index.html`: interfaz de lectura/escucha y 59 señales de voz de *CENICIENTO*.
 - `ceniciento/narracion.txt`: material de narración asociado a *CENICIENTO*.
-- Archivo complementario vigente: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (14).md](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(14).md).
+- Archivo complementario vigente: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (16).md](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(16).md).
 
 ## 8. Separación editorial
 
@@ -196,3 +196,12 @@ La versión 15 toma el teléfono como soporte principal. Conserva las tres puert
 El final de *SOLO LA TARJETA* y el cierre de lectura de *CENICIENTO* se activan al entrar en vista la última línea o la firma, mediante `IntersectionObserver`. Se conserva la alternativa basada en scroll para navegadores sin esa API. Las páginas afectadas ajustan el viewport para ocupar correctamente la pantalla y respetar las áreas seguras.
 
 Las siete comprobaciones CJS del paquete pasan, incluidas verificaciones de las zonas táctiles, el fin de lectura observado y la ausencia de nuevas rutas. El código se publicó en `main` el 10 de octubre de 2026 mediante el commit `79d073790dfdcf2bcbd2819cc2aa70bff06f9b0b`; la edición de conservación y este dossier se registran en el commit documental posterior.
+
+
+## 13. Corrección de navegación final de la versión 16
+
+La revisión 15 no mostraba controles al completar *SOLO LA TARJETA*. La versión 16 restaura dos botones al final de la pieza: «Volver a ANA KLAUDYA» y «Ir a CENICIENTO». El cierre se activa cuando la última línea entra en la zona observada por `IntersectionObserver`; los navegadores sin esa API usan el respaldo por scroll. Los botones aparecen después de ese evento, no durante la lectura.
+
+En pantallas táctiles, los botones se apilan en columna y cada uno tiene una altura mínima de 52 px; en pantallas más anchas se presentan juntos. Respetan el área segura inferior, el foco visible por teclado y la preferencia de movimiento reducido. La navegación tiene un nombre accesible y no depende de hover. Los motivos secundarios se mantienen como ecos sin enlace.
+
+Se ejecutaron las siete comprobaciones CJS de la edición y todas pasaron. El código corregido quedó publicado en `main` mediante `50313d6b562e199222942bb4c103107ac48b28b`; el archivo archivístico completo de la versión 16 y este dossier se publican en el commit documental siguiente.
