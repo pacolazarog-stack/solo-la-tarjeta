@@ -41,6 +41,9 @@ jobs:
       - name: Unificar navegación final de SOLO LA TARJETA
         run: python3 patch-solo-endnav.py
 
+      - name: Mejorar contraste de A fuego lento
+        run: python3 patch-a-fuego-contrast.py
+
       - name: Verificar progreso de lectura
         run: |
           node check-reading-progress.cjs
