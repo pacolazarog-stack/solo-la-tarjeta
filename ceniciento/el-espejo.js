@@ -63,7 +63,7 @@ scenes.forEach((text,index)=>{
     const next=document.createElement('button');next.type='button';next.className='mirror-continue';next.textContent='seguir';next.setAttribute('aria-label',`Continuar después del fragmento ${number}`);next.hidden=true;
     next.addEventListener('click',()=>{if(!locked||lockedScene!==scene)return;releasePause();scene.focus({preventScroll:true})});scene.append(next);
   }
-  if(number===32){const end=document.createElement('span');end.className='mirror-end-sentinel';end.setAttribute('aria-hidden','true');scene.append(end)}
+  if(number===32){const mark=document.createElement('p');mark.className='mirror-end-mark';mark.textContent='flag';copy.append(mark);const end=document.createElement('span');end.className='mirror-end-sentinel';end.setAttribute('aria-hidden','true');scene.append(end)}
   mirror.append(scene);sceneNodes.push(scene);
 });
 const pauseObserver=new IntersectionObserver(entries=>{
