@@ -240,3 +240,10 @@ La comprobación `check-mobile-navigation.cjs` verifica la regla de una sola fil
 La barra inferior de navegación conserva una sola fila hasta 760 px y adopta un fondo oscuro translúcido con desenfoque leve; así la imagen de bodegón puede verse a través de los controles sin sacrificar legibilidad. La tarjeta flotante se reduce a 86 × 54 px y su placa también deja pasar parte de la fotografía. El contenido de la obra y la imagen permanecen intactos.
 
 La prueba móvil comprueba la translucidez de la navegación y la tarjeta compacta; las siete comprobaciones CJS pasan. El código se publicó en `main` mediante `e5461949f48ffaa4209c6e11b003c682730702f0`; el archivo fuente completo es [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (21).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(21).md).
+
+
+## 19. Criterio de calidad para la edición móvil
+
+La relectura decisiva procede de los propios textos y, en particular, de la relación entre *CENICIENTO* y *ANA KLAUDYA*. Las animaciones, los estados y las transiciones pueden acompañar la experiencia, pero no deben ser necesarios para que esa relación exista. Si al retirarlos la lectura retrospectiva permanece, la arquitectura narrativa se sostiene por sí misma.
+
+La edición móvil canónica conserva tres puertas entre obras —tarjeta, interrogante y «volver»—, cuatro frases fantasma y motivos secundarios que funcionan como ecos de memoria. Los accesos deben ser objetos táctiles claros y fáciles de hallar con el pulgar; los motivos resonantes no se convierten en navegación. El criterio no es añadir más controles, sino facilitar la lectura sin debilitar el misterio.
