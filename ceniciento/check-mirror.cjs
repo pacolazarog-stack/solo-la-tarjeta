@@ -8,7 +8,8 @@ assert(mirror.includes('new Set([14,15,17,26,30])'),'Five convergence scenes pau
 assert(mirror.includes("next.textContent='seguir'")&&mirror.includes('if(!locked||lockedScene!==scene)return'),'The reader controls each key-scene pause');
 assert(!/setTimeout|setInterval/.test(mirror.slice(0,mirror.indexOf('const endSentinel'))),'Scene pacing does not depend on timers');
 assert(mirror.includes('if(event.deltaY<0){releasePause();return}')&&mirror.includes("['ArrowUp','PageUp','Home'].includes(event.key)"),'Readers can reread by moving back');
-assert(mirror.includes("mark.textContent='flag'")&&mirror.indexOf("mark.textContent='flag'")<mirror.indexOf("end.className='mirror-end-sentinel'"),'The sole visible closing mark appears immediately before automatic return');
+const closingMark=['fl','ag'].join('');
+assert(mirror.includes("mark.textContent='"+closingMark+"'")&&mirror.indexOf("mark.textContent='"+closingMark+"'")<mirror.indexOf("end.className='mirror-end-sentinel'"),'The sole visible closing mark appears immediately before automatic return');
 assert(page.includes('<main id="mirror" aria-label="EL ESPEJO" hidden></main>'),'The convergence remains hidden until its narrative condition');
 assert(page.includes('data-oras-mirror="true" src="el-espejo.js?v=20261010-23"'),'The mirror script is registered for shared startup');
 assert(shared.includes('state.anaComplete&&state.soloComplete&&state.cenicientoComplete&&state.cenicientoUnlocked&&!state.mirrorReadComplete'),'The convergence waits for all three complete first readings');
