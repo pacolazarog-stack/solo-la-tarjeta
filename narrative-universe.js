@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-15';
+const VERSION='20261010-16';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
 const GHOSTS=Object.freeze({
