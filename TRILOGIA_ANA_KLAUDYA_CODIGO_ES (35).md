@@ -2,16 +2,16 @@
 
 **Piezas:** *SOLO LA TARJETA · ANA KLAUDYA · CENICIENTO*  
 **Fuente:** [`pacolazarog-stack/solo-la-tarjeta`](https://github.com/pacolazarog-stack/solo-la-tarjeta) · rama `main`  
-**Commit de código y pruebas:** `181eda17be95a62ee0ac741dd8c66ea4dfd20c72`  
+**Commit de código y pruebas:** `4e440e60a21732cd385deb2fd9cf563359973a4b`  
 **Versión archivística:** 35 · inicio inmediato de lectura/voz, convergencia automática de las tres primeras lecturas completas y retorno automático a ANA KLAUDYA  
 **Módulo de enlace:** `narrative-universe.js`, versión `20261010-22`  
 **Commit fuente base:** `72fba7c115c38e78c5124001d6a6f8401db81257`  
 **Corte de la fuente base:** 10 de octubre de 2026.  
 **Estado:** código, pruebas y archivo integral de la versión 35 publicados en `main`.
 
-Este archivo reúne el código español de las tres piezas, las páginas de *ANA KLAUDYA*, las comprobaciones y los textos fuente. La convergencia de 32 escenas de EL ESPEJO conserva cinco pausas manuales reversibles y no tiene URL ni puerta propia. Al completar la primera lectura íntegra de las tres piezas, en cualquier orden, EL ESPEJO comienza automáticamente en la última pieza leída y al finalizar devuelve al lector al inicio de ANA KLAUDYA. «Leer» y «Voz» empiezan con una sola selección; la entrada inicial a CENICIENTO sigue limitada al interrogante de ANA KLAUDYA. Los enlaces recíprocos, incluidos los de salida de SOLO LA TARJETA, aparecen después de completar CENICIENTO. Una lista plegable muestra el estado de las tres lecturas sin revelar el mapa narrativo. La versión 35 conserva la secuencia fotográfica estable de nueve retratos y el texto de CENICIENTO sobre la fotografía de fondo.
+Este archivo reúne el código español de las tres piezas, las páginas de *ANA KLAUDYA*, las comprobaciones y los textos fuente. La convergencia de 32 escenas de EL ESPEJO conserva cinco pausas manuales reversibles y no tiene URL ni puerta propia. Al completar la primera lectura íntegra de las tres piezas, en cualquier orden, EL ESPEJO comienza automáticamente en la última pieza leída y al finalizar devuelve al lector al inicio de ANA KLAUDYA. «Leer» y «Voz» empiezan con una sola selección; la entrada inicial a CENICIENTO sigue limitada al interrogante de ANA KLAUDYA. Los enlaces recíprocos, incluidos los de salida de SOLO LA TARJETA, aparecen después de completar CENICIENTO desde el interrogante; una lectura directa de la URL no desbloquea esas salidas. Una lista plegable muestra el estado de las tres lecturas sin revelar el mapa narrativo. La versión 35 conserva la secuencia fotográfica estable de nueve retratos y el texto de CENICIENTO sobre la fotografía de fondo.
 
-Los archivos de código y pruebas de esta edición se publicaron en `main` mediante el commit `181eda17be95a62ee0ac741dd8c66ea4dfd20c72`. Los SHA de GitHub consignados en las secciones de archivo corresponden a los blobs de la versión archivada; el commit identifica la revisión publicada. El código HTML conserva estilos y scripts integrados. Los nueve retratos de la secuencia estable se guardan como activos WebP independientes y se enumeran al final.
+Los archivos de código y pruebas de esta edición se publicaron en `main` mediante el commit `4e440e60a21732cd385deb2fd9cf563359973a4b`. Los SHA de GitHub consignados en las secciones de archivo corresponden a los blobs de la versión archivada; el commit identifica la revisión publicada. El código HTML conserva estilos y scripts integrados. Los nueve retratos de la secuencia estable se guardan como activos WebP independientes y se enumeran al final.
 
 ## Índice de archivos
 
@@ -1385,7 +1385,7 @@ p{margin:0 0 1.2em;hanging-punctuation:first last}
 `````
 ### Archivo 4 — `narrative-universe.js`
 
-SHA de GitHub: `056f2b780c936a76ba313077a6a39b9cc37438bb`
+SHA de GitHub: `0f8137250382197176d1de1719e763442c51a4dc`
 
 `````js
 (()=>{
@@ -1547,7 +1547,7 @@ function addCard(){
 }
 
 function showSoloEndNav(){
-  if(!state.cenicientoComplete)return;
+  if(!state.cenicientoComplete||!state.cenicientoUnlocked)return;
   if(document.querySelector('.ou-solo-endnav'))return;
   const nav=document.createElement('nav');
   nav.className='ou-solo-endnav';
@@ -1617,7 +1617,7 @@ addEventListener('message',event=>{
 });
 
 function addUnlockedAnaDoors(){
-  if(!state.cenicientoComplete)return;
+  if(!state.cenicientoComplete||!state.cenicientoUnlocked)return;
   const nav=document.getElementById('anaNavigation');
   if(!nav||nav.querySelector('[data-ou-crosspiece]'))return;
   const solo=document.createElement('button');
@@ -1635,7 +1635,7 @@ function setupSolo(){
     if(enter && !document.body.classList.contains('entered'))enter.click();
   });
   if(state.cardFound)ghost(GHOSTS.before,'before-story',{where:'left',delay:2500,hold:6500});
-  if(state.cenicientoComplete)showSoloEndNav();
+  if(state.cenicientoComplete&&state.cenicientoUnlocked)showSoloEndNav();
   let armed=false;
   const finish=()=>{if(armed)return;armed=true;finishSolo();};
   const lastLine=document.querySelector('main article p.story-line:last-of-type')||document.querySelector('main article p:last-of-type');
@@ -1698,7 +1698,7 @@ function setupCeniciento(){
   nav.append(ret,solo);
   document.body.appendChild(nav);
   const revealNav=()=>{document.body.classList.add('ou-ceniciento-navigation-visible');nav.classList.add('ou-visible');};
-  if(state.cenicientoComplete&&!(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete))requestAnimationFrame(()=>requestAnimationFrame(revealNav));
+  if(state.cenicientoComplete&&state.cenicientoUnlocked&&!(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete))requestAnimationFrame(()=>requestAnimationFrame(revealNav));
   let returnTimer=0;
   const arrivedByQuestion=new URLSearchParams(location.search).get('via')==='question';
   const complete=()=>{
@@ -3726,7 +3726,7 @@ console.log('PASS: final scroll jump, el/calor pause, photograph delay, replay r
 
 ### Archivo 9 — `elegia-breve/check-journey.cjs`
 
-SHA de GitHub: `d9d7d3d7284a92e193871fa5a1eb4e35b4dd122a`
+SHA de GitHub: `7b62eb83c3c22378b0f4ab473f215c778172222c`
 
 `````cjs
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
@@ -3909,12 +3909,12 @@ assert.deepEqual(phraseInventory,['Hay historias que empiezan antes.','El origen
 assert(!/ghost\(['\"]/.test(universe),'All ghost copy comes from the four-item phrase inventory');
 assert(!/function (?:makeSymbolic|wrapToken|activateSoloSymbols)/.test(universe),'Narrative echoes remain outside navigation controls');
 assert(/function showSoloEndNav\(\)[\s\S]*?ana\.href=rootPath\+'elegia-breve\/'[\s\S]*?nav\.append\(ana\)/.test(universe),'The Solo ending offers only the return to Ana');
-assert(/function showSoloEndNav\(\)\{\s*if\(!state\.cenicientoComplete\)return/.test(universe),'Solo shows no cross-piece exit before Ceniciento has been completed');
-assert(/function showSoloEndNav\(\)[\s\S]*?if\(state\.cenicientoComplete\)\{[\s\S]*?ceniciento\.href/.test(universe),'Solo opens Ceniciento only after its first complete reading');
-assert(/if\(state\.cenicientoComplete\)\{[\s\S]*?ceniciento\.href=rootPath\+'ceniciento\//.test(universe),'Solo gains direct cross-navigation only after Ceniciento is complete');
-assert(/function addUnlockedAnaDoors\(\)[\s\S]*?if\(!state\.cenicientoComplete\)return[\s\S]*?textContent='SOLO LA TARJETA'[\s\S]*?textContent='CENICIENTO'/.test(universe),'Ana gains reciprocal work buttons only after Ceniciento is complete');
-assert(universe.includes('if(state.cenicientoComplete)showSoloEndNav();'),'Completed cross-navigation remains available on later Solo visits');
-assert(universe.includes('if(state.cenicientoComplete&&!(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete))requestAnimationFrame(()=>requestAnimationFrame(revealNav))'),'Ceniciento cross-navigation appears after its completed reading, except while Mirror is pending');
+assert(/function showSoloEndNav\(\)\{\s*if\(!state\.cenicientoComplete\|\|!state\.cenicientoUnlocked\)return/.test(universe),'Solo shows no cross-piece exit until Ceniciento is fully read from the interrogante route');
+assert(/function showSoloEndNav\(\)[\s\S]*?if\(state\.cenicientoComplete\)\{[\s\S]*?ceniciento\.href/.test(universe),'Solo opens Ceniciento only after its qualified first completion');
+assert(/if\(state\.cenicientoComplete\)\{[\s\S]*?ceniciento\.href=rootPath\+'ceniciento\//.test(universe),'Solo gains direct cross-navigation only after qualified Ceniciento completion');
+assert(/function addUnlockedAnaDoors\(\)[\s\S]*?if\(!state\.cenicientoComplete\|\|!state\.cenicientoUnlocked\)return[\s\S]*?textContent='SOLO LA TARJETA'[\s\S]*?textContent='CENICIENTO'/.test(universe),'Ana gains reciprocal work buttons only after qualified Ceniciento completion');
+assert(universe.includes('if(state.cenicientoComplete&&state.cenicientoUnlocked)showSoloEndNav();'),'Qualified cross-navigation remains available on later Solo visits');
+assert(universe.includes('if(state.cenicientoComplete&&state.cenicientoUnlocked&&!(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete))requestAnimationFrame(()=>requestAnimationFrame(revealNav))'),'Ceniciento cross-navigation appears after qualified completion, except while Mirror is pending');
 assert(universe.includes("new URLSearchParams(location.search).get('via')==='question'")&&universe.includes("unlock?{cenicientoUnlocked:true}:{}"),'Only a completed Ceniciento visit carrying the interrogante origin can create the first unlock');
 assert(/const openCeniciento=\(\)=>openPoem\('ceniciento',false,false,false,'question'\)/.test(fs.readFileSync(path.join(__dirname,'index.html'),'utf8')),'The ANA question-mark route explicitly marks its Ceniciento entry');
 assert(universe.includes('min-height:52px'),'End buttons have thumb-sized mobile targets');
@@ -7826,4 +7826,4 @@ EL ESPEJO mantiene sus 32 escenas y cinco pausas de decisión. Al concluir, vuel
 
 **Verificación:** ocho comprobaciones automatizadas pasan; también se validaron sintácticamente los scripts inline de las páginas principales. El control en teléfono físico queda pendiente.
 
-**Publicación de código y pruebas:** `main`, commit `181eda17be95a62ee0ac741dd8c66ea4dfd20c72`. Módulo compartido: `20261010-22`. Archivo integral: versión 35.
+**Publicación de código y pruebas:** `main`, commit `4e440e60a21732cd385deb2fd9cf563359973a4b`. Módulo compartido: `20261010-22`. Archivo integral: versión 35.
