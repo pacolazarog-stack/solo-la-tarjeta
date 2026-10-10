@@ -1377,7 +1377,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         anaNavigation.hidden=false;body.classList.add('ana-navigation-ready');
         setJourney('elegia');
       };
-      const openPoem=(piece,asPrologue=false,continuingOpening=false,reuseOpening=false)=>{
+      const openPoem=(piece,asPrologue=false,continuingOpening=false,reuseOpening=false,entrySource='')=>{
         const keepOpening=piece==='epilogo'&&poemRoute==='interludio'&&(interludePreviewReady||(reuseOpening&&continuingOpening));
         clearTimeout(finalPortraitTimer);finalPortraitTimer=null;
         if(poemRoute===piece&&!cenicientoFrame.hidden&&!sonrisaLeaving)return;
@@ -1399,10 +1399,10 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         setJourney(piece);
         body.classList.add('journey-started');
         if(keepOpening)cenicientoFrame.contentWindow.postMessage({channel:'ceniciento-music-v1',type:'continue-epilogue'},window.location.origin);
-        else cenicientoFrame.src='../'+piece+'/?music=parent&v=20261010-ceniciento-score40-v3-audio'+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'');
+        else cenicientoFrame.src='../'+piece+'/?music=parent&v=20261010-ceniciento-score40-v3-audio'+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'')+(piece==='ceniciento'&&entrySource==='question'?'&via=question':'');
         if(window.location.hash!=='#'+piece)window.history.pushState({piece},'','#'+piece);
       };
-      const openCeniciento=()=>openPoem('ceniciento');
+      const openCeniciento=()=>openPoem('ceniciento',false,false,false,'question');
       document.getElementById('cenicientoLink').addEventListener('click',openCeniciento);
       const returnToAna=(mode='home',updateHistory=true)=>{
         if(cenicientoFrame.hidden||sonrisaLeaving)return;
@@ -1681,6 +1681,6 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       syncPoemRoute();
     })();
   </script>
-<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-19"></script>
+<script data-oras-universe="v1" src="../narrative-universe.js?v=20261010-20"></script>
 </body>
 </html>

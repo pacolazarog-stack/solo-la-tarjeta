@@ -6,17 +6,20 @@ const literals=mirror.slice(mirror.indexOf('const scenes=['),mirror.indexOf('\n]
 assert.equal((literals.match(/^`/gm)||[]).length,32,'EL ESPEJO contains exactly 32 scenes');
 assert(mirror.includes('new Set([14,15,17,26,30])'),'The five convergence scenes require a reader-controlled pause');
 assert(mirror.includes("next.textContent='seguir'")&&mirror.includes('if(!locked||lockedScene!==scene)return'),'A deliberate action releases each key-scene pause');
-assert(!/setTimeout|setInterval/.test(mirror),'Scene pacing does not depend on timers');
+assert(!/setTimeout|setInterval/.test(mirror.slice(0,mirror.indexOf('function beginReturn'))),'Scene pacing does not depend on timers');
 assert(mirror.includes('if(event.deltaY<0){releasePause();return}')&&mirror.includes("['ArrowUp','PageUp','Home'].includes(event.key)"),'The reader can move back to reread, then encounter the pause again on return');
 assert(mirror.includes('scroll-snap')===false,'Scroll snapping is defined in the page stylesheet, not script');
 assert(page.includes('scroll-snap-type:y mandatory')&&page.includes('scroll-snap-stop:always'),'Each scene occupies its own reading stop');
 assert(page.includes('<main id="mirror" aria-label="EL ESPEJO" hidden></main>'),'The convergence room is not exposed before its narrative condition');
-assert(page.includes('src="el-espejo.js?v=20261010-19"'),'The scene script is cache-versioned');
-assert(shared.includes('state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete'),'The convergence only appears after all three pieces have been completed');
+assert(page.includes('src="el-espejo.js?v=20261010-20"'),'The scene script is cache-versioned');
+assert(shared.includes('state.cenicientoUnlocked&&state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete'),'The convergence only appears after all three pieces have been completed through the question-mark route');
 assert(shared.includes("new CustomEvent('oras:mirror-start')"),'EL ESPEJO begins as a reading layer, without a new route or door');
-assert(shared.includes("new CustomEvent('oras:mirror-end')")||mirror.includes("new CustomEvent('oras:mirror-end')"),'Completing the final scene releases the existing Ceniciento exits');
-assert(shared.includes('save({mirrorReadComplete:true})'),'A completed convergence is preserved across later readings');
+assert(shared.includes('save({mirrorReadComplete:true,returnedFromCeniciento:true})'),'A completed convergence and return are preserved across later readings');
+assert(shared.includes("new CustomEvent('oras:mirror-return')")&&mirror.includes("window.addEventListener('oras:mirror-return',beginReturn"),'The end of EL ESPEJO triggers its automatic return sequence');
+assert(mirror.includes("background:'#000'")&&mirror.includes("veil.style.opacity='1'")&&mirror.includes("type:'mirror-return'"),'The convergence fades to black and returns to ANA without an exit menu');
+assert(shared.includes('nav.hidden=true')&&shared.includes('.ou-ceniciento-endnav[hidden]{display:none!important}'),'CENICIENTO exit buttons stay hidden during and after the convergence');
+assert(shared.includes("new CustomEvent('oras:mirror-returned')")===false&&shared.includes("window.addEventListener('oras:mirror-returned'"),'The returned ANA page can show the return phrase');
 assert.equal((shared.match(/Hay historias que empiezan antes\.|El origen suele parecer insignificante\.|Falta una versión de la historia\.|Nadie regresa al mismo lugar\./g)||[]).length,4,'The four ghost phrases remain unchanged');
 const pages=['../index.html','../elegia-breve/index.html','../ojos/index.html','../sonrisa/index.html','../estrella/index.html','../epilogo/index.html','index.html'];
-for(const f of pages){const s=fs.readFileSync(path.join(__dirname,f),'utf8');assert(s.includes('narrative-universe.js?v=20261010-18'),`${f} points to shared module version 18`)}
-console.log('PASS: 32 scenes, reader-controlled pauses, all-three completion condition, one-time convergence, cache versions and four ghost phrases');
+for(const f of pages){const s=fs.readFileSync(path.join(__dirname,f),'utf8');assert(s.includes('narrative-universe.js?v=20261010-20'),`${f} points to shared module version 20`)}
+console.log('PASS: 32 scenes, reader-controlled pauses, all-three completion condition, hidden convergence exits, automatic return and four ghost phrases');

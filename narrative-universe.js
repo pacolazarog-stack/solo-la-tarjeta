@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-19';
+const VERSION='20261010-20';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
 const GHOSTS=Object.freeze({
@@ -25,8 +25,8 @@ const page={
 };
 
 function readState(){
-  try{return Object.assign({cardFound:false,soloComplete:false,anaComplete:false,cenicientoComplete:false,mirrorReadComplete:false,returnedFromCeniciento:false,ghosts:{}},JSON.parse(localStorage.getItem(STORAGE)||'{}'));}
-  catch(_){return {cardFound:false,soloComplete:false,anaComplete:false,cenicientoComplete:false,mirrorReadComplete:false,returnedFromCeniciento:false,ghosts:{}};}
+  try{return Object.assign({cardFound:false,soloComplete:false,anaComplete:false,cenicientoComplete:false,cenicientoUnlocked:false,mirrorReadComplete:false,returnedFromCeniciento:false,ghosts:{}},JSON.parse(localStorage.getItem(STORAGE)||'{}'));}
+  catch(_){return {cardFound:false,soloComplete:false,anaComplete:false,cenicientoComplete:false,cenicientoUnlocked:false,mirrorReadComplete:false,returnedFromCeniciento:false,ghosts:{}};}
 }
 let state=readState();
 function save(patch={}){
@@ -144,7 +144,7 @@ function showSoloEndNav(){
   ana.href=rootPath+'elegia-breve/';
   ana.textContent='Volver a ANA KLAUDYA';
   nav.append(ana);
-  if(state.cenicientoComplete){
+  if(state.cenicientoUnlocked){
     const ceniciento=document.createElement('a');
     ceniciento.href=rootPath+'ceniciento/?v='+VERSION;
     ceniciento.textContent='CENICIENTO';
@@ -164,7 +164,7 @@ function finishSolo(){
 }
 
 function addUnlockedAnaDoors(){
-  if(!state.cenicientoComplete)return;
+  if(!state.cenicientoUnlocked)return;
   const nav=document.getElementById('anaNavigation');
   if(!nav||nav.querySelector('[data-ou-crosspiece]'))return;
   const solo=document.createElement('button');
@@ -182,7 +182,7 @@ function setupSolo(){
     if(enter && !document.body.classList.contains('entered'))enter.click();
   });
   if(state.cardFound)ghost(GHOSTS.before,'before-story',{where:'left',delay:2500,hold:6500});
-  if(state.cenicientoComplete)showSoloEndNav();
+  if(state.cenicientoUnlocked)showSoloEndNav();
   let armed=false;
   const finish=()=>{if(armed)return;armed=true;finishSolo();};
   const lastLine=document.querySelector('main article p.story-line:last-of-type')||document.querySelector('main article p:last-of-type');
@@ -235,6 +235,7 @@ function setupCeniciento(){
   if(oldBack)oldBack.style.display='none';
   const nav=document.createElement('nav');
   nav.className='ou-ceniciento-endnav';
+  nav.hidden=!state.cenicientoUnlocked;
   nav.setAttribute('aria-label','Continuar después de CENICIENTO');
   const ret=document.createElement('a');
   ret.href=rootPath+'elegia-breve/?v='+VERSION;ret.target='_top';ret.textContent='volver';ret.setAttribute('aria-label','Volver a ANA KLAUDYA');
@@ -245,20 +246,27 @@ function setupCeniciento(){
   nav.append(ret,solo);
   document.body.appendChild(nav);
   const revealNav=()=>{document.body.classList.add('ou-ceniciento-navigation-visible');nav.classList.add('ou-visible');};
-  if(state.cenicientoComplete&&!(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete))requestAnimationFrame(()=>requestAnimationFrame(revealNav));
+  if(state.cenicientoUnlocked&&!(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete))requestAnimationFrame(()=>requestAnimationFrame(revealNav));
   let returnTimer=0;
+  const arrivedByQuestion=new URLSearchParams(location.search).get('via')==='question';
   const complete=()=>{
-    const wasComplete=state.cenicientoComplete;
-    if(!wasComplete){save({cenicientoComplete:true});state=readState();}
-    if(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete){
+    const wasUnlocked=state.cenicientoUnlocked;
+    const unlock=wasUnlocked||arrivedByQuestion;
+    if(!state.cenicientoComplete|| (unlock&&!wasUnlocked)){
+      save({cenicientoComplete:true,...(unlock?{cenicientoUnlocked:true}:{})});state=readState();
+    }
+    if(state.cenicientoUnlocked&&state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete){
       clearTimeout(returnTimer);
       nav.classList.remove('ou-visible');
       nav.hidden=true;
       window.dispatchEvent(new CustomEvent('oras:mirror-start'));
       return;
     }
-    if(wasComplete){revealNav();return;}
-    clearTimeout(returnTimer);returnTimer=after(6200,revealNav);
+    if(state.cenicientoUnlocked){
+      nav.hidden=false;
+      if(wasUnlocked){revealNav();return;}
+      clearTimeout(returnTimer);returnTimer=after(6200,revealNav);
+    }
   };
   window.addEventListener('oras:mirror-end',()=>{
     save({mirrorReadComplete:true,returnedFromCeniciento:true});state=readState();

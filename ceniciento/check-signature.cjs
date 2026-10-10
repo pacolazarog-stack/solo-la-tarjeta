@@ -25,9 +25,9 @@ assert(shared.includes("ret.href=rootPath+'elegia-breve/?v='+VERSION;ret.target=
 assert(shared.includes("returnedFromCeniciento:true"),'Returning stores the narrative return state');
 assert(shared.includes("ret.href=rootPath+'elegia-breve/?v='+VERSION"),'volver returns to Ana Klaudya');
 assert(shared.includes("solo.href=rootPath+'?origen=ceniciento&v='+VERSION;solo.target='_top';solo.textContent='SOLO LA TARJETA'"),'After Ceniciento is complete, a second exit returns to Solo la tarjeta');
-assert(shared.includes("nav.className='ou-ceniciento-endnav'")&&shared.includes("const wasComplete=state.cenicientoComplete")&&shared.includes('returnTimer=after(6200,revealNav)'), 'First completion waits before showing exits; later readings show them immediately');
+assert(shared.includes("nav.className='ou-ceniciento-endnav'")&&shared.includes("const wasUnlocked=state.cenicientoUnlocked")&&shared.includes('returnTimer=after(6200,revealNav)'), 'Question-mark-qualified completion waits before showing exits; later readings show them immediately');
 assert(shared.includes("solo.addEventListener('click',()=>save({cenicientoComplete:true,returnedFromCeniciento:true}))"),'Both Ceniciento exits preserve the return state for Ana');
-assert(shared.includes("if(state.cenicientoComplete&&!(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete))requestAnimationFrame(()=>requestAnimationFrame(revealNav))"),'Previously completed Ceniciento restores reciprocal exits unless the convergence room is pending');
+assert(shared.includes("if(state.cenicientoUnlocked&&!(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete))requestAnimationFrame(()=>requestAnimationFrame(revealNav))"),'Previously qualified Ceniciento restores reciprocal exits unless the convergence room is pending');
 assert(shared.includes('body.read .ou-ceniciento-endnav{position:relative;left:auto;bottom:auto'),'Reading-mode exits follow the text instead of covering the final line');
 assert(shared.includes('body.voice.ou-ceniciento-navigation-visible .screen.final{bottom:calc(8.5svh + 84px)}'),'Voice-mode navigation leaves the final line visible');
 assert(shared.includes("if(voice)voice.addEventListener('ended',complete)"),'Voice completion reveals the return door');
