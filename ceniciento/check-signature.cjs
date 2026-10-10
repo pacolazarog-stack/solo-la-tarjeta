@@ -2,7 +2,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict'),path=require('n
 const source=fs.readFileSync(path.join(__dirname,'index.html'),'utf8');
 const text=fs.readFileSync(path.join(__dirname,'texto.md'),'utf8').trim();
 const shared=fs.readFileSync(path.join(__dirname,'../narrative-universe.js'),'utf8');
-assert(source.includes('<p class="signature">flag</p>'),'The canonical signature remains in the reading text');
+assert(!source.includes('<p class="signature">')&&source.includes('<span class="reading-end" aria-hidden="true"></span>'),"CENICIENTO has no byline and keeps an invisible reading-end marker");
 assert(source.includes("fetch('texto.md?v=16'"),'Reading mode loads the canonical text file');
 assert(source.includes('const AGE_FRAME_COUNT=9')&&source.includes('function agePosition(p){return clamp(p)*(frames.length-1)}'),'The full nine-frame historical sequence advances evenly');
 assert(source.includes("'frames-stable/'+String(i+1).padStart(2,'0')+'.webp?v=20261010-stable-sequence'")&&!source.includes('frames-v2/'),'The restored stable assets load in the correct order');
@@ -20,6 +20,6 @@ assert(shared.includes("solo.href=rootPath+'?origen=ceniciento&v='+VERSION;solo.
 assert(shared.includes('save({mirrorReadComplete:true,returnedFromCeniciento:true})'),'Completing the convergence records its automatic return to Ana');
 assert(shared.includes("solo.addEventListener('click',()=>save({cenicientoComplete:true,returnedFromCeniciento:true}))"),'The chosen direct exit is persisted without a visible completion flag');
 assert(shared.includes('state.cenicientoUnlocked')&&shared.includes('arrivedByQuestion'),'Ceniciento remains initially gated by the question mark');
-assert(source.includes('el-espejo.js?v=20261010-22')&&source.includes('narrative-universe.js?v=20261010-22'),'Ceniciento loads current cache versions');
+assert(source.includes('el-espejo.js?v=20261010-23')&&source.includes('narrative-universe.js?v=20261010-23'),'Ceniciento loads current cache versions');
 assert(!source.includes('id="continue"')&&!source.includes('cont.onclick'),'Choosing Read or Voice starts without a second button');
 console.log('PASS: stable nine-frame progression, visible background, single-action reading start, Ceniciento gate, and automatic Mirror return');
