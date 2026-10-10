@@ -5,8 +5,8 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Paquete archivístico vigente:** versión 24; conserva el código publicado en `main` mediante el commit `c734c9fcd665c830690e4aa19f46e73baac30f78`  
-**Módulo compartido:** `narrative-universe.js`, versión `20261010-12`  
+**Paquete archivístico vigente:** versión 25; conserva el código publicado en `main` mediante el commit `78e715f9f920cb7353ab4aca177377e6332a4b13`  
+**Módulo compartido:** `narrative-universe.js`, versión `20261010-13`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
 > Este documento reúne información contextual, bibliográfica y técnica para prensa, investigación, programación de festivales y preservación. No debe incorporarse a las páginas de las obras ni presentarse como parte de su recorrido narrativo.
@@ -15,13 +15,14 @@
 
 El conjunto comprende tres obras digitales en español: *ANA KLAUDYA*, *SOLO LA TARJETA* y *CENICIENTO*. Cada pieza puede recorrerse como una obra autónoma. En conjunto admiten una lectura retrospectiva: al descubrir otras piezas, ciertos elementos de las anteriores adquieren nuevos sentidos.
 
-La edición descrita aquí conserva tres señales narrativas entre obras: tarjeta, interrogante y «volver». Al completar *SOLO LA TARJETA*, aparecen además dos botones convencionales de salida —a *ANA KLAUDYA* y *CENICIENTO*— para que el visitante pueda continuar sin buscar una puerta nueva. Los motivos secundarios no abren destinos.
+La edición descrita aquí conserva tres puertas de navegación entre obras: tarjeta hacia *SOLO LA TARJETA*, interrogante hacia *CENICIENTO* y «volver» hacia *ANA KLAUDYA*. *SOLO LA TARJETA* no ofrece un acceso a *CENICIENTO*: el interrogante de *ANA KLAUDYA* es su única entrada. Al completar *CENICIENTO*, aparecen dos salidas: «volver» hacia *ANA KLAUDYA* y *SOLO LA TARJETA*. Los motivos secundarios no abren destinos.
 
-| Señal en la obra | Destino |
+| Señal o estado | Destino |
 | --- | --- |
 | tarjeta | *SOLO LA TARJETA* |
-| ? | *CENICIENTO* |
-| volver | *ANA KLAUDYA* |
+| ? en *ANA KLAUDYA* | *CENICIENTO* |
+| «volver» al terminar *CENICIENTO* | *ANA KLAUDYA* |
+| *CENICIENTO* terminado | *SOLO LA TARJETA* |
 
 Otros motivos —entre ellos «ojos de estatua», la Torre Eiffel, el reloj, el pan, la cebolla y la tarjeta anulada— funcionan como resonancias y no como enlaces.
 
@@ -96,7 +97,7 @@ Ejemplo con la fecha canónica registrada para *ANA KLAUDYA*:
 
 ### Cita del código fuente archivado
 
-> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 24, corrección de visibilidad del fondo COTÁN en móvil. Código del commit `pacolazarog-stack/solo-la-tarjeta`, commit de código `c734c9fcd665c830690e4aa19f46e73baac30f78`; módulo compartido `20261010-12`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
+> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 25, acceso a CENICIENTO y salidas tras completar la lectura. Código del commit `pacolazarog-stack/solo-la-tarjeta`, commit de código `78e715f9f920cb7353ab4aca177377e6332a4b13`; módulo compartido `20261010-13`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
 
 Para citas académicas, conviene especificar la pieza, el modo de acceso (lectura o escucha), la URL y la fecha de consulta. Si se cita un verso, añadir el nombre de la pieza y el identificador o encabezado de sección disponible en la edición consultada. No asignar números de verso que la obra no muestre.
 
@@ -108,7 +109,7 @@ Para citas académicas, conviene especificar la pieza, el modo de acceso (lectur
 - `ceniciento/texto.md`: texto de lectura de *CENICIENTO*.
 - `ceniciento/index.html`: interfaz de lectura/escucha y 59 señales de voz de *CENICIENTO*.
 - `ceniciento/narracion.txt`: material de narración asociado a *CENICIENTO*.
-- Archivo complementario vigente: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (24).md](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(24).md).
+- Archivo complementario vigente: [TRILOGIA_ANA_KLAUDYA_CODIGO_ES (25).md](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(25).md).
 
 ## 8. Separación editorial
 
@@ -275,4 +276,13 @@ La versión 23 es una actualización documental y archivística. No altera el c�
 
 La captura móvil confirma que la barra inferior seguía presentándose como una placa casi opaca. La versión 24 reduce su fondo a una opacidad del 18 %, elimina el desenfoque que velaba la imagen y conserva el contraste de las etiquetas con sombra de texto. El estilo base adopta también la placa translúcida para evitar que el fondo claro opaque la fotografía en dispositivos cuyo viewport no active el corte móvil. La tarjeta compacta permanece sin cambios.
 
-Las siete comprobaciones CJS pasan, incluida la prueba móvil actualizada. El código se publicó en `main` mediante `c734c9fcd665c830690e4aa19f46e73baac30f78`; el archivo archivístico completo correspondiente es [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (24).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(24).md).
+Las siete comprobaciones CJS pasan, incluida la prueba móvil actualizada. El código se publicó en `main` mediante `c734c9fcd665c830690e4aa19f46e73baac30f78`; el archivo archivístico completo correspondiente es [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (25).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(25).md).
+
+
+## 23. Acceso único a CENICIENTO y salidas finales · versión 25
+
+La entrada de navegación a *CENICIENTO* queda reservada al interrogante de *ANA KLAUDYA*. Se elimina el enlace «Ir a CENICIENTO» del final de *SOLO LA TARJETA*. En ese cierre sólo queda «Volver a ANA KLAUDYA».
+
+Al acabar *CENICIENTO*, sí se permite continuar hacia ambas piezas: «volver» conduce a *ANA KLAUDYA* y un segundo enlace conduce a *SOLO LA TARJETA*. Estos controles aparecen sólo cuando termina la lectura —firma observada o narración terminada— y tras la pausa prevista. Desde el marco de lectura de ANA, ambos enlaces abren los destinos en la ventana superior. El enlace hacia *SOLO LA TARJETA* no simula el descubrimiento de la tarjeta.
+
+El cambio conserva las tres puertas de entrada definidas por la arquitectura y añade una salida poslectura desde *CENICIENTO* a *SOLO LA TARJETA*. No convierte motivos secundarios en controles. Se actualiza el identificador del módulo compartido para evitar que el navegador conserve una copia anterior. Las siete pruebas CJS pasan. Código publicado en `main` mediante `78e715f9f920cb7353ab4aca177377e6332a4b13`; archivo fuente integral: [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (25).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(25).md).
