@@ -38,11 +38,11 @@ button.primary{background:var(--rose);color:#24151d;border-color:var(--rose)}
 .line{display:block;transition:opacity .8s ease,filter .8s ease}
 .line.hidden-line{opacity:0;filter:blur(5px)}
 .accent{color:var(--rose)}.ending{font-style:italic;color:var(--rose)}
-.signature{font:12px/1.5 system-ui,sans-serif;letter-spacing:.25em;color:var(--gold);margin-top:45px}
+
 footer{padding:0 6vw 30px;max-width:1160px;margin:auto;color:var(--muted);font:10px/1.6 system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase}
 @media(max-width:760px){header{padding:22px 7vw}main{display:block;padding:15px 7vw 40px}.intro{position:static;padding-top:10px}h1{font-size:64px}.subtitle{max-width:none}.controls{margin-top:24px}.poem{padding:22px 0 0;border-left:none;border-top:1px solid #c8ae8338;margin-top:30px;font-size:clamp(18px,4.8vw,25px)}.stanza{margin-bottom:28px}footer{padding:0 7vw 25px}}
 @media(prefers-reduced-motion:reduce){.line{transition:none}.line.hidden-line{filter:none}}
-@media print{body{background:white;color:black}body:after,body:before,.detail-background,header,.controls,.status,footer{display:none}main{display:block;padding:0}.intro{position:static;padding:0}h1{font-size:32px}h1 em,.kicker,.subtitle,.accent,.ending,.signature{color:black}.rule{display:none}.poem{border:0;padding:0;font-size:16px}.line.hidden-line{opacity:1;filter:none}}
+@media print{body{background:white;color:black}body:after,body:before,.detail-background,header,.controls,.status,footer{display:none}main{display:block;padding:0}.intro{position:static;padding:0}h1{font-size:32px}h1 em,.kicker,.subtitle,.accent,.ending,.rule{display:none}.poem{border:0;padding:0;font-size:16px}.line.hidden-line{opacity:1;filter:none}}
 .music-controls{display:grid;gap:13px;margin-top:24px;color:var(--muted);font:12px/1.5 system-ui,sans-serif;max-width:260px}.music-controls button{justify-self:start}.music-controls button[hidden]{display:none}.music-controls input{accent-color:var(--rose)}.music-controls label{display:flex;gap:10px;align-items:center}.music-controls input[type=range]{width:100%;min-height:28px}.music-controls output{margin-left:auto}@media print{.music-controls{display:none}}
 
 @media(prefers-reduced-motion:reduce){ .detail-background,.detail-background svg{animation:none!important}.detail-background svg{transition:none;filter:none}}
@@ -59,8 +59,8 @@ header{padding:18px 5vw;font-size:10px;opacity:.7}
 .poem{border-left:0;padding-left:0}
 main{padding-bottom:140px;gap:6vw}
 .controls button{box-shadow:none;min-height:44px}
-@media(max-width:760px){main{padding:15px 5vw 130px}.intro{padding-top:0}.poem{border-top:0;margin-top:36px;line-height:1.85}.stanza{margin-bottom:36px}.music-controls{max-width:none}.signature{margin-bottom:30px}.phrase{line-height:1.85}}
-@media(prefers-reduced-motion:reduce){header,.kicker,.status,.signature,footer,.music-controls,h1,.phrase{animation:none!important}}
+@media(max-width:760px){main{padding:15px 5vw 130px}.intro{padding-top:0}.poem{border-top:0;margin-top:36px;line-height:1.85}.stanza{margin-bottom:36px}.music-controls{max-width:none}.phrase{line-height:1.85}}
+@media(prefers-reduced-motion:reduce){header,.kicker,.status,footer,.music-controls,h1,.phrase{animation:none!important}}
 
 
 /* Portada móvil compacta: el poema gana pantalla sin perder sus controles. */
@@ -81,7 +81,7 @@ main{padding-bottom:140px;gap:6vw}
   .music-controls input[type=range]{width:100%;min-height:24px}
   .poem{margin-top:14px;padding-top:0;font-size:clamp(18px,4.8vw,23px);line-height:1.68}
   .stanza{margin-bottom:24px}
-  .signature{margin-top:26px}
+  
 }
 @media(max-height:700px) and (max-width:760px){
   main{padding-top:5px}
