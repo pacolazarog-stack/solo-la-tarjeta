@@ -5,8 +5,8 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Código fuente archivístico vigente en este dossier:** versión 14, publicada en `main` como commit `d41e87817a801545209f6e85379a0c5c800e1517`
-**Módulo compartido:** `narrative-universe.js`, versión local `20261010-8`  
+**Código fuente archivístico vigente en este dossier:** versión 15, publicada en `main` como commit `79d073790dfdcf2bcbd2819cc2aa70bff06f9b0b`
+**Módulo compartido:** `narrative-universe.js`, versión `20261010-9`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
 > Este documento reúne información contextual, bibliográfica y técnica para prensa, investigación, programación de festivales y preservación. No debe incorporarse a las páginas de las obras ni presentarse como parte de su recorrido narrativo.
@@ -48,7 +48,7 @@ Las siguientes direcciones aparecen en el README del repositorio fuente. Se incl
 - [*CENICIENTO* — edición web](https://pacolazarog-stack.github.io/solo-la-tarjeta/ceniciento/)
 - [Repositorio fuente](https://github.com/pacolazarog-stack/solo-la-tarjeta)
 
-La edición de código reunida en el archivo complementario contiene las páginas y los textos fuente necesarios para inspeccionar la implementación. La referencia remota utilizada como base fue el commit `f9d6a74429e9d64b478c139274dc1c443e7c925c` de `main`. Los cinco archivos de código revisados en la versión archivística 14 se publicaron en `main` mediante el commit `d41e87817a801545209f6e85379a0c5c800e1517`.
+La edición de código reunida en el archivo complementario contiene las páginas y los textos fuente necesarios para inspeccionar la implementación. La referencia remota utilizada como base fue el commit `f9d6a74429e9d64b478c139274dc1c443e7c925c` de `main`. Los diez archivos de código revisados en la versión archivística 15 se publicaron en `main` mediante el commit `79d073790dfdcf2bcbd2819cc2aa70bff06f9b0b`.
 
 Los medios binarios (audio e imágenes) se mantienen como recursos referenciados o como elementos del repositorio, según corresponda; el archivo de código Markdown no los sustituye por transcripciones codificadas. Para una preservación integral deben conservarse junto con el repositorio y verificarse los recursos externos antes de una nueva publicación.
 
@@ -96,7 +96,7 @@ Ejemplo con la fecha canónica registrada para *ANA KLAUDYA*:
 
 ### Cita del código fuente archivado
 
-> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 14, revisión local basada en la versión 13. Repositorio `pacolazarog-stack/solo-la-tarjeta`, commit fuente base `f9d6a74429e9d64b478c139274dc1c443e7c925c`; módulo compartido `20261010-8`. Archivo Markdown de conservación, no publicado en el sitio.
+> flag. *Trilogía ANA KLAUDYA: código fuente español completo*. Versión archivística 15, revisión móvil basada en la versión 14. Repositorio `pacolazarog-stack/solo-la-tarjeta`, commit de código `79d073790dfdcf2bcbd2819cc2aa70bff06f9b0b`; módulo compartido `20261010-9`. Archivo Markdown de conservación, fuera de la interfaz de lectura.
 
 Para citas académicas, conviene especificar la pieza, el modo de acceso (lectura o escucha), la URL y la fecha de consulta. Si se cita un verso, añadir el nombre de la pieza y el identificador o encabezado de sección disponible en la edición consultada. No asignar números de verso que la obra no muestre.
 
@@ -187,3 +187,12 @@ Se ejecutaron las siete comprobaciones CJS incluidas en el paquete archivístico
 La relectura de *SOLO LA TARJETA* hacia *ANA KLAUDYA* funciona como resonancia del origen y del motivo de la tarjeta. La de *CENICIENTO* hacia *ANA KLAUDYA* tiene un efecto más directo: cambia quién mira y quién es mirado. La arquitectura se considera editorialmente cerrada en estas conexiones; la frase rectora queda así:
 
 > La fuerza del sistema no reside en cuántas conexiones existen, sino en cuántas conexiones el lector es capaz de recordar por sí mismo.
+
+
+## 12. Revisión móvil de la versión 15
+
+La versión 15 toma el teléfono como soporte principal. Conserva las tres puertas y no añade rótulos de menú. La tarjeta pasa a 112 × 70 px en pantallas estrechas, respeta el área segura del dispositivo y mantiene un nombre accesible; el interrogante dispone de un área de toque de 80 × 80 px, aparece antes en móvil y deja de pulsar en dispositivos táctiles; «volver» cuenta con un área mínima de 100 × 48 px, situada de forma estable sobre el borde seguro inferior.
+
+El final de *SOLO LA TARJETA* y el cierre de lectura de *CENICIENTO* se activan al entrar en vista la última línea o la firma, mediante `IntersectionObserver`. Se conserva la alternativa basada en scroll para navegadores sin esa API. Las páginas afectadas ajustan el viewport para ocupar correctamente la pantalla y respetar las áreas seguras.
+
+Las siete comprobaciones CJS del paquete pasan, incluidas verificaciones de las zonas táctiles, el fin de lectura observado y la ausencia de nuevas rutas. El código se publicó en `main` el 10 de octubre de 2026 mediante el commit `79d073790dfdcf2bcbd2819cc2aa70bff06f9b0b`; la edición de conservación y este dossier se registran en el commit documental posterior.
