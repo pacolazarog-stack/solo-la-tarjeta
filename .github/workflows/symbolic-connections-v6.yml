@@ -1,0 +1,131 @@
+name: Symbolic connections v6
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/symbolic-connections-v6.yml"
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Separate physical accesses from symbolic discoveries
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path('narrative-universe.js')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace("const VERSION='20261010-5';","const VERSION='20261010-6';",1)
+
+          # Symbolic connections must look like literature at rest, not links.
+          s=re.sub(
+            r"  \.ou-active-text\{[^\n]*\n?",
+            "  .ou-symbolic{cursor:pointer;font:inherit;font-weight:inherit;color:inherit;text-decoration-line:underline;text-decoration-style:solid;text-decoration-thickness:.055em;text-underline-offset:.20em;text-decoration-color:transparent;transition:color .5s ease,text-decoration-color .5s ease,text-shadow .5s ease,opacity .5s ease}.ou-symbolic:hover,.ou-symbolic:focus-visible{color:rgba(92,67,47,.92);text-decoration-color:rgba(92,67,47,.28);text-shadow:0 0 12px rgba(112,72,38,.08);outline:none}\n",
+            s,
+            count=1
+          )
+          # Remove any leftover duplicate hover rule from the old active-link treatment.
+          s=re.sub(r"\.ou-active-text:hover[^\n]*\n?","",s)
+
+          old_make="""function makeClickable(el,destination,label){
+  if(!el || el.dataset.ouActive)return;
+  el.dataset.ouActive='1';
+  el.classList.add('ou-active-text');
+  el.tabIndex=0;
+  el.setAttribute('role','link');
+  if(label)el.setAttribute('aria-label',label);
+  const go=()=>topGo(destination);
+  el.addEventListener('click',go);
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
+}
+function pByExact(text){return [...document.querySelectorAll('p,span')].find(el=>el.textContent.trim()===text)||null;}
+function psContaining(token){return [...document.querySelectorAll('p')].filter(el=>el.textContent.includes(token));}
+"""
+          new_make="""function makeSymbolic(el,destination,label){
+  if(!el || el.dataset.ouSymbolic)return;
+  el.dataset.ouSymbolic='1';
+  el.classList.add('ou-symbolic');
+  el.tabIndex=0;
+  el.setAttribute('role','link');
+  if(label)el.setAttribute('aria-label',label);
+  const go=()=>topGo(destination);
+  el.addEventListener('click',go);
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
+}
+function pByExact(text){return [...document.querySelectorAll('p,span')].find(el=>el.textContent.trim()===text)||null;}
+function psByExact(text){return [...document.querySelectorAll('p,span')].filter(el=>el.textContent.trim()===text);}
+function psContaining(token){return [...document.querySelectorAll('p')].filter(el=>el.textContent.includes(token));}
+function wrapToken(root,token,destination,label){
+  if(!root || root.dataset.ouWrapped?.includes(token))return;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const nodes=[];
+  while(walker.nextNode())nodes.push(walker.currentNode);
+  let changed=false;
+  for(const node of nodes){
+    if(node.parentElement?.closest('a,button,.ou-symbolic'))continue;
+    const text=node.nodeValue||'';
+    if(!text.includes(token))continue;
+    const frag=document.createDocumentFragment();
+    const parts=text.split(token);
+    parts.forEach((part,i)=>{
+      if(part)frag.appendChild(document.createTextNode(part));
+      if(i<parts.length-1){
+        const span=document.createElement('span');
+        span.textContent=token;
+        makeSymbolic(span,destination,label);
+        frag.appendChild(span);
+      }
+    });
+    node.replaceWith(frag);changed=true;
+  }
+  if(changed)root.dataset.ouWrapped=((root.dataset.ouWrapped||'')+' '+token).trim();
+}
+"""
+          if old_make not in s:
+            raise RuntimeError('No se encontró el bloque de conexión actual')
+          s=s.replace(old_make,new_make,1)
+
+          old_activate="""function activateSoloSymbols(){
+  makeClickable(pByExact('Los ojos de estatua.'),rootPath+'elegia-breve/#ojos','Ojos de estatua');
+  psContaining('reloj').forEach(p=>makeClickable(p,rootPath+'elegia-breve/#ceniciento','Reloj · Ceniciento'));
+  installEiffel();
+}
+"""
+          new_activate="""function activateSoloSymbols(){
+  // Conexiones simbólicas: existen dentro del texto y sólo se revelan al reconocerlas.
+  [...psByExact('Ojos de estatua.'),...psByExact('Los ojos de estatua.')]
+    .forEach(el=>makeSymbolic(el,rootPath+'elegia-breve/#ojos','Ojos de estatua'));
+
+  psContaining('París').forEach(el=>wrapToken(el,'París',rootPath+'elegia-breve/#estrella','París · Estrella'));
+
+  const annulled=document.getElementById('duskColorTurn') || pByExact('La tarjeta quedó anulada.');
+  makeSymbolic(annulled,rootPath+'elegia-breve/#epilogo','La tarjeta quedó anulada · Epílogo');
+
+  psContaining('reloj').forEach(el=>wrapToken(el,'reloj',rootPath+'elegia-breve/#ceniciento','reloj · Ceniciento'));
+}
+"""
+          if old_activate not in s:
+            raise RuntimeError('No se encontró activateSoloSymbols actual')
+          s=s.replace(old_activate,new_activate,1)
+
+          p.write_text(s,encoding='utf-8')
+
+          # Force every route to load the new grammar and retire the Eiffel icon by cache invalidation.
+          for html in Path('.').rglob('*.html'):
+            text=html.read_text(encoding='utf-8')
+            new=re.sub(r'narrative-universe\.js\?v=20261010-\d+', 'narrative-universe.js?v=20261010-6', text)
+            if new!=text:
+              html.write_text(new,encoding='utf-8')
+          PY
+      - name: Commit and remove one-shot workflow
+        run: |
+          rm .github/workflows/symbolic-connections-v6.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Separate physical access from symbolic narrative links"
+          git push
