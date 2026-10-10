@@ -5,7 +5,7 @@
 **Idioma:** español  
 **Autoría publicada:** flag  
 **Edición canónica de *ANA KLAUDYA*:** cerrada el 9 de octubre de 2026  
-**Paquete archivístico vigente:** versión 22; conserva el código publicado en `main` mediante el commit `e5461949f48ffaa4209c6e11b003c682730702f0`
+**Paquete archivístico vigente:** versión 22; conserva el código publicado en `main` mediante el commit `e5461949f48ffaa4209c6e11b003c682730702f0`  
 **Módulo compartido:** `narrative-universe.js`, versión `20261010-12`  
 **Estado de este dossier:** documento crítico y de conservación; no forma parte de la interfaz de lectura.
 
