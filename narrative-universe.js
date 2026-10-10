@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-6';
+const VERSION='20261010-7';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
 const path=location.pathname.replace(/\/+$/,'') || '/';
@@ -50,6 +50,7 @@ function installBaseStyles(){
   .ou-symbolic{cursor:pointer;font:inherit;font-weight:inherit;color:inherit;text-decoration-line:underline;text-decoration-style:solid;text-decoration-thickness:.055em;text-underline-offset:.20em;text-decoration-color:transparent;transition:color .5s ease,text-decoration-color .5s ease,text-shadow .5s ease,opacity .5s ease}
   .ou-symbolic:hover,.ou-symbolic:focus-visible{color:rgba(92,67,47,.92);text-decoration-color:rgba(92,67,47,.28);text-shadow:0 0 12px rgba(112,72,38,.08);outline:none}
   .ou-return{position:fixed;z-index:80;left:50%;bottom:6.2svh;transform:translateX(-50%);appearance:none;border:0;background:none;color:#fffaf1;padding:.5em 1em;font:italic 400 clamp(1.05rem,2.4vw,1.35rem)/1 Georgia,"Times New Roman",serif;letter-spacing:.035em;opacity:0;visibility:hidden;cursor:pointer;transition:opacity 2.4s ease,visibility 2.4s ease;text-shadow:0 2px 18px rgba(0,0,0,.9)}.ou-return.ou-visible{opacity:.72;visibility:visible}.ou-return:hover,.ou-return:focus-visible{opacity:1;outline:none}
+  .ou-solo-endnav{position:fixed;z-index:82;left:50%;bottom:6.2svh;transform:translateX(-50%) translateY(8px);display:flex;align-items:center;justify-content:center;gap:clamp(1.1rem,3vw,2.4rem);max-width:min(92vw,760px);opacity:0;visibility:hidden;transition:opacity 2s ease,transform 2s ease,visibility 2s ease;text-align:center}.ou-solo-endnav.ou-visible{opacity:.76;visibility:visible;transform:translateX(-50%) translateY(0)}.ou-solo-endnav a{color:#fffaf1;text-decoration:none;font:italic 400 clamp(.92rem,1.8vw,1.14rem)/1.25 Georgia,"Times New Roman",serif;letter-spacing:.025em;text-shadow:0 2px 18px rgba(0,0,0,.9);opacity:.78;transition:opacity .4s ease,text-shadow .4s ease}.ou-solo-endnav a:hover,.ou-solo-endnav a:focus-visible{opacity:1;text-shadow:0 2px 22px rgba(0,0,0,1);outline:none}.ou-solo-endnav .ou-sep{color:rgba(255,250,241,.34);font-size:.8em;pointer-events:none}
   @media(max-width:700px){.ou-card{left:18px;bottom:9vh;width:92px;height:57px}.ou-card::before{left:13px;top:13px;width:22px;height:16px}.ou-card::after{left:13px;right:13px;bottom:12px}.ou-ghost{max-width:68vw}.ou-ghost.ou-left{left:16px;top:14vh}.ou-ghost.ou-right{right:16px;top:21vh}.ou-ghost.ou-low{right:16px;bottom:13vh}}
   @media(prefers-reduced-motion:reduce){.ou-card{animation:none}.ou-transition{transition:none}}
   `;
@@ -168,26 +169,44 @@ function activateSoloSymbols(){
   psContaining('reloj').forEach(el=>wrapToken(el,'reloj',rootPath+'elegia-breve/#ceniciento','reloj · Ceniciento'));
 }
 
+function showSoloEndNav(){
+  if(document.querySelector('.ou-solo-endnav'))return;
+  const nav=document.createElement('nav');
+  nav.className='ou-solo-endnav';
+  nav.setAttribute('aria-label','Continuar desde Solo la tarjeta');
+  const back=document.createElement('a');
+  back.href=rootPath+'elegia-breve/';
+  back.textContent='Volver a Ana Klaudya';
+  const sep=document.createElement('span');
+  sep.className='ou-sep';
+  sep.textContent='·';
+  const next=document.createElement('a');
+  next.href=rootPath+'ceniciento/';
+  next.textContent='Ir a Ceniciento';
+  nav.append(back,sep,next);
+  document.body.appendChild(nav);
+  after(900,()=>nav.classList.add('ou-visible'));
+}
+
 function finishSolo(){
-  if(state.soloComplete)return;
-  save({soloComplete:true});
-  state=readState();
-  ghost('Una casualidad rara vez termina donde parece.','after-solo',{where:'low',delay:2600,hold:6500});
+  if(!state.soloComplete){
+    save({soloComplete:true});
+    state=readState();
+    ghost('Una casualidad rara vez termina donde parece.','after-solo',{where:'low',delay:2600,hold:6500});
+  }
+  showSoloEndNav();
 }
 function setupSolo(){
-  const params=new URLSearchParams(location.search);
-  if(params.get('auto')==='1' || params.has('origen')){
-    after(70,()=>{
-      const enter=document.getElementById('enterButton');
-      if(enter && !document.body.classList.contains('entered'))enter.click();
-    });
-  }
+  after(30,()=>{
+    const enter=document.getElementById('enterButton');
+    if(enter && !document.body.classList.contains('entered'))enter.click();
+  });
   activateSoloSymbols();
   if(state.cardFound)ghost('Hay historias que empiezan antes.','before-story',{where:'left',delay:2500,hold:6500});
   if(state.soloComplete && state.anaComplete)ghost('Todo esto ocurrió después.','all-after',{where:'right',delay:6000,hold:6400});
   let armed=false;
   const checkEnd=()=>{
-    if(armed||state.soloComplete)return;
+    if(armed)return;
     const d=Math.max(document.documentElement.scrollHeight,document.body.scrollHeight);
     if(scrollY+innerHeight>=d-180){armed=true;finishSolo();}
   };

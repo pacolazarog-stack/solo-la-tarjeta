@@ -9,6 +9,7 @@
   <meta property="og:type" content="article">
   <meta property="og:locale" content="es_ES">
   <title>SOLO LA TARJETA</title>
+  <script>document.documentElement.classList.add("ou-direct-entry");</script>
   
 <style>
 :root{
@@ -34,6 +35,13 @@ body:not(.entered) .progress,
 body:not(.entered) header,
 body:not(.entered) main,
 body:not(.entered) .dusk-passage{visibility:hidden}
+html.ou-direct-entry body:not(.entered){overflow:auto}
+html.ou-direct-entry .entry-gate{display:none!important}
+html.ou-direct-entry body:not(.entered) .world,
+html.ou-direct-entry body:not(.entered) .progress,
+html.ou-direct-entry body:not(.entered) header,
+html.ou-direct-entry body:not(.entered) main,
+html.ou-direct-entry body:not(.entered) .dusk-passage{visibility:visible}
 
 /* ÚNICO ESCENARIO VISUAL */
 .world{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:rgb(var(--paper-r) var(--paper-g) var(--paper-b));isolation:isolate}
@@ -1228,6 +1236,6 @@ p{margin:0 0 1.2em;hanging-punctuation:first last}
   resizeCanvas();rebuildFrames();render();animate();
 })();
 </script>
-<script data-oras-universe="v1" src="narrative-universe.js?v=20261010-6"></script>
+<script data-oras-universe="v1" src="narrative-universe.js?v=20261010-7"></script>
 </body>
 </html>
