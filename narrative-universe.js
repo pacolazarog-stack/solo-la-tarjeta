@@ -157,7 +157,7 @@ function addCard(){
 }
 
 function showSoloEndNav(){
-  if(!state.cenicientoComplete)return;
+  if(!state.cenicientoComplete||!state.cenicientoUnlocked)return;
   if(document.querySelector('.ou-solo-endnav'))return;
   const nav=document.createElement('nav');
   nav.className='ou-solo-endnav';
@@ -227,7 +227,7 @@ addEventListener('message',event=>{
 });
 
 function addUnlockedAnaDoors(){
-  if(!state.cenicientoComplete)return;
+  if(!state.cenicientoComplete||!state.cenicientoUnlocked)return;
   const nav=document.getElementById('anaNavigation');
   if(!nav||nav.querySelector('[data-ou-crosspiece]'))return;
   const solo=document.createElement('button');
@@ -245,7 +245,7 @@ function setupSolo(){
     if(enter && !document.body.classList.contains('entered'))enter.click();
   });
   if(state.cardFound)ghost(GHOSTS.before,'before-story',{where:'left',delay:2500,hold:6500});
-  if(state.cenicientoComplete)showSoloEndNav();
+  if(state.cenicientoComplete&&state.cenicientoUnlocked)showSoloEndNav();
   let armed=false;
   const finish=()=>{if(armed)return;armed=true;finishSolo();};
   const lastLine=document.querySelector('main article p.story-line:last-of-type')||document.querySelector('main article p:last-of-type');
@@ -308,7 +308,7 @@ function setupCeniciento(){
   nav.append(ret,solo);
   document.body.appendChild(nav);
   const revealNav=()=>{document.body.classList.add('ou-ceniciento-navigation-visible');nav.classList.add('ou-visible');};
-  if(state.cenicientoComplete&&!(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete))requestAnimationFrame(()=>requestAnimationFrame(revealNav));
+  if(state.cenicientoComplete&&state.cenicientoUnlocked&&!(state.soloComplete&&state.anaComplete&&!state.mirrorReadComplete))requestAnimationFrame(()=>requestAnimationFrame(revealNav));
   let returnTimer=0;
   const arrivedByQuestion=new URLSearchParams(location.search).get('via')==='question';
   const complete=()=>{
