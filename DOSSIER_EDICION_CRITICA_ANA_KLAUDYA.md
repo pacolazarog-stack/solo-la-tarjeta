@@ -394,3 +394,10 @@ La sala está contenida en la página de CENICIENTO y se crea desde `ceniciento/
 Las siete pruebas anteriores y la nueva comprobación `ceniciento/check-espejo.cjs` pasan: ocho en total. La prueba nueva verifica el recuento de 32 escenas, la lista exacta de pausas, el disparador tras completar las tres piezas, la persistencia, la ausencia de temporizadores y el mantenimiento de las cuatro frases fantasma. La inspección automatizada no sustituye la validación visual en teléfonos físicos.
 
 La versión 29 añade al archivo completo las fuentes actualizadas, el script de EL ESPEJO y su comprobación automatizada. Código y pruebas publicados en `main` mediante el commit `25edbd10e0455f5f36c0e33d588853b97dd855db`; fuente integral: [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (29).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(29).md). La documentación continúa fuera de la experiencia narrativa.
+
+
+## 28. Pausas reversibles en EL ESPEJO · versión 30
+
+La pausa de los fragmentos 14, 15, 17, 26 y 30 detiene únicamente el avance. El lector puede retroceder y releer sin liberar la pausa por delante; al regresar al fragmento, debe elegir «seguir». Así, el sistema conserva la detención dramática y permite la relectura sin convertir la pausa en un bloqueo de navegación. No hay temporizador ni nueva puerta.
+
+La prueba de EL ESPEJO se amplió para comprobar este comportamiento, además de las 32 escenas, las cinco pausas y el acceso condicionado a la finalización de las tres piezas. Las ocho comprobaciones automatizadas pasan. Código publicado en `main`, commit `d04e5a6b5ec6290c6e9f9003210d12360ff3847b`; archivo integral de código fuente: [`TRILOGIA_ANA_KLAUDYA_CODIGO_ES (30).md`](TRILOGIA_ANA_KLAUDYA_CODIGO_ES%20(30).md).
