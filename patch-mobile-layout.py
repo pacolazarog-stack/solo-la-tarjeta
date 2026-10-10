@@ -7,8 +7,9 @@ VERSIONS_OLD = (
     "20261011-32",
     "20261011-33",
     "20261011-34",
+    "20261011-35",
 )
-VERSION_NEW = "20261011-35"
+VERSION_NEW = "20261011-36"
 
 p = Path("narrative-universe.js")
 s = p.read_text(encoding="utf-8")
@@ -59,6 +60,82 @@ if portrait not in s:
     if marker not in s:
         raise RuntimeError("No se encontró el anclaje CSS del universo narrativo")
     s = s.replace(marker, portrait + marker, 1)
+
+# SOLO LA TARJETA: its end navigation must always become available when the text is finished.
+old_endnav = """function showSoloEndNav(){
+  if(!state.cenicientoComplete||!state.cenicientoUnlocked)return;
+  if(document.querySelector('.ou-solo-endnav'))return;
+  const nav=document.createElement('nav');
+  nav.className='ou-solo-endnav';
+  nav.setAttribute('aria-label','Continuar desde SOLO LA TARJETA');
+  const ana=document.createElement('a');
+  ana.href=rootPath+'elegia-breve/';
+  ana.textContent='Volver a ANA KLAUDYA';
+  nav.append(ana);
+  if(state.cenicientoComplete){
+    const ceniciento=document.createElement('a');
+    ceniciento.href=rootPath+'ceniciento/?v='+VERSION;
+    ceniciento.textContent='CENICIENTO';
+    nav.append(ceniciento);
+  }
+  document.body.appendChild(nav);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>nav.classList.add('ou-visible')));
+}
+"""
+new_endnav = """function showSoloEndNav(){
+  if(document.querySelector('.ou-solo-endnav'))return;
+  const nav=document.createElement('nav');
+  nav.className='ou-solo-endnav';
+  nav.setAttribute('aria-label','Navegación al terminar SOLO LA TARJETA');
+
+  const makeButton=(label,aria,handler)=>{
+    const b=document.createElement('button');
+    b.type='button';
+    b.textContent=label;
+    b.setAttribute('aria-label',aria);
+    b.addEventListener('click',handler);
+    return b;
+  };
+
+  const back=makeButton('Atrás','Volver a la página anterior',()=>history.back());
+  const forward=makeButton('Adelante','Ir a la página siguiente del historial',()=>history.forward());
+  const index=makeButton('Índice','Abrir el índice de lecturas',()=>{
+    const box=document.querySelector('.ou-reading-checklist');
+    if(box){box.hidden=false;box.open=true;box.scrollIntoView({behavior:'smooth',block:'end'});}
+  });
+  const ana=document.createElement('a');
+  ana.href=rootPath+'elegia-breve/?v='+VERSION;
+  ana.target='_top';
+  ana.textContent='ANA KLAUDYA';
+  ana.setAttribute('aria-label','Ir a ANA KLAUDYA');
+
+  nav.append(back,forward,index,ana);
+  document.body.appendChild(nav);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>nav.classList.add('ou-visible')));
+}
+"""
+if old_endnav not in s:
+    raise RuntimeError("No se encontró showSoloEndNav canónico")
+s = s.replace(old_endnav, new_endnav, 1)
+s = s.replace("  if(state.cenicientoComplete&&state.cenicientoUnlocked)showSoloEndNav();\n", "", 1)
+
+# End-navigation buttons should visually match its links.
+s = s.replace(
+    ".ou-solo-endnav a,.ou-ceniciento-endnav a{",
+    ".ou-solo-endnav a,.ou-solo-endnav button,.ou-ceniciento-endnav a{",
+)
+s = s.replace(
+    ".ou-solo-endnav a:hover,.ou-solo-endnav a:focus-visible,.ou-ceniciento-endnav a:hover,.ou-ceniciento-endnav a:focus-visible{",
+    ".ou-solo-endnav a:hover,.ou-solo-endnav a:focus-visible,.ou-solo-endnav button:hover,.ou-solo-endnav button:focus-visible,.ou-ceniciento-endnav a:hover,.ou-ceniciento-endnav a:focus-visible{",
+)
+s = s.replace(
+    ".ou-solo-endnav a:active,.ou-ceniciento-endnav a:active{",
+    ".ou-solo-endnav a:active,.ou-solo-endnav button:active,.ou-ceniciento-endnav a:active{",
+)
+s = s.replace(
+    ".ou-solo-endnav a,.ou-ceniciento-endnav a{padding:11px 13px}",
+    ".ou-solo-endnav a,.ou-solo-endnav button,.ou-ceniciento-endnav a{padding:11px 13px}",
+)
 
 p.write_text(s, encoding="utf-8")
 
@@ -116,6 +193,14 @@ summary{
   background:rgba(12,12,12,.10)!important;
   border-color:rgba(255,255,255,.15)!important;
   box-shadow:0 2px 8px rgba(0,0,0,.06)!important;
+}
+.ou-solo-endnav button,
+.ou-solo-endnav a{
+  background:rgba(12,12,12,.10)!important;
+  border-color:rgba(255,255,255,.18)!important;
+  box-shadow:none!important;
+  backdrop-filter:blur(2px)!important;
+  -webkit-backdrop-filter:blur(2px)!important;
 }
 </style>"""
 
