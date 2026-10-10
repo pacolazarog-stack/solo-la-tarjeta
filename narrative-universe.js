@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const VERSION='20261010-13';
+const VERSION='20261010-14';
 const STORAGE='oras.universe.v1';
 const rootPath='/solo-la-tarjeta/';
 const GHOSTS=Object.freeze({
@@ -55,7 +55,7 @@ function installBaseStyles(){
   .ou-transition{position:fixed;inset:0;z-index:9999;background:rgba(16,15,14,0);pointer-events:none;transition:background 1.25s ease}.ou-transition.ou-on{background:rgba(16,15,14,.95)}
   .ou-symbolic{cursor:pointer;font:inherit;font-weight:inherit;color:inherit;text-decoration-line:underline;text-decoration-style:solid;text-decoration-thickness:.055em;text-underline-offset:.20em;text-decoration-color:transparent;transition:color .5s ease,text-decoration-color .5s ease,text-shadow .5s ease,opacity .5s ease}
   .ou-symbolic:hover,.ou-symbolic:focus-visible{color:rgba(92,67,47,.92);text-decoration-color:rgba(92,67,47,.28);text-shadow:0 0 12px rgba(112,72,38,.08);outline:none}
-  .ou-solo-endnav{position:fixed;z-index:82;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%) translateY(8px);display:flex;align-items:center;justify-content:center;gap:12px;width:max-content;max-width:92vw;opacity:0;visibility:hidden;transition:opacity .7s ease,transform .7s ease,visibility .7s ease;text-align:center}.ou-solo-endnav.ou-visible{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+  .ou-solo-endnav{position:relative;z-index:82;left:auto;bottom:auto;transform:translateY(8px);display:flex;align-items:center;justify-content:center;gap:12px;width:max-content;max-width:92vw;margin:2rem auto max(28px,env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .7s ease,transform .7s ease,visibility .7s ease;text-align:center}.ou-solo-endnav.ou-visible{opacity:1;visibility:visible;transform:translateY(0)}
   .ou-ceniciento-endnav{position:fixed;z-index:82;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%) translateY(8px);display:flex;align-items:center;justify-content:center;gap:12px;width:max-content;max-width:92vw;opacity:0;visibility:hidden;transition:opacity .7s ease,transform .7s ease,visibility .7s ease;text-align:center}.ou-ceniciento-endnav.ou-visible{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
   .ou-solo-endnav a,.ou-ceniciento-endnav a{box-sizing:border-box;display:flex;align-items:center;justify-content:center;min-width:48px;min-height:48px;padding:12px 20px;border:1px solid rgba(255,250,241,.28);border-radius:999px;background:rgba(12,12,12,.82);color:#fffaf1;text-decoration:none;font:italic 400 clamp(.96rem,1.8vw,1.14rem)/1.25 Georgia,"Times New Roman",serif;letter-spacing:.025em;text-shadow:0 2px 18px rgba(0,0,0,.9);opacity:.94;transition:opacity .25s ease,background-color .25s ease,border-color .25s ease}
   .ou-solo-endnav a:hover,.ou-solo-endnav a:focus-visible,.ou-ceniciento-endnav a:hover,.ou-ceniciento-endnav a:focus-visible{opacity:1;background:rgba(28,26,23,.98);border-color:rgba(255,250,241,.72);outline:2px solid rgba(255,250,241,.82);outline-offset:3px}.ou-solo-endnav a:active,.ou-ceniciento-endnav a:active{background:rgba(58,51,42,.98)}
@@ -139,6 +139,12 @@ function showSoloEndNav(){
   ana.href=rootPath+'elegia-breve/';
   ana.textContent='Volver a ANA KLAUDYA';
   nav.append(ana);
+  if(state.cenicientoComplete){
+    const ceniciento=document.createElement('a');
+    ceniciento.href=rootPath+'ceniciento/?v='+VERSION;
+    ceniciento.textContent='CENICIENTO';
+    nav.append(ceniciento);
+  }
   document.body.appendChild(nav);
   requestAnimationFrame(()=>requestAnimationFrame(()=>nav.classList.add('ou-visible')));
 }
@@ -152,12 +158,26 @@ function finishSolo(){
   showSoloEndNav();
 }
 
+function addUnlockedAnaDoors(){
+  if(!state.cenicientoComplete)return;
+  const nav=document.getElementById('anaNavigation');
+  if(!nav||nav.querySelector('[data-ou-crosspiece]'))return;
+  const solo=document.createElement('button');
+  solo.type='button';solo.className='entry-button';solo.dataset.ouCrosspiece='solo';solo.textContent='SOLO LA TARJETA';
+  solo.addEventListener('click',()=>topGo(rootPath+'?origen=ana&v='+VERSION));
+  const ceniciento=document.createElement('button');
+  ceniciento.type='button';ceniciento.className='entry-button';ceniciento.dataset.ouCrosspiece='ceniciento';ceniciento.textContent='CENICIENTO';
+  ceniciento.addEventListener('click',()=>topGo(rootPath+'ceniciento/?v='+VERSION));
+  nav.append(solo,ceniciento);
+}
+
 function setupSolo(){
   after(30,()=>{
     const enter=document.getElementById('enterButton');
     if(enter && !document.body.classList.contains('entered'))enter.click();
   });
   if(state.cardFound)ghost(GHOSTS.before,'before-story',{where:'left',delay:2500,hold:6500});
+  if(state.cenicientoComplete)showSoloEndNav();
   let armed=false;
   const finish=()=>{if(armed)return;armed=true;finishSolo();};
   const lastLine=document.querySelector('main article p.story-line:last-of-type')||document.querySelector('main article p:last-of-type');
@@ -177,6 +197,7 @@ function setupSolo(){
 }
 
 function setupAna(){
+  addUnlockedAnaDoors();
   const q=document.getElementById('cenicientoLink');
   if(q){
     let hinted=false;
@@ -217,9 +238,11 @@ function setupCeniciento(){
   solo.addEventListener('click',()=>save({cenicientoComplete:true}));
   nav.append(ret,solo);
   document.body.appendChild(nav);
+  if(state.cenicientoComplete)requestAnimationFrame(()=>requestAnimationFrame(()=>nav.classList.add('ou-visible')));
   let returnTimer=0;
   const complete=()=>{
     if(!state.cenicientoComplete){save({cenicientoComplete:true});state=readState();}
+    if(state.cenicientoComplete){nav.classList.add('ou-visible');return;}
     clearTimeout(returnTimer);returnTimer=after(6200,()=>nav.classList.add('ou-visible'));
   };
   const voice=document.getElementById('voice');

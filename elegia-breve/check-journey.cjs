@@ -178,7 +178,11 @@ assert.deepEqual(phraseInventory,['Hay historias que empiezan antes.','El origen
 assert(!/ghost\(['\"]/.test(universe),'All ghost copy comes from the four-item phrase inventory');
 assert(!/function (?:makeSymbolic|wrapToken|activateSoloSymbols)/.test(universe),'Narrative echoes remain outside navigation controls');
 assert(/function showSoloEndNav\(\)[\s\S]*?ana\.href=rootPath\+'elegia-breve\/'[\s\S]*?nav\.append\(ana\)/.test(universe),'The Solo ending offers only the return to Ana');
-assert(!/function showSoloEndNav\(\)[\s\S]*?ceniciento\.href/.test(universe),'Solo does not open a direct route to Ceniciento');
+assert(/function showSoloEndNav\(\)[\s\S]*?if\(state\.cenicientoComplete\)\{[\s\S]*?ceniciento\.href/.test(universe),'Solo opens Ceniciento only after the persistent unlock');
+assert(/if\(state\.cenicientoComplete\)\{[\s\S]*?ceniciento\.href=rootPath\+'ceniciento\//.test(universe),'Solo gains a Ceniciento button only after its persistent completion flag is set');
+assert(/function addUnlockedAnaDoors\(\)[\s\S]*?if\(!state\.cenicientoComplete\)return[\s\S]*?textContent='SOLO LA TARJETA'[\s\S]*?textContent='CENICIENTO'/.test(universe),'Ana gains both reciprocal work buttons only after Ceniciento completion');
+assert(universe.includes('if(state.cenicientoComplete)showSoloEndNav();'),'Unlocked cross-navigation remains available on later Solo visits');
+assert(universe.includes('if(state.cenicientoComplete)requestAnimationFrame(()=>requestAnimationFrame(()=>nav.classList.add(\'ou-visible\')))'),'Ceniciento cross-navigation remains available on later visits');
 assert(universe.includes('min-height:52px'),'End buttons have thumb-sized mobile targets');
 assert(universe.includes("nav.setAttribute('aria-label','Continuar desde SOLO LA TARJETA')"),'The ending navigation has an accessible label');
 assert(universe.includes("ana.textContent='Volver a ANA KLAUDYA'")&&!universe.includes("ceniciento.textContent='Ir a CENICIENTO'"),'The Solo ending contains no Ceniciento exit');
