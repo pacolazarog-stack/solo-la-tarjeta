@@ -8,9 +8,7 @@ anchor="""function ensureChecklist(){
 """
 helper="""function readingChecklistHref(piece,key){
   if(piece==='solo')return rootPath+'?origen=contador';
-  /* CENICIENTO nunca se abre desde la barra de lecturas: su única puerta
-     narrativa sigue siendo el interrogante. */
-  if(piece==='ceniciento')return '';
+  if(piece==='ceniciento')return rootPath+'ceniciento/';
   if(piece!=='ana')return '';
   if(key==='elegia')return rootPath+'elegia-breve/';
   const hash={estrella:'estrella',ojos:'ojos',labios:'sonrisa',cabello:'cabello',piel:'piel',interludio:'interludio',epilogo:'epilogo'}[key];
@@ -43,14 +41,23 @@ function wireReadingChecklist(box,current){
 
   const cen=box.querySelector('[data-piece=\"ceniciento\"]');
   if(cen){
-    /* Se muestra su estado, pero deliberadamente no es un enlace incluso
-       después de haber sido descubierto o leído. */
-    cen.classList.remove('ou-check-link');
-    cen.classList.add('ou-check-locked');
-    cen.tabIndex=-1;cen.removeAttribute('role');
-    cen.setAttribute('aria-disabled','true');
-    cen.setAttribute('title','CENICIENTO solo es accesible desde el interrogante');
-    cen.onclick=null;cen.onkeydown=null;
+    /* Antes de su primera lectura, CENICIENTO solo se alcanza desde el
+       interrogante. Una vez completado por esa vía, pasa a ser accesible
+       también desde el índice de lecturas. */
+    const enabled=current.cenicientoComplete===true;
+    cen.classList.toggle('ou-check-link',enabled);
+    cen.classList.toggle('ou-check-locked',!enabled);
+    if(enabled){
+      const href=readingChecklistHref('ceniciento');
+      cen.tabIndex=0;cen.setAttribute('role','link');cen.removeAttribute('aria-disabled');
+      cen.setAttribute('title','Volver a leer CENICIENTO');
+      cen.onclick=()=>go(href);cen.onkeydown=event=>keyboard(event,href);
+    }else{
+      cen.tabIndex=-1;cen.removeAttribute('role');
+      cen.setAttribute('aria-disabled','true');
+      cen.setAttribute('title','CENICIENTO se descubre desde el interrogante');
+      cen.onclick=null;cen.onkeydown=null;
+    }
   }
 }
 
@@ -81,4 +88,4 @@ if css_anchor not in s:
 s=s.replace(css_anchor,css_extra,1)
 
 p.write_text(s,encoding='utf-8')
-print('PASS: barra de lecturas navegable; CENICIENTO permanece exclusivo del interrogante')
+print('PASS: barra de lecturas navegable; CENICIENTO se habilita solo después de su primera lectura completa')
