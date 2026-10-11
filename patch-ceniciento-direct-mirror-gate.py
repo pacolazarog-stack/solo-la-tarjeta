@@ -66,7 +66,11 @@ addon=r'''
   const sync=()=>{
     if(!mirrorPending()){
       armed=false;clearTimeout(readyTimer);
-      document.body.classList.remove('ou-ceniciento-direct-mirror');
+      // classList.remove emite una mutación incluso si la clase ya no existe.
+      // Este observer vigila class: no volver a escribir el mismo estado.
+      if(document.body.classList.contains('ou-ceniciento-direct-mirror')){
+        document.body.classList.remove('ou-ceniciento-direct-mirror');
+      }
       return;
     }
     arm();
@@ -95,3 +99,16 @@ runpy.run_path('patch-ceniciento-absolute-assets.py',run_name='__main__')
 # VOZ deja de depender de los fotogramas para habilitarse y se fuerza una URL nueva
 # del iframe para evitar reutilizar una portada cacheada anterior.
 runpy.run_path('patch-ceniciento-entry-startup.py',run_name='__main__')
+
+# Renovar también el script del iframe: cambiar sólo su HTML conserva el JS
+# anterior en caché y, con él, el bucle del observer.
+page=Path('ceniciento/index.html')
+html=page.read_text(encoding='utf-8')
+import re
+html,count=re.subn(r'(narrative-universe\.js\?v=)[^"\s]+',r'\g<1>20261012-ceniciento-observer-v2',html)
+if count!=1:
+    raise RuntimeError('Se esperaba un único script del universo en CENICIENTO')
+page.write_text(html,encoding='utf-8')
+parent=Path('elegia-breve/index.html')
+html=parent.read_text(encoding='utf-8').replace('v=20261012-ceniciento-entry-v1','v=20261012-ceniciento-observer-v2')
+parent.write_text(html,encoding='utf-8')
