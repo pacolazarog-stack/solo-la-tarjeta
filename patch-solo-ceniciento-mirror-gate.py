@@ -4,13 +4,16 @@ p=Path('narrative-universe.js')
 s=p.read_text(encoding='utf-8')
 
 # SOLO abierto desde CENICIENTO debe volver a completarse en esta pasada.
-# La última frase completa SOLO: si con ella se alcanza 3/3 aparece «Seguir»;
-# si aún faltan lecturas aparece la botonera normal Atrás · Índice · Adelante.
+# Compatible tanto con el universo base como con el progreso compuesto de ANA.
 if "const soloFromCeniciento=" not in s:
-    end="};\n\nfunction emptyState()"
-    if end not in s:
-        raise RuntimeError('No se encontró el final del mapa de páginas')
-    s=s.replace(end,"};\nconst soloFromCeniciento=page.solo&&new URLSearchParams(location.search).get('origen')==='ceniciento';\n\nfunction emptyState()",1)
+    if "const ANA_PARTS=Object.freeze([" in s:
+        marker="const ANA_PARTS=Object.freeze(["
+        s=s.replace(marker,"const soloFromCeniciento=page.solo&&new URLSearchParams(location.search).get('origen')==='ceniciento';\n\n"+marker,1)
+    else:
+        marker="function emptyState()"
+        if marker not in s:
+            raise RuntimeError('No se encontró el anclaje posterior al mapa de páginas')
+        s=s.replace(marker,"const soloFromCeniciento=page.solo&&new URLSearchParams(location.search).get('origen')==='ceniciento';\n\n"+marker,1)
 
 old_mirror="""function maybeStartMirror(){
   state=readState();ensureChecklist();
@@ -76,7 +79,7 @@ new_setup=r'''function setupSolo(){
     if(armed)return;
     armed=true;
     finishSolo();
-  };
+  }
 
   if(soloFromCeniciento){
     const finalPhrase=document.getElementById('duskFinalPhrase');
@@ -142,7 +145,6 @@ new_setup=r'''function setupSolo(){
       finalPhrase.style.opacity='1';
       finalPhrase.style.visibility='visible';
 
-      /* La frase final es el instante exacto en que SOLO queda completada. */
       save({soloComplete:true});
       state=readState();
       ensureChecklist();
@@ -155,8 +157,6 @@ new_setup=r'''function setupSolo(){
         return;
       }
 
-      /* Solo cuando la frase acaba de completar 3/3 se detiene la pantalla
-         y aparece «Seguir». No se muestra Atrás · Índice · Adelante. */
       locked=true;
       lockY=scrollY;
       document.body.classList.add('ou-solo-final-locked');
