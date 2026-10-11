@@ -38,6 +38,9 @@ jobs:
       - name: Aplicar disposición de controles
         run: python3 patch-mobile-layout.py
 
+      - name: Exigir lectura integral de ANA KLAUDYA
+        run: python3 patch-ana-composite-progress.py
+
       - name: Unificar navegación final de SOLO LA TARJETA
         run: python3 patch-solo-endnav.py
 
@@ -79,7 +82,8 @@ jobs:
 
       - name: Verificar progreso de lectura
         run: |
-          node check-reading-progress.cjs
+          node --check narrative-universe.js
+          node check-ana-composite.cjs
           node ceniciento/check-mirror.cjs
           node check-publication-loading.cjs
 
