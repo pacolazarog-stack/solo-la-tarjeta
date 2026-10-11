@@ -38,8 +38,6 @@ new_setup=r'''function setupSolo(){
   if(state.cardFound)ghost(GHOSTS.before,'before-story',{where:'left',delay:2500,hold:6500});
 
   if(soloFromCeniciento){
-    /* Esta entrada forma parte del encadenado CENICIENTO -> SOLO -> EL ESPEJO.
-       Aunque SOLO constase como leída antes, esta pasada debe completarse de nuevo. */
     if(state.soloComplete){save({soloComplete:false});state=readState();ensureChecklist();}
     document.querySelector('.ou-solo-endnav')?.remove();
     document.body.classList.remove('ou-solo-mirror-ready','ou-solo-mirror-enter','ou-solo-final-locked');
@@ -59,10 +57,7 @@ new_setup=r'''function setupSolo(){
     index.href=rootPath+'elegia-breve/?indice=1&v='+VERSION;index.target='_top';index.textContent='Índice';
     const forward=document.createElement('button');
     forward.type='button';forward.textContent='Adelante';forward.setAttribute('aria-label','Entrar en EL ESPEJO');
-    forward.onclick=()=>{
-      document.body.classList.add('ou-solo-mirror-enter');
-      maybeStartMirror();
-    };
+    forward.onclick=()=>{document.body.classList.add('ou-solo-mirror-enter');maybeStartMirror();};
     nav.append(back,index,forward);
     document.body.appendChild(nav);
     requestAnimationFrame(()=>requestAnimationFrame(()=>nav.classList.add('ou-visible')));
@@ -91,10 +86,13 @@ new_setup=r'''function setupSolo(){
     const style=document.createElement('style');
     style.id='ou-solo-final-pause-style';
     style.textContent=`
-      body.ou-solo-final-locked{overscroll-behavior:none!important}
-      body.ou-solo-final-locked #duskFinalPhrase{opacity:1!important;visibility:visible!important;filter:none!important;transform:none!important}
-      .ou-solo-final-follow{position:fixed;z-index:170;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(8px);min-width:96px;min-height:48px;padding:10px 20px;border:0;border-top:1px solid rgba(255,250,241,.48);border-radius:0;background:rgba(12,12,12,.10);color:#fffaf1;font:14px/1.2 system-ui,sans-serif;text-shadow:0 1px 4px rgba(0,0,0,.9);opacity:0;cursor:pointer;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);transition:opacity .9s ease,transform .9s ease}
+      body.ou-solo-final-locked{overflow:hidden!important;overscroll-behavior:none!important}
+      body.ou-solo-final-locked .dusk-ending,
+      body.ou-solo-final-locked .dusk-final-wrap{position:fixed!important;z-index:168!important;inset:0!important;width:100vw!important;height:100svh!important;margin:0!important;padding:0!important;display:grid!important;place-items:center!important;opacity:1!important;visibility:visible!important;filter:none!important;transform:none!important;pointer-events:none!important;background:transparent!important}
+      body.ou-solo-final-locked #duskFinalPhrase{position:static!important;margin:0!important;padding:0 24px!important;width:auto!important;max-width:min(900px,90vw)!important;opacity:1!important;visibility:visible!important;filter:none!important;transform:none!important;color:#fffaf1!important;text-align:center!important;line-height:1.15!important;pointer-events:none!important}
+      .ou-solo-final-follow{position:fixed;z-index:170;left:50%;top:calc(50% + 110px);transform:translateX(-50%) translateY(8px);min-width:96px;min-height:48px;padding:10px 20px;border:0;border-top:1px solid rgba(255,250,241,.48);border-radius:0;background:rgba(12,12,12,.10);color:#fffaf1;font:14px/1.2 system-ui,sans-serif;text-shadow:0 1px 4px rgba(0,0,0,.9);opacity:0;cursor:pointer;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);transition:opacity .9s ease,transform .9s ease}
       .ou-solo-final-follow.ou-visible{opacity:1;transform:translateX(-50%) translateY(0)}
+      @media(max-width:700px){.ou-solo-final-follow{top:calc(50% + 90px)}}
     `;
     document.head.appendChild(style);
 
@@ -105,9 +103,7 @@ new_setup=r'''function setupSolo(){
     const blockAdvance=event=>{
       if(!locked)return;
       if(event.target===follow||event.target?.closest?.('.ou-solo-final-follow'))return;
-      event.preventDefault();
-      event.stopPropagation();
-      requestAnimationFrame(restoreLock);
+      event.preventDefault();event.stopPropagation();requestAnimationFrame(restoreLock);
     };
     const blockKeys=event=>{
       if(!locked)return;
@@ -126,44 +122,33 @@ new_setup=r'''function setupSolo(){
       if(!locked)return;
       locked=false;
       document.body.classList.remove('ou-solo-final-locked');
-      follow?.remove();
-      follow=null;
-      finish();
+      follow?.remove();follow=null;finish();
     };
 
     const lockFinal=()=>{
       if(locked||armed)return;
-      /* Primero hacemos visible y centramos el verso. El bloqueo se activa
-         después, sobre esa posición exacta, para que nunca quede fuera de pantalla. */
       finalPhrase.classList.add('visible');
       finalPhrase.style.opacity='1';
       finalPhrase.style.visibility='visible';
-      finalPhrase.scrollIntoView({block:'center',inline:'nearest',behavior:'auto'});
-      requestAnimationFrame(()=>requestAnimationFrame(()=>{
-        if(locked||armed)return;
-        locked=true;
-        lockY=scrollY;
-        document.body.classList.add('ou-solo-final-locked');
-        follow=document.createElement('button');
-        follow.type='button';
-        follow.className='ou-solo-final-follow';
-        follow.textContent='Seguir';
-        follow.setAttribute('aria-label','Continuar después de la última frase');
-        follow.addEventListener('click',release,{once:true});
-        document.body.appendChild(follow);
-        requestAnimationFrame(()=>requestAnimationFrame(()=>follow?.classList.add('ou-visible')));
-        requestAnimationFrame(restoreLock);
-      }));
+      locked=true;
+      lockY=scrollY;
+      document.body.classList.add('ou-solo-final-locked');
+      follow=document.createElement('button');
+      follow.type='button';
+      follow.className='ou-solo-final-follow';
+      follow.textContent='Seguir';
+      follow.setAttribute('aria-label','Continuar después de la última frase');
+      follow.addEventListener('click',release,{once:true});
+      document.body.appendChild(follow);
+      requestAnimationFrame(()=>requestAnimationFrame(()=>follow?.classList.add('ou-visible')));
+      requestAnimationFrame(restoreLock);
     };
 
     if('IntersectionObserver' in window){
       const finalObserver=new IntersectionObserver(entries=>{
         const entry=entries.find(e=>e.target===finalPhrase);
         if(!entry||armed||locked)return;
-        if(entry.isIntersecting&&entry.intersectionRatio>=.55){
-          finalObserver.disconnect();
-          lockFinal();
-        }
+        if(entry.isIntersecting&&entry.intersectionRatio>=.55){finalObserver.disconnect();lockFinal();}
       },{threshold:[.55,.82,1]});
       finalObserver.observe(finalPhrase);
     }else{
