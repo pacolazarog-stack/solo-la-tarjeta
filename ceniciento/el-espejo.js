@@ -62,6 +62,7 @@ function resetReadingCycleForInventory(){
     const saved=raw?JSON.parse(raw):{};
     const next=Object.assign({},saved,{
       anaComplete:false,
+      anaParts:{estrella:false,elegia:false,ojos:false,labios:false,cabello:false,piel:false,interludio:false,epilogo:false},
       soloComplete:false,
       cenicientoComplete:false,
       mirrorReadComplete:false,
