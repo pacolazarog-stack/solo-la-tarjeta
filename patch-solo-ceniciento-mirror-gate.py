@@ -90,11 +90,16 @@ new_setup=r'''function setupSolo(){
     style.id='ou-solo-final-pause-style';
     style.textContent=`
       body.ou-solo-final-locked{overflow:hidden!important;overscroll-behavior:none!important}
+      body.ou-solo-final-locked main article p:not(#duskFinalPhrase),
+      body.ou-solo-final-locked main article .story-line:not(#duskFinalPhrase),
+      body.ou-solo-final-locked .dusk-ending p:not(#duskFinalPhrase),
+      body.ou-solo-final-locked .dusk-final-wrap p:not(#duskFinalPhrase){opacity:0!important;visibility:hidden!important}
       body.ou-solo-final-locked .dusk-ending,
       body.ou-solo-final-locked .dusk-final-wrap{position:fixed!important;z-index:168!important;inset:0!important;width:100vw!important;height:100svh!important;margin:0!important;padding:0!important;display:grid!important;place-items:center!important;opacity:1!important;visibility:visible!important;filter:none!important;transform:none!important;pointer-events:none!important;background:transparent!important}
       body.ou-solo-final-locked #duskFinalPhrase{position:static!important;margin:0!important;padding:0 24px!important;width:auto!important;max-width:min(900px,90vw)!important;opacity:1!important;visibility:visible!important;filter:none!important;transform:none!important;color:#fffaf1!important;text-align:center!important;line-height:1.15!important;pointer-events:none!important}
       .ou-solo-final-follow{position:fixed;z-index:170;left:50%;top:calc(50% + 110px);transform:translateX(-50%) translateY(8px);min-width:96px;min-height:48px;padding:10px 20px;border:0;border-top:1px solid rgba(255,250,241,.48);border-radius:0;background:rgba(12,12,12,.10);color:#fffaf1;font:14px/1.2 system-ui,sans-serif;text-shadow:0 1px 4px rgba(0,0,0,.9);opacity:0;cursor:pointer;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);transition:opacity .9s ease,transform .9s ease}
       .ou-solo-final-follow.ou-visible{opacity:1;transform:translateX(-50%) translateY(0)}
+      .ou-solo-endnav button,.ou-solo-endnav a,.journey-nav button,.journey-nav a{color:#fff!important}
       @media(max-width:700px){.ou-solo-final-follow{top:calc(50% + 90px)}}
     `;
     document.head.appendChild(style);
