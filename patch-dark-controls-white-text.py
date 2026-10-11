@@ -1,9 +1,10 @@
 from pathlib import Path
 
 STYLE = '''<style id="oras-dark-controls-white-text">
-/* Todo control textual de fondo oscuro mantiene la rotulación blanca. */
-button:not(.ou-card):not(.mirror-finale-card),
-[role="button"]:not(.ou-card):not(.mirror-finale-card),
+/* Todo control textual de fondo oscuro mantiene la rotulación blanca.
+   El interrogante de ANA KLAUDYA es una excepción narrativa: permanece negro. */
+button:not(.ou-card):not(.mirror-finale-card):not(.portrait-question),
+[role="button"]:not(.ou-card):not(.mirror-finale-card):not(.portrait-question),
 input[type="button"],
 input[type="submit"],
 summary,
@@ -22,6 +23,11 @@ summary,
   color:#fffaf1!important;
   -webkit-text-fill-color:#fffaf1!important;
 }
+.portrait-question,
+.portrait-question .question-beat{
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+}
 </style>'''
 
 for p in Path('.').rglob('*.html'):
@@ -32,4 +38,4 @@ for p in Path('.').rglob('*.html'):
         s=s.replace('</head>',STYLE+'\n</head>',1)
         p.write_text(s,encoding='utf-8')
 
-print('PASS: dark control text forced to white')
+print('PASS: controles oscuros en blanco; interrogante de ANA KLAUDYA en negro')
