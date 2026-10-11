@@ -80,8 +80,13 @@ s=s.replace(old_check,new_check,1)
 
 css_anchor='.ou-reading-checklist li{white-space:nowrap}.ou-reading-checklist li+li{margin-top:5px}'
 css_extra='''.ou-reading-checklist li{white-space:nowrap}.ou-reading-checklist li+li{margin-top:5px}
-  .ou-reading-checklist .ou-ana-parts{display:grid;gap:2px;margin:6px 0 2px 14px;font:10px/1.35 system-ui,sans-serif;letter-spacing:.01em;white-space:normal;max-width:min(340px,72vw)}
-  .ou-reading-checklist .ou-ana-parts span[data-done="true"]{color:#f7f1e8}.ou-reading-checklist .ou-ana-parts span[data-done="false"]{color:#aaa8a3}'''
+  .ou-reading-checklist{color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.9)}
+  .ou-reading-checklist summary{color:#fff!important;background:rgba(10,12,11,.78)!important;border-color:rgba(255,255,255,.28)!important;box-shadow:0 5px 18px rgba(0,0,0,.22)!important}
+  .ou-reading-checklist ul{background:rgba(10,12,11,.90)!important;color:#fff!important;border:1px solid rgba(255,255,255,.22)!important;box-shadow:0 10px 30px rgba(0,0,0,.34)!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .ou-reading-checklist li{color:#fff!important;font-weight:600}
+  .ou-reading-checklist li[data-done="true"]{color:#f5e2a8!important}
+  .ou-reading-checklist .ou-ana-parts{display:grid;gap:3px;margin:7px 0 3px 14px;font:11px/1.4 system-ui,sans-serif;letter-spacing:.01em;white-space:normal;max-width:min(360px,76vw)}
+  .ou-reading-checklist .ou-ana-parts span[data-done="true"]{color:#fff4cf!important;font-weight:600}.ou-reading-checklist .ou-ana-parts span[data-done="false"]{color:#e0e0dc!important;font-weight:500}'''
 if css_anchor not in s: raise RuntimeError('No se encontró CSS del contador')
 s=s.replace(css_anchor,css_extra,1)
 
