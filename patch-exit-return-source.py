@@ -36,12 +36,17 @@ if marker not in s:
     s += addon
 p.write_text(s, encoding='utf-8')
 
-# En la pantalla final de EL ESPEJO, Salir no vuelve a ANA: regresa a la
-# página exacta desde la que comenzó la visita. Primero usa el historial del
-# navegador (para conservar incluso estado/query/scroll cuando sea posible),
-# y sólo después recurre al referrer guardado.
+# La versión actual de EL ESPEJO desemboca en EL INVENTARIO DEL AIRE y ya no
+# contiene la antigua botonera final con «Salir». En ese canon no hay nada que
+# sustituir aquí; conservar sólo la memoria del origen para el resto del viaje.
 p = Path('ceniciento/el-espejo.js')
 s = p.read_text(encoding='utf-8')
+if "INVENTORY_URL=ROOT+'inventario-del-aire/" in s:
+    print('PASS: origen de visita conservado; EL ESPEJO continúa al Inventario sin botón Salir heredado')
+    raise SystemExit(0)
+
+# Canon anterior: en la pantalla final de EL ESPEJO, Salir vuelve a la página
+# exacta desde la que comenzó la visita.
 old = "exit.onclick=()=>go(ROOT+'elegia-breve/');"
 new = rf"""function returnToEntrySource(){{
   clearFinaleTimers();
