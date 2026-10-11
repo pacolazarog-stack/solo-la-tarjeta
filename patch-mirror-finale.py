@@ -12,6 +12,7 @@ new_mark = """  if(number===32){const end=document.createElement('span');end.cla
 });
 
 // PANTALLA FINAL AUTÓNOMA DE EL ESPEJO.
+const ROOT='/solo-la-tarjeta/';
 const finale=document.createElement('section');
 finale.className='mirror-flag-finale';
 finale.hidden=true;
@@ -21,6 +22,26 @@ finale.setAttribute('aria-label','Final de EL ESPEJO');
 const flag=document.createElement('div');
 flag.className='mirror-flag-word';
 flag.textContent='flag';
+
+const go=url=>{
+  clearFinaleTimers();
+  try{window.top.location.href=url;}catch(_){location.href=url;}
+};
+
+const back=document.createElement('button');
+back.type='button';back.className='mirror-finale-back';back.textContent='Atrás';
+back.setAttribute('aria-label','Volver a CENICIENTO');
+back.onclick=()=>go(ROOT+'elegia-breve/#ceniciento');
+
+const index=document.createElement('button');
+index.type='button';index.className='mirror-finale-index';index.textContent='Índice';
+index.setAttribute('aria-label','Abrir el índice de ANA KLAUDYA');
+index.onclick=()=>go(ROOT+'elegia-breve/?indice=1');
+
+const forward=document.createElement('button');
+forward.type='button';forward.className='mirror-finale-forward';forward.textContent='Adelante';
+forward.setAttribute('aria-label','Continuar a ANA KLAUDYA');
+forward.onclick=()=>go(ROOT+'elegia-breve/#interludio');
 
 const restart=document.createElement('button');
 restart.type='button';restart.className='mirror-finale-restart';restart.textContent='Reinicio';
@@ -33,29 +54,26 @@ restart.onclick=()=>{
     Object.assign(st,{journeyStartedAt:Date.now(),soloComplete:false,anaComplete:false,cenicientoComplete:false,mirrorReadComplete:false,returnedFromCeniciento:false});
     localStorage.setItem(key,JSON.stringify(st));
   }catch(_){}
-  try{window.top.location.href='../elegia-breve/';}catch(_){location.href='../elegia-breve/';}
+  go(ROOT+'elegia-breve/');
 };
 
 const exit=document.createElement('button');
 exit.type='button';exit.className='mirror-finale-exit';exit.textContent='Salir';
 exit.setAttribute('aria-label','Salir de EL ESPEJO y volver a ANA KLAUDYA');
-exit.onclick=()=>{
-  clearFinaleTimers();
-  try{window.top.location.href='../elegia-breve/';}catch(_){location.href='../elegia-breve/';}
-};
+exit.onclick=()=>go(ROOT+'elegia-breve/');
 
 const finaleNav=document.createElement('nav');
 finaleNav.className='mirror-finale-nav';
 finaleNav.setAttribute('aria-label','Opciones finales');
-finaleNav.append(restart,exit);
+finaleNav.append(back,index,forward,restart,exit);
 
 const card=document.createElement('button');
 card.type='button';card.className='mirror-finale-card';card.setAttribute('aria-label','Ir a SOLO LA TARJETA');
-card.onclick=()=>{clearFinaleTimers();try{window.top.location.href='../?origen=tarjeta&auto=1';}catch(_){location.href='../?origen=tarjeta&auto=1';}};
+card.onclick=()=>go(ROOT+'?origen=tarjeta&auto=1');
 
 const question=document.createElement('button');
 question.type='button';question.className='mirror-finale-question';question.textContent='?';question.setAttribute('aria-label','Entrar en CENICIENTO');
-question.onclick=()=>{clearFinaleTimers();try{window.top.location.href='../elegia-breve/#ceniciento';}catch(_){location.href='../elegia-breve/#ceniciento';}};
+question.onclick=()=>go(ROOT+'elegia-breve/#ceniciento');
 
 finale.append(flag,finaleNav,card,question);
 document.body.append(finale);
@@ -88,7 +106,7 @@ body .mirror-flag-finale[hidden]{display:none!important}
 body .mirror-flag-finale{position:fixed!important;z-index:2147483000!important;inset:0!important;width:100vw!important;height:100svh!important;overflow:hidden!important;background:#100e0d!important;color:#fffaf1!important;isolation:isolate!important;touch-action:none!important;overscroll-behavior:none!important}
 body .mirror-flag-word{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,250,241,.82);font:italic 400 clamp(1.15rem,2.5vw,1.6rem)/1 Georgia,'Times New Roman',serif;letter-spacing:.24em;opacity:0;transform:scale(.985);transition:opacity 1.8s ease,transform 1.8s ease}
 body .mirror-flag-finale.is-active .mirror-flag-word{opacity:1;transform:scale(1)}
-body .mirror-finale-nav{position:absolute;z-index:5;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));transform:translate(-50%,12px);width:min(330px,calc(100% - 224px));height:48px;display:flex;align-items:stretch;border-top:1px solid rgba(255,250,241,.42);opacity:0;visibility:hidden;pointer-events:none;transition:opacity 1.8s ease,transform 1.8s ease,visibility 0s linear 1.8s}
+body .mirror-finale-nav{position:absolute;z-index:5;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));transform:translate(-50%,12px);width:min(720px,calc(100% - 224px));height:48px;display:flex;align-items:stretch;border-top:1px solid rgba(255,250,241,.42);opacity:0;visibility:hidden;pointer-events:none;transition:opacity 1.8s ease,transform 1.8s ease,visibility 0s linear 1.8s}
 body .mirror-flag-finale.show-options .mirror-finale-nav{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0);transition-delay:0s}
 body .mirror-finale-nav button{flex:1 1 0;display:grid;place-items:center;min-width:0;min-height:48px;padding:7px 4px;border:0;border-radius:0;background:rgba(12,12,12,.06);color:#fffaf1;font:14px/1.2 system-ui,sans-serif;text-shadow:0 1px 4px rgba(0,0,0,.9);cursor:pointer;backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px)}
 body .mirror-finale-nav>*+*{border-left:1px solid rgba(255,250,241,.24)}
@@ -98,7 +116,7 @@ body .mirror-finale-card::after{content:'';position:absolute;left:13px;right:13p
 body .mirror-flag-finale.show-card .mirror-finale-card{opacity:.72;visibility:visible;pointer-events:auto;transform:rotate(4deg) translateY(0);transition-delay:0s}
 body .mirror-finale-question{position:absolute;z-index:6;right:max(26px,6vw);top:max(26px,8vh);width:62px;height:62px;border:1px solid rgba(255,250,241,.38);border-radius:50%;background:rgba(238,241,233,.08);color:#fffaf1;font:400 1.75rem/1 Georgia,serif;display:grid;place-items:center;opacity:0;visibility:hidden;pointer-events:none;transform:scale(.84);transition:opacity 2s ease,transform 2s ease,visibility 0s linear 2s;cursor:pointer;backdrop-filter:blur(1.5px)}
 body .mirror-flag-finale.show-question .mirror-finale-question{opacity:.78;visibility:visible;pointer-events:auto;transform:scale(1);transition-delay:0s}
-@media(max-width:700px){body .mirror-finale-nav{left:112px;right:112px;width:auto;transform:translateY(12px)}body .mirror-flag-finale.show-options .mirror-finale-nav{transform:none}body .mirror-finale-card{right:max(10px,env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}body .mirror-finale-question{right:18px;top:22px;width:54px;height:54px}}
+@media(max-width:700px){body .mirror-finale-nav{left:112px;right:112px;width:auto;transform:translateY(12px)}body .mirror-flag-finale.show-options .mirror-finale-nav{transform:none}body .mirror-finale-nav button{font-size:11px;padding:7px 2px}body .mirror-finale-card{right:max(10px,env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}body .mirror-finale-question{right:18px;top:22px;width:54px;height:54px}}
 `;
 document.head.appendChild(finaleStyle);"""
 if old_mark not in s:
