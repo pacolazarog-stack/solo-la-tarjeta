@@ -7,7 +7,8 @@ const sceneBlock=mirror.slice(mirror.indexOf('const scenes=['),mirror.indexOf(']
 assert.equal((sceneBlock.match(/^`/gm)||[]).length,32,'EL ESPEJO contains exactly 32 narrative scenes');
 assert(mirror.includes('new Set([14,15,17,26,30])'),'Five convergence scenes pause for reader action');
 assert(mirror.includes("next.textContent='seguir'")&&mirror.includes('if(!locked||lockedScene!==scene)return'),'The reader controls each key-scene pause');
-assert(mirror.includes('if(event.deltaY<0){releasePause();return}')&&mirror.includes("['ArrowUp','PageUp','Home'].includes(event.key)"),'Readers can reread by moving back');
+assert(mirror.includes('oras-mirror-explicit-follow-gates')&&mirror.includes('mirror-pause-locked')&&mirror.includes('blockWhilePaused'),'Each pause remains locked until its Seguir button is pressed');
+assert(mirror.includes('body.mirror .ou-ceniciento-endnav')&&mirror.includes('display:none!important'),'The normal button bar stays hidden throughout Mirror reading');
 assert(mirror.includes("flag.textContent='flag'")&&mirror.includes("finale.className='mirror-flag-finale'"),'EL ESPEJO has one autonomous full-screen flag finale');
 assert(mirror.includes("restart.textContent='Reinicio'")&&mirror.includes("exit.textContent='Salir'")&&mirror.includes("question.textContent='?'"),'Final screen exposes Restart, Exit and question choices');
 assert(mirror.includes("finaleTimers.push(setTimeout(()=>finale.classList.add('show-options'),4200))")&&mirror.includes("finaleTimers.push(setTimeout(()=>finale.classList.add('show-card'),5200))")&&mirror.includes("finaleTimers.push(setTimeout(()=>finale.classList.add('show-question'),6200))"),'Final choices appear progressively after flag');
@@ -16,17 +17,18 @@ assert(!mirror.includes("window.dispatchEvent(new CustomEvent('oras:mirror-end')
 assert(page.includes('<main id="mirror" aria-label="EL ESPEJO" hidden></main>'),'The convergence remains hidden until its narrative condition');
 assert(page.includes('data-oras-mirror="true" src="el-espejo.js?v=20261010-29"'),'The mirror script is registered for shared startup');
 assert(shared.includes('state.anaComplete&&state.soloComplete&&state.cenicientoComplete&&state.cenicientoUnlocked&&!state.mirrorReadComplete'),'The convergence waits for all three complete first readings');
-assert(shared.includes("completePiece('anaComplete')")&&shared.includes("completePiece('cenicientoComplete'")&&shared.includes('maybeStartMirror();'),'Every piece completion checks for the convergence, regardless of reading order');
-assert(shared.includes("function resetReadingCycle()")&&shared.includes("anaComplete:false,soloComplete:false,cenicientoComplete:false,mirrorReadComplete:false,returnedFromCeniciento:true"),'The reset function still clears cycle progress when Restart is chosen');
+assert(shared.includes("completeAnaPart('elegia')")&&shared.includes('anaPartsComplete(current.anaParts)')&&shared.includes("completePiece('cenicientoComplete'")&&shared.includes('maybeStartMirror();'),'ANA is composite and every completed work still checks the convergence gate');
+assert(shared.includes("function resetReadingCycle()")&&shared.includes('anaParts:emptyAnaParts()')&&shared.includes('soloComplete:false')&&shared.includes('cenicientoComplete:false'),'The reset function clears the full reading cycle including ANA parts');
 assert(shared.includes("window.addEventListener('oras:mirror-end'")&&shared.includes('EL ESPEJO queda bloqueado en su pantalla final hasta una elección expresa.'),'Shared Mirror end handler no longer navigates automatically');
-assert(shared.includes("box.className='ou-reading-checklist'")&&shared.includes('data-piece="solo"><span>SOLO LA TARJETA</span>')&&shared.includes("row.setAttribute('aria-label'"),'A single compact accessible checklist tracks the three pieces');
+assert(shared.includes("box.className='ou-reading-checklist'")&&shared.includes('ANA KLAUDYA · ${anaDone}/${ANA_PARTS.length}')&&shared.includes('data-piece="solo"><span>SOLO LA TARJETA</span>'),'The compact checklist exposes ANA internal progress and the three works');
+assert(shared.includes('oras-ceniciento-mirror-transition-style')&&shared.includes("follow.textContent='Seguir'")&&shared.includes('readyTimer=setTimeout')&&shared.includes('2200'),'CENICIENTO enters EL ESPEJO through a timed transition and explicit Seguir');
 assert(!page.includes('id="continue"')&&!page.includes('cont.onclick'),'Read and Voice have no second start button');
 assert(page.includes("voice.play().then(loop)"),'Voice playback starts directly from the mode selection');
 assert.equal((shared.match(/Hay historias que empiezan antes\.|El origen suele parecer insignificante\.|Falta una versión de la historia\.|Nadie regresa al mismo lugar\./g)||[]).length,4,'The four ghost phrases remain unchanged');
 const pages=['../index.html','../elegia-breve/index.html','../ojos/index.html','../sonrisa/index.html','../estrella/index.html','../epilogo/index.html','index.html'];
 for(const f of pages){const s=fs.readFileSync(path.join(__dirname,f),'utf8');assert(/narrative-universe\.js\?v=202610(?:10-29|11-(?:30|31|32|33|34|35|36|37|39|40|41|42))/.test(s),`${f} points to an approved shared module version`)}
-console.log('PASS: 32-scene convergence, locked flag finale, completion gate, checklist, and one-tap reading start');
+console.log('PASS: 32-scene convergence, explicit pause gates, timed transition, locked flag finale, completion gate, and checklist');
 
 assert(!/\n\s*main\s*\{/.test(ana),'Ana reading visibility is scoped to #reading, not every main');
 assert(shared.includes('body.mirror #mirror{opacity:1;visibility:visible;width:100%;max-width:none;margin:0;padding:0;'),'Mirror overrides host visibility and dimensions');
-assert(shared.includes('body.mirror{touch-action:pan-y}'),'Locked entry must not block Mirror touch scrolling');
+assert(shared.includes('body.mirror{touch-action:pan-y}'),'Base Mirror touch scrolling remains available between explicit pause gates');
