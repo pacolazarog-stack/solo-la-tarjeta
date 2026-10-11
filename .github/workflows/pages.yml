@@ -140,6 +140,9 @@ jobs:
       - name: Distribuir la memoria de EL ESPEJO en las relecturas
         run: python3 patch-distributed-mirror-memory.py
 
+      - name: Reducir ruido exterior de SOLO en relecturas post-Espejo
+        run: python3 patch-solo-narrative-entropy.py
+
       - name: Aplicar cierre desnudo de EL ESPEJO
         run: python3 patch-mirror-minimal-return.py
 
@@ -161,6 +164,10 @@ jobs:
           ! grep -q "function fadeHtmlAudio" index.html
           grep -q "if(soundtrack.muted||soundtrack.paused)" index.html
           grep -q "await soundtrack.play()" index.html
+          grep -q "oras-solo-narrative-entropy-v1" index.html
+          grep -q "machine:\[0.025,0.020,0.016,0.012\]" index.html
+          grep -q "bus:\[0.015,0.012,0.009,0.006\]" index.html
+          grep -q "window.addEventListener('oras:memory-active'" index.html
           grep -q "window.setTimeout(showAnaMirrorFollow,10000)" narrative-universe.js
           grep -q "follow.textContent='Seguir'" narrative-universe.js
           ! grep -q "setTimeout(enterMirrorAfterFlowers,10000)" narrative-universe.js
