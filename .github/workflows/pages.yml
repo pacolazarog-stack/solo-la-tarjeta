@@ -101,6 +101,9 @@ jobs:
       - name: Enlazar ? con CENICIENTO y tarjeta con SOLO LA TARJETA
         run: python3 patch-mirror-finale-direct-links.py
 
+      - name: Exigir acción explícita para entrar en EL ESPEJO
+        run: python3 patch-mirror-explicit-entry.py
+
       - name: Devolver Salir a la página de origen
         run: python3 patch-exit-return-source.py
 
