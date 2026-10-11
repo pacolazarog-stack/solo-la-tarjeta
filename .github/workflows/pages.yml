@@ -80,9 +80,16 @@ jobs:
       - name: Eliminar salidas heredadas de CENICIENTO
         run: python3 patch-ceniciento-remove-legacy-exits.py
 
+      - name: Añadir transición y bloqueos de lectura de EL ESPEJO
+        run: python3 patch-ceniciento-mirror-reading-gates.py
+
+      - name: Mantener letras blancas en controles oscuros
+        run: python3 patch-dark-controls-white-text.py
+
       - name: Verificar progreso de lectura
         run: |
           node --check narrative-universe.js
+          node --check ceniciento/el-espejo.js
           node check-ana-composite.cjs
           node ceniciento/check-mirror.cjs
           node check-publication-loading.cjs
