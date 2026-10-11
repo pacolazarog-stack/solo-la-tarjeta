@@ -128,6 +128,9 @@ jobs:
       - name: Reducir navegación a Atrás y Adelante
         run: python3 patch-two-button-navigation.py
 
+      - name: Suprimir botonera de CENICIENTO en 3/3 y mostrar solo Seguir
+        run: python3 patch-ceniciento-direct-mirror-gate.py
+
       - name: Mantener Adelante en Flores si quedan lecturas
         run: python3 patch-ana-epilogue-forward.py
 
@@ -164,6 +167,9 @@ jobs:
           grep -q "mirrorReadComplete===true" narrative-universe.js
           grep -q "oras.memory.v1" narrative-universe.js
           grep -q "transition-delay:700ms" narrative-universe.js
+          grep -q "oras-ceniciento-direct-mirror-gate-v1" narrative-universe.js
+          grep -q "ou-ceniciento-direct-mirror" narrative-universe.js
+          grep -q "follow.textContent='Seguir'" narrative-universe.js
 
       - name: Preparar voz de Ceniciento
         run: |
