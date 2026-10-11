@@ -163,10 +163,13 @@ jobs:
           ! grep -q "setTimeout(enterMirrorAfterFlowers,10000)" narrative-universe.js
           grep -q "function anaEpilogueForwardTarget()" elegia-breve/index.html
           grep -q "journeyNext.disabled=i===journeyPieces.length-1&&!epilogueTarget" elegia-breve/index.html
-          grep -q "oras-distributed-mirror-memory-v1" narrative-universe.js
-          grep -q "mirrorReadComplete===true" narrative-universe.js
-          grep -q "oras.memory.v1" narrative-universe.js
+          grep -q "oras-distributed-mirror-memory-v2" narrative-universe.js
+          grep -q "mirrorReadComplete!==true" narrative-universe.js
+          grep -q "oras.memory.v2" narrative-universe.js
           grep -q "transition-delay:700ms" narrative-universe.js
+          grep -q "oras-memory-absence" narrative-universe.js
+          grep -q "eiffel:0,clock:0,photograph:0" narrative-universe.js
+          grep -q "oras:memory-active" narrative-universe.js
           grep -q "oras-ceniciento-direct-mirror-gate-v1" narrative-universe.js
           grep -q "ou-ceniciento-direct-mirror" narrative-universe.js
           grep -q "follow.textContent='Seguir'" narrative-universe.js
