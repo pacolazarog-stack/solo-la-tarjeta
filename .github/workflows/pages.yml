@@ -131,6 +131,9 @@ jobs:
       - name: Mantener Adelante en Flores si quedan lecturas
         run: python3 patch-ana-epilogue-forward.py
 
+      - name: Distribuir la memoria de EL ESPEJO en las relecturas
+        run: python3 patch-distributed-mirror-memory.py
+
       - name: Aplicar cierre desnudo de EL ESPEJO
         run: python3 patch-mirror-minimal-return.py
 
@@ -157,6 +160,10 @@ jobs:
           ! grep -q "setTimeout(enterMirrorAfterFlowers,10000)" narrative-universe.js
           grep -q "function anaEpilogueForwardTarget()" elegia-breve/index.html
           grep -q "journeyNext.disabled=i===journeyPieces.length-1&&!epilogueTarget" elegia-breve/index.html
+          grep -q "oras-distributed-mirror-memory-v1" narrative-universe.js
+          grep -q "mirrorReadComplete===true" narrative-universe.js
+          grep -q "oras.memory.v1" narrative-universe.js
+          grep -q "transition-delay:700ms" narrative-universe.js
 
       - name: Preparar voz de Ceniciento
         run: |
