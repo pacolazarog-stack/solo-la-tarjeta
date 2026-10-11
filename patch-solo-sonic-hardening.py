@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Blindaje de la respiración sonora de SOLO LA TARJETA.
 
-Verifica la firma y los anclajes reales del index canónico y elimina la
-competencia entre el fundido HTML ya existente y el motor Web Audio añadido.
+Unifica el motor nuevo con el fadeSoundTo canónico del index: no crea un segundo
+fundido de <audio>, no añade otra inicialización global y mantiene un único
+disparo narrativo de silencio en #duskPreFinal.
 """
 from pathlib import Path
 import sys
@@ -10,10 +11,7 @@ import sys
 path = Path(sys.argv[1] if len(sys.argv) > 1 else "index.html")
 s = path.read_text(encoding="utf-8")
 
-# Contrato real del index: si cambia, fallar en construcción en vez de publicar
-# un parche basado en una firma supuesta.
 required = {
-    'fadeSoundTo(target,duration=900,done)': "const fadeSoundTo=(target,duration=900,done)=>",
     '#duskPreFinal': 'id="duskPreFinal"',
     '#duskFinalPhrase': 'id="duskFinalPhrase"',
     '#entryGate': 'id="entryGate"',
@@ -27,8 +25,46 @@ if missing:
 if 'oras-sonic-breath-engine' not in s:
     raise SystemExit('El motor de respiración sonora no fue insertado')
 
-# 1) Referencia defensiva al botón de entrada. En el HTML actual es hijo directo
-# de .entry-gate, pero el fallback tolera cambios de marcado futuros.
+# 1) El index fuente real llega aquí con fadeSoundTo(target,duration=900).
+# Lo ampliamos, en el mismo punto de definición, para aceptar callback y para
+# conservar una cadencia fina también en el fundido largo de 5 segundos.
+old_fade = """  const fadeSoundTo=(target,duration=900)=>{
+    clearInterval(soundFade);
+    const start=soundtrack.volume;
+    const steps=30;
+    let n=0;
+    soundFade=setInterval(()=>{
+      n++;
+      const t=n/steps;
+      soundtrack.volume=start+(target-start)*t;
+      if(n>=steps){
+        clearInterval(soundFade);
+        soundtrack.volume=target;
+      }
+    },Math.max(16,duration/steps));
+  };"""
+new_fade = """  const fadeSoundTo=(target,duration=900,done)=>{
+    clearInterval(soundFade);
+    const start=soundtrack.volume;
+    const steps=duration>2500?Math.round(duration/50):30;
+    let n=0;
+    soundFade=setInterval(()=>{
+      n++;
+      const t=n/steps;
+      soundtrack.volume=start+(target-start)*t;
+      if(n>=steps){
+        clearInterval(soundFade);
+        soundtrack.volume=target;
+        if(typeof done==='function')done();
+      }
+    },Math.max(16,duration/steps));
+  };"""
+if old_fade in s:
+    s = s.replace(old_fade, new_fade, 1)
+elif "const fadeSoundTo=(target,duration=900,done)=>" not in s:
+    raise SystemExit('No se encontró la firma real de fadeSoundTo para unificarla')
+
+# 2) Referencia defensiva al botón de entrada dentro del motor añadido.
 s = s.replace(
     "  const enterButton = document.getElementById('enterButton');",
     "  const entryGate = document.getElementById('entryGate') || document.querySelector('.entry-gate');\n"
@@ -36,10 +72,7 @@ s = s.replace(
     1,
 )
 
-# 2) El index canónico YA posee fadeSoundTo() y su observer final. No añadimos un
-# segundo temporizador que compita por soundtrack.volume. El motor añadido solo
-# funde sus capas Web Audio y, al terminar el fundido canónico, fuerza el estado
-# irreversible de silencio como red de seguridad.
+# 3) Eliminar el segundo temporizador que competía por soundtrack.volume.
 start = s.find("  function fadeHtmlAudio(target, duration = 2.5, done){")
 if start >= 0:
     end = s.find("\n  function stopLayer", start)
@@ -55,9 +88,8 @@ old = """    fadeHtmlAudio(0, 5, () => {
       stopLayer(machineLayer);
       stopLayer(busLayer);
     });"""
-new = """    // El <audio> principal se funde mediante fadeSoundTo(0,5000) en el
-    // observer canónico del propio index. Aquí no competimos por volume.
-    window.setTimeout(() => {
+new = """    // Un único fundido del <audio>: reutiliza el fadeSoundTo canónico.
+    fadeSoundTo(0, 5000, () => {
       if(soundtrack){
         soundtrack.volume = 0;
         soundtrack.muted = true;
@@ -65,13 +97,13 @@ new = """    // El <audio> principal se funde mediante fadeSoundTo(0,5000) en el
       }
       stopLayer(machineLayer);
       stopLayer(busLayer);
-    }, 5200);"""
+    });"""
 if old not in s:
     raise SystemExit('No se encontró el bloque de fundido HTML duplicado')
 s = s.replace(old, new, 1)
 
-# 3) Cada marca se consume antes de ejecutar su acción: no existe una segunda
-# oportunidad de disparo aunque la acción produzca cambios de layout.
+# 4) Consumir cada marca antes de ejecutar su acción, para que un cambio de layout
+# provocado por la propia acción no pueda dispararla de nuevo.
 old_order = """        seen.add(entry.target);
         const action = actions.get(entry.target);
         if(action) action();
@@ -84,12 +116,24 @@ if old_order not in s:
     raise SystemExit('No se encontró el orden del observer sonoro')
 s = s.replace(old_order, new_order, 1)
 
-# 4) El motor se inserta al final del body ya construido. No necesita un segundo
-# DOMContentLoaded ni window.load; esta aserción evita introducirlos aquí.
-engine = s[s.find('<script id="oras-sonic-breath-engine">'):]
-engine = engine[:engine.find('</script>')]
+# 5) El motor se inserta sobre DOM ya construido: no debe añadir otro arranque.
+engine_start = s.find('<script id="oras-sonic-breath-engine">')
+engine_end = s.find('</script>', engine_start)
+if engine_start < 0 or engine_end < 0:
+    raise SystemExit('No se pudo aislar el motor sonoro')
+engine = s[engine_start:engine_end]
 if 'DOMContentLoaded' in engine or "addEventListener('load'" in engine or 'addEventListener("load"' in engine:
     raise SystemExit('El motor sonoro no debe crear una segunda inicialización global')
 
+# Contrato final que también exige el workflow.
+for needle in (
+    "const fadeSoundTo=(target,duration=900,done)=>",
+    "fadeSoundTo(0, 5000, () => {",
+):
+    if needle not in s:
+        raise SystemExit('No quedó aplicada la unificación sonora: ' + needle)
+if 'function fadeHtmlAudio' in s:
+    raise SystemExit('Sigue existiendo un segundo fundido HTML')
+
 path.write_text(s, encoding="utf-8")
-print('PASS: firma real verificada; anclajes presentes; sin doble fundido ni doble inicialización')
+print('PASS: fadeSoundTo unificado; anclajes presentes; sin doble fundido ni doble inicialización')
