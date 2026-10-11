@@ -5,6 +5,8 @@ s=p.read_text(encoding='utf-8')
 
 # When ANA KLAUDYA is the reading that completes 3/3, Flores becomes a clean,
 # blocked transition screen. Only an explicit Seguir may launch EL ESPEJO.
+# The epilogue may already be marked complete in a reader's localStorage from
+# a previous deployment, so reaching Flores must recover the pending gate too.
 
 old_state="""  return {journeyStartedAt:0,cardFound:false,soloComplete:false,anaComplete:false,anaParts:emptyAnaParts(),cenicientoComplete:false,cenicientoUnlocked:false,mirrorReadComplete:false,returnedFromCeniciento:false,ghosts:{}};
 """
@@ -38,7 +40,22 @@ old_complete="""function completeAnaPart(key){
 new_complete="""function completeAnaPart(key){
   state=readState();
   if(!state.journeyStartedAt||!ANA_PARTS.some(([part])=>part===key))return false;
-  if(state.anaParts[key]){ensureChecklist();return true;}
+
+  /* A reader can arrive here with epilogo already true because that completion
+     was stored before this gate existed. Reaching the visible Flores screen is
+     still the authoritative boundary: if the three readings are complete and
+     EL ESPEJO has not been completed, recover the explicit Seguir gate. */
+  if(state.anaParts[key]){
+    const recoverThirdGate=key==='epilogo'&&state.anaComplete&&state.soloComplete&&state.cenicientoComplete&&!state.mirrorReadComplete;
+    if(recoverThirdGate&&!state.anaThirdGatePending){save({anaThirdGatePending:true});state=readState();}
+    ensureChecklist();
+    if(recoverThirdGate){
+      if(window.parent===window)showAnaThirdMirrorGate();
+      else window.parent.postMessage({channel:'oras-universe-v2',type:'ana-progress'},location.origin);
+    }
+    return true;
+  }
+
   const wasAnaComplete=state.anaComplete;
   const parts=Object.assign(emptyAnaParts(),state.anaParts,{[key]:true});
   const completesAna=anaPartsComplete(parts);
@@ -157,4 +174,4 @@ if old_reset not in s: raise RuntimeError('No se encontró reset compuesto de AN
 s=s.replace(old_reset,new_reset,1)
 
 p.write_text(s,encoding='utf-8')
-print('PASS: ANA third-reading Flores gate requires explicit Seguir before EL ESPEJO')
+print('PASS: ANA third-reading Flores gate requires explicit Seguir before EL ESPEJO, including pre-existing completion state')
