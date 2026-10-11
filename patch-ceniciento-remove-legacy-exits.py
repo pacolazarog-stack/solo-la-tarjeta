@@ -3,16 +3,24 @@ from pathlib import Path
 p=Path('ceniciento/index.html')
 s=p.read_text(encoding='utf-8')
 
+# El cierre nativo no debe escribir «fin» en pantalla.
+s=s.replace("status.textContent='fin'", "status.textContent=''", 1)
+
 marker='oras-ceniciento-purge-native-exits'
 script=r'''<script id="oras-ceniciento-purge-native-exits">
 (()=>{
   const purge=()=>{
-    const nodes=[...document.querySelectorAll('a,button')];
-    for(const node of nodes){
-      if(node.closest('.ou-ceniciento-endnav')) continue;
+    // CENICIENTO no conserva ninguna botonera final propia: el recorrido general
+    // o EL ESPEJO se encargan de la continuación narrativa.
+    document.querySelectorAll('.ou-ceniciento-endnav').forEach(node=>node.remove());
+
+    for(const node of [...document.querySelectorAll('a,button')]){
       const text=(node.textContent||'').trim().replace(/\s+/g,' ').toUpperCase();
       if(text==='ANA KLAUDYA'||text==='SOLO LA TARJETA') node.remove();
     }
+
+    const status=document.getElementById('status');
+    if(status&&/^fin$/i.test((status.textContent||'').trim())) status.textContent='';
   };
   const start=()=>{
     purge();
