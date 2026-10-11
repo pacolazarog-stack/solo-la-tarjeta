@@ -28,6 +28,14 @@ if old_maybe not in s:
     raise RuntimeError('No se encontró maybeStartMirror para blindar la entrada explícita')
 s=s.replace(old_maybe,new_maybe,1)
 
+# Incluso la señal interna que finalmente abre EL ESPEJO queda autenticada como
+# explícita. Así cualquier emisión residual de oras:mirror-start queda ignorada.
+old_launch="const start=()=>window.dispatchEvent(new CustomEvent('oras:mirror-start'));"
+new_launch="const start=()=>window.dispatchEvent(new CustomEvent('oras:mirror-start',{detail:{explicit:true}}));"
+if old_launch not in s:
+    raise RuntimeError('No se encontró el disparo interno de EL ESPEJO')
+s=s.replace(old_launch,new_launch,1)
+
 old_ana="""    save({anaThirdGatePending:false});state=readState();ensureChecklist();
     maybeStartMirror();
 """
@@ -71,4 +79,33 @@ if old_transition not in s:
 s=s.replace(old_transition,new_transition,1)
 
 p.write_text(s,encoding='utf-8')
-print('PASS: EL ESPEJO solo arranca por acción explícita; releer SOLO o CENICIENTO con 3/3 no lo dispara')
+
+# Segunda barrera dentro del propio lector de EL ESPEJO. El script puede estar
+# cargado en CENICIENTO desde el inicio, pero jamás debe mostrar una escena salvo
+# que reciba la señal autenticada anterior.
+p=Path('ceniciento/el-espejo.js')
+m=p.read_text(encoding='utf-8')
+old_listener="window.addEventListener('oras:mirror-start',start);"
+new_listener="window.addEventListener('oras:mirror-start',event=>{if(event.detail?.explicit===true)start();});"
+if old_listener not in m:
+    raise RuntimeError('No se encontró el listener de inicio de EL ESPEJO')
+m=m.replace(old_listener,new_listener,1)
+
+# Al cargar o volver a CENICIENTO por ?/Lecturas, se garantiza una pantalla limpia
+# aunque el navegador restaure clases del documento desde bfcache.
+reset_guard="""
+;(()=>{
+  const path=location.pathname.replace(/\\/index\\.html$/,'/').replace(/\\/+$/,'');
+  if(!path.endsWith('/ceniciento'))return;
+  const params=new URLSearchParams(location.search);
+  if(!params.has('via')&&!params.has('origen'))return;
+  const mirror=document.getElementById('mirror');
+  if(mirror)mirror.hidden=true;
+  document.body.classList.remove('mirror','mirror-finale-active','mirror-pause-locked','mirror-final-wait-locked');
+})();
+"""
+if 'params.has(\'via\')' not in m:
+    m += reset_guard
+p.write_text(m,encoding='utf-8')
+
+print('PASS: EL ESPEJO solo acepta una señal explícita autenticada y CENICIENTO entra limpio al releer')
