@@ -89,3 +89,9 @@ print('PASS: CENICIENTO 3/3 hides ordinary navigation and exposes only Seguir in
 # se resolverían contra /elegia-breve/ y dejarían VOZ y LEER permanentemente desactivados.
 # Aplicamos el endurecimiento de rutas en el mismo paso ya autoritativo de Pages.
 runpy.run_path('patch-ceniciento-absolute-assets.py',run_name='__main__')
+
+# VOZ y LEER no deben permanecer bloqueados por una espera de metadatos, fotogramas
+# o una petición de texto que no concluya. El texto canónico se embebe como respaldo,
+# VOZ deja de depender de los fotogramas para habilitarse y se fuerza una URL nueva
+# del iframe para evitar reutilizar una portada cacheada anterior.
+runpy.run_path('patch-ceniciento-entry-startup.py',run_name='__main__')
