@@ -41,6 +41,9 @@ jobs:
       - name: Unificar navegación final de SOLO LA TARJETA
         run: python3 patch-solo-endnav.py
 
+      - name: Exigir cierre completo de SOLO antes de EL ESPEJO
+        run: python3 patch-solo-ceniciento-mirror-gate.py
+
       - name: Forzar versión vigente y verificar motivos del índice
         run: python3 patch-index-version-42.py
 
