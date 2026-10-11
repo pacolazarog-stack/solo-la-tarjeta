@@ -46,8 +46,8 @@ requireAll('CENICIENTO / música',cen,[
   'musicStart.onclick=startMusic'
 ]);
 
-// Cierre Flores: no es automático. Tras 10 s aparece Seguir y solo ese control
-// autoriza la entrada explícita en EL ESPEJO.
+// Cierre Flores: tras 10 s aparece Seguir y solo ese control autoriza la entrada
+// explícita en EL ESPEJO.
 requireAll('ANA KLAUDYA / Flores -> EL ESPEJO',universe,[
   'window.setTimeout(showAnaMirrorFollow,10000)',
   "follow.textContent='Seguir'",
@@ -58,10 +58,13 @@ if(universe.includes('setTimeout(enterMirrorAfterFlowers,10000)')){
   throw new Error('ANA KLAUDYA / Flores: EL ESPEJO vuelve a arrancar automáticamente');
 }
 
-// Los Seguir internos de EL ESPEJO deben seguir teniendo una acción asociada.
+// Los Seguir internos de EL ESPEJO usan la variable `next` y texto en minúscula.
+// Se exige que el mismo control tenga clase, rótulo, click y liberación de pausa.
 requireAll('EL ESPEJO / Seguir',mirror,[
-  "button.textContent='Seguir'",
-  "button.addEventListener('click'"
+  "next.className='mirror-continue'",
+  "next.textContent='seguir'",
+  "next.addEventListener('click'",
+  'releasePause();'
 ]);
 
 // Barrido defensivo de controles sonoros publicados: si aparece un control conocido,
