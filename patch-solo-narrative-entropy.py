@@ -9,7 +9,9 @@ if marker in s:
     raise SystemExit(0)
 
 required=[
-    "let htmlAudioFade = 0;",
+    "let machineLayer = null;",
+    "let busLayer = null;",
+    "let paymentPlayed = false;",
     "fadeGain(machineLayer.gain, 0.025, 4);",
     "fadeGain(busLayer.gain, 0.015, 4);",
     "fadeGain(machineLayer.gain, 0, 6);",
@@ -45,7 +47,11 @@ entropy=r'''  // oras-solo-narrative-entropy-v1
   });
 '''
 
-s=s.replace("  let htmlAudioFade = 0;\n", "  let htmlAudioFade = 0;\n\n"+entropy+"\n", 1)
+anchor="  let paymentPlayed = false;\n"
+if anchor not in s:
+    raise RuntimeError('No se encontró punto estable de inserción para entropía narrativa')
+s=s.replace(anchor, anchor+"\n"+entropy+"\n", 1)
+
 s=s.replace("fadeGain(machineLayer.gain, 0.025, 4);", "fadeGain(machineLayer.gain, entropyGain('machine'), entropyFade(4));", 1)
 s=s.replace("fadeGain(busLayer.gain, 0.015, 4);", "fadeGain(busLayer.gain, entropyGain('bus'), entropyFade(4));", 1)
 s=s.replace("fadeGain(machineLayer.gain, 0, 6);", "fadeGain(machineLayer.gain, 0, entropyFade(6));", 1)
