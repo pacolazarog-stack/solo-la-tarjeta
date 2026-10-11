@@ -3,7 +3,8 @@
 
 Unifica el motor nuevo con el fadeSoundTo canónico del index: no crea un segundo
 fundido de <audio>, no añade otra inicialización global y mantiene un único
-disparo narrativo de silencio en #duskPreFinal.
+disparo narrativo de silencio en #duskPreFinal. También garantiza que el botón
+de sonido no solo cambie muted: si el audio está pausado, vuelve a reproducirlo.
 """
 from pathlib import Path
 import sys
@@ -17,6 +18,7 @@ required = {
     '#entryGate': 'id="entryGate"',
     '#enterButton': 'id="enterButton"',
     '#soundtrack': 'id="soundtrack"',
+    '#soundToggle': 'id="soundToggle"',
 }
 missing = [label for label, needle in required.items() if needle not in s]
 if missing:
@@ -64,7 +66,47 @@ if old_fade in s:
 elif "const fadeSoundTo=(target,duration=900,done)=>" not in s:
     raise SystemExit('No se encontró la firma real de fadeSoundTo para unificarla')
 
-# 2) Referencia defensiva al botón de entrada dentro del motor añadido.
+# 2) El control de sonido debe reflejar el estado REAL. Muted por sí solo no basta:
+# si el navegador dejó el audio pausado, Activar sonido debe ejecutar play().
+old_toggle = """  soundToggle?.addEventListener('click',()=>{
+    const willMute=!soundtrack.muted;
+    soundtrack.muted=willMute;
+    soundToggle.setAttribute('aria-pressed',String(willMute));
+    soundToggle.setAttribute('aria-label',willMute?'Activar sonido':'Silenciar sonido');
+    soundToggle.setAttribute('title',willMute?'Activar sonido':'Silenciar sonido');
+  });"""
+new_toggle = """  const syncSoundToggle=()=>{
+    const active=!soundtrack.paused&&!soundtrack.muted;
+    soundToggle?.classList.toggle('is-muted',!active);
+    soundToggle?.setAttribute('aria-pressed',String(!active));
+    soundToggle?.setAttribute('aria-label',active?'Silenciar sonido':'Activar sonido');
+    soundToggle?.setAttribute('title',active?'Silenciar sonido':'Activar sonido');
+  };
+
+  soundToggle?.addEventListener('click',async()=>{
+    if(soundtrack.muted||soundtrack.paused){
+      soundtrack.muted=false;
+      if(soundtrack.paused){
+        try{
+          await soundtrack.play();
+          if(soundtrack.volume<=.001)fadeSoundTo(SOUND_LEVEL,700);
+        }catch(_){
+          soundtrack.muted=true;
+        }
+      }
+    }else{
+      soundtrack.muted=true;
+    }
+    syncSoundToggle();
+  });
+  for(const eventName of ['play','pause','volumechange'])soundtrack.addEventListener(eventName,syncSoundToggle);
+  syncSoundToggle();"""
+if old_toggle in s:
+    s = s.replace(old_toggle, new_toggle, 1)
+elif "if(soundtrack.muted||soundtrack.paused)" not in s or "syncSoundToggle" not in s:
+    raise SystemExit('No se encontró el control canónico de sonido para reforzarlo')
+
+# 3) Referencia defensiva al botón de entrada dentro del motor añadido.
 s = s.replace(
     "  const enterButton = document.getElementById('enterButton');",
     "  const entryGate = document.getElementById('entryGate') || document.querySelector('.entry-gate');\n"
@@ -72,7 +114,7 @@ s = s.replace(
     1,
 )
 
-# 3) Eliminar el segundo temporizador que competía por soundtrack.volume.
+# 4) Eliminar el segundo temporizador que competía por soundtrack.volume.
 start = s.find("  function fadeHtmlAudio(target, duration = 2.5, done){")
 if start >= 0:
     end = s.find("\n  function stopLayer", start)
@@ -102,7 +144,7 @@ if old not in s:
     raise SystemExit('No se encontró el bloque de fundido HTML duplicado')
 s = s.replace(old, new, 1)
 
-# 4) Consumir cada marca antes de ejecutar su acción, para que un cambio de layout
+# 5) Consumir cada marca antes de ejecutar su acción, para que un cambio de layout
 # provocado por la propia acción no pueda dispararla de nuevo.
 old_order = """        seen.add(entry.target);
         const action = actions.get(entry.target);
@@ -116,7 +158,7 @@ if old_order not in s:
     raise SystemExit('No se encontró el orden del observer sonoro')
 s = s.replace(old_order, new_order, 1)
 
-# 5) El motor se inserta sobre DOM ya construido: no debe añadir otro arranque.
+# 6) El motor se inserta sobre DOM ya construido: no debe añadir otro arranque.
 engine_start = s.find('<script id="oras-sonic-breath-engine">')
 engine_end = s.find('</script>', engine_start)
 if engine_start < 0 or engine_end < 0:
@@ -129,6 +171,9 @@ if 'DOMContentLoaded' in engine or "addEventListener('load'" in engine or 'addEv
 for needle in (
     "const fadeSoundTo=(target,duration=900,done)=>",
     "fadeSoundTo(0, 5000, () => {",
+    "if(soundtrack.muted||soundtrack.paused)",
+    "await soundtrack.play()",
+    "syncSoundToggle",
 ):
     if needle not in s:
         raise SystemExit('No quedó aplicada la unificación sonora: ' + needle)
@@ -136,4 +181,4 @@ if 'function fadeHtmlAudio' in s:
     raise SystemExit('Sigue existiendo un segundo fundido HTML')
 
 path.write_text(s, encoding="utf-8")
-print('PASS: fadeSoundTo unificado; anclajes presentes; sin doble fundido ni doble inicialización')
+print('PASS: sonido SOLO reactivable; fadeSoundTo unificado; sin doble fundido ni doble inicialización')
