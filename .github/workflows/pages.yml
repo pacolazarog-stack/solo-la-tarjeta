@@ -92,6 +92,9 @@ jobs:
       - name: Mantener letras blancas en controles oscuros
         run: python3 patch-dark-controls-white-text.py
 
+      - name: Mantener siempre visible el contador de lecturas
+        run: python3 patch-reading-counter-always-visible.py
+
       - name: Verificar progreso de lectura
         run: |
           node --check narrative-universe.js
