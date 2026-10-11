@@ -27,8 +27,35 @@ assert(!page.includes('id="continue"')&&!page.includes('cont.onclick'),'Read and
 assert(page.includes("voice.play().then(loop)"),'Voice playback starts directly from the mode selection');
 assert.equal((shared.match(/Hay historias que empiezan antes\.|El origen suele parecer insignificante\.|Falta una versión de la historia\.|Nadie regresa al mismo lugar\./g)||[]).length,4,'The four ghost phrases remain unchanged');
 const pages=['../index.html','../elegia-breve/index.html','../ojos/index.html','../sonrisa/index.html','../estrella/index.html','../epilogo/index.html','index.html'];
-for(const f of pages){const s=fs.readFileSync(path.join(__dirname,f),'utf8');assert(/narrative-universe\.js\?v=202610(?:10-29|11-(?:30|31|32|33|34|35|36|37|39|40|41|42))/.test(s),`${f} points to an approved shared module version`)}
+for(const f of pages){const s=fs.readFileSync(path.join(__dirname,f),'utf8');assert(/narrative-universe\.js\?v=202610(?:10-29|11-(?:30|31|32|33|34|35|36|37|39|40|41|42)|12-ceniciento-observer-v2)/.test(s),`${f} points to an approved shared module version`)}
 assert(!/\n\s*main\s*\{/.test(ana),'Ana reading visibility is scoped to #reading, not every main');
 assert(shared.includes('body.mirror #mirror{opacity:1;visibility:visible;width:100%;max-width:none;margin:0;padding:0;'),'Mirror overrides host visibility and dimensions');
 assert(shared.includes('body.mirror{touch-action:pan-y}'),'Base Mirror touch scrolling remains available between explicit pause gates');
 console.log('PASS: 32-scene convergence, one-shot explicit pause gates, silent flag finale, automatic return, completion gate, and checklist');
+
+// Exercise the emitted gate with DOMTokenList mutation semantics: even removing
+// an absent class queues a class mutation. The callback must reach idle.
+const gateStart=shared.lastIndexOf(';(()=>{',shared.indexOf('// oras-ceniciento-direct-mirror-gate-v1'));
+const gateEnd=shared.indexOf('})();',gateStart)+5;
+assert(gateStart>=0&&gateEnd>gateStart,'Published CENICIENTO gate exists');
+const gate=shared.slice(gateStart,gateEnd);
+for(const [label,complete,initial] of [['2/3',false,false],['reset',false,true],['3/3 finale',true,false]]){
+  let callback,queued=0,deliveries=0;
+  const frames=[],timers=[],classes=new Set(initial?['ou-ceniciento-direct-mirror']:[]);
+  if(complete)classes.add('ou-ceniciento-finale-ready');
+  const classList={contains:x=>classes.has(x),add(...xs){xs.forEach(x=>classes.add(x));if(callback)queued++},remove(...xs){xs.forEach(x=>classes.delete(x));if(callback)queued++}};
+  const dummy={classList:{add(){},remove(){}},setAttribute(){},focus(){},querySelector(){return this}};
+  const state={anaComplete:true,soloComplete:true,cenicientoComplete:complete,cenicientoUnlocked:complete};
+  require('node:vm').runInNewContext(gate,{
+    location:{pathname:'/solo-la-tarjeta/ceniciento/'},localStorage:{getItem:()=>JSON.stringify(state)},
+    document:{body:{classList},head:{appendChild(){}},createElement:()=>({...dummy}),querySelector:()=>dummy},
+    MutationObserver:class{constructor(cb){callback=cb}observe(){}},addEventListener(){},
+    requestAnimationFrame:f=>frames.push(f),setTimeout:f=>timers.push(f),clearTimeout(){}
+  });
+  while(frames.length)frames.shift()();
+  while(queued&&deliveries<100){queued=0;deliveries++;callback()}
+  assert.equal(queued,0,label+': class observer settles without starving input');
+  assert.equal(classes.has('ou-ceniciento-direct-mirror'),complete,label+': convergence gate remains correct');
+  assert.equal(timers.length,complete?1:0,label+': only the completed finale schedules Seguir');
+}
+console.log('PASS: CENICIENTO observer settles at 2/3, after reset and at the 3/3 finale');
