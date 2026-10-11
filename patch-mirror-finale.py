@@ -3,34 +3,147 @@ from pathlib import Path
 p = Path('ceniciento/el-espejo.js')
 s = p.read_text(encoding='utf-8')
 
-# El flag deja de estar incrustado en la coda 32: tendrá su propia pantalla completa.
-old_mark = """  if(number===32){const mark=document.createElement('p');mark.className='mirror-end-mark';mark.textContent='flag';copy.append(mark);const end=document.createElement('span');end.className='mirror-end-sentinel';end.setAttribute('aria-hidden','true');scene.append(end)}\n  mirror.append(scene);sceneNodes.push(scene);\n});"""
-new_mark = """  mirror.append(scene);sceneNodes.push(scene);\n});\n\n// Pantalla final autónoma de EL ESPEJO.\nconst finale=document.createElement('section');\nfinale.className='mirror-scene mirror-flag-finale';\nfinale.tabIndex=-1;\nfinale.setAttribute('role','group');\nfinale.setAttribute('aria-label','Final de EL ESPEJO');\nconst flag=document.createElement('div');flag.className='mirror-flag-word';flag.textContent='flag';\nconst finaleNav=document.createElement('nav');finaleNav.className='mirror-finale-nav';finaleNav.setAttribute('aria-label','Navegación final');\nconst back=document.createElement('button');back.type='button';back.textContent='Atrás';back.onclick=()=>{const prev=sceneNodes[sceneNodes.length-1];prev?.scrollIntoView({behavior:'smooth',block:'start'});};\nconst index=document.createElement('a');index.textContent='Índice';index.href='../elegia-breve/?indice=1';index.target='_top';\nconst forward=document.createElement('a');forward.textContent='Adelante';forward.href='../elegia-breve/#interludio';forward.target='_top';\nconst restart=document.createElement('button');restart.type='button';restart.textContent='Reinicio';restart.setAttribute('aria-label','Reiniciar ANA KLAUDYA');\nrestart.onclick=()=>{\n  try{\n    const key='oras.universe.v2';\n    const st=JSON.parse(localStorage.getItem(key)||'{}');\n    Object.assign(st,{journeyStartedAt:Date.now(),soloComplete:false,anaComplete:false,cenicientoComplete:false,mirrorReadComplete:false,returnedFromCeniciento:false});\n    localStorage.setItem(key,JSON.stringify(st));\n  }catch(_){}\n  try{window.top.location.href='../elegia-breve/';}catch(_){location.href='../elegia-breve/';}\n};\nfinaleNav.append(back,index,forward,restart);\nconst card=document.createElement('button');card.type='button';card.className='mirror-finale-card';card.setAttribute('aria-label','Ir a SOLO LA TARJETA');card.onclick=()=>{try{window.top.location.href='../?origen=tarjeta&auto=1';}catch(_){location.href='../?origen=tarjeta&auto=1';}};\nconst question=document.createElement('button');question.type='button';question.className='mirror-finale-question';question.textContent='?';question.setAttribute('aria-label','Entrar en CENICIENTO');question.onclick=()=>{try{window.top.location.href='../elegia-breve/#ceniciento';}catch(_){location.href='../elegia-breve/#ceniciento';}};\nconst end=document.createElement('span');end.className='mirror-end-sentinel';end.setAttribute('aria-hidden','true');\nfinale.append(flag,finaleNav,card,question,end);\nmirror.append(finale);sceneNodes.push(finale);\n\nconst finaleStyle=document.createElement('style');\nfinaleStyle.id='mirror-fullscreen-flag-finale';\nfinaleStyle.textContent=`\nbody.mirror .mirror-flag-finale{position:relative;min-height:100svh!important;padding:0!important;background:#100e0d!important;overflow:hidden;isolation:isolate}\nbody.mirror .mirror-flag-word{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,250,241,.72);font:italic 400 clamp(1.05rem,2.4vw,1.45rem)/1 Georgia,serif;letter-spacing:.24em;opacity:0;transform:scale(.985);transition:opacity 1.8s ease,transform 1.8s ease}\nbody.mirror .mirror-flag-finale.is-active .mirror-flag-word{opacity:1;transform:scale(1)}\nbody.mirror .mirror-finale-nav{position:absolute;z-index:5;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));transform:translate(-50%,10px);width:min(620px,calc(100% - 224px));height:48px;display:flex;align-items:stretch;border-top:1px solid rgba(255,250,241,.42);opacity:0;visibility:hidden;transition:opacity 1.8s ease,transform 1.8s ease,visibility 0s linear 1.8s}\nbody.mirror .mirror-flag-finale.show-nav .mirror-finale-nav{opacity:1;visibility:visible;transform:translate(-50%,0);transition-delay:0s}\nbody.mirror .mirror-finale-nav a,body.mirror .mirror-finale-nav button{flex:1 1 0;display:grid;place-items:center;min-width:0;min-height:48px;padding:7px 4px;border:0;border-radius:0;background:rgba(12,12,12,.07);color:#fffaf1;text-decoration:none;font:14px/1.2 system-ui,sans-serif;text-shadow:0 1px 4px rgba(0,0,0,.9);cursor:pointer;backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px)}\nbody.mirror .mirror-finale-nav>*+*{border-left:1px solid rgba(255,250,241,.24)}\nbody.mirror .mirror-finale-card{position:absolute;z-index:5;right:max(16px,env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom,0px) + 12px);width:94px;height:58px;border:1px solid rgba(255,255,255,.23);border-radius:8px;background:linear-gradient(145deg,rgba(62,68,77,.18),rgba(20,24,30,.11));box-shadow:0 9px 26px rgba(0,0,0,.16),inset 0 0 0 1px rgba(255,255,255,.07);opacity:0;visibility:hidden;transform:rotate(4deg) translateY(10px);transition:opacity 1.9s ease,transform 1.9s ease,visibility 0s linear 1.9s;cursor:pointer;backdrop-filter:blur(1px)}\nbody.mirror .mirror-finale-card::before{content:'';position:absolute;left:13px;top:12px;width:23px;height:17px;border-radius:3px;background:linear-gradient(135deg,rgba(185,139,46,.7),rgba(241,217,139,.72) 48%,rgba(158,114,32,.65))}\nbody.mirror .mirror-finale-card::after{content:'';position:absolute;left:13px;right:13px;bottom:11px;height:2px;background:rgba(246,244,238,.65);box-shadow:0 -8px 0 rgba(246,244,238,.24),0 -16px 0 rgba(246,244,238,.10)}\nbody.mirror .mirror-flag-finale.show-card .mirror-finale-card{opacity:.72;visibility:visible;transform:rotate(4deg) translateY(0);transition-delay:0s}\nbody.mirror .mirror-finale-question{position:absolute;z-index:6;right:max(26px,6vw);top:max(26px,8vh);width:62px;height:62px;border:1px solid rgba(255,250,241,.38);border-radius:50%;background:rgba(238,241,233,.08);color:#fffaf1;font:400 1.75rem/1 Georgia,serif;display:grid;place-items:center;opacity:0;visibility:hidden;transform:scale(.84);transition:opacity 2s ease,transform 2s ease,visibility 0s linear 2s;cursor:pointer;backdrop-filter:blur(1.5px)}\nbody.mirror .mirror-flag-finale.show-question .mirror-finale-question{opacity:.78;visibility:visible;transform:scale(1);transition-delay:0s}\n@media(max-width:700px){body.mirror .mirror-finale-nav{left:112px;right:112px;width:auto;transform:translateY(10px)}body.mirror .mirror-flag-finale.show-nav .mirror-finale-nav{transform:none}body.mirror .mirror-finale-card{right:max(10px,env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}body.mirror .mirror-finale-question{right:18px;top:22px;width:54px;height:54px}}\n`;\ndocument.head.appendChild(finaleStyle);"""
+# Quitar el antiguo flag incrustado en la coda. La coda conserva solo su texto.
+old_mark = """  if(number===32){const mark=document.createElement('p');mark.className='mirror-end-mark';mark.textContent='flag';copy.append(mark);const end=document.createElement('span');end.className='mirror-end-sentinel';end.setAttribute('aria-hidden','true');scene.append(end)}
+  mirror.append(scene);sceneNodes.push(scene);
+});"""
+new_mark = """  if(number===32){const end=document.createElement('span');end.className='mirror-end-sentinel';end.setAttribute('aria-hidden','true');scene.append(end)}
+  mirror.append(scene);sceneNodes.push(scene);
+});
+
+// FINAL AUTÓNOMO DE EL ESPEJO: capa fija que sustituye por completo al flujo anterior.
+const finale=document.createElement('section');
+finale.className='mirror-flag-finale';
+finale.hidden=true;
+finale.setAttribute('role','region');
+finale.setAttribute('aria-label','Final de EL ESPEJO');
+
+const flag=document.createElement('div');
+flag.className='mirror-flag-word';
+flag.textContent='flag';
+
+const finaleNav=document.createElement('nav');
+finaleNav.className='mirror-finale-nav';
+finaleNav.setAttribute('aria-label','Opciones finales');
+
+const back=document.createElement('button');
+back.type='button';back.textContent='Atrás';
+back.setAttribute('aria-label','Volver al último fragmento de EL ESPEJO');
+back.onclick=()=>leaveFinale(()=>{
+  mirror.hidden=false;
+  document.body.classList.add('mirror');
+  const prev=sceneNodes[sceneNodes.length-1];
+  mirror.scrollTop=prev.offsetTop;
+  prev.focus({preventScroll:true});
+});
+
+const index=document.createElement('a');
+index.textContent='Índice';index.href='../elegia-breve/?indice=1';index.target='_top';
+
+const forward=document.createElement('a');
+forward.textContent='Adelante';forward.href='../elegia-breve/#interludio';forward.target='_top';
+
+const restart=document.createElement('button');
+restart.type='button';restart.textContent='Reinicio';restart.setAttribute('aria-label','Reiniciar ANA KLAUDYA');
+restart.onclick=()=>{
+  try{
+    const key='oras.universe.v2';
+    const st=JSON.parse(localStorage.getItem(key)||'{}');
+    Object.assign(st,{journeyStartedAt:Date.now(),soloComplete:false,anaComplete:false,cenicientoComplete:false,mirrorReadComplete:false,returnedFromCeniciento:false});
+    localStorage.setItem(key,JSON.stringify(st));
+  }catch(_){}
+  try{window.top.location.href='../elegia-breve/';}catch(_){location.href='../elegia-breve/';}
+};
+finaleNav.append(back,index,forward,restart);
+
+const card=document.createElement('button');
+card.type='button';card.className='mirror-finale-card';card.setAttribute('aria-label','Ir a SOLO LA TARJETA');
+card.onclick=()=>{try{window.top.location.href='../?origen=tarjeta&auto=1';}catch(_){location.href='../?origen=tarjeta&auto=1';}};
+
+const question=document.createElement('button');
+question.type='button';question.className='mirror-finale-question';question.textContent='?';question.setAttribute('aria-label','Entrar en CENICIENTO');
+question.onclick=()=>{try{window.top.location.href='../elegia-breve/#ceniciento';}catch(_){location.href='../elegia-breve/#ceniciento';}};
+
+finale.append(flag,finaleNav,card,question);
+document.body.append(finale);
+
+let finaleTimers=[];
+function clearFinaleTimers(){finaleTimers.forEach(clearTimeout);finaleTimers=[]}
+function leaveFinale(next){
+  clearFinaleTimers();
+  document.body.classList.remove('mirror-finale-active');
+  finale.classList.remove('is-active','show-nav','show-card','show-question');
+  finale.hidden=true;
+  if(typeof next==='function')next();
+}
+function enterFinale(){
+  if(finale.classList.contains('is-active'))return;
+  clearFinaleTimers();
+  // Ocultar por completo EL ESPEJO: flag queda realmente solo en pantalla.
+  mirror.hidden=true;
+  document.body.classList.remove('mirror');
+  document.body.classList.add('mirror-finale-active');
+  finale.hidden=false;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>finale.classList.add('is-active')));
+  // flag permanece absolutamente solo durante varios segundos.
+  finaleTimers.push(setTimeout(()=>finale.classList.add('show-nav'),4200));
+  finaleTimers.push(setTimeout(()=>finale.classList.add('show-card'),5200));
+  finaleTimers.push(setTimeout(()=>finale.classList.add('show-question'),6200));
+}
+
+const finaleStyle=document.createElement('style');
+finaleStyle.id='mirror-fullscreen-flag-finale';
+finaleStyle.textContent=`
+html:has(body.mirror-finale-active),body.mirror-finale-active{overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important;background:#100e0d!important}
+body.mirror-finale-active>:not(.mirror-flag-finale):not(script):not(style){visibility:hidden!important;pointer-events:none!important}
+body .mirror-flag-finale[hidden]{display:none!important}
+body .mirror-flag-finale{position:fixed!important;z-index:2147483000!important;inset:0!important;width:100vw!important;height:100svh!important;overflow:hidden!important;background:#100e0d!important;color:#fffaf1!important;isolation:isolate!important;touch-action:none!important;overscroll-behavior:none!important}
+body .mirror-flag-word{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,250,241,.76);font:italic 400 clamp(1.08rem,2.4vw,1.5rem)/1 Georgia,'Times New Roman',serif;letter-spacing:.24em;opacity:0;transform:scale(.985);transition:opacity 1.8s ease,transform 1.8s ease}
+body .mirror-flag-finale.is-active .mirror-flag-word{opacity:1;transform:scale(1)}
+body .mirror-finale-nav{position:absolute;z-index:5;left:50%;bottom:calc(12px + env(safe-area-inset-bottom,0px));transform:translate(-50%,12px);width:min(620px,calc(100% - 224px));height:48px;display:flex;align-items:stretch;border-top:1px solid rgba(255,250,241,.42);opacity:0;visibility:hidden;pointer-events:none;transition:opacity 1.8s ease,transform 1.8s ease,visibility 0s linear 1.8s}
+body .mirror-flag-finale.show-nav .mirror-finale-nav{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0);transition-delay:0s}
+body .mirror-finale-nav a,body .mirror-finale-nav button{flex:1 1 0;display:grid;place-items:center;min-width:0;min-height:48px;padding:7px 4px;border:0;border-radius:0;background:rgba(12,12,12,.06);color:#fffaf1;text-decoration:none;font:14px/1.2 system-ui,sans-serif;text-shadow:0 1px 4px rgba(0,0,0,.9);cursor:pointer;backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px)}
+body .mirror-finale-nav>*+*{border-left:1px solid rgba(255,250,241,.24)}
+body .mirror-finale-card{position:absolute;z-index:5;right:max(16px,env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom,0px) + 12px);width:94px;height:58px;border:1px solid rgba(255,255,255,.23);border-radius:8px;background:linear-gradient(145deg,rgba(62,68,77,.18),rgba(20,24,30,.11));box-shadow:0 9px 26px rgba(0,0,0,.16),inset 0 0 0 1px rgba(255,255,255,.07);opacity:0;visibility:hidden;pointer-events:none;transform:rotate(4deg) translateY(10px);transition:opacity 1.9s ease,transform 1.9s ease,visibility 0s linear 1.9s;cursor:pointer;backdrop-filter:blur(1px)}
+body .mirror-finale-card::before{content:'';position:absolute;left:13px;top:12px;width:23px;height:17px;border-radius:3px;background:linear-gradient(135deg,rgba(185,139,46,.70),rgba(241,217,139,.72) 48%,rgba(158,114,32,.65))}
+body .mirror-finale-card::after{content:'';position:absolute;left:13px;right:13px;bottom:11px;height:2px;background:rgba(246,244,238,.65);box-shadow:0 -8px 0 rgba(246,244,238,.24),0 -16px 0 rgba(246,244,238,.10)}
+body .mirror-flag-finale.show-card .mirror-finale-card{opacity:.72;visibility:visible;pointer-events:auto;transform:rotate(4deg) translateY(0);transition-delay:0s}
+body .mirror-finale-question{position:absolute;z-index:6;right:max(26px,6vw);top:max(26px,8vh);width:62px;height:62px;border:1px solid rgba(255,250,241,.38);border-radius:50%;background:rgba(238,241,233,.08);color:#fffaf1;font:400 1.75rem/1 Georgia,serif;display:grid;place-items:center;opacity:0;visibility:hidden;pointer-events:none;transform:scale(.84);transition:opacity 2s ease,transform 2s ease,visibility 0s linear 2s;cursor:pointer;backdrop-filter:blur(1.5px)}
+body .mirror-flag-finale.show-question .mirror-finale-question{opacity:.78;visibility:visible;pointer-events:auto;transform:scale(1);transition-delay:0s}
+@media(max-width:700px){body .mirror-finale-nav{left:112px;right:112px;width:auto;transform:translateY(12px)}body .mirror-flag-finale.show-nav .mirror-finale-nav{transform:none}body .mirror-finale-card{right:max(10px,env(safe-area-inset-right));bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}body .mirror-finale-question{right:18px;top:22px;width:54px;height:54px}}
+`;
+document.head.appendChild(finaleStyle);"""
 if old_mark not in s:
-    raise RuntimeError('No se encontró el cierre original de la escena 32 de EL ESPEJO')
+    raise RuntimeError('No se encontró el cierre canónico de la escena 32 de EL ESPEJO')
 s = s.replace(old_mark, new_mark, 1)
 
-# El observador final ya no abandona automáticamente EL ESPEJO: revela progresivamente la interfaz.
+# Alcanzar el final ya no emite un evento de salida: entra en una pantalla bloqueada.
 old_observer = """new IntersectionObserver(entries=>{\n  if(finished||!started||!entries.some(entry=>entry.isIntersecting))return;\n  finished=true;window.dispatchEvent(new CustomEvent('oras:mirror-end'));\n},{root:mirror,threshold:.5}).observe(endSentinel);"""
-new_observer = """new IntersectionObserver(entries=>{\n  if(finished||!started||!entries.some(entry=>entry.isIntersecting))return;\n  finished=true;\n  finale.classList.add('is-active');\n  // Primero queda solo 'flag'. Después aparecen, despacio y por capas, los controles.\n  setTimeout(()=>finale.classList.add('show-nav'),2600);\n  setTimeout(()=>finale.classList.add('show-card'),3400);\n  setTimeout(()=>finale.classList.add('show-question'),4200);\n},{root:mirror,threshold:.52}).observe(endSentinel);"""
+new_observer = """new IntersectionObserver(entries=>{\n  if(finished||!started||!entries.some(entry=>entry.isIntersecting))return;\n  finished=true;\n  enterFinale();\n},{root:mirror,threshold:.5}).observe(endSentinel);"""
 if old_observer not in s:
-    raise RuntimeError('No se encontró el observador final base de EL ESPEJO')
+    raise RuntimeError('No se encontró el observador final canónico de EL ESPEJO')
 s = s.replace(old_observer, new_observer, 1)
 
-# Reset visual si se reinicia EL ESPEJO internamente.
+# Bloquear cualquier navegación por gesto/tecla mientras la pantalla flag esté activa.
+anchor = """mirror.addEventListener('keydown',event=>{\n  if(!locked)return;\n  if(['ArrowUp','PageUp','Home'].includes(event.key)){releasePause();return}\n  if(['ArrowDown','PageDown',' ','End'].includes(event.key)){event.preventDefault();event.stopPropagation()}\n});"""
+extra = anchor + """\nfunction blockFinaleInput(event){\n  if(!document.body.classList.contains('mirror-finale-active'))return;\n  event.preventDefault();event.stopPropagation();\n}\nwindow.addEventListener('wheel',blockFinaleInput,{passive:false,capture:true});\nwindow.addEventListener('touchmove',blockFinaleInput,{passive:false,capture:true});\nwindow.addEventListener('keydown',event=>{\n  if(!document.body.classList.contains('mirror-finale-active'))return;\n  if(['Tab'].includes(event.key))return;\n  event.preventDefault();event.stopPropagation();\n},{capture:true});"""
+if anchor not in s:
+    raise RuntimeError('No se encontró el bloque de teclado de EL ESPEJO')
+s = s.replace(anchor, extra, 1)
+
 old_reset = """window.addEventListener('oras:mirror-reset',()=>{started=false;finished=false;locked=false;lockedScene=null;mirror.hidden=true;document.body.classList.remove('mirror')});"""
-new_reset = """window.addEventListener('oras:mirror-reset',()=>{started=false;finished=false;locked=false;lockedScene=null;finale.classList.remove('is-active','show-nav','show-card','show-question');mirror.hidden=true;document.body.classList.remove('mirror')});"""
+new_reset = """window.addEventListener('oras:mirror-reset',()=>{started=false;finished=false;locked=false;lockedScene=null;clearFinaleTimers();finale.classList.remove('is-active','show-nav','show-card','show-question');finale.hidden=true;document.body.classList.remove('mirror','mirror-finale-active');mirror.hidden=true});"""
 if old_reset in s:
     s = s.replace(old_reset, new_reset, 1)
 
 p.write_text(s, encoding='utf-8')
 
-# Se neutraliza el retorno automático antiguo del universo: el final queda bajo control de la pantalla flag.
+# El universo no debe abandonar EL ESPEJO automáticamente: toda salida se hace desde opciones explícitas.
 p = Path('narrative-universe.js')
 s = p.read_text(encoding='utf-8')
 old = """window.addEventListener('oras:mirror-end',()=>{\n  resetReadingCycle();\n  if(page.ana){topGo(rootPath+'elegia-breve/?v='+VERSION);return;}\n  if(window.parent!==window){window.parent.postMessage({channel:'oras-universe-v2',type:'mirror-return'},location.origin);return;}\n  topGo(rootPath+'elegia-breve/?v='+VERSION);\n});"""
-new = """window.addEventListener('oras:mirror-end',()=>{\n  // EL ESPEJO posee ahora una pantalla final autónoma con navegación y Reinicio.\n});"""
+new = """window.addEventListener('oras:mirror-end',()=>{\n  // Sin salida automática: la pantalla final de EL ESPEJO exige una opción explícita.\n});"""
 if old not in s:
-    raise RuntimeError('No se encontró el cierre automático del universo para EL ESPEJO')
+    raise RuntimeError('No se encontró el retorno automático canónico de EL ESPEJO')
 s = s.replace(old, new, 1)
 p.write_text(s, encoding='utf-8')
