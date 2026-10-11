@@ -1,19 +1,18 @@
 from pathlib import Path
+import re
 
 p=Path('elegia-breve/index.html')
 s=p.read_text(encoding='utf-8')
 
-old_set="""      function setJourney(piece){
-        if(piece==='ceniciento'){journeyNav.hidden=true;return;}
-        const i=journeyPieces.indexOf(piece);if(i<0)return;
-        journeyPiece=piece;journeyNav.hidden=false;
-        journeyPrevious.disabled=i===0;journeyNext.disabled=i===journeyPieces.length-1;
-        journeyPrevious.setAttribute('aria-label',i>0?'Anterior: '+journeyTitles[i-1]:'Principio del recorrido');
-        journeyNext.setAttribute('aria-label',i<journeyPieces.length-1?'Siguiente: '+journeyTitles[i+1]:'Final del recorrido');
-        journeyNav.setAttribute('aria-label','Recorrido · '+journeyTitles[i]);
-      }
-"""
-new_set="""      function anaUniverseState(){
+# Idempotencia: si ya está aplicada, solo verificamos el contrato.
+if 'function anaEpilogueForwardTarget()' not in s:
+    pattern=r"(?ms)^\s*function setJourney\(piece\)\{.*?^\s*\}\n(?=\s*function goJourney\(piece\))"
+    m=re.search(pattern,s)
+    if not m:
+        raise RuntimeError('No se encontró setJourney de ANA KLAUDYA')
+
+    indent=re.match(r"\s*",m.group(0)).group(0)
+    new_set="""      function anaUniverseState(){
         try{return JSON.parse(localStorage.getItem('oras.universe.v2')||'null')||{}}catch(_){return {}}
       }
       function anaEpilogueForwardTarget(){
@@ -34,23 +33,20 @@ new_set="""      function anaUniverseState(){
         journeyNav.setAttribute('aria-label','Recorrido · '+journeyTitles[i]);
       }
 """
-if old_set not in s:
-    raise RuntimeError('No se encontró setJourney de ANA KLAUDYA')
-s=s.replace(old_set,new_set,1)
+    s=s[:m.start()]+new_set+s[m.end():]
 
-old_next="""      journeyNext.addEventListener('click',()=>goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)+1]));
-"""
-new_next="""      journeyNext.addEventListener('click',()=>{
+if "if(journeyPiece==='epilogo')" not in s:
+    pattern=r"journeyNext\.addEventListener\('click',\(\)=>goJourney\(journeyPieces\[journeyPieces\.indexOf\(journeyPiece\)\+1\]\)\);"
+    new_next="""journeyNext.addEventListener('click',()=>{
         if(journeyPiece==='epilogo'){
           const target=anaEpilogueForwardTarget();
           if(target){try{window.top.location.href=target.href}catch(_){location.href=target.href}return;}
         }
         goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)+1]);
-      });
-"""
-if old_next not in s:
-    raise RuntimeError('No se encontró acción Siguiente de ANA KLAUDYA')
-s=s.replace(old_next,new_next,1)
+      });"""
+    s,count=re.subn(pattern,new_next,s,count=1)
+    if count!=1:
+        raise RuntimeError('No se encontró acción Siguiente de ANA KLAUDYA')
 
 p.write_text(s,encoding='utf-8')
 
