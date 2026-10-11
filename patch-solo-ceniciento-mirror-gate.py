@@ -41,12 +41,18 @@ new_setup=r'''function setupSolo(){
   });
   if(state.cardFound)ghost(GHOSTS.before,'before-story',{where:'left',delay:2500,hold:6500});
 
+  const otherTwoComplete=!!(state.anaComplete&&state.cenicientoComplete&&state.cenicientoUnlocked);
+
   if(soloFromCeniciento){
     if(state.soloComplete){save({soloComplete:false});state=readState();ensureChecklist();}
     document.querySelector('.ou-solo-endnav')?.remove();
     document.body.classList.remove('ou-solo-mirror-ready','ou-solo-mirror-enter','ou-solo-final-locked');
-  }else if(state.cenicientoComplete&&state.cenicientoUnlocked){
+  }else if(state.cenicientoComplete&&state.cenicientoUnlocked&&!otherTwoComplete){
     showSoloEndNav();
+  }else if(otherTwoComplete){
+    /* Si ANA y CENICIENTO ya están completos, SOLO puede ser la tercera lectura
+       o una relectura con 3/3. En ambos casos no debe aparecer navegación final. */
+    document.querySelector('.ou-solo-endnav')?.remove();
   }
 
   let armed=false;
@@ -64,7 +70,7 @@ new_setup=r'''function setupSolo(){
     forward.onclick=()=>{
       state=readState();
       if(state.anaComplete&&state.soloComplete&&state.cenicientoComplete&&state.cenicientoUnlocked){
-        document.body.classList.add('ou-solo-mirror-enter');
+        document.body.classList.add('ou-solo-mirror-enter','ou-mirror-explicit-enter');
         maybeStartMirror();
       }else{
         location.href=rootPath+'elegia-breve/?v='+VERSION;
@@ -81,7 +87,10 @@ new_setup=r'''function setupSolo(){
     finishSolo();
   }
 
-  if(soloFromCeniciento){
+  /* La pausa sobre «La cita, en cambio, sí.» no depende ya del origen de SOLO.
+     Si ANA y CENICIENTO están completos, SOLO culmina el 3/3 (o se relee con 3/3):
+     entonces aparece exclusivamente Seguir y éste entra de forma explícita en EL ESPEJO. */
+  if(soloFromCeniciento||otherTwoComplete){
     const finalPhrase=document.getElementById('duskFinalPhrase');
     if(!finalPhrase)throw new Error('No se encontró #duskFinalPhrase');
 
@@ -97,7 +106,9 @@ new_setup=r'''function setupSolo(){
       body.ou-solo-final-locked main,
       body.ou-solo-final-locked .dusk-sequence,
       body.ou-solo-final-locked .progress,
-      body.ou-solo-final-locked .sound-toggle{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+      body.ou-solo-final-locked .sound-toggle,
+      body.ou-solo-final-locked .ou-solo-endnav,
+      body.ou-solo-final-locked .journey-nav{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
       body.ou-solo-final-locked .dusk-ending,
       body.ou-solo-final-locked .dusk-final-wrap{position:fixed!important;z-index:168!important;inset:0!important;width:100vw!important;height:100svh!important;margin:0!important;padding:0!important;display:grid!important;place-items:center!important;opacity:1!important;visibility:visible!important;filter:none!important;transform:none!important;pointer-events:none!important;background:transparent!important}
       body.ou-solo-final-locked #duskFinalPhrase{position:static!important;margin:0!important;padding:0 24px!important;width:auto!important;max-width:min(900px,90vw)!important;opacity:1!important;visibility:visible!important;filter:none!important;transform:none!important;color:#fffaf1!important;text-align:center!important;line-height:1.15!important;pointer-events:none!important}
@@ -135,7 +146,7 @@ new_setup=r'''function setupSolo(){
       locked=false;
       document.body.classList.remove('ou-solo-final-locked');
       follow?.remove();follow=null;
-      document.body.classList.add('ou-solo-mirror-enter');
+      document.body.classList.add('ou-solo-mirror-enter','ou-mirror-explicit-enter');
       maybeStartMirror();
     };
 
@@ -158,6 +169,7 @@ new_setup=r'''function setupSolo(){
         return;
       }
 
+      document.querySelectorAll('.ou-solo-endnav,.journey-nav').forEach(node=>node.remove());
       locked=true;
       lockY=scrollY;
       document.body.classList.add('ou-solo-final-locked');
