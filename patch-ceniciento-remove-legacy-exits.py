@@ -1,39 +1,32 @@
 from pathlib import Path
 
-p=Path('narrative-universe.js')
+p=Path('ceniciento/index.html')
 s=p.read_text(encoding='utf-8')
 
-addon=r'''
-;(()=>{
-  const path=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'');
-  if(!path.endsWith('/ceniciento'))return;
-
-  const purgeLegacyExits=()=>{
-    if(!document.querySelectorAll)return;
-    const nodes=document.querySelectorAll('a,button');
+marker='oras-ceniciento-purge-native-exits'
+script=r'''<script id="oras-ceniciento-purge-native-exits">
+(()=>{
+  const purge=()=>{
+    const nodes=[...document.querySelectorAll('a,button')];
     for(const node of nodes){
-      if(node.closest&&node.closest('.ou-ceniciento-endnav'))continue;
+      if(node.closest('.ou-ceniciento-endnav')) continue;
       const text=(node.textContent||'').trim().replace(/\s+/g,' ').toUpperCase();
-      if(text==='ANA KLAUDYA'||text==='SOLO LA TARJETA'){
-        if(node.remove)node.remove();
-        else if(node.parentNode)node.parentNode.removeChild(node);
-      }
+      if(text==='ANA KLAUDYA'||text==='SOLO LA TARJETA') node.remove();
     }
   };
-
   const start=()=>{
-    purgeLegacyExits();
-    if('MutationObserver' in window){
-      const mo=new MutationObserver(()=>purgeLegacyExits());
-      mo.observe(document.documentElement,{subtree:true,childList:true});
-    }
+    purge();
+    const mo=new MutationObserver(purge);
+    mo.observe(document.documentElement,{subtree:true,childList:true,characterData:true});
   };
-
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true});
   else start();
 })();
-'''
+</script>'''
 
-if 'purgeLegacyExits' not in s:
-    s += addon
+if marker not in s:
+    if '</body>' not in s:
+        raise RuntimeError('No se encontró </body> en ceniciento/index.html')
+    s=s.replace('</body>',script+'\n</body>',1)
+
 p.write_text(s,encoding='utf-8')
