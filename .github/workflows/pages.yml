@@ -113,7 +113,7 @@ jobs:
       - name: Exigir acción explícita para entrar en EL ESPEJO
         run: python3 patch-mirror-explicit-entry.py
 
-      - name: Hacer automático el enlace Flores a EL ESPEJO
+      - name: Esperar 10 s y mostrar Seguir hacia EL ESPEJO
         run: python3 patch-ana-third-mirror-auto.py
 
       - name: Devolver Salir a la página de origen
@@ -131,7 +131,7 @@ jobs:
       - name: Aplicar cierre desnudo de EL ESPEJO
         run: python3 patch-mirror-minimal-return.py
 
-      - name: Verificar progreso de lectura
+      - name: Verificar progreso y controles interactivos
         run: |
           node --check narrative-universe.js
           node --check ceniciento/el-espejo.js
@@ -139,6 +139,7 @@ jobs:
           node ceniciento/check-mirror.cjs
           node check-mirror-silent-finale.cjs .
           node check-publication-loading.cjs
+          node check-interactive-controls.cjs
           grep -q 'id="oras-sonic-breath-engine"' index.html
           grep -q "function deepSilence()" index.html
           grep -q "osc.frequency.value = 1040" index.html
@@ -146,8 +147,11 @@ jobs:
           grep -q 'id="duskPreFinal"' index.html
           grep -q 'id="duskFinalPhrase"' index.html
           ! grep -q "function fadeHtmlAudio" index.html
-          grep -q "setTimeout(enterMirrorAfterFlowers,10000)" narrative-universe.js
-          ! grep -q "follow.textContent='Seguir'" narrative-universe.js
+          grep -q "if(soundtrack.muted||soundtrack.paused)" index.html
+          grep -q "await soundtrack.play()" index.html
+          grep -q "window.setTimeout(showAnaMirrorFollow,10000)" narrative-universe.js
+          grep -q "follow.textContent='Seguir'" narrative-universe.js
+          ! grep -q "setTimeout(enterMirrorAfterFlowers,10000)" narrative-universe.js
 
       - name: Preparar voz de Ceniciento
         run: |
