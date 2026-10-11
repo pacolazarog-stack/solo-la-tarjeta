@@ -4,14 +4,13 @@ import re
 p=Path('elegia-breve/index.html')
 s=p.read_text(encoding='utf-8')
 
-# Idempotencia: si ya está aplicada, solo verificamos el contrato.
+# 1) Mantener Adelante activo en Flores mientras quede alguna lectura pendiente.
 if 'function anaEpilogueForwardTarget()' not in s:
     pattern=r"(?ms)^\s*function setJourney\(piece\)\{.*?^\s*\}\n(?=\s*function goJourney\(piece\))"
     m=re.search(pattern,s)
     if not m:
         raise RuntimeError('No se encontró setJourney de ANA KLAUDYA')
 
-    indent=re.match(r"\s*",m.group(0)).group(0)
     new_set="""      function anaUniverseState(){
         try{return JSON.parse(localStorage.getItem('oras.universe.v2')||'null')||{}}catch(_){return {}}
       }
@@ -35,18 +34,41 @@ if 'function anaEpilogueForwardTarget()' not in s:
 """
     s=s[:m.start()]+new_set+s[m.end():]
 
-if "if(journeyPiece==='epilogo')" not in s:
-    pattern=r"journeyNext\.addEventListener\('click',\(\)=>goJourney\(journeyPieces\[journeyPieces\.indexOf\(journeyPiece\)\+1\]\)\);"
-    new_next="""journeyNext.addEventListener('click',()=>{
-        if(journeyPiece==='epilogo'){
-          const target=anaEpilogueForwardTarget();
-          if(target){try{window.top.location.href=target.href}catch(_){location.href=target.href}return;}
-        }
-        goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)+1]);
-      });"""
-    s,count=re.subn(pattern,new_next,s,count=1)
-    if count!=1:
-        raise RuntimeError('No se encontró acción Siguiente de ANA KLAUDYA')
+# 2) No dependemos de la forma textual del listener canónico de journeyNext.
+#    Un listener en captura intercepta únicamente Flores cuando queda una lectura pendiente.
+marker='oras-ana-epilogue-forward-v2'
+if marker not in s:
+    anchor='''<script data-oras-universe="v1" src="../narrative-universe.js'''
+    pos=s.rfind(anchor)
+    if pos < 0:
+        raise RuntimeError('No se encontró la carga de narrative-universe.js en ANA KLAUDYA')
+
+    addon=r'''
+<script id="oras-ana-epilogue-forward-v2">
+;(()=>{
+  const STORAGE='oras.universe.v2';
+  const readState=()=>{
+    try{return JSON.parse(localStorage.getItem(STORAGE)||'{}')||{}}catch(_){return {}}
+  };
+  const pendingHref=()=>{
+    const saved=readState();
+    if(saved.soloComplete!==true)return '../?origen=ana-nav&auto=1';
+    if(saved.cenicientoComplete!==true)return '../ceniciento/?origen=ana-nav';
+    return '';
+  };
+  document.addEventListener('click',event=>{
+    const button=event.target.closest?.('#journeyNext');
+    if(!button || location.hash.toLowerCase()!=='#epilogo')return;
+    const href=pendingHref();
+    if(!href)return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    try{window.top.location.href=href}catch(_){location.href=href}
+  },true);
+})();
+</script>
+'''
+    s=s[:pos]+addon+s[pos:]
 
 p.write_text(s,encoding='utf-8')
 
@@ -56,9 +78,11 @@ required=[
     "saved.soloComplete!==true",
     "saved.cenicientoComplete!==true",
     "journeyNext.disabled=i===journeyPieces.length-1&&!epilogueTarget",
-    "if(journeyPiece==='epilogo')",
-    "window.top.location.href=target.href",
+    "oras-ana-epilogue-forward-v2",
+    "event.stopImmediatePropagation()",
+    "#journeyNext",
+    "location.hash.toLowerCase()!=='#epilogo'",
 ]
 for token in required:
     if token not in check: raise RuntimeError('Falta blindaje de navegación: '+token)
-print('PASS: Flores conserva Adelante hacia la primera lectura pendiente; EL ESPEJO sigue reservado al cierre 3/3')
+print('PASS: Flores conserva Adelante hacia la primera lectura pendiente sin depender del formato del listener canónico')
