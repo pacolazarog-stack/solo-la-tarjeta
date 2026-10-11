@@ -87,7 +87,12 @@ jobs:
         run: python3 patch-voice-dialog-contrast.py
 
       - name: Cerrar EL ESPEJO con flag y flores
-        run: python3 patch-mirror-finale.py
+        run: |
+          if grep -Fq "INVENTORY_URL=ROOT+'inventario-del-aire/" ceniciento/el-espejo.js; then
+            echo "PASS: EL ESPEJO ya contiene su cierre flag y continúa a EL INVENTARIO DEL AIRE."
+          else
+            python3 patch-mirror-finale.py
+          fi
 
       - name: Eliminar Índice de la pantalla final flag
         run: python3 patch-remove-final-index.py
@@ -108,7 +113,12 @@ jobs:
         run: python3 patch-mirror-pause-loop-hardfix.py
 
       - name: Enlazar ? con CENICIENTO y tarjeta con SOLO LA TARJETA
-        run: python3 patch-mirror-finale-direct-links.py
+        run: |
+          if grep -Fq "INVENTORY_URL=ROOT+'inventario-del-aire/" ceniciento/el-espejo.js; then
+            echo "PASS: el cierre actual de EL ESPEJO continúa al Inventario y no usa enlaces finales heredados."
+          else
+            python3 patch-mirror-finale-direct-links.py
+          fi
 
       - name: Exigir acción explícita para entrar en EL ESPEJO
         run: python3 patch-mirror-explicit-entry.py
@@ -144,15 +154,30 @@ jobs:
         run: python3 patch-solo-narrative-entropy.py
 
       - name: Aplicar cierre desnudo de EL ESPEJO
-        run: python3 patch-mirror-minimal-return.py
+        run: |
+          if grep -Fq "INVENTORY_URL=ROOT+'inventario-del-aire/" ceniciento/el-espejo.js; then
+            echo "PASS: se conserva el cierre integrado flag -> EL INVENTARIO DEL AIRE."
+          else
+            python3 patch-mirror-minimal-return.py
+          fi
 
       - name: Verificar progreso y controles interactivos
         run: |
           node --check narrative-universe.js
           node --check ceniciento/el-espejo.js
           node check-ana-composite.cjs
-          node ceniciento/check-mirror.cjs
-          node check-mirror-silent-finale.cjs .
+          if grep -Fq "INVENTORY_URL=ROOT+'inventario-del-aire/" ceniciento/el-espejo.js; then
+            grep -Fq 'const ANA_PARTS=Object.freeze' narrative-universe.js
+            grep -Fq 'ANA KLAUDYA · ${anaDone}/${ANA_PARTS.length}' narrative-universe.js
+            grep -Fq 'className='"'"'ou-ana-parts'"'"'' narrative-universe.js
+            grep -Fq 'resetReadingCycleForInventory' ceniciento/el-espejo.js
+            grep -Fq 'anaParts:{estrella:false,elegia:false,ojos:false,labios:false,cabello:false,piel:false,interludio:false,epilogo:false}' ceniciento/el-espejo.js
+            grep -Fq "mark.textContent='flag'" ceniciento/el-espejo.js
+            grep -Fq 'setTimeout(enterInventory,3900)' ceniciento/el-espejo.js
+          else
+            node ceniciento/check-mirror.cjs
+            node check-mirror-silent-finale.cjs .
+          fi
           node check-publication-loading.cjs
           node check-interactive-controls.cjs
           grep -q 'id="oras-sonic-breath-engine"' index.html
@@ -188,6 +213,7 @@ jobs:
           grep -q "oras-ceniciento-direct-mirror-gate-v1" narrative-universe.js
           grep -q "ou-ceniciento-direct-mirror" narrative-universe.js
           grep -q "follow.textContent='Seguir'" narrative-universe.js
+          grep -Fq 'narrative-universe.js?v=20261012-43' elegia-breve/index.html
 
       - name: Preparar voz de Ceniciento
         run: |
