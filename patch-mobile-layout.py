@@ -164,6 +164,13 @@ summary{
   backdrop-filter:blur(2px)!important;
   -webkit-backdrop-filter:blur(2px)!important;
 }
+.journey-nav button,.journey-nav a,
+.ou-solo-endnav button,.ou-solo-endnav a,
+.ou-ceniciento-endnav button,.ou-ceniciento-endnav a,
+.controls button,.control-bar button,.toolbar button{
+  color:#fffaf1!important;
+  -webkit-text-fill-color:#fffaf1!important;
+}
 [class~="card"],
 [class*="-card"],
 [class*="card-"],
@@ -216,7 +223,7 @@ for q in pages:
         nav_portrait = """<style id="oras-ana-mobile-nav">
 @media(max-width:700px) and (orientation:portrait){
   .journey-nav{left:112px!important;right:112px!important;bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;transform:none!important;width:auto!important;max-width:none!important;height:48px!important;padding:0!important;border:0!important;border-top:1px solid rgba(255,250,241,.28)!important;border-radius:0!important;background:rgba(12,12,12,.045)!important;box-shadow:none!important;backdrop-filter:blur(1.5px)!important;-webkit-backdrop-filter:blur(1.5px)!important}
-  .journey-nav button{min-width:0!important;min-height:48px!important;padding:7px 3px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;font-size:12px!important;text-shadow:0 1px 4px rgba(0,0,0,.9)!important}
+  .journey-nav button{min-width:0!important;min-height:48px!important;padding:7px 3px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;font-size:12px!important;color:#fffaf1!important;-webkit-text-fill-color:#fffaf1!important;text-shadow:0 1px 4px rgba(0,0,0,.9)!important}
   .journey-nav button+button{border-left:1px solid rgba(255,250,241,.18)!important}
 }
 </style>"""
