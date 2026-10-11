@@ -44,6 +44,9 @@ jobs:
       - name: Comunicar lectura de Tu cabello y Tu piel
         run: python3 patch-ana-detail-progress-bridge.py
 
+      - name: Hacer navegable la barra de lecturas
+        run: python3 patch-checklist-navigation.py
+
       - name: Encadenar Flores con EL ESPEJO cuando ANA completa 3/3
         run: python3 patch-ana-third-mirror-gate.py
 
