@@ -3,8 +3,8 @@ from pathlib import Path
 p=Path('narrative-universe.js')
 s=p.read_text(encoding='utf-8')
 
-# SOLO abierto desde CENICIENTO debe volver a completarse en esta pasada,
-# mantener su última frase visible y, después, ofrecer una puerta explícita.
+# SOLO abierto desde CENICIENTO debe volver a completarse en esta pasada y
+# detenerse obligatoriamente en su última frase hasta pulsar «Seguir».
 if "const soloFromCeniciento=" not in s:
     end="};\n\nfunction emptyState()"
     if end not in s:
@@ -19,7 +19,7 @@ old_mirror="""function maybeStartMirror(){
 new_mirror="""function maybeStartMirror(){
   state=readState();ensureChecklist();
   /* En la cadena CENICIENTO -> SOLO -> EL ESPEJO nunca se entra automáticamente.
-     Hace falta completar SOLO, esperar el cierre y pulsar la puerta. */
+     Hace falta completar SOLO, pulsar Seguir y después pulsar Adelante. */
   if(soloFromCeniciento&&!document.body.classList.contains('ou-solo-mirror-enter'))return;
   if(state.anaComplete&&state.soloComplete&&state.cenicientoComplete&&state.cenicientoUnlocked&&!state.mirrorReadComplete)launchMirror();
 }
@@ -42,7 +42,7 @@ new_setup=r'''function setupSolo(){
        Aunque SOLO constase como leída antes, esta pasada debe completarse de nuevo. */
     if(state.soloComplete){save({soloComplete:false});state=readState();ensureChecklist();}
     document.querySelector('.ou-solo-endnav')?.remove();
-    document.body.classList.remove('ou-solo-mirror-ready','ou-solo-mirror-enter');
+    document.body.classList.remove('ou-solo-mirror-ready','ou-solo-mirror-enter','ou-solo-final-locked');
   }else if(state.cenicientoComplete&&state.cenicientoUnlocked){
     showSoloEndNav();
   }
@@ -73,7 +73,6 @@ new_setup=r'''function setupSolo(){
     armed=true;
     if(soloFromCeniciento){
       document.body.classList.add('ou-solo-mirror-ready');
-      /* Marcar SOLO como completada sin abrir EL ESPEJO. */
       completePiece('soloComplete');
       showMirrorDoor();
       return;
@@ -83,28 +82,87 @@ new_setup=r'''function setupSolo(){
 
   if(soloFromCeniciento){
     const finalPhrase=document.getElementById('duskFinalPhrase');
-    let holdTimer=0;
-    const cancelHold=()=>{if(holdTimer){clearTimeout(holdTimer);holdTimer=0;}};
-    const armHold=()=>{
-      if(armed||holdTimer)return;
-      holdTimer=after(4800,()=>{holdTimer=0;finish();});
+    if(!finalPhrase)throw new Error('No se encontró #duskFinalPhrase');
+
+    let locked=false;
+    let lockY=0;
+    let follow=null;
+
+    const style=document.createElement('style');
+    style.id='ou-solo-final-pause-style';
+    style.textContent=`
+      body.ou-solo-final-locked{overscroll-behavior:none!important}
+      .ou-solo-final-follow{position:fixed;z-index:170;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(8px);min-width:96px;min-height:48px;padding:10px 20px;border:0;border-top:1px solid rgba(255,250,241,.48);border-radius:0;background:rgba(12,12,12,.10);color:#fffaf1;font:14px/1.2 system-ui,sans-serif;text-shadow:0 1px 4px rgba(0,0,0,.9);opacity:0;cursor:pointer;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);transition:opacity .9s ease,transform .9s ease}
+      .ou-solo-final-follow.ou-visible{opacity:1;transform:translateX(-50%) translateY(0)}
+    `;
+    document.head.appendChild(style);
+
+    const restoreLock=()=>{
+      if(!locked)return;
+      if(Math.abs(scrollY-lockY)>1)scrollTo({top:lockY,left:0,behavior:'auto'});
     };
-    if('IntersectionObserver' in window&&finalPhrase){
+    const blockAdvance=event=>{
+      if(!locked)return;
+      if(event.target===follow||event.target?.closest?.('.ou-solo-final-follow'))return;
+      event.preventDefault();
+      event.stopPropagation();
+      requestAnimationFrame(restoreLock);
+    };
+    const blockKeys=event=>{
+      if(!locked)return;
+      if(event.target===follow&&(event.key==='Enter'||event.key===' '))return;
+      if(['ArrowDown','ArrowUp','PageDown','PageUp','End','Home',' ','Enter'].includes(event.key)){
+        event.preventDefault();event.stopPropagation();requestAnimationFrame(restoreLock);
+      }
+    };
+
+    addEventListener('wheel',blockAdvance,{passive:false,capture:true});
+    addEventListener('touchmove',blockAdvance,{passive:false,capture:true});
+    addEventListener('keydown',blockKeys,{capture:true});
+    addEventListener('scroll',restoreLock,{passive:true});
+
+    const release=()=>{
+      if(!locked)return;
+      locked=false;
+      document.body.classList.remove('ou-solo-final-locked');
+      follow?.remove();
+      follow=null;
+      finish();
+    };
+
+    const lockFinal=()=>{
+      if(locked||armed)return;
+      locked=true;
+      lockY=scrollY;
+      document.body.classList.add('ou-solo-final-locked');
+      follow=document.createElement('button');
+      follow.type='button';
+      follow.className='ou-solo-final-follow';
+      follow.textContent='Seguir';
+      follow.setAttribute('aria-label','Continuar después de la última frase');
+      follow.addEventListener('click',release,{once:true});
+      document.body.appendChild(follow);
+      requestAnimationFrame(()=>requestAnimationFrame(()=>follow?.classList.add('ou-visible')));
+      requestAnimationFrame(restoreLock);
+    };
+
+    if('IntersectionObserver' in window){
       const finalObserver=new IntersectionObserver(entries=>{
         const entry=entries.find(e=>e.target===finalPhrase);
-        if(!entry||armed)return;
-        /* La frase debe permanecer realmente legible, no solo rozar el viewport. */
-        if(entry.isIntersecting&&entry.intersectionRatio>=.82)armHold();
-        else cancelHold();
-      },{threshold:[0,.82,1]});
+        if(!entry||armed||locked)return;
+        if(entry.isIntersecting&&entry.intersectionRatio>=.82){
+          finalObserver.disconnect();
+          lockFinal();
+        }
+      },{threshold:[.82,1]});
       finalObserver.observe(finalPhrase);
-    }else if(finalPhrase){
+    }else{
       const checkFinal=()=>{
-        if(armed)return;
+        if(armed||locked)return;
         const r=finalPhrase.getBoundingClientRect();
         const visible=Math.max(0,Math.min(r.bottom,innerHeight)-Math.max(r.top,0));
         const ratio=r.height>0?visible/r.height:0;
-        if(ratio>=.82)armHold();else cancelHold();
+        if(ratio>=.82)lockFinal();
       };
       addEventListener('scroll',checkFinal,{passive:true});
       addEventListener('resize',checkFinal);
