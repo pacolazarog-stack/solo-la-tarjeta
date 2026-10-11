@@ -113,6 +113,9 @@ jobs:
       - name: Exigir acción explícita para entrar en EL ESPEJO
         run: python3 patch-mirror-explicit-entry.py
 
+      - name: Hacer automático el enlace Flores a EL ESPEJO
+        run: python3 patch-ana-third-mirror-auto.py
+
       - name: Devolver Salir a la página de origen
         run: python3 patch-exit-return-source.py
 
@@ -143,6 +146,8 @@ jobs:
           grep -q 'id="duskPreFinal"' index.html
           grep -q 'id="duskFinalPhrase"' index.html
           ! grep -q "function fadeHtmlAudio" index.html
+          grep -q "setTimeout(enterMirrorAfterFlowers,10000)" narrative-universe.js
+          ! grep -q "follow.textContent='Seguir'" narrative-universe.js
 
       - name: Preparar voz de Ceniciento
         run: |
