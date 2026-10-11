@@ -17,11 +17,14 @@ const required=[
   "observeAnaEnd('.line','cabello')",
   "observeAnaEnd('.line','piel')",
   "observeAnaEnd('.phrase','estrella')",
-  "completeAnaPart('epilogo')",
+  "observeAnaEnd('#flowerCoda','epilogo')",
   "completeAnaPart('interludio')",
+  "type:'ana-progress'",
+  "event.data.type==='ana-progress'",
   'anaParts:emptyAnaParts()',
   'ANA KLAUDYA · ${anaDone}/${ANA_PARTS.length}'
 ];
 for(const token of required)assert(source.includes(token),'Falta regla de progreso ANA: '+token);
 assert(!source.includes("completePiece('anaComplete')"),'ANA no puede completarse como una sola pieza');
-console.log('PASS: ANA KLAUDYA is composite and requires all 8 canonical sections');
+assert(!source.includes("if(!flowers.hidden)completeAnaPart('epilogo')"),'A fuego lento no puede completarse solo por mostrar el contenedor de Flores');
+console.log('PASS: ANA KLAUDYA requires all 8 sections, visible Flores and parent progress sync');
