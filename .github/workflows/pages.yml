@@ -125,6 +125,7 @@ jobs:
           node --check ceniciento/el-espejo.js
           node check-ana-composite.cjs
           node ceniciento/check-mirror.cjs
+          node check-mirror-silent-finale.cjs .
           node check-publication-loading.cjs
 
       - name: Preparar voz de Ceniciento
