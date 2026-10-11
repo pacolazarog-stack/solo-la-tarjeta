@@ -83,6 +83,9 @@ jobs:
       - name: Añadir transición y bloqueos de lectura de EL ESPEJO
         run: python3 patch-ceniciento-mirror-reading-gates.py
 
+      - name: Devolver Salir a la página de origen
+        run: python3 patch-exit-return-source.py
+
       - name: Mantener letras blancas en controles oscuros
         run: python3 patch-dark-controls-white-text.py
 
