@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ORAS · memoria interpretativa · experimento</title>
+<style>
+:root{
+  --paper:#eee9df;
+  --ink:#221f1b;
+  --delay:1.4s;
+  --absence:1;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink)}
+body{
+  font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia,"Times New Roman",serif;
+  transition:background-color 1.6s ease,color 1.6s ease;
+}
+main{min-height:100svh;display:grid;place-items:center;padding:8vh 7vw}
+.scene{width:min(42rem,100%);position:relative}
+.copy{font-size:clamp(1.25rem,2.5vw,1.7rem);line-height:1.62}
+.copy p{margin:0 0 1.05em;opacity:0;transform:translateY(5px);animation:arrive 1.3s ease forwards;animation-delay:var(--delay)}
+.copy p:nth-child(2){animation-delay:calc(var(--delay) + .45s)}
+.copy p:nth-child(3){animation-delay:calc(var(--delay) + .9s)}
+.copy p:nth-child(4){animation-delay:calc(var(--delay) + 1.35s)}
+.memory-mark{display:block;margin:2.2rem auto 0;width:.46rem;height:.46rem;border-radius:50%;background:currentColor;opacity:calc(.26 * var(--absence));transition:opacity 1.2s ease}
+.controls{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:10px;z-index:2}
+button{border:1px solid rgba(34,31,27,.25);background:rgba(255,255,255,.42);color:inherit;border-radius:999px;padding:.75em 1.25em;font:600 .72rem/1 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+button[hidden]{display:none}
+body.memory-active{
+  --paper:#e8ddd2;
+  --delay:3.2s;
+  --absence:0;
+}
+body.memory-active .copy{filter:saturate(.93)}
+@keyframes arrive{to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .copy p{animation-duration:.01ms!important;animation-delay:0s!important}
+  body{transition:none}
+}
+</style>
+</head>
+<body>
+<main>
+  <section class="scene" aria-label="Escena experimental">
+    <div class="copy">
+      <p>La habitación estaba vacía cuando abrió la puerta.</p>
+      <p>Sobre la mesa había un vaso, una llave y una hoja doblada.</p>
+      <p>La ventana permanecía abierta, aunque afuera no se movía nada.</p>
+      <p>Se sentó sin tocar ninguno de los objetos.</p>
+    </div>
+    <span class="memory-mark" aria-hidden="true"></span>
+  </section>
+</main>
+<div class="controls" aria-label="Controles experimentales">
+  <button id="repeat" type="button">Releer</button>
+  <button id="reset" type="button">Reiniciar</button>
+</div>
+<script>
+(()=>{
+  'use strict';
+  const params=new URLSearchParams(location.search);
+  const group=(params.get('grupo')||'A').toUpperCase();
+  const KEY='oras.experiment.memory.v1.'+group;
+  const repeat=document.getElementById('repeat');
+  const reset=document.getElementById('reset');
+
+  const getState=()=>{
+    try{return JSON.parse(localStorage.getItem(KEY)||'{"reads":0}')}catch(_){return {reads:0}}
+  };
+  const setState=state=>localStorage.setItem(KEY,JSON.stringify(state));
+
+  function apply(){
+    const state=getState();
+    const secondOrMore=state.reads>=1;
+    document.body.classList.toggle('memory-active',group==='C'&&secondOrMore);
+    repeat.hidden=group==='A';
+  }
+
+  function registerRead(){
+    const state=getState();
+    state.reads=(state.reads||0)+1;
+    setState(state);
+  }
+
+  repeat.addEventListener('click',()=>{
+    registerRead();
+    location.reload();
+  });
+
+  reset.addEventListener('click',()=>{
+    localStorage.removeItem(KEY);
+    location.reload();
+  });
+
+  apply();
+})();
+</script>
+</body>
+</html>
