@@ -134,6 +134,9 @@ jobs:
       - name: Mantener Adelante en Flores si quedan lecturas
         run: python3 patch-ana-epilogue-forward.py
 
+      - name: Decidir convergencia en Flores al entrar
+        run: python3 patch-flores-convergence.py
+
       - name: Distribuir la memoria de EL ESPEJO en las relecturas
         run: python3 patch-distributed-mirror-memory.py
 
@@ -163,6 +166,11 @@ jobs:
           ! grep -q "setTimeout(enterMirrorAfterFlowers,10000)" narrative-universe.js
           grep -q "function anaEpilogueForwardTarget()" elegia-breve/index.html
           grep -q "journeyNext.disabled=i===journeyPieces.length-1&&!epilogueTarget" elegia-breve/index.html
+          grep -q "oras-flores-convergence-v1" elegia-breve/index.html
+          grep -q "window.setTimeout(showFollow,10000)" elegia-breve/index.html
+          grep -q "body.ou-flores-convergence #journeyNav" elegia-breve/index.html
+          grep -q "body.ou-flores-convergence .ou-card" elegia-breve/index.html
+          grep -q "new CustomEvent('oras:mirror-explicit-start')" elegia-breve/index.html
           grep -q "oras-distributed-mirror-memory-v2" narrative-universe.js
           grep -q "mirrorReadComplete!==true" narrative-universe.js
           grep -q "oras.memory.v2" narrative-universe.js
