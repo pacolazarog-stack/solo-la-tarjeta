@@ -7,7 +7,8 @@ const sceneBlock=mirror.slice(mirror.indexOf('const scenes=['),mirror.indexOf(']
 assert.equal((sceneBlock.match(/^`/gm)||[]).length,32,'EL ESPEJO contains exactly 32 narrative scenes');
 assert(mirror.includes('new Set([14,15,17,26,30])'),'Five convergence scenes pause for reader action');
 assert(mirror.includes("next.textContent='seguir'")&&mirror.includes('if(!locked||lockedScene!==scene)return'),'The reader controls each key-scene pause');
-assert(mirror.includes('oras-mirror-explicit-follow-gates')&&mirror.includes('mirror-pause-locked')&&mirror.includes('blockWhilePaused'),'Each pause remains locked until its Seguir button is pressed');
+assert(mirror.includes("scene.dataset.pauseConsumed='true'")&&mirror.includes('pauseObserver.unobserve(scene)'),'Each Seguir consumes and unobserves its pause before advancing');
+assert(mirror.includes("entry.target.dataset.pauseConsumed!=='true'")&&mirror.includes('oras-mirror-explicit-follow-gates')&&mirror.includes('mirror-pause-locked')&&mirror.includes('blockWhilePaused'),'Each pause is one-shot and remains locked until its Seguir button is pressed');
 assert(mirror.includes('body.mirror .ou-ceniciento-endnav')&&mirror.includes('display:none!important'),'The normal button bar stays hidden throughout Mirror reading');
 assert(mirror.includes("flag.textContent='flag'")&&mirror.includes("finale.className='mirror-flag-finale'"),'EL ESPEJO has one autonomous full-screen flag finale');
 assert(mirror.includes('finale.append(flag);'),'The final screen contains only flag');
@@ -16,7 +17,7 @@ assert(mirror.includes('FINALE_BLACK_MS=5000')&&mirror.includes('FINALE_FLAG_MS=
 assert(mirror.includes("window.dispatchEvent(new CustomEvent('oras:mirror-end'))")&&mirror.includes("ROOT+'elegia-breve/'"),'EL ESPEJO returns automatically to ANA KLAUDYA after flag');
 assert(mirror.includes("document.body.classList.add('mirror-finale-active')")&&mirror.includes("window.addEventListener('wheel',blockFinaleInput,{passive:false,capture:true})")&&mirror.includes("window.addEventListener('touchmove',blockFinaleInput,{passive:false,capture:true})"),'The silent finale blocks interaction');
 assert(page.includes('<main id="mirror" aria-label="EL ESPEJO" hidden></main>'),'The convergence remains hidden until its narrative condition');
-assert(page.includes('data-oras-mirror="true" src="el-espejo.js?v=20261010-29"'),'The mirror script is registered for shared startup');
+assert(/data-oras-mirror="true" src="(?:\/solo-la-tarjeta\/ceniciento\/)?el-espejo\.js\?v=20261010-29"/.test(page),'The mirror script is registered for shared startup');
 assert(shared.includes('state.anaComplete&&state.soloComplete&&state.cenicientoComplete&&state.cenicientoUnlocked&&!state.mirrorReadComplete'),'The convergence waits for all three complete first readings');
 assert(shared.includes("completeAnaPart('elegia')")&&shared.includes('anaPartsComplete(current.anaParts)')&&shared.includes("completePiece('cenicientoComplete'")&&shared.includes('maybeStartMirror();'),'ANA is composite and every completed work still checks the convergence gate');
 assert(shared.includes("function resetReadingCycle()")&&shared.includes('anaParts:emptyAnaParts()')&&shared.includes('soloComplete:false')&&shared.includes('cenicientoComplete:false'),'The reset function clears the full reading cycle including ANA parts');
@@ -30,4 +31,4 @@ for(const f of pages){const s=fs.readFileSync(path.join(__dirname,f),'utf8');ass
 assert(!/\n\s*main\s*\{/.test(ana),'Ana reading visibility is scoped to #reading, not every main');
 assert(shared.includes('body.mirror #mirror{opacity:1;visibility:visible;width:100%;max-width:none;margin:0;padding:0;'),'Mirror overrides host visibility and dimensions');
 assert(shared.includes('body.mirror{touch-action:pan-y}'),'Base Mirror touch scrolling remains available between explicit pause gates');
-console.log('PASS: 32-scene convergence, explicit pause gates, silent flag finale, automatic return, completion gate, and checklist');
+console.log('PASS: 32-scene convergence, one-shot explicit pause gates, silent flag finale, automatic return, completion gate, and checklist');
