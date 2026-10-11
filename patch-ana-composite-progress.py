@@ -78,7 +78,6 @@ new_check="""function ensureChecklist(){
 if old_check not in s: raise RuntimeError('No se encontró ensureChecklist base')
 s=s.replace(old_check,new_check,1)
 
-# Make the eight ANA sections visible inside the ANA reading row.
 css_anchor='.ou-reading-checklist li{white-space:nowrap}.ou-reading-checklist li+li{margin-top:5px}'
 css_extra='''.ou-reading-checklist li{white-space:nowrap}.ou-reading-checklist li+li{margin-top:5px}
   .ou-reading-checklist .ou-ana-parts{display:grid;gap:2px;margin:6px 0 2px 14px;font:10px/1.35 system-ui,sans-serif;letter-spacing:.01em;white-space:normal;max-width:min(340px,72vw)}
@@ -86,7 +85,6 @@ css_extra='''.ou-reading-checklist li{white-space:nowrap}.ou-reading-checklist l
 if css_anchor not in s: raise RuntimeError('No se encontró CSS del contador')
 s=s.replace(css_anchor,css_extra,1)
 
-# Completing one ANA section updates ANA only when all eight sections are done.
 anchor="""function completePiece(key,patch={}){
   state=readState();
   if(!state.journeyStartedAt)return false;
@@ -103,7 +101,12 @@ function completeAnaPart(key){
   if(state.anaParts[key]){ensureChecklist();return true;}
   const parts=Object.assign(emptyAnaParts(),state.anaParts,{[key]:true});
   save({anaParts:parts,anaComplete:anaPartsComplete(parts)});
-  state=readState();ensureChecklist();maybeStartMirror();
+  state=readState();ensureChecklist();
+  if(window.parent===window){
+    maybeStartMirror();
+  }else{
+    window.parent.postMessage({channel:'oras-universe-v2',type:'ana-progress'},location.origin);
+  }
   return true;
 }
 window.addEventListener('oras:ana-part-complete',event=>completeAnaPart(event.detail?.part));
@@ -125,20 +128,19 @@ function setupAnaPartTracking(){
   if(page.cabello)observeAnaEnd('.line','cabello');
   if(page.piel)observeAnaEnd('.line','piel');
   if(page.estrella)observeAnaEnd('.phrase','estrella');
-  if(page.epilogo){
-    const flowers=document.getElementById('flowerCoda');
-    if(flowers){const mark=()=>{if(!flowers.hidden)completeAnaPart('epilogo');};new MutationObserver(mark).observe(flowers,{attributes:true,attributeFilter:['hidden']});mark();}
-  }
+  if(page.epilogo)observeAnaEnd('#flowerCoda','epilogo');
   if(page.ana)addEventListener('message',event=>{
-    if(event.origin!==location.origin||event.data?.channel!=='ceniciento-music-v1'||event.data.type!=='interlude-ended')return;
-    completeAnaPart('interludio');
+    if(event.origin!==location.origin)return;
+    if(event.data?.channel==='ceniciento-music-v1'&&event.data.type==='interlude-ended'){completeAnaPart('interludio');return;}
+    if(event.data?.channel==='oras-universe-v2'&&event.data.type==='ana-progress'){
+      state=readState();ensureChecklist();maybeStartMirror();
+    }
   });
 }
 """
 if anchor not in s: raise RuntimeError('No se encontró completePiece')
 s=s.replace(anchor,extra,1)
 
-# The main Elegía is one section, not all of ANA KLAUDYA.
 old_mark="""  const markAna=()=>{
     if(document.body.classList.contains('portrait-revealed'))completePiece('anaComplete');
   };
@@ -176,4 +178,4 @@ if init_anchor not in s: raise RuntimeError('No se encontró bloque init')
 s=s.replace(init_anchor,init_new,1)
 
 p.write_text(s,encoding='utf-8')
-print('PASS: ANA KLAUDYA requires all 8 canonical sections')
+print('PASS: ANA KLAUDYA requires all 8 canonical sections and Flores visibility')
