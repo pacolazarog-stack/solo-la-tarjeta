@@ -65,6 +65,9 @@ jobs:
       - name: Compatibilizar navegación final de CENICIENTO con las pruebas
         run: python3 patch-ceniciento-finale-test-compat.py
 
+      - name: Eliminar salidas heredadas de CENICIENTO
+        run: python3 patch-ceniciento-remove-legacy-exits.py
+
       - name: Verificar progreso de lectura
         run: |
           node check-reading-progress.cjs
