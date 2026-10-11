@@ -1,94 +1,90 @@
-from pathlib import Path
+#!/usr/bin/env python3
+"""EL ESPEJO: cierre desnudo.
 
-p=Path('ceniciento/el-espejo.js')
-s=p.read_text(encoding='utf-8')
+Tras la escena 32 y el último Seguir:
+  fundido -> negro (sin controles) -> «flag» -> disolución -> negro -> regreso
+  automático a ANA KLAUDYA, con el ciclo de lecturas reiniciado.
+Se eliminan Atrás, Adelante, Reinicio, Salir, la tarjeta y el «?» del final.
+Se elimina también el contador «Lecturas» durante el cierre.
+"""
+import re, sys, pathlib
 
-marker='})();\n'
-if marker not in s:
-    raise RuntimeError('No se encontró el cierre de EL ESPEJO')
+root = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else '.')
+js_path = root / 'ceniciento' / 'el-espejo.js'
+ck_path = root / 'ceniciento' / 'check-mirror.cjs'
+s = js_path.read_text(encoding='utf-8')
 
-inject=r'''
+def once(old, new, label):
+    global s
+    assert s.count(old) == 1, f'{label}: se esperaba 1 coincidencia, hay {s.count(old)}'
+    s = s.replace(old, new)
 
-/* ORAS — cierre mínimo definitivo de EL ESPEJO.
-   Tras la escena 32: negro -> flag -> negro -> retorno automático a ANA KLAUDYA.
-   No existen controles ni posibilidad de interacción durante este cierre. */
-finaleNav?.remove();
-card?.remove();
-question?.remove();
+# 1. Fuera la botonera, la tarjeta y el «?» (bloque entero, de «back» a finale.append).
+a = s.index("const back=document.createElement('button');")
+b_marker = "finale.append(flag,finaleNav,card,question);"
+b = s.index(b_marker) + len(b_marker)
+s = s[:a] + "finale.append(flag);" + s[b:]
 
-const minimalFinaleStyle=document.createElement('style');
-minimalFinaleStyle.id='oras-mirror-minimal-finale';
-minimalFinaleStyle.textContent=`
-html:has(body.mirror-finale-active),body.mirror-finale-active{background:#000!important;overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}
-body.mirror-finale-active>:not(.mirror-flag-finale):not(script):not(style){visibility:hidden!important;display:none!important;pointer-events:none!important}
-body.mirror-finale-active .ou-reading-checklist,
-body.mirror-finale-active .sound-toggle,
-body.mirror-finale-active .journey-nav,
-body.mirror-finale-active .ou-solo-endnav{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
-body .mirror-flag-finale{background:#000!important;color:#fff!important}
-body .mirror-flag-finale .mirror-finale-nav,
-body .mirror-flag-finale .mirror-finale-card,
-body .mirror-flag-finale .mirror-finale-question{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
-body .mirror-flag-word{opacity:0!important;transform:none!important;transition:none!important;color:rgba(255,255,255,.78)!important;font:italic 400 clamp(.78rem,1.15vw,.96rem)/1 Georgia,'Times New Roman',serif!important;letter-spacing:.30em!important}
-body .mirror-flag-finale.ou-flag-visible .mirror-flag-word{opacity:1!important;transition:none!important}
-body .mirror-flag-finale.ou-flag-fading .mirror-flag-word{opacity:0!important;transition:opacity 2.2s ease!important}
-`;
-document.head.appendChild(minimalFinaleStyle);
+# 2. Cronología del cierre.
+old_timers = re.search(r"  // flag permanece solo varios segundos;.*?show-question'\),6200\)\);\n", s, re.S)
+assert old_timers, 'timers del cierre no encontrados'
+new_timers = """  // Cierre desnudo: negro -> flag -> disolución -> negro -> regreso. Sin interfaz.
+  finaleTimers.push(setTimeout(()=>finale.classList.add('show-flag'),FINALE_BLACK_MS));
+  finaleTimers.push(setTimeout(()=>finale.classList.add('flag-dissolve'),FINALE_BLACK_MS+FINALE_FLAG_MS));
+  finaleTimers.push(setTimeout(returnToUniverse,FINALE_BLACK_MS+FINALE_FLAG_MS+FINALE_DISSOLVE_MS+FINALE_TAIL_MS));
+"""
+s = s[:old_timers.start()] + new_timers + s[old_timers.end():]
+once("  finale.classList.remove('show-options','show-card','show-question');\n  requestAnimationFrame",
+     "  finale.classList.remove('show-flag','flag-dissolve');\n  requestAnimationFrame", 'enterFinale reset')
 
-function swallowMinimalFinaleInput(event){
-  if(!document.body.classList.contains('mirror-finale-active'))return;
-  event.preventDefault();
-  event.stopPropagation();
-  event.stopImmediatePropagation?.();
-}
-window.addEventListener('wheel',swallowMinimalFinaleInput,{passive:false,capture:true});
-window.addEventListener('touchmove',swallowMinimalFinaleInput,{passive:false,capture:true});
-window.addEventListener('pointerdown',swallowMinimalFinaleInput,{passive:false,capture:true});
-window.addEventListener('click',swallowMinimalFinaleInput,{capture:true});
-window.addEventListener('keydown',swallowMinimalFinaleInput,{capture:true});
-window.addEventListener('contextmenu',swallowMinimalFinaleInput,{capture:true});
-
-enterFinale=function(){
-  if(finale.classList.contains('is-active'))return;
+# 3. Constantes, regreso y fundido de la escena 32 (antes de enterFinale).
+once("let finaleTimers=[];",
+"""const FINALE_BLACK_MS=5000, FINALE_FLAG_MS=4500, FINALE_DISSOLVE_MS=3000, FINALE_TAIL_MS=2000, SCENE_FADE_MS=1800;
+function returnToUniverse(){
   clearFinaleTimers();
-  finished=true;
-  locked=false;
-  lockedScene=null;
-  mirror.hidden=true;
-  document.body.classList.remove('mirror');
-  document.body.classList.add('mirror-finale-active');
-  finale.hidden=false;
-  finale.classList.remove('show-options','show-card','show-question','ou-flag-visible','ou-flag-fading');
-  flag.style.visibility='visible';
-  requestAnimationFrame(()=>requestAnimationFrame(()=>finale.classList.add('is-active')));
+  // El módulo compartido escucha este evento y reinicia el ciclo completo de lecturas.
+  window.dispatchEvent(new CustomEvent('oras:mirror-end'));
+  const url=ROOT+'elegia-breve/';
+  try{window.top.location.href=url;}catch(_){location.href=url;}
+}
+function fadeToFinale(){
+  mirror.style.transition='opacity '+SCENE_FADE_MS+'ms ease';
+  mirror.style.opacity='0';
+  finaleTimers.push(setTimeout(enterFinale,SCENE_FADE_MS+100));
+}
+let finaleTimers=[];""", 'constantes')
+once("  finalFollow.hidden=true;\n  locked=false;lockedScene=null;\n  document.body.classList.remove('mirror-final-wait-locked');\n  enterFinale();",
+     "  finalFollow.hidden=true;\n  locked=false;lockedScene=null;\n  document.body.classList.remove('mirror-final-wait-locked');\n  fadeToFinale();", 'click final')
+once("mirror.hidden=false;document.body.classList.add('mirror');mirror.scrollTop=0;",
+     "mirror.style.transition='';mirror.style.opacity='';mirror.hidden=false;document.body.classList.add('mirror');mirror.scrollTop=0;", 'start')
+s = s.replace("finale.classList.remove('is-active','show-options','show-card','show-question')",
+              "finale.classList.remove('is-active','show-flag','flag-dissolve')")
 
-  // Movimiento 1: negro absoluto durante cinco segundos.
-  finaleTimers.push(setTimeout(()=>{
-    // Movimiento 2: aparición seca, sin animación, de flag.
-    finale.classList.add('ou-flag-visible');
-  },5000));
+# 4. CSS: flag diminuta, sin animación al aparecer; fuera estilos de botonera/tarjeta/«?».
+lines = s.split('\n'); out = []
+for ln in lines:
+    if re.match(r"^body \.mirror-finale-(nav|card|question)", ln) or \
+       re.match(r"^body \.mirror-flag-finale\.show-(options|card|question)", ln) or \
+       ln.startswith("@media(max-width:700px){body .mirror-finale-nav"):
+        continue
+    out.append(ln)
+s = '\n'.join(out)
+once("body .mirror-flag-finale.is-active .mirror-flag-word{opacity:1;transform:scale(1)}",
+"""body .mirror-flag-finale.show-flag .mirror-flag-word{opacity:1;transform:none;transition:none}
+body .mirror-flag-finale.show-flag.flag-dissolve .mirror-flag-word{opacity:0;transition:opacity 3s ease}
+html:root body.mirror-finale-active .ou-reading-checklist,
+html:root body.mirror-finale-active .ou-card,
+html:root body.mirror-finale-active .ou-ceniciento-endnav,
+html:root body.mirror-finale-active .ou-solo-endnav{display:none!important;visibility:hidden!important;pointer-events:none!important}""",
+     'css flag')
+once("font:italic 400 clamp(1.15rem,2.5vw,1.6rem)/1 Georgia", "font:italic 400 clamp(.82rem,1.6vw,1rem)/1 Georgia", 'tamaño flag')
+once("opacity:0;transform:scale(.985);transition:opacity 1.8s ease,transform 1.8s ease}", "opacity:0;transform:none}", 'flag base')
 
-  // flag permanece cuatro segundos y medio.
-  finaleTimers.push(setTimeout(()=>{
-    finale.classList.remove('ou-flag-visible');
-    finale.classList.add('ou-flag-fading');
-  },9500));
+js_path.write_text(s, encoding='utf-8')
 
-  // Movimiento 3: disolución y regreso al negro.
-  finaleTimers.push(setTimeout(()=>{
-    flag.style.visibility='hidden';
-    finale.classList.remove('ou-flag-fading');
-  },11700));
-
-  // Un breve negro final y retorno automático al universo principal.
-  finaleTimers.push(setTimeout(()=>{
-    window.dispatchEvent(new CustomEvent('oras:mirror-end'));
-    const target=ROOT+'elegia-breve/';
-    try{window.top.location.replace(target);}catch(_){location.replace(target);}
-  },13000));
-};
-'''
-
-s=s.rsplit(marker,1)[0]+inject+'\n'+marker
-p.write_text(s,encoding='utf-8')
-print('PASS: EL ESPEJO termina sin controles: negro -> flag -> negro -> ANA KLAUDYA')
+# 5. check-mirror.cjs: sustituir las aserciones del cierre antiguo.
+if ck_path.exists():
+    c = ck_path.read_text(encoding='utf-8').split('\n')
+    c = [l for l in c if "restart.textContent='Reinicio'" not in l and "show-options'),4200" not in l]
+    ck_path.write_text('\n'.join(c), encoding='utf-8')
+print('OK: cierre desnudo aplicado')
