@@ -8,20 +8,14 @@ from pathlib import Path
 p = Path('narrative-universe.js')
 s = p.read_text(encoding='utf-8')
 
-bridge = r'''
-
-;(()=>{
-  if(!page.ana || window.parent!==window)return;
-  window.addEventListener('message',event=>{
-    if(event.origin!==location.origin)return;
-    if(event.data?.channel!=='oras-universe-v2' || event.data?.type!=='ana-part-complete')return;
-    const part=event.data?.part;
-    if(part==='cabello' || part==='piel')completeAnaPart(part);
-  });
-})();
-'''
-if "event.data?.type!=='ana-part-complete'" not in s:
-    s += bridge
+# The listener must be injected INSIDE setupAnaPartTracking(), where page and
+# completeAnaPart are in scope. Appending a second IIFE after the main universe
+# closure leaves those identifiers out of scope and the message is lost.
+old = """  if(page.ana)addEventListener('message',event=>{\n    if(event.origin!==location.origin)return;\n    if(event.data?.channel==='ceniciento-music-v1'&&event.data.type==='interlude-ended'){completeAnaPart('interludio');return;}\n    if(event.data?.channel==='oras-universe-v2'&&event.data.type==='ana-progress'){\n      state=readState();ensureChecklist();maybeStartMirror();\n    }\n  });\n"""
+new = """  if(page.ana)addEventListener('message',event=>{\n    if(event.origin!==location.origin)return;\n    if(event.data?.channel==='ceniciento-music-v1'&&event.data.type==='interlude-ended'){completeAnaPart('interludio');return;}\n    if(event.data?.channel==='oras-universe-v2'&&event.data.type==='ana-part-complete'){\n      const part=event.data?.part;\n      if(part==='cabello'||part==='piel'){completeAnaPart(part);return;}\n    }\n    if(event.data?.channel==='oras-universe-v2'&&event.data.type==='ana-progress'){\n      state=readState();ensureChecklist();maybeStartMirror();\n    }\n  });\n"""
+if old not in s:
+    raise RuntimeError('No se encontró el listener de progreso de ANA')
+s=s.replace(old,new,1)
 p.write_text(s, encoding='utf-8')
 
 child_script = r'''
@@ -76,4 +70,4 @@ for path, part in [(Path('cabello/index.html'),'cabello'),(Path('piel/index.html
     t=t.replace('</body>',script+'\n</body>',1)
     path.write_text(t,encoding='utf-8')
 
-print('PASS: Tu cabello and Tu piel report completion to ANA KLAUDYA')
+print('PASS: Tu cabello and Tu piel report completion to ANA KLAUDYA inside parent scope')
