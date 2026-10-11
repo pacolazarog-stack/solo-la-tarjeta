@@ -41,6 +41,9 @@ jobs:
       - name: Exigir lectura integral de ANA KLAUDYA
         run: python3 patch-ana-composite-progress.py
 
+      - name: Comunicar lectura de Tu cabello y Tu piel
+        run: python3 patch-ana-detail-progress-bridge.py
+
       - name: Encadenar Flores con EL ESPEJO cuando ANA completa 3/3
         run: python3 patch-ana-third-mirror-gate.py
 
