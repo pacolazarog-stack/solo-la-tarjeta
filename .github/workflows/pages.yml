@@ -101,6 +101,9 @@ jobs:
       - name: Mantener siempre visible el contador de lecturas
         run: python3 patch-reading-counter-always-visible.py
 
+      - name: Reducir navegación a Atrás y Adelante
+        run: python3 patch-two-button-navigation.py
+
       - name: Verificar progreso de lectura
         run: |
           node --check narrative-universe.js
