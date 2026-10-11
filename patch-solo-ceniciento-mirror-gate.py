@@ -3,8 +3,9 @@ from pathlib import Path
 p=Path('narrative-universe.js')
 s=p.read_text(encoding='utf-8')
 
-# SOLO abierto desde CENICIENTO debe volver a completarse en esta pasada y
-# detenerse obligatoriamente en su última frase hasta pulsar «Seguir».
+# SOLO abierto desde CENICIENTO debe volver a completarse en esta pasada.
+# La última frase completa SOLO: si con ella se alcanza 3/3 aparece «Seguir»;
+# si aún faltan lecturas aparece la botonera normal Atrás · Índice · Adelante.
 if "const soloFromCeniciento=" not in s:
     end="};\n\nfunction emptyState()"
     if end not in s:
@@ -19,7 +20,7 @@ old_mirror="""function maybeStartMirror(){
 new_mirror="""function maybeStartMirror(){
   state=readState();ensureChecklist();
   /* En la cadena CENICIENTO -> SOLO -> EL ESPEJO nunca se entra automáticamente.
-     Hace falta completar SOLO, pulsar Seguir y después pulsar Adelante. */
+     Solo se entra tras la acción explícita que corresponda al cierre de SOLO. */
   if(soloFromCeniciento&&!document.body.classList.contains('ou-solo-mirror-enter'))return;
   if(state.anaComplete&&state.soloComplete&&state.cenicientoComplete&&state.cenicientoUnlocked&&!state.mirrorReadComplete)launchMirror();
 }
@@ -50,14 +51,22 @@ new_setup=r'''function setupSolo(){
     if(document.querySelector('.ou-solo-mirror-door'))return;
     const nav=document.createElement('nav');
     nav.className='ou-solo-endnav ou-solo-mirror-door';
-    nav.setAttribute('aria-label','Puerta hacia EL ESPEJO');
+    nav.setAttribute('aria-label','Navegación final de SOLO LA TARJETA');
     const back=document.createElement('button');
     back.type='button';back.textContent='Atrás';back.onclick=()=>history.back();
     const index=document.createElement('a');
     index.href=rootPath+'elegia-breve/?indice=1&v='+VERSION;index.target='_top';index.textContent='Índice';
     const forward=document.createElement('button');
-    forward.type='button';forward.textContent='Adelante';forward.setAttribute('aria-label','Entrar en EL ESPEJO');
-    forward.onclick=()=>{document.body.classList.add('ou-solo-mirror-enter');maybeStartMirror();};
+    forward.type='button';forward.textContent='Adelante';
+    forward.onclick=()=>{
+      state=readState();
+      if(state.anaComplete&&state.soloComplete&&state.cenicientoComplete&&state.cenicientoUnlocked){
+        document.body.classList.add('ou-solo-mirror-enter');
+        maybeStartMirror();
+      }else{
+        location.href=rootPath+'elegia-breve/?v='+VERSION;
+      }
+    };
     nav.append(back,index,forward);
     document.body.appendChild(nav);
     requestAnimationFrame(()=>requestAnimationFrame(()=>nav.classList.add('ou-visible')));
@@ -66,17 +75,6 @@ new_setup=r'''function setupSolo(){
   const finish=()=>{
     if(armed)return;
     armed=true;
-    if(soloFromCeniciento){
-      document.body.classList.add('ou-solo-mirror-ready');
-      /* Primero mostramos la puerta y después actualizamos 3/3 sin llamar a
-         completePiece(), porque esa función puede lanzar EL ESPEJO al completar
-         las tres lecturas. */
-      showMirrorDoor();
-      save({soloComplete:true});
-      state=readState();
-      ensureChecklist();
-      return;
-    }
     finishSolo();
   };
 
@@ -123,18 +121,37 @@ new_setup=r'''function setupSolo(){
     addEventListener('keydown',blockKeys,{capture:true});
     addEventListener('scroll',restoreLock,{passive:true});
 
-    const release=()=>{
+    const enterMirror=()=>{
       if(!locked)return;
       locked=false;
       document.body.classList.remove('ou-solo-final-locked');
-      follow?.remove();follow=null;finish();
+      follow?.remove();follow=null;
+      document.body.classList.add('ou-solo-mirror-enter');
+      maybeStartMirror();
     };
 
-    const lockFinal=()=>{
-      if(locked||armed)return;
+    const completeAtFinalPhrase=()=>{
+      if(armed)return;
+      armed=true;
       finalPhrase.classList.add('visible');
       finalPhrase.style.opacity='1';
       finalPhrase.style.visibility='visible';
+
+      /* La frase final es el instante exacto en que SOLO queda completada. */
+      save({soloComplete:true});
+      state=readState();
+      ensureChecklist();
+
+      const allThree=!!(state.anaComplete&&state.soloComplete&&state.cenicientoComplete&&state.cenicientoUnlocked);
+      document.body.classList.add('ou-solo-mirror-ready');
+
+      if(!allThree){
+        showMirrorDoor();
+        return;
+      }
+
+      /* Solo cuando la frase acaba de completar 3/3 se detiene la pantalla
+         y aparece «Seguir». No se muestra Atrás · Índice · Adelante. */
       locked=true;
       lockY=scrollY;
       document.body.classList.add('ou-solo-final-locked');
@@ -142,8 +159,8 @@ new_setup=r'''function setupSolo(){
       follow.type='button';
       follow.className='ou-solo-final-follow';
       follow.textContent='Seguir';
-      follow.setAttribute('aria-label','Continuar después de la última frase');
-      follow.addEventListener('click',release,{once:true});
+      follow.setAttribute('aria-label','Seguir hacia EL ESPEJO');
+      follow.addEventListener('click',enterMirror,{once:true});
       document.body.appendChild(follow);
       requestAnimationFrame(()=>requestAnimationFrame(()=>follow?.classList.add('ou-visible')));
       requestAnimationFrame(restoreLock);
@@ -152,17 +169,17 @@ new_setup=r'''function setupSolo(){
     if('IntersectionObserver' in window){
       const finalObserver=new IntersectionObserver(entries=>{
         const entry=entries.find(e=>e.target===finalPhrase);
-        if(!entry||armed||locked)return;
-        if(entry.isIntersecting&&entry.intersectionRatio>=.55){finalObserver.disconnect();lockFinal();}
+        if(!entry||armed)return;
+        if(entry.isIntersecting&&entry.intersectionRatio>=.55){finalObserver.disconnect();completeAtFinalPhrase();}
       },{threshold:[.55,.82,1]});
       finalObserver.observe(finalPhrase);
     }else{
       const checkFinal=()=>{
-        if(armed||locked)return;
+        if(armed)return;
         const r=finalPhrase.getBoundingClientRect();
         const visible=Math.max(0,Math.min(r.bottom,innerHeight)-Math.max(r.top,0));
         const ratio=r.height>0?visible/r.height:0;
-        if(ratio>=.55)lockFinal();
+        if(ratio>=.55)completeAtFinalPhrase();
       };
       addEventListener('scroll',checkFinal,{passive:true});
       addEventListener('resize',checkFinal);
