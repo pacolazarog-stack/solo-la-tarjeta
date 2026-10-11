@@ -38,6 +38,9 @@ jobs:
       - name: Aplicar disposición de controles
         run: python3 patch-mobile-layout.py
 
+      - name: Animar el cometa solo con transform y opacity
+        run: python3 patch-comet-transform.py index.html
+
       - name: Exigir lectura integral de ANA KLAUDYA
         run: python3 patch-ana-composite-progress.py
 
