@@ -67,17 +67,12 @@ requireAll('EL ESPEJO / Seguir',mirror,[
   'releasePause();'
 ]);
 
-// Barrido defensivo de controles sonoros publicados: si aparece un control conocido,
-// debe existir también un manejador en el mismo documento.
+// Barrido defensivo de los controles generales de sonido. Los controles
+// musicEnabled/musicStart pertenecen específicamente a CENICIENTO y ya se
+// comprueban arriba; no deben inferirse por una coincidencia de id en ANA.
 for(const [path,source] of [['index.html',solo],['elegia-breve/index.html',ana],['ceniciento/index.html',cen]]){
   if(source.includes('id="soundToggle"')&&!/(soundToggle\??\.addEventListener|soundToggle\.addEventListener)/.test(source)){
     throw new Error(`${path}: #soundToggle existe pero no tiene manejador click`);
-  }
-  if(source.includes('id="musicEnabled"')&&!source.includes('musicEnabled.onchange')){
-    throw new Error(`${path}: #musicEnabled existe pero no tiene manejador change`);
-  }
-  if(source.includes('id="musicStart"')&&!source.includes('musicStart.onclick')){
-    throw new Error(`${path}: #musicStart existe pero no tiene manejador click`);
   }
 }
 
