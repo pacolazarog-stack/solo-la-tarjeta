@@ -3,9 +3,8 @@ from pathlib import Path
 p=Path('narrative-universe.js')
 s=p.read_text(encoding='utf-8')
 
-# SOLO abierto desde CENICIENTO debe volver a completarse en esta pasada y
-# mantener su última frase visible antes de permitir EL ESPEJO.
-anchor="const page={\n"
+# SOLO abierto desde CENICIENTO debe volver a completarse en esta pasada,
+# mantener su última frase visible y, después, ofrecer una puerta explícita.
 if "const soloFromCeniciento=" not in s:
     end="};\n\nfunction emptyState()"
     if end not in s:
@@ -19,7 +18,9 @@ old_mirror="""function maybeStartMirror(){
 """
 new_mirror="""function maybeStartMirror(){
   state=readState();ensureChecklist();
-  if(soloFromCeniciento&&!document.body.classList.contains('ou-solo-mirror-ready'))return;
+  /* En la cadena CENICIENTO -> SOLO -> EL ESPEJO nunca se entra automáticamente.
+     Hace falta completar SOLO, esperar el cierre y pulsar la puerta. */
+  if(soloFromCeniciento&&!document.body.classList.contains('ou-solo-mirror-enter'))return;
   if(state.anaComplete&&state.soloComplete&&state.cenicientoComplete&&state.cenicientoUnlocked&&!state.mirrorReadComplete)launchMirror();
 }
 """
@@ -29,7 +30,6 @@ s=s.replace(old_mirror,new_mirror,1)
 
 start=s.index('function setupSolo(){')
 end=s.index('\nfunction setupAna(){',start)
-old_setup=s[start:end]
 new_setup=r'''function setupSolo(){
   after(30,()=>{
     const enter=document.getElementById('enterButton');
@@ -42,16 +42,42 @@ new_setup=r'''function setupSolo(){
        Aunque SOLO constase como leída antes, esta pasada debe completarse de nuevo. */
     if(state.soloComplete){save({soloComplete:false});state=readState();ensureChecklist();}
     document.querySelector('.ou-solo-endnav')?.remove();
-    document.body.classList.remove('ou-solo-mirror-ready');
+    document.body.classList.remove('ou-solo-mirror-ready','ou-solo-mirror-enter');
   }else if(state.cenicientoComplete&&state.cenicientoUnlocked){
     showSoloEndNav();
   }
 
   let armed=false;
+  const showMirrorDoor=()=>{
+    if(document.querySelector('.ou-solo-mirror-door'))return;
+    const nav=document.createElement('nav');
+    nav.className='ou-solo-endnav ou-solo-mirror-door';
+    nav.setAttribute('aria-label','Puerta hacia EL ESPEJO');
+    const back=document.createElement('button');
+    back.type='button';back.textContent='Atrás';back.onclick=()=>history.back();
+    const index=document.createElement('a');
+    index.href=rootPath+'elegia-breve/?indice=1&v='+VERSION;index.target='_top';index.textContent='Índice';
+    const forward=document.createElement('button');
+    forward.type='button';forward.textContent='Adelante';forward.setAttribute('aria-label','Entrar en EL ESPEJO');
+    forward.onclick=()=>{
+      document.body.classList.add('ou-solo-mirror-enter');
+      maybeStartMirror();
+    };
+    nav.append(back,index,forward);
+    document.body.appendChild(nav);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>nav.classList.add('ou-visible')));
+  };
+
   const finish=()=>{
     if(armed)return;
     armed=true;
-    if(soloFromCeniciento)document.body.classList.add('ou-solo-mirror-ready');
+    if(soloFromCeniciento){
+      document.body.classList.add('ou-solo-mirror-ready');
+      /* Marcar SOLO como completada sin abrir EL ESPEJO. */
+      completePiece('soloComplete');
+      showMirrorDoor();
+      return;
+    }
     finishSolo();
   };
 
