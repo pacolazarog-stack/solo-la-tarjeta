@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#efece5">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>EL INVENTARIO DEL AIRE</title>
+<style>
+:root{color-scheme:light;--paper:#efece5;--ink:#201e1b;--muted:#716c64}
+*{box-sizing:border-box}
+html{background:#080808;scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:var(--paper);color:var(--ink);font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia,"Times New Roman",serif;-webkit-font-smoothing:antialiased;opacity:1;transition:opacity 2.2s ease,background-color 2.2s ease}
+body.from-mirror{background:#080808;color:#f3efe6;opacity:0}
+body.from-mirror.ready{background:var(--paper);color:var(--ink);opacity:1}
+main{width:min(calc(100% - 40px),760px);margin:0 auto;padding:clamp(76px,12vh,138px) 0 18vh}
+.loading{text-align:center;font-style:italic;color:var(--muted);min-height:54vh;display:grid;place-items:center}
+.book{display:none}.book.ready{display:block}
+h1,h2,h3,.volume-label{text-align:center;font-weight:400}
+h1{margin:0 0 1.7em;font-size:clamp(2rem,6.2vw,4.1rem);line-height:1.02;letter-spacing:.08em;text-wrap:balance}
+h2{margin:.7em auto 2.8em;font-size:clamp(1.65rem,4vw,2.65rem);line-height:1.1;letter-spacing:.055em;text-wrap:balance}
+.volume-label{margin:15vh 0 1.2em;color:var(--muted);font-size:.72rem;letter-spacing:.24em;text-transform:uppercase}
+h3{margin:4.8em 0 1.55em;font-size:clamp(1.08rem,2.3vw,1.28rem);font-variant:small-caps;letter-spacing:.045em}
+p{margin:0 0 1.18em;font-size:clamp(1.08rem,2.15vw,1.28rem);line-height:1.72;text-wrap:pretty}
+.epilogue{margin-top:17vh}
+.return-zone{min-height:78vh;display:grid;place-items:center;text-align:center;opacity:0;transform:translateY(18px);transition:opacity 1.8s ease,transform 1.8s ease}
+.return-zone.visible{opacity:1;transform:none}
+.return-wrap{display:grid;gap:1.2rem;justify-items:center}
+.return-label{font-size:.72rem;letter-spacing:.20em;text-transform:uppercase;color:var(--muted)}
+.return-link{color:inherit;text-decoration:none;font-size:clamp(1.35rem,3vw,1.8rem);font-style:italic;border-bottom:1px solid rgba(32,30,27,.24);padding:.4rem .1rem;transition:border-color .3s ease,opacity .3s ease}
+.return-link:hover,.return-link:focus-visible{border-color:currentColor;outline:none}
+.error{max-width:42rem;margin:20vh auto;text-align:center;line-height:1.6}
+@media(max-width:620px){main{width:min(calc(100% - 30px),760px);padding-top:12vh}p{line-height:1.64}.volume-label{margin-top:12vh}h3{margin-top:4em}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}body,.return-zone{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<main>
+<div id="loading" class="loading">El aire todavía está quieto.</div>
+<article id="book" class="book" aria-label="EL INVENTARIO DEL AIRE"></article>
+<section id="returnZone" class="return-zone" aria-label="Regreso a ANA KLAUDYA">
+  <div class="return-wrap">
+    <span class="return-label">regreso</span>
+    <a class="return-link" href="../elegia-breve/?from=inventario">ANA KLAUDYA</a>
+  </div>
+</section>
+<noscript><p class="error">Esta edición necesita JavaScript para componer la lectura. <a href="../EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md">Abrir el texto canónico.</a></p></noscript>
+</main>
+<script>
+(()=>{
+'use strict';
+const params=new URLSearchParams(location.search);
+if(params.get('from')==='mirror')document.body.classList.add('from-mirror');
+requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('ready')));
+
+const source='../EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md?v=20261012-1';
+const loading=document.getElementById('loading');
+const book=document.getElementById('book');
+const returnZone=document.getElementById('returnZone');
+const headings=[
+'I. El recibidor','II. La habitación del reloj','III. La cocina','IV. El pasillo','V. El dormitorio','VI. El jardín','VII. Inventario','VIII. Salida',
+'I. La estación','II. El revisor','III. Las sombras','IV. El hombre de la fila siete','V. Conversación','VI. Inventario de ausencias móviles','VII. El taller','VIII. El oficio','IX. Último recorrido',
+'I. La plaza','II. El archivero','III. La fuente','IV. Los resistentes','V. El mapa imposible','VI. Teoría','VII. El museo','VIII. El visitante','IX. Invierno','X. La última sala'
+];
+function esc(s){return s.replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+function normalize(raw){
+  let text=raw.replace(/^\uFEFF/,'').replace(/\r/g,'');
+  text=text.replace(/\s+VOLUMEN IIEL OFICIO DE LAS SOMBRAS/g,'\n\nVOLUMEN II\n\nEL OFICIO DE LAS SOMBRAS\n\n');
+  text=text.replace(/\s+VOLUMEN IIILA CIUDAD QUE APRENDIÓ A OLVIDAR/g,'\n\nVOLUMEN III\n\nLA CIUDAD QUE APRENDIÓ A OLVIDAR\n\n');
+  text=text.replace(/\s+EpílogoLa habitación número cero/g,'\n\nEPÍLOGO\n\nLa habitación número cero\n\n');
+  for(const h of headings)text=text.replace(h,'\n\n'+h+'\n\n');
+  return text.replace(/\n{3,}/g,'\n\n').trim();
+}
+function prose(block){
+  return block
+    .replace(/([.!?])(?=[A-ZÁÉÍÓÚÜÑ¿¡—])/g,'$1 ')
+    .replace(/([:;])(?=[A-ZÁÉÍÓÚÜÑ¿¡—])/g,'$1 ')
+    .trim();
+}
+function compose(raw){
+  const blocks=normalize(raw).split(/\n\n+/).map(s=>s.trim()).filter(Boolean);
+  const html=[];
+  for(const block of blocks){
+    if(block==='EL INVENTARIO DEL AIRE'){html.push('<h1>'+esc(block)+'</h1>');continue}
+    if(block==='VOLUMEN II'||block==='VOLUMEN III'){html.push('<div class="volume-label">'+esc(block)+'</div>');continue}
+    if(block==='EPÍLOGO'){html.push('<div class="volume-label epilogue">EPÍLOGO</div>');continue}
+    if(block==='EL OFICIO DE LAS SOMBRAS'||block==='LA CIUDAD QUE APRENDIÓ A OLVIDAR'||block==='La habitación número cero'){html.push('<h2>'+esc(block)+'</h2>');continue}
+    if(/^(?:I|II|III|IV|V|VI|VII|VIII|IX|X)\.\s/.test(block)){html.push('<h3>'+esc(block)+'</h3>');continue}
+    html.push('<p>'+esc(prose(block))+'</p>');
+  }
+  book.innerHTML=html.join('\n');
+  loading.remove();book.classList.add('ready');
+  const watcher=new IntersectionObserver(entries=>{
+    if(entries.some(e=>e.isIntersecting)){returnZone.classList.add('visible');watcher.disconnect()}
+  },{threshold:.18});
+  watcher.observe(returnZone);
+}
+fetch(source,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error(String(r.status));return r.text()}).then(compose).catch(()=>{
+  loading.className='error';
+  loading.innerHTML='No se ha podido cargar el texto canónico.<br><a href="../EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md">Abrir EL INVENTARIO DEL AIRE.</a>';
+});
+})();
+</script>
+</body>
+</html>
