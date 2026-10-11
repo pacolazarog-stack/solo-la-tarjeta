@@ -92,6 +92,9 @@ jobs:
       - name: Añadir transición y bloqueos de lectura de EL ESPEJO
         run: python3 patch-ceniciento-mirror-reading-gates.py
 
+      - name: Blindar las pausas de EL ESPEJO contra bucles
+        run: python3 patch-mirror-pause-loop-hardfix.py
+
       - name: Devolver Salir a la página de origen
         run: python3 patch-exit-return-source.py
 
