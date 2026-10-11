@@ -1,4 +1,5 @@
 from pathlib import Path
+import runpy
 
 p=Path('narrative-universe.js')
 s=p.read_text(encoding='utf-8')
@@ -82,3 +83,9 @@ if 'oras-ceniciento-direct-mirror-gate-v1' not in s:
 
 p.write_text(s,encoding='utf-8')
 print('PASS: CENICIENTO 3/3 hides ordinary navigation and exposes only Seguir into EL ESPEJO')
+
+# El contenedor ANA puede mostrar CENICIENTO conservando /elegia-breve/#ceniciento
+# en la barra de direcciones. En ese contexto, los recursos relativos de CENICIENTO
+# se resolverían contra /elegia-breve/ y dejarían VOZ y LEER permanentemente desactivados.
+# Aplicamos el endurecimiento de rutas en el mismo paso ya autoritativo de Pages.
+runpy.run_path('patch-ceniciento-absolute-assets.py',run_name='__main__')
