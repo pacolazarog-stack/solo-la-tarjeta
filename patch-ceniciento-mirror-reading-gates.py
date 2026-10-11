@@ -77,6 +77,29 @@ p.write_text(s, encoding='utf-8')
 p = Path('ceniciento/el-espejo.js')
 s = p.read_text(encoding='utf-8')
 
+# Cada pausa sólo puede dispararse una vez por lectura. Al pulsar Seguir se marca
+# como consumida y se avanza automáticamente al fragmento siguiente.
+pause_click_old = """next.addEventListener('click',()=>{if(!locked||lockedScene!==scene)return;releasePause();scene.focus({preventScroll:true})});"""
+pause_click_new = """next.addEventListener('click',()=>{
+      if(!locked||lockedScene!==scene)return;
+      scene.dataset.pauseConsumed='true';
+      releasePause();
+      const nextScene=sceneNodes[index+1];
+      if(nextScene){
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          mirror.scrollTo({top:nextScene.offsetTop,behavior:'smooth'});
+          nextScene.focus({preventScroll:true});
+        }));
+      }
+    });"""
+if pause_click_old in s:
+    s = s.replace(pause_click_old, pause_click_new, 1)
+
+pause_trigger_old = """if(entry.isIntersecting&&entry.intersectionRatio>=.68&&entry.target.dataset.pause==='true'){"""
+pause_trigger_new = """if(entry.isIntersecting&&entry.intersectionRatio>=.68&&entry.target.dataset.pause==='true'&&entry.target.dataset.pauseConsumed!=='true'){"""
+if pause_trigger_old in s:
+    s = s.replace(pause_trigger_old, pause_trigger_new, 1)
+
 sentinel_anchor = "const endSentinel=mirror.querySelector('.mirror-end-sentinel');\n"
 final_gate = r'''const endSentinel=mirror.querySelector('.mirror-end-sentinel');
 let finalGateArmed=false,finalGateReady=false,finalGateTimer=0;
@@ -145,6 +168,7 @@ start_old = """function start(){
 }"""
 start_new = """function start(){
   if(started)return;started=true;finished=false;locked=false;lockedScene=null;lastTouchY=null;
+  sceneNodes.forEach(scene=>delete scene.dataset.pauseConsumed);
   resetMirrorFinalGate();
   clearFinaleTimers();
   finale.hidden=true;finale.classList.remove('is-active','show-options','show-card','show-question');
@@ -156,7 +180,7 @@ if start_old in s:
     s = s.replace(start_old, start_new, 1)
 
 reset_old = """window.addEventListener('oras:mirror-reset',()=>{started=false;finished=false;locked=false;lockedScene=null;clearFinaleTimers();finale.classList.remove('is-active','show-options','show-card','show-question');finale.hidden=true;document.body.classList.remove('mirror','mirror-finale-active');mirror.hidden=true});"""
-reset_new = """window.addEventListener('oras:mirror-reset',()=>{started=false;finished=false;locked=false;lockedScene=null;resetMirrorFinalGate();clearFinaleTimers();finale.classList.remove('is-active','show-options','show-card','show-question');finale.hidden=true;document.body.classList.remove('mirror','mirror-finale-active');mirror.hidden=true});"""
+reset_new = """window.addEventListener('oras:mirror-reset',()=>{started=false;finished=false;locked=false;lockedScene=null;sceneNodes.forEach(scene=>delete scene.dataset.pauseConsumed);resetMirrorFinalGate();clearFinaleTimers();finale.classList.remove('is-active','show-options','show-card','show-question');finale.hidden=true;document.body.classList.remove('mirror','mirror-finale-active');mirror.hidden=true});"""
 if reset_old in s:
     s = s.replace(reset_old, reset_new, 1)
 
@@ -206,4 +230,4 @@ if 'oras-mirror-explicit-follow-gates' not in s:
     s += addon
 p.write_text(s, encoding='utf-8')
 
-print('PASS: CENICIENTO transition, EL ESPEJO gates and 10-second final hold applied')
+print('PASS: CENICIENTO transition, EL ESPEJO gates, one-shot pauses and 10-second final hold applied')
