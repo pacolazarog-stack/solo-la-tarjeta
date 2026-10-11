@@ -68,8 +68,13 @@ new_setup=r'''function setupSolo(){
     armed=true;
     if(soloFromCeniciento){
       document.body.classList.add('ou-solo-mirror-ready');
-      completePiece('soloComplete');
+      /* Primero mostramos la puerta y después actualizamos 3/3 sin llamar a
+         completePiece(), porque esa función puede lanzar EL ESPEJO al completar
+         las tres lecturas. */
       showMirrorDoor();
+      save({soloComplete:true});
+      state=readState();
+      ensureChecklist();
       return;
     }
     finishSolo();
