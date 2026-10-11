@@ -44,6 +44,9 @@ jobs:
       - name: Aplicar respiración sonora de SOLO LA TARJETA
         run: python3 patch-solo-sonic-breath.py index.html
 
+      - name: Blindar integración sonora con el index real
+        run: python3 patch-solo-sonic-hardening.py index.html
+
       - name: Exigir lectura integral de ANA KLAUDYA
         run: python3 patch-ana-composite-progress.py
 
@@ -136,6 +139,10 @@ jobs:
           grep -q 'id="oras-sonic-breath-engine"' index.html
           grep -q "function deepSilence()" index.html
           grep -q "osc.frequency.value = 1040" index.html
+          grep -q "const fadeSoundTo=(target,duration=900,done)=>" index.html
+          grep -q 'id="duskPreFinal"' index.html
+          grep -q 'id="duskFinalPhrase"' index.html
+          ! grep -q "function fadeHtmlAudio" index.html
 
       - name: Preparar voz de Ceniciento
         run: |
