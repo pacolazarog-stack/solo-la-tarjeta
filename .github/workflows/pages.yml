@@ -80,6 +80,9 @@ jobs:
       - name: Cerrar EL ESPEJO con flag y flores
         run: python3 patch-mirror-finale.py
 
+      - name: Eliminar Índice de la pantalla final flag
+        run: python3 patch-remove-final-index.py
+
       - name: Unificar controles finales de CENICIENTO
         run: python3 patch-ceniciento-finale-controls.py
 
