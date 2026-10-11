@@ -41,6 +41,9 @@ jobs:
       - name: Animar el cometa solo con transform y opacity
         run: python3 patch-comet-transform.py index.html
 
+      - name: Aplicar respiración sonora de SOLO LA TARJETA
+        run: python3 patch-solo-sonic-breath.py index.html
+
       - name: Exigir lectura integral de ANA KLAUDYA
         run: python3 patch-ana-composite-progress.py
 
@@ -130,6 +133,9 @@ jobs:
           node ceniciento/check-mirror.cjs
           node check-mirror-silent-finale.cjs .
           node check-publication-loading.cjs
+          grep -q 'id="oras-sonic-breath-engine"' index.html
+          grep -q "function deepSilence()" index.html
+          grep -q "osc.frequency.value = 1040" index.html
 
       - name: Preparar voz de Ceniciento
         run: |
