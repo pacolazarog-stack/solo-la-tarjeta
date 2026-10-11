@@ -62,6 +62,9 @@ jobs:
       - name: Unificar controles finales de CENICIENTO
         run: python3 patch-ceniciento-finale-controls.py
 
+      - name: Compatibilizar navegación final de CENICIENTO con las pruebas
+        run: python3 patch-ceniciento-finale-test-compat.py
+
       - name: Verificar progreso de lectura
         run: |
           node check-reading-progress.cjs
