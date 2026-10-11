@@ -8,11 +8,13 @@ anchor="""function ensureChecklist(){
 """
 helper="""function readingChecklistHref(piece,key){
   if(piece==='solo')return rootPath+'?origen=contador';
-  if(piece==='ceniciento')return rootPath+'ceniciento/';
+  /* CENICIENTO nunca se abre desde la barra de lecturas: su única puerta
+     narrativa sigue siendo el interrogante. */
+  if(piece==='ceniciento')return '';
   if(piece!=='ana')return '';
   if(key==='elegia')return rootPath+'elegia-breve/';
   const hash={estrella:'estrella',ojos:'ojos',labios:'sonrisa',cabello:'cabello',piel:'piel',interludio:'interludio',epilogo:'epilogo'}[key];
-  return hash?rootPath+'elegia-breve/#'+hash:rootPath+'elegia-breve/?indice=1';
+  return hash?rootPath+'elegia-breve/#'+hash:rootPath+'elegia-breve/';
 }
 function wireReadingChecklist(box,current){
   const go=href=>{if(href)location.href=href;};
@@ -41,10 +43,14 @@ function wireReadingChecklist(box,current){
 
   const cen=box.querySelector('[data-piece=\"ceniciento\"]');
   if(cen){
-    const enabled=current.cenicientoUnlocked||current.cenicientoComplete;
-    cen.classList.toggle('ou-check-link',enabled);cen.classList.toggle('ou-check-locked',!enabled);
-    if(enabled){const href=readingChecklistHref('ceniciento');cen.tabIndex=0;cen.setAttribute('role','link');cen.removeAttribute('aria-disabled');cen.onclick=()=>go(href);cen.onkeydown=event=>keyboard(event,href);}
-    else{cen.tabIndex=-1;cen.removeAttribute('role');cen.setAttribute('aria-disabled','true');cen.onclick=null;cen.onkeydown=null;}
+    /* Se muestra su estado, pero deliberadamente no es un enlace incluso
+       después de haber sido descubierto o leído. */
+    cen.classList.remove('ou-check-link');
+    cen.classList.add('ou-check-locked');
+    cen.tabIndex=-1;cen.removeAttribute('role');
+    cen.setAttribute('aria-disabled','true');
+    cen.setAttribute('title','CENICIENTO solo es accesible desde el interrogante');
+    cen.onclick=null;cen.onkeydown=null;
   }
 }
 
@@ -68,11 +74,11 @@ css_anchor="""  .ou-reading-checklist .ou-ana-parts span[data-done=\"true\"]{col
 css_extra=css_anchor+"""
   .ou-reading-checklist .ou-check-link,.ou-reading-checklist .ou-ana-part-link{cursor:pointer}
   .ou-reading-checklist .ou-check-link:hover,.ou-reading-checklist .ou-check-link:focus-visible,.ou-reading-checklist .ou-ana-part-link:hover,.ou-reading-checklist .ou-ana-part-link:focus-visible{color:#fff!important;text-decoration:underline;text-underline-offset:2px;outline:none}
-  .ou-reading-checklist .ou-check-locked{cursor:default;opacity:.66}
+  .ou-reading-checklist .ou-check-locked{cursor:default;opacity:.76;text-decoration:none!important}
 """
 if css_anchor not in s:
     raise RuntimeError('No se encontró CSS del listado ANA')
 s=s.replace(css_anchor,css_extra,1)
 
 p.write_text(s,encoding='utf-8')
-print('PASS: la barra de lecturas permite abrir cada lectura y cada parte de ANA')
+print('PASS: barra de lecturas navegable; CENICIENTO permanece exclusivo del interrogante')
