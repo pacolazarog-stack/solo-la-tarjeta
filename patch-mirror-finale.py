@@ -79,13 +79,11 @@ function leaveFinale(next){
 function enterFinale(){
   if(finale.classList.contains('is-active'))return;
   clearFinaleTimers();
-  // Ocultar por completo EL ESPEJO: flag queda realmente solo en pantalla.
   mirror.hidden=true;
   document.body.classList.remove('mirror');
   document.body.classList.add('mirror-finale-active');
   finale.hidden=false;
   requestAnimationFrame(()=>requestAnimationFrame(()=>finale.classList.add('is-active')));
-  // flag permanece absolutamente solo durante varios segundos.
   finaleTimers.push(setTimeout(()=>finale.classList.add('show-nav'),4200));
   finaleTimers.push(setTimeout(()=>finale.classList.add('show-card'),5200));
   finaleTimers.push(setTimeout(()=>finale.classList.add('show-question'),6200));
@@ -117,14 +115,12 @@ if old_mark not in s:
     raise RuntimeError('No se encontró el cierre canónico de la escena 32 de EL ESPEJO')
 s = s.replace(old_mark, new_mark, 1)
 
-# Alcanzar el final ya no emite un evento de salida: entra en una pantalla bloqueada.
 old_observer = """new IntersectionObserver(entries=>{\n  if(finished||!started||!entries.some(entry=>entry.isIntersecting))return;\n  finished=true;window.dispatchEvent(new CustomEvent('oras:mirror-end'));\n},{root:mirror,threshold:.5}).observe(endSentinel);"""
 new_observer = """new IntersectionObserver(entries=>{\n  if(finished||!started||!entries.some(entry=>entry.isIntersecting))return;\n  finished=true;\n  enterFinale();\n},{root:mirror,threshold:.5}).observe(endSentinel);"""
 if old_observer not in s:
     raise RuntimeError('No se encontró el observador final canónico de EL ESPEJO')
 s = s.replace(old_observer, new_observer, 1)
 
-# Bloquear cualquier navegación por gesto/tecla mientras la pantalla flag esté activa.
 anchor = """mirror.addEventListener('keydown',event=>{\n  if(!locked)return;\n  if(['ArrowUp','PageUp','Home'].includes(event.key)){releasePause();return}\n  if(['ArrowDown','PageDown',' ','End'].includes(event.key)){event.preventDefault();event.stopPropagation()}\n});"""
 extra = anchor + """\nfunction blockFinaleInput(event){\n  if(!document.body.classList.contains('mirror-finale-active'))return;\n  event.preventDefault();event.stopPropagation();\n}\nwindow.addEventListener('wheel',blockFinaleInput,{passive:false,capture:true});\nwindow.addEventListener('touchmove',blockFinaleInput,{passive:false,capture:true});\nwindow.addEventListener('keydown',event=>{\n  if(!document.body.classList.contains('mirror-finale-active'))return;\n  if(['Tab'].includes(event.key))return;\n  event.preventDefault();event.stopPropagation();\n},{capture:true});"""
 if anchor not in s:
@@ -138,11 +134,11 @@ if old_reset in s:
 
 p.write_text(s, encoding='utf-8')
 
-# El universo no debe abandonar EL ESPEJO automáticamente: toda salida se hace desde opciones explícitas.
+# Se conserva el reset del ciclo por compatibilidad y coherencia de estado, pero nunca se navega automáticamente.
 p = Path('narrative-universe.js')
 s = p.read_text(encoding='utf-8')
 old = """window.addEventListener('oras:mirror-end',()=>{\n  resetReadingCycle();\n  if(page.ana){topGo(rootPath+'elegia-breve/?v='+VERSION);return;}\n  if(window.parent!==window){window.parent.postMessage({channel:'oras-universe-v2',type:'mirror-return'},location.origin);return;}\n  topGo(rootPath+'elegia-breve/?v='+VERSION);\n});"""
-new = """window.addEventListener('oras:mirror-end',()=>{\n  // Sin salida automática: la pantalla final de EL ESPEJO exige una opción explícita.\n});"""
+new = """window.addEventListener('oras:mirror-end',()=>{\n  resetReadingCycle();\n  // Sin salida automática: la pantalla final de EL ESPEJO exige una opción explícita.\n});"""
 if old not in s:
     raise RuntimeError('No se encontró el retorno automático canónico de EL ESPEJO')
 s = s.replace(old, new, 1)
