@@ -1,5 +1,8 @@
 (()=>{
 'use strict';
+const ROOT='/solo-la-tarjeta/';
+const STORAGE='oras.universe.v2';
+const INVENTORY_URL=ROOT+'inventario-del-aire/?from=mirror';
 const scenes=[
 `No era la misma historia.`,
 `Parecían tres.`,
@@ -52,6 +55,23 @@ function releasePause(){
   const button=lockedScene?.querySelector('.mirror-continue');
   if(button)button.hidden=true;
   locked=false;lockedScene=null;
+}
+function resetReadingCycleForInventory(){
+  try{
+    const raw=localStorage.getItem(STORAGE);
+    const saved=raw?JSON.parse(raw):{};
+    const next=Object.assign({},saved,{
+      anaComplete:false,
+      soloComplete:false,
+      cenicientoComplete:false,
+      mirrorReadComplete:false,
+      returnedFromCeniciento:true
+    });
+    localStorage.setItem(STORAGE,JSON.stringify(next));
+  }catch(_){}
+}
+function enterInventory(){
+  try{window.top.location.href=INVENTORY_URL}catch(_){location.href=INVENTORY_URL}
 }
 scenes.forEach((text,index)=>{
   const number=index+1,scene=document.createElement('section');
@@ -106,13 +126,20 @@ mirror.addEventListener('keydown',event=>{
 const endSentinel=mirror.querySelector('.mirror-end-sentinel');
 new IntersectionObserver(entries=>{
   if(finished||!started||!entries.some(entry=>entry.isIntersecting))return;
-  finished=true;window.dispatchEvent(new CustomEvent('oras:mirror-end'));
+  finished=true;
+  resetReadingCycleForInventory();
+  setTimeout(()=>{
+    mirror.style.transition='opacity 1.6s ease';
+    mirror.style.opacity='0';
+  },2200);
+  setTimeout(enterInventory,3900);
 },{root:mirror,threshold:.5}).observe(endSentinel);
 function start(){
   if(started)return;started=true;finished=false;locked=false;lockedScene=null;lastTouchY=null;
+  mirror.style.transition='';mirror.style.opacity='';
   mirror.hidden=false;document.body.classList.add('mirror');mirror.scrollTop=0;
   sceneNodes[0].focus({preventScroll:true});
 }
 window.addEventListener('oras:mirror-start',start);
-window.addEventListener('oras:mirror-reset',()=>{started=false;finished=false;locked=false;lockedScene=null;mirror.hidden=true;document.body.classList.remove('mirror')});
+window.addEventListener('oras:mirror-reset',()=>{started=false;finished=false;locked=false;lockedScene=null;mirror.style.transition='';mirror.style.opacity='';mirror.hidden=true;document.body.classList.remove('mirror')});
 })();
