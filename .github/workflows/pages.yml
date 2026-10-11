@@ -41,6 +41,9 @@ jobs:
       - name: Exigir lectura integral de ANA KLAUDYA
         run: python3 patch-ana-composite-progress.py
 
+      - name: Encadenar Flores con EL ESPEJO cuando ANA completa 3/3
+        run: python3 patch-ana-third-mirror-gate.py
+
       - name: Unificar navegación final de SOLO LA TARJETA
         run: python3 patch-solo-endnav.py
 
