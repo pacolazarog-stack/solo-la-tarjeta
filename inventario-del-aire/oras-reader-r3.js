@@ -11,11 +11,11 @@ const ASSETS={
   zero:{zero:null}
 };
 
-/* Sprites fotográficos aportados para R3.
-   Cada tira conserva el orden narrativo de sus capítulos. */
+/* R3.2 · Los títulos de volumen NO reutilizan la primera foto del capítulo.
+   Sombras y Ciudad mantienen el orden narrativo de las tiras ya cargadas. */
 const SPRITE_INDEX={
-  train:{train:0,station:0,inspector:1,shadows:2,'row-seven':3,conversation:4,'mobile-inventory':5,workshop:6,office:7,'last-journey':8},
-  city:{city:0,plaza:0,archivist:1,fountain:2,resisters:3,map:4,theory:5,museum:6,visitor:7,winter:8,'last-room':9}
+  train:{station:0,inspector:1,shadows:2,'row-seven':3,conversation:4,'mobile-inventory':5,workshop:6,office:7,'last-journey':8},
+  city:{plaza:0,archivist:1,fountain:2,resisters:3,map:4,theory:5,museum:6,visitor:7,winter:8,'last-room':9}
 };
 const SPRITE_COUNT={train:9,city:10};
 const TILE_RATIO=426/240;
@@ -173,8 +173,8 @@ function applySprite(layer,world,chapter){
   if(idx==null||!count||!b64)return false;
 
   const rect=layer.getBoundingClientRect();
-  const h=rect.height||innerHeight*1.04;
-  const w=rect.width||innerWidth*1.04;
+  const h=rect.height||innerHeight;
+  const w=rect.width||innerWidth;
   const tileW=h*TILE_RATIO;
   const totalW=count*tileW;
   const x=w/2-(idx+.5)*tileW;
@@ -190,6 +190,12 @@ function applyPanelPhoto(layer,panel){
   const world=panel?.dataset.world||'house';
   const chapter=panel?.dataset.chapter||world;
   const asset=panel?.dataset.asset||'';
+
+  /* Los títulos de VOLUMEN conservan su propia escenografía y no duplican capítulo I. */
+  if((world==='train'&&chapter==='train')||(world==='city'&&chapter==='city'))return false;
+
+  /* Habitación 0 nace de la última sala del museo y después se blanquea por CSS. */
+  if(world==='zero')return applySprite(layer,'city','last-room');
 
   if(world==='train'||world==='city')return applySprite(layer,world,chapter);
   if(world==='house'&&asset){
@@ -245,7 +251,7 @@ function showBackground(panel){
   if(!hasPhoto){
     outgoing.classList.remove('bg-enter');
     outgoing.classList.add('bg-exit');
-    setTimeout(()=>resetLayer(outgoing),1150);
+    setTimeout(()=>resetLayer(outgoing),900);
     return;
   }
 
@@ -261,7 +267,7 @@ function showBackground(panel){
     incoming.classList.add('bg-current');
     incoming.style.zIndex='1';
     activeLayer=nextIndex;
-  },1700);
+  },1500);
 }
 
 function syncPanel(){
