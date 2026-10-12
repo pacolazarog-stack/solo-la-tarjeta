@@ -2,17 +2,20 @@
 'use strict';
 
 const STORAGE='oras.universe.v2';
+const MIRROR_AUDIO_STORAGE='oras.mirror.audio.v1';
 const ROOT='/solo-la-tarjeta/';
+const VERSION='20261012-audio-mirror-1';
 const anaPage=location.pathname.includes('/elegia-breve/');
+const soloPage=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'')==='/solo-la-tarjeta';
 const epilogueDocument=location.pathname.includes('/epilogo/');
 
 if(epilogueDocument)document.documentElement.classList.add('ou-epilogue-document');
+if(soloPage)document.documentElement.classList.add('ou-solo-document');
 
 const syncJourneyNav=()=>{
   const hideJourneyNav=anaPage&&location.hash.toLowerCase()==='#ceniciento';
   document.documentElement.classList.toggle('ou-hide-journey-nav',hideJourneyNav);
 };
-
 const syncEpilogueForward=()=>{
   if(!anaPage)return;
   const button=document.getElementById('journeyNext');
@@ -30,183 +33,120 @@ const syncEpilogueForward=()=>{
     delete button.dataset.ouSoloForward;
   }
 };
-
-const syncRouteChrome=()=>{
-  syncJourneyNav();
-  syncEpilogueForward();
-};
-
+const syncRouteChrome=()=>{syncJourneyNav();syncEpilogueForward()};
 syncRouteChrome();
-window.addEventListener('hashchange',syncRouteChrome);
-window.addEventListener('popstate',syncRouteChrome);
+addEventListener('hashchange',syncRouteChrome);
+addEventListener('popstate',syncRouteChrome);
 
 if(anaPage){
-  const originalPushState=history.pushState.bind(history);
-  history.pushState=(...args)=>{
-    const result=originalPushState(...args);
-    queueMicrotask(syncRouteChrome);
-    return result;
-  };
-  const originalReplaceState=history.replaceState.bind(history);
-  history.replaceState=(...args)=>{
-    const result=originalReplaceState(...args);
-    queueMicrotask(syncRouteChrome);
-    return result;
-  };
+  const push=history.pushState.bind(history),replace=history.replaceState.bind(history);
+  history.pushState=(...args)=>{const out=push(...args);queueMicrotask(syncRouteChrome);return out};
+  history.replaceState=(...args)=>{const out=replace(...args);queueMicrotask(syncRouteChrome);return out};
 }
 
-function readUniverseState(){
-  try{
-    const raw=localStorage.getItem(STORAGE);
-    return raw?JSON.parse(raw):{};
-  }catch(_){return {}}
+function hostWindow(){try{return window.top||window}catch(_){return window}}
+function hostDocument(){try{return hostWindow().document}catch(_){return document}}
+function hostAudio(){return [...hostDocument().querySelectorAll('audio')]}
+function readUniverseState(){try{const raw=localStorage.getItem(STORAGE);return raw?JSON.parse(raw):{}}catch(_){return {}}}
+function markCardFound(){try{const state=readUniverseState();state.cardFound=true;localStorage.setItem(STORAGE,JSON.stringify(state))}catch(_){}}
+function veil(){
+  const doc=hostDocument();
+  let node=doc.getElementById('ou-transition-v2');
+  if(node)return node;
+  node=doc.createElement('div');node.id='ou-transition-v2';node.setAttribute('aria-hidden','true');
+  node.style.cssText='position:fixed;inset:0;z-index:2147483646;pointer-events:none;background:#100f0e;opacity:0;transition:opacity 2.2s ease';
+  doc.body.appendChild(node);return node;
+}
+function fadeAudio(duration=2200){
+  const tracks=hostAudio().map(audio=>({audio,start:Number.isFinite(audio.volume)?audio.volume:1}));
+  const began=performance.now();
+  return new Promise(resolve=>{
+    const step=now=>{
+      const p=Math.min(1,(now-began)/duration);
+      tracks.forEach(({audio,start})=>{try{audio.volume=Math.max(0,start*(1-p))}catch(_){}});
+      if(p<1){requestAnimationFrame(step);return}
+      tracks.forEach(({audio})=>{try{audio.volume=0;audio.pause()}catch(_){}});resolve();
+    };
+    requestAnimationFrame(step);
+  });
+}
+function hardSilence(){hostAudio().forEach(audio=>{try{audio.volume=0;audio.muted=true;audio.pause()}catch(_){}})}
+async function darkAndSilence(){
+  const node=veil();requestAnimationFrame(()=>{node.style.opacity='1'});await fadeAudio(2200);hardSilence();return node;
+}
+function revealMirror(node){if(!node)return;node.style.transition='opacity .95s ease';requestAnimationFrame(()=>{node.style.opacity='0'});setTimeout(()=>node.remove(),1100)}
+function saveMirrorAudioState(){
+  const win=hostWindow(),doc=hostDocument(),drone=doc.getElementById('soundtrack');
+  const path=win.location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'');
+  const origin=path==='/solo-la-tarjeta'?'solo':'ana';
+  const state={origin,route:win.location.hash||'',droneTime:origin==='solo'&&drone?drone.currentTime||0:0,droneVolume:origin==='solo'&&drone&&drone.volume>0?drone.volume:.14};
+  try{win.sessionStorage.setItem(MIRROR_AUDIO_STORAGE,JSON.stringify(state))}catch(_){}
 }
 
-function markCardFound(){
-  try{
-    const state=readUniverseState();
-    state.cardFound=true;
-    localStorage.setItem(STORAGE,JSON.stringify(state));
-  }catch(_){}
+let navTransitioning=false;
+async function goToSoloFromEpilogue(){
+  if(navTransitioning)return;navTransitioning=true;markCardFound();await darkAndSilence();
+  const url=ROOT+'?origen=tarjeta&auto=1&v='+VERSION;
+  try{hostWindow().location.href=url}catch(_){location.href=url}
 }
 
-function goToSoloFromEpilogue(){
-  const card=document.querySelector('.ou-card');
-  if(card){card.click();return;}
-  markCardFound();
-  const url=ROOT+'?origen=tarjeta&auto=1&v=20261012-epilogo';
-  try{window.top.location.href=url}catch(_){location.href=url}
-}
+let mirrorTransitioning=false,permitMirrorStart=false,mirrorSilenceTimer=0;
+function guardMirrorSilence(){hardSilence();clearInterval(mirrorSilenceTimer);mirrorSilenceTimer=setInterval(hardSilence,250)}
+addEventListener('oras:mirror-silence',guardMirrorSilence,true);
+addEventListener('oras:mirror-start',event=>{
+  if(permitMirrorStart){permitMirrorStart=false;guardMirrorSilence();return}
+  event.stopImmediatePropagation();
+  if(mirrorTransitioning)return;
+  mirrorTransitioning=true;saveMirrorAudioState();
+  darkAndSilence().then(node=>{
+    guardMirrorSilence();permitMirrorStart=true;dispatchEvent(new CustomEvent('oras:mirror-start'));
+    setTimeout(()=>revealMirror(node),80);mirrorTransitioning=false;
+  });
+},true);
 
-function trilogyCompleteForMirror(){
-  const state=readUniverseState();
-  return state.soloComplete===true&&state.anaComplete===true&&state.cenicientoComplete===true&&state.mirrorReadComplete!==true;
-}
-
-function launchMirrorFromAna(){
-  if(document.body.classList.contains('mirror'))return;
+function ensureMirrorEngine(){
+  if(window.parent!==window||(!soloPage&&!anaPage))return;
   let mirror=document.getElementById('mirror');
-  if(!mirror){
-    mirror=document.createElement('main');
-    mirror.id='mirror';
-    mirror.setAttribute('aria-label','EL ESPEJO');
-    mirror.hidden=true;
-    document.body.appendChild(mirror);
-  }
-  const start=()=>window.dispatchEvent(new CustomEvent('oras:mirror-start'));
-  const existing=document.querySelector('script[data-oras-mirror]');
-  if(existing){start();return;}
-  const script=document.createElement('script');
-  script.dataset.orasMirror='true';
-  script.src='/solo-la-tarjeta/ceniciento/el-espejo.js?v=20261012-last-ana-piece';
-  script.onload=start;
-  document.body.appendChild(script);
+  if(!mirror){mirror=document.createElement('main');mirror.id='mirror';mirror.setAttribute('aria-label','EL ESPEJO');mirror.hidden=true;document.body.appendChild(mirror)}
+  if(document.querySelector('script[data-oras-mirror]'))return;
+  const script=document.createElement('script');script.dataset.orasMirror='true';script.src=ROOT+'ceniciento/el-espejo.js?v='+VERSION;document.body.appendChild(script);
+}
+ensureMirrorEngine();
+
+function trilogyCompleteForMirror(){const state=readUniverseState();return state.soloComplete===true&&state.anaComplete===true&&state.cenicientoComplete===true&&state.mirrorReadComplete!==true}
+function launchMirrorFromAna(){
+  ensureMirrorEngine();
+  const script=document.querySelector('script[data-oras-mirror]');
+  if(script?.dataset.loaded==='true'){dispatchEvent(new CustomEvent('oras:mirror-start'));return}
+  if(script)script.addEventListener('load',()=>{script.dataset.loaded='true';dispatchEvent(new CustomEvent('oras:mirror-start'))},{once:true});
 }
 
 document.addEventListener('click',event=>{
-  const button=event.target.closest?.('#journeyNext');
-  if(!button||!anaPage)return;
+  const button=event.target.closest?.('#journeyNext');if(!button||!anaPage)return;
   const hash=location.hash.toLowerCase();
-  if(hash==='#epilogo'){
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    goToSoloFromEpilogue();
-    return;
-  }
-  if(hash!=='#estrella')return;
-  if(!trilogyCompleteForMirror())return;
-  event.preventDefault();
-  event.stopImmediatePropagation();
-  launchMirrorFromAna();
+  if(hash==='#epilogo'){event.preventDefault();event.stopImmediatePropagation();goToSoloFromEpilogue();return}
+  if(hash==='#estrella'&&trilogyCompleteForMirror()){event.preventDefault();event.stopImmediatePropagation();launchMirrorFromAna()}
 },true);
 
 const base=document.createElement('script');
 base.src='https://cdn.jsdelivr.net/gh/pacolazarog-stack/solo-la-tarjeta@80866cb8ae17d31356462edf408a4d7f099e1241/narrative-universe.js';
 base.async=false;
 base.onload=()=>{
-  const style=document.createElement('style');
-  style.id='mobile-portrait-layout-fix';
-  style.textContent=`
-html.ou-hide-journey-nav .journey-nav{
-  display:none!important;
-}
-html.ou-epilogue-document .ou-card{
-  display:none!important;
-}
-.ou-card{
-  right:max(16px,env(safe-area-inset-right))!important;
-  left:auto!important;
-  transform:rotate(4deg)!important;
-}
-.ou-reading-checklist{
-  left:max(10px,env(safe-area-inset-left))!important;
-  right:auto!important;
-}
-.ou-reading-checklist summary{margin-left:0!important}
-.ou-reading-checklist ul{left:0!important;right:auto!important}
-
+  const style=document.createElement('style');style.id='mobile-portrait-layout-fix';style.textContent=`
+html.ou-hide-journey-nav .journey-nav{display:none!important}
+html.ou-epilogue-document .ou-card{display:none!important}
+html.ou-solo-document .work-subtitle{display:none!important}
+.ou-card{right:max(16px,env(safe-area-inset-right))!important;left:auto!important;transform:rotate(4deg)!important}
+.ou-reading-checklist{left:max(10px,env(safe-area-inset-left))!important;right:auto!important}
+.ou-reading-checklist summary{margin-left:0!important}.ou-reading-checklist ul{left:0!important;right:auto!important}
 @media(max-width:700px) and (orientation:portrait){
-  .ou-card{
-    right:max(10px,env(safe-area-inset-right))!important;
-    left:auto!important;
-    bottom:calc(env(safe-area-inset-bottom,0px) + 10px)!important;
-    width:94px!important;
-    height:58px!important;
-    transform:rotate(4deg)!important;
-  }
-  .ou-card::before{left:13px!important;top:12px!important;width:23px!important;height:17px!important}
-  .ou-card::after{left:13px!important;right:13px!important;bottom:11px!important}
-
-  .ou-reading-checklist{
-    left:max(10px,env(safe-area-inset-left))!important;
-    right:auto!important;
-    bottom:calc(env(safe-area-inset-bottom,0px) + 18px)!important;
-  }
-  .ou-reading-checklist summary{
-    margin-left:0!important;
-    padding:5px 8px!important;
-    border-color:rgba(255,255,255,.20)!important;
-    background:rgba(12,12,12,.38)!important;
-    backdrop-filter:blur(3px)!important;
-    -webkit-backdrop-filter:blur(3px)!important;
-  }
-  .ou-reading-checklist ul{left:0!important;right:auto!important}
-
-  .journey-nav{
-    left:112px!important;
-    right:112px!important;
-    bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;
-    transform:none!important;
-    width:auto!important;
-    max-width:none!important;
-    height:48px!important;
-    padding:0!important;
-    border:0!important;
-    border-top:1px solid rgba(255,250,241,.46)!important;
-    border-radius:0!important;
-    background:transparent!important;
-    box-shadow:none!important;
-    backdrop-filter:none!important;
-    -webkit-backdrop-filter:none!important;
-  }
-  .journey-nav button{
-    min-width:0!important;
-    min-height:48px!important;
-    padding:7px 3px!important;
-    border:0!important;
-    border-radius:0!important;
-    background:transparent!important;
-    box-shadow:none!important;
-    font-size:12px!important;
-    text-shadow:0 1px 4px rgba(0,0,0,.9)!important;
-  }
-  .journey-nav button+button{
-    border-left:1px solid rgba(255,250,241,.26)!important;
-  }
-}
-`;
-  document.head.appendChild(style);
-  syncRouteChrome();
+.ou-card{right:max(10px,env(safe-area-inset-right))!important;left:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 10px)!important;width:94px!important;height:58px!important;transform:rotate(4deg)!important}
+.ou-card::before{left:13px!important;top:12px!important;width:23px!important;height:17px!important}.ou-card::after{left:13px!important;right:13px!important;bottom:11px!important}
+.ou-reading-checklist{left:max(10px,env(safe-area-inset-left))!important;right:auto!important;bottom:calc(env(safe-area-inset-bottom,0px) + 18px)!important}
+.ou-reading-checklist summary{margin-left:0!important;padding:5px 8px!important;border-color:rgba(255,255,255,.20)!important;background:rgba(12,12,12,.38)!important;backdrop-filter:blur(3px)!important;-webkit-backdrop-filter:blur(3px)!important}.ou-reading-checklist ul{left:0!important;right:auto!important}
+.journey-nav{left:112px!important;right:112px!important;bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;transform:none!important;width:auto!important;max-width:none!important;height:48px!important;padding:0!important;border:0!important;border-top:1px solid rgba(255,250,241,.46)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.journey-nav button{min-width:0!important;min-height:48px!important;padding:7px 3px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;font-size:12px!important;text-shadow:0 1px 4px rgba(0,0,0,.9)!important}.journey-nav button+button{border-left:1px solid rgba(255,250,241,.26)!important}
+}`;document.head.appendChild(style);syncRouteChrome();
 };
 base.onerror=()=>console.error('No se pudo cargar el módulo base del universo narrativo.');
 document.head.appendChild(base);
