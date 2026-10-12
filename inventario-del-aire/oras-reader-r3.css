@@ -1,45 +1,34 @@
-/* ORAS · lector fotográfico secuencial R3.2
-   Una parte = un viewport. La fotografía cambia; la lectura siempre avanza izquierda→derecha. */
+/* ORAS · lector fotográfico secuencial R4
+   Una parte = un viewport. Una foto HD propia por capítulo. La lectura siempre avanza izquierda→derecha. */
 html.oras-reader-active{scroll-snap-type:y mandatory;scroll-padding:0;background:#080808}
 body.oras-reader-active{background:#080808;overscroll-behavior-y:contain}
 body.oras-reader-active main{width:100%;max-width:none;margin:0;padding:0}
 body.oras-reader-active .book{width:100%;max-width:none;margin:0;padding:0}
 
 .photo-stage{position:fixed;inset:0;z-index:20;overflow:hidden;pointer-events:none;background:#080808}
-.photo-layer{position:absolute;inset:0;opacity:0;background-position:center center;background-size:cover;background-repeat:no-repeat;transform:scale(1);filter:saturate(.97) contrast(1.045) brightness(.80);image-rendering:auto;backface-visibility:hidden;will-change:opacity,transform,clip-path,filter}
-.photo-layer::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,5,5,.42),rgba(5,5,5,.10) 56%,rgba(5,5,5,.20)),linear-gradient(180deg,rgba(4,4,4,.12),transparent 34%,rgba(4,4,4,.16))}
-.photo-layer.bg-current{opacity:1;z-index:1;transform:none;filter:saturate(.98) contrast(1.055) brightness(.82)}
+.photo-layer{position:absolute;inset:0;opacity:0;background-position:center center;background-size:cover;background-repeat:no-repeat;transform:none;filter:none;image-rendering:auto;backface-visibility:hidden;will-change:opacity,transform,clip-path}
+.photo-layer::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,5,5,.40),rgba(5,5,5,.08) 56%,rgba(5,5,5,.16)),linear-gradient(180deg,rgba(4,4,4,.08),transparent 35%,rgba(4,4,4,.12))}
+.photo-layer.bg-current{opacity:1;z-index:1;transform:none;filter:none}
 .photo-layer.bg-enter{z-index:2}
 .photo-layer.bg-exit{z-index:1;animation:orasBgExit .9s ease both}
 
-/* El Inventario conserva los activos individuales R2. */
-.photo-layer.asset-house-arrival{background-image:url("./assets-r2/i1-llegada.avif")}
-.photo-layer.asset-house-entry{background-image:url("./assets-r2/i2-recibidor.avif")}
-.photo-layer.asset-house-clock{background-image:url("./assets-r2/i3-reloj.avif")}
-.photo-layer.asset-house-kitchen{background-image:url("./assets-r2/i4-silla.avif")}
-.photo-layer.asset-house-corridor{background-image:url("./assets-r2/i5-pasillo.avif")}
-.photo-layer.asset-house-bedroom{background-image:url("./assets-r2/i5-pasillo.avif")}
-.photo-layer.asset-house-garden{background-image:url("./assets-r2/i6-jardin.avif")}
-.photo-layer.asset-house-inventory{background-image:url("./assets-r2/i2-recibidor.avif")}
-.photo-layer.asset-house-exit{background-image:url("./assets-r2/i1-llegada.avif")}
-
-@keyframes orasBgExit{from{opacity:1;filter:saturate(.98) contrast(1.055) brightness(.82)}to{opacity:0;filter:saturate(.90) contrast(1.02) brightness(.64)}}
+@keyframes orasBgExit{from{opacity:1}to{opacity:0}}
 .photo-layer.tr-fade.bg-enter{animation:orasBgFade 1.42s ease both}
 .photo-layer.tr-down.bg-enter{animation:orasBgDown 1.38s cubic-bezier(.22,.78,.24,1) both}
 .photo-layer.tr-left.bg-enter{animation:orasBgLeft 1.38s cubic-bezier(.22,.78,.24,1) both}
 .photo-layer.tr-up.bg-enter{animation:orasBgUp 1.38s cubic-bezier(.22,.78,.24,1) both}
 .photo-layer.tr-right.bg-enter{animation:orasBgRight 1.38s cubic-bezier(.22,.78,.24,1) both}
 .photo-layer.tr-flash.bg-enter{animation:orasBgFlash 1.08s ease-out both}
-@keyframes orasBgFade{from{opacity:0;transform:scale(1.012)}to{opacity:1;transform:scale(1)}}
-@keyframes orasBgDown{from{opacity:.7;clip-path:inset(0 0 100% 0);transform:translateY(-1.4%) scale(1.008)}to{opacity:1;clip-path:inset(0);transform:none}}
-@keyframes orasBgLeft{from{opacity:.7;clip-path:inset(0 100% 0 0);transform:translateX(-1.4%) scale(1.008)}to{opacity:1;clip-path:inset(0);transform:none}}
-@keyframes orasBgUp{from{opacity:.7;clip-path:inset(100% 0 0 0);transform:translateY(1.4%) scale(1.008)}to{opacity:1;clip-path:inset(0);transform:none}}
-@keyframes orasBgRight{from{opacity:.7;clip-path:inset(0 0 0 100%);transform:translateX(1.4%) scale(1.008)}to{opacity:1;clip-path:inset(0);transform:none}}
-@keyframes orasBgFlash{0%{opacity:0;filter:brightness(2.35) saturate(.25);transform:scale(1.012)}18%{opacity:1;filter:brightness(1.55) saturate(.7)}48%{filter:brightness(.95) saturate(.94)}100%{opacity:1;filter:saturate(.98) contrast(1.055) brightness(.82);transform:none}}
+@keyframes orasBgFade{from{opacity:0}to{opacity:1}}
+@keyframes orasBgDown{from{opacity:.72;clip-path:inset(0 0 100% 0);transform:translateY(-1.2%)}to{opacity:1;clip-path:inset(0);transform:none}}
+@keyframes orasBgLeft{from{opacity:.72;clip-path:inset(0 100% 0 0);transform:translateX(-1.2%)}to{opacity:1;clip-path:inset(0);transform:none}}
+@keyframes orasBgUp{from{opacity:.72;clip-path:inset(100% 0 0 0);transform:translateY(1.2%)}to{opacity:1;clip-path:inset(0);transform:none}}
+@keyframes orasBgRight{from{opacity:.72;clip-path:inset(0 0 0 100%);transform:translateX(1.2%)}to{opacity:1;clip-path:inset(0);transform:none}}
+@keyframes orasBgFlash{0%{opacity:0;filter:brightness(2.15) saturate(.25)}18%{opacity:1;filter:brightness(1.45) saturate(.72)}50%{filter:none}100%{opacity:1;filter:none;transform:none}}
 
 .book.ready{display:block}
 .story-panel{position:relative;width:100%;height:100svh;min-height:100svh;display:flex;align-items:center;padding:0;isolation:isolate;scroll-snap-align:start;scroll-snap-stop:always}
-.story-panel .panel-copy{width:min(790px,calc(100vw - 42px));max-height:82svh;overflow:auto;margin:0 auto;padding:clamp(1.15rem,2.8vw,2.2rem) clamp(1rem,3vw,2.25rem);background:linear-gradient(90deg,rgba(7,7,7,.58),rgba(7,7,7,.34) 74%,rgba(7,7,7,.10));backdrop-filter:none;border-left:1px solid rgba(255,255,255,.16);box-shadow:0 24px 70px rgba(0,0,0,.18);color:#f4efe5;text-shadow:0 2px 14px rgba(0,0,0,.78);scrollbar-width:thin;scrollbar-color:rgba(245,240,229,.28) transparent}
+.story-panel .panel-copy{width:min(790px,calc(100vw - 42px));max-height:82svh;overflow:auto;margin:0 auto;padding:clamp(1.15rem,2.8vw,2.2rem) clamp(1rem,3vw,2.25rem);background:linear-gradient(90deg,rgba(7,7,7,.56),rgba(7,7,7,.31) 74%,rgba(7,7,7,.08));backdrop-filter:none;border-left:1px solid rgba(255,255,255,.16);box-shadow:0 24px 70px rgba(0,0,0,.18);color:#f4efe5;text-shadow:0 2px 14px rgba(0,0,0,.78);scrollbar-width:thin;scrollbar-color:rgba(245,240,229,.28) transparent}
 .story-panel h1,.story-panel h2,.story-panel h3,.story-panel .volume-label,.story-panel p{text-align:left!important;color:inherit;text-shadow:inherit}
 .story-panel h1,.story-panel h2,.story-panel h3{margin-top:0}
 .story-panel h1{font-size:clamp(2rem,5.4vw,4rem);margin-bottom:1.1em}
@@ -49,40 +38,42 @@ body.oras-reader-active .book{width:100%;max-width:none;margin:0;padding:0}
 .story-panel p{font-size:clamp(1.03rem,1.55vw,1.24rem);line-height:1.68;margin:0 0 1.08em}
 .story-panel p:last-child{margin-bottom:0}
 
-/* Display: la fotografía puede entrar desde cualquier dirección; cada renglón se construye de izquierda a derecha. */
-.display-word{display:inline-block;opacity:0;clip-path:inset(0 100% 0 0);transform:translateX(-.12em);filter:blur(.14px);transition:opacity .16s linear,clip-path .22s linear,transform .22s ease,filter .22s ease;transition-delay:var(--reveal-delay,0s)}
-.story-panel.is-reading .display-word{opacity:1;clip-path:inset(0);transform:none;filter:none}
+/* El texto se construye siempre de izquierda a derecha, renglón a renglón. */
+.display-word{display:inline-block;opacity:0;clip-path:inset(0 100% 0 0);transform:translateX(-.12em);transition:opacity .16s linear,clip-path .22s linear,transform .22s ease;transition-delay:var(--reveal-delay,0s)}
+.story-panel.is-reading .display-word{opacity:1;clip-path:inset(0);transform:none}
 .story-panel .panel-copy{opacity:0;transition:opacity .7s ease,transform .85s cubic-bezier(.2,.8,.2,1),filter .7s ease}
 .story-panel.is-reading .panel-copy{opacity:1;transform:none!important;filter:none!important}
 .story-panel[data-transition="tr-down"] .panel-copy{transform:translateY(-34px)}
 .story-panel[data-transition="tr-up"] .panel-copy{transform:translateY(34px)}
 .story-panel[data-transition="tr-left"] .panel-copy{transform:translateX(-38px)}
 .story-panel[data-transition="tr-right"] .panel-copy{transform:translateX(38px)}
-.story-panel[data-transition="tr-fade"] .panel-copy{filter:blur(3px)}
-.story-panel[data-transition="tr-flash"] .panel-copy{filter:brightness(1.8) blur(1px)}
+.story-panel[data-transition="tr-fade"] .panel-copy{filter:blur(2px)}
+.story-panel[data-transition="tr-flash"] .panel-copy{filter:brightness(1.7)}
 
-/* Cuando existe fotografía concreta, la vieja escenografía desaparece por completo. */
-body.r3-photo-active[data-world="house"] .scene-house,
-body.r3-photo-active[data-world="train"] .scene-train,
-body.r3-photo-active[data-world="city"] .scene-city{opacity:0!important;filter:none!important}
+/* R4: cuando la fotografía concreta existe, desaparece por completo la escenografía gráfica antigua. */
+body.r4-photo-active[data-world="house"] .scene-house,
+body.r4-photo-active[data-world="train"] .scene-train,
+body.r4-photo-active[data-world="city"] .scene-city,
+body.r4-photo-active[data-world="zero"] .scene-zero{opacity:0!important;filter:none!important}
 
-/* Habitación Cero parte de la última sala real y la va perdiendo progresivamente. */
-body[data-world="zero"] .photo-stage{opacity:calc(1 - var(--zero-progress)*.88);transition:opacity 2.4s ease}
+/* Habitación Cero conserva materia fotográfica y la lleva hacia el blanco, nunca hacia una pantalla vacía. */
+body[data-world="zero"] .photo-stage{opacity:1;transition:opacity 1.3s ease}
+body[data-world="zero"] .photo-layer::after{background:linear-gradient(90deg,rgba(247,246,242,.20),rgba(247,246,242,.34)),linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.26))}
 body:not([data-world="zero"]) .photo-stage{opacity:1;transition:opacity 1.15s ease}
-body[data-world="house"] .book,body[data-world="train"] .book,body[data-world="city"] .book{color:#f4efe5}
-body[data-world="zero"] .story-panel .panel-copy{background:linear-gradient(90deg,rgba(18,18,17,.48),rgba(18,18,17,.22) 75%,rgba(18,18,17,.06));color:#f4efe5}
+body[data-world="house"] .book,body[data-world="train"] .book,body[data-world="city"] .book,body[data-world="zero"] .book{color:#f4efe5}
+body[data-world="zero"] .story-panel .panel-copy{background:linear-gradient(90deg,rgba(18,18,17,.45),rgba(18,18,17,.20) 75%,rgba(18,18,17,.05));color:#f4efe5}
 
 body.oras-reader-active .return-zone{min-height:100svh;scroll-snap-align:start;margin:0;background:rgba(7,7,7,.94);color:#f4efe5}
 body.oras-reader-active .return-zone .return-label{color:rgba(244,239,229,.62)}
 
 @media(max-width:700px){
   .story-panel{height:100dvh;min-height:100dvh}
-  .story-panel .panel-copy{width:min(calc(100vw - 24px),790px);max-height:84dvh;padding:1.15rem 1rem;background:rgba(8,8,8,.50);border-left:0}
+  .story-panel .panel-copy{width:min(calc(100vw - 24px),790px);max-height:84dvh;padding:1.15rem 1rem;background:rgba(8,8,8,.48);border-left:0}
   .story-panel p{font-size:clamp(1rem,4.2vw,1.12rem);line-height:1.62}
 }
 @media(prefers-reduced-motion:reduce){
   html.oras-reader-active{scroll-behavior:auto}
   .photo-layer.bg-enter,.photo-layer.bg-exit{animation:none!important}
-  .photo-layer.bg-enter,.photo-layer.bg-current{opacity:1!important;clip-path:none!important;transform:none!important;filter:saturate(.98) contrast(1.055) brightness(.82)!important}
+  .photo-layer.bg-enter,.photo-layer.bg-current{opacity:1!important;clip-path:none!important;transform:none!important;filter:none!important}
   .story-panel .panel-copy,.display-word{opacity:1!important;clip-path:none!important;transform:none!important;filter:none!important;transition:none!important}
 }
