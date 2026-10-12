@@ -8,6 +8,64 @@ const isCenicientoPage=normalizedPath.includes('/ceniciento');
 const isSoloPage=normalizedPath==='/solo-la-tarjeta';
 const readState=()=>{try{return JSON.parse(localStorage.getItem(STORAGE)||'{}')}catch(_){return {}}};
 const writeState=patch=>{try{localStorage.setItem(STORAGE,JSON.stringify(Object.assign({},readState(),patch)))}catch(_){}};
+const ANA_PARTS=[
+  {state:'estrella',route:'estrella',label:'Prólogo · Siguiendo una tarjeta'},
+  {state:'elegia',route:'elegia',label:'Elegía breve para Ana Klaudya'},
+  {state:'ojos',route:'ojos',label:'En tus ojos'},
+  {state:'labios',route:'sonrisa',label:'En tus labios'},
+  {state:'cabello',route:'cabello',label:'Tu cabello'},
+  {state:'piel',route:'piel',label:'Tu piel'},
+  {state:'interludio',route:'interludio',label:'Interludio · Iba a llevarte flores'},
+  {state:'epilogo',route:'epilogo',label:'Epílogo · A fuego lento'}
+];
+const firstUnreadAnaPart=()=>{
+  const state=readState();
+  if(state.anaComplete===true)return null;
+  const parts=state.anaParts;
+  if(!parts||typeof parts!=='object')return null;
+  return ANA_PARTS.find(part=>parts[part.state]!==true)||null;
+};
+const syncSoloContinuationNav=()=>{
+  if(!isSoloPage)return;
+  const oldNav=document.querySelector('.ou-solo-endnav');
+  if(!oldNav)return;
+  const state=readState();
+  const target=firstUnreadAnaPart();
+  if(target){
+    let link=oldNav.querySelector('[data-oras-smart-ana]');
+    if(!link){
+      oldNav.replaceChildren();
+      link=document.createElement('a');
+      link.dataset.orasSmartAna='true';
+      oldNav.append(link);
+    }
+    link.href='/solo-la-tarjeta/elegia-breve/#'+target.route;
+    link.textContent=target.label;
+    link.title=target.label;
+    link.setAttribute('aria-label','Seguir a '+target.label);
+    oldNav.setAttribute('aria-label','Continuar a '+target.label);
+    oldNav.classList.add('ou-smart-forward');
+    return;
+  }
+  if(state.anaComplete===true&&state.cenicientoComplete===true){
+    oldNav.remove();
+    return;
+  }
+  oldNav.remove();
+};
+const observeSoloContinuationNav=()=>{
+  if(!isSoloPage||!document.body)return;
+  const observer=new MutationObserver(mutations=>{
+    const relevant=mutations.some(mutation=>[...mutation.addedNodes].some(node=>
+      node?.nodeType===1&&(node.matches?.('.ou-solo-endnav')||node.querySelector?.('.ou-solo-endnav'))
+    ));
+    if(relevant)requestAnimationFrame(syncSoloContinuationNav);
+  });
+  observer.observe(document.body,{childList:true,subtree:true});
+  requestAnimationFrame(syncSoloContinuationNav);
+  addEventListener('pageshow',()=>setTimeout(syncSoloContinuationNav,60));
+  addEventListener('storage',event=>{if(event.key===STORAGE)setTimeout(syncSoloContinuationNav,0)});
+};
 const style=document.createElement('style');
 style.textContent=`
 .oras-mirror-nav{display:none}
@@ -42,6 +100,8 @@ body.mirror .oras-mirror-nav button:focus-visible{outline:1px solid rgba(255,250
 @media(max-width:760px){body.mirror .oras-mirror-nav{width:min(380px,calc(100vw - 32px));bottom:max(12px,env(safe-area-inset-bottom))}.oras-solo-mirror-gate{top:calc(50% + 90px)}}
 `;
 document.head.append(style);
+
+observeSoloContinuationNav();
 
 let mirrorGate=null,mirrorGateUserRequested=false;
 if(isCenicientoPage){
@@ -144,8 +204,8 @@ if(isSoloPage){
       addEventListener('resize',checkSoloEnd);
       setTimeout(checkSoloEnd,500);
     }
-    addEventListener('storage',event=>{if(event.key===STORAGE)checkSoloEnd()});
-    addEventListener('pageshow',()=>setTimeout(checkSoloEnd,80));
+    addEventListener('storage',event=>{if(event.key===STORAGE){checkSoloEnd();syncSoloContinuationNav()}});
+    addEventListener('pageshow',()=>setTimeout(()=>{checkSoloEnd();syncSoloContinuationNav()},80));
 
     continueButton.addEventListener('click',()=>{
       soloGateUserRequested=true;
