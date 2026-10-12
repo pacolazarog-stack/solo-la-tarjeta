@@ -35,7 +35,9 @@ jobs:
           node --check oras-screen-transition.js
           node --check ceniciento/el-espejo.js
           node --check inventario-del-aire/oras-expansion.js
-          grep -Fq '20261012-screen-fades-2' narrative-universe.js
+          grep -Fq '20261012-music-portrait-flow-1' narrative-universe.js
+          grep -Fq 'ou-solo-ana-forward' narrative-universe.js
+          grep -Fq 'oras:ana-portrait' narrative-universe.js
           grep -Fq 'ORASScreenTransition' oras-screen-transition.js
           grep -Fq 'oras-screen-transition-veil' oras-screen-transition.js
           grep -Fq '#journeyNext' oras-screen-transition.js
@@ -47,8 +49,10 @@ jobs:
           grep -Fq "new URLSearchParams(location.search).get('from')==='inventario'" narrative-universe.js
           grep -Fq '20261012-mirror-gates-4' ceniciento/el-espejo.js
           grep -Fq 'el-espejo.js?v=20261012-mirror-mechanical-3' ceniciento/index.html
-          grep -Fq 'narrative-universe.js?v=20261012-screen-fades-2' index.html
-          grep -Fq 'narrative-universe.js?v=20261012-screen-fades-2' elegia-breve/index.html
+          grep -Fq 'narrative-universe.js?v=20261012-music-portrait-flow-1' index.html
+          grep -Fq 'narrative-universe.js?v=20261012-music-portrait-flow-1' elegia-breve/index.html
+          grep -Fq 'autoplay loop src="ana-klaudya.m4a"' elegia-breve/index.html
+          grep -Fq "window.addEventListener('oras:ana-portrait',showPortraitFromJourney)" elegia-breve/index.html
           grep -Fq '../oras-screen-transition.js?v=20261012-screen-fades-2' inventario-del-aire/index.html
           ! grep -Fq 'Relato breve digital inmersivo' index.html
           grep -Fq 'maintainSilence' ceniciento/el-espejo.js
@@ -57,7 +61,7 @@ jobs:
           grep -Fq 'finalContinue.addEventListener' ceniciento/el-espejo.js
           ! grep -Fq "mark.textContent='flag'" ceniciento/el-espejo.js
           grep -Fq 'solo-la-tarjeta-fondo.mp3' inventario-del-aire/index.html
-          echo 'PASS: todos los cambios de pantalla por botón están cubiertos por fundido y descenso de audio; EL ESPEJO termina con seguir hacia EL INVENTARIO DEL AIRE.'
+          echo 'PASS: música inicial activa, continuidad Solo-Ana y Flores-retrato-Ceniciento validadas; transiciones audiovisuales conservadas.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
