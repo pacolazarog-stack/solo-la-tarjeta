@@ -2,7 +2,7 @@
 'use strict';
 
 const STORAGE='oras.universe.v2';
-const VERSION='20261012-reading-window-r4-ana-final';
+const VERSION='20261012-reading-window-r5-repeat-final-gate';
 const BASE='/solo-la-tarjeta';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
@@ -155,11 +155,12 @@ function setupTracking(){
 }
 
 /*
-  Una vez completadas las ocho piezas de ANA KLAUDYA, un nuevo acceso a
-  /elegia-breve/ ya no obliga a repetir el recorrido. Se recupera el último
-  instante: "el calor." queda como fondo y comienza directamente el fundido
-  de la fotografía. El interrogante conserva su aparición y crecimiento.
-  Un acceso explícito a una pieza desde el índice sigue permitiendo releerla.
+  Una vez completadas las ocho piezas de ANA KLAUDYA, una nueva entrada a
+  /elegia-breve/ recupera el final. Si SOLO LA TARJETA y CENICIENTO ya están
+  completos, ese final no salta directamente a la fotografía: primero aparece
+  la botonera Atrás / Adelante. Atrás vuelve al epílogo de Ana; Adelante abre
+  EL ESPEJO. Si el recorrido todavía necesita CENICIENTO, se conserva el
+  fundido de la fotografía y el interrogante como puerta narrativa.
 */
 function resumeCompletedAnaAtFinal(){
   const path=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'');
@@ -198,8 +199,27 @@ function resumeCompletedAnaAtFinal(){
   const nav=document.getElementById('anaNavigation');
   if(nav)nav.hidden=true;
   body.classList.remove('ana-navigation-ready','portrait-revealed');
-  portrait.setAttribute('aria-hidden','false');
 
+  const mirrorReady=state.soloComplete===true&&state.cenicientoComplete===true&&state.mirrorReadComplete!==true;
+  const journeyNav=document.getElementById('journeyNav');
+  const previous=document.getElementById('journeyPrevious');
+  const next=document.getElementById('journeyNext');
+
+  if(mirrorReady&&journeyNav&&previous&&next){
+    body.dataset.ouRepeatAnaFinalGate='mirror';
+    portrait.setAttribute('aria-hidden','true');
+    journeyNav.hidden=false;
+    journeyNav.setAttribute('aria-label','Final de ANA KLAUDYA');
+    previous.disabled=false;next.disabled=false;
+    previous.textContent='Atrás';next.textContent='Adelante';
+    previous.title='Volver al epílogo de ANA KLAUDYA';
+    next.title='Continuar hacia EL ESPEJO';
+    previous.setAttribute('aria-label','Atrás: volver al epílogo de ANA KLAUDYA');
+    next.setAttribute('aria-label','Adelante: continuar hacia EL ESPEJO');
+    return;
+  }
+
+  portrait.setAttribute('aria-hidden','false');
   const beginFade=()=>{
     portrait.getBoundingClientRect();
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
@@ -226,6 +246,31 @@ function resumeCompletedAnaAtFinal(){
   if(photo.complete&&photo.naturalWidth)beginFade();
   else photo.addEventListener('load',beginFade,{once:true});
 }
+
+document.addEventListener('click',event=>{
+  const body=document.body;
+  if(body?.dataset.ouRepeatAnaFinalGate!=='mirror')return;
+  const previous=event.target.closest?.('#journeyPrevious');
+  const next=event.target.closest?.('#journeyNext');
+  if(!previous&&!next)return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  const journeyNav=document.getElementById('journeyNav');
+  if(journeyNav)journeyNav.hidden=true;
+
+  if(previous){
+    delete body.dataset.ouRepeatAnaFinalGate;
+    delete body.dataset.ouCompletedAnaFinal;
+    const epilogue=document.getElementById('anaEpilogue');
+    if(epilogue){epilogue.click();return;}
+    history.replaceState(history.state,'',location.pathname+location.search+'#epilogo');
+    dispatchEvent(new HashChangeEvent('hashchange'));
+    return;
+  }
+
+  body.dataset.ouRepeatAnaFinalGate='opening-mirror';
+  dispatchEvent(new CustomEvent('oras:mirror-start',{detail:{source:'ana-repeat-forward'}}));
+},true);
 
 render(true);
 setupTracking();
