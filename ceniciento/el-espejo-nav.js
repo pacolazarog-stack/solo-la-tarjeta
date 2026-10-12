@@ -1,9 +1,13 @@
 (()=>{
 'use strict';
 const STORAGE='oras.universe.v2';
+const normalizedPath=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'');
+if(normalizedPath==='/solo-la-tarjeta'){
+  const soloHero=document.querySelector('header.hero');
+  if(soloHero&&!soloHero.id)soloHero.id='hero';
+}
 const mirror=document.getElementById('mirror');
 if(!mirror)return;
-const normalizedPath=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'');
 const isCenicientoPage=normalizedPath.includes('/ceniciento');
 const isSoloPage=normalizedPath==='/solo-la-tarjeta';
 const readState=()=>{try{return JSON.parse(localStorage.getItem(STORAGE)||'{}')}catch(_){return {}}};
