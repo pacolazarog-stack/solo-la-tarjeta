@@ -8,10 +8,17 @@ if(!book||!stage)return;
 const TRANSITIONS=['tr-down','tr-left','tr-fade','tr-up','tr-right','tr-flash'];
 const ASSETS={
   house:{house:'asset-house-arrival',entry:'asset-house-entry',clock:'asset-house-clock',kitchen:'asset-house-kitchen',corridor:'asset-house-corridor',bedroom:'asset-house-bedroom',garden:'asset-house-garden',inventory:'asset-house-inventory',exit:'asset-house-exit'},
-  train:{train:'asset-train-station',station:'asset-train-station',inspector:'asset-train-inspector',shadows:'asset-train-shadows','row-seven':'asset-train-row-seven',conversation:'asset-train-conversation','mobile-inventory':'asset-train-mobile-inventory',workshop:'asset-train-workshop',office:'asset-train-office','last-journey':'asset-train-last-journey'},
-  city:{city:'asset-city-plaza',plaza:'asset-city-plaza',archivist:'asset-city-archivist',fountain:'asset-city-fountain',resisters:'asset-city-resisters',map:'asset-city-map',theory:'asset-city-theory',museum:'asset-city-museum',visitor:'asset-city-visitor',winter:'asset-city-winter','last-room':'asset-city-last-room'},
   zero:{zero:null}
 };
+
+/* Sprites fotográficos aportados para R3.
+   Cada tira conserva el orden narrativo de sus capítulos. */
+const SPRITE_INDEX={
+  train:{train:0,station:0,inspector:1,shadows:2,'row-seven':3,conversation:4,'mobile-inventory':5,workshop:6,office:7,'last-journey':8},
+  city:{city:0,plaza:0,archivist:1,fountain:2,resisters:3,map:4,theory:5,museum:6,visitor:7,winter:8,'last-room':9}
+};
+const SPRITE_COUNT={train:9,city:10};
+const TILE_RATIO=426/240;
 
 let panels=[];
 let layers=[...stage.querySelectorAll('.photo-layer')];
@@ -141,32 +148,95 @@ function setupReading(){
   panels.forEach(p=>io.observe(p));
 }
 
+function resetLayer(layer){
+  layer.className='photo-layer';
+  layer.style.removeProperty('background-image');
+  layer.style.removeProperty('background-size');
+  layer.style.removeProperty('background-position');
+  layer.style.removeProperty('z-index');
+}
+
+function spriteBase64(world){
+  if(world==='train')return window.ORAS_TRAIN_SPRITE_B64||'';
+  if(world==='city')return window.ORAS_CITY_SPRITE_B64||'';
+  return '';
+}
+
+function applySprite(layer,world,chapter){
+  const idx=SPRITE_INDEX[world]?.[chapter];
+  const count=SPRITE_COUNT[world];
+  const b64=spriteBase64(world);
+  if(idx==null||!count||!b64)return false;
+
+  const rect=layer.getBoundingClientRect();
+  const h=rect.height||innerHeight*1.04;
+  const w=rect.width||innerWidth*1.04;
+  const tileW=h*TILE_RATIO;
+  const totalW=count*tileW;
+  const x=w/2-(idx+.5)*tileW;
+
+  layer.style.backgroundImage=`url("data:image/avif;base64,${b64}")`;
+  layer.style.backgroundSize=`${totalW.toFixed(1)}px ${h.toFixed(1)}px`;
+  layer.style.backgroundPosition=`${x.toFixed(1)}px center`;
+  return true;
+}
+
+function applyPanelPhoto(layer,panel){
+  resetLayer(layer);
+  const world=panel?.dataset.world||'house';
+  const chapter=panel?.dataset.chapter||world;
+  const asset=panel?.dataset.asset||'';
+
+  if(world==='train'||world==='city'){
+    return applySprite(layer,world,chapter);
+  }
+  if(world==='house'&&asset){
+    layer.classList.add(asset);
+    return true;
+  }
+  return false;
+}
+
+function refreshActivePhoto(){
+  if(!activePanel)return;
+  const layer=layers[activeLayer];
+  const classList=[...layer.classList].filter(c=>c!=='photo-layer'&&c!=='bg-current');
+  const hadCurrent=layer.classList.contains('bg-current');
+  const ok=applyPanelPhoto(layer,activePanel);
+  classList.forEach(c=>layer.classList.add(c));
+  if(hadCurrent)layer.classList.add('bg-current');
+  document.body.classList.toggle('r3-photo-active',ok);
+}
+
 function showBackground(panel){
   if(!panel||panel===activePanel)return;
   activePanel=panel;
-  const asset=panel.dataset.asset||'';
   const tr=panel.dataset.transition||'tr-fade';
   document.body.dataset.panelTransition=tr;
-
-  if(!asset){
-    const old=layers[activeLayer];
-    old.classList.add('bg-exit');
-    setTimeout(()=>{old.className='photo-layer'},1150);
-    return;
-  }
 
   const nextIndex=1-activeLayer;
   const incoming=layers[nextIndex];
   const outgoing=layers[activeLayer];
-  incoming.className='photo-layer '+asset+' bg-enter '+tr;
+  const hasPhoto=applyPanelPhoto(incoming,panel);
+  document.body.classList.toggle('r3-photo-active',hasPhoto);
+
+  if(!hasPhoto){
+    outgoing.classList.remove('bg-enter');
+    outgoing.classList.add('bg-exit');
+    setTimeout(()=>resetLayer(outgoing),1150);
+    return;
+  }
+
+  incoming.classList.add('bg-enter',tr);
   incoming.style.zIndex='2';
   outgoing.classList.remove('bg-enter');
   outgoing.classList.add('bg-exit');
   outgoing.style.zIndex='1';
 
   setTimeout(()=>{
-    outgoing.className='photo-layer';
-    incoming.className='photo-layer '+asset+' bg-current';
+    resetLayer(outgoing);
+    incoming.classList.remove('bg-enter',tr);
+    incoming.classList.add('bg-current');
     incoming.style.zIndex='1';
     activeLayer=nextIndex;
   },1700);
@@ -199,7 +269,10 @@ function start(){
   },{passive:true});
   addEventListener('resize',()=>{
     clearTimeout(resizeTimer);
-    resizeTimer=setTimeout(assignTimings,180);
+    resizeTimer=setTimeout(()=>{
+      assignTimings();
+      refreshActivePhoto();
+    },180);
   },{passive:true});
 }
 
