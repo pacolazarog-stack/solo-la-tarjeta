@@ -2,7 +2,7 @@
 'use strict';
 const ROOT='/solo-la-tarjeta/';
 const STORAGE='oras.universe.v2';
-const VERSION='20261012-mirror-mechanical-3';
+const VERSION='20261012-mirror-gates-4';
 const INVENTORY_URL=ROOT+'inventario-del-aire/?from=mirror&v='+VERSION;
 const scenes=[
 `No era la misma historia.`,
@@ -192,7 +192,6 @@ scenes.forEach((text,index)=>{
     });scene.append(next);
   }
   if(number===32){
-    const mark=document.createElement('p');mark.className='mirror-end-mark';mark.textContent='flag';copy.append(mark);
     const end=document.createElement('span');end.className='mirror-end-sentinel';end.setAttribute('aria-hidden','true');scene.append(end);
     finalContinue=document.createElement('button');finalContinue.type='button';finalContinue.className='mirror-continue mirror-final-continue';finalContinue.textContent='seguir';finalContinue.setAttribute('aria-label','Seguir hacia EL INVENTARIO DEL AIRE');finalContinue.hidden=true;
     finalContinue.addEventListener('click',()=>{playMechanicalStep();finishMirror()});
