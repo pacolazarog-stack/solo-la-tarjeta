@@ -1,0 +1,75 @@
+name: Install ORAS reading window R2
+
+on:
+  push:
+    paths:
+      - '.github/workflows/install-reading-window-r2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Inject current reading window
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          version='20261012-reading-window-r2'
+          targets=[
+            Path('index.html'),
+            Path('elegia-breve/index.html'),
+            Path('estrella/index.html'),
+            Path('ojos/index.html'),
+            Path('sonrisa/index.html'),
+            Path('cabello/index.html'),
+            Path('piel/index.html'),
+            Path('interludio/index.html'),
+            Path('epilogo/index.html'),
+            Path('ceniciento/index.html'),
+          ]
+          tag=f'<script data-oras-reading-window="r2" src="/solo-la-tarjeta/oras-reading-window-r2.js?v={version}"></script>'
+          for p in targets:
+            if not p.exists():
+              continue
+            s=p.read_text(encoding='utf-8')
+            s=re.sub(r'\n?<script data-oras-reading-window="r2"[^>]*></script>', '', s)
+            matches=list(re.finditer(r'<script[^>]+src="[^\"]*narrative-universe\.js\?v=[^\"]+"[^>]*></script>',s))
+            if not matches:
+              raise RuntimeError(f'No se encontró narrative-universe en {p}')
+            m=matches[-1]
+            s=s[:m.end()]+'\n'+tag+s[m.end():]
+            p.write_text(s,encoding='utf-8')
+
+          pages=Path('.github/workflows/pages.yml')
+          s=pages.read_text(encoding='utf-8')
+          if 'node --check oras-reading-window-r2.js' not in s:
+            s=s.replace('          node --check narrative-universe.js\n','          node --check narrative-universe.js\n          node --check oras-reading-window-r2.js\n')
+          check="          grep -Fq 'oras-reading-window-r2.js?v=20261012-reading-window-r2' elegia-breve/index.html\n          grep -Fq 'ANA_PARTS' oras-reading-window-r2.js\n          grep -Fq 'Epílogo · A fuego lento · Flores' oras-reading-window-r2.js\n"
+          if "oras-reading-window-r2.js?v=20261012-reading-window-r2" not in s:
+            anchor="          grep -Fq 'narrative-universe.js?v=20261012-inventory-return-reset-1' elegia-breve/index.html\n"
+            s=s.replace(anchor,anchor+check)
+          pages.write_text(s,encoding='utf-8')
+          PY
+
+      - name: Commit installed reading window
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html elegia-breve/index.html estrella/index.html ojos/index.html sonrisa/index.html cabello/index.html piel/index.html interludio/index.html epilogo/index.html ceniciento/index.html .github/workflows/pages.yml
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'ORAS: activa ventana completa de lecturas'
+          git push origin HEAD:main
