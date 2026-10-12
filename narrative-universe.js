@@ -1,6 +1,13 @@
 (()=>{
 'use strict';
 
+const syncJourneyNav=()=>{
+  const hideJourneyNav=location.pathname.includes('/elegia-breve/')&&location.hash.toLowerCase()==='#ceniciento';
+  document.documentElement.classList.toggle('ou-hide-journey-nav',hideJourneyNav);
+};
+syncJourneyNav();
+window.addEventListener('hashchange',syncJourneyNav);
+
 const base=document.createElement('script');
 base.src='https://cdn.jsdelivr.net/gh/pacolazarog-stack/solo-la-tarjeta@80866cb8ae17d31356462edf408a4d7f099e1241/narrative-universe.js';
 base.async=false;
@@ -8,6 +15,9 @@ base.onload=()=>{
   const style=document.createElement('style');
   style.id='mobile-portrait-layout-fix';
   style.textContent=`
+html.ou-hide-journey-nav .journey-nav{
+  display:none!important;
+}
 .ou-card{
   right:max(16px,env(safe-area-inset-right))!important;
   left:auto!important;
