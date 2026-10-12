@@ -43,71 +43,47 @@ La variación debe impedir la monotonía sin convertirse en espectáculo. Las tr
 
 Cada pantalla contiene un bloque `.panel-copy` y cada palabra se convierte en una unidad de revelado `.display-word`.
 
-El navegador calcula las líneas reales una vez maquetado el texto. La temporización se asigna según:
-
-1. renglón visual;
-2. posición de la palabra dentro del renglón.
-
-El resultado es una lectura progresiva **renglón a renglón**, siempre de izquierda a derecha.
+El navegador calcula los renglones reales una vez maquetado el texto. La temporización se asigna primero por línea visual y después por la posición de la palabra dentro de esa línea. El resultado es una lectura progresiva **renglón a renglón**, siempre de izquierda a derecha.
 
 ## Relación con las fotografías
 
 ### El Inventario del Aire
 
-La infraestructura R3 está activa y utiliza los activos fotográficos ya publicados. Cada capítulo recibe un fondo determinado. Los capítulos para los que aún no existe un binario fotográfico propio pueden reutilizar temporalmente el encuadre más próximo hasta que se publique el activo definitivo.
+La infraestructura R3 está activa y utiliza los activos fotográficos R2 ya publicados. Cada capítulo recibe un fondo determinado; donde todavía se reutiliza un encuadre próximo, la reutilización es deliberada y no altera el texto.
 
 ### El Oficio de las Sombras
 
-Queda fijada una fotografía específica para cada uno de sus nueve capítulos:
+Las **nueve fotografías seleccionadas están ya publicadas y activas** en el lector R3. Se conservan en una tira AVIF compacta y se asignan por capítulo en este orden narrativo: Estación; Revisor; Sombras; Hombre de la fila siete; Conversación; Inventario de ausencias móviles; Taller; El oficio; Último recorrido.
 
-1. Estación — andén y tren.
-2. Revisor — comprobación de billetes.
-3. Sombras — vagón poblado por persistencias.
-4. Hombre de la fila siete — enfrentamiento visual entre viajero y sombra.
-5. Conversación — diálogo con la presencia.
-6. Inventario de ausencias móviles — escritura durante el trayecto.
-7. Taller — espacio ferroviario material.
-8. El oficio — observación y registro junto a la ventanilla.
-9. Último recorrido — viajero y sombra frente al paisaje final.
-
-Las imágenes correspondientes han sido seleccionadas en la fase de trabajo y sus clases R3 están ya previstas en `oras-reader-r3.js`; la publicación binaria definitiva se realiza separadamente del código textual.
+El encuadre correspondiente se extrae en tiempo de lectura sin deformar la fotografía y se centra como fondo de su pantalla. La escenografía ferroviaria R1 queda únicamente como respaldo si el activo fotográfico no pudiera cargarse.
 
 ### La Ciudad que Aprendió a Olvidar
 
-Queda fijada una fotografía específica para sus diez capítulos:
+Las **diez fotografías seleccionadas están ya publicadas y activas** en el lector R3. Se conservan en una tira AVIF compacta y se asignan por capítulo en este orden narrativo: Plaza; Archivero; Fuente; Resistentes; Mapa imposible; Teoría; Museo; Visitante; Invierno; Última sala.
 
-1. Plaza — espacio urbano completo / primera ausencia.
-2. Archivero — investigación documental.
-3. Fuente — comparación entre presente y fotografía.
-4. Resistentes — memoria oral y testigos.
-5. Mapa imposible — cartografía de desapariciones.
-6. Teoría — investigación colectiva.
-7. Museo — institucionalización de las ausencias.
-8. Visitante — confrontación individual con la prueba.
-9. Invierno — archivero en la ciudad erosionada.
-10. Última sala — frase y espacio museístico final.
+La progresión fotográfica conserva la realidad material de la ciudad mientras los capítulos desplazan la atención desde la plaza y el archivo hacia la prueba, el museo, la erosión y la última sala.
 
-Las clases fotográficas correspondientes están previstas en el lector R3.
+### La Habitación Número Cero
+
+No se fuerza al régimen fotográfico secuencial. Al entrar en EL CERO, la capa R3 se retira para conservar la lógica de sustracción ya fijada: el mundo visual debe desaparecer, no recibir una nueva serie de imágenes.
 
 ## Implementación técnica
 
-Archivos activos:
+Archivos activos principales:
 
 - `inventario-del-aire/oras-reader-r3.css`
 - `inventario-del-aire/oras-reader-r3.js`
 - `inventario-del-aire/index.html`
+- `inventario-del-aire/photo-r3/train-r3-part-1.js` a `train-r3-part-4.js`
+- `inventario-del-aire/photo-r3/city-r3-part-1.js` a `city-r3-part-7.js`
 
-El lector utiliza dos capas fotográficas alternas para que una imagen pueda entrar mientras la anterior se retira. El tipo de transición pertenece a la pantalla, no al texto literario.
+Las fotografías de *Sombras* y *Ciudad* se cargan como datos AVIF compactos divididos en fragmentos de transporte. El lector reconstruye cada tira antes de iniciar la composición y selecciona el fotograma correspondiente a cada capítulo. La doble capa fotográfica permite que una imagen entre mientras la anterior se retira.
 
-La maqueta gráfica R1 permanece como **fallback** cuando un activo fotográfico definitivo todavía no está publicado.
+La maqueta gráfica R1 permanece como **fallback real**: sólo se atenúa cuando una fotografía concreta está disponible.
 
 ## Accesibilidad
 
-Con `prefers-reduced-motion: reduce`:
-
-- se eliminan barridos, flashes y desplazamientos;
-- el texto aparece completo;
-- las imágenes cambian sin animación compleja.
+Con `prefers-reduced-motion: reduce`, se eliminan barridos, flashes y desplazamientos; el texto aparece completo y las imágenes cambian sin animación compleja.
 
 ## Regla final
 
