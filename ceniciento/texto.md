@@ -570,10 +570,6 @@ Frente a sí mismo.
 
 Entonces recordó el abrazo.
 
-No al muchacho.
-
-A él.
-
 Paco se quedó inmóvil.
 
 Había algo que no había comprendido.
