@@ -1548,6 +1548,13 @@ clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
         root.style.setProperty('--warm',warmTakeover.toFixed(3));
       });
 
+      const elegiaAlreadyReadAtFinal=()=>{
+        try{
+          const saved=JSON.parse(localStorage.getItem('oras.universe.v2')||'{}');
+          return saved?.anaParts?.elegia===true;
+        }catch(_){return false;}
+      };
+
       const startFinalSequence=()=>{
         if(finalSequenceStarted) return;
         finalSequenceStarted=true;
@@ -1560,6 +1567,13 @@ clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
           finalCalorTimer=null;
           finalHeat.classList.add('show-calor');
           intensifyWarmWithCalor();
+          if(elegiaAlreadyReadAtFinal()){
+            clearTimeout(finalPortraitTimer);
+            finalPortraitTimer=setTimeout(()=>{
+              finalPortraitTimer=null;
+              if(cenicientoFrame.hidden && body.classList.contains('reading-ready'))revealPortrait();
+            },4000);
+          }
 },4500);
       };
 
