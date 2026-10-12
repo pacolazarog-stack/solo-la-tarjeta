@@ -23,200 +23,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Configurar Pages
         uses: actions/configure-pages@v5
 
-      - name: Aplicar canon de ANA KLAUDYA
-        run: python3 ana-klaudya/apply_canonical_site.py
-
-      - name: Restaurar universo narrativo estable
-        run: git show 80866cb8ae17d31356462edf408a4d7f099e1241:narrative-universe.js > narrative-universe.js
-
-      - name: Aplicar disposición de controles
-        run: python3 patch-mobile-layout.py
-
-      - name: Animar el cometa solo con transform y opacity
-        run: python3 patch-comet-transform.py index.html
-
-      - name: Aplicar respiración sonora de SOLO LA TARJETA
-        run: python3 patch-solo-sonic-breath.py index.html
-
-      - name: Blindar integración sonora con el index real
-        run: python3 patch-solo-sonic-hardening.py index.html
-
-      - name: Exigir lectura integral de ANA KLAUDYA
-        run: python3 patch-ana-composite-progress.py
-
-      - name: Comunicar lectura de Tu cabello y Tu piel
-        run: python3 patch-ana-detail-progress-bridge.py
-
-      - name: Hacer navegable la barra de lecturas
-        run: python3 patch-checklist-navigation.py
-
-      - name: Encadenar Flores con EL ESPEJO cuando ANA completa 3/3
-        run: python3 patch-ana-third-mirror-gate.py
-
-      - name: Unificar navegación final de SOLO LA TARJETA
-        run: python3 patch-solo-endnav.py
-
-      - name: Eliminar duplicados de SOLO LA TARJETA y CENICIENTO en el índice
-        run: python3 patch-index-deduplicate-related.py
-
-      - name: Exigir cierre completo de SOLO antes de EL ESPEJO
-        run: python3 patch-solo-ceniciento-mirror-gate.py
-
-      - name: Forzar visibilidad del verso final de SOLO
-        run: python3 patch-solo-final-verse-visible.py
-
-      - name: Forzar versión vigente y verificar motivos del índice
-        run: python3 patch-index-version-42.py
-
-      - name: Mejorar contraste de A fuego lento
-        run: python3 patch-a-fuego-contrast.py
-
-      - name: Ocultar invitación flotante redundante al epílogo
-        run: python3 patch-hide-epilogue-invitation.py
-
-      - name: Forzar letras blancas en Leer con pausa
-        run: python3 patch-read-pause-contrast.py
-
-      - name: Reforzar contraste de PAUSAR y VOLVER
-        run: python3 patch-voice-dialog-contrast.py
-
-      - name: Cerrar EL ESPEJO con flag y flores
+      - name: Verificar versión audiovisual vigente
+        shell: bash
         run: |
-          if grep -Fq "INVENTORY_URL=ROOT+'inventario-del-aire/" ceniciento/el-espejo.js; then
-            echo "PASS: EL ESPEJO ya contiene su cierre flag y continúa a EL INVENTARIO DEL AIRE."
-          else
-            python3 patch-mirror-finale.py
-          fi
-
-      - name: Eliminar Índice de la pantalla final flag
-        run: python3 patch-remove-final-index.py
-
-      - name: Unificar controles finales de CENICIENTO
-        run: python3 patch-ceniciento-finale-controls.py
-
-      - name: Compatibilizar navegación final de CENICIENTO con las pruebas
-        run: python3 patch-ceniciento-finale-test-compat.py
-
-      - name: Eliminar salidas heredadas de CENICIENTO
-        run: python3 patch-ceniciento-remove-legacy-exits.py
-
-      - name: Añadir transición y bloqueos de lectura de EL ESPEJO
-        run: python3 patch-ceniciento-mirror-reading-gates.py
-
-      - name: Blindar las pausas de EL ESPEJO contra bucles
-        run: python3 patch-mirror-pause-loop-hardfix.py
-
-      - name: Enlazar ? con CENICIENTO y tarjeta con SOLO LA TARJETA
-        run: |
-          if grep -Fq "INVENTORY_URL=ROOT+'inventario-del-aire/" ceniciento/el-espejo.js; then
-            echo "PASS: el cierre actual de EL ESPEJO continúa al Inventario y no usa enlaces finales heredados."
-          else
-            python3 patch-mirror-finale-direct-links.py
-          fi
-
-      - name: Exigir acción explícita para entrar en EL ESPEJO
-        run: python3 patch-mirror-explicit-entry.py
-
-      - name: Esperar 10 s y mostrar Seguir hacia EL ESPEJO
-        run: python3 patch-ana-third-mirror-auto.py
-
-      - name: Devolver Salir a la página de origen
-        run: python3 patch-exit-return-source.py
-
-      - name: Mantener letras blancas en controles oscuros
-        run: python3 patch-dark-controls-white-text.py
-
-      - name: Mantener siempre visible el contador de lecturas
-        run: python3 patch-reading-counter-always-visible.py
-
-      - name: Reducir navegación a Atrás y Adelante
-        run: python3 patch-two-button-navigation.py
-
-      - name: Suprimir botonera de CENICIENTO en 3/3 y mostrar solo Seguir
-        run: python3 patch-ceniciento-direct-mirror-gate.py
-
-      - name: Mantener Adelante en Flores si quedan lecturas
-        run: python3 patch-ana-epilogue-forward.py
-
-      - name: Decidir convergencia en Flores al entrar
-        run: python3 patch-flores-convergence.py
-
-      - name: Distribuir la memoria de EL ESPEJO en las relecturas
-        run: python3 patch-distributed-mirror-memory.py
-
-      - name: Reducir ruido exterior de SOLO en relecturas post-Espejo
-        run: python3 patch-solo-narrative-entropy.py
-
-      - name: Aplicar cierre desnudo de EL ESPEJO
-        run: |
-          if grep -Fq "INVENTORY_URL=ROOT+'inventario-del-aire/" ceniciento/el-espejo.js; then
-            echo "PASS: se conserva el cierre integrado flag -> EL INVENTARIO DEL AIRE."
-          else
-            python3 patch-mirror-minimal-return.py
-          fi
-
-      - name: Verificar progreso y controles interactivos
-        run: |
+          set -euo pipefail
           node --check narrative-universe.js
           node --check ceniciento/el-espejo.js
-          node check-ana-composite.cjs
-          if grep -Fq "INVENTORY_URL=ROOT+'inventario-del-aire/" ceniciento/el-espejo.js; then
-            grep -Fq 'const ANA_PARTS=Object.freeze' narrative-universe.js
-            grep -Fq 'ANA KLAUDYA · ${anaDone}/${ANA_PARTS.length}' narrative-universe.js
-            grep -Fq 'className='"'"'ou-ana-parts'"'"'' narrative-universe.js
-            grep -Fq 'resetReadingCycleForInventory' ceniciento/el-espejo.js
-            grep -Fq 'anaParts:{estrella:false,elegia:false,ojos:false,labios:false,cabello:false,piel:false,interludio:false,epilogo:false}' ceniciento/el-espejo.js
-            grep -Fq "mark.textContent='flag'" ceniciento/el-espejo.js
-            grep -Fq 'setTimeout(enterInventory,3900)' ceniciento/el-espejo.js
-          else
-            node ceniciento/check-mirror.cjs
-            node check-mirror-silent-finale.cjs .
-          fi
-          node check-publication-loading.cjs
-          node check-interactive-controls.cjs
-          grep -q 'id="oras-sonic-breath-engine"' index.html
-          grep -q "function deepSilence()" index.html
-          grep -q "osc.frequency.value = 1040" index.html
-          grep -q "const fadeSoundTo=(target,duration=900,done)=>" index.html
-          grep -q 'id="duskPreFinal"' index.html
-          grep -q 'id="duskFinalPhrase"' index.html
-          ! grep -q "function fadeHtmlAudio" index.html
-          grep -q "if(soundtrack.muted||soundtrack.paused)" index.html
-          grep -q "await soundtrack.play()" index.html
-          grep -q "oras-solo-narrative-entropy-v1" index.html
-          grep -q "machine:\[0.025,0.020,0.016,0.012\]" index.html
-          grep -q "bus:\[0.015,0.012,0.009,0.006\]" index.html
-          grep -q "window.addEventListener('oras:memory-active'" index.html
-          grep -q "window.setTimeout(showAnaMirrorFollow,10000)" narrative-universe.js
-          grep -q "follow.textContent='Seguir'" narrative-universe.js
-          ! grep -q "setTimeout(enterMirrorAfterFlowers,10000)" narrative-universe.js
-          grep -q "function anaEpilogueForwardTarget()" elegia-breve/index.html
-          grep -q "journeyNext.disabled=i===journeyPieces.length-1&&!epilogueTarget" elegia-breve/index.html
-          grep -q "oras-flores-convergence-v1" elegia-breve/index.html
-          grep -q "window.setTimeout(showFollow,10000)" elegia-breve/index.html
-          grep -q "body.ou-flores-convergence #journeyNav" elegia-breve/index.html
-          grep -q "body.ou-flores-convergence .ou-card" elegia-breve/index.html
-          grep -q "new CustomEvent('oras:mirror-explicit-start')" elegia-breve/index.html
-          grep -q "oras-distributed-mirror-memory-v2" narrative-universe.js
-          grep -q "mirrorReadComplete!==true" narrative-universe.js
-          grep -q "oras.memory.v2" narrative-universe.js
-          grep -q "transition-delay:700ms" narrative-universe.js
-          grep -q "oras-memory-absence" narrative-universe.js
-          grep -q "eiffel:0,clock:0,photograph:0" narrative-universe.js
-          grep -q "oras:memory-active" narrative-universe.js
-          grep -q "oras-ceniciento-direct-mirror-gate-v1" narrative-universe.js
-          grep -q "ou-ceniciento-direct-mirror" narrative-universe.js
-          grep -q "follow.textContent='Seguir'" narrative-universe.js
-          grep -Fq 'narrative-universe.js?v=20261012-43' elegia-breve/index.html
+          node --check inventario-del-aire/oras-expansion.js
+          grep -Fq '20261012-mirror-mechanical-2' narrative-universe.js
+          grep -Fq '20261012-mirror-mechanical-2' ceniciento/el-espejo.js
+          grep -Fq 'narrative-universe.js?v=20261012-mirror-mechanical-2' index.html
+          ! grep -Fq 'Relato breve digital inmersivo' index.html
+          grep -Fq 'maintainSilence' ceniciento/el-espejo.js
+          grep -Fq 'playMechanicalStep' ceniciento/el-espejo.js
+          grep -Fq 'finalContinue.addEventListener' ceniciento/el-espejo.js
+          grep -Fq 'solo-la-tarjeta-fondo.mp3' inventario-del-aire/index.html
+          echo 'PASS: fuente publicada = fuente vigente; Espejo sin cama sonora y con clac mecánico.'
 
       - name: Preparar voz de Ceniciento
+        shell: bash
         run: |
+          set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
           import hashlib
