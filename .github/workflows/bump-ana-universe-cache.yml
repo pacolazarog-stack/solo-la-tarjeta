@@ -18,7 +18,7 @@ jobs:
           from pathlib import Path
           import re
 
-          version = '20261012-mirror-mechanical-2'
+          version = '20261012-inventory-return-reset-1'
           for p in Path('.').rglob('*.html'):
               s = p.read_text(encoding='utf-8')
               updated = re.sub(
@@ -40,5 +40,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -u
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "ORAS: publica Espejo mecánico, sin drone ni subtítulo"
+          git commit -m "ORAS: fuerza reinicio limpio al volver del Inventario"
           git push

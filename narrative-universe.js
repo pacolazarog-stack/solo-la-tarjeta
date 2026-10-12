@@ -4,10 +4,11 @@
 const STORAGE='oras.universe.v2';
 const MIRROR_AUDIO_STORAGE='oras.mirror.audio.v1';
 const ROOT='/solo-la-tarjeta/';
-const VERSION='20261012-mirror-mechanical-2';
+const VERSION='20261012-inventory-return-reset-1';
 const anaPage=location.pathname.includes('/elegia-breve/');
 const soloPage=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'')==='/solo-la-tarjeta';
 const epilogueDocument=location.pathname.includes('/epilogo/');
+const returnedFromInventory=anaPage&&new URLSearchParams(location.search).get('from')==='inventario';
 
 if(epilogueDocument)document.documentElement.classList.add('ou-epilogue-document');
 if(soloPage)document.documentElement.classList.add('ou-solo-document');
@@ -48,6 +49,24 @@ function hostWindow(){try{return window.top||window}catch(_){return window}}
 function hostDocument(){try{return hostWindow().document}catch(_){return document}}
 function hostAudio(){return [...hostDocument().querySelectorAll('audio')]}
 function readUniverseState(){try{const raw=localStorage.getItem(STORAGE);return raw?JSON.parse(raw):{}}catch(_){return {}}}
+function resetCycleAfterInventoryReturn(){
+  if(!returnedFromInventory)return;
+  try{
+    const saved=readUniverseState();
+    const next=Object.assign({},saved,{
+      anaComplete:false,
+      anaParts:{estrella:false,elegia:false,ojos:false,labios:false,cabello:false,piel:false,interludio:false,epilogo:false},
+      soloComplete:false,
+      cenicientoComplete:false,
+      mirrorReadComplete:false,
+      returnedFromCeniciento:false
+    });
+    localStorage.setItem(STORAGE,JSON.stringify(next));
+    sessionStorage.removeItem(MIRROR_AUDIO_STORAGE);
+  }catch(_){}
+  try{history.replaceState(history.state,'',location.pathname+(location.hash||''))}catch(_){}
+}
+resetCycleAfterInventoryReturn();
 function markCardFound(){try{const state=readUniverseState();state.cardFound=true;localStorage.setItem(STORAGE,JSON.stringify(state))}catch(_){}}
 function veil(){
   const doc=hostDocument();
