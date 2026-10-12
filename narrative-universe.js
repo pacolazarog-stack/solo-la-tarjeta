@@ -4,7 +4,7 @@
 const STORAGE='oras.universe.v2';
 const MIRROR_AUDIO_STORAGE='oras.mirror.audio.v1';
 const ROOT='/solo-la-tarjeta/';
-const VERSION='20261012-audio-mirror-1';
+const VERSION='20261012-mirror-mechanical-2';
 const anaPage=location.pathname.includes('/elegia-breve/');
 const soloPage=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'')==='/solo-la-tarjeta';
 const epilogueDocument=location.pathname.includes('/epilogo/');
@@ -70,9 +70,23 @@ function fadeAudio(duration=2200){
     requestAnimationFrame(step);
   });
 }
-function hardSilence(){hostAudio().forEach(audio=>{try{audio.volume=0;audio.muted=true;audio.pause()}catch(_){}})}
+function hardSilence(){
+  hostAudio().forEach(audio=>{
+    try{
+      audio.autoplay=false;
+      audio.removeAttribute('autoplay');
+      audio.volume=0;
+      audio.muted=true;
+      audio.pause();
+    }catch(_){}
+  });
+}
 async function darkAndSilence(){
-  const node=veil();requestAnimationFrame(()=>{node.style.opacity='1'});await fadeAudio(2200);hardSilence();return node;
+  const node=veil();
+  requestAnimationFrame(()=>{node.style.opacity='1'});
+  await fadeAudio(2200);
+  hardSilence();
+  return node;
 }
 function revealMirror(node){if(!node)return;node.style.transition='opacity .95s ease';requestAnimationFrame(()=>{node.style.opacity='0'});setTimeout(()=>node.remove(),1100)}
 function saveMirrorAudioState(){
@@ -84,25 +98,52 @@ function saveMirrorAudioState(){
 }
 
 let navTransitioning=false;
-async function goToSoloFromEpilogue(){
-  if(navTransitioning)return;navTransitioning=true;markCardFound();await darkAndSilence();
-  const url=ROOT+'?origen=tarjeta&auto=1&v='+VERSION;
+async function goToSolo(origin='tarjeta'){
+  if(navTransitioning)return;
+  navTransitioning=true;
+  markCardFound();
+  await darkAndSilence();
+  const url=ROOT+'?origen='+encodeURIComponent(origin)+'&auto=1&v='+VERSION;
   try{hostWindow().location.href=url}catch(_){location.href=url}
 }
 
 let mirrorTransitioning=false,permitMirrorStart=false,mirrorSilenceTimer=0;
-function guardMirrorSilence(){hardSilence();clearInterval(mirrorSilenceTimer);mirrorSilenceTimer=setInterval(hardSilence,250)}
+function guardMirrorSilence(){
+  hardSilence();
+  clearInterval(mirrorSilenceTimer);
+  mirrorSilenceTimer=setInterval(hardSilence,90);
+}
+function syncMirrorSilenceFromBody(){
+  const doc=hostDocument();
+  if(doc.body?.classList.contains('mirror'))guardMirrorSilence();
+}
 addEventListener('oras:mirror-silence',guardMirrorSilence,true);
 addEventListener('oras:mirror-start',event=>{
   if(permitMirrorStart){permitMirrorStart=false;guardMirrorSilence();return}
   event.stopImmediatePropagation();
   if(mirrorTransitioning)return;
-  mirrorTransitioning=true;saveMirrorAudioState();
+  mirrorTransitioning=true;
+  saveMirrorAudioState();
   darkAndSilence().then(node=>{
-    guardMirrorSilence();permitMirrorStart=true;dispatchEvent(new CustomEvent('oras:mirror-start'));
-    setTimeout(()=>revealMirror(node),80);mirrorTransitioning=false;
+    guardMirrorSilence();
+    permitMirrorStart=true;
+    dispatchEvent(new CustomEvent('oras:mirror-start'));
+    setTimeout(()=>revealMirror(node),80);
+    mirrorTransitioning=false;
   });
 },true);
+
+if(document.body){
+  new MutationObserver(syncMirrorSilenceFromBody).observe(document.body,{attributes:true,attributeFilter:['class']});
+  syncMirrorSilenceFromBody();
+}else{
+  addEventListener('DOMContentLoaded',()=>{
+    new MutationObserver(syncMirrorSilenceFromBody).observe(document.body,{attributes:true,attributeFilter:['class']});
+    syncMirrorSilenceFromBody();
+  },{once:true});
+}
+addEventListener('pageshow',syncMirrorSilenceFromBody);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncMirrorSilenceFromBody()});
 
 function ensureMirrorEngine(){
   if(window.parent!==window||(!soloPage&&!anaPage))return;
@@ -126,17 +167,36 @@ function launchMirrorFromAna(){
 }
 
 document.addEventListener('click',event=>{
-  const button=event.target.closest?.('#journeyNext');if(!button||!anaPage)return;
+  const card=event.target.closest?.('.ou-card');
+  if(card&&anaPage){
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    goToSolo('ana-nav');
+    return;
+  }
+  const button=event.target.closest?.('#journeyNext');
+  if(!button||!anaPage)return;
   const hash=location.hash.toLowerCase();
-  if(hash==='#epilogo'){event.preventDefault();event.stopImmediatePropagation();goToSoloFromEpilogue();return}
-  if(hash==='#estrella'&&trilogyCompleteForMirror()){event.preventDefault();event.stopImmediatePropagation();launchMirrorFromAna()}
+  if(hash==='#epilogo'){
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    goToSolo('tarjeta');
+    return;
+  }
+  if(hash==='#estrella'&&trilogyCompleteForMirror()){
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    launchMirrorFromAna();
+  }
 },true);
 
 const base=document.createElement('script');
 base.src='https://cdn.jsdelivr.net/gh/pacolazarog-stack/solo-la-tarjeta@80866cb8ae17d31356462edf408a4d7f099e1241/narrative-universe.js';
 base.async=false;
 base.onload=()=>{
-  const style=document.createElement('style');style.id='mobile-portrait-layout-fix';style.textContent=`
+  const style=document.createElement('style');
+  style.id='mobile-portrait-layout-fix';
+  style.textContent=`
 html.ou-hide-journey-nav .journey-nav{display:none!important}
 html.ou-epilogue-document .ou-card{display:none!important}
 html.ou-solo-document .work-subtitle{display:none!important}
@@ -150,7 +210,9 @@ html.ou-solo-document .work-subtitle{display:none!important}
 .ou-reading-checklist summary{margin-left:0!important;padding:5px 8px!important;border-color:rgba(255,255,255,.20)!important;background:rgba(12,12,12,.38)!important;backdrop-filter:blur(3px)!important;-webkit-backdrop-filter:blur(3px)!important}.ou-reading-checklist ul{left:0!important;right:auto!important}
 .journey-nav{left:112px!important;right:112px!important;bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;transform:none!important;width:auto!important;max-width:none!important;height:48px!important;padding:0!important;border:0!important;border-top:1px solid rgba(255,250,241,.46)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 .journey-nav button{min-width:0!important;min-height:48px!important;padding:7px 3px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;font-size:12px!important;text-shadow:0 1px 4px rgba(0,0,0,.9)!important}.journey-nav button+button{border-left:1px solid rgba(255,250,241,.26)!important}
-}`;document.head.appendChild(style);syncRouteChrome();
+}`;
+  document.head.appendChild(style);
+  syncRouteChrome();
 };
 base.onerror=()=>console.error('No se pudo cargar el módulo base del universo narrativo.');
 document.head.appendChild(base);
