@@ -1,10 +1,28 @@
 # ORAS · MÁSTER CANÓNICO R4
 
+## Lo que queda de las horas
+
 **Edición de comprobación y congelación.**
 
 R4 no constituye una nueva redacción del corpus. El texto literario es **idéntico a R3** y la auditoría final concluye con **0 nuevas modificaciones literarias**.
 
 La única intervención textual considerada obligatoria en la última fase —la supresión de la primera formulación «No al muchacho. / A él.» antes de «Ella nunca había visto al joven.»— ya fue incorporada a **Ceniciento R3** y queda verificada en la fuente canónica.
+
+## Formulaciones editoriales canónicas
+
+**Subtítulo canónico:**
+
+> **Lo que queda de las horas**
+
+**Definición crítica definitiva:**
+
+> **ORAS combina la ambición conceptual de la gran literatura de ideas con una historia íntima sobre el encuentro, la edad y el reconocimiento, convirtiendo una experiencia humana concreta en una investigación progresiva sobre qué puede sobrevivir a una existencia.**
+
+**Frase de contraportada:**
+
+> **Lo que comienza con una tarjeta olvidada termina preguntándose qué puede permanecer cuando ya no queda nadie que recuerde.**
+
+El subtítulo se mantiene deliberadamente abierto: antes de la lectura remite al tiempo; después de la lectura puede entenderse como aquello que permanece cuando las horas ya han pasado.
 
 ## Arquitectura
 
