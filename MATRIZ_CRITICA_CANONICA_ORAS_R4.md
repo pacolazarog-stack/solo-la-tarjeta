@@ -2,7 +2,25 @@
 
 ## R4 · VERSIÓN DEFINITIVA CONGELADA
 
-Contenido conceptual idéntico a la matriz R3. R4 certifica la auditoría final y la congelación del marco crítico.
+### ORAS · Lo que queda de las horas
+
+Contenido conceptual idéntico a la matriz R3 en su arquitectura y tesis. R4 certifica la auditoría final, la congelación del marco crítico y fija las formulaciones editoriales canónicas.
+
+## Formulaciones editoriales canónicas
+
+**Subtítulo:**
+
+> **Lo que queda de las horas**
+
+**Definición crítica definitiva:**
+
+> **ORAS combina la ambición conceptual de la gran literatura de ideas con una historia íntima sobre el encuentro, la edad y el reconocimiento, convirtiendo una experiencia humana concreta en una investigación progresiva sobre qué puede sobrevivir a una existencia.**
+
+**Frase de contraportada:**
+
+> **Lo que comienza con una tarjeta olvidada termina preguntándose qué puede permanecer cuando ya no queda nadie que recuerde.**
+
+El subtítulo opera en dos tiempos: antes de la lectura remite a las horas; después, a aquello que puede permanecer cuando las horas ya han pasado.
 
 ## Tesis central
 
@@ -255,4 +273,4 @@ La última función de la narración en ORAS no es recordar: **es afirmar que oc
 
 ## Estado R4
 
-La matriz queda congelada en contenido conceptual. Cualquier revisión futura sólo podrá corregir ortotipografía o incorporar un descubrimiento estructural verdaderamente nuevo y demostrable.
+La matriz queda congelada en contenido conceptual. El subtítulo, la definición crítica y la frase de contraportada quedan asimismo fijados como formulaciones editoriales canónicas. Cualquier revisión futura sólo podrá corregir ortotipografía o incorporar un descubrimiento estructural verdaderamente nuevo y demostrable.
