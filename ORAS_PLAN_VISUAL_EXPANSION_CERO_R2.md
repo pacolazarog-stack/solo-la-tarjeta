@@ -6,6 +6,14 @@ Documento canónico de diseño visual para **El Inventario del Aire · El Oficio
 
 Este plan no modifica el texto literario R4. Sustituye la concepción gráfica/esquemática provisional de la primera implementación audiovisual por una gramática **fotográfica, material, orgánica y progresivamente erosionada**.
 
+## Estado de implementación · 12/10/2026
+
+**EL INVENTARIO DEL AIRE · I.1–I.6: IMPLEMENTADO EN R2.**
+
+Las seis pantallas fundamentales de la casa emplean ya activos fotográficos propios en el lector público. La antigua construcción gráfica CSS queda oculta como respaldo. La vida de la imagen se limita a respiración óptica, polvo y variación de luz extremadamente discretos.
+
+**EL OFICIO DE LAS SOMBRAS · LA CIUDAD QUE APRENDIÓ A OLVIDAR · LA HABITACIÓN NÚMERO CERO:** diseño R2 fijado; sustitución fotográfica/material todavía pendiente.
+
 ## Principio rector
 
 > **El espectador jamás debe sentir que ORAS abandona la realidad para volverse abstracta. Debe sentir que la realidad permanece delante de él mientras se va quedando sin aquello que la sostenía.**
@@ -58,6 +66,10 @@ La casa existe.
 
 Todavía no es memoria.
 
+### Implementación
+
+**R2 activa:** `inventario-del-aire/assets-r2/i1-llegada.webp`.
+
 ---
 
 ## Pantalla I.2 · Recibidor
@@ -88,6 +100,10 @@ Falta alguien.
 
 Ausencia personal.
 
+### Implementación
+
+**R2 activa:** `inventario-del-aire/assets-r2/i2-recibidor.webp`.
+
 ---
 
 ## Pantalla I.3 · El reloj
@@ -112,6 +128,10 @@ Pero sigue presente.
 ### Función
 
 Tiempo convertido en huella.
+
+### Implementación
+
+**R2 activa:** `inventario-del-aire/assets-r2/i3-reloj.webp`.
 
 ---
 
@@ -138,6 +158,10 @@ Pero nadie volverá.
 
 Gesto conservado.
 
+### Implementación
+
+**R2 activa:** `inventario-del-aire/assets-r2/i4-silla.webp`.
+
 ---
 
 ## Pantalla I.5 · Pasillo
@@ -158,6 +182,10 @@ El espacio empieza a resultar más importante que los objetos.
 ### Función
 
 Arquitectura de la memoria.
+
+### Implementación
+
+**R2 activa:** `inventario-del-aire/assets-r2/i5-pasillo.webp`.
 
 ---
 
@@ -180,6 +208,10 @@ La naturaleza corrige a la memoria.
 ### Función
 
 Persistencia material.
+
+### Implementación
+
+**R2 activa:** `inventario-del-aire/assets-r2/i6-jardin.webp`.
 
 ---
 
@@ -626,6 +658,8 @@ Mostrar que algo ocurrió.
 
 ## Estado
 
-**Plan visual R2:** canónico para la siguiente implementación técnica.
+**Plan visual R2:** canónico y en implementación progresiva.
 
-La implementación R1 basada en gráficos CSS se considera **provisional** hasta que los activos fotográficos R2 sustituyan sus fondos esquemáticos.
+**Inventario I.1–I.6:** implementación fotográfica R2 activa.
+
+**Sombras · Ciudad · Habitación 0:** la implementación R1 basada en gráficos CSS se considera provisional hasta que los activos fotográficos/materiales R2 sustituyan sus fondos esquemáticos.
