@@ -1,6 +1,22 @@
 # ORAS
 
+## Lo que queda de las horas
+
 Proyecto literario y multimedia.
+
+## Formulaciones canónicas
+
+**Subtítulo:** *Lo que queda de las horas*.
+
+**Definición crítica:**
+
+> **ORAS combina la ambición conceptual de la gran literatura de ideas con una historia íntima sobre el encuentro, la edad y el reconocimiento, convirtiendo una experiencia humana concreta en una investigación progresiva sobre qué puede sobrevivir a una existencia.**
+
+**Frase de contraportada:**
+
+> **Lo que comienza con una tarjeta olvidada termina preguntándose qué puede permanecer cuando ya no queda nadie que recuerde.**
+
+El subtítulo no explica ORAS: lo revela retrospectivamente. Una vez terminada la obra, ORAS puede leerse como aquello que permanece cuando las horas ya han pasado.
 
 ## Arquitectura canónica · R4
 
