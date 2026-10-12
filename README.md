@@ -75,15 +75,15 @@ La diferencia visual no debe ser riqueza frente a abstracción, sino **realismo 
 
 ### Estado de implementación · LA EXPANSIÓN / EL CERO
 
-**EL INVENTARIO DEL AIRE · R3 SECUENCIAL: ACTIVO.**
+**LA EXPANSIÓN · R3 SECUENCIAL FOTOGRÁFICO: ACTIVO.**
 
-El lector público separa ahora el contenido en pantallas narrativas. Cada parte recibe una transición visual propia —arriba/abajo, izquierda/derecha, fundido, abajo/arriba, derecha/izquierda o flash— elegida pseudoaleatoriamente sin repetición inmediata. El texto aparece como un display: **de izquierda a derecha y renglón a renglón**.
+El lector público separa el contenido en pantallas narrativas. Cada parte recibe una transición visual propia —arriba/abajo, izquierda/derecha, fundido, abajo/arriba, derecha/izquierda o flash— elegida pseudoaleatoriamente sin repetición inmediata. El texto aparece como un display: **de izquierda a derecha y renglón a renglón**.
 
-La doble capa fotográfica permite que una imagen entre mientras la anterior se retira. La casa continúa utilizando los activos R2 ya publicados. Las clases de fondos específicos para *Sombras* y *Ciudad* están preparadas en el lector R3; mientras sus binarios definitivos no estén publicados, la escenografía R1 permanece como fallback y evita pantallas vacías.
+La doble capa fotográfica permite que una imagen entre mientras la anterior se retira. *El Inventario del Aire* utiliza sus activos fotográficos R2; **El Oficio de las Sombras incorpora ya sus nueve fotografías específicas** y **La Ciudad que Aprendió a Olvidar incorpora ya sus diez fotografías específicas**, asignadas capítulo a capítulo en el lector R3.
 
-Los gráficos CSS de la casa R1 quedan ocultos como respaldo. R2/R3 conserva únicamente movimientos mínimos de materia viva —respiración óptica, luz y polvo— para evitar tanto la pantalla congelada como el efecto ornamental.
+Las imágenes de *Sombras* y *Ciudad* se conservan en tiras AVIF compactas cargadas antes del lector y se recortan dinámicamente para cada pantalla sin deformación. La escenografía R1 sólo se mantiene como fallback y se atenúa únicamente cuando una fotografía concreta está disponible.
 
-**La Habitación Número Cero** mantiene por ahora su tratamiento de sustracción vigente; el lector R3 se retira al entrar en EL CERO para no competir con la desaparición final.
+**La Habitación Número Cero** mantiene su tratamiento de sustracción vigente; el lector R3 se retira al entrar en EL CERO para no competir con la desaparición final.
 
 ## Documentación canónica vigente
 
@@ -107,7 +107,7 @@ Los gráficos CSS de la casa R1 quedan ocultos como respaldo. R2/R3 conserva ún
 - **LA HABITACIÓN NÚMERO CERO:** sólo corrección ortográfica, tipográfica o de puntuación; no modificación narrativa.
 - **MATRIZ CRÍTICA:** congelada en contenido conceptual.
 - **RESTO DE ORAS:** cualquier cambio posterior deberá demostrar una ganancia inequívoca frente a R4.
-- **DIRECCIÓN AUDIOVISUAL:** Biblia R1; Plan Visual R2 canónico; Lector Secuencial R3 activo y abierto a incorporación progresiva de activos fotográficos.
+- **DIRECCIÓN AUDIOVISUAL:** Biblia R1; Plan Visual R2 canónico; Lector Secuencial R3 activo con fotografía específica en Inventario, Sombras y Ciudad.
 
 La última función de la narración en ORAS no es recordar: **es afirmar que ocurrió**.
 
