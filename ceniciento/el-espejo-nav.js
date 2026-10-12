@@ -105,7 +105,7 @@ if(isSoloPage){
 
     const mirrorReady=()=>{
       const state=readState();
-      return state.anaComplete===true&&state.cenicientoComplete===true&&state.mirrorReadComplete!==true;
+      return state.anaComplete===true&&state.cenicientoComplete===true;
     };
     const showSoloGate=()=>{
       if(soloGateUserRequested||document.body.classList.contains('mirror')||!mirrorReady())return;
