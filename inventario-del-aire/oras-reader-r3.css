@@ -1,11 +1,23 @@
 /* ORAS · lector fotográfico secuencial R3
    Cada parte ocupa una pantalla, cambia de fotografía y conserva lectura izquierda→derecha. */
-.photo-stage{position:absolute;inset:0;z-index:20;overflow:hidden;pointer-events:none;background:#0c0b0a}
+.photo-stage{position:absolute;inset:0;z-index:20;overflow:hidden;pointer-events:none;background:transparent}
 .photo-layer{position:absolute;inset:-2%;opacity:0;background-position:center center;background-size:cover;background-repeat:no-repeat;transform:scale(1.025);filter:saturate(.92) contrast(1.01) brightness(.72);will-change:opacity,transform,clip-path,filter}
 .photo-layer::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,5,5,.54),rgba(5,5,5,.19) 56%,rgba(5,5,5,.31)),linear-gradient(180deg,rgba(4,4,4,.20),transparent 34%,rgba(4,4,4,.25));}
 .photo-layer.bg-current{opacity:1;z-index:1}
 .photo-layer.bg-enter{z-index:2}
 .photo-layer.bg-exit{z-index:1;animation:orasBgExit 1.1s ease both}
+
+/* Activos de casa ya publicados. Las clases de tren y ciudad quedan preparadas para sus fotografías R3. */
+.photo-layer.asset-house-arrival{background-image:url("./assets-r2/i1-llegada.avif")}
+.photo-layer.asset-house-entry{background-image:url("./assets-r2/i2-recibidor.avif")}
+.photo-layer.asset-house-clock{background-image:url("./assets-r2/i3-reloj.avif")}
+.photo-layer.asset-house-kitchen{background-image:url("./assets-r2/i4-silla.avif")}
+.photo-layer.asset-house-corridor{background-image:url("./assets-r2/i5-pasillo.avif")}
+.photo-layer.asset-house-bedroom{background-image:url("./assets-r2/i5-pasillo.avif")}
+.photo-layer.asset-house-garden{background-image:url("./assets-r2/i6-jardin.avif")}
+.photo-layer.asset-house-inventory{background-image:url("./assets-r2/i2-recibidor.avif")}
+.photo-layer.asset-house-exit{background-image:url("./assets-r2/i1-llegada.avif")}
+
 @keyframes orasBgExit{from{opacity:1}to{opacity:0;filter:brightness(.55) saturate(.72)}}
 .photo-layer.tr-fade.bg-enter{animation:orasBgFade 1.65s ease both}
 .photo-layer.tr-down.bg-enter{animation:orasBgDown 1.55s cubic-bezier(.22,.78,.24,1) both}
@@ -39,7 +51,9 @@
 .story-panel[data-transition="tr-right"] .panel-copy{transform:translateX(38px)}
 .story-panel[data-transition="tr-fade"] .panel-copy{filter:blur(5px)}
 .story-panel[data-transition="tr-flash"] .panel-copy{filter:brightness(2.1) blur(2px)}
-body[data-world="house"] .scene-house,body[data-world="train"] .scene-train,body[data-world="city"] .scene-city{opacity:.10!important;filter:blur(2px) brightness(.45)}
+body[data-world="house"] .scene-house,body[data-world="train"] .scene-train,body[data-world="city"] .scene-city{filter:brightness(.70)}
+body[data-world="house"] .scene-house{opacity:.12!important}
+body[data-world="train"] .scene-train,body[data-world="city"] .scene-city{opacity:1!important}
 body[data-world="zero"] .photo-stage{opacity:0;transition:opacity 2.4s ease}
 body:not([data-world="zero"]) .photo-stage{opacity:1;transition:opacity 1.4s ease}
 body[data-world="house"] .book,body[data-world="train"] .book,body[data-world="city"] .book{color:#f4efe5}
