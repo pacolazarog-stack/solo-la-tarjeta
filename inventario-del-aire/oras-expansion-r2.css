@@ -35,12 +35,12 @@
   transition:opacity 3s ease;
 }
 
-.house-photo-arrival{background-image:url("./assets-r2/i1-llegada.webp")}
-.house-photo-entry{background-image:url("./assets-r2/i2-recibidor.webp")}
-.house-photo-clock{background-image:url("./assets-r2/i3-reloj.webp")}
-.house-photo-chair{background-image:url("./assets-r2/i4-silla.webp")}
-.house-photo-corridor{background-image:url("./assets-r2/i5-pasillo.webp")}
-.house-photo-garden{background-image:url("./assets-r2/i6-jardin.webp")}
+.house-photo-arrival{background-image:url("./assets-r2/i1-llegada.avif")}
+.house-photo-entry{background-image:url("./assets-r2/i2-recibidor.avif")}
+.house-photo-clock{background-image:url("./assets-r2/i3-reloj.avif")}
+.house-photo-chair{background-image:url("./assets-r2/i4-silla.avif")}
+.house-photo-corridor{background-image:url("./assets-r2/i5-pasillo.avif")}
+.house-photo-garden{background-image:url("./assets-r2/i6-jardin.avif")}
 
 /* La construcción gráfica R1 queda como respaldo histórico, no visible. */
 .scene-house .house-wall,
