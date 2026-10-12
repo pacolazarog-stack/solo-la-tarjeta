@@ -4,7 +4,25 @@
 const STORAGE='oras.universe.v2';
 const MIRROR_AUDIO_STORAGE='oras.mirror.audio.v1';
 const ROOT='/solo-la-tarjeta/';
-const VERSION='20261012-screen-fades-1';
+const VERSION='20261012-screen-fades-2';
+
+if(!document.querySelector('script[data-oras-screen-transition]')){
+  const transitionScript=document.createElement('script');
+  transitionScript.dataset.orasScreenTransition='true';
+  transitionScript.src=ROOT+'oras-screen-transition.js?v='+VERSION;
+  transitionScript.async=false;
+  document.head.appendChild(transitionScript);
+}
+function runWithScreenTransition(action,options={}){
+  const fx=window.ORASScreenTransition;
+  if(fx&&!fx.isActive()){
+    fx.run(action,options);
+    return true;
+  }
+  action();
+  return false;
+}
+
 const anaPage=location.pathname.includes('/elegia-breve/');
 const soloPage=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'')==='/solo-la-tarjeta';
 const epilogueDocument=location.pathname.includes('/epilogo/');
@@ -240,17 +258,19 @@ document.addEventListener('click',event=>{
     event.preventDefault();
     event.stopImmediatePropagation();
     const target=firstUnreadAnaTarget();
-    if(target&&openAnaTarget(target)){
-      syncRouteChrome();
-      return;
-    }
-    goToSolo('tarjeta');
+    runWithScreenTransition(()=>{
+      if(target&&openAnaTarget(target)){
+        syncRouteChrome();
+        return;
+      }
+      goToSolo('tarjeta');
+    },{expectNavigation:!target});
     return;
   }
   if(hash==='#estrella'&&trilogyCompleteForMirror()){
     event.preventDefault();
     event.stopImmediatePropagation();
-    launchMirrorFromAna();
+    runWithScreenTransition(()=>launchMirrorFromAna());
   }
 },true);
 
