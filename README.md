@@ -46,7 +46,7 @@ La literatura R4 permanece congelada. La dirección audiovisual se desarrolla co
 - [`ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md`](./ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md) — Biblia de Dirección Audiovisual.
 - [`ORAS_PLAN_VISUAL_EXPANSION_CERO_R2.md`](./ORAS_PLAN_VISUAL_EXPANSION_CERO_R2.md) — plan visual fotográfico de 25 pantallas para LA EXPANSIÓN y EL CERO.
 - [`ORAS_HOJA_TECNICA_MEZCLA_5_1_R1.md`](./ORAS_HOJA_TECNICA_MEZCLA_5_1_R1.md) — hoja de mezcla 5.1: presente frontal, persistencia trasera, conciencia central y materialidad LFE.
-- [`inventario-del-aire/ASSETS_FOTOGRAFICOS_R2.md`](./inventario-del-aire/ASSETS_FOTOGRAFICOS_R2.md) — manifiesto de activos fotográficos requeridos por la implementación R2.
+- [`inventario-del-aire/ASSETS_FOTOGRAFICOS_R2.md`](./inventario-del-aire/ASSETS_FOTOGRAFICOS_R2.md) — manifiesto y estado de los activos fotográficos R2.
 
 Principio maestro:
 
@@ -70,16 +70,20 @@ La diferencia visual no debe ser riqueza frente a abstracción, sino **realismo 
 
 ### Estado de implementación · LA EXPANSIÓN / EL CERO
 
-La experiencia pública de [`inventario-del-aire/`](./inventario-del-aire/) dispone actualmente de una **maqueta funcional audiovisual R1** construida con CSS y sonido procedural. Sirve para validar transiciones, capítulos, erosión, botón y arquitectura sonora, pero su plástica gráfica/esquemática se considera provisional.
+**EL INVENTARIO DEL AIRE · R2 FOTOGRÁFICO: IMPLEMENTADO.**
 
-La siguiente implementación R2 sustituirá esas construcciones por activos fotográficos propios:
+El lector público utiliza ya seis activos fotográficos propios para el primer volumen:
 
-- **Inventario:** casa real, recibidor, reloj, silla, pasillo y jardín;
-- **Sombras:** andén, vagón, ventanilla, reflejos y túneles reales;
-- **Ciudad:** plaza, archivo, fotografías, museo y estados sucesivos de desaparición;
-- **Habitación 0:** museo real → sala real → blanqueamiento → macro del botón → luz residual.
+- **I.1 · Llegada:** exterior de la casa;
+- **I.2 · Recibidor:** interior con profundidad;
+- **I.3 · El reloj:** tiempo detenido convertido en huella;
+- **I.4 · La silla:** gesto conservado;
+- **I.5 · Pasillo:** arquitectura de la memoria;
+- **I.6 · Jardín:** persistencia material.
 
-La abstracción será resultado de la erosión, no el punto de partida.
+Los gráficos CSS de la casa R1 quedan ocultos como respaldo. R2 conserva únicamente movimientos mínimos de materia viva —respiración óptica, luz y polvo— para evitar tanto la pantalla congelada como el efecto ornamental. Los capítulos intermedios reutilizan las imágenes existentes mediante erosión de luz y color, sin inventar fotografías decorativas.
+
+**El Oficio de las Sombras · La Ciudad que Aprendió a Olvidar · La Habitación Número Cero** conservan todavía la maqueta audiovisual R1 y quedan pendientes de su sustitución fotográfica/material R2. En esos bloques, la abstracción deberá aparecer sólo como consecuencia de la erosión de una realidad previamente plena.
 
 ## Documentación canónica vigente
 
@@ -102,7 +106,7 @@ La abstracción será resultado de la erosión, no el punto de partida.
 - **LA HABITACIÓN NÚMERO CERO:** sólo corrección ortográfica, tipográfica o de puntuación; no modificación narrativa.
 - **MATRIZ CRÍTICA:** congelada en contenido conceptual.
 - **RESTO DE ORAS:** cualquier cambio posterior deberá demostrar una ganancia inequívoca frente a R4.
-- **DIRECCIÓN AUDIOVISUAL:** Biblia R1; Plan Visual R2 canónico y abierto a implementación técnica.
+- **DIRECCIÓN AUDIOVISUAL:** Biblia R1; Plan Visual R2 canónico y abierto a implementación técnica. *Inventario* I.1–I.6 ya está implementado fotográficamente.
 
 La última función de la narración en ORAS no es recordar: **es afirmar que ocurrió**.
 
