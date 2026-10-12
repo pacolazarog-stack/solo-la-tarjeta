@@ -315,9 +315,7 @@
     .ceniciento-frame{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#100e0d}
     .ceniciento-frame[hidden]{display:none}
     .ceniciento-frame.sonrisa-leaving{pointer-events:none}
-    .epilogue-invitation{margin:18svh 0 0}
-    .epilogue-invitation[hidden]{display:none}
-    .flambe-button,.flambe-button:hover,.flambe-button:focus-visible{
+.flambe-button,.flambe-button:hover,.flambe-button:focus-visible{
       isolation:isolate;overflow:hidden;color:#321609;border-color:#ed993d;
       background:linear-gradient(115deg,#ffe19a,#ffad50 24%,#f79548 48%,#ffcf68 72%,#ffe19a);
       background-size:280% 100%;text-shadow:0 1px 0 rgba(255,239,178,.4);
@@ -940,9 +938,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
           <span class="heat-part heat-calor">calor.</span>
         </span>
       </span>
-
-      <div class="epilogue-invitation" id="epilogueInvitation" hidden><button class="entry-button flambe-button" id="readEpilogue" type="button">Epílogo · A fuego lento →</button></div>
-    </div>
+</div>
   </main>
 
   <script>
@@ -1154,8 +1150,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         finalCalorTimer=null;finalPortraitTimer=null;finalSequenceStarted=false;
         finalHeat.classList.remove('is-shown','show-calor','is-burning');
         warmPhase=0;warmTakeover=0;root.style.setProperty('--warm','0');
-        document.getElementById('epilogueInvitation').hidden=true;
-        clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
+clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
         portraitRequested=false;completedVoicePasses=0;
         questionGrowthActive=false;questionGrowth=.22;questionNext=.22;
         for(const key of ['--question-current','--question-first','--question-next'])root.style.setProperty(key,'.22');
@@ -1444,7 +1439,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       const openEstrella=()=>openPoem('estrella');
       const openEpilogue=()=>openPoem('epilogo');
       document.getElementById('anaInterlude').addEventListener('click',()=>openPoem('interludio'));
-      for(const id of ['anaEpilogue','readEpilogue'])document.getElementById(id).addEventListener('click',openEpilogue);
+      document.getElementById('anaEpilogue').addEventListener('click',openEpilogue);
       document.getElementById('anaSonrisa').addEventListener('click',openSonrisa);
       document.getElementById('anaOjos').addEventListener('click',openOjos);
       document.getElementById('anaCabello').addEventListener('click',openCabello);
@@ -1565,13 +1560,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
           finalCalorTimer=null;
           finalHeat.classList.add('show-calor');
           intensifyWarmWithCalor();
-          let epilogueAlreadyRead=false;
-try{
-  const saved=JSON.parse(localStorage.getItem('oras.universe.v2')||'{}');
-  epilogueAlreadyRead=saved?.anaParts?.epilogo===true;
-}catch(_){}
-document.getElementById('epilogueInvitation').hidden=epilogueAlreadyRead;
-        },4500);
+},4500);
       };
 
       const revealLines=()=>{
