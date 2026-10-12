@@ -1,0 +1,33 @@
+/* Compatibilidad: la erosión usa capas y opacidades simples, sin depender de multiplicación en calc(). */
+.scene-city{filter:none!important}
+.scene-city::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:20;
+  pointer-events:none;
+  background:rgba(244,244,241,.90);
+  opacity:var(--erosion);
+  transition:opacity 1.8s linear;
+}
+.city-horizon{opacity:.78!important}
+.city-map::before{mask-image:none!important;-webkit-mask-image:none!important;opacity:calc(1 - var(--erosion));transition:opacity 1.8s linear}
+body[data-world="city"] .city-absence{opacity:.72!important}
+body[data-world="city"][data-chapter="winter"] .city-horizon,
+body[data-world="city"][data-chapter="last-room"] .city-horizon{filter:none!important;opacity:calc(1 - var(--erosion))!important;transition:opacity 2s linear}
+
+.scene-zero{background:#e8e8e4!important}
+.scene-zero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background:#fff;
+  opacity:var(--zero-progress);
+  transition:opacity 1.6s linear;
+}
+.zero-room,.zero-line,.pearl-button{z-index:1}
+.zero-room{opacity:calc(.72 - var(--zero-progress))!important}
+.zero-line{opacity:calc(.5 - var(--zero-progress))!important}
+body[data-world="zero"] .grain{opacity:.012!important}
+body.final-withdrawal .grain{opacity:0!important}
