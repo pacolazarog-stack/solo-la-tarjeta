@@ -53,7 +53,7 @@ jobs:
           grep -Fq 'narrative-universe.js?v=20261013-audio-groups-1' elegia-breve/index.html
           grep -Fq 'autoplay loop src="ana-klaudya.m4a"' elegia-breve/index.html
           grep -Fq "window.addEventListener('oras:ana-portrait',showPortraitFromJourney)" elegia-breve/index.html
-          grep -Fq '../oras-screen-transition.js?v=20261012-screen-fades-2' inventario-del-aire/index.html
+          grep -Fq '../oras-screen-transition.js?v=20261013-audio-groups-1' inventario-del-aire/index.html
           ! grep -Fq 'Relato breve digital inmersivo' index.html
           grep -Fq 'maintainSilence' ceniciento/el-espejo.js
           grep -Fq 'playMechanicalStep' ceniciento/el-espejo.js
