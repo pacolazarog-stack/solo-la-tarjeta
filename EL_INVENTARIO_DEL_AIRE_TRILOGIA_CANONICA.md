@@ -1,4 +1,4 @@
-EL INVENTARIO DEL AIRE
+# EL INVENTARIO DEL AIRE
 
 La casa seguía allí.
 
@@ -10,25 +10,675 @@ La dejó un momento suspendida.
 
 Después sacó la llave.
 
-I. El recibidorLa casa llevaba vacía tres años.No abandonada.Vacía.La diferencia era importante.Las casas abandonadas se rendían.Aquella seguía esperando.Al entrar, lo primero que llamó la atención no fue el polvo.Fue el aire.Parecía guardado.Como si nadie hubiera respirado allí desde el último día.Abrió una ventana.Nada cambió.Abrió otra.Tampoco.La casa parecía producir su propio clima.Sacó una libreta.Había venido a hacer un inventario.No de objetos.De ausencias.Anotó:Recibidor.Falta algo.No supo precisar qué.II. La habitación del relojSobre una cómoda permanecía un reloj parado.Las agujas marcaban las seis y diecisiete.No avanzaban.No retrocedían.Simplemente estaban allí.Como dos insectos dormidos.Intentó darle cuerda.No funcionó.Intentó mover las agujas.Tampoco.Anotó:Reloj.No mide el tiempo.Conserva una hora.La frase le pareció ridícula.La tachó.Después la escribió de nuevo.III. La cocinaLa cocina estaba limpia.Demasiado limpia.Como una fotografía.Las tazas seguían alineadas.Los platos seguían apilados.Una silla permanecía ligeramente separada de la mesa.Como si alguien acabara de levantarse.Se quedó mirando aquella silla mucho tiempo.Una parte de él esperaba que volviera a moverse.No ocurrió.Anotó:Silla.Conserva un gesto.No tachó nada.IV. El pasilloEl pasillo era largo.Más largo de lo que recordaba.Quizá siempre había sido así.Quizá era él quien había cambiado.Las puertas cerradas parecían observarlo.No con hostilidad.Con paciencia.Habían aprendido a esperar.Él todavía no.A mitad del pasillo encontró una fotografía caída.El cristal estaba roto.La imagen apenas mostraba un jardín.Nadie.Nada.Sin embargo, al verla tuvo una sensación precisa.Aquella fotografía estaba incompleta.No porque faltara una persona.Porque faltaba una mirada.La dejó donde estaba.V. El dormitorioLa cama seguía hecha.Las almohadas hundidas.La colcha sin arrugas.Había algo insoportablemente preciso en aquella escena.Como si cada objeto hubiese decidido permanecer inmóvil para no empeorar las cosas.Abrió el armario.Ropa.Perchas.Cajas.Nada extraordinario.La vida siempre dejaba restos aburridos.La muerte también.Anotó:Los objetos sobreviven mejor que las explicaciones.Era la primera frase del día que no le pareció equivocada.VI. El jardínAl atardecer salió al jardín.Las plantas habían crecido sin permiso.Las raíces ignoraban la nostalgia.Los árboles tampoco parecían interesados en recordar.Solo continuaban.Miró la fachada.La casa parecía más pequeña desde fuera.Siempre ocurría.La memoria construía edificios enormes.La realidad no podía competir.Se sentó en un banco.Esperó.No sabía qué.Solo esperó.VII. InventarioAl anochecer revisó la libreta.Había escrito:Falta algo.Conserva una hora.Conserva un gesto.Falta una mirada.Los objetos sobreviven mejor que las explicaciones.Aquello no era un inventario.Era otra cosa.Lo entendió de golpe.Había venido creyendo que las personas dejaban objetos.Pero quizá ocurría al revés.Quizá los objetos eran quienes dejaban personas.Pequeñas huellas.Formas de presencia.Residuos de atención.Nada más.Nada menos.VIII. SalidaAntes de marcharse cerró todas las ventanas.No quería que entrara polvo.Ni lluvia.Ni aire nuevo.La casa no estaba esperando a nadie.Eso también lo entendió tarde.No esperaba.Recordaba.Era distinto.Al salir, dejó la libreta sobre la cómoda del recibidor.Junto al reloj detenido.No se llevó una sola página.En el último instante miró atrás.No ocurrió nada.Ninguna revelación.Ninguna despedida.Solo una casa.Y el aire inmóvil de una casa que había aprendido a recordar sin ayuda de nadie. VOLUMEN IIEL OFICIO DE LAS SOMBRASI. La estaciónEl tren llegó vacío.No sin pasajeros.Vacío.Los pasajeros ocupaban los asientos.El tren ocupaba el andén.Pero algo faltaba.Algo que no figuraba en ningún horario.Aquel tren había perdido su destino.No su recorrido.Su destino.La diferencia resultaba difícil de explicar.Los paneles seguían funcionando.Los altavoces anunciaban llegadas.Las puertas obedecían.Todo parecía correcto.Sin embargo, quien subía a aquel tren descendía exactamente igual que había entrado.Un hombre observó la vía durante varios minutos.Después compró un billete.No para viajar.Para comprobar una sospecha.II. El revisorEl revisor llevaba cuarenta años trabajando.Nunca había tenido problemas.Los horarios cambiaban.Los gobiernos cambiaban.Los uniformes cambiaban.Los retrasos permanecían.Era una profesión razonable.Medir el movimiento de las personas.Aquella mañana encontró algo extraño.Todos los billetes eran válidos.Todos.Hasta los más antiguos.Hasta algunos impresos décadas atrás.Los escaneó varias veces.Nada.El sistema los aceptaba.Parecía reconocer algo que él no veía.Anotó la incidencia.Nadie respondió.III. Las sombrasAl anochecer comenzaron a aparecer.No eran personas.Tampoco reflejos.Eran sombras.Sombras sin dueño.Atravesaban lentamente los vagones.Se sentaban.Esperaban.Y desaparecían.Nunca hablaban.Nunca interferían.A veces ocupaban el asiento junto a un viajero.Otras veces permanecían de pie durante horas.Como si aún estuvieran realizando un trayecto iniciado mucho tiempo atrás.Los pasajeros fingían no verlas.Era más fácil.IV. El hombre de la fila sieteSiempre viajaba en el mismo vagón.Siempre en el mismo asiento.Fila siete.Ventanilla.No parecía buscar nada.Tampoco escapar.Simplemente viajaba.Un día encontró una sombra sentada enfrente.No desapareció.No cambió de sitio.Permaneció allí todo el trayecto.Era la primera vez.Cuando el tren llegó al final de la línea, la sombra continuaba observando el paisaje.Como si todavía faltara una estación.V. ConversaciónA la semana siguiente volvió.La sombra también.El hombre decidió hablar.—¿Nos conocemos?No obtuvo respuesta.—¿Te estoy esperando?Silencio.—¿O eres tú quien espera?Las luces del vagón parpadearon.Después nada.Sin embargo, por alguna razón inexplicable, tuvo la certeza de haber formulado la pregunta correcta.No la más inteligente.La correcta.VI. Inventario de ausencias móvilesComenzó a tomar notas.No sobre las sombras.Sobre sus costumbres.Descubrió que aparecían siempre en trayectos largos.Nunca en recorridos breves.Evitaban los vagones vacíos.No miraban a las personas.Miraban a través de ellas.Como quien consulta un paisaje desaparecido.Su libreta empezó a llenarse.No de datos.De dudas.Las dudas ocupaban más espacio.VII. El tallerMeses después encontró una antigua nave ferroviaria.Abandonada.O quizá olvidada.Allí descansaban locomotoras retiradas.Vías muertas.Herramientas sin uso.En una pared alguien había escrito una frase.No parecía reciente.Tampoco antigua.Sólo necesaria.Decía:Todo viaje deja una sombra.Debajo no figuraba firma alguna.Ni fecha.Ni explicación.Por primera vez en mucho tiempo sintió alivio.VIII. El oficioLa revelación tardó más de lo esperado.No llegó en una estación.Ni en un tren.Ni frente a una sombra concreta.Llegó una tarde cualquiera.Mientras revisaba sus notas.Comprendió que estaba equivocado.No eran viajeros perdidos.No eran recuerdos.No eran fantasmas.Eran trayectos.Los viajes también envejecían.También dejaban restos.Personas que ya no estaban.Conversaciones terminadas.Despedidas olvidadas.Encuentros irrepetibles.Todo eso permanecía suspendido en algún lugar.Como una estela.Las sombras eran simplemente la forma visible de esa persistencia.IX. Último recorridoAños después volvió a encontrarse con la sombra de la fila siete.Seguía allí.Ventanilla opuesta.Misma quietud.Misma espera.El hombre ya no intentó hablar.Se sentó enfrente.Los dos miraron el paisaje.Bosques.Túneles.Luz.Oscuridad.Nada extraordinario.El tren continuó avanzando.Cuando llegaron al final de la línea, la sombra desapareció.No de golpe.No como una aparición.Se desvaneció despacio.Como una tarea terminada.Entonces comprendió.No había estado observando una presencia.Había estado asistiendo a una despedida.Y algunas despedidas, pensó mientras el andén se vaciaba, necesitan décadas para completarse. VOLUMEN IIILA CIUDAD QUE APRENDIÓ A OLVIDARI. La plazaLa primera desaparición fue pequeña.Nadie le prestó atención.Faltó un banco.Un banco cualquiera.De hierro verde.Con pintura descascarillada.Había estado allí durante décadas.Después dejó de estar.Las personas se sorprendieron.Durante una mañana.Quizá una tarde.Luego continuaron con sus asuntos.Las ciudades siempre tienen problemas mayores.O eso creían.II. El archiveroEl archivero municipal conservaba planos antiguos.Licencias.Padrones.Fotografías.Correspondencia.Había dedicado cuarenta años a registrar la memoria de la ciudad.Por eso fue el primero en detectar la anomalía.No desaparecían sólo los objetos.Desaparecían los documentos.Buscó el banco.No aparecía en ninguna fotografía.Ni en las actas.Ni en los planos.Ni en los presupuestos.No se había eliminado.Nunca había existido.O al menos eso afirmaban los archivos.El archivero cerró la carpeta.Volvió a abrirla.La respuesta seguía allí.III. La fuenteDespués desapareció una fuente.Era más difícil ignorarla.Había presidido una glorieta desde el siglo pasado.Los vecinos discutieron.Mostraron fotografías.Las fotografías habían cambiado.Donde antes aparecía la fuente ahora había flores.Siempre había habido flores.Todos podían verlo.Los documentos lo confirmaban.Los mapas también.Sólo quedaba una certeza incómoda.Había personas que recordaban agua donde ya no existía ninguna prueba.IV. Los resistentesCon el tiempo comenzaron a encontrarse.En silencio.Sin asociaciones.Sin manifiestos.No parecían conspiradores.Parecían supervivientes.Cada uno recordaba algo distinto.Una estatua.Una librería.Una escalera.Un quiosco.Elementos mínimos.Pero todos compartían el mismo problema.La ciudad insistía en que aquellos lugares jamás habían existido.V. El mapa imposibleUna mujer llevó una libreta.Otra persona llevó una caja de fotografías.El archivero aportó planos.Comenzaron a construir un mapa.No de la ciudad.De sus pérdidas.Al principio parecía absurdo.Después empezó a adquirir forma.Las ausencias se agrupaban.Como barrios invisibles.Calles borradas.Plazas evaporadas.La ciudad visible contenía otra ciudad debajo.Una ciudad hecha únicamente de recuerdos incompatibles.VI. TeoríaIntentaron explicarlo.Fracasar resultó sencillo.Era un error administrativo.No.Un fraude.No.Una conspiración.Tampoco.Ninguna hipótesis sobrevivía demasiado tiempo.Entonces el archivero formuló otra posibilidad.No dijo:—La ciudad borra cosas.Dijo:—Quizá la ciudad esté olvidando.Nadie respondió.Porque todos habían pensado exactamente lo mismo.VII. El museoPasaron los años.Las desapariciones continuaron.Pero también las reuniones.Al final fundaron un museo.No exhibía objetos.Exhibía descripciones.En una sala podía leerse:Aquí hubo una barbería.En otra:Una mujer jura que existió una higuera.Más adelante:Cuatro personas recuerdan una puerta azul.El museo parecía vacío.Sin embargo, estaba lleno.Lleno de cosas que ya no podían demostrarse.VIII. El visitanteUn día llegó un niño.Recorrió las salas.Leyó los carteles.Observó las paredes desnudas.Y preguntó:—¿Por qué no buscáis fotografías?Nadie respondió.El archivero sonrió.Después señaló una vitrina.Dentro había una imagen antigua.Mostraba una plaza.Sin banco.El niño la observó.—Entonces no estaba.—Quizá.—¿Y si todos recuerdan mal?El archivero asintió.—También es posible.El niño guardó silencio.Luego hizo una pregunta mejor.—¿Y si la fotografía es la que recuerda mal?IX. InviernoEl archivero envejeció.La ciudad también.Las desapariciones se hicieron menos frecuentes.O quizá más.Nadie estaba seguro.Había dejado de ser fácil distinguirlas.Algunas pérdidas ocurrían tan despacio que sólo se percibían después de muchos años.Como la erosión.Como la distancia.Como ciertas despedidas.X. La última salaCuando el archivero murió, encontraron entre sus papeles un mensaje.No estaba dirigido a nadie.Decía solamente:Las personas creen que recuerdan las ciudades.Es al revés.Nada más.El museo colocó la frase en la última sala.Bajo un cristal sencillo.Sin explicaciones.Sin contexto.Sin biografía.Los visitantes la leían.Después regresaban a la calle.Y algunos experimentaban una sensación extraña.Miraban edificios conocidos.Plazas conocidas.Puertas conocidas.Y durante un instante muy breve no estaban completamente seguros de quién conservaba a quién.La ciudad.O ellos. EpílogoLa habitación número ceroMuchos años después de la muerte del archivero, el museo seguía abierto.No recibía demasiadas visitas.Tampoco las necesitaba.Los visitantes llegaban.Leían.Dudaban.Se marchaban.Era suficiente.Las ciudades nunca habían dependido de las multitudes para recordar.Sólo de unos pocos obstinados.Una mañana apareció una caja.Nadie supo quién la dejó.No llevaba remitente.Ni fecha.Ni dirección.Sólo una etiqueta.Escrita a mano.Decía:Para la habitación número cero.El museo no tenía una habitación número cero.Aun así, todos comprendieron inmediatamente a qué se refería.
+## I. El recibidor
 
-La caja permaneció varios días cerrada.Nadie quería abrirla.No por miedo.Por respeto.Como si hacerlo fuera alterar algo que aún no había decidido existir.Finalmente reunieron a los responsables.Abrieron la tapa.Dentro encontraron una única carpeta.Y una hoja.La hoja contenía apenas una frase.Decía:Esta sala contiene todo lo que fue olvidado antes de poder ser recordado.Nada más.
+La casa llevaba vacía tres años.
+No abandonada.
+Vacía.
+La diferencia era importante.
+Las casas abandonadas se rendían.
+Aquella seguía esperando.
+Al entrar, lo primero que llamó la atención no fue el polvo.
+Fue el aire.
+Parecía guardado.
+Como si nadie hubiera respirado allí desde el último día.
+Abrió una ventana.
+Nada cambió.
+Abrió otra.
+Tampoco.
+La casa parecía producir su propio clima.
+Sacó una libreta.
+Había venido a hacer un inventario.
+No de objetos.
+De ausencias.
+Anotó:
+Recibidor.
+Falta algo.
+No supo precisar qué.
 
-Al principio pensaron que estaba vacía.Después comprendieron su error.La carpeta contenía cientos de fichas.Nombres.Direcciones.Descripciones.Referencias.Objetos.Calles.Rostros.Tiendas.Conversaciones.Todo aquello había desaparecido.Pero existía una diferencia.Nadie lo recordaba.Ni una sola persona.No había testimonios.No había fotografías conservadas en cajas familiares.No había discusiones entre vecinos.No había recuerdos incompatibles.Nada.Aquello era el resto de algo que había sido olvidado por completo.
+## II. La habitación del reloj
 
-Hasta ese momento, el museo se había dedicado a conservar discrepancias.La existencia de una memoria era precisamente lo que justificaba la exposición.Alguien recordaba la fuente.Alguien recordaba el banco.Alguien recordaba la puerta azul.Ahora tenían delante otra categoría.Cosas que habían desaparecido sin dejar testigos.Ausencias absolutas.
+Sobre una cómoda permanecía un reloj parado.
+Las agujas marcaban las seis y diecisiete.
+No avanzaban.
+No retrocedían.
+Simplemente estaban allí.
+Como dos insectos dormidos.
+Intentó darle cuerda.
+No funcionó.
+Intentó mover las agujas.
+Tampoco.
+Anotó:
+Reloj.
+No mide el tiempo.
+Conserva una hora.
+La frase le pareció ridícula.
+La tachó.
+Después la escribió de nuevo.
 
-Pasaron semanas intentando decidir qué hacer.Algunas personas defendían catalogarlo.Otras querían investigarlo.Hubo quien propuso destruir la carpeta.La idea parecía razonable.Si nadie recordaba aquellas cosas, ¿por qué conservarlas?La discusión duró meses.Porque la pregunta era más difícil de lo que parecía.¿Qué responsabilidad tenemos con aquello que ya no puede ser amado?
+## III. La cocina
 
-Finalmente construyeron una nueva sala.No la numeraron.No figuraba en los planos.No aparecía en los folletos.No estaba señalizada.Había que conocer su existencia para encontrarla.La llamaron:Habitación número cero.
+La cocina estaba limpia.
+Demasiado limpia.
+Como una fotografía.
+Las tazas seguían alineadas.
+Los platos seguían apilados.
+Una silla permanecía ligeramente separada de la mesa.
+Como si alguien acabara de levantarse.
+Se quedó mirando aquella silla mucho tiempo.
+Una parte de él esperaba que volviera a moverse.
+No ocurrió.
+Anotó:
+Silla.
+Conserva un gesto.
+No tachó nada.
 
-La sala estaba vacía.Completamente vacía.Ni vitrinas.Ni paneles.Ni fotografías.Sólo una habitación blanca.Silenciosa.En el centro.Sobre una pared.La frase de la hoja original.Nada más.Los visitantes entraban.Permanecían allí unos minutos.Y salían confundidos.Algunos se enfadaban.Otros sonreían.Muchos regresaban a las demás salas.Como si de pronto comprendieran mejor el valor de las cosas recordadas.
+## IV. El pasillo
 
-Con el paso del tiempo ocurrió algo extraño.La habitación comenzó a convertirse en la más visitada.No porque contuviera algo.Sino porque no contenía nada.La gente entraba.Y pensaba.En los amigos cuyos nombres ya no podía reconstruir.En las voces olvidadas.En las fotografías que nadie tomó.En las calles demolidas antes de ser importantes.En los amores tan breves que apenas dejaron una marca.La habitación actuaba como un espejo extraño.No exhibía pérdidas.Las provocaba.
+El pasillo parecía más largo de lo que recordaba, aunque quizá siempre hubiera sido así.
+Quizá era él quien había cambiado.
+Las puertas cerradas parecían observarlo.
+No con hostilidad.
+Con paciencia.
+Habían aprendido a esperar.
+Él todavía no.
+A mitad del pasillo encontró una fotografía caída.
+El cristal estaba roto.
+La imagen apenas mostraba un jardín.
+Nadie.
+Nada.
+Sin embargo, al verla tuvo una sensación precisa.
+Aquella fotografía estaba incompleta.
+No porque faltara una persona.
+Porque faltaba una mirada.
+La dejó donde estaba.
 
-Décadas más tarde, una investigadora intentó estudiar el fenómeno.Revisó archivos.Entrevistas.Estadísticas.Cuestionarios.Todo parecía absurdo.La sala no mostraba información.No ofrecía pruebas.No enseñaba ninguna colección.Y, sin embargo, era el espacio que más tiempo retenía a los visitantes.Terminó su informe con una frase prudente.Una frase que nadie consiguió mejorar después.Escribió:Las demás habitaciones contienen cosas que desaparecieron.La habitación número cero contiene la posibilidad de desaparecer.
+## V. El dormitorio
 
-Con los años la ciudad siguió cambiando.Calles nuevas.Edificios nuevos.Nuevos mapas.Nuevas generaciones.El museo también cambió.Pero la habitación permaneció igual.Vacía.Silenciosa.Inútil.Necesaria.
+La cama seguía hecha.
+Las almohadas hundidas.
+La colcha sin arrugas.
+Había algo insoportablemente preciso en aquella escena.
+Como si cada objeto hubiese decidido permanecer inmóvil para no empeorar las cosas.
+Abrió el armario.
+Ropa.
+Perchas.
+Cajas.
+Nada extraordinario.
+La vida siempre dejaba restos aburridos.
+La muerte también.
+Anotó:
+Los objetos sobreviven mejor que las explicaciones.
+Era la primera frase del día que no le pareció equivocada.
+
+## VI. El jardín
+
+Al atardecer salió al jardín.
+Las plantas habían crecido sin permiso. Las raíces ignoraban la nostalgia y los árboles seguían a lo suyo: crecer, torcerse, dar sombra.
+Ninguno parecía obligado a recordar.
+Miró la fachada.
+La casa parecía más pequeña desde fuera.
+Siempre ocurría.
+La memoria construía edificios enormes; la realidad no podía competir.
+Se sentó en un banco.
+Esperó.
+No sabía qué.
+Solo esperó.
+
+## VII. Inventario
+
+Al anochecer revisó la libreta.
+Había escrito:
+Falta algo.
+Conserva una hora.
+Conserva un gesto.
+Falta una mirada.
+Los objetos sobreviven mejor que las explicaciones.
+Aquello no era un inventario.
+Era otra cosa.
+Lo entendió de golpe.
+Había venido creyendo que las personas dejaban objetos.
+Pero quizá ocurría al revés.
+Quizá los objetos eran quienes dejaban personas.
+Pequeñas huellas.
+Formas de presencia.
+Residuos de atención.
+Nada más.
+Nada menos.
+
+## VIII. Salida
+
+Antes de marcharse cerró todas las ventanas.
+No quería que entrara polvo.
+Ni lluvia.
+Ni aire nuevo.
+La casa no estaba esperando a nadie.
+Eso también lo entendió tarde.
+No esperaba.
+Recordaba.
+Era distinto.
+Al salir, dejó la libreta sobre la cómoda del recibidor.
+Junto al reloj detenido.
+No se llevó una sola página.
+En el último instante miró atrás.
+No ocurrió nada.
+Ninguna revelación.
+Ninguna despedida.
+Solo una casa.
+Y el aire inmóvil de una casa que había aprendido a recordar sin ayuda de nadie.
+
+# VOLUMEN II
+
+# EL OFICIO DE LAS SOMBRAS
+
+## I. La estación
+
+El tren llegó vacío.
+No sin pasajeros.
+Vacío.
+Los pasajeros ocupaban los asientos.
+El tren ocupaba el andén.
+Pero algo faltaba.
+Algo que no figuraba en ningún horario.
+Aquel tren había perdido su destino.
+No su recorrido.
+Su destino.
+La diferencia resultaba difícil de explicar.
+Los paneles seguían funcionando.
+Los altavoces anunciaban llegadas.
+Las puertas obedecían.
+Todo parecía correcto.
+Sin embargo, quien subía a aquel tren descendía exactamente igual que había entrado.
+Un hombre observó la vía durante varios minutos.
+Después compró un billete.
+No para viajar.
+Para comprobar una sospecha.
+
+## II. El revisor
+
+El revisor llevaba cuarenta años trabajando y nunca había tenido problemas.
+Los horarios, los gobiernos y los uniformes cambiaban; los retrasos permanecían.
+Era una profesión razonable: medir el movimiento de las personas.
+Aquella mañana encontró algo extraño.
+Todos los billetes eran válidos.
+Todos.
+Hasta los más antiguos.
+Hasta algunos impresos décadas atrás.
+Los escaneó varias veces.
+Nada.
+El sistema los aceptaba.
+Parecía reconocer algo que él no veía.
+Anotó la incidencia.
+Nadie respondió.
+
+## III. Las sombras
+
+Al anochecer comenzaron a aparecer.
+No eran personas.
+Tampoco reflejos.
+Eran sombras.
+Sombras sin dueño.
+Atravesaban lentamente los vagones.
+Se sentaban.
+Esperaban.
+Y desaparecían.
+Nunca hablaban.
+Nunca interferían.
+A veces ocupaban el asiento junto a un viajero.
+Otras veces permanecían de pie durante horas.
+Como si aún estuvieran realizando un trayecto iniciado mucho tiempo atrás.
+Los pasajeros fingían no verlas.
+Era más fácil.
+
+## IV. El hombre de la fila siete
+
+Siempre viajaba en el mismo vagón.
+Siempre en el mismo asiento.
+Fila siete.
+Ventanilla.
+No parecía buscar nada.
+Tampoco escapar.
+Simplemente viajaba.
+Un día encontró una sombra sentada enfrente.
+No desapareció.
+No cambió de sitio.
+Permaneció allí todo el trayecto.
+Era la primera vez.
+Cuando el tren llegó al final de la línea, la sombra continuaba observando el paisaje.
+Como si todavía faltara una estación.
+
+## V. Conversación
+
+A la semana siguiente volvió.
+La sombra también.
+El hombre decidió hablar.
+—¿Nos conocemos?
+No obtuvo respuesta.
+—¿Te estoy esperando?
+Silencio.
+—¿O eres tú quien espera?
+Las luces del vagón parpadearon.
+En el extremo del coche, el revisor se detuvo.
+Miró al hombre.
+Miró el asiento de enfrente.
+Siguió caminando.
+Después nada.
+Sin embargo, por alguna razón inexplicable, el hombre tuvo la certeza de haber formulado la pregunta correcta.
+No la más inteligente.
+La correcta.
+
+## VI. Inventario de ausencias móviles
+
+Comenzó a tomar notas.
+No sobre las sombras.
+Sobre sus costumbres.
+Descubrió que aparecían siempre en trayectos largos.
+Nunca en recorridos breves.
+Evitaban los vagones vacíos.
+No miraban a las personas.
+Miraban a través de ellas.
+Como quien consulta un paisaje desaparecido.
+Su libreta empezó a llenarse.
+No de datos.
+De dudas.
+Las dudas ocupaban más espacio.
+
+## VII. El taller
+
+Meses después encontró una antigua nave ferroviaria.
+Abandonada.
+O quizá olvidada.
+Allí descansaban locomotoras retiradas.
+Vías muertas.
+Herramientas sin uso.
+En una pared alguien había escrito una frase.
+No parecía reciente.
+Tampoco antigua.
+Sólo necesaria.
+Decía:
+Todo viaje deja una sombra.
+Debajo no figuraba firma alguna.
+Ni fecha.
+Ni explicación.
+Por primera vez en mucho tiempo sintió alivio.
+
+## VIII. El oficio
+
+La revelación tardó más de lo esperado.
+No llegó en una estación, ni en un tren, ni frente a una sombra concreta.
+Llegó una tarde cualquiera, mientras revisaba sus notas.
+Entonces comprendió que estaba equivocado.
+No eran viajeros perdidos.
+No eran recuerdos.
+No eran fantasmas.
+Eran trayectos.
+Los viajes también envejecían. También dejaban restos: personas que ya no estaban, conversaciones terminadas, despedidas olvidadas, encuentros irrepetibles.
+Todo eso permanecía suspendido en algún lugar, como una estela.
+Las sombras eran simplemente la forma visible de esa persistencia.
+
+## IX. Último recorrido
+
+Años después volvió a encontrarse con la sombra de la fila siete.
+Seguía allí.
+Ventanilla opuesta.
+Misma quietud.
+Misma espera.
+El hombre ya no intentó hablar.
+Se sentó enfrente.
+Los dos miraron el paisaje.
+Bosques.
+Túneles.
+Luz.
+Oscuridad.
+Nada extraordinario.
+El tren continuó avanzando.
+Cuando llegaron al final de la línea, la sombra desapareció.
+No de golpe.
+No como una aparición.
+Se desvaneció despacio.
+Como una tarea terminada.
+Entonces comprendió.
+No había estado observando una presencia.
+Había estado asistiendo a una despedida.
+Y algunas despedidas, pensó mientras el andén se vaciaba, necesitan décadas para completarse.
+
+# VOLUMEN III
+
+# LA CIUDAD QUE APRENDIÓ A OLVIDAR
+
+## I. La plaza
+
+La primera desaparición fue pequeña.
+Nadie le prestó atención.
+Faltó un banco.
+Un banco cualquiera.
+De hierro verde.
+Con pintura descascarillada.
+Había estado allí durante décadas.
+Después dejó de estar.
+Las personas se sorprendieron.
+Durante una mañana.
+Quizá una tarde.
+Luego continuaron con sus asuntos.
+Las ciudades siempre tienen problemas mayores.
+O eso creían.
+
+## II. El archivero
+
+El archivero municipal conservaba planos antiguos.
+Licencias.
+Padrones.
+Fotografías.
+Correspondencia.
+Había dedicado cuarenta años a registrar la memoria de la ciudad.
+Por eso fue el primero en detectar la anomalía.
+No desaparecían sólo los objetos.
+Desaparecían los documentos.
+Buscó el banco.
+No aparecía en ninguna fotografía.
+Ni en las actas.
+Ni en los planos.
+Ni en los presupuestos.
+No se había eliminado.
+Nunca había existido.
+O al menos eso afirmaban los archivos.
+El archivero cerró la carpeta.
+Volvió a abrirla.
+La respuesta seguía allí.
+
+## III. La fuente
+
+Después desapareció una fuente.
+Era más difícil ignorarla.
+Había presidido una glorieta desde el siglo pasado.
+Los vecinos discutieron.
+Mostraron fotografías.
+Las fotografías habían cambiado.
+Donde antes aparecía la fuente ahora había flores.
+Siempre había habido flores.
+Todos podían verlo.
+Los documentos lo confirmaban.
+Los mapas también.
+Sólo quedaba una certeza incómoda.
+Había personas que recordaban agua donde ya no existía ninguna prueba.
+
+## IV. Los resistentes
+
+Con el tiempo comenzaron a encontrarse.
+En silencio.
+Sin asociaciones.
+Sin manifiestos.
+No parecían conspiradores.
+Parecían supervivientes.
+Cada uno recordaba algo distinto.
+Una estatua.
+Una librería.
+Una escalera.
+Un quiosco.
+Elementos mínimos.
+Pero todos compartían el mismo problema.
+La ciudad insistía en que aquellos lugares jamás habían existido.
+
+## V. El mapa imposible
+
+Una mujer llevó una libreta.
+Otra persona llevó una caja de fotografías.
+El archivero aportó planos.
+Comenzaron a construir un mapa.
+No de la ciudad.
+De sus pérdidas.
+Al principio parecía absurdo.
+Después empezó a adquirir forma.
+Las ausencias se agrupaban.
+Como barrios invisibles.
+Calles borradas.
+Plazas evaporadas.
+La ciudad visible contenía otra ciudad debajo.
+Una ciudad hecha únicamente de recuerdos incompatibles.
+
+## VI. Teoría
+
+Intentaron explicarlo.
+Probaron con un error administrativo, un fraude, una conspiración.
+Ninguna hipótesis sobrevivía demasiado tiempo.
+—Entonces ¿dice que la ciudad borra cosas? —preguntó alguien.
+El archivero tardó en responder.
+—No.
+Miró los planos extendidos sobre la mesa.
+—Digo que quizá la ciudad esté olvidando.
+Nadie respondió.
+Porque todos habían pensado exactamente lo mismo.
+
+## VII. El museo
+
+Pasaron los años.
+Las desapariciones continuaron, y también las reuniones.
+Cuando alguien propuso fundar un museo, la primera pregunta fue inevitable:
+—¿Qué vamos a exhibir?
+—Descripciones.
+Lo fundaron.
+En una sala podía leerse:
+Aquí hubo una barbería.
+En otra:
+Una mujer jura que existió una higuera.
+Más adelante:
+Cuatro personas recuerdan una puerta azul.
+El museo parecía vacío.
+Sin embargo, estaba lleno.
+Lleno de cosas que ya no podían demostrarse.
+
+## VIII. El visitante
+
+Un día llegó un niño.
+Recorrió las salas.
+Leyó los carteles.
+Observó las paredes desnudas.
+Y preguntó:
+—¿Por qué no buscáis fotografías?
+Nadie respondió.
+El archivero sonrió.
+Después señaló una vitrina.
+Dentro había una imagen antigua.
+Mostraba una plaza.
+Sin banco.
+El niño la observó.
+—Entonces no estaba.
+—Quizá.
+—¿Y si todos recuerdan mal?
+El archivero asintió.
+—También es posible.
+El niño guardó silencio.
+Luego hizo una pregunta mejor.
+—¿Y si la fotografía es la que recuerda mal?
+
+## IX. Invierno
+
+El archivero envejeció.
+La ciudad también.
+Las desapariciones se hicieron menos frecuentes.
+O quizá más.
+Nadie estaba seguro.
+Había dejado de ser fácil distinguirlas.
+Algunas pérdidas ocurrían tan despacio que sólo se percibían después de muchos años.
+Como la erosión.
+Como la distancia.
+Como ciertas despedidas.
+
+## X. La última sala
+
+Cuando el archivero murió, encontraron entre sus papeles un mensaje.
+No estaba dirigido a nadie.
+Decía solamente:
+Las personas creen que recuerdan las ciudades.
+Es al revés.
+Nada más.
+El museo colocó la frase en la última sala.
+Bajo un cristal sencillo.
+Sin explicaciones.
+Sin contexto.
+Sin biografía.
+Los visitantes la leían.
+Después regresaban a la calle.
+Y algunos experimentaban una sensación extraña.
+Miraban edificios conocidos.
+Plazas conocidas.
+Puertas conocidas.
+Y durante un instante muy breve no estaban completamente seguros de quién conservaba a quién.
+La ciudad.
+O ellos.
+
+# EPÍLOGO
+
+# La habitación número cero
+
+Muchos años después de la muerte del archivero, el museo seguía abierto.
+No recibía demasiadas visitas.
+Tampoco las necesitaba.
+Los visitantes llegaban.
+Leían.
+Dudaban.
+Se marchaban.
+Era suficiente.
+Las ciudades nunca habían dependido de las multitudes para recordar.
+Sólo de unos pocos obstinados.
+Una mañana apareció una caja.
+Nadie supo quién la dejó.
+No llevaba remitente.
+Ni fecha.
+Ni dirección.
+Sólo una etiqueta.
+Escrita a mano.
+Decía:
+Para la habitación número cero.
+El museo no tenía una habitación número cero.
+Aun así, todos comprendieron inmediatamente a qué se refería.
+
+La caja permaneció varios días cerrada.
+Nadie quería abrirla.
+No por miedo.
+Por respeto.
+Como si hacerlo fuera alterar algo que aún no había decidido existir.
+Finalmente reunieron a los responsables.
+Abrieron la tapa.
+Dentro encontraron una única carpeta.
+Y una hoja.
+La hoja contenía apenas una frase.
+Decía:
+Esta sala contiene todo lo que fue olvidado antes de poder ser recordado.
+Nada más.
+
+Al principio pensaron que estaba vacía.
+Después comprendieron su error.
+La carpeta contenía cientos de fichas.
+Nombres.
+Direcciones.
+Descripciones.
+Referencias.
+Objetos.
+Calles.
+Rostros.
+Tiendas.
+Conversaciones.
+Todo aquello había desaparecido.
+Pero existía una diferencia.
+Nadie lo recordaba.
+Ni una sola persona.
+No había testimonios.
+No había fotografías conservadas en cajas familiares.
+No había discusiones entre vecinos.
+No había recuerdos incompatibles.
+Nada.
+Aquello era el resto de algo que había sido olvidado por completo.
+
+Hasta ese momento, el museo se había dedicado a conservar discrepancias.
+La existencia de una memoria era precisamente lo que justificaba la exposición.
+Alguien recordaba la fuente.
+Alguien recordaba el banco.
+Alguien recordaba la puerta azul.
+Ahora tenían delante otra categoría.
+Cosas que habían desaparecido sin dejar testigos.
+Ausencias absolutas.
+
+Pasaron semanas intentando decidir qué hacer.
+Algunas personas defendían catalogarlo.
+Otras querían investigarlo.
+Hubo quien propuso destruir la carpeta.
+La idea parecía razonable.
+Si nadie recordaba aquellas cosas, ¿por qué conservarlas?
+La discusión duró meses.
+Porque la pregunta era más difícil de lo que parecía.
+¿Qué responsabilidad tenemos con aquello que ya no puede ser amado?
+
+Finalmente construyeron una nueva sala.
+No la numeraron.
+No figuraba en los planos.
+No aparecía en los folletos.
+No estaba señalizada.
+Había que conocer su existencia para encontrarla.
+La llamaron:
+Habitación número cero.
+
+La sala estaba vacía.
+Completamente vacía.
+Ni vitrinas.
+Ni paneles.
+Ni fotografías.
+Sólo una habitación blanca.
+Silenciosa.
+En el centro.
+Sobre una pared.
+La frase de la hoja original.
+Nada más.
+Los visitantes entraban.
+Permanecían allí unos minutos.
+Y salían confundidos.
+Algunos se enfadaban.
+Otros sonreían.
+Muchos regresaban a las demás salas.
+Como si de pronto comprendieran mejor el valor de las cosas recordadas.
+
+Con el paso del tiempo ocurrió algo extraño.
+La habitación comenzó a convertirse en la más visitada.
+No porque contuviera algo.
+Sino porque no contenía nada.
+La gente entraba.
+Y pensaba.
+En los amigos cuyos nombres ya no podía reconstruir.
+En las voces olvidadas.
+En las fotografías que nadie tomó.
+En las calles demolidas antes de ser importantes.
+En los amores tan breves que apenas dejaron una marca.
+La habitación actuaba como un espejo extraño.
+No exhibía pérdidas.
+Las provocaba.
+
+Décadas más tarde, una investigadora intentó estudiar el fenómeno.
+Revisó archivos.
+Entrevistas.
+Estadísticas.
+Cuestionarios.
+Todo parecía absurdo.
+La sala no mostraba información.
+No ofrecía pruebas.
+No enseñaba ninguna colección.
+Y, sin embargo, era el espacio que más tiempo retenía a los visitantes.
+Terminó su informe con una frase prudente.
+Una frase que nadie consiguió mejorar después.
+Escribió:
+Las demás habitaciones contienen cosas que desaparecieron.
+La habitación número cero contiene la posibilidad de desaparecer.
+
+Con los años la ciudad siguió cambiando.
+Calles nuevas.
+Edificios nuevos.
+Nuevos mapas.
+Nuevas generaciones.
+El museo también cambió.
+Pero la habitación permaneció igual.
+Vacía.
+Silenciosa.
+Inútil.
+Necesaria.
 
 Una tarde, al cerrar el museo, la encargada encontró un botón en el suelo de la habitación.
 
