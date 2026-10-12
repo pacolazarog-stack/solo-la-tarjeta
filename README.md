@@ -18,6 +18,14 @@ Proyecto literario y multimedia.
 
 El subtítulo no explica ORAS: lo revela retrospectivamente. Una vez terminada la obra, ORAS puede leerse como aquello que permanece cuando las horas ya han pasado.
 
+## Duración canónica de presentación
+
+> **Duración estimada de la experiencia completa: 70 minutos.**
+
+Rango razonable de recorrido: **65–80 minutos**, según ritmo de lectura, pausas, voz, música y transiciones audiovisuales.
+
+La ficha detallada se conserva en [`ORAS_DATOS_PRESENTACION_R1.md`](./ORAS_DATOS_PRESENTACION_R1.md).
+
 ## Arquitectura canónica · R4
 
 **I · LA VIDA** — *Solo la Tarjeta · Ana Klaudya · Ceniciento*  
@@ -66,6 +74,7 @@ La implementación visual y sonora permanece subordinada a la Biblia; el texto l
 - [`ORAS_R4_AUDITORIA_FINAL.md`](./ORAS_R4_AUDITORIA_FINAL.md) — comprobación final de Ceniciento, léxico, explicaciones, El Espejo, aperturas/cierres, ouroboros y motivos mayores.
 - [`MATRIZ_CRITICA_CANONICA_ORAS_R4.md`](./MATRIZ_CRITICA_CANONICA_ORAS_R4.md) — matriz crítica canónica, congelada en contenido conceptual.
 - [`ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md`](./ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md) — capa audiovisual canónica R1; no modifica el texto literario R4.
+- [`ORAS_DATOS_PRESENTACION_R1.md`](./ORAS_DATOS_PRESENTACION_R1.md) — duración oficial de referencia y tiempos orientativos por pieza.
 - [`EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md`](./EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md) — ciclo de la expansión y *La Habitación Número Cero*; texto literario vigente.
 - [`ana-klaudya/TEXTO_CANONICO_ES.md`](./ana-klaudya/TEXTO_CANONICO_ES.md) — texto español canónico de *Ana Klaudya*.
 - [`ceniciento/texto.md`](./ceniciento/texto.md) — texto canónico de *Ceniciento*; auditoría de revelación superada y texto congelado.
