@@ -5,6 +5,7 @@ if(!mirror)return;
 const style=document.createElement('style');
 style.textContent=`
 .oras-mirror-nav{display:none}
+body.mirror .mirror-continue{display:none!important}
 body.mirror .oras-mirror-nav{position:fixed;z-index:220;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(460px,calc(100vw - 48px));display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(255,250,241,.28);background:rgba(8,9,14,.10);backdrop-filter:blur(3px)}
 body.mirror .oras-mirror-nav button{border:0;background:transparent;color:rgba(255,250,241,.78);min-height:48px;padding:.72rem 1rem;font:italic 1rem Georgia,"Times New Roman",serif;cursor:pointer}
 body.mirror .oras-mirror-nav button+button{border-left:1px solid rgba(255,250,241,.14)}
