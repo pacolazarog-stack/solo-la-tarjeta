@@ -18,7 +18,7 @@ jobs:
           from pathlib import Path
           import re
 
-          version = '20261012-screen-fades-2'
+          version = '20261012-music-portrait-flow-1'
           nav_version = '20261012-ceniciento-linear-nav-1'
           nav_link = f'<link rel="stylesheet" href="../oras-ceniciento-nav-r1.css?v={nav_version}">'
 
