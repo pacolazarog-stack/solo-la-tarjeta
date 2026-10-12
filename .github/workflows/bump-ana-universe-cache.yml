@@ -156,16 +156,34 @@ jobs:
                   1,
               )
 
-          # La invitación flotante al Epílogo solo debe existir mientras el Epílogo siga pendiente.
-          old = "          document.getElementById('epilogueInvitation').hidden=false;"
-          new = """          let epilogueAlreadyRead=false;
-          try{
-            const saved=JSON.parse(localStorage.getItem('oras.universe.v2')||'{}');
-            epilogueAlreadyRead=saved?.anaParts?.epilogo===true;
-          }catch(_){}
-          document.getElementById('epilogueInvitation').hidden=epilogueAlreadyRead;"""
-          if old in s:
-              s = s.replace(old,new,1)
+          # El antiguo botón flotante "Epílogo · A fuego lento" ya no forma parte
+          # del recorrido. La continuidad se resuelve exclusivamente con Atrás/Adelante.
+          s = re.sub(
+              r'\n?\s*<div class="epilogue-invitation" id="epilogueInvitation" hidden>.*?</div>\s*',
+              '\n',
+              s,
+              count=1,
+              flags=re.S,
+          )
+          s = re.sub(
+              r'^\s*document\.getElementById\(["\']epilogueInvitation["\']\)\.hidden=true;\s*\n?',
+              '',
+              s,
+              flags=re.M,
+          )
+          s = re.sub(
+              r'\s*let epilogueAlreadyRead=false;\s*try\{.*?document\.getElementById\(["\']epilogueInvitation["\']\)\.hidden=epilogueAlreadyRead;\s*',
+              '\n',
+              s,
+              count=1,
+              flags=re.S,
+          )
+          s = s.replace(
+              "      for(const id of ['anaEpilogue','readEpilogue'])document.getElementById(id).addEventListener('click',openEpilogue);",
+              "      document.getElementById('anaEpilogue').addEventListener('click',openEpilogue);",
+          )
+          s = re.sub(r'^\s*\.epilogue-invitation\{[^\n]*\}\s*\n?', '', s, flags=re.M)
+          s = re.sub(r'^\s*\.epilogue-invitation\[hidden\]\{[^\n]*\}\s*\n?', '', s, flags=re.M)
           ana.write_text(s,encoding='utf-8')
 
           # También al recuperar directamente una fotografía ya completada se fuerza
