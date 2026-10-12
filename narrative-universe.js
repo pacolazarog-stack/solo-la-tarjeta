@@ -4,7 +4,7 @@
 const STORAGE='oras.universe.v2';
 const MIRROR_AUDIO_STORAGE='oras.mirror.audio.v1';
 const ROOT='/solo-la-tarjeta/';
-const VERSION='20261012-epilogue-unread-forward-1';
+const VERSION='20261012-screen-fades-1';
 const anaPage=location.pathname.includes('/elegia-breve/');
 const soloPage=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'')==='/solo-la-tarjeta';
 const epilogueDocument=location.pathname.includes('/epilogo/');
@@ -137,6 +137,10 @@ function hardSilence(){
   });
 }
 async function darkAndSilence(){
+  if(window.ORASScreenTransition?.isActive?.()){
+    hardSilence();
+    return null;
+  }
   const node=veil();
   requestAnimationFrame(()=>{node.style.opacity='1'});
   await fadeAudio(2200);
