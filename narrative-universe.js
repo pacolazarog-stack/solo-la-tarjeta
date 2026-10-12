@@ -1,12 +1,57 @@
 (()=>{
 'use strict';
 
+const STORAGE='oras.universe.v2';
+
 const syncJourneyNav=()=>{
   const hideJourneyNav=location.pathname.includes('/elegia-breve/')&&location.hash.toLowerCase()==='#ceniciento';
   document.documentElement.classList.toggle('ou-hide-journey-nav',hideJourneyNav);
 };
 syncJourneyNav();
 window.addEventListener('hashchange',syncJourneyNav);
+
+function readUniverseState(){
+  try{
+    const raw=localStorage.getItem(STORAGE);
+    return raw?JSON.parse(raw):{};
+  }catch(_){return {}}
+}
+
+function trilogyCompleteForMirror(){
+  const state=readUniverseState();
+  return state.soloComplete===true&&state.anaComplete===true&&state.cenicientoComplete===true&&state.mirrorReadComplete!==true;
+}
+
+function launchMirrorFromAna(){
+  if(document.body.classList.contains('mirror'))return;
+  let mirror=document.getElementById('mirror');
+  if(!mirror){
+    mirror=document.createElement('main');
+    mirror.id='mirror';
+    mirror.setAttribute('aria-label','EL ESPEJO');
+    mirror.hidden=true;
+    document.body.appendChild(mirror);
+  }
+  const start=()=>window.dispatchEvent(new CustomEvent('oras:mirror-start'));
+  const existing=document.querySelector('script[data-oras-mirror]');
+  if(existing){start();return;}
+  const script=document.createElement('script');
+  script.dataset.orasMirror='true';
+  script.src='/solo-la-tarjeta/ceniciento/el-espejo.js?v=20261012-last-ana-piece';
+  script.onload=start;
+  document.body.appendChild(script);
+}
+
+document.addEventListener('click',event=>{
+  const button=event.target.closest?.('#journeyNext');
+  if(!button)return;
+  if(!location.pathname.includes('/elegia-breve/'))return;
+  if(location.hash.toLowerCase()!=='#estrella')return;
+  if(!trilogyCompleteForMirror())return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  launchMirrorFromAna();
+},true);
 
 const base=document.createElement('script');
 base.src='https://cdn.jsdelivr.net/gh/pacolazarog-stack/solo-la-tarjeta@80866cb8ae17d31356462edf408a4d7f099e1241/narrative-universe.js';
