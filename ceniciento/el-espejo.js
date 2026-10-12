@@ -2,7 +2,7 @@
 'use strict';
 const ROOT='/solo-la-tarjeta/';
 const STORAGE='oras.universe.v2';
-const VERSION='20261012-mirror-mechanical-2';
+const VERSION='20261012-mirror-mechanical-3';
 const INVENTORY_URL=ROOT+'inventario-del-aire/?from=mirror&v='+VERSION;
 const scenes=[
 `No era la misma historia.`,
@@ -44,6 +44,7 @@ if(!mirror)return;
 let started=false,locked=false,lockedScene=null,finished=false,finalReady=false;
 let lastTouchY=null,finalContinue=null,silenceTimer=0;
 const sceneNodes=[];
+const clearedPauses=new Set();
 
 function addText(parent,text){
   text.split(/\n\n+/).forEach(block=>{
@@ -183,6 +184,7 @@ scenes.forEach((text,index)=>{
     const next=document.createElement('button');next.type='button';next.className='mirror-continue';next.textContent='seguir';next.setAttribute('aria-label',`Continuar después del fragmento ${number}`);next.hidden=true;
     next.addEventListener('click',()=>{
       if(!locked||lockedScene!==scene)return;
+      clearedPauses.add(number);
       playMechanicalStep();
       releasePause();
       const following=sceneNodes[index+1];
@@ -202,7 +204,8 @@ scenes.forEach((text,index)=>{
 const pauseObserver=new IntersectionObserver(entries=>{
   if(!document.body.classList.contains('mirror')||locked)return;
   for(const entry of entries){
-    if(entry.isIntersecting&&entry.intersectionRatio>=.68&&entry.target.dataset.pause==='true'){
+    const pauseNumber=Number(entry.target.dataset.pauseNumber||0);
+    if(entry.isIntersecting&&entry.intersectionRatio>=.68&&entry.target.dataset.pause==='true'&&!clearedPauses.has(pauseNumber)){
       locked=true;lockedScene=entry.target;
       const button=entry.target.querySelector('.mirror-continue');button.hidden=false;
       mirror.scrollTop=entry.target.offsetTop;break;
@@ -241,6 +244,7 @@ new IntersectionObserver(entries=>{
 function start(){
   if(started)return;
   started=true;finished=false;finalReady=false;locked=false;lockedScene=null;lastTouchY=null;
+  clearedPauses.clear();
   if(finalContinue){finalContinue.hidden=true;finalContinue.disabled=false;finalContinue.textContent='seguir'}
   mirror.style.transition='';mirror.style.opacity='';mirror.hidden=false;document.body.classList.add('mirror');mirror.scrollTop=0;
   maintainSilence();
@@ -250,6 +254,7 @@ window.addEventListener('oras:mirror-start',start);
 window.addEventListener('oras:mirror-reset',()=>{
   clearInterval(silenceTimer);
   started=false;finished=false;finalReady=false;locked=false;lockedScene=null;
+  clearedPauses.clear();
   mirror.style.transition='';mirror.style.opacity='';mirror.hidden=true;document.body.classList.remove('mirror');
 });
 })();
