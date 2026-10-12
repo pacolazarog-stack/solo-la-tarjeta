@@ -103,12 +103,12 @@ main{padding-bottom:140px;gap:6vw}
 <div class="rule" aria-hidden="true"></div>
 <p class="subtitle">Una grieta de luz.</p>
 <div class="controls">
-<button class="primary" id="paced" type="button">Leer con pausas</button>
+<button class="primary" id="paced" type="button">Pausar</button>
 <button id="full" type="button">Poema completo</button>
 </div>
-<p class="status" id="status" role="status">A tu ritmo.</p>
+<p class="status" id="status" role="status">Deja respirar cada verso.</p>
 <div class="music-controls">
-<button id="musicStart" type="button">Activar música</button>
+<button id="musicStart" type="button" hidden>Activar música</button>
 <label><input id="musicEnabled" type="checkbox" checked> Música de fondo</label>
 <label for="musicLevel">Volumen <output id="musicValue">30 %</output></label>
 <input id="musicLevel" type="range" min="0" max="80" value="30">
@@ -116,29 +116,29 @@ main{padding-bottom:140px;gap:6vw}
 </section>
 <article class="poem" aria-label="Tu cabello">
 <p class="stanza">
-<span class="line" data-wait="2400">Negro, con ese brillo de crin</span>
-<span class="line" data-wait="2400">que estalla al volver la cabeza:</span>
-<span class="line" data-wait="2400">la luz resbala por él</span>
-<span class="line" data-wait="4200">sin llegar a aclararlo.</span>
+<span class="line hidden-line" data-wait="2400">Negro, con ese brillo de crin</span>
+<span class="line hidden-line" data-wait="2400">que estalla al volver la cabeza:</span>
+<span class="line hidden-line" data-wait="2400">la luz resbala por él</span>
+<span class="line hidden-line" data-wait="4200">sin llegar a aclararlo.</span>
 </p>
 <p class="stanza">
-<span class="line" data-wait="2400">Cae sobre tu hombro</span>
-<span class="line" data-wait="2400">y tarda en quedarse quieto.</span>
-<span class="line" data-wait="2400">Tú regresas a tus palabras;</span>
-<span class="line" data-wait="2400">pero un mechón prolonga</span>
-<span class="line" data-wait="4200">el giro de tu rostro.</span>
+<span class="line hidden-line" data-wait="2400">Cae sobre tu hombro</span>
+<span class="line hidden-line" data-wait="2400">y tarda en quedarse quieto.</span>
+<span class="line hidden-line" data-wait="2400">Tú regresas a tus palabras;</span>
+<span class="line hidden-line" data-wait="2400">pero un mechón prolonga</span>
+<span class="line hidden-line" data-wait="4200">el giro de tu rostro.</span>
 </p>
 <p class="stanza">
-<span class="line" data-wait="2400">Lo apartas con los dedos.</span>
-<span class="line" data-wait="2400">El gesto desnuda tu cuello</span>
-<span class="line" data-wait="2400">y deja entre las hebras</span>
-<span class="line" data-wait="4200">una grieta de luz.</span>
+<span class="line hidden-line" data-wait="2400">Lo apartas con los dedos.</span>
+<span class="line hidden-line" data-wait="2400">El gesto desnuda tu cuello</span>
+<span class="line hidden-line" data-wait="2400">y deja entre las hebras</span>
+<span class="line hidden-line" data-wait="4200">una grieta de luz.</span>
 </p>
 <p class="stanza">
-<span class="line" data-wait="2400">Sigues hablando.</span>
-<span class="line" data-wait="2400">El mechón vuelve a su sitio.</span>
-<span class="line" data-wait="2400">Yo tardo</span>
-<span class="line ending" data-wait="4200">un poco más.</span>
+<span class="line hidden-line" data-wait="2400">Sigues hablando.</span>
+<span class="line hidden-line" data-wait="2400">El mechón vuelve a su sitio.</span>
+<span class="line hidden-line" data-wait="2400">Yo tardo</span>
+<span class="line hidden-line ending" data-wait="4200">un poco más.</span>
 </p>
 </article>
 </main>
@@ -166,10 +166,15 @@ window.addEventListener('message',event=>{
  musicValue.textContent=musicLevel.value+' %';musicEnabled.checked=!!event.data.enabled;
  musicStart.hidden=!musicEnabled.checked || !!event.data.playing;
 });
-if(inheritedMusic)sendMusic('ready');
+if(inheritedMusic){
+ musicEnabled.checked=true;
+ sendMusic('enabled');
+ sendMusic('start');
+ sendMusic('ready');
+}
 const lines=[...document.querySelectorAll('.line')];
 const paced=document.getElementById('paced'),full=document.getElementById('full'),status=document.getElementById('status');
-let timer=null,index=0,mode='full';
+let timer=null,index=0,mode='playing';
 function clear(){clearTimeout(timer);timer=null}
 function reveal(){
  if(mode!=='playing')return;
@@ -183,6 +188,8 @@ paced.addEventListener('click',()=>{
  clear();index=0;lines.forEach(l=>l.classList.add('hidden-line'));mode='playing';paced.textContent='Pausar';status.textContent='Deja respirar cada verso.';reveal();
 });
 full.addEventListener('click',()=>{clear();mode='full';lines.forEach(l=>l.classList.remove('hidden-line'));paced.textContent='Leer con pausas';status.textContent='A tu ritmo.'});
+/* ORAS default: música + lectura pausada */
+reveal();
 </script>
 <script data-oras-reading-window="r2" src="/solo-la-tarjeta/oras-reading-window-r2.js?v=20261013-ana-portrait-prev-next-1"></script>
 </body>

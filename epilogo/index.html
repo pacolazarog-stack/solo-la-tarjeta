@@ -220,7 +220,7 @@ body.cotan-on::before{opacity:0!important}
 </div>
 <p class="status" id="status" role="status">Deja entrar la luz.</p>
 <div class="music-controls">
-<button id="musicStart" type="button">Activar música</button>
+<button id="musicStart" type="button" hidden>Activar música</button>
 <label><input id="musicEnabled" type="checkbox" checked> Música de fondo</label>
 <label for="musicLevel">Volumen <output id="musicValue">30 %</output></label>
 <input id="musicLevel" type="range" min="0" max="80" value="30">
@@ -287,7 +287,12 @@ window.addEventListener('message',event=>{
  musicValue.textContent=musicLevel.value+' %';musicEnabled.checked=!!event.data.enabled;
  musicStart.hidden=!musicEnabled.checked || !!event.data.playing;
 });
-if(inheritedMusic)sendMusic('ready');
+if(inheritedMusic){
+ musicEnabled.checked=true;
+ sendMusic('enabled');
+ sendMusic('start');
+ sendMusic('ready');
+}
 const phrases=[...document.querySelectorAll('.phrase')];
 const openingMode=new URLSearchParams(location.search).get('opening');
 const continuingOpening=openingMode==='seen',openingPreview=openingMode==='preview';
