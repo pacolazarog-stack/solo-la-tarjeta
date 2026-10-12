@@ -1235,5 +1235,89 @@ p{margin:0 0 1.2em;hanging-punctuation:first last}
 <script data-oras-universe="v1" src="narrative-universe.js?v=20261013-audio-groups-1"></script>
 <script data-oras-mirror-nav="v2" src="/solo-la-tarjeta/ceniciento/el-espejo-nav.js?v=20261012-mirror-nav-2"></script>
 <script data-oras-reading-window="r2" src="/solo-la-tarjeta/oras-reading-window-r2.js?v=20261012-reading-window-r3-index"></script>
+<script data-oras-solo-auto-intro="v1">
+(()=>{
+  'use strict';
+  if(window.__orasSoloAutoIntroInstalled)return;
+  window.__orasSoloAutoIntroInstalled=true;
+
+  const path=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'')||'/';
+  if(path!=='/solo-la-tarjeta')return;
+
+  const begin=()=>{
+    if(window.scrollY>8)return;
+    const title=document.querySelector('#hero h1');
+    if(!title)return;
+
+    const root=document.documentElement;
+    const oldScrollBehavior=root.style.scrollBehavior;
+    const oldOverscroll=root.style.overscrollBehavior;
+    const scrollKeys=new Set(['ArrowDown','ArrowUp','PageDown','PageUp','Home','End',' ']);
+    let locked=true;
+
+    const preventScroll=event=>{
+      if(!locked)return;
+      event.preventDefault();
+    };
+    const preventKey=event=>{
+      if(!locked||!scrollKeys.has(event.key))return;
+      const target=event.target;
+      const tag=target?.tagName;
+      if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||target?.isContentEditable)return;
+      event.preventDefault();
+    };
+
+    addEventListener('wheel',preventScroll,{passive:false,capture:true});
+    addEventListener('touchmove',preventScroll,{passive:false,capture:true});
+    addEventListener('keydown',preventKey,{capture:true});
+
+    const release=()=>{
+      if(!locked)return;
+      locked=false;
+      removeEventListener('wheel',preventScroll,true);
+      removeEventListener('touchmove',preventScroll,true);
+      removeEventListener('keydown',preventKey,true);
+      root.style.scrollBehavior=oldScrollBehavior;
+      root.style.overscrollBehavior=oldOverscroll;
+      document.body?.classList.remove('oras-solo-auto-intro');
+      try{window.dispatchEvent(new CustomEvent('oras:solo-auto-intro-end'))}catch(_){}
+    };
+
+    root.style.scrollBehavior='auto';
+    root.style.overscrollBehavior='none';
+    document.body?.classList.add('oras-solo-auto-intro');
+
+    const rect=title.getBoundingClientRect();
+    const origin=window.scrollY;
+    const destination=Math.max(0,origin+rect.top+rect.height/2-window.innerHeight/2);
+    if(destination<=origin+2){release();return}
+
+    const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches===true;
+    const duration=reduced?1400:7800;
+    const started=performance.now();
+    try{window.dispatchEvent(new CustomEvent('oras:solo-auto-intro-start',{detail:{destination,duration}}))}catch(_){}
+
+    const frame=now=>{
+      if(!locked)return;
+      const p=Math.max(0,Math.min(1,(now-started)/duration));
+      const eased=p*p*(3-2*p);
+      window.scrollTo(0,origin+(destination-origin)*eased);
+      if(p<1){
+        requestAnimationFrame(frame);
+      }else{
+        window.scrollTo(0,destination);
+        requestAnimationFrame(release);
+      }
+    };
+    requestAnimationFrame(frame);
+  };
+
+  if(document.readyState==='complete'){
+    setTimeout(begin,240);
+  }else{
+    addEventListener('load',()=>setTimeout(begin,240),{once:true});
+  }
+})();
+</script>
 </body>
 </html>
