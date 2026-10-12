@@ -20,11 +20,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          sleep 20
+          sleep 12
           git fetch origin main
           git reset --hard origin/main
 
-      - name: Aplicar correcciones
+      - name: Aplicar correcciones a la obra
         shell: bash
         run: |
           set -euo pipefail
@@ -41,8 +41,6 @@ jobs:
                   raise RuntimeError('No se encontró: '+label)
               return text.replace(old,new,1)
 
-          # ANA KLAUDYA: música activa por defecto. El navegador puede exigir
-          # un gesto; en ese caso el primer gesto desbloquea la reproducción.
           p=Path('elegia-breve/index.html')
           s=p.read_text(encoding='utf-8')
           s=s.replace('<audio id="voiceMusic" preload="auto" loop src="ana-klaudya.m4a"></audio>',
@@ -65,7 +63,6 @@ jobs:
               'arranque musical')
           p.write_text(s,encoding='utf-8')
 
-          # Navegación y estado de lectura.
           p=Path('narrative-universe.js')
           s=p.read_text(encoding='utf-8')
           s=re.sub(r"const VERSION='[^']+';",f"const VERSION='{VERSION}';",s,count=1)
@@ -91,31 +88,11 @@ jobs:
               'ocultar navegación antigua de Solo')
           p.write_text(s,encoding='utf-8')
 
-          # Cache-buster de la navegación local.
           for html in Path('.').rglob('*.html'):
               text=html.read_text(encoding='utf-8')
               updated=re.sub(r"narrative-universe\.js\?v=[A-Za-z0-9._-]+",f"narrative-universe.js?v={VERSION}",text)
               if updated!=text:
                   html.write_text(updated,encoding='utf-8')
-
-          # Validación de Pages.
-          p=Path('.github/workflows/pages.yml')
-          s=p.read_text(encoding='utf-8')
-          s=s.replace('20261012-screen-fades-2',VERSION)
-          if "grep -Fq 'ou-solo-ana-forward' narrative-universe.js" not in s:
-              marker="          grep -Fq 'ORASScreenTransition' oras-screen-transition.js\n"
-              insert=(marker+
-                      "          grep -Fq 'ou-solo-ana-forward' narrative-universe.js\n"+
-                      "          grep -Fq 'oras:ana-portrait' narrative-universe.js\n"+
-                      "          grep -Fq 'autoplay loop src=\"ana-klaudya.m4a\"' elegia-breve/index.html\n")
-              if marker in s:
-                  s=s.replace(marker,insert,1)
-          p.write_text(s,encoding='utf-8')
-
-          p=Path('.github/workflows/bump-ana-universe-cache.yml')
-          s=p.read_text(encoding='utf-8')
-          s=re.sub(r"version = '[^']+'",f"version = '{VERSION}'",s,count=1)
-          p.write_text(s,encoding='utf-8')
           PY
 
           node --check narrative-universe.js
@@ -125,14 +102,15 @@ jobs:
           grep -Fq 'autoplay loop src="ana-klaudya.m4a"' elegia-breve/index.html
           grep -Fq "window.addEventListener('oras:ana-portrait',showPortraitFromJourney)" elegia-breve/index.html
 
-      - name: Guardar y retirar workflows temporales
+      - name: Guardar cambios de la obra
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git rm -f .github/workflows/fix-music-reading-flow-20261012.yml .github/workflows/fix-music-reading-flow-20261012b.yml
-          git add -A
+          git add narrative-universe.js elegia-breve/index.html index.html
+          git add '*.html' ':!:.github/**' 2>/dev/null || true
+          if git diff --cached --quiet; then exit 0; fi
           git commit -m "Inicia música y corrige continuidad Solo-Ana-Ceniciento"
           git pull --rebase origin main
           git push origin HEAD:main
