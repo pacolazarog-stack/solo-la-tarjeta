@@ -1,0 +1,183 @@
+/* ORAS · EL INVENTARIO DEL AIRE · PUESTA EN ESCENA FOTOGRÁFICA R2
+   Esta capa sustituye únicamente la representación esquemática de la casa.
+   El texto literario R4 permanece intacto. */
+
+.scene-house{
+  background:#15120f;
+  overflow:hidden;
+}
+
+.scene-house .house-photo{
+  position:absolute;
+  inset:-2.5%;
+  z-index:1;
+  opacity:0;
+  background-position:center center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  transform:scale(1.025) translate3d(0,0,0);
+  filter:saturate(.94) contrast(.98) brightness(.92);
+  transition:
+    opacity 2.8s ease,
+    filter 3.4s ease,
+    transform 18s ease;
+  will-change:opacity,filter,transform;
+}
+
+.scene-house .house-photo::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,rgba(13,10,8,.28),rgba(13,10,8,.05) 42%,rgba(13,10,8,.12)),
+    radial-gradient(ellipse at 50% 44%,transparent 38%,rgba(10,8,6,.24) 100%);
+  opacity:.48;
+  transition:opacity 3s ease;
+}
+
+.house-photo-arrival{background-image:url("./assets-r2/i1-llegada.webp")}
+.house-photo-entry{background-image:url("./assets-r2/i2-recibidor.webp")}
+.house-photo-clock{background-image:url("./assets-r2/i3-reloj.webp")}
+.house-photo-chair{background-image:url("./assets-r2/i4-silla.webp")}
+.house-photo-corridor{background-image:url("./assets-r2/i5-pasillo.webp")}
+.house-photo-garden{background-image:url("./assets-r2/i6-jardin.webp")}
+
+/* La construcción gráfica R1 queda como respaldo histórico, no visible. */
+.scene-house .house-wall,
+.scene-house .house-window,
+.scene-house .house-clock,
+.scene-house .house-table,
+.scene-house .house-chair,
+.scene-house .corridor,
+.scene-house .garden{
+  display:none!important;
+}
+
+/* Materia viva: la fotografía no queda congelada, pero tampoco "actúa". */
+.scene-house .light-beam{
+  z-index:3;
+  opacity:.13;
+  mix-blend-mode:screen;
+  filter:blur(8px);
+}
+.scene-house .dust-field{
+  z-index:4;
+  opacity:.16;
+  mix-blend-mode:screen;
+}
+.scene-house + .scene-train{z-index:0}
+
+/* I.1 · Llegada */
+body[data-world="house"][data-chapter="house"] .house-photo-arrival,
+body[data-world="house"]:not([data-chapter]) .house-photo-arrival{
+  opacity:1;
+  filter:saturate(.93) contrast(.98) brightness(.88);
+  animation:orasPhotoBreathA 34s ease-in-out infinite alternate;
+}
+
+/* I.2 · Recibidor */
+body[data-world="house"][data-chapter="entry"] .house-photo-entry{
+  opacity:1;
+  filter:saturate(.90) contrast(.97) brightness(.88);
+  animation:orasPhotoBreathB 38s ease-in-out infinite alternate;
+}
+
+/* I.3 · El reloj */
+body[data-world="house"][data-chapter="clock"] .house-photo-clock{
+  opacity:1;
+  filter:saturate(.88) contrast(1.01) brightness(.86);
+  animation:orasPhotoBreathC 42s ease-in-out infinite alternate;
+}
+
+/* I.4 · La silla / cocina */
+body[data-world="house"][data-chapter="kitchen"] .house-photo-chair{
+  opacity:1;
+  filter:saturate(.91) contrast(.99) brightness(.90);
+  animation:orasPhotoBreathB 40s ease-in-out infinite alternate;
+}
+
+/* Dormitorio: no se inventa una séptima imagen; el pasillo pierde luz y foco. */
+body[data-world="house"][data-chapter="bedroom"] .house-photo-corridor{
+  opacity:1;
+  filter:saturate(.72) contrast(.94) brightness(.64) blur(.25px);
+  transform:scale(1.045) translate3d(-.25%,0,0);
+}
+
+/* I.5 · Pasillo */
+body[data-world="house"][data-chapter="corridor"] .house-photo-corridor{
+  opacity:1;
+  filter:saturate(.84) contrast(.99) brightness(.82);
+  animation:orasCorridorDepth 46s ease-in-out infinite alternate;
+}
+
+/* I.6 · Jardín */
+body[data-world="house"][data-chapter="garden"] .house-photo-garden{
+  opacity:1;
+  filter:saturate(.92) contrast(.98) brightness(.82);
+  animation:orasPhotoBreathA 36s ease-in-out infinite alternate;
+}
+body[data-world="house"][data-chapter="garden"] .dust-field{opacity:.035}
+
+/* Inventario: regreso material al interior, ya leído como vestigio. */
+body[data-world="house"][data-chapter="inventory"] .house-photo-entry{
+  opacity:1;
+  filter:saturate(.62) contrast(.92) brightness(.66);
+  transform:scale(1.04) translate3d(.25%,0,0);
+}
+
+/* Salida: la casa continúa existiendo, pero se retira afectivamente. */
+body[data-world="house"][data-chapter="exit"] .house-photo-arrival{
+  opacity:1;
+  filter:saturate(.58) contrast(.92) brightness(.62);
+  transform:scale(1.035) translate3d(.18%,0,0);
+}
+body[data-world="house"][data-chapter="exit"] .dust-field{opacity:.045}
+
+@keyframes orasPhotoBreathA{
+  from{transform:scale(1.025) translate3d(0,0,0)}
+  to{transform:scale(1.052) translate3d(-.35%,.18%,0)}
+}
+@keyframes orasPhotoBreathB{
+  from{transform:scale(1.028) translate3d(.15%,0,0)}
+  to{transform:scale(1.055) translate3d(-.18%,-.16%,0)}
+}
+@keyframes orasPhotoBreathC{
+  from{transform:scale(1.026) translate3d(0,0,0)}
+  to{transform:scale(1.048) translate3d(.22%,-.10%,0)}
+}
+@keyframes orasCorridorDepth{
+  from{transform:scale(1.028) translate3d(0,0,0)}
+  to{transform:scale(1.062) translate3d(0,-.12%,0)}
+}
+
+/* El texto sigue siendo legible sobre fotografía: papel translúcido, no tarjeta opaca. */
+body[data-world="house"] .book{
+  text-shadow:0 1px 18px rgba(255,255,255,.36);
+}
+body[data-world="house"] .book p,
+body[data-world="house"] .book h1,
+body[data-world="house"] .book h3,
+body[data-world="house"] .volume-label{
+  position:relative;
+  z-index:2;
+}
+
+@media (max-width:760px){
+  .scene-house .house-photo{
+    inset:-1.5%;
+    background-position:center center;
+  }
+  .house-photo-clock{background-position:62% center}
+  .house-photo-chair{background-position:55% center}
+  .house-photo-garden{background-position:62% center}
+  .scene-house .house-photo::after{opacity:.56}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .scene-house .house-photo{
+    animation:none!important;
+    transform:scale(1.025)!important;
+    transition:opacity .8s ease,filter .8s ease;
+  }
+  .scene-house .light-beam{animation:none!important}
+}
