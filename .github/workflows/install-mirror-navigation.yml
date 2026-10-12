@@ -1,0 +1,91 @@
+name: Install mirror navigation
+
+on:
+  push:
+    paths:
+      - .github/workflows/install-mirror-navigation.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Write mirror navigation overlay
+        shell: bash
+        run: |
+          cat > ceniciento/el-espejo-nav.js <<'EOF'
+          (()=>{
+          'use strict';
+          const mirror=document.getElementById('mirror');
+          if(!mirror)return;
+          const style=document.createElement('style');
+          style.textContent=`
+          .oras-mirror-nav{display:none}
+          body.mirror .oras-mirror-nav{position:fixed;z-index:220;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(460px,calc(100vw - 48px));display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(255,250,241,.28);background:rgba(8,9,14,.10);backdrop-filter:blur(3px)}
+          body.mirror .oras-mirror-nav button{border:0;background:transparent;color:rgba(255,250,241,.78);min-height:48px;padding:.72rem 1rem;font:italic 1rem Georgia,"Times New Roman",serif;cursor:pointer}
+          body.mirror .oras-mirror-nav button+button{border-left:1px solid rgba(255,250,241,.14)}
+          body.mirror .oras-mirror-nav button:disabled{opacity:.22;cursor:default}
+          body.mirror .oras-mirror-nav button:not(:disabled):hover{color:#fffaf1;background:rgba(255,255,255,.035)}
+          body.mirror .oras-mirror-nav button:focus-visible{outline:1px solid rgba(255,250,241,.8);outline-offset:3px}
+          @media(max-width:760px){body.mirror .oras-mirror-nav{width:min(380px,calc(100vw - 32px));bottom:max(12px,env(safe-area-inset-bottom))}}
+          `;
+          document.head.append(style);
+          const nav=document.createElement('nav');nav.className='oras-mirror-nav';nav.setAttribute('aria-label','Navegación de EL ESPEJO');
+          const back=document.createElement('button');back.type='button';back.textContent='Atrás';
+          const next=document.createElement('button');next.type='button';next.textContent='Adelante';
+          nav.append(back,next);document.body.append(nav);
+          const scenes=()=>[...mirror.querySelectorAll('.mirror-scene')];
+          const current=()=>{
+            const list=scenes();if(!list.length)return 0;
+            const center=mirror.scrollTop+mirror.clientHeight*.5;let best=0,dist=Infinity;
+            list.forEach((el,i)=>{const d=Math.abs(el.offsetTop+el.offsetHeight*.5-center);if(d<dist){dist=d;best=i}});return best;
+          };
+          const sync=()=>{const i=current(),list=scenes();back.disabled=i<=0;next.disabled=!list.length};
+          const releasePause=()=>mirror.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowUp',bubbles:true}));
+          const go=(dir)=>{
+            const list=scenes();if(!list.length)return;let i=current();
+            if(dir<0){if(i<=0)return;releasePause();i--;mirror.scrollTo({top:list[i].offsetTop,left:0,behavior:'smooth'});setTimeout(sync,460);return}
+            const here=list[i];const old=here.querySelector('.mirror-continue');
+            if(old&&!old.hidden){old.click();setTimeout(sync,460);return}
+            if(i>=list.length-1){const final=here.querySelector('.mirror-final-continue');if(final){final.hidden=false;final.click()}return}
+            i++;mirror.scrollTo({top:list[i].offsetTop,left:0,behavior:'smooth'});setTimeout(sync,460);
+          };
+          back.addEventListener('click',()=>go(-1));next.addEventListener('click',()=>go(1));
+          mirror.addEventListener('scroll',()=>requestAnimationFrame(sync),{passive:true});
+          addEventListener('oras:mirror-start',()=>requestAnimationFrame(sync));
+          sync();
+          })();
+          EOF
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          for p in Path('.').rglob('*.html'):
+              s=p.read_text(encoding='utf-8')
+              if 'data-oras-mirror' not in s:
+                  continue
+              tag='<script data-oras-mirror-nav="v1" src="/solo-la-tarjeta/ceniciento/el-espejo-nav.js?v=20261012-mirror-nav-1"></script>'
+              if 'data-oras-mirror-nav=' in s:
+                  s=re.sub(r'<script data-oras-mirror-nav="[^"]+"[^>]*></script>',tag,s)
+              else:
+                  m=re.search(r'(<script data-oras-mirror="true"[^>]*></script>)',s)
+                  if m:s=s[:m.end()]+"\n"+tag+s[m.end():]
+              p.write_text(s,encoding='utf-8')
+          PY
+
+          node --check ceniciento/el-espejo-nav.js
+      - name: Commit mirror navigation
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'ORAS: muestra Atrás y Adelante en EL ESPEJO'
+          git pull --rebase origin main
+          git push origin HEAD:main
