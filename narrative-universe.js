@@ -2,19 +2,80 @@
 'use strict';
 
 const STORAGE='oras.universe.v2';
+const ROOT='/solo-la-tarjeta/';
+const anaPage=location.pathname.includes('/elegia-breve/');
+const epilogueDocument=location.pathname.includes('/epilogo/');
+
+if(epilogueDocument)document.documentElement.classList.add('ou-epilogue-document');
 
 const syncJourneyNav=()=>{
-  const hideJourneyNav=location.pathname.includes('/elegia-breve/')&&location.hash.toLowerCase()==='#ceniciento';
+  const hideJourneyNav=anaPage&&location.hash.toLowerCase()==='#ceniciento';
   document.documentElement.classList.toggle('ou-hide-journey-nav',hideJourneyNav);
 };
-syncJourneyNav();
-window.addEventListener('hashchange',syncJourneyNav);
+
+const syncEpilogueForward=()=>{
+  if(!anaPage)return;
+  const button=document.getElementById('journeyNext');
+  if(!button)return;
+  const epilogue=location.hash.toLowerCase()==='#epilogo';
+  if(epilogue){
+    button.disabled=false;
+    button.textContent='Delante';
+    button.title='SOLO LA TARJETA';
+    button.setAttribute('aria-label','Continuar a SOLO LA TARJETA');
+    button.dataset.ouSoloForward='true';
+  }else if(button.dataset.ouSoloForward==='true'){
+    button.textContent='Siguiente';
+    button.title='';
+    delete button.dataset.ouSoloForward;
+  }
+};
+
+const syncRouteChrome=()=>{
+  syncJourneyNav();
+  syncEpilogueForward();
+};
+
+syncRouteChrome();
+window.addEventListener('hashchange',syncRouteChrome);
+window.addEventListener('popstate',syncRouteChrome);
+
+if(anaPage){
+  const originalPushState=history.pushState.bind(history);
+  history.pushState=(...args)=>{
+    const result=originalPushState(...args);
+    queueMicrotask(syncRouteChrome);
+    return result;
+  };
+  const originalReplaceState=history.replaceState.bind(history);
+  history.replaceState=(...args)=>{
+    const result=originalReplaceState(...args);
+    queueMicrotask(syncRouteChrome);
+    return result;
+  };
+}
 
 function readUniverseState(){
   try{
     const raw=localStorage.getItem(STORAGE);
     return raw?JSON.parse(raw):{};
   }catch(_){return {}}
+}
+
+function markCardFound(){
+  try{
+    const state=readUniverseState();
+    state.cardFound=true;
+    localStorage.setItem(STORAGE,JSON.stringify(state));
+  }catch(_){}
+}
+
+function goToSoloFromEpilogue(){
+  const card=document.querySelector('.ou-card');
+  if(card){card.click();return;}
+  markCardFound();
+  const url=ROOT+'?origen=tarjeta&auto=1&v=20261012-epilogo';
+  try{window.top.location.href=url}catch(_){location.href=url}
 }
 
 function trilogyCompleteForMirror(){
@@ -44,9 +105,15 @@ function launchMirrorFromAna(){
 
 document.addEventListener('click',event=>{
   const button=event.target.closest?.('#journeyNext');
-  if(!button)return;
-  if(!location.pathname.includes('/elegia-breve/'))return;
-  if(location.hash.toLowerCase()!=='#estrella')return;
+  if(!button||!anaPage)return;
+  const hash=location.hash.toLowerCase();
+  if(hash==='#epilogo'){
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    goToSoloFromEpilogue();
+    return;
+  }
+  if(hash!=='#estrella')return;
   if(!trilogyCompleteForMirror())return;
   event.preventDefault();
   event.stopImmediatePropagation();
@@ -61,6 +128,9 @@ base.onload=()=>{
   style.id='mobile-portrait-layout-fix';
   style.textContent=`
 html.ou-hide-journey-nav .journey-nav{
+  display:none!important;
+}
+html.ou-epilogue-document .ou-card{
   display:none!important;
 }
 .ou-card{
@@ -136,6 +206,7 @@ html.ou-hide-journey-nav .journey-nav{
 }
 `;
   document.head.appendChild(style);
+  syncRouteChrome();
 };
 base.onerror=()=>console.error('No se pudo cargar el módulo base del universo narrativo.');
 document.head.appendChild(base);
