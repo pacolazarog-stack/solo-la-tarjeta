@@ -2,7 +2,7 @@
 'use strict';
 const ROOT='/solo-la-tarjeta/';
 const STORAGE='oras.universe.v2';
-const VERSION='20261012-audio-mirror-1';
+const VERSION='20261012-mirror-mechanical-2';
 const INVENTORY_URL=ROOT+'inventario-del-aire/?from=mirror&v='+VERSION;
 const scenes=[
 `No era la misma historia.`,
@@ -42,7 +42,7 @@ const pauseAt=new Set([14,15,17,26,30]);
 const mirror=document.getElementById('mirror');
 if(!mirror)return;
 let started=false,locked=false,lockedScene=null,finished=false,finalReady=false;
-let lastTouchY=null,finalContinue=null;
+let lastTouchY=null,finalContinue=null,silenceTimer=0;
 const sceneNodes=[];
 
 function addText(parent,text){
@@ -76,6 +76,93 @@ function resetReadingCycleForInventory(){
 function enterInventory(){
   try{window.top.location.href=INVENTORY_URL}catch(_){location.href=INVENTORY_URL}
 }
+
+/* EL ESPEJO NO TIENE CAMA SONORA. Se silencian de forma continua todas las
+   pistas HTML heredadas. El único sonido permitido aquí es el clac mecánico
+   idéntico de los botones «seguir». */
+function silenceMirror(){
+  try{window.dispatchEvent(new CustomEvent('oras:mirror-silence'))}catch(_){}
+  const docs=[document];
+  try{if(window.top.document!==document)docs.push(window.top.document)}catch(_){}
+  docs.forEach(doc=>{
+    doc.querySelectorAll('audio').forEach(audio=>{
+      try{
+        audio.autoplay=false;
+        audio.removeAttribute('autoplay');
+        audio.volume=0;
+        audio.muted=true;
+        audio.pause();
+      }catch(_){}
+    });
+  });
+}
+function maintainSilence(){
+  silenceMirror();
+  clearInterval(silenceTimer);
+  silenceTimer=setInterval(silenceMirror,90);
+}
+
+let mechCtx=null,mechNoise=null;
+function prepareMechanicalAudio(){
+  if(mechCtx)return true;
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return false;
+  mechCtx=new AC();
+  const length=Math.max(1,Math.floor(mechCtx.sampleRate*.028));
+  mechNoise=mechCtx.createBuffer(1,length,mechCtx.sampleRate);
+  const data=mechNoise.getChannelData(0);
+  let seed=1977;
+  for(let i=0;i<length;i++){
+    seed=(seed*16807)%2147483647;
+    data[i]=(seed/2147483647)*2-1;
+  }
+  return true;
+}
+function fireMechanicalClack(){
+  if(!mechCtx||mechCtx.state!=='running')return;
+  const t=mechCtx.currentTime+.002;
+
+  const snap=mechCtx.createOscillator();
+  const snapGain=mechCtx.createGain();
+  snap.type='square';
+  snap.frequency.setValueAtTime(690,t);
+  snap.frequency.exponentialRampToValueAtTime(185,t+.052);
+  snapGain.gain.setValueAtTime(.0001,t);
+  snapGain.gain.exponentialRampToValueAtTime(.038,t+.003);
+  snapGain.gain.exponentialRampToValueAtTime(.0001,t+.058);
+  snap.connect(snapGain).connect(mechCtx.destination);
+  snap.start(t);snap.stop(t+.062);
+
+  const body=mechCtx.createOscillator();
+  const bodyGain=mechCtx.createGain();
+  body.type='triangle';
+  body.frequency.setValueAtTime(118,t);
+  body.frequency.exponentialRampToValueAtTime(82,t+.07);
+  bodyGain.gain.setValueAtTime(.022,t);
+  bodyGain.gain.exponentialRampToValueAtTime(.0001,t+.075);
+  body.connect(bodyGain).connect(mechCtx.destination);
+  body.start(t);body.stop(t+.08);
+
+  if(mechNoise){
+    const noise=mechCtx.createBufferSource();
+    const filter=mechCtx.createBiquadFilter();
+    const noiseGain=mechCtx.createGain();
+    noise.buffer=mechNoise;
+    filter.type='bandpass';filter.frequency.value=2350;filter.Q.value=.9;
+    noiseGain.gain.setValueAtTime(.043,t);
+    noiseGain.gain.exponentialRampToValueAtTime(.0001,t+.029);
+    noise.connect(filter).connect(noiseGain).connect(mechCtx.destination);
+    noise.start(t);noise.stop(t+.03);
+  }
+}
+function playMechanicalStep(){
+  silenceMirror();
+  if(!prepareMechanicalAudio())return;
+  if(mechCtx.state==='suspended'){
+    mechCtx.resume().then(fireMechanicalClack).catch(()=>{});
+  }else fireMechanicalClack();
+}
+
 function finishMirror(){
   if(finished||!finalReady)return;
   finished=true;
@@ -96,6 +183,7 @@ scenes.forEach((text,index)=>{
     const next=document.createElement('button');next.type='button';next.className='mirror-continue';next.textContent='seguir';next.setAttribute('aria-label',`Continuar después del fragmento ${number}`);next.hidden=true;
     next.addEventListener('click',()=>{
       if(!locked||lockedScene!==scene)return;
+      playMechanicalStep();
       releasePause();
       const following=sceneNodes[index+1];
       if(following){mirror.scrollTo({top:following.offsetTop,left:0,behavior:'smooth'});setTimeout(()=>following.focus({preventScroll:true}),420)}
@@ -104,7 +192,9 @@ scenes.forEach((text,index)=>{
   if(number===32){
     const mark=document.createElement('p');mark.className='mirror-end-mark';mark.textContent='flag';copy.append(mark);
     const end=document.createElement('span');end.className='mirror-end-sentinel';end.setAttribute('aria-hidden','true');scene.append(end);
-    finalContinue=document.createElement('button');finalContinue.type='button';finalContinue.className='mirror-continue mirror-final-continue';finalContinue.textContent='seguir';finalContinue.setAttribute('aria-label','Seguir hacia EL INVENTARIO DEL AIRE');finalContinue.hidden=true;finalContinue.addEventListener('click',finishMirror);scene.append(finalContinue);
+    finalContinue=document.createElement('button');finalContinue.type='button';finalContinue.className='mirror-continue mirror-final-continue';finalContinue.textContent='seguir';finalContinue.setAttribute('aria-label','Seguir hacia EL INVENTARIO DEL AIRE');finalContinue.hidden=true;
+    finalContinue.addEventListener('click',()=>{playMechanicalStep();finishMirror()});
+    scene.append(finalContinue);
   }
   mirror.append(scene);sceneNodes.push(scene);
 });
@@ -148,19 +238,17 @@ new IntersectionObserver(entries=>{
   if(finalContinue)finalContinue.hidden=false;
 },{root:mirror,threshold:.5}).observe(endSentinel);
 
-function silenceMirror(){
-  window.dispatchEvent(new CustomEvent('oras:mirror-silence'));
-  for(const audio of document.querySelectorAll('audio')){try{audio.pause();audio.muted=true;audio.volume=0}catch(_){}}
-}
 function start(){
   if(started)return;
   started=true;finished=false;finalReady=false;locked=false;lockedScene=null;lastTouchY=null;
   if(finalContinue){finalContinue.hidden=true;finalContinue.disabled=false;finalContinue.textContent='seguir'}
   mirror.style.transition='';mirror.style.opacity='';mirror.hidden=false;document.body.classList.add('mirror');mirror.scrollTop=0;
-  silenceMirror();sceneNodes[0].focus({preventScroll:true});
+  maintainSilence();
+  sceneNodes[0].focus({preventScroll:true});
 }
 window.addEventListener('oras:mirror-start',start);
 window.addEventListener('oras:mirror-reset',()=>{
+  clearInterval(silenceTimer);
   started=false;finished=false;finalReady=false;locked=false;lockedScene=null;
   mirror.style.transition='';mirror.style.opacity='';mirror.hidden=true;document.body.classList.remove('mirror');
 });
