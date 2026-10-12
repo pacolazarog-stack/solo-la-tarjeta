@@ -437,9 +437,9 @@
     /* AUDIO */
     .sound-toggle{
       position:fixed;
-      left:max(14px,env(safe-area-inset-left));
-      bottom:max(14px,env(safe-area-inset-bottom));
-      z-index:35;
+      left:max(146px,calc(env(safe-area-inset-left) + 134px));
+      bottom:max(12px,env(safe-area-inset-bottom));
+      z-index:2147482999;
       width:42px;
       height:42px;
       border:1px solid rgba(23,63,50,.19);
@@ -1024,8 +1024,8 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
           if(!Context) return false;
           mixContext=new Context();
           musicGain=mixContext.createGain();musicGain.gain.value=voiceMusic.paused ? 0 : voiceMusic.volume;
-          mixContext.createMediaElementSource(recording).connect(mixContext.destination);
-          mixContext.createMediaElementSource(nameAudio).connect(mixContext.destination);
+          // La voz y el nombre permanecen en la ruta nativa del elemento <audio>.
+          // Así siguen oyéndose aunque AudioContext esté suspendido por la política de autoplay.
           mixContext.createMediaElementSource(voiceMusic).connect(musicGain).connect(mixContext.destination);
           voiceMusic.volume=1;
         }
@@ -1068,6 +1068,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         }
         ensureAmbientMusic();
         // Unlock media playback in this user gesture, preserving the first word.
+        recording.volume=1;
         recording.muted=true;
         recording.play().then(()=>{
           recording.pause();recording.currentTime=playhead;recording.muted=muted;voicePriming=false;
@@ -1291,14 +1292,26 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         if(!voiceDialog.open){
           body.classList.add('voice-open');voiceDialog.show();
         }
+        // Cada apertura de la voz comienza audible; después el control nativo puede silenciarla.
+        recording.muted=false;
+        if(recording.volume===0) recording.volume=1;
         // A voice selection starts listening with the existing music fade and delay.
         if(recording.paused && !voicePending) playRecording();
       };
       document.getElementById('voiceLaunch').addEventListener('click',()=>openVoice());
       voicePlay.addEventListener('click',()=>{
-        if(voicePending) cancelVoiceStart();
-        else if(recording.paused) playRecording();
-        else recording.pause();
+        if(voicePending){cancelVoiceStart();return;}
+        if(!recording.paused){recording.pause();return;}
+        // Tras una pausa se reanuda inmediatamente; la transición de entrada sólo se usa al comenzar.
+        if(recording.currentTime>0 && !recording.ended){
+          voiceAllowed=true;
+          recording.play().catch(()=>{
+            voiceAllowed=false;voicePlay.textContent='Activar voz';
+            voiceStatus.textContent='Pulsa Activar voz para volver a intentarlo.';
+          });
+          return;
+        }
+        playRecording();
       });
       document.getElementById('voiceClose').addEventListener('click',()=>voiceDialog.close());
       voiceDialog.addEventListener('close',()=>{
@@ -1307,7 +1320,8 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       });
       recording.addEventListener('play',()=>{
         if(voicePriming) return;
-        if(!voiceAllowed){recording.pause();playRecording();return;}
+        // Los controles nativos de <audio> también pueden iniciar/reanudar la voz directamente.
+        voiceAllowed=true;voicePending=false;
         voicePlay.textContent='Pausar';voiceStatus.textContent='';startMix();
       });
       recording.addEventListener('pause',()=>{
