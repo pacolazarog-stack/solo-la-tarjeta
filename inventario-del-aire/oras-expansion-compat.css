@@ -31,3 +31,10 @@ body[data-world="city"][data-chapter="last-room"] .city-horizon{filter:none!impo
 .zero-line{opacity:calc(.5 - var(--zero-progress))!important}
 body[data-world="zero"] .grain{opacity:.012!important}
 body.final-withdrawal .grain{opacity:0!important}
+
+/* HABITACIÓN NÚMERO CERO · la ficha final se lee en tinta negra. */
+body[data-world="zero"] .story-panel p.story-card,
+body[data-world="zero"] .story-panel p.story-card .display-word{
+  color:#111!important;
+  text-shadow:none!important;
+}
