@@ -2,16 +2,17 @@
 'use strict';
 
 const STORAGE='oras.universe.v2';
-const VERSION='20261012-reading-window-r2';
+const VERSION='20261012-reading-window-r3-index';
+const BASE='/solo-la-tarjeta';
 const ANA_PARTS=Object.freeze([
-  ['estrella','Siguiendo una tarjeta'],
-  ['elegia','Elegía breve para Ana Klaudya'],
-  ['ojos','En tus ojos'],
-  ['labios','En tus labios'],
-  ['cabello','Tu cabello'],
-  ['piel','Tu piel'],
-  ['interludio','Interludio · Iba a llevarte flores'],
-  ['epilogo','Epílogo · A fuego lento · Flores']
+  ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
+  ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
+  ['ojos','En tus ojos',`${BASE}/ojos/`],
+  ['labios','En tus labios',`${BASE}/sonrisa/`],
+  ['cabello','Tu cabello',`${BASE}/cabello/`],
+  ['piel','Tu piel',`${BASE}/piel/`],
+  ['interludio','Interludio · Iba a llevarte flores',`${BASE}/interludio/`],
+  ['epilogo','Epílogo · A fuego lento · Flores',`${BASE}/epilogo/`]
 ]);
 
 function emptyAnaParts(){return Object.fromEntries(ANA_PARTS.map(([key])=>[key,false]));}
@@ -59,10 +60,14 @@ style.textContent=`
 .ou-reading-window-r2 .ou-rw-name{font-weight:600;letter-spacing:.015em}
 .ou-reading-window-r2 .ou-rw-state{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:rgba(247,241,232,.56);white-space:nowrap}
 .ou-reading-window-r2 .ou-rw-piece[data-done="true"] .ou-rw-state{color:#f0d998}
+.ou-reading-window-r2 .ou-rw-link{display:block;color:inherit;text-decoration:none;border-radius:7px;margin:-2px -5px;padding:2px 5px;transition:background .18s ease,color .18s ease}
+.ou-reading-window-r2 .ou-rw-link:hover,.ou-reading-window-r2 .ou-rw-link:focus-visible{background:rgba(255,255,255,.07);color:#fff8e7;outline:none}
 .ou-reading-window-r2 .ou-rw-parts{display:grid;gap:2px;margin:6px 0 2px 13px;font:10.5px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif;color:rgba(247,241,232,.54)}
-.ou-reading-window-r2 .ou-rw-part{display:grid;grid-template-columns:12px 1fr;gap:3px;align-items:start}
+.ou-reading-window-r2 .ou-rw-part{display:grid;grid-template-columns:12px 1fr;gap:3px;align-items:start;color:inherit;text-decoration:none;border-radius:5px;margin-left:-4px;padding:1px 4px;transition:background .18s ease,color .18s ease}
+.ou-reading-window-r2 .ou-rw-part:hover,.ou-reading-window-r2 .ou-rw-part:focus-visible{background:rgba(255,255,255,.07);color:#fff8e7;outline:none}
 .ou-reading-window-r2 .ou-rw-part[data-done="true"]{color:rgba(255,246,221,.91)}
 .ou-reading-window-r2 .ou-rw-mark{font-family:Georgia,"Times New Roman",serif;color:#d9be72}
+.ou-reading-window-r2 .ou-rw-piece[data-direct-link="false"]{cursor:default}
 body.mirror .ou-reading-window-r2{display:none!important}
 @media(max-width:700px){
   .ou-reading-window-r2{left:max(9px,env(safe-area-inset-left));bottom:max(10px,env(safe-area-inset-bottom))}
@@ -77,7 +82,7 @@ let box=document.querySelector('.ou-reading-window-r2');
 if(!box){
   box=document.createElement('details');
   box.className='ou-reading-window-r2';
-  box.setAttribute('aria-label','Estado completo de las lecturas');
+  box.setAttribute('aria-label','Índice y estado de las lecturas');
   box.innerHTML='<summary>Lecturas</summary><div class="ou-rw-panel" role="status" aria-live="polite"></div>';
   document.body.appendChild(box);
 }
@@ -100,14 +105,14 @@ function render(force=false){
   const summary=box.querySelector('summary');
   const panel=box.querySelector('.ou-rw-panel');
   summary.textContent=`Lecturas · ${completed}/3`;
-  const partRows=ANA_PARTS.map(([key,label])=>`<span class="ou-rw-part" data-done="${parts[key]===true}"><span class="ou-rw-mark">${parts[key]===true?'✓':'·'}</span><span>${label}</span></span>`).join('');
+  const partRows=ANA_PARTS.map(([key,label,href])=>`<a class="ou-rw-part" data-done="${parts[key]===true}" href="${href}"><span class="ou-rw-mark">${parts[key]===true?'✓':'·'}</span><span>${label}</span></a>`).join('');
   panel.innerHTML=`
     <div class="ou-rw-piece" data-done="${computedAna}">
       <div class="ou-rw-head"><span class="ou-rw-name">${computedAna?'✓':'·'} ANA KLAUDYA</span><span class="ou-rw-state">${anaCount}/8</span></div>
-      <div class="ou-rw-parts">${partRows}</div>
+      <nav class="ou-rw-parts" aria-label="Partes de Ana Klaudya">${partRows}</nav>
     </div>
-    <div class="ou-rw-piece" data-done="${solo}"><div class="ou-rw-head"><span class="ou-rw-name">${solo?'✓':'·'} SOLO LA TARJETA</span><span class="ou-rw-state">${solo?'completa':'pendiente'}</span></div></div>
-    <div class="ou-rw-piece" data-done="${ceniciento}"><div class="ou-rw-head"><span class="ou-rw-name">${ceniciento?'✓':'·'} CENICIENTO</span><span class="ou-rw-state">${ceniciento?'completa':'pendiente'}</span></div></div>`;
+    <div class="ou-rw-piece" data-done="${solo}" data-direct-link="true"><a class="ou-rw-link" href="${BASE}/"><div class="ou-rw-head"><span class="ou-rw-name">${solo?'✓':'·'} SOLO LA TARJETA</span><span class="ou-rw-state">${solo?'completa':'pendiente'}</span></div></a></div>
+    <div class="ou-rw-piece" data-done="${ceniciento}" data-direct-link="false"><div class="ou-rw-head"><span class="ou-rw-name">${ceniciento?'✓':'·'} CENICIENTO</span><span class="ou-rw-state">${ceniciento?'completa':'pendiente'}</span></div></div>`;
 }
 
 function observeEnd(selector,key,ratio=.58){
