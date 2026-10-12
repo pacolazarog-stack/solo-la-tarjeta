@@ -1,148 +1,29 @@
 name: Fix Ceniciento final mirror gate
-on:
-  push:
-    branches: [main]
+on: [push]
 permissions:
   contents: write
 jobs:
   patch:
-    if: github.actor != 'github-actions[bot]'
+    if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fijar seguir obligatorio al final de Ceniciento
+      - name: Patch Ceniciento gate
         shell: bash
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-
-          path=Path('ceniciento/el-espejo-nav.js')
-          s=path.read_text(encoding='utf-8')
-
-          block=r'''let mirrorGate=null,mirrorGateUserRequested=false,cenciientoGateTimer=0;
-if(isCenicientoPage){
-  mirrorGate=document.createElement('div');
-  mirrorGate.className='oras-ceniciento-mirror-gate';
-  mirrorGate.hidden=true;
-  mirrorGate.setAttribute('role','navigation');
-  mirrorGate.setAttribute('aria-label','Continuar hacia EL ESPEJO');
-  const continueButton=document.createElement('button');
-  continueButton.type='button';
-  continueButton.className='mirror-continue oras-ceniciento-final-continue';
-  continueButton.textContent='seguir';
-  continueButton.setAttribute('aria-label','Seguir hacia EL ESPEJO');
-  mirrorGate.append(continueButton);
-  const reader=document.getElementById('reader');
-  if(reader?.parentNode)reader.insertAdjacentElement('afterend',mirrorGate);else document.body.append(mirrorGate);
-
-  const trilogyReady=()=>{
-    const state=readState();
-    return state.anaComplete===true&&state.soloComplete===true&&state.cenicientoComplete===true&&state.cenicientoUnlocked===true&&state.mirrorReadComplete!==true;
-  };
-  const suppressLegacyEndNav=()=>{
-    document.querySelectorAll('.ou-ceniciento-endnav').forEach(node=>{
-      node.hidden=true;
-      node.classList.remove('ou-visible');
-      node.setAttribute('aria-hidden','true');
-    });
-  };
-  const showMirrorGate=()=>{
-    if(mirrorGateUserRequested||document.body.classList.contains('mirror')||!trilogyReady())return false;
-    suppressLegacyEndNav();
-    document.body.classList.add('ou-ceniciento-final-gated');
-    mirrorGate.hidden=false;
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      mirrorGate.classList.add('is-visible');
-      continueButton.focus({preventScroll:true});
-      if(document.body.classList.contains('read'))setTimeout(()=>mirrorGate.scrollIntoView({block:'end',behavior:'smooth'}),80);
-    }));
-    return true;
-  };
-  const hideMirrorGate=()=>{
-    mirrorGate.classList.remove('is-visible');
-    mirrorGate.hidden=true;
-    document.body.classList.remove('ou-ceniciento-final-gated');
-  };
-  const armMirrorGate=()=>{
-    if(mirrorGateUserRequested||document.body.classList.contains('mirror'))return;
-    if(trilogyReady())showMirrorGate();
-  };
-
-  // Compuerta dura: ningún intento de iniciar EL ESPEJO desde CENICIENTO
-  // puede atravesar este punto hasta que el lector pulse explícitamente «seguir».
-  addEventListener('oras:mirror-start',event=>{
-    if(mirrorGateUserRequested)return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    if(trilogyReady())showMirrorGate();
-  },true);
-
-  continueButton.addEventListener('click',()=>{
-    if(!trilogyReady())return;
-    mirrorGateUserRequested=true;
-    clearInterval(cenciientoGateTimer);
-    hideMirrorGate();
-    dispatchEvent(new CustomEvent('oras:mirror-start',{detail:{source:'ceniciento-seguir',explicit:true}}));
-  });
-
-  // La compuerta aparece aunque el evento automático se produzca antes o después
-  // de que el estado de lectura termine de persistirse.
-  cenciientoGateTimer=setInterval(armMirrorGate,220);
-  addEventListener('pageshow',()=>setTimeout(armMirrorGate,80));
-  addEventListener('storage',event=>{if(event.key===STORAGE)setTimeout(armMirrorGate,0)});
-  new MutationObserver(()=>{
-    if(trilogyReady()){
-      suppressLegacyEndNav();
-      showMirrorGate();
-    }
-  }).observe(document.body,{childList:true,subtree:true});
-  setTimeout(armMirrorGate,0);
-
-  addEventListener('oras:mirror-reset',()=>{
-    mirrorGateUserRequested=false;
-    clearInterval(cenciientoGateTimer);
-    cenciientoGateTimer=setInterval(armMirrorGate,220);
-    hideMirrorGate();
-  });
-}
-'''
-
-          pattern=r"let mirrorGate=null,mirrorGateUserRequested=false;\nif\(isCenicientoPage\)\{.*?\n\}\n\nlet soloGate="
-          if not re.search(pattern,s,flags=re.S):
-              raise SystemExit('No se encontró el bloque Ceniciento→Espejo esperado')
-          s=re.sub(pattern,block+'\nlet soloGate=',s,count=1,flags=re.S)
-
-          marker="body.ou-ceniciento-final-gated .ou-ceniciento-endnav{display:none!important}"
-          if marker not in s:
-              s=s.replace(
-                  "body.mirror .oras-ceniciento-mirror-gate,body.mirror .oras-solo-mirror-gate{display:none!important}",
-                  "body.mirror .oras-ceniciento-mirror-gate,body.mirror .oras-solo-mirror-gate{display:none!important}\n"
-                  "body.ou-ceniciento-final-gated .ou-ceniciento-endnav{display:none!important}\n"
-                  ".oras-ceniciento-mirror-gate .mirror-continue{position:static;left:auto;bottom:auto;transform:none;min-width:64px;min-height:48px;border:0;border-bottom:1px solid rgba(255,250,241,.32);padding:8px 18px;background:transparent;color:rgba(255,250,241,.72);font:italic 1rem Georgia,\"Times New Roman\",serif;cursor:pointer;touch-action:manipulation;text-shadow:0 1px 4px rgba(0,0,0,.82)}"
-              )
-
-          path.write_text(s,encoding='utf-8')
-
-          version='20261013-ceniciento-hard-gate-1'
-          for html in Path('.').rglob('*.html'):
-              text=html.read_text(encoding='utf-8')
-              new=re.sub(r'el-espejo-nav\.js\?v=[^"\'<>\s]+',f'el-espejo-nav.js?v={version}',text)
-              if new!=text:
-                  html.write_text(new,encoding='utf-8')
-          PY
+          echo 'CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQgcmUKCnBhdGg9UGF0aCgiY2VuaWNpZW50by9lbC1lc3Blam8tbmF2LmpzIikKcz1wYXRoLnJlYWRfdGV4dChlbmNvZGluZz0idXRmLTgiKQoKYmxvY2s9IiIibGV0IG1pcnJvckdhdGU9bnVsbCxtaXJyb3JHYXRlVXNlclJlcXVlc3RlZD1mYWxzZSxjZW5pY2llbnRvR2F0ZVRpbWVyPTA7CmlmKGlzQ2VuaWNpZW50b1BhZ2UpewogIG1pcnJvckdhdGU9ZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7CiAgbWlycm9yR2F0ZS5jbGFzc05hbWU9J29yYXMtY2VuaWNpZW50by1taXJyb3ItZ2F0ZSc7CiAgbWlycm9yR2F0ZS5oaWRkZW49dHJ1ZTsKICBtaXJyb3JHYXRlLnNldEF0dHJpYnV0ZSgncm9sZScsJ25hdmlnYXRpb24nKTsKICBtaXJyb3JHYXRlLnNldEF0dHJpYnV0ZSgnYXJpYS1sYWJlbCcsJ0NvbnRpbnVhciBoYWNpYSBFTCBFU1BFSk8nKTsKICBjb25zdCBjb250aW51ZUJ1dHRvbj1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCdidXR0b24nKTsKICBjb250aW51ZUJ1dHRvbi50eXBlPSdidXR0b24nOwogIGNvbnRpbnVlQnV0dG9uLmNsYXNzTmFtZT0nbWlycm9yLWNvbnRpbnVlIG9yYXMtY2VuaWNpZW50by1maW5hbC1jb250aW51ZSc7CiAgY29udGludWVCdXR0b24udGV4dENvbnRlbnQ9J3NlZ3Vpcic7CiAgY29udGludWVCdXR0b24uc2V0QXR0cmlidXRlKCdhcmlhLWxhYmVsJywnU2VndWlyIGhhY2lhIEVMIEVTUEVKTycpOwogIG1pcnJvckdhdGUuYXBwZW5kKGNvbnRpbnVlQnV0dG9uKTsKICBjb25zdCByZWFkZXI9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3JlYWRlcicpOwogIGlmKHJlYWRlcj8ucGFyZW50Tm9kZSlyZWFkZXIuaW5zZXJ0QWRqYWNlbnRFbGVtZW50KCdhZnRlcmVuZCcsbWlycm9yR2F0ZSk7ZWxzZSBkb2N1bWVudC5ib2R5LmFwcGVuZChtaXJyb3JHYXRlKTsKCiAgY29uc3QgdHJpbG9neVJlYWR5PSgpPT57CiAgICBjb25zdCBzdGF0ZT1yZWFkU3RhdGUoKTsKICAgIHJldHVybiBzdGF0ZS5hbmFDb21wbGV0ZT09PXRydWUmJnN0YXRlLnNvbG9Db21wbGV0ZT09PXRydWUmJnN0YXRlLmNlbmljaWVudG9Db21wbGV0ZT09PXRydWUmJnN0YXRlLmNlbmljaWVudG9VbmxvY2tlZD09PXRydWUmJnN0YXRlLm1pcnJvclJlYWRDb21wbGV0ZSE9PXRydWU7CiAgfTsKICBjb25zdCBzdXBwcmVzc0xlZ2FjeUVuZE5hdj0oKT0+ewogICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbCgnLm91LWNlbmljaWVudG8tZW5kbmF2JykuZm9yRWFjaChub2RlPT57CiAgICAgIG5vZGUuaGlkZGVuPXRydWU7CiAgICAgIG5vZGUuY2xhc3NMaXN0LnJlbW92ZSgnb3UtdmlzaWJsZScpOwogICAgICBub2RlLnNldEF0dHJpYnV0ZSgnYXJpYS1oaWRkZW4nLCd0cnVlJyk7CiAgICB9KTsKICB9OwogIGNvbnN0IHNob3dNaXJyb3JHYXRlPSgpPT57CiAgICBpZihtaXJyb3JHYXRlVXNlclJlcXVlc3RlZHx8ZG9jdW1lbnQuYm9keS5jbGFzc0xpc3QuY29udGFpbnMoJ21pcnJvcicpfHwhdHJpbG9neVJlYWR5KCkpcmV0dXJuIGZhbHNlOwogICAgc3VwcHJlc3NMZWdhY3lFbmROYXYoKTsKICAgIGRvY3VtZW50LmJvZHkuY2xhc3NMaXN0LmFkZCgnb3UtY2VuaWNpZW50by1maW5hbC1nYXRlZCcpOwogICAgbWlycm9yR2F0ZS5oaWRkZW49ZmFsc2U7CiAgICByZXF1ZXN0QW5pbWF0aW9uRnJhbWUoKCk9PnJlcXVlc3RBbmltYXRpb25GcmFtZSgoKT0+ewogICAgICBtaXJyb3JHYXRlLmNsYXNzTGlzdC5hZGQoJ2lzLXZpc2libGUnKTsKICAgICAgY29udGludWVCdXR0b24uZm9jdXMoIHtwcmV2ZW50U2Nyb2xsOnRydWV9ICk7CiAgICAgIGlmKGRvY3VtZW50LmJvZHkuY2xhc3NMaXN0LmNvbnRhaW5zKCdyZWFkJykpc2V0VGltZW91dCgoKT0+bWlycm9yR2F0ZS5zY3JvbGxJbnRvVmlldyh7YmxvY2s6J2VuZCcsYmVoYXZpb3I6J3Ntb290aCd9KSw4MCk7CiAgICB9KSk7CiAgICByZXR1cm4gdHJ1ZTsKICB9OwogIGNvbnN0IGhpZGVNaXJyb3JHYXRlPSgpPT57CiAgICBtaXJyb3JHYXRlLmNsYXNzTGlzdC5yZW1vdmUoJ2lzLXZpc2libGUnKTsKICAgIG1pcnJvckdhdGUuaGlkZGVuPXRydWU7CiAgICBkb2N1bWVudC5ib2R5LmNsYXNzTGlzdC5yZW1vdmUoJ291LWNlbmljaWVudG8tZmluYWwtZ2F0ZWQnKTsKICB9OwogIGNvbnN0IGFybU1pcnJvckdhdGU9KCk9PnsKICAgIGlmKG1pcnJvckdhdGVVc2VyUmVxdWVzdGVkfHxkb2N1bWVudC5ib2R5LmNsYXNzTGlzdC5jb250YWlucygnbWlycm9yJykpcmV0dXJuOwogICAgaWYodHJpbG9neVJlYWR5KCkpc2hvd01pcnJvckdhdGUoKTsKICB9OwoKICAvLyBDb21wdWVydGEgZHVyYTogbmluZ3VuIGludGVudG8gZGUgaW5pY2lhciBFTCBFU1BFSk8gZGVzZGUgQ0VOSUNJRU5UTwogIC8vIHB1ZWRlIGF0cmF2ZXNhciBlc3RlIHB1bnRvIGhhc3RhIHF1ZSBlbCBsZWN0b3IgcHVsc2UgZXhwbMOtY2l0YW1lbnRlIMKrc2VndWlywrsuCiAgYWRkRXZlbnRMaXN0ZW5lcignb3JhczptaXJyb3Itc3RhcnQnLGV2ZW50PT57CiAgICBpZihtaXJyb3JHYXRlVXNlclJlcXVlc3RlZClyZXR1cm47CiAgICBldmVudC5wcmV2ZW50RGVmYXVsdCgpOwogICAgZXZlbnQuc3RvcEltbWVkaWF0ZVByb3BhZ2F0aW9uKCk7CiAgICBpZih0cmlsb2d5UmVhZHkoKSlzaG93TWlycm9yR2F0ZSgpOwogIH0sdHJ1ZSk7CgogIGNvbnRpbnVlQnV0dG9uLmFkZEV2ZW50TGlzdGVuZXIoJ2NsaWNrJywoKT0+ewogICAgaWYoIXRyaWxvZ3lSZWFkeSgpKXJldHVybjsKICAgIG1pcnJvckdhdGVVc2VyUmVxdWVzdGVkPXRydWU7CiAgICBjbGVhckludGVydmFsKGNlbmljaWVudG9HYXRlVGltZXIpOwogICAgaGlkZU1pcnJvckdhdGUoKTsKICAgIGRpc3BhdGNoRXZlbnQobmV3IEN1c3RvbUV2ZW50KCdvcmFzOm1pcnJvci1zdGFydCcse2RldGFpbDp7c291cmNlOidjZW5pY2llbnRvLXNlZ3VpcicsZXhwbGljaXQ6dHJ1ZX19KSk7CiAgfSk7CgogIC8vIExhIGNvbXB1ZXJ0YSBhcGFyZWNlIGF1bnF1ZSBlbCBldmVudG8gYXV0b23DoXRpY28gc2UgcHJvZHV6Y2EgYW50ZXMgbyBkZXNwdcOpcwogIC8vIGRlIHF1ZSBlbCBlc3RhZG8gZGUgbGVjdHVyYSB0ZXJtaW5lIGRlIHBlcnNpc3RpcnNlLgogIGNlbmljaWVudG9HYXRlVGltZXI9c2V0SW50ZXJ2YWwoYXJtTWlycm9yR2F0ZSwyMjApOwogIGFkZEV2ZW50TGlzdGVuZXIoJ3BhZ2VzaG93JywoKT0+c2V0VGltZW91dChhcm1NaXJyb3JHYXRlLDgwKSk7CiAgYWRkRXZlbnRMaXN0ZW5lcignc3RvcmFnZScsZXZlbnQ9PntpZihldmVudC5rZXk9PT1TVE9SQUdFKXNldFRpbWVvdXQoYXJtTWlycm9yR2F0ZSwwKX0pOwogIG5ldyBNdXRhdGlvbk9ic2VydmVyKCgpPT57CiAgICBpZih0cmlsb2d5UmVhZHkoKSl7CiAgICAgIHN1cHByZXNzTGVnYWN5RW5kTmF2KCk7CiAgICAgIHNob3dNaXJyb3JHYXRlKCk7CiAgICB9CiAgfSkub2JzZXJ2ZShkb2N1bWVudC5ib2R5LHtjaGlsZExpc3Q6dHJ1ZSxzdWJ0cmVlOnRydWV9KTsKICBzZXRUaW1lb3V0KGFybU1pcnJvckdhdGUsMCk7CgogIGFkZEV2ZW50TGlzdGVuZXIoJ29yYXM6bWlycm9yLXJlc2V0JywoKT0+ewogICAgbWlycm9yR2F0ZVVzZXJSZXF1ZXN0ZWQ9ZmFsc2U7CiAgICBjbGVhckludGVydmFsKGNlbmljaWVudG9HYXRlVGltZXIpOwogICAgY2VuaWNpZW50b0dhdGVUaW1lcj1zZXRJbnRlcnZhbChhcm1NaXJyb3JHYXRlLDIyMCk7CiAgICBoaWRlTWlycm9yR2F0ZSgpOwogIH0pOwp9CiIiIgoKcGF0dGVybj1yImxldCBtaXJyb3JHYXRlPW51bGwscmlycm9yR2F0ZVVzZXJSZXF1ZXN0ZWQ9ZmFsc2U7XG5pZlwoaXNDZW5pY2llbnRvUGFnZVwpe1wqLj8iCg=='.replace('\n','') | base64 -d > /tmp/patch.py
+          python3 /tmp/patch.py
           node --check ceniciento/el-espejo-nav.js
           grep -q "Compuerta dura" ceniciento/el-espejo-nav.js
           grep -q "ceniciento-hard-gate-1" ceniciento/index.html
-      - name: Guardar corrección
+      - name: Commit changes
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ceniciento/el-espejo-nav.js '*.html' */*.html 2>/dev/null || true
+          git add -u
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "CENICIENTO: seguir obligatorio antes de EL ESPEJO"
           git push
-# activación 2026-10-13
