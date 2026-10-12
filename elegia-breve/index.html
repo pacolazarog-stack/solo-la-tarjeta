@@ -840,7 +840,6 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
 </dialog>
 <nav class="journey-nav" id="journeyNav" aria-label="Recorrido de la obra" hidden>
 <button id="journeyPrevious" type="button">Anterior</button>
-<button id="journeyIndexOpen" type="button" aria-haspopup="dialog" hidden>Índice</button>
 <button id="journeyNext" type="button">Siguiente</button>
 </nav>
 
@@ -1496,10 +1495,6 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       }
       journeyPrevious.addEventListener('click',()=>goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)-1]));
       journeyNext.addEventListener('click',()=>goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)+1]));
-      document.getElementById('journeyIndexOpen').addEventListener('click',()=>{
-        anaNavigation.hidden=false;journeyIndex.showModal();
-        document.getElementById('journeyIndexClose').focus();
-      });
       document.getElementById('journeyIndexClose').addEventListener('click',()=>journeyIndex.close());
       anaNavigation.addEventListener('click',event=>{if(event.target.closest('button'))journeyIndex.close();});
 
