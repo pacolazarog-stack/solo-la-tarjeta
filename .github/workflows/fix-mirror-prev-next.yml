@@ -142,14 +142,12 @@ mirror.addEventListener('scroll',()=>requestAnimationFrame(syncMirrorNavigation)
           )
           p.write_text(s,encoding='utf-8')
 
-          # Fuerza la nueva versión del script en todas las páginas que lo cargan.
           for html in Path('.').rglob('*.html'):
               text=html.read_text(encoding='utf-8')
               new=re.sub(r'el-espejo\.js\?v=[^"\']+', 'el-espejo.js?v=20261012-mirror-nav-4', text)
               if new!=text:
                   html.write_text(new,encoding='utf-8')
 
-          # Mantén coherente la verificación de Pages con la nueva versión.
           pages=Path('.github/workflows/pages.yml')
           if pages.exists():
               text=pages.read_text(encoding='utf-8')
@@ -169,8 +167,9 @@ mirror.addEventListener('scroll',()=>requestAnimationFrame(syncMirrorNavigation)
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add ceniciento/el-espejo.js '*.html' '*/index.html' '*/**/*.html' .github/workflows/pages.yml 2>/dev/null || git add -A
+          git add -A
           if git diff --cached --quiet; then exit 0; fi
           git commit -m 'ORAS: añade Atrás y Adelante a EL ESPEJO'
           git pull --rebase origin main
           git push origin HEAD:main
+# trigger
