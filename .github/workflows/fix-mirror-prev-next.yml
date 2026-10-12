@@ -1,0 +1,176 @@
+name: Fix mirror prev next
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-mirror-prev-next.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add persistent Atrás Adelante navigation to EL ESPEJO
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path('ceniciento/el-espejo.js')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace("const VERSION='20261012-mirror-mechanical-3';", "const VERSION='20261012-mirror-nav-4';")
+          s=s.replace(
+              "let lastTouchY=null,finalContinue=null,silenceTimer=0;",
+              "let lastTouchY=null,finalContinue=null,silenceTimer=0,currentSceneIndex=0,mirrorNav=null,mirrorBack=null,mirrorForward=null;"
+          )
+
+          marker="function finishMirror(){"
+          if 'function installMirrorNavigation()' not in s:
+              block=r'''
+function installMirrorNavigation(){
+  if(mirrorNav)return;
+  const style=document.createElement('style');
+  style.id='oras-mirror-nav-style';
+  style.textContent=`
+    body.mirror .mirror-continue{display:none!important}
+    .oras-mirror-nav{display:none}
+    body.mirror .oras-mirror-nav{position:fixed;z-index:180;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(460px,calc(100vw - 48px));display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(255,250,241,.26);background:rgba(10,10,12,.10);backdrop-filter:blur(3px)}
+    body.mirror .oras-mirror-nav button{appearance:none;border:0;background:transparent;color:rgba(255,250,241,.76);min-height:48px;padding:.7rem 1rem;font:italic 1rem Georgia,"Times New Roman",serif;cursor:pointer;text-align:center}
+    body.mirror .oras-mirror-nav button+button{border-left:1px solid rgba(255,250,241,.14)}
+    body.mirror .oras-mirror-nav button:disabled{opacity:.22;cursor:default}
+    body.mirror .oras-mirror-nav button:not(:disabled):hover{color:#fffaf1;background:rgba(255,255,255,.035)}
+    body.mirror .oras-mirror-nav button:focus-visible{outline:1px solid rgba(255,250,241,.72);outline-offset:3px}
+    @media(max-width:760px){body.mirror .oras-mirror-nav{width:min(380px,calc(100vw - 32px));bottom:max(12px,env(safe-area-inset-bottom))}}
+  `;
+  document.head.append(style);
+  mirrorNav=document.createElement('nav');
+  mirrorNav.className='oras-mirror-nav';
+  mirrorNav.setAttribute('aria-label','Navegación de EL ESPEJO');
+  mirrorBack=document.createElement('button');
+  mirrorBack.type='button';mirrorBack.textContent='Atrás';mirrorBack.setAttribute('aria-label','Fragmento anterior');
+  mirrorForward=document.createElement('button');
+  mirrorForward.type='button';mirrorForward.textContent='Adelante';mirrorForward.setAttribute('aria-label','Fragmento siguiente');
+  mirrorNav.append(mirrorBack,mirrorForward);
+  document.body.append(mirrorNav);
+  mirrorBack.addEventListener('click',()=>goMirror(-1));
+  mirrorForward.addEventListener('click',()=>goMirror(1));
+  updateMirrorNavigation();
+}
+function updateMirrorNavigation(){
+  if(!mirrorBack||!mirrorForward)return;
+  mirrorBack.disabled=currentSceneIndex<=0;
+  mirrorForward.disabled=finished;
+}
+function sceneIndexFromViewport(){
+  let best=currentSceneIndex,bestDistance=Infinity;
+  const center=mirror.scrollTop+mirror.clientHeight*.5;
+  sceneNodes.forEach((scene,index)=>{
+    const sceneCenter=scene.offsetTop+scene.offsetHeight*.5;
+    const distance=Math.abs(sceneCenter-center);
+    if(distance<bestDistance){bestDistance=distance;best=index;}
+  });
+  return best;
+}
+function goMirror(delta){
+  if(!started||finished)return;
+  currentSceneIndex=sceneIndexFromViewport();
+  if(delta<0){
+    if(currentSceneIndex<=0)return;
+    playMechanicalStep();
+    releasePause();
+    currentSceneIndex-=1;
+    const target=sceneNodes[currentSceneIndex];
+    mirror.scrollTo({top:target.offsetTop,left:0,behavior:'smooth'});
+    setTimeout(()=>target.focus({preventScroll:true}),420);
+    updateMirrorNavigation();
+    return;
+  }
+  const currentNumber=currentSceneIndex+1;
+  if(locked&&lockedScene===sceneNodes[currentSceneIndex]){
+    clearedPauses.add(currentNumber);
+    releasePause();
+  }
+  playMechanicalStep();
+  if(currentSceneIndex>=sceneNodes.length-1){
+    finalReady=true;
+    finishMirror();
+    return;
+  }
+  currentSceneIndex+=1;
+  const target=sceneNodes[currentSceneIndex];
+  mirror.scrollTo({top:target.offsetTop,left:0,behavior:'smooth'});
+  setTimeout(()=>target.focus({preventScroll:true}),420);
+  updateMirrorNavigation();
+}
+function syncMirrorNavigation(){
+  if(!started||finished)return;
+  currentSceneIndex=sceneIndexFromViewport();
+  updateMirrorNavigation();
+}
+'''
+              s=s.replace(marker,block+'\n'+marker)
+
+          insert="""
+installMirrorNavigation();
+mirror.addEventListener('scroll',()=>requestAnimationFrame(syncMirrorNavigation),{passive:true});
+"""
+          target="const pauseObserver=new IntersectionObserver(entries=>{"
+          if insert.strip() not in s:
+              s=s.replace(target,insert+'\n'+target)
+
+          s=s.replace(
+              "started=true;finished=false;finalReady=false;locked=false;lockedScene=null;lastTouchY=null;",
+              "started=true;finished=false;finalReady=false;locked=false;lockedScene=null;lastTouchY=null;currentSceneIndex=0;"
+          )
+          s=s.replace(
+              "mirror.style.transition='';mirror.style.opacity='';mirror.hidden=false;document.body.classList.add('mirror');mirror.scrollTop=0;",
+              "mirror.style.transition='';mirror.style.opacity='';mirror.hidden=false;document.body.classList.add('mirror');mirror.scrollTop=0;updateMirrorNavigation();"
+          )
+          s=s.replace(
+              "mirror.style.transition='';mirror.style.opacity='';mirror.hidden=true;document.body.classList.remove('mirror');",
+              "mirror.style.transition='';mirror.style.opacity='';mirror.hidden=true;document.body.classList.remove('mirror');currentSceneIndex=0;updateMirrorNavigation();"
+          )
+          p.write_text(s,encoding='utf-8')
+
+          # Fuerza la nueva versión del script en todas las páginas que lo cargan.
+          for html in Path('.').rglob('*.html'):
+              text=html.read_text(encoding='utf-8')
+              new=re.sub(r'el-espejo\.js\?v=[^"\']+', 'el-espejo.js?v=20261012-mirror-nav-4', text)
+              if new!=text:
+                  html.write_text(new,encoding='utf-8')
+
+          # Mantén coherente la verificación de Pages con la nueva versión.
+          pages=Path('.github/workflows/pages.yml')
+          if pages.exists():
+              text=pages.read_text(encoding='utf-8')
+              text=text.replace("grep -Fq '20261012-mirror-mechanical-2' ceniciento/el-espejo.js", "grep -Fq '20261012-mirror-nav-4' ceniciento/el-espejo.js")
+              text=text.replace("grep -Fq '20261012-mirror-mechanical-3' ceniciento/el-espejo.js", "grep -Fq '20261012-mirror-nav-4' ceniciento/el-espejo.js")
+              pages.write_text(text,encoding='utf-8')
+          PY
+
+          node --check ceniciento/el-espejo.js
+          grep -Fq "textContent='Atrás'" ceniciento/el-espejo.js
+          grep -Fq "textContent='Adelante'" ceniciento/el-espejo.js
+          grep -Fq "20261012-mirror-nav-4" ceniciento/el-espejo.js
+
+      - name: Commit navigation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ceniciento/el-espejo.js '*.html' '*/index.html' '*/**/*.html' .github/workflows/pages.yml 2>/dev/null || git add -A
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'ORAS: añade Atrás y Adelante a EL ESPEJO'
+          git pull --rebase origin main
+          git push origin HEAD:main
