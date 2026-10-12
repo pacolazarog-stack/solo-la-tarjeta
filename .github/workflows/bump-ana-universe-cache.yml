@@ -184,6 +184,20 @@ jobs:
           )
           s = re.sub(r'^\s*\.epilogue-invitation\{[^\n]*\}\s*\n?', '', s, flags=re.M)
           s = re.sub(r'^\s*\.epilogue-invitation\[hidden\]\{[^\n]*\}\s*\n?', '', s, flags=re.M)
+
+          # En una relectura ya registrada de la Elegía, al terminar "el calor."
+          # vuelve a aparecer la fotografía de Ana. El interrogante y la navegación
+          # Anterior/Siguiente se conservan sobre esa fotografía.
+          if 'const elegiaAlreadyReadAtFinal=()=>{' not in s:
+              s = s.replace(
+                  "      const startFinalSequence=()=>{",
+                  """      const elegiaAlreadyReadAtFinal=()=>{\n        try{\n          const saved=JSON.parse(localStorage.getItem('oras.universe.v2')||'{}');\n          return saved?.anaParts?.elegia===true;\n        }catch(_){return false;}\n      };\n\n      const startFinalSequence=()=>{""",
+                  1,
+              )
+          old_final = """          finalHeat.classList.add('show-calor');\n          intensifyWarmWithCalor();\n},4500);"""
+          new_final = """          finalHeat.classList.add('show-calor');\n          intensifyWarmWithCalor();\n          if(elegiaAlreadyReadAtFinal()){\n            clearTimeout(finalPortraitTimer);\n            finalPortraitTimer=setTimeout(()=>{\n              finalPortraitTimer=null;\n              if(cenicientoFrame.hidden && body.classList.contains('reading-ready'))revealPortrait();\n            },4000);\n          }\n},4500);"""
+          if old_final in s:
+              s = s.replace(old_final,new_final,1)
           ana.write_text(s,encoding='utf-8')
 
           # También al recuperar directamente una fotografía ya completada se fuerza
