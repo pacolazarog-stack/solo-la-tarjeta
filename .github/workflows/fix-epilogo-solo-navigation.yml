@@ -1,0 +1,103 @@
+name: ORAS fix epilogue Solo navigation
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-epilogo-solo-navigation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Patch epilogue navigation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          ana_path = Path('elegia-breve/index.html')
+          epi_path = Path('epilogo/index.html')
+          ana = ana_path.read_text(encoding='utf-8')
+          epi = epi_path.read_text(encoding='utf-8')
+
+          old_set = """      function setJourney(piece){
+        if(piece==='ceniciento'){journeyNav.hidden=true;return;}
+        const i=journeyPieces.indexOf(piece);if(i<0)return;
+        journeyPiece=piece;journeyNav.hidden=false;
+        journeyPrevious.disabled=i===0;journeyNext.disabled=i===journeyPieces.length-1;
+        journeyPrevious.setAttribute('aria-label',i>0?'Anterior: '+journeyTitles[i-1]:'Principio del recorrido');
+        journeyNext.setAttribute('aria-label',i<journeyPieces.length-1?'Siguiente: '+journeyTitles[i+1]:'Final del recorrido');
+        journeyNav.setAttribute('aria-label','Recorrido · '+journeyTitles[i]);
+      }
+"""
+          new_set = """      function setJourney(piece){
+        if(piece==='ceniciento'){journeyNav.hidden=true;return;}
+        const i=journeyPieces.indexOf(piece);if(i<0)return;
+        const isFinal=i===journeyPieces.length-1;
+        journeyPiece=piece;journeyNav.hidden=false;
+        journeyPrevious.disabled=i===0;journeyNext.disabled=false;
+        journeyPrevious.setAttribute('aria-label',i>0?'Anterior: '+journeyTitles[i-1]:'Principio del recorrido');
+        journeyNext.setAttribute('aria-label',isFinal?'Continuar a SOLO LA TARJETA':'Siguiente: '+journeyTitles[i+1]);
+        journeyNext.title=isFinal?'SOLO LA TARJETA':'';
+        journeyNav.setAttribute('aria-label','Recorrido · '+journeyTitles[i]);
+      }
+"""
+          if old_set not in ana:
+              raise SystemExit('No se encontró el bloque setJourney esperado')
+          ana = ana.replace(old_set, new_set, 1)
+
+          old_next = """      journeyPrevious.addEventListener('click',()=>goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)-1]));
+      journeyNext.addEventListener('click',()=>goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)+1]));
+"""
+          new_next = """      journeyPrevious.addEventListener('click',()=>goJourney(journeyPieces[journeyPieces.indexOf(journeyPiece)-1]));
+      journeyNext.addEventListener('click',()=>{
+        const i=journeyPieces.indexOf(journeyPiece);
+        if(i===journeyPieces.length-1){
+          const card=document.querySelector('.ou-card');
+          if(card){card.click();return;}
+          try{window.top.location.href='../?origen=tarjeta&auto=1';}
+          catch(_){window.location.href='../?origen=tarjeta&auto=1';}
+          return;
+        }
+        goJourney(journeyPieces[i+1]);
+      });
+"""
+          if old_next not in ana:
+              raise SystemExit('No se encontró el listener journeyNext esperado')
+          ana = ana.replace(old_next, new_next, 1)
+
+          marker = "[hidden]{display:none!important}\n"
+          insert = marker + "/* En el epílogo sobra la tarjeta flotante: 'Delante' continúa a SOLO LA TARJETA desde ANA KLAUDYA. */\nbody .ou-card{display:none!important}\n"
+          if 'body .ou-card{display:none!important}' not in epi:
+              if marker not in epi:
+                  raise SystemExit('No se encontró el marcador CSS del epílogo')
+              epi = epi.replace(marker, insert, 1)
+
+          ana_path.write_text(ana, encoding='utf-8')
+          epi_path.write_text(epi, encoding='utf-8')
+
+          assert "Continuar a SOLO LA TARJETA" in ana
+          assert "?origen=tarjeta&auto=1" in ana
+          assert "body .ou-card{display:none!important}" in epi
+          PY
+
+      - name: Commit correction
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add elegia-breve/index.html epilogo/index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'ORAS: unifica salida del epílogo hacia Solo la Tarjeta'
+          git push origin HEAD:main
