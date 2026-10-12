@@ -1,4 +1,4 @@
-# Mantiene canónicas la navegación y las versiones públicas del recorrido ORAS.
+# Mantiene canónicas la navegación, elimina controles obsoletos y fija las versiones públicas del recorrido ORAS.
 name: Force ORAS universe cache refresh
 on:
   push:
