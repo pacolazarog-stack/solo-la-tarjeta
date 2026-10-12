@@ -4,7 +4,7 @@
 const STORAGE='oras.universe.v2';
 const MIRROR_AUDIO_STORAGE='oras.mirror.audio.v1';
 const ROOT='/solo-la-tarjeta/';
-const VERSION='20261012-screen-fades-2';
+const VERSION='20261012-music-portrait-flow-1';
 
 if(!document.querySelector('script[data-oras-screen-transition]')){
   const transitionScript=document.createElement('script');
@@ -46,6 +46,11 @@ function firstUnreadAnaTarget(){
   if(!parts||typeof parts!=='object')return null;
   return ANA_FORWARD_TARGETS.find(target=>target.route!=='epilogo'&&parts[target.state]===false)||null;
 }
+function firstUnreadAnaTargetIncludingEpilogue(){
+  const parts=readUniverseState().anaParts;
+  if(!parts||typeof parts!=='object')return null;
+  return ANA_FORWARD_TARGETS.find(target=>parts[target.state]===false)||null;
+}
 function openAnaTarget(target){
   if(!target)return false;
   if(target.route==='elegia'){
@@ -76,16 +81,18 @@ const syncEpilogueForward=()=>{
       button.dataset.ouAnaUnreadForward=target.route;
       delete button.dataset.ouSoloForward;
     }else{
-      button.title='SOLO LA TARJETA';
-      button.setAttribute('aria-label','Continuar a SOLO LA TARJETA');
-      button.dataset.ouSoloForward='true';
+      button.title='Fotografía final de Ana Klaudya';
+      button.setAttribute('aria-label','Continuar a la fotografía final de Ana Klaudya');
+      button.dataset.ouPortraitForward='true';
+      delete button.dataset.ouSoloForward;
       delete button.dataset.ouAnaUnreadForward;
     }
-  }else if(button.dataset.ouSoloForward==='true'||button.dataset.ouAnaUnreadForward){
+  }else if(button.dataset.ouSoloForward==='true'||button.dataset.ouAnaUnreadForward||button.dataset.ouPortraitForward==='true'){
     button.textContent='Siguiente';
     button.title='';
     delete button.dataset.ouSoloForward;
     delete button.dataset.ouAnaUnreadForward;
+    delete button.dataset.ouPortraitForward;
   }
 };
 const syncRouteChrome=()=>{syncJourneyNav();syncEpilogueForward()};
@@ -122,6 +129,48 @@ function resetCycleAfterInventoryReturn(){
 }
 resetCycleAfterInventoryReturn();
 function markCardFound(){try{const state=readUniverseState();state.cardFound=true;localStorage.setItem(STORAGE,JSON.stringify(state))}catch(_){}}
+
+let soloAnaForwardButton=null;
+function ensureSoloAnaForwardButton(){
+  if(!soloPage||!document.body)return null;
+  if(soloAnaForwardButton?.isConnected)return soloAnaForwardButton;
+  const button=document.createElement('button');
+  button.id='ou-solo-ana-forward';
+  button.type='button';
+  button.setAttribute('data-oras-screen-transition','true');
+  button.setAttribute('data-oras-screen-navigation','true');
+  button.hidden=true;
+  button.style.cssText='position:fixed;left:50%;bottom:max(72px,calc(env(safe-area-inset-bottom,0px) + 68px));transform:translateX(-50%);z-index:190;min-height:46px;padding:11px 18px;border:1px solid rgba(255,244,220,.48);border-radius:999px;background:rgba(13,16,25,.72);color:#fff8eb;font:500 13px/1.2 system-ui,sans-serif;letter-spacing:.03em;box-shadow:0 8px 28px rgba(0,0,0,.28);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis';
+  button.addEventListener('click',()=>{
+    const target=firstUnreadAnaTargetIncludingEpilogue();
+    if(!target)return;
+    location.href=ROOT+'elegia-breve/#'+target.route;
+  });
+  document.body.appendChild(button);
+  soloAnaForwardButton=button;
+  return button;
+}
+function syncSoloAnaForward(){
+  if(!soloPage||!document.body)return;
+  const button=ensureSoloAnaForwardButton();
+  const state=readUniverseState();
+  const target=state.soloComplete===true?firstUnreadAnaTargetIncludingEpilogue():null;
+  const nearEnd=(window.scrollY+window.innerHeight)>=document.documentElement.scrollHeight-Math.max(260,window.innerHeight*.2);
+  const show=!!target&&nearEnd;
+  button.hidden=!show;
+  document.documentElement.classList.toggle('ou-solo-forward-ana',show);
+  if(!show)return;
+  button.textContent='Continuar · '+target.label;
+  button.title=target.label;
+  button.setAttribute('aria-label','Continuar a '+target.label);
+}
+if(soloPage){
+  queueMicrotask(syncSoloAnaForward);
+  addEventListener('pageshow',syncSoloAnaForward);
+  addEventListener('scroll',syncSoloAnaForward,{passive:true});
+  addEventListener('resize',syncSoloAnaForward,{passive:true});
+  setInterval(syncSoloAnaForward,750);
+}
 function veil(){
   const doc=hostDocument();
   let node=doc.getElementById('ou-transition-v2');
@@ -263,8 +312,8 @@ document.addEventListener('click',event=>{
         syncRouteChrome();
         return;
       }
-      goToSolo('tarjeta');
-    },{expectNavigation:!target});
+      window.dispatchEvent(new CustomEvent('oras:ana-portrait'));
+    },{expectNavigation:false});
     return;
   }
   if(hash==='#estrella'&&trilogyCompleteForMirror()){
@@ -284,6 +333,7 @@ base.onload=()=>{
 html.ou-hide-journey-nav .journey-nav{display:none!important}
 html.ou-epilogue-document .ou-card{display:none!important}
 html.ou-solo-document .work-subtitle{display:none!important}
+html.ou-solo-forward-ana .ou-solo-endnav{display:none!important}
 .ou-card{right:max(16px,env(safe-area-inset-right))!important;left:auto!important;transform:rotate(4deg)!important}
 .ou-reading-checklist{left:max(70px,calc(env(safe-area-inset-left) + 56px))!important;right:auto!important}
 .ou-reading-checklist summary{margin-left:0!important}.ou-reading-checklist ul{left:0!important;right:auto!important}

@@ -803,7 +803,7 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
 </head>
 
 <body class="locked" data-publication="web">
-  <audio id="voiceMusic" preload="auto" loop src="ana-klaudya.m4a"></audio>
+  <audio id="voiceMusic" preload="auto" autoplay loop src="ana-klaudya.m4a"></audio>
   <audio id="nameAudio" preload="auto" src="nombre.m4a"></audio>
 
   <div class="world" aria-hidden="true">
@@ -985,6 +985,8 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
           body.classList.add('portrait-revealed');
           anaNavigation.hidden=true;
           body.classList.remove('ana-navigation-ready');
+          const finalJourneyNav=document.getElementById('journeyNav');
+          if(finalJourneyNav)finalJourneyNav.hidden=true;
           clearTimeout(portraitRevealTimer);
           portraitRevealTimer=setTimeout(()=>{
             if(!body.classList.contains('portrait-revealed') || !cenicientoFrame.hidden)return;
@@ -1226,6 +1228,12 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
         return ensureAmbientMusic();
       };
 
+      const unlockDefaultMusic=()=>{
+        if(musicEnabled.checked && voiceMusic.paused)startSound();
+      };
+      document.addEventListener('pointerdown',unlockDefaultMusic,{capture:true});
+      document.addEventListener('keydown',unlockDefaultMusic,{capture:true});
+
       const beginPrelude=(nameReady)=>{
         setJourney('elegia');
         cancelAnaPrelude();
@@ -1372,6 +1380,14 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
       };
       const openCeniciento=()=>openPoem('ceniciento',false,false,false,'question');
       document.getElementById('cenicientoLink').addEventListener('click',openCeniciento);
+      const showPortraitFromJourney=()=>{
+        cancelPoemTransition();cancelAnaPrelude();
+        if(!cenicientoFrame.hidden)closeCeniciento();
+        try{window.history.replaceState(null,'',window.location.pathname+window.location.search);}catch(_){}
+        showAnaText();
+        revealPortrait();
+      };
+      window.addEventListener('oras:ana-portrait',showPortraitFromJourney);
       const returnToAna=(mode='home',updateHistory=true)=>{
         if(cenicientoFrame.hidden||sonrisaLeaving)return;
         cancelPoemTransition();cancelAnaPrelude();
@@ -1642,6 +1658,7 @@ document.getElementById('epilogueInvitation').hidden=epilogueAlreadyRead;
       window.addEventListener('scroll',onScroll,{passive:true});
       window.addEventListener('resize',onScroll);
 
+      startSound();
       syncSoundToggle();
       renderWorld();
       syncPoemRoute();
