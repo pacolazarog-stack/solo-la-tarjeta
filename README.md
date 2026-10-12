@@ -45,6 +45,7 @@ La literatura R4 permanece congelada. La dirección audiovisual se desarrolla co
 
 - [`ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md`](./ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md) — Biblia de Dirección Audiovisual.
 - [`ORAS_PLAN_VISUAL_EXPANSION_CERO_R2.md`](./ORAS_PLAN_VISUAL_EXPANSION_CERO_R2.md) — plan visual fotográfico de 25 pantallas para LA EXPANSIÓN y EL CERO.
+- [`ORAS_LECTOR_SECUENCIAL_R3.md`](./ORAS_LECTOR_SECUENCIAL_R3.md) — lectura por pantallas, fondos por capítulo, transiciones variables y aparición de texto tipo display.
 - [`ORAS_HOJA_TECNICA_MEZCLA_5_1_R1.md`](./ORAS_HOJA_TECNICA_MEZCLA_5_1_R1.md) — hoja de mezcla 5.1: presente frontal, persistencia trasera, conciencia central y materialidad LFE.
 - [`inventario-del-aire/ASSETS_FOTOGRAFICOS_R2.md`](./inventario-del-aire/ASSETS_FOTOGRAFICOS_R2.md) — manifiesto y estado de los activos fotográficos R2.
 
@@ -55,6 +56,10 @@ Principio maestro:
 Principio visual R2:
 
 > **El espectador jamás debe sentir que ORAS abandona la realidad para volverse abstracta. Debe sentir que la realidad permanece delante de él mientras se va quedando sin aquello que la sostenía.**
+
+Principio de lectura R3:
+
+> **La fotografía puede entrar desde cualquier dirección. El relato sólo avanza de izquierda a derecha.**
 
 Principio espacial:
 
@@ -70,20 +75,15 @@ La diferencia visual no debe ser riqueza frente a abstracción, sino **realismo 
 
 ### Estado de implementación · LA EXPANSIÓN / EL CERO
 
-**EL INVENTARIO DEL AIRE · R2 FOTOGRÁFICO: IMPLEMENTADO.**
+**EL INVENTARIO DEL AIRE · R3 SECUENCIAL: ACTIVO.**
 
-El lector público utiliza ya seis activos fotográficos propios para el primer volumen:
+El lector público separa ahora el contenido en pantallas narrativas. Cada parte recibe una transición visual propia —arriba/abajo, izquierda/derecha, fundido, abajo/arriba, derecha/izquierda o flash— elegida pseudoaleatoriamente sin repetición inmediata. El texto aparece como un display: **de izquierda a derecha y renglón a renglón**.
 
-- **I.1 · Llegada:** exterior de la casa;
-- **I.2 · Recibidor:** interior con profundidad;
-- **I.3 · El reloj:** tiempo detenido convertido en huella;
-- **I.4 · La silla:** gesto conservado;
-- **I.5 · Pasillo:** arquitectura de la memoria;
-- **I.6 · Jardín:** persistencia material.
+La doble capa fotográfica permite que una imagen entre mientras la anterior se retira. La casa continúa utilizando los activos R2 ya publicados. Las clases de fondos específicos para *Sombras* y *Ciudad* están preparadas en el lector R3; mientras sus binarios definitivos no estén publicados, la escenografía R1 permanece como fallback y evita pantallas vacías.
 
-Los gráficos CSS de la casa R1 quedan ocultos como respaldo. R2 conserva únicamente movimientos mínimos de materia viva —respiración óptica, luz y polvo— para evitar tanto la pantalla congelada como el efecto ornamental. Los capítulos intermedios reutilizan las imágenes existentes mediante erosión de luz y color, sin inventar fotografías decorativas.
+Los gráficos CSS de la casa R1 quedan ocultos como respaldo. R2/R3 conserva únicamente movimientos mínimos de materia viva —respiración óptica, luz y polvo— para evitar tanto la pantalla congelada como el efecto ornamental.
 
-**El Oficio de las Sombras · La Ciudad que Aprendió a Olvidar · La Habitación Número Cero** conservan todavía la maqueta audiovisual R1 y quedan pendientes de su sustitución fotográfica/material R2. En esos bloques, la abstracción deberá aparecer sólo como consecuencia de la erosión de una realidad previamente plena.
+**La Habitación Número Cero** mantiene por ahora su tratamiento de sustracción vigente; el lector R3 se retira al entrar en EL CERO para no competir con la desaparición final.
 
 ## Documentación canónica vigente
 
@@ -92,6 +92,7 @@ Los gráficos CSS de la casa R1 quedan ocultos como respaldo. R2 conserva única
 - [`MATRIZ_CRITICA_CANONICA_ORAS_R4.md`](./MATRIZ_CRITICA_CANONICA_ORAS_R4.md) — matriz crítica canónica, congelada en contenido conceptual.
 - [`ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md`](./ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md) — capa audiovisual canónica.
 - [`ORAS_PLAN_VISUAL_EXPANSION_CERO_R2.md`](./ORAS_PLAN_VISUAL_EXPANSION_CERO_R2.md) — plan visual fotográfico R2.
+- [`ORAS_LECTOR_SECUENCIAL_R3.md`](./ORAS_LECTOR_SECUENCIAL_R3.md) — especificación del lector audiovisual por pantallas.
 - [`ORAS_HOJA_TECNICA_MEZCLA_5_1_R1.md`](./ORAS_HOJA_TECNICA_MEZCLA_5_1_R1.md) — especificación del máster multicanal y traducción web estéreo/binaural.
 - [`ORAS_DATOS_PRESENTACION_R1.md`](./ORAS_DATOS_PRESENTACION_R1.md) — duración oficial de referencia y tiempos orientativos por pieza.
 - [`EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md`](./EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md) — ciclo de la expansión y *La Habitación Número Cero*; texto literario vigente.
@@ -106,7 +107,7 @@ Los gráficos CSS de la casa R1 quedan ocultos como respaldo. R2 conserva única
 - **LA HABITACIÓN NÚMERO CERO:** sólo corrección ortográfica, tipográfica o de puntuación; no modificación narrativa.
 - **MATRIZ CRÍTICA:** congelada en contenido conceptual.
 - **RESTO DE ORAS:** cualquier cambio posterior deberá demostrar una ganancia inequívoca frente a R4.
-- **DIRECCIÓN AUDIOVISUAL:** Biblia R1; Plan Visual R2 canónico y abierto a implementación técnica. *Inventario* I.1–I.6 ya está implementado fotográficamente.
+- **DIRECCIÓN AUDIOVISUAL:** Biblia R1; Plan Visual R2 canónico; Lector Secuencial R3 activo y abierto a incorporación progresiva de activos fotográficos.
 
 La última función de la narración en ORAS no es recordar: **es afirmar que ocurrió**.
 
