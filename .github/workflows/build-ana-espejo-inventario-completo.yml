@@ -1,0 +1,153 @@
+name: ORAS complete Ana Espejo Inventario
+
+on:
+  push:
+    paths:
+      - '.github/workflows/build-ana-espejo-inventario-completo.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-complete-edition:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate complete Markdown and HTML
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re, html, unicodedata
+
+          root = Path('.')
+          outdir = root / 'ana-klaudya-el-espejo-el-inventario'
+          outdir.mkdir(parents=True, exist_ok=True)
+
+          ana = (root / 'ana-klaudya/TEXTO_CANONICO_ES.md').read_text(encoding='utf-8').strip()
+          inventario = (root / 'EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md').read_text(encoding='utf-8').strip()
+          espejo_js = (root / 'ceniciento/el-espejo.js').read_text(encoding='utf-8')
+
+          match = re.search(r'const scenes=\[(.*?)\];\s*const pauseAt', espejo_js, re.S)
+          if not match:
+              raise SystemExit('No se encontró el bloque canónico scenes de EL ESPEJO')
+          raw_scenes = re.findall(r'`((?:\\.|[^`])*)`', match.group(1), re.S)
+          scenes = []
+          for raw in raw_scenes:
+              text = raw.replace('\\n', '\n').replace('\\`', '`').replace('\\\\', '\\')
+              scenes.append(text.strip())
+          if len(scenes) != 32:
+              raise SystemExit(f'EL ESPEJO debe contener 32 fragmentos; encontrados: {len(scenes)}')
+
+          md_parts = [
+              '<!-- ORAS · edición combinada generada desde las fuentes canónicas R4. No editar manualmente. -->',
+              ana,
+              '---',
+              '# EL ESPEJO'
+          ]
+          for n, scene in enumerate(scenes, 1):
+              md_parts.append(f'## Fragmento {n:02d}\n\n{scene}')
+          md_parts.append('flag')
+          md_parts.extend(['---', inventario])
+          combined_md = '\n\n'.join(md_parts).rstrip() + '\n'
+          md_path = outdir / 'ANA_KLAUDYA_EL_ESPEJO_EL_INVENTARIO_COMPLETO.md'
+          md_path.write_text(combined_md, encoding='utf-8')
+
+          def slugify(text):
+              text = unicodedata.normalize('NFKD', text)
+              text = ''.join(ch for ch in text if not unicodedata.combining(ch))
+              text = re.sub(r'[^a-zA-Z0-9]+', '-', text).strip('-').lower()
+              return text or 'seccion'
+
+          def md_to_html(md):
+              lines = md.splitlines()
+              body = []
+              para = []
+              used = {}
+
+              def flush():
+                  nonlocal para
+                  if not para:
+                      return
+                  cleaned = [line.rstrip().rstrip('  ') for line in para]
+                  body.append('<p>' + '<br>'.join(html.escape(line) for line in cleaned) + '</p>')
+                  para = []
+
+              for line in lines:
+                  if line.startswith('<!--') and line.endswith('-->'):
+                      continue
+                  if re.fullmatch(r'\s*---\s*', line):
+                      flush(); body.append('<hr>'); continue
+                  m = re.match(r'^(#{1,6})\s+(.*)$', line)
+                  if m:
+                      flush()
+                      level = len(m.group(1))
+                      title = m.group(2).strip()
+                      base = slugify(title)
+                      used[base] = used.get(base, 0) + 1
+                      ident = base if used[base] == 1 else f'{base}-{used[base]}'
+                      body.append(f'<h{level} id="{ident}">{html.escape(title)}</h{level}>')
+                      continue
+                  if not line.strip():
+                      flush(); continue
+                  para.append(line)
+              flush()
+              return '\n'.join(body)
+
+          article = md_to_html(combined_md)
+          page = f'''<!doctype html>
+          <html lang="es">
+          <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+          <meta name="robots" content="noindex,nofollow,noarchive">
+          <title>ANA KLAUDYA · EL ESPEJO · EL INVENTARIO DEL AIRE</title>
+          <style>
+          :root{{--paper:#f1ede4;--ink:#211f1b;--muted:#777064;--rule:#cfc6b7;--max:820px}}
+          *{{box-sizing:border-box}}
+          html{{scroll-behavior:smooth;background:var(--paper)}}
+          body{{margin:0;color:var(--ink);background:var(--paper);font-family:Georgia,'Times New Roman',serif}}
+          nav{{position:sticky;top:0;z-index:3;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;padding:.8rem 1rem;background:rgba(241,237,228,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);font:600 .78rem/1.2 system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase}}
+          nav a{{color:var(--ink);text-decoration:none}}
+          main{{width:min(var(--max),calc(100% - 2rem));margin:0 auto;padding:7vh 0 14vh}}
+          h1{{font-size:clamp(2.1rem,6vw,4.7rem);line-height:1.02;margin:15vh 0 6vh;font-weight:500}}
+          main>h1:first-child{{margin-top:0}}
+          h2{{font-size:clamp(1.4rem,3vw,2rem);line-height:1.2;margin:8vh 0 2.2vh;font-weight:600}}
+          h3{{font-size:1.15rem;margin:5vh 0 1.5vh}}
+          p{{font-size:clamp(1.08rem,2vw,1.32rem);line-height:1.72;margin:0 0 1.35em}}
+          hr{{border:0;border-top:1px solid var(--rule);margin:12vh 0}}
+          #el-espejo~h2{{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.78rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}}
+          a{{color:inherit}}
+          @media(max-width:640px){{main{{width:min(100% - 1.35rem,var(--max))}}nav{{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}}}}
+          </style>
+          </head>
+          <body>
+          <nav aria-label="Obras"><a href="#ana-klaudya">Ana Klaudya</a><a href="#el-espejo">El Espejo</a><a href="#el-inventario-del-aire">El Inventario del Aire</a></nav>
+          <main>
+          {article}
+          </main>
+          </body>
+          </html>
+          '''
+          (outdir / 'index.html').write_text(page, encoding='utf-8')
+          PY
+
+      - name: Commit complete edition
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ana-klaudya-el-espejo-el-inventario/index.html \
+                  ana-klaudya-el-espejo-el-inventario/ANA_KLAUDYA_EL_ESPEJO_EL_INVENTARIO_COMPLETO.md
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m 'ORAS: edición completa Ana Espejo Inventario'
+          git push origin HEAD:main
