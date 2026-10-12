@@ -109,7 +109,11 @@ function ensureMirrorEngine(){
   let mirror=document.getElementById('mirror');
   if(!mirror){mirror=document.createElement('main');mirror.id='mirror';mirror.setAttribute('aria-label','EL ESPEJO');mirror.hidden=true;document.body.appendChild(mirror)}
   if(document.querySelector('script[data-oras-mirror]'))return;
-  const script=document.createElement('script');script.dataset.orasMirror='true';script.src=ROOT+'ceniciento/el-espejo.js?v='+VERSION;document.body.appendChild(script);
+  const script=document.createElement('script');
+  script.dataset.orasMirror='true';
+  script.src=ROOT+'ceniciento/el-espejo.js?v='+VERSION;
+  script.addEventListener('load',()=>{script.dataset.loaded='true'},{once:true});
+  document.body.appendChild(script);
 }
 ensureMirrorEngine();
 
