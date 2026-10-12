@@ -37,7 +37,7 @@ jobs:
           grep -Fq '20261012-epilogue-unread-forward-1' narrative-universe.js
           grep -Fq 'resetCycleAfterInventoryReturn' narrative-universe.js
           grep -Fq "new URLSearchParams(location.search).get('from')==='inventario'" narrative-universe.js
-          grep -Fq '20261012-mirror-mechanical-3' ceniciento/el-espejo.js
+          grep -Fq '20261012-mirror-gates-4' ceniciento/el-espejo.js
           grep -Fq 'el-espejo.js?v=20261012-mirror-mechanical-3' ceniciento/index.html
           grep -Fq 'narrative-universe.js?v=20261012-epilogue-unread-forward-1' index.html
           grep -Fq 'narrative-universe.js?v=20261012-epilogue-unread-forward-1' elegia-breve/index.html
@@ -46,8 +46,9 @@ jobs:
           grep -Fq 'playMechanicalStep' ceniciento/el-espejo.js
           grep -Fq 'clearedPauses' ceniciento/el-espejo.js
           grep -Fq 'finalContinue.addEventListener' ceniciento/el-espejo.js
+          ! grep -Fq "mark.textContent='flag'" ceniciento/el-espejo.js
           grep -Fq 'solo-la-tarjeta-fondo.mp3' inventario-del-aire/index.html
-          echo 'PASS: fuente publicada = fuente vigente; el Epílogo continúa por la pieza de Ana pendiente y el retorno del Inventario reinicia el ciclo.'
+          echo 'PASS: fuente publicada = fuente vigente; EL ESPEJO termina con seguir hacia EL INVENTARIO DEL AIRE.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
