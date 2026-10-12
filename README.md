@@ -26,6 +26,9 @@ Proyecto literario y multimedia.
 - [SOLO LA TARJETA](https://pacolazarog-stack.github.io/solo-la-tarjeta/)
 - [ANA KLAUDYA](https://pacolazarog-stack.github.io/solo-la-tarjeta/elegia-breve/)
 - [CENICIENTO](https://pacolazarog-stack.github.io/solo-la-tarjeta/ceniciento/)
+- [EL INVENTARIO DEL AIRE](https://pacolazarog-stack.github.io/solo-la-tarjeta/inventario-del-aire/)
+
+**EL ESPEJO** funciona como umbral de convergencia dentro de la experiencia y conduce al ciclo de *El Inventario del Aire*.
 
 ## ANA KLAUDYA · corpus internacional 2027
 
