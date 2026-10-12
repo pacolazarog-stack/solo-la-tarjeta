@@ -2,7 +2,7 @@
 'use strict';
 
 const STORAGE='oras.universe.v2';
-const VERSION='20261012-reading-window-r3-index';
+const VERSION='20261012-reading-window-r4-ana-final';
 const BASE='/solo-la-tarjeta';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
@@ -154,9 +154,83 @@ function setupTracking(){
   addEventListener('oras:ana-part-complete',event=>completeAnaPart(event.detail?.part));
 }
 
+/*
+  Una vez completadas las ocho piezas de ANA KLAUDYA, un nuevo acceso a
+  /elegia-breve/ ya no obliga a repetir el recorrido. Se recupera el último
+  instante: "el calor." queda como fondo y comienza directamente el fundido
+  de la fotografía. El interrogante conserva su aparición y crecimiento.
+  Un acceso explícito a una pieza desde el índice sigue permitiendo releerla.
+*/
+function resumeCompletedAnaAtFinal(){
+  const path=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'');
+  if(!path.endsWith('/elegia-breve'))return;
+  if(location.hash)return;
+  if(new URLSearchParams(location.search).get('from')==='inventario')return;
+  const state=readState();
+  if(state.anaComplete!==true&&!anaComplete(state.anaParts))return;
+
+  const body=document.body;
+  const root=document.documentElement;
+  const portrait=document.getElementById('portraitFinale');
+  const photo=document.getElementById('anaPortrait');
+  const entry=document.getElementById('entry');
+  if(!body||!portrait||!photo||!entry)return;
+  if(body.dataset.ouCompletedAnaFinal==='true')return;
+  body.dataset.ouCompletedAnaFinal='true';
+
+  document.querySelectorAll('audio').forEach(audio=>{try{audio.pause()}catch(_){}});
+  document.getElementById('namePrelude')?.classList.add('fade');
+  entry.classList.add('is-open');
+  body.classList.remove('locked','prelude','voice-open','ceniciento-open','eyes-open');
+  root.classList.remove('ceniciento-open');
+  body.classList.add('journey-started','reading-ready','has-scrolled');
+
+  const finalHeat=document.getElementById('finalHeat');
+  if(finalHeat){
+    finalHeat.classList.add('is-shown','show-calor','is-burning');
+    try{finalHeat.scrollIntoView({block:'center',behavior:'auto'})}catch(_){window.scrollTo(0,document.documentElement.scrollHeight)}
+  }
+  root.style.setProperty('--warm','.92');
+  root.style.setProperty('--question-current','.22');
+  root.style.setProperty('--question-first','.22');
+  root.style.setProperty('--question-next','.22');
+
+  const nav=document.getElementById('anaNavigation');
+  if(nav)nav.hidden=true;
+  body.classList.remove('ana-navigation-ready','portrait-revealed');
+  portrait.setAttribute('aria-hidden','false');
+
+  const beginFade=()=>{
+    portrait.getBoundingClientRect();
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      if(body.dataset.ouCompletedAnaFinal!=='true')return;
+      body.classList.add('portrait-revealed');
+
+      setTimeout(()=>{
+        if(!body.classList.contains('portrait-revealed')||body.classList.contains('ceniciento-open'))return;
+        if(nav){nav.hidden=false;body.classList.add('ana-navigation-ready');}
+        let current=.22;
+        const grow=()=>{
+          if(!body.classList.contains('portrait-revealed')||body.classList.contains('ceniciento-open'))return;
+          current=Math.min(1,current+.12);
+          root.style.setProperty('--question-current',current.toFixed(3));
+          root.style.setProperty('--question-first',Math.min(1,current+.06).toFixed(3));
+          root.style.setProperty('--question-next',Math.min(1,current+.12).toFixed(3));
+          if(current<1)setTimeout(grow,1850);
+        };
+        grow();
+      },25000);
+    }));
+  };
+
+  if(photo.complete&&photo.naturalWidth)beginFade();
+  else photo.addEventListener('load',beginFade,{once:true});
+}
+
 render(true);
 setupTracking();
-addEventListener('pageshow',()=>render(true));
+resumeCompletedAnaAtFinal();
+addEventListener('pageshow',()=>{render(true);resumeCompletedAnaAtFinal();});
 addEventListener('hashchange',()=>render(true));
 addEventListener('storage',event=>{if(event.key===STORAGE)render(true)});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)render(true)});
