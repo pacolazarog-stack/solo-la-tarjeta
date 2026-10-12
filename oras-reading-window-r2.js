@@ -2,7 +2,7 @@
 'use strict';
 
 const STORAGE='oras.universe.v2';
-const VERSION='20261012-reading-window-r6-repeat-final-gate';
+const VERSION='20261013-ana-portrait-prev-next-1';
 const BASE='/solo-la-tarjeta';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
@@ -240,6 +240,7 @@ function resumeCompletedAnaAtFinal(){
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
       if(body.dataset.ouCompletedAnaFinal!=='true')return;
       body.classList.add('portrait-revealed');
+      try{window.ORASSetJourney?.('elegia')}catch(_){}
 
       setTimeout(()=>{
         if(!body.classList.contains('portrait-revealed')||body.classList.contains('ceniciento-open'))return;
