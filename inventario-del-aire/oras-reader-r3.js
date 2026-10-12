@@ -92,6 +92,8 @@ function wrapPanels(){
       panel.appendChild(copy);
       prevTr=nextTransition(prevTr);
       panel.dataset.transition=prevTr;
+      panel.dataset.world='house';
+      panel.dataset.chapter='house';
       frag.appendChild(panel);
     }
     panel.querySelector('.panel-copy').appendChild(node);
@@ -99,6 +101,8 @@ function wrapPanels(){
   pending.forEach(n=>panel?.querySelector('.panel-copy')?.appendChild(n));
   book.replaceChildren(frag);
   panels=[...book.querySelectorAll('.story-panel')];
+  document.documentElement.classList.add('oras-reader-active');
+  document.body.classList.add('oras-reader-active');
 }
 
 function splitWords(){
@@ -144,7 +148,7 @@ function setupReading(){
         io.unobserve(e.target);
       }
     }
-  },{threshold:.28,rootMargin:'-8% 0px -8% 0px'});
+  },{threshold:.55,rootMargin:'-4% 0px -4% 0px'});
   panels.forEach(p=>io.observe(p));
 }
 
@@ -187,9 +191,7 @@ function applyPanelPhoto(layer,panel){
   const chapter=panel?.dataset.chapter||world;
   const asset=panel?.dataset.asset||'';
 
-  if(world==='train'||world==='city'){
-    return applySprite(layer,world,chapter);
-  }
+  if(world==='train'||world==='city')return applySprite(layer,world,chapter);
   if(world==='house'&&asset){
     layer.classList.add(asset);
     return true;
@@ -197,19 +199,39 @@ function applyPanelPhoto(layer,panel){
   return false;
 }
 
+function worldProgress(panel){
+  const world=panel?.dataset.world||'house';
+  const group=panels.filter(p=>(p.dataset.world||'house')===world);
+  const index=Math.max(0,group.indexOf(panel));
+  return group.length>1?index/(group.length-1):0;
+}
+
+function syncWorldState(panel){
+  if(!panel)return;
+  const world=panel.dataset.world||'house';
+  const chapter=panel.dataset.chapter||world;
+  const progress=worldProgress(panel);
+  document.body.dataset.world=world;
+  document.body.dataset.chapter=chapter;
+  document.documentElement.style.setProperty('--world-progress',progress.toFixed(4));
+  document.documentElement.style.setProperty('--erosion',(world==='city'?progress:0).toFixed(4));
+  document.documentElement.style.setProperty('--zero-progress',(world==='zero'?progress:0).toFixed(4));
+  document.body.classList.toggle('final-withdrawal',world==='zero'&&progress>.78);
+}
+
 function refreshActivePhoto(){
   if(!activePanel)return;
   const layer=layers[activeLayer];
-  const classList=[...layer.classList].filter(c=>c!=='photo-layer'&&c!=='bg-current');
   const hadCurrent=layer.classList.contains('bg-current');
   const ok=applyPanelPhoto(layer,activePanel);
-  classList.forEach(c=>layer.classList.add(c));
   if(hadCurrent)layer.classList.add('bg-current');
   document.body.classList.toggle('r3-photo-active',ok);
 }
 
 function showBackground(panel){
-  if(!panel||panel===activePanel)return;
+  if(!panel)return;
+  syncWorldState(panel);
+  if(panel===activePanel)return;
   activePanel=panel;
   const tr=panel.dataset.transition||'tr-fade';
   document.body.dataset.panelTransition=tr;
@@ -244,11 +266,13 @@ function showBackground(panel){
 
 function syncPanel(){
   if(!panels.length)return;
-  const y=scrollY+innerHeight*.48;
+  const targetY=innerHeight*.5;
   let chosen=panels[0];
+  let best=Infinity;
   for(const p of panels){
-    if(p.offsetTop<=y)chosen=p;
-    else break;
+    const r=p.getBoundingClientRect();
+    const d=Math.abs((r.top+r.height*.5)-targetY);
+    if(d<best){best=d;chosen=p}
   }
   showBackground(chosen);
 }
@@ -272,6 +296,7 @@ function start(){
     resizeTimer=setTimeout(()=>{
       assignTimings();
       refreshActivePhoto();
+      syncPanel();
     },180);
   },{passive:true});
 }
