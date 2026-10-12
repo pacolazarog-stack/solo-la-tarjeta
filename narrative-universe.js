@@ -4,7 +4,7 @@
 const STORAGE='oras.universe.v2';
 const MIRROR_AUDIO_STORAGE='oras.mirror.audio.v1';
 const ROOT='/solo-la-tarjeta/';
-const VERSION='20261012-inventory-return-reset-1';
+const VERSION='20261012-epilogue-unread-forward-1';
 const anaPage=location.pathname.includes('/elegia-breve/');
 const soloPage=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'')==='/solo-la-tarjeta';
 const epilogueDocument=location.pathname.includes('/epilogo/');
@@ -12,6 +12,32 @@ const returnedFromInventory=anaPage&&new URLSearchParams(location.search).get('f
 
 if(epilogueDocument)document.documentElement.classList.add('ou-epilogue-document');
 if(soloPage)document.documentElement.classList.add('ou-solo-document');
+
+const ANA_FORWARD_TARGETS=[
+  {state:'estrella',route:'estrella',label:'Prólogo · Siguiendo una tarjeta',id:'anaEstrella'},
+  {state:'elegia',route:'elegia',label:'Elegía breve para Ana Klaudya',id:'anaRead'},
+  {state:'ojos',route:'ojos',label:'En tus ojos',id:'anaOjos'},
+  {state:'labios',route:'sonrisa',label:'En tus labios',id:'anaSonrisa'},
+  {state:'cabello',route:'cabello',label:'Tu cabello',id:'anaCabello'},
+  {state:'piel',route:'piel',label:'Tu piel',id:'anaPiel'},
+  {state:'interludio',route:'interludio',label:'Interludio · Iba a llevarte flores',id:'anaInterlude'},
+  {state:'epilogo',route:'epilogo',label:'Epílogo · A fuego lento',id:'anaEpilogue'}
+];
+function firstUnreadAnaTarget(){
+  const parts=readUniverseState().anaParts;
+  if(!parts||typeof parts!=='object')return null;
+  return ANA_FORWARD_TARGETS.find(target=>target.route!=='epilogo'&&parts[target.state]===false)||null;
+}
+function openAnaTarget(target){
+  if(!target)return false;
+  if(target.route==='elegia'){
+    try{history.replaceState(history.state,'',location.pathname+location.search)}catch(_){}
+  }
+  const control=document.getElementById(target.id);
+  if(!control)return false;
+  control.click();
+  return true;
+}
 
 const syncJourneyNav=()=>{
   const hideJourneyNav=anaPage&&location.hash.toLowerCase()==='#ceniciento';
@@ -23,15 +49,25 @@ const syncEpilogueForward=()=>{
   if(!button)return;
   const epilogue=location.hash.toLowerCase()==='#epilogo';
   if(epilogue){
+    const target=firstUnreadAnaTarget();
     button.disabled=false;
     button.textContent='Delante';
-    button.title='SOLO LA TARJETA';
-    button.setAttribute('aria-label','Continuar a SOLO LA TARJETA');
-    button.dataset.ouSoloForward='true';
-  }else if(button.dataset.ouSoloForward==='true'){
+    if(target){
+      button.title=target.label;
+      button.setAttribute('aria-label','Continuar a '+target.label);
+      button.dataset.ouAnaUnreadForward=target.route;
+      delete button.dataset.ouSoloForward;
+    }else{
+      button.title='SOLO LA TARJETA';
+      button.setAttribute('aria-label','Continuar a SOLO LA TARJETA');
+      button.dataset.ouSoloForward='true';
+      delete button.dataset.ouAnaUnreadForward;
+    }
+  }else if(button.dataset.ouSoloForward==='true'||button.dataset.ouAnaUnreadForward){
     button.textContent='Siguiente';
     button.title='';
     delete button.dataset.ouSoloForward;
+    delete button.dataset.ouAnaUnreadForward;
   }
 };
 const syncRouteChrome=()=>{syncJourneyNav();syncEpilogueForward()};
@@ -199,6 +235,11 @@ document.addEventListener('click',event=>{
   if(hash==='#epilogo'){
     event.preventDefault();
     event.stopImmediatePropagation();
+    const target=firstUnreadAnaTarget();
+    if(target&&openAnaTarget(target)){
+      syncRouteChrome();
+      return;
+    }
     goToSolo('tarjeta');
     return;
   }
