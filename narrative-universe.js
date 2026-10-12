@@ -4,7 +4,7 @@
 const STORAGE='oras.universe.v2';
 const MIRROR_AUDIO_STORAGE='oras.mirror.audio.v1';
 const ROOT='/solo-la-tarjeta/';
-const VERSION='20261012-music-portrait-flow-1';
+const VERSION='20261013-audio-groups-1';
 
 if(!document.querySelector('script[data-oras-screen-transition]')){
   const transitionScript=document.createElement('script');
