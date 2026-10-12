@@ -12,6 +12,7 @@ const isCenicientoPage=normalizedPath.includes('/ceniciento');
 const isSoloPage=normalizedPath==='/solo-la-tarjeta';
 const readState=()=>{try{return JSON.parse(localStorage.getItem(STORAGE)||'{}')}catch(_){return {}}};
 const writeState=patch=>{try{localStorage.setItem(STORAGE,JSON.stringify(Object.assign({},readState(),patch)))}catch(_){}};
+
 const ANA_PARTS=[
   {state:'estrella',route:'estrella',label:'Prólogo · Siguiendo una tarjeta'},
   {state:'elegia',route:'elegia',label:'Elegía breve para Ana Klaudya'},
@@ -51,10 +52,6 @@ const syncSoloContinuationNav=()=>{
     oldNav.classList.add('ou-smart-forward');
     return;
   }
-  if(state.anaComplete===true&&state.cenicientoComplete===true){
-    oldNav.remove();
-    return;
-  }
   oldNav.remove();
 };
 const observeSoloContinuationNav=()=>{
@@ -70,6 +67,7 @@ const observeSoloContinuationNav=()=>{
   addEventListener('pageshow',()=>setTimeout(syncSoloContinuationNav,60));
   addEventListener('storage',event=>{if(event.key===STORAGE)setTimeout(syncSoloContinuationNav,0)});
 };
+
 const style=document.createElement('style');
 style.textContent=`
 .oras-mirror-nav{display:none}
@@ -81,6 +79,8 @@ style.textContent=`
 body.voice .oras-ceniciento-mirror-gate{position:fixed;z-index:210;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translateX(-50%)}
 body.read .oras-ceniciento-mirror-gate{position:relative;z-index:20;width:max-content;margin:1rem auto 4rem}
 body.mirror .oras-ceniciento-mirror-gate,body.mirror .oras-solo-mirror-gate{display:none!important}
+body.ou-ceniciento-final-gated .ou-ceniciento-endnav{display:none!important}
+.oras-ceniciento-mirror-gate .mirror-continue{position:static;left:auto;bottom:auto;transform:none;min-width:64px;min-height:48px;border:0;border-bottom:1px solid rgba(255,250,241,.32);padding:8px 18px;background:transparent;color:rgba(255,250,241,.72);font:italic 1rem Georgia,"Times New Roman",serif;cursor:pointer;touch-action:manipulation;text-shadow:0 1px 4px rgba(0,0,0,.82)}
 body.ou-solo-final-locked{overflow:hidden!important;overscroll-behavior:none!important}
 body.ou-solo-final-locked header,
 body.ou-solo-final-locked main,
@@ -107,7 +107,7 @@ document.head.append(style);
 
 observeSoloContinuationNav();
 
-let mirrorGate=null,mirrorGateUserRequested=false;
+let mirrorGate=null,mirrorGateUserRequested=false,cenicientoGateTimer=0;
 if(isCenicientoPage){
   mirrorGate=document.createElement('div');
   mirrorGate.className='oras-ceniciento-mirror-gate';
@@ -116,37 +116,78 @@ if(isCenicientoPage){
   mirrorGate.setAttribute('aria-label','Continuar hacia EL ESPEJO');
   const continueButton=document.createElement('button');
   continueButton.type='button';
+  continueButton.className='mirror-continue oras-ceniciento-final-continue';
   continueButton.textContent='seguir';
   continueButton.setAttribute('aria-label','Seguir hacia EL ESPEJO');
   mirrorGate.append(continueButton);
   const reader=document.getElementById('reader');
   if(reader?.parentNode)reader.insertAdjacentElement('afterend',mirrorGate);else document.body.append(mirrorGate);
 
-  const showMirrorGate=()=>{
-    if(document.body.classList.contains('mirror'))return;
-    mirrorGate.hidden=false;
-    requestAnimationFrame(()=>{
-      mirrorGate.classList.add('is-visible');
-      if(document.body.classList.contains('read'))setTimeout(()=>mirrorGate.scrollIntoView({block:'end',behavior:'smooth'}),80);
+  const trilogyReady=()=>{
+    const state=readState();
+    return state.anaComplete===true&&state.soloComplete===true&&state.cenicientoComplete===true&&state.cenicientoUnlocked===true&&state.mirrorReadComplete!==true;
+  };
+  const suppressLegacyEndNav=()=>{
+    document.querySelectorAll('.ou-ceniciento-endnav').forEach(node=>{
+      node.hidden=true;
+      node.classList.remove('ou-visible');
+      node.setAttribute('aria-hidden','true');
     });
   };
-  const hideMirrorGate=()=>{mirrorGate.classList.remove('is-visible');mirrorGate.hidden=true;};
+  const showMirrorGate=()=>{
+    if(mirrorGateUserRequested||document.body.classList.contains('mirror')||!trilogyReady())return false;
+    suppressLegacyEndNav();
+    document.body.classList.add('ou-ceniciento-final-gated');
+    mirrorGate.hidden=false;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      mirrorGate.classList.add('is-visible');
+      continueButton.focus({preventScroll:true});
+      if(document.body.classList.contains('read'))setTimeout(()=>mirrorGate.scrollIntoView({block:'end',behavior:'smooth'}),80);
+    }));
+    return true;
+  };
+  const hideMirrorGate=()=>{
+    mirrorGate.classList.remove('is-visible');
+    mirrorGate.hidden=true;
+    document.body.classList.remove('ou-ceniciento-final-gated');
+  };
+  const armMirrorGate=()=>{
+    if(mirrorGateUserRequested||document.body.classList.contains('mirror'))return;
+    if(trilogyReady())showMirrorGate();
+  };
 
+  // Compuerta dura: ningún intento de iniciar EL ESPEJO desde CENICIENTO
+  // atraviesa este punto hasta que el lector pulse explícitamente «seguir».
   addEventListener('oras:mirror-start',event=>{
     if(mirrorGateUserRequested)return;
     event.preventDefault();
     event.stopImmediatePropagation();
-    showMirrorGate();
+    if(trilogyReady())showMirrorGate();
   },true);
 
   continueButton.addEventListener('click',()=>{
+    if(!trilogyReady())return;
     mirrorGateUserRequested=true;
+    clearInterval(cenicientoGateTimer);
     hideMirrorGate();
-    dispatchEvent(new CustomEvent('oras:mirror-start',{detail:{source:'ceniciento-seguir'}}));
+    dispatchEvent(new CustomEvent('oras:mirror-start',{detail:{source:'ceniciento-seguir',explicit:true}}));
   });
+
+  cenicientoGateTimer=setInterval(armMirrorGate,220);
+  addEventListener('pageshow',()=>setTimeout(armMirrorGate,80));
+  addEventListener('storage',event=>{if(event.key===STORAGE)setTimeout(armMirrorGate,0)});
+  new MutationObserver(()=>{
+    if(trilogyReady()){
+      suppressLegacyEndNav();
+      showMirrorGate();
+    }
+  }).observe(document.body,{childList:true,subtree:true});
+  setTimeout(armMirrorGate,0);
 
   addEventListener('oras:mirror-reset',()=>{
     mirrorGateUserRequested=false;
+    clearInterval(cenicientoGateTimer);
+    cenicientoGateTimer=setInterval(armMirrorGate,220);
     hideMirrorGate();
   });
 }
@@ -226,7 +267,9 @@ if(isSoloPage){
   }
 }
 
-const nav=document.createElement('nav');nav.className='oras-mirror-nav';nav.setAttribute('aria-label','Navegación de EL ESPEJO');
+const nav=document.createElement('nav');
+nav.className='oras-mirror-nav';
+nav.setAttribute('aria-label','Navegación de EL ESPEJO');
 const back=document.createElement('button');back.type='button';back.textContent='Atrás';
 const next=document.createElement('button');next.type='button';next.textContent='Adelante';
 nav.append(back,next);document.body.append(nav);
@@ -247,15 +290,26 @@ const sync=()=>{
   next.disabled=!list.length||i>=list.length-1;
 };
 const releasePause=()=>mirror.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowUp',bubbles:true}));
-const go=(dir)=>{
+const go=dir=>{
   const list=scenes();if(!list.length)return;let i=current();
-  if(dir<0){if(i<=0)return;releasePause();i--;mirror.scrollTo({top:list[i].offsetTop,left:0,behavior:'smooth'});setTimeout(sync,460);return}
-  const here=list[i];const gate=visibleGate(here);
+  if(dir<0){
+    if(i<=0)return;
+    releasePause();
+    i--;
+    mirror.scrollTo({top:list[i].offsetTop,left:0,behavior:'smooth'});
+    setTimeout(sync,460);
+    return;
+  }
+  const here=list[i];
+  const gate=visibleGate(here);
   if(gate){gate.click();setTimeout(sync,460);return}
   if(i>=list.length-1)return;
-  i++;mirror.scrollTo({top:list[i].offsetTop,left:0,behavior:'smooth'});setTimeout(sync,460);
+  i++;
+  mirror.scrollTo({top:list[i].offsetTop,left:0,behavior:'smooth'});
+  setTimeout(sync,460);
 };
-back.addEventListener('click',()=>go(-1));next.addEventListener('click',()=>go(1));
+back.addEventListener('click',()=>go(-1));
+next.addEventListener('click',()=>go(1));
 mirror.addEventListener('scroll',()=>requestAnimationFrame(sync),{passive:true});
 new MutationObserver(()=>requestAnimationFrame(sync)).observe(mirror,{subtree:true,attributes:true,attributeFilter:['hidden','class']});
 addEventListener('oras:mirror-start',()=>requestAnimationFrame(sync));
