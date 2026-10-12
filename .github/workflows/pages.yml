@@ -34,15 +34,18 @@ jobs:
           node --check narrative-universe.js
           node --check ceniciento/el-espejo.js
           node --check inventario-del-aire/oras-expansion.js
-          grep -Fq '20261012-mirror-mechanical-2' narrative-universe.js
+          grep -Fq '20261012-inventory-return-reset-1' narrative-universe.js
+          grep -Fq 'resetCycleAfterInventoryReturn' narrative-universe.js
+          grep -Fq "new URLSearchParams(location.search).get('from')==='inventario'" narrative-universe.js
           grep -Fq '20261012-mirror-mechanical-2' ceniciento/el-espejo.js
-          grep -Fq 'narrative-universe.js?v=20261012-mirror-mechanical-2' index.html
+          grep -Fq 'narrative-universe.js?v=20261012-inventory-return-reset-1' index.html
+          grep -Fq 'narrative-universe.js?v=20261012-inventory-return-reset-1' elegia-breve/index.html
           ! grep -Fq 'Relato breve digital inmersivo' index.html
           grep -Fq 'maintainSilence' ceniciento/el-espejo.js
           grep -Fq 'playMechanicalStep' ceniciento/el-espejo.js
           grep -Fq 'finalContinue.addEventListener' ceniciento/el-espejo.js
           grep -Fq 'solo-la-tarjeta-fondo.mp3' inventario-del-aire/index.html
-          echo 'PASS: fuente publicada = fuente vigente; Espejo sin cama sonora y con clac mecánico.'
+          echo 'PASS: fuente publicada = fuente vigente; retorno del Inventario reinicia el ciclo y el Espejo conserva su sonido mecánico.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
