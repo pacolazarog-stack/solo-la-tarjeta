@@ -3,15 +3,13 @@ name: ORAS fix epilogue Solo navigation
 on:
   push:
     paths:
-      - '.github/workflows/fix-epilogo-solo-navigation.yml'
-  workflow_dispatch:
+      - ".github/workflows/fix-epilogo-solo-navigation.yml"
 
 permissions:
   contents: write
 
 jobs:
   patch:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -77,7 +75,7 @@ jobs:
           ana = ana.replace(old_next, new_next, 1)
 
           marker = "[hidden]{display:none!important}\n"
-          insert = marker + "/* En el epílogo sobra la tarjeta flotante: 'Delante' continúa a SOLO LA TARJETA desde ANA KLAUDYA. */\nbody .ou-card{display:none!important}\n"
+          insert = marker + "/* En el epílogo sobra la tarjeta flotante: Delante continúa a SOLO LA TARJETA desde ANA KLAUDYA. */\nbody .ou-card{display:none!important}\n"
           if 'body .ou-card{display:none!important}' not in epi:
               if marker not in epi:
                   raise SystemExit('No se encontró el marcador CSS del epílogo')
@@ -86,18 +84,18 @@ jobs:
           ana_path.write_text(ana, encoding='utf-8')
           epi_path.write_text(epi, encoding='utf-8')
 
-          assert "Continuar a SOLO LA TARJETA" in ana
-          assert "?origen=tarjeta&auto=1" in ana
-          assert "body .ou-card{display:none!important}" in epi
+          assert 'Continuar a SOLO LA TARJETA' in ana
+          assert '?origen=tarjeta&auto=1' in ana
+          assert 'body .ou-card{display:none!important}' in epi
           PY
 
       - name: Commit correction
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add elegia-breve/index.html epilogo/index.html
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m 'ORAS: unifica salida del epílogo hacia Solo la Tarjeta'
+          git commit -m "ORAS: unifica salida del epílogo hacia Solo la Tarjeta"
           git push origin HEAD:main
