@@ -47,6 +47,19 @@ Macroprogresión sensorial:
 
 La experiencia audiovisual se organiza en dos regímenes separados por *El Espejo*: **presencia** (*Solo la Tarjeta · Ana Klaudya · Ceniciento*) y **desaparición** (*Inventario · Sombras · Ciudad · Habitación Número Cero*).
 
+### Implementación audiovisual R1 · LA EXPANSIÓN / EL CERO
+
+La experiencia pública de [`inventario-del-aire/`](./inventario-del-aire/) deja de ser un lector puramente textual. La primera implementación técnica incorpora, sin alterar una palabra del texto R4:
+
+- **Inventario:** casa inmóvil, ventana, luz lenta, polvo suspendido, reloj, mesa/silla, pasillo y jardín.
+- **Sombras:** ventana ferroviaria, movimiento lateral continuo, reflejos casi humanos, parpadeo y desaparición progresiva.
+- **Ciudad:** arquitectura, mapa, archivo, fuente y erosión visual gradual; el ambiente sonoro pierde capas antes de que la imagen empiece a borrarse.
+- **Habitación 0:** blanqueamiento progresivo, retirada acústica, aparición mínima del botón de nácar y desaparición antes del último cierre.
+- **Sonido:** ambiente procedural opcional activado por el lector; aire → hierro/tren → ciudad erosionada → resto casi inaudible.
+- **Compositor:** lectura directa del Markdown canónico sin fragmentar sus encabezados.
+
+La implementación visual y sonora permanece subordinada a la Biblia; el texto literario R4 continúa congelado.
+
 ## Documentación canónica vigente
 
 - [`ORAS_MASTER_CANONICO_R4.md`](./ORAS_MASTER_CANONICO_R4.md) — mapa maestro del corpus, fuentes canónicas, resultado de auditoría y reglas de congelación.
