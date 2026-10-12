@@ -32,15 +32,19 @@ jobs:
         run: |
           set -euo pipefail
           node --check narrative-universe.js
+          node --check oras-screen-transition.js
           node --check ceniciento/el-espejo.js
           node --check inventario-del-aire/oras-expansion.js
-          grep -Fq '20261012-epilogue-unread-forward-1' narrative-universe.js
+          grep -Fq '20261012-screen-fades-2' narrative-universe.js
+          grep -Fq 'ORASScreenTransition' oras-screen-transition.js
+          grep -Fq 'oras-screen-transition-veil' oras-screen-transition.js
           grep -Fq 'resetCycleAfterInventoryReturn' narrative-universe.js
           grep -Fq "new URLSearchParams(location.search).get('from')==='inventario'" narrative-universe.js
           grep -Fq '20261012-mirror-gates-4' ceniciento/el-espejo.js
           grep -Fq 'el-espejo.js?v=20261012-mirror-mechanical-3' ceniciento/index.html
-          grep -Fq 'narrative-universe.js?v=20261012-epilogue-unread-forward-1' index.html
-          grep -Fq 'narrative-universe.js?v=20261012-epilogue-unread-forward-1' elegia-breve/index.html
+          grep -Fq 'narrative-universe.js?v=20261012-screen-fades-2' index.html
+          grep -Fq 'narrative-universe.js?v=20261012-screen-fades-2' elegia-breve/index.html
+          grep -Fq '../oras-screen-transition.js?v=20261012-screen-fades-2' inventario-del-aire/index.html
           ! grep -Fq 'Relato breve digital inmersivo' index.html
           grep -Fq 'maintainSilence' ceniciento/el-espejo.js
           grep -Fq 'playMechanicalStep' ceniciento/el-espejo.js
@@ -48,7 +52,7 @@ jobs:
           grep -Fq 'finalContinue.addEventListener' ceniciento/el-espejo.js
           ! grep -Fq "mark.textContent='flag'" ceniciento/el-espejo.js
           grep -Fq 'solo-la-tarjeta-fondo.mp3' inventario-del-aire/index.html
-          echo 'PASS: fuente publicada = fuente vigente; EL ESPEJO termina con seguir hacia EL INVENTARIO DEL AIRE.'
+          echo 'PASS: transiciones de pantalla con fundido y descenso de audio; EL ESPEJO termina con seguir hacia EL INVENTARIO DEL AIRE.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
