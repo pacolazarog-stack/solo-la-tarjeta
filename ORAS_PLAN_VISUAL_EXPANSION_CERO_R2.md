@@ -68,7 +68,7 @@ Todavía no es memoria.
 
 ### Implementación
 
-**R2 activa:** `inventario-del-aire/assets-r2/i1-llegada.webp`.
+**R2 activa:** `inventario-del-aire/assets-r2/i1-llegada.avif`.
 
 ---
 
@@ -102,7 +102,7 @@ Ausencia personal.
 
 ### Implementación
 
-**R2 activa:** `inventario-del-aire/assets-r2/i2-recibidor.webp`.
+**R2 activa:** `inventario-del-aire/assets-r2/i2-recibidor.avif`.
 
 ---
 
@@ -131,7 +131,7 @@ Tiempo convertido en huella.
 
 ### Implementación
 
-**R2 activa:** `inventario-del-aire/assets-r2/i3-reloj.webp`.
+**R2 activa:** `inventario-del-aire/assets-r2/i3-reloj.avif`.
 
 ---
 
@@ -160,7 +160,7 @@ Gesto conservado.
 
 ### Implementación
 
-**R2 activa:** `inventario-del-aire/assets-r2/i4-silla.webp`.
+**R2 activa:** `inventario-del-aire/assets-r2/i4-silla.avif`.
 
 ---
 
@@ -185,7 +185,7 @@ Arquitectura de la memoria.
 
 ### Implementación
 
-**R2 activa:** `inventario-del-aire/assets-r2/i5-pasillo.webp`.
+**R2 activa:** `inventario-del-aire/assets-r2/i5-pasillo.avif`.
 
 ---
 
@@ -211,7 +211,7 @@ Persistencia material.
 
 ### Implementación
 
-**R2 activa:** `inventario-del-aire/assets-r2/i6-jardin.webp`.
+**R2 activa:** `inventario-del-aire/assets-r2/i6-jardin.avif`.
 
 ---
 
@@ -660,6 +660,6 @@ Mostrar que algo ocurrió.
 
 **Plan visual R2:** canónico y en implementación progresiva.
 
-**Inventario I.1–I.6:** implementación fotográfica R2 activa.
+**Inventario I.1–I.6:** implementación fotográfica R2 activa mediante derivados AVIF de entrega web.
 
 **Sombras · Ciudad · Habitación 0:** la implementación R1 basada en gráficos CSS se considera provisional hasta que los activos fotográficos/materiales R2 sustituyan sus fondos esquemáticos.
