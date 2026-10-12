@@ -324,6 +324,25 @@ Y su desplazamiento ontológico:
 
 ---
 
+# DOCUMENTOS TÉCNICOS VINCULADOS
+
+La aplicación de esta Biblia se concreta en dos documentos canónicos complementarios:
+
+- [`ORAS_PLAN_VISUAL_EXPANSION_CERO_R2.md`](./ORAS_PLAN_VISUAL_EXPANSION_CERO_R2.md) — plan de 25 pantallas y transición desde el realismo corporal al realismo erosionado.
+- [`ORAS_HOJA_TECNICA_MEZCLA_5_1_R1.md`](./ORAS_HOJA_TECNICA_MEZCLA_5_1_R1.md) — dramaturgia multicanal, mapa de canales, automatización espacial y reducción web.
+
+Los activos fotográficos necesarios para la siguiente implementación se especifican en [`inventario-del-aire/ASSETS_FOTOGRAFICOS_R2.md`](./inventario-del-aire/ASSETS_FOTOGRAFICOS_R2.md).
+
+Regla visual R2:
+
+> **El espectador jamás debe sentir que ORAS abandona la realidad para volverse abstracta. Debe sentir que la realidad permanece delante de él mientras se va quedando sin aquello que la sostenía.**
+
+Regla espacial 5.1:
+
+> **Los surround contienen permanencia.**
+
+---
+
 # ESTADO CANÓNICO
 
 Esta Biblia inaugura la capa audiovisual de ORAS como sistema independiente del texto literario.
@@ -331,6 +350,8 @@ Esta Biblia inaugura la capa audiovisual de ORAS como sistema independiente del 
 **Texto literario vigente:** R4, congelado.
 
 **Dirección audiovisual:** R1, abierta a implementación técnica siempre que respete estas leyes.
+
+**Plan visual:** R2 canónico; la implementación gráfica CSS R1 queda considerada maqueta funcional provisional hasta incorporar activos fotográficos propios.
 
 Las futuras decisiones visuales o sonoras deberán justificar su presencia por función, no por decoración.
 
