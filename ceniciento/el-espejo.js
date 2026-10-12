@@ -2,7 +2,8 @@
 'use strict';
 const ROOT='/solo-la-tarjeta/';
 const STORAGE='oras.universe.v2';
-const INVENTORY_URL=ROOT+'inventario-del-aire/?from=mirror';
+const VERSION='20261012-audio-mirror-1';
+const INVENTORY_URL=ROOT+'inventario-del-aire/?from=mirror&v='+VERSION;
 const scenes=[
 `No era la misma historia.`,
 `Parecían tres.`,
@@ -40,9 +41,10 @@ const scenes=[
 const pauseAt=new Set([14,15,17,26,30]);
 const mirror=document.getElementById('mirror');
 if(!mirror)return;
-let started=false,locked=false,lockedScene=null,finished=false;
-let lastTouchY=null;
+let started=false,locked=false,lockedScene=null,finished=false,finalReady=false;
+let lastTouchY=null,finalContinue=null;
 const sceneNodes=[];
+
 function addText(parent,text){
   text.split(/\n\n+/).forEach(block=>{
     const p=document.createElement('p');
@@ -74,6 +76,16 @@ function resetReadingCycleForInventory(){
 function enterInventory(){
   try{window.top.location.href=INVENTORY_URL}catch(_){location.href=INVENTORY_URL}
 }
+function finishMirror(){
+  if(finished||!finalReady)return;
+  finished=true;
+  resetReadingCycleForInventory();
+  if(finalContinue){finalContinue.disabled=true;finalContinue.textContent='…'}
+  mirror.style.transition='opacity 1.15s ease';
+  mirror.style.opacity='0';
+  setTimeout(enterInventory,1200);
+}
+
 scenes.forEach((text,index)=>{
   const number=index+1,scene=document.createElement('section');
   scene.className='mirror-scene';scene.tabIndex=-1;scene.setAttribute('role','group');
@@ -86,27 +98,29 @@ scenes.forEach((text,index)=>{
       if(!locked||lockedScene!==scene)return;
       releasePause();
       const following=sceneNodes[index+1];
-      if(following){
-        mirror.scrollTo({top:following.offsetTop,left:0,behavior:'smooth'});
-        setTimeout(()=>following.focus({preventScroll:true}),420);
-      }
+      if(following){mirror.scrollTo({top:following.offsetTop,left:0,behavior:'smooth'});setTimeout(()=>following.focus({preventScroll:true}),420)}
     });scene.append(next);
   }
-  if(number===32){const mark=document.createElement('p');mark.className='mirror-end-mark';mark.textContent='flag';copy.append(mark);const end=document.createElement('span');end.className='mirror-end-sentinel';end.setAttribute('aria-hidden','true');scene.append(end)}
+  if(number===32){
+    const mark=document.createElement('p');mark.className='mirror-end-mark';mark.textContent='flag';copy.append(mark);
+    const end=document.createElement('span');end.className='mirror-end-sentinel';end.setAttribute('aria-hidden','true');scene.append(end);
+    finalContinue=document.createElement('button');finalContinue.type='button';finalContinue.className='mirror-continue mirror-final-continue';finalContinue.textContent='seguir';finalContinue.setAttribute('aria-label','Seguir hacia EL INVENTARIO DEL AIRE');finalContinue.hidden=true;finalContinue.addEventListener('click',finishMirror);scene.append(finalContinue);
+  }
   mirror.append(scene);sceneNodes.push(scene);
 });
+
 const pauseObserver=new IntersectionObserver(entries=>{
   if(!document.body.classList.contains('mirror')||locked)return;
   for(const entry of entries){
     if(entry.isIntersecting&&entry.intersectionRatio>=.68&&entry.target.dataset.pause==='true'){
       locked=true;lockedScene=entry.target;
       const button=entry.target.querySelector('.mirror-continue');button.hidden=false;
-      mirror.scrollTop=entry.target.offsetTop;
-      break;
+      mirror.scrollTop=entry.target.offsetTop;break;
     }
   }
 },{root:mirror,threshold:[.68,.9]});
 sceneNodes.filter(scene=>scene.dataset.pause==='true').forEach(scene=>pauseObserver.observe(scene));
+
 mirror.addEventListener('wheel',event=>{
   if(!locked)return;
   if(event.deltaY<0){releasePause();return}
@@ -124,23 +138,30 @@ mirror.addEventListener('keydown',event=>{
   if(['ArrowUp','PageUp','Home'].includes(event.key)){releasePause();return}
   if(['ArrowDown','PageDown',' ','End'].includes(event.key)){event.preventDefault();event.stopPropagation()}
 });
+
 const endSentinel=mirror.querySelector('.mirror-end-sentinel');
 new IntersectionObserver(entries=>{
-  if(finished||!started||!entries.some(entry=>entry.isIntersecting))return;
-  finished=true;
-  resetReadingCycleForInventory();
-  setTimeout(()=>{
-    mirror.style.transition='opacity 1.6s ease';
-    mirror.style.opacity='0';
-  },2200);
-  setTimeout(enterInventory,3900);
+  if(!started||finished||!entries.some(entry=>entry.isIntersecting))return;
+  finalReady=true;
+  const finalScene=sceneNodes[sceneNodes.length-1];
+  finalScene.classList.add('mirror-finished');
+  if(finalContinue)finalContinue.hidden=false;
 },{root:mirror,threshold:.5}).observe(endSentinel);
+
+function silenceMirror(){
+  window.dispatchEvent(new CustomEvent('oras:mirror-silence'));
+  for(const audio of document.querySelectorAll('audio')){try{audio.pause();audio.muted=true;audio.volume=0}catch(_){}}
+}
 function start(){
-  if(started)return;started=true;finished=false;locked=false;lockedScene=null;lastTouchY=null;
-  mirror.style.transition='';mirror.style.opacity='';
-  mirror.hidden=false;document.body.classList.add('mirror');mirror.scrollTop=0;
-  sceneNodes[0].focus({preventScroll:true});
+  if(started)return;
+  started=true;finished=false;finalReady=false;locked=false;lockedScene=null;lastTouchY=null;
+  if(finalContinue){finalContinue.hidden=true;finalContinue.disabled=false;finalContinue.textContent='seguir'}
+  mirror.style.transition='';mirror.style.opacity='';mirror.hidden=false;document.body.classList.add('mirror');mirror.scrollTop=0;
+  silenceMirror();sceneNodes[0].focus({preventScroll:true});
 }
 window.addEventListener('oras:mirror-start',start);
-window.addEventListener('oras:mirror-reset',()=>{started=false;finished=false;locked=false;lockedScene=null;mirror.style.transition='';mirror.style.opacity='';mirror.hidden=true;document.body.classList.remove('mirror')});
+window.addEventListener('oras:mirror-reset',()=>{
+  started=false;finished=false;finalReady=false;locked=false;lockedScene=null;
+  mirror.style.transition='';mirror.style.opacity='';mirror.hidden=true;document.body.classList.remove('mirror');
+});
 })();
