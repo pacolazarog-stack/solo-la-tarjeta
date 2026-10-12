@@ -4,30 +4,42 @@ Este archivo define los activos necesarios para sustituir la implementación gr�
 
 No deben reutilizarse fotografías de ANA KLAUDYA ni de CENICIENTO para simular estos espacios. La continuidad entre bloques debe proceder de la **calidad material**, no de compartir imágenes.
 
+## Estado de implementación · 12/10/2026
+
+**EL INVENTARIO DEL AIRE · I.1–I.6: IMPLEMENTADO.**
+
+Las seis imágenes seleccionadas para la casa han sido incorporadas al repositorio como WebP optimizados para la edición web y conectadas al lector público mediante `oras-expansion-r2.css`.
+
+La construcción esquemática CSS R1 se conserva únicamente como respaldo histórico y técnico; ya no constituye la apariencia canónica de *El Inventario del Aire*.
+
+**Sombras · Ciudad · Habitación Número Cero:** continúan pendientes de la sustitución fotográfica R2 de sus activos provisionales.
+
 ## Convenciones
 
-Directorio previsto:
+Directorio vigente:
 
 `inventario-del-aire/assets-r2/`
 
-Formato preferente para fotografía estática: `webp` de alta calidad, con JPG como alternativa si la textura fotográfica lo exige.
+Formato para fotografía estática: `webp` optimizado para entrega web. Las fuentes visuales de trabajo conservan mayor resolución antes de la optimización de publicación.
 
 Cada pantalla debe disponer, cuando sea necesario, de dos o más estados del mismo encuadre para permitir erosión o cambio retrospectivo sin morphing evidente.
 
-## Inventario
+## Inventario · IMPLEMENTADO
 
-| Pantalla | Archivo principal previsto | Función |
-| --- | --- | --- |
-| I.1 | `i1-llegada.webp` | Casa real, exterior vivido |
-| I.2 | `i2-recibidor.webp` | Interior con profundidad |
-| I.3 | `i3-reloj.webp` | Primer plano de reloj detenido |
-| I.4 | `i4-silla.webp` | Mesa y silla desplazada |
-| I.5 | `i5-pasillo.webp` | Pasillo real y profundo |
-| I.6 | `i6-jardin.webp` | Vegetación real y persistente |
+| Pantalla | Archivo | Función | Estado |
+| --- | --- | --- | --- |
+| I.1 | `i1-llegada.webp` | Casa real, exterior vivido | **R2 activo** |
+| I.2 | `i2-recibidor.webp` | Interior con profundidad | **R2 activo** |
+| I.3 | `i3-reloj.webp` | Primer plano de reloj detenido | **R2 activo** |
+| I.4 | `i4-silla.webp` | Mesa y silla desplazada | **R2 activo** |
+| I.5 | `i5-pasillo.webp` | Pasillo real y profundo | **R2 activo** |
+| I.6 | `i6-jardin.webp` | Vegetación real y persistente | **R2 activo** |
 
-Activos auxiliares posibles: `i1-nubes.webm`, `i1-hojas.webm`, capas de polvo y máscaras de luz. Si se resuelven proceduralmente, deben mantener apariencia naturalista.
+La puesta en escena añade únicamente materia viva muy discreta —respiración óptica, luz y polvo—. La fotografía domina; el efecto nunca debe competir con ella.
 
-## Sombras
+Para capítulos del texto que no requieren una imagen autónoma, R2 reutiliza material de estas seis pantallas mediante cambios de luz y erosión: **Dormitorio → Pasillo atenuado; Inventario → Recibidor erosionado; Salida → Llegada desaturada**. No se inventan fotografías suplementarias para llenar huecos.
+
+## Sombras · PENDIENTE R2
 
 | Pantalla | Archivo / clip previsto | Función |
 | --- | --- | --- |
@@ -38,7 +50,7 @@ Activos auxiliares posibles: `i1-nubes.webm`, `i1-hojas.webm`, capas de polvo y 
 | S.5 | `s5-tunel.webm` | Oscuridad física y destellos |
 | S.6 | `s6-ultimo-recorrido.webm` | Paisaje crepuscular y despedida |
 
-## Ciudad
+## Ciudad · PENDIENTE R2
 
 | Pantalla | Activos previstos | Función |
 | --- | --- | --- |
@@ -51,7 +63,7 @@ Activos auxiliares posibles: `i1-nubes.webm`, `i1-hojas.webm`, capas de polvo y 
 
 La plaza C.1/C.2 debe conservar, en lo posible, exactamente encuadre, focal, luz y densidad humana. La desaparición del banco no debe parecer un truco gráfico.
 
-## Habitación Número Cero
+## Habitación Número Cero · PENDIENTE R2
 
 | Pantalla | Activos previstos | Función |
 | --- | --- | --- |
@@ -79,4 +91,4 @@ Se rechaza cualquier activo que:
 
 > **La imagen debe parecer encontrada en el mundo antes de parecer diseñada para ORAS.**
 
-Hasta que estos activos estén disponibles, la implementación CSS actual funciona únicamente como **maqueta funcional R1**, no como acabado visual definitivo.
+En *Inventario*, esa regla ya está implementada: la abstracción deja de ser un punto de partida y sólo podrá aparecer más adelante como resultado de la erosión del mundo material.
