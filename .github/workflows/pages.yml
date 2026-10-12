@@ -38,6 +38,11 @@ jobs:
           grep -Fq '20261012-screen-fades-2' narrative-universe.js
           grep -Fq 'ORASScreenTransition' oras-screen-transition.js
           grep -Fq 'oras-screen-transition-veil' oras-screen-transition.js
+          grep -Fq '#journeyNext' oras-screen-transition.js
+          grep -Fq '.oras-ceniciento-mirror-gate button' oras-screen-transition.js
+          grep -Fq '.oras-solo-mirror-gate button' oras-screen-transition.js
+          grep -Fq '.oras-mirror-nav button' oras-screen-transition.js
+          grep -Fq '.return-link' oras-screen-transition.js
           grep -Fq 'resetCycleAfterInventoryReturn' narrative-universe.js
           grep -Fq "new URLSearchParams(location.search).get('from')==='inventario'" narrative-universe.js
           grep -Fq '20261012-mirror-gates-4' ceniciento/el-espejo.js
@@ -52,7 +57,7 @@ jobs:
           grep -Fq 'finalContinue.addEventListener' ceniciento/el-espejo.js
           ! grep -Fq "mark.textContent='flag'" ceniciento/el-espejo.js
           grep -Fq 'solo-la-tarjeta-fondo.mp3' inventario-del-aire/index.html
-          echo 'PASS: transiciones de pantalla con fundido y descenso de audio; EL ESPEJO termina con seguir hacia EL INVENTARIO DEL AIRE.'
+          echo 'PASS: todos los cambios de pantalla por botón están cubiertos por fundido y descenso de audio; EL ESPEJO termina con seguir hacia EL INVENTARIO DEL AIRE.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
