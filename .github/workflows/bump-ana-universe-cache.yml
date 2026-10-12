@@ -42,6 +42,7 @@ jobs:
               if updated != s:
                   p.write_text(updated, encoding='utf-8')
 
+          # La invitación flotante al Epílogo solo debe existir mientras el Epílogo siga pendiente.
           ana = Path('elegia-breve/index.html')
           s = ana.read_text(encoding='utf-8')
           old = "          document.getElementById('epilogueInvitation').hidden=false;"
