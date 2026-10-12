@@ -8,7 +8,9 @@ No deben reutilizarse fotografías de ANA KLAUDYA ni de CENICIENTO para simular 
 
 **EL INVENTARIO DEL AIRE · I.1–I.6: IMPLEMENTADO.**
 
-Las seis imágenes seleccionadas para la casa han sido incorporadas al repositorio como WebP optimizados para la edición web y conectadas al lector público mediante `oras-expansion-r2.css`.
+Las seis imágenes seleccionadas para la casa han sido incorporadas al repositorio como derivados **AVIF** optimizados para la edición web y conectadas al lector público mediante `oras-expansion-r2.css`.
+
+Los PNG aportados para I.1–I.6 constituyen la fuente visual de referencia; los AVIF son exclusivamente derivados de entrega web. La reducción de peso no modifica la concepción ni la asignación canónica de cada imagen.
 
 La construcción esquemática CSS R1 se conserva únicamente como respaldo histórico y técnico; ya no constituye la apariencia canónica de *El Inventario del Aire*.
 
@@ -20,7 +22,7 @@ Directorio vigente:
 
 `inventario-del-aire/assets-r2/`
 
-Formato para fotografía estática: `webp` optimizado para entrega web. Las fuentes visuales de trabajo conservan mayor resolución antes de la optimización de publicación.
+Formato vigente para las seis fotografías de *Inventario*: `avif`, optimizado para entrega web. Las fuentes visuales de trabajo conservan mayor resolución antes de la optimización de publicación.
 
 Cada pantalla debe disponer, cuando sea necesario, de dos o más estados del mismo encuadre para permitir erosión o cambio retrospectivo sin morphing evidente.
 
@@ -28,12 +30,12 @@ Cada pantalla debe disponer, cuando sea necesario, de dos o más estados del mis
 
 | Pantalla | Archivo | Función | Estado |
 | --- | --- | --- | --- |
-| I.1 | `i1-llegada.webp` | Casa real, exterior vivido | **R2 activo** |
-| I.2 | `i2-recibidor.webp` | Interior con profundidad | **R2 activo** |
-| I.3 | `i3-reloj.webp` | Primer plano de reloj detenido | **R2 activo** |
-| I.4 | `i4-silla.webp` | Mesa y silla desplazada | **R2 activo** |
-| I.5 | `i5-pasillo.webp` | Pasillo real y profundo | **R2 activo** |
-| I.6 | `i6-jardin.webp` | Vegetación real y persistente | **R2 activo** |
+| I.1 | `i1-llegada.avif` | Casa real, exterior vivido | **R2 activo** |
+| I.2 | `i2-recibidor.avif` | Interior con profundidad | **R2 activo** |
+| I.3 | `i3-reloj.avif` | Primer plano de reloj detenido | **R2 activo** |
+| I.4 | `i4-silla.avif` | Mesa y silla desplazada | **R2 activo** |
+| I.5 | `i5-pasillo.avif` | Pasillo real y profundo | **R2 activo** |
+| I.6 | `i6-jardin.avif` | Vegetación real y persistente | **R2 activo** |
 
 La puesta en escena añade únicamente materia viva muy discreta —respiración óptica, luz y polvo—. La fotografía domina; el efecto nunca debe competir con ella.
 
@@ -49,6 +51,8 @@ Para capítulos del texto que no requieren una imagen autónoma, R2 reutiliza ma
 | S.4 | `s4-reflejo.webp` | Reflejo ambiguo, nunca fantasma gráfico |
 | S.5 | `s5-tunel.webm` | Oscuridad física y destellos |
 | S.6 | `s6-ultimo-recorrido.webm` | Paisaje crepuscular y despedida |
+
+Los formatos de los bloques pendientes son orientativos y podrán optimizarse en la fase de entrega sin alterar su función plástica.
 
 ## Ciudad · PENDIENTE R2
 
