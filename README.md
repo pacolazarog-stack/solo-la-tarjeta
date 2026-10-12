@@ -31,11 +31,28 @@ R4 es una **edición de comprobación y congelación**. El texto literario perma
 
 > **Cuando ya no queda nadie que recuerde, todavía puede quedar algo que contar.**
 
+## Capa audiovisual canónica
+
+La literatura R4 permanece congelada. La dirección audiovisual se desarrolla como una capa autónoma y no reescribe el corpus.
+
+- [`ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md`](./ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md) — Biblia de Dirección Audiovisual R1: materia, color, movimiento, sonido, sustracción y leyes de puesta en escena.
+
+Principio maestro:
+
+> **En ORAS, la desaparición sonora precede a la desaparición visual.**
+
+Macroprogresión sensorial:
+
+> **ámbar humano → gris memoria → blanco olvido → nácar relato**
+
+La experiencia audiovisual se organiza en dos regímenes separados por *El Espejo*: **presencia** (*Solo la Tarjeta · Ana Klaudya · Ceniciento*) y **desaparición** (*Inventario · Sombras · Ciudad · Habitación Número Cero*).
+
 ## Documentación canónica vigente
 
 - [`ORAS_MASTER_CANONICO_R4.md`](./ORAS_MASTER_CANONICO_R4.md) — mapa maestro del corpus, fuentes canónicas, resultado de auditoría y reglas de congelación.
 - [`ORAS_R4_AUDITORIA_FINAL.md`](./ORAS_R4_AUDITORIA_FINAL.md) — comprobación final de Ceniciento, léxico, explicaciones, El Espejo, aperturas/cierres, ouroboros y motivos mayores.
 - [`MATRIZ_CRITICA_CANONICA_ORAS_R4.md`](./MATRIZ_CRITICA_CANONICA_ORAS_R4.md) — matriz crítica canónica, congelada en contenido conceptual.
+- [`ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md`](./ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md) — capa audiovisual canónica R1; no modifica el texto literario R4.
 - [`EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md`](./EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md) — ciclo de la expansión y *La Habitación Número Cero*; texto literario vigente.
 - [`ana-klaudya/TEXTO_CANONICO_ES.md`](./ana-klaudya/TEXTO_CANONICO_ES.md) — texto español canónico de *Ana Klaudya*.
 - [`ceniciento/texto.md`](./ceniciento/texto.md) — texto canónico de *Ceniciento*; auditoría de revelación superada y texto congelado.
@@ -48,6 +65,7 @@ R4 es una **edición de comprobación y congelación**. El texto literario perma
 - **LA HABITACIÓN NÚMERO CERO:** sólo corrección ortográfica, tipográfica o de puntuación; no modificación narrativa.
 - **MATRIZ CRÍTICA:** congelada en contenido conceptual.
 - **RESTO DE ORAS:** cualquier cambio posterior deberá demostrar una ganancia inequívoca frente a R4.
+- **DIRECCIÓN AUDIOVISUAL:** R1 abierta a implementación técnica, subordinada a las leyes de la Biblia audiovisual.
 
 La última función de la narración en ORAS no es recordar: **es afirmar que ocurrió**.
 
