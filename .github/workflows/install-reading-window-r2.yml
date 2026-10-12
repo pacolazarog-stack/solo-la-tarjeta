@@ -56,16 +56,6 @@ jobs:
           if 'elegia-breve/index.html' not in installed:
             raise RuntimeError('La ventana R2 debe quedar instalada en ANA KLAUDYA')
           print('Instalada en:', ', '.join(installed))
-
-          pages=Path('.github/workflows/pages.yml')
-          s=pages.read_text(encoding='utf-8')
-          if 'node --check oras-reading-window-r2.js' not in s:
-            s=s.replace('          node --check narrative-universe.js\n','          node --check narrative-universe.js\n          node --check oras-reading-window-r2.js\n')
-          check="          grep -Fq 'oras-reading-window-r2.js?v=20261012-reading-window-r2' elegia-breve/index.html\n          grep -Fq 'ANA_PARTS' oras-reading-window-r2.js\n          grep -Fq 'Epílogo · A fuego lento · Flores' oras-reading-window-r2.js\n"
-          if "oras-reading-window-r2.js?v=20261012-reading-window-r2" not in s:
-            anchor="          grep -Fq 'narrative-universe.js?v=20261012-inventory-return-reset-1' elegia-breve/index.html\n"
-            s=s.replace(anchor,anchor+check)
-          pages.write_text(s,encoding='utf-8')
           PY
 
       - name: Commit installed reading window
@@ -74,8 +64,7 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -u
-          git add .github/workflows/pages.yml
+          git add index.html elegia-breve/index.html estrella/index.html ojos/index.html sonrisa/index.html epilogo/index.html ceniciento/index.html
           if git diff --cached --quiet; then exit 0; fi
           git commit -m 'ORAS: activa ventana completa de lecturas'
           git pull --rebase origin main
