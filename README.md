@@ -43,11 +43,22 @@ R4 es una **edición de comprobación y congelación**. El texto literario perma
 
 La literatura R4 permanece congelada. La dirección audiovisual se desarrolla como una capa autónoma y no reescribe el corpus.
 
-- [`ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md`](./ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md) — Biblia de Dirección Audiovisual R1: materia, color, movimiento, sonido, sustracción y leyes de puesta en escena.
+- [`ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md`](./ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md) — Biblia de Dirección Audiovisual.
+- [`ORAS_PLAN_VISUAL_EXPANSION_CERO_R2.md`](./ORAS_PLAN_VISUAL_EXPANSION_CERO_R2.md) — plan visual fotográfico de 25 pantallas para LA EXPANSIÓN y EL CERO.
+- [`ORAS_HOJA_TECNICA_MEZCLA_5_1_R1.md`](./ORAS_HOJA_TECNICA_MEZCLA_5_1_R1.md) — hoja de mezcla 5.1: presente frontal, persistencia trasera, conciencia central y materialidad LFE.
+- [`inventario-del-aire/ASSETS_FOTOGRAFICOS_R2.md`](./inventario-del-aire/ASSETS_FOTOGRAFICOS_R2.md) — manifiesto de activos fotográficos requeridos por la implementación R2.
 
 Principio maestro:
 
 > **En ORAS, la desaparición sonora precede a la desaparición visual.**
+
+Principio visual R2:
+
+> **El espectador jamás debe sentir que ORAS abandona la realidad para volverse abstracta. Debe sentir que la realidad permanece delante de él mientras se va quedando sin aquello que la sostenía.**
+
+Principio espacial:
+
+> **Los surround contienen permanencia.**
 
 Macroprogresión sensorial:
 
@@ -55,25 +66,29 @@ Macroprogresión sensorial:
 
 La experiencia audiovisual se organiza en dos regímenes separados por *El Espejo*: **presencia** (*Solo la Tarjeta · Ana Klaudya · Ceniciento*) y **desaparición** (*Inventario · Sombras · Ciudad · Habitación Número Cero*).
 
-### Implementación audiovisual R1 · LA EXPANSIÓN / EL CERO
+La diferencia visual no debe ser riqueza frente a abstracción, sino **realismo íntimo/corporal** frente a **realismo erosionado/espacial**.
 
-La experiencia pública de [`inventario-del-aire/`](./inventario-del-aire/) deja de ser un lector puramente textual. La primera implementación técnica incorpora, sin alterar una palabra del texto R4:
+### Estado de implementación · LA EXPANSIÓN / EL CERO
 
-- **Inventario:** casa inmóvil, ventana, luz lenta, polvo suspendido, reloj, mesa/silla, pasillo y jardín.
-- **Sombras:** ventana ferroviaria, movimiento lateral continuo, reflejos casi humanos, parpadeo y desaparición progresiva.
-- **Ciudad:** arquitectura, mapa, archivo, fuente y erosión visual gradual; el ambiente sonoro pierde capas antes de que la imagen empiece a borrarse.
-- **Habitación 0:** blanqueamiento progresivo, retirada acústica, aparición mínima del botón de nácar y desaparición antes del último cierre.
-- **Sonido:** ambiente procedural opcional activado por el lector; aire → hierro/tren → ciudad erosionada → resto casi inaudible.
-- **Compositor:** lectura directa del Markdown canónico sin fragmentar sus encabezados.
+La experiencia pública de [`inventario-del-aire/`](./inventario-del-aire/) dispone actualmente de una **maqueta funcional audiovisual R1** construida con CSS y sonido procedural. Sirve para validar transiciones, capítulos, erosión, botón y arquitectura sonora, pero su plástica gráfica/esquemática se considera provisional.
 
-La implementación visual y sonora permanece subordinada a la Biblia; el texto literario R4 continúa congelado.
+La siguiente implementación R2 sustituirá esas construcciones por activos fotográficos propios:
+
+- **Inventario:** casa real, recibidor, reloj, silla, pasillo y jardín;
+- **Sombras:** andén, vagón, ventanilla, reflejos y túneles reales;
+- **Ciudad:** plaza, archivo, fotografías, museo y estados sucesivos de desaparición;
+- **Habitación 0:** museo real → sala real → blanqueamiento → macro del botón → luz residual.
+
+La abstracción será resultado de la erosión, no el punto de partida.
 
 ## Documentación canónica vigente
 
 - [`ORAS_MASTER_CANONICO_R4.md`](./ORAS_MASTER_CANONICO_R4.md) — mapa maestro del corpus, fuentes canónicas, resultado de auditoría y reglas de congelación.
 - [`ORAS_R4_AUDITORIA_FINAL.md`](./ORAS_R4_AUDITORIA_FINAL.md) — comprobación final de Ceniciento, léxico, explicaciones, El Espejo, aperturas/cierres, ouroboros y motivos mayores.
 - [`MATRIZ_CRITICA_CANONICA_ORAS_R4.md`](./MATRIZ_CRITICA_CANONICA_ORAS_R4.md) — matriz crítica canónica, congelada en contenido conceptual.
-- [`ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md`](./ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md) — capa audiovisual canónica R1; no modifica el texto literario R4.
+- [`ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md`](./ORAS_BIBLIA_DIRECCION_AUDIOVISUAL_R1.md) — capa audiovisual canónica.
+- [`ORAS_PLAN_VISUAL_EXPANSION_CERO_R2.md`](./ORAS_PLAN_VISUAL_EXPANSION_CERO_R2.md) — plan visual fotográfico R2.
+- [`ORAS_HOJA_TECNICA_MEZCLA_5_1_R1.md`](./ORAS_HOJA_TECNICA_MEZCLA_5_1_R1.md) — especificación del máster multicanal y traducción web estéreo/binaural.
 - [`ORAS_DATOS_PRESENTACION_R1.md`](./ORAS_DATOS_PRESENTACION_R1.md) — duración oficial de referencia y tiempos orientativos por pieza.
 - [`EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md`](./EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md) — ciclo de la expansión y *La Habitación Número Cero*; texto literario vigente.
 - [`ana-klaudya/TEXTO_CANONICO_ES.md`](./ana-klaudya/TEXTO_CANONICO_ES.md) — texto español canónico de *Ana Klaudya*.
@@ -87,7 +102,7 @@ La implementación visual y sonora permanece subordinada a la Biblia; el texto l
 - **LA HABITACIÓN NÚMERO CERO:** sólo corrección ortográfica, tipográfica o de puntuación; no modificación narrativa.
 - **MATRIZ CRÍTICA:** congelada en contenido conceptual.
 - **RESTO DE ORAS:** cualquier cambio posterior deberá demostrar una ganancia inequívoca frente a R4.
-- **DIRECCIÓN AUDIOVISUAL:** R1 abierta a implementación técnica, subordinada a las leyes de la Biblia audiovisual.
+- **DIRECCIÓN AUDIOVISUAL:** Biblia R1; Plan Visual R2 canónico y abierto a implementación técnica.
 
 La última función de la narración en ORAS no es recordar: **es afirmar que ocurrió**.
 
