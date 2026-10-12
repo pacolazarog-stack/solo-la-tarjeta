@@ -1533,7 +1533,12 @@ html.poem-route-loading::after{content:"";position:fixed;inset:0;z-index:155;bac
           finalCalorTimer=null;
           finalHeat.classList.add('show-calor');
           intensifyWarmWithCalor();
-          document.getElementById('epilogueInvitation').hidden=false;
+          let epilogueAlreadyRead=false;
+try{
+  const saved=JSON.parse(localStorage.getItem('oras.universe.v2')||'{}');
+  epilogueAlreadyRead=saved?.anaParts?.epilogo===true;
+}catch(_){}
+document.getElementById('epilogueInvitation').hidden=epilogueAlreadyRead;
         },4500);
       };
 
