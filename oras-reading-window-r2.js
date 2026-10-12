@@ -2,7 +2,7 @@
 'use strict';
 
 const STORAGE='oras.universe.v2';
-const VERSION='20261012-reading-window-r5-repeat-final-gate';
+const VERSION='20261012-reading-window-r6-repeat-final-gate';
 const BASE='/solo-la-tarjeta';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
@@ -42,6 +42,9 @@ function completeAnaPart(key){
   writeState({anaParts:parts,anaComplete:anaComplete(parts)});
   render(true);
 }
+function mirrorReady(state=readState()){
+  return (state.anaComplete===true||anaComplete(state.anaParts))&&state.soloComplete===true&&state.cenicientoComplete===true&&state.mirrorReadComplete!==true;
+}
 
 const style=document.createElement('style');
 style.id='oras-reading-window-r2-style';
@@ -69,6 +72,9 @@ style.textContent=`
 .ou-reading-window-r2 .ou-rw-mark{font-family:Georgia,"Times New Roman",serif;color:#d9be72}
 .ou-reading-window-r2 .ou-rw-piece[data-direct-link="false"]{cursor:default}
 body.mirror .ou-reading-window-r2{display:none!important}
+body[data-ou-repeat-ana-final-gate="mirror"] .portrait-finale,
+body[data-ou-repeat-ana-final-gate="mirror"].portrait-revealed .portrait-finale{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+body[data-ou-repeat-ana-final-gate="mirror"] .portrait-question{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
 @media(max-width:700px){
   .ou-reading-window-r2{left:max(9px,env(safe-area-inset-left));bottom:max(10px,env(safe-area-inset-bottom))}
   .ou-reading-window-r2>summary{font-size:11px;min-height:29px;padding:5px 9px}
@@ -154,13 +160,39 @@ function setupTracking(){
   addEventListener('oras:ana-part-complete',event=>completeAnaPart(event.detail?.part));
 }
 
+function showRepeatMirrorGate(){
+  const body=document.body;
+  if(!body||!mirrorReady())return false;
+  const portrait=document.getElementById('portraitFinale');
+  const nav=document.getElementById('anaNavigation');
+  const journeyNav=document.getElementById('journeyNav');
+  const previous=document.getElementById('journeyPrevious');
+  const next=document.getElementById('journeyNext');
+  if(!journeyNav||!previous||!next)return false;
+
+  body.dataset.ouRepeatAnaFinalGate='mirror';
+  body.classList.remove('portrait-revealed','ana-navigation-ready');
+  if(portrait)portrait.setAttribute('aria-hidden','true');
+  if(nav)nav.hidden=true;
+  journeyNav.hidden=false;
+  journeyNav.setAttribute('aria-label','Final de ANA KLAUDYA');
+  previous.disabled=false;next.disabled=false;
+  previous.textContent='Atrás';next.textContent='Adelante';
+  previous.title='Volver al epílogo de ANA KLAUDYA';
+  next.title='Continuar hacia EL ESPEJO';
+  previous.setAttribute('aria-label','Atrás: volver al epílogo de ANA KLAUDYA');
+  next.setAttribute('aria-label','Adelante: continuar hacia EL ESPEJO');
+  return true;
+}
+
 /*
   Una vez completadas las ocho piezas de ANA KLAUDYA, una nueva entrada a
   /elegia-breve/ recupera el final. Si SOLO LA TARJETA y CENICIENTO ya están
   completos, ese final no salta directamente a la fotografía: primero aparece
   la botonera Atrás / Adelante. Atrás vuelve al epílogo de Ana; Adelante abre
-  EL ESPEJO. Si el recorrido todavía necesita CENICIENTO, se conserva el
-  fundido de la fotografía y el interrogante como puerta narrativa.
+  EL ESPEJO. La misma puerta se instala cuando el lector vuelve a leer Ana sin
+  recargar la página. Si CENICIENTO aún está pendiente se conserva el fundido
+  de la fotografía y el interrogante como puerta narrativa.
 */
 function resumeCompletedAnaAtFinal(){
   const path=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'');
@@ -200,24 +232,7 @@ function resumeCompletedAnaAtFinal(){
   if(nav)nav.hidden=true;
   body.classList.remove('ana-navigation-ready','portrait-revealed');
 
-  const mirrorReady=state.soloComplete===true&&state.cenicientoComplete===true&&state.mirrorReadComplete!==true;
-  const journeyNav=document.getElementById('journeyNav');
-  const previous=document.getElementById('journeyPrevious');
-  const next=document.getElementById('journeyNext');
-
-  if(mirrorReady&&journeyNav&&previous&&next){
-    body.dataset.ouRepeatAnaFinalGate='mirror';
-    portrait.setAttribute('aria-hidden','true');
-    journeyNav.hidden=false;
-    journeyNav.setAttribute('aria-label','Final de ANA KLAUDYA');
-    previous.disabled=false;next.disabled=false;
-    previous.textContent='Atrás';next.textContent='Adelante';
-    previous.title='Volver al epílogo de ANA KLAUDYA';
-    next.title='Continuar hacia EL ESPEJO';
-    previous.setAttribute('aria-label','Atrás: volver al epílogo de ANA KLAUDYA');
-    next.setAttribute('aria-label','Adelante: continuar hacia EL ESPEJO');
-    return;
-  }
+  if(mirrorReady(state)&&showRepeatMirrorGate())return;
 
   portrait.setAttribute('aria-hidden','false');
   const beginFade=()=>{
@@ -246,6 +261,34 @@ function resumeCompletedAnaAtFinal(){
   if(photo.complete&&photo.naturalWidth)beginFade();
   else photo.addEventListener('load',beginFade,{once:true});
 }
+
+/* Detecta una relectura real dentro de la misma página. La primera lectura no
+   se altera: sólo cuando el final ya se había mostrado y vuelve a resetearse,
+   se arma la salida hacia EL ESPEJO para el siguiente final. */
+(function watchRepeatedAnaReading(){
+  const path=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'');
+  if(!path.endsWith('/elegia-breve'))return;
+  const finalHeat=document.getElementById('finalHeat');
+  if(!finalHeat)return;
+  let wasShown=finalHeat.classList.contains('is-shown');
+  const watchFinal=()=>{
+    const shown=finalHeat.classList.contains('is-shown');
+    if(wasShown&&!shown&&mirrorReady())document.body.dataset.ouAnaRereadArmed='mirror';
+    wasShown=shown;
+    if(document.body.dataset.ouAnaRereadArmed==='mirror'&&shown&&finalHeat.classList.contains('show-calor')){
+      delete document.body.dataset.ouAnaRereadArmed;
+      document.body.dataset.ouCompletedAnaFinal='true';
+      showRepeatMirrorGate();
+    }
+  };
+  new MutationObserver(watchFinal).observe(finalHeat,{attributes:true,attributeFilter:['class']});
+  new MutationObserver(()=>{
+    if(document.body.dataset.ouRepeatAnaFinalGate==='mirror'&&document.body.classList.contains('portrait-revealed')){
+      document.body.classList.remove('portrait-revealed','ana-navigation-ready');
+      document.getElementById('portraitFinale')?.setAttribute('aria-hidden','true');
+    }
+  }).observe(document.body,{attributes:true,attributeFilter:['class']});
+})();
 
 document.addEventListener('click',event=>{
   const body=document.body;
