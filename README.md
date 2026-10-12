@@ -15,9 +15,9 @@ Proyecto literario y multimedia.
 
 ## Documentación canónica
 
-- [`ORAS_MASTER_CANONICO_R3.md`](./ORAS_MASTER_CANONICO_R3.md) — corpus textual completo R3.
+- [`ORAS_MASTER_CANONICO_R3.md`](./ORAS_MASTER_CANONICO_R3.md) — mapa maestro del corpus, estado R3 y fuentes canónicas.
 - [`MATRIZ_CRITICA_CANONICA_ORAS_R3.md`](./MATRIZ_CRITICA_CANONICA_ORAS_R3.md) — matriz crítica canónica definitiva.
-- [`EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md`](./EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md) — ciclo de la expansión y Habitación Número Cero.
+- [`EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md`](./EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md) — ciclo de la expansión y Habitación Número Cero, actualizado a R3.
 - [`ana-klaudya/TEXTO_CANONICO_ES.md`](./ana-klaudya/TEXTO_CANONICO_ES.md) — texto español canónico de *Ana Klaudya*.
 - [`ceniciento/texto.md`](./ceniciento/texto.md) — texto canónico R3 de *Ceniciento*.
 
