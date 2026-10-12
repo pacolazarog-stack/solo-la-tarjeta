@@ -1,0 +1,69 @@
+name: ORAS R4 HD assets
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/oras-r4-assets.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  import-assets:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download approved R4 photographic assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p inventario-del-aire/assets-r4/house inventario-del-aire/assets-r4/train inventario-del-aire/assets-r4/city inventario-del-aire/assets-r4/zero
+          get(){ curl -L --fail --retry 3 --retry-delay 2 "$1" -o "$2"; }
+
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/cce3fc0f-220a-4735-99e8-1b6310180c60.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiODQ1M2UyZjdjN2QxNDkwYSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTg5MTcwM30.E2kQ2i3mQ5r4zM37Edn6n6SfBSFutJBzS76lIxot_r0' inventario-del-aire/assets-r4/house/01-recibidor.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/ddf855b7-7679-4ca9-8de4-5828ce9e70c1.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiOThkNmUzOTRiM2EzOTM2ZiIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTg5MDE5Nn0.WJzVhHSS5kYfimPRZf-yg9QxENxxrxOVjAk8BB9g8XA' inventario-del-aire/assets-r4/house/02-reloj.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/71db0be9-e801-424f-bd2f-bbb0ac39ad1d.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiOTI1MWZjNjExMDRlNDVlMyIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTg5OTM2MX0.NPGL36nqi3YyTjVqfGKDh--YBrHs9xcjqnk0z17kp44' inventario-del-aire/assets-r4/house/03-cocina.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/e289d765-33a6-4df9-b35f-4494f60b6344.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiY2NhY2RiODYxNDc5YzdiNSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTkzNDg1NH0.MX52EA3HFSADt5UO0JE4B4i0yv0zTc_KTcJl2KHSuPc' inventario-del-aire/assets-r4/house/04-pasillo.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/177379bc-17b0-44ba-a7b0-d4eafa03df08.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiZjY0YTRkZmU4NmFmNmUyNSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTkyMDc2Nn0.Y3eil6XTSJdI_fSSdAivx2uh0a5KWMzeFI2Gi2l-B34' inventario-del-aire/assets-r4/house/05-dormitorio.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/c420beb2-7506-46f0-b616-1d314b74c68c.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiYTBkNWQwN2JiNzkwMzNjOSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTk0NDY5OX0.puaaNGq5uF_g9Y_DDMRMkXoqT2oNDudnKeCAoFhK3Uk' inventario-del-aire/assets-r4/house/06-jardin.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/d0af6bf1-4942-4e86-86cc-1967262c65b6.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiN2IxOWM3ZjhmOWVjOTAwYSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTkxNzU2MH0.dSYYK026HJ0FMTS7AX9_enxIVllgMm1Kswqmn2Axn20' inventario-del-aire/assets-r4/house/07-inventario.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/b638a5df-ab95-495d-bba7-5f03082bde69.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiZjBlMzlkYTk1MjFlZmUxOSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTkzODQ3M30.7LDgcbBzdMyrOvw_6sFIgQ41K95qJ9wAqAtJd_Cg10U' inventario-del-aire/assets-r4/house/08-salida.webp
+
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/084184c9-69ce-4e4f-9ae4-bcf1021c9589.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiMDA1NzJiMmZlMmFkZDA1YyIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTk0NjI4N30.NgMrlvMM9ZDF-ubfIMrx9NwWpqNIEoCM1SYc75xkd4I' inventario-del-aire/assets-r4/train/01-estacion.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/8c23c231-444f-4d1a-ac4f-a6435d56e5ee.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNWJlYmUxMTMwODMxNGU5OCIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTg4MTIzNX0.NbwzW7NzOlRoN9R5-0_p6MRNR0mEfBs93RXjWLowN-w' inventario-del-aire/assets-r4/train/02-revisor.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/4fb62893-c29a-46c3-8707-31b355783a88.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiYTY0N2NiNDc5NTk3NmI4MiIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTg4OTM1MX0.Tus7Ok5AjtTTVzcpytLiJAC74lDXK8bmBZ-JHkMMemI' inventario-del-aire/assets-r4/train/03-sombras.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/1a7b4961-a4bd-4c77-b23b-d8c492e55459.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNzI5MWY4MDFkZmU3NDc5MCIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTg3NzYzM30.r8sdQVaW-n0LcEt7VgnTKdVxZMxDA_xTnYHzGAqxa0s' inventario-del-aire/assets-r4/train/04-fila-siete.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/59f92e95-f759-4c1e-91c6-326031b716ea.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiOWE0MzU1ZmM4ODZiMDhlMiIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTkyODE4OH0.tRtRaqHUQGCq2uyNWulBP_LM_YU6ckVPMTewe65a8i4' inventario-del-aire/assets-r4/train/05-conversacion.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/c58e6149-e043-4764-b116-e625c841deb2.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNWJjYjI3YjEzZTRkYWNiNyIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTg5NjYyNX0.fZSQXaLvnUr9n_Aowl09W1Mapw844muNyFM8bmOsGBM' inventario-del-aire/assets-r4/train/06-inventario-ausencias-moviles.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/ffd919c2-0244-468d-9613-3e2947ccd587.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiMGIwNzMwZjEwMTRhMjk2ZCIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTg4Nzg1N30.i7h8FcR3gzk4DYJ1EXp-ZjmYTeJY2GI60oSflCcocXs' inventario-del-aire/assets-r4/train/07-taller.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/2c3c1284-7df7-4e55-b55f-a177dc6a2770.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNjM3MDg4ZTY1NDFmNTg4MSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTk1Nzg2Mn0.RkLwFIuSCoqOxbcxHSUY0QOnGCAPvwNfXXBbB5q1K_c' inventario-del-aire/assets-r4/train/08-oficio.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/4669f789-ec92-4ff9-8985-f0d0e1ef7c4c.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiZTUzNThhMjlkZmM4MzFjOCIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTkzNjA0MX0.t5GFjfn9odSr8Zsztuz4h87eyj1pVbRluUyLUjJWB7Y' inventario-del-aire/assets-r4/train/09-ultimo-recorrido.webp
+
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/e4b69e27-91c3-44ff-b0ec-b81ecf9ee0b0.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNGRmYjdhY2MwYjcxZTZkOSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTkwNzQwNH0.OdDGpVlF3SgvcJJ8NrEX6cbdHcqsSuV1j4k4I5iU8Ms' inventario-del-aire/assets-r4/city/01-plaza.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/6495c065-15a1-471c-b844-369133ac82eb.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiM2VjMDYzNGMwMWZkNDY5NiIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTk0NzcyNH0.VpSRdct_YlgGchp0oofzcZFHZl2xWb2NspKMfUljZGQ' inventario-del-aire/assets-r4/city/02-archivero.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/078fea77-06ac-47a4-a8e6-9eb130f25ca8.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiZGM1ZmRiYWFkYjFkZTFiZSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTg5MDQ3NH0.2oSkOsPCzLQlOXKNU9oT-5p4Al9eRMF6fgFTOdg1hPU' inventario-del-aire/assets-r4/city/03-fuente.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/e92f0621-414e-4ae0-8918-b822bcb3b367.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiZDE3NTE5ZDBkOTk3MmJmYyIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTkwMTI2NH0.thATi2nd8726dN0o1J8_qkNDORvGUteOTc3MMOUyasM' inventario-del-aire/assets-r4/city/04-resistentes.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/f61445cb-e812-4bfb-8b2a-f849dae81542.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNTY3MGNiMjMzNDJjYzFkNiIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTk0NDYxMX0.Bp3ZwtXxXqJs7pHWAtVnXMspWbW1nQK42G7yN9RfASU' inventario-del-aire/assets-r4/city/05-mapa-imposible.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/226780c5-8ded-4bcb-8bf6-2ef656564970.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNWQ3NDNmZGY1NTU1MWQ5OCIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTkzNDgxNX0.08-lTJ4eEg94FqEIjZkdpQCs7edvlrlbHsK-ume88Hw' inventario-del-aire/assets-r4/city/06-teoria.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/73b0d09d-063b-4eb8-924d-e600a92d0184.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiNjAyZTBmNjExNDQwMjk3YSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTk2MDkyOX0.RDLB673I5f194V9LQglQNJWXj2_oeL0nbMfyt9RtxQ8' inventario-del-aire/assets-r4/city/07-museo.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/30e1a4f0-951e-4516-aba0-6b4884d02f52.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiMDhhODNjNWUzZDYyZDA0MyIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTk0MDgzMH0.2BYsmIDPilOP3AfTHiafeVfZEaCQy-yyFLdXl0ICkYE' inventario-del-aire/assets-r4/city/08-visitante.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/936fd8b5-63ea-4165-911a-ff95018c97c4.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiYjEyZGEzZjhlOTMzYjQ4NSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTkwMjMyOH0.1bYXVpCj5ECzdFiIXDfuVQjSkBLWHW9-n8l8sbqdga0' inventario-del-aire/assets-r4/city/09-invierno.webp
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/6d2d39ca-0f22-4ceb-b520-bdbc28bbdb3d.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiODZlN2Q4NmRmZTUzOWMzYyIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTk0Mjc2NX0.wKzrbTKex3CAFqnLvmqXgQPXIPf7A8t4OuNaQQfKtjE' inventario-del-aire/assets-r4/city/10-ultima-sala.webp
+
+          get 'https://d2jqrm6oza8nb6.cloudfront.net/datasets/cb10ebcc-3987-41bf-85ee-91761d525708.webp?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiMWIyODEzYjVlNzM4YjU2MSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5MTk2MDExN30.YBAGw-hIt_gincDaBU657sSo5eIHgCOzBVXlQVnoBNA' inventario-del-aire/assets-r4/zero/01-habitacion-cero.webp
+
+          file inventario-del-aire/assets-r4/*/*.webp
+      - name: Commit permanent R4 assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add inventario-del-aire/assets-r4
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'ORAS R4: fondos fotográficos HD definitivos'
+          git push
