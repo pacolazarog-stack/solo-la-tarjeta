@@ -13,7 +13,6 @@
   --oras-heading-leading:1.18;
 }
 
-/* Una sola caja de lectura para todos los capítulos. */
 body.oras-reader-active .story-panel:not(.atlas-panel) .panel-copy,
 body.oras-reader-active .story-panel[data-chapter="deep-archive"] .panel-copy,
 body.oras-reader-active .story-panel[data-chapter="trace-machine"] .panel-copy,
@@ -31,7 +30,6 @@ body.oras-reader-active .story-panel[data-chapter="resonator"] .panel-copy{
   box-shadow:0 24px 70px rgba(0,0,0,.18);
 }
 
-/* La Habitación Cero mantiene su luz distinta, no una tipografía distinta. */
 body[data-world="zero"].oras-reader-active .story-panel:not(.atlas-panel) .panel-copy{
   width:min(var(--oras-copy-width),calc(100vw - 42px));
   max-height:var(--oras-copy-height);
@@ -91,7 +89,6 @@ body[data-world="zero"].oras-reader-active .story-panel:not(.atlas-panel) .panel
   margin:0 0 1rem!important;
 }
 
-/* Una sola coreografía textual para todos los capítulos. */
 .story-panel .panel-copy,
 .story-panel[data-transition="tr-down"] .panel-copy,
 .story-panel[data-transition="tr-up"] .panel-copy,
@@ -125,7 +122,6 @@ body[data-world="zero"].oras-reader-active .story-panel:not(.atlas-panel) .panel
   transform:none;
 }
 
-/* Ecos persistentes: forman parte de la misma caja de lectura, no una segunda columna. */
 .atlas-r7-echo{
   width:100%;
   max-width:100%;
@@ -140,7 +136,6 @@ body[data-world="zero"].oras-reader-active .story-panel:not(.atlas-panel) .panel
   overflow-wrap:anywhere;
 }
 
-/* ATLAS / AZAR necesita anchura de instrumento, no anchura de página literaria. */
 body.oras-reader-active .story-panel.atlas-panel,
 body.oras-reader-active .story-panel.atlas-panel-r6{
   align-items:center;
@@ -156,12 +151,21 @@ body.oras-reader-active .story-panel.atlas-panel-r6 .panel-copy{
   overflow-x:hidden!important;
   font-family:var(--oras-font);
   line-height:var(--oras-body-leading);
-  opacity:0;
-  transform:translateY(12px)!important;
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
   filter:none!important;
-  transition:opacity .62s ease,transform .78s cubic-bezier(.2,.78,.2,1)!important;
+  transition:none!important;
 }
-.atlas-panel.is-reading .panel-copy,.atlas-panel-r6.is-reading .panel-copy{opacity:1;transform:none!important}
+/* ATLAS es un instrumento interactivo: nunca depende de is-reading para existir. */
+.story-panel[data-chapter="atlas"] .panel-copy,
+.story-panel[data-chapter="atlas"].atlas-panel-r6 .panel-copy,
+.story-panel[data-chapter="atlas"].atlas-panel .panel-copy{
+  opacity:1!important;
+  visibility:visible!important;
+  display:block!important;
+  transform:none!important;
+}
 
 .atlas-panel-r6 .atlas-r6-title{
   margin-bottom:.72rem!important;
