@@ -263,9 +263,6 @@ function resumeCompletedAnaAtFinal(){
   else photo.addEventListener('load',beginFade,{once:true});
 }
 
-/* Detecta una relectura real dentro de la misma página. La primera lectura no
-   se altera: sólo cuando el final ya se había mostrado y vuelve a resetearse,
-   se arma la salida hacia EL ESPEJO para el siguiente final. */
 (function watchRepeatedAnaReading(){
   const path=location.pathname.replace(/\/index\.html$/,'/').replace(/\/+$/,'');
   if(!path.endsWith('/elegia-breve'))return;
@@ -326,4 +323,14 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)render(tru
 setInterval(render,600);
 
 window.ORASReadingWindowR2={version:VERSION,render,completeAnaPart};
+})();
+
+(()=>{
+  const path=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');
+  if(path!=='/solo-la-tarjeta'||window.__orasMasterIndexLoader)return;
+  window.__orasMasterIndexLoader=true;
+  const script=document.createElement('script');
+  script.src='/solo-la-tarjeta/oras-master-index-r1.js?v=20261013-master-index-2';
+  script.async=false;
+  document.head.appendChild(script);
 })();
