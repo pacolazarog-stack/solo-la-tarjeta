@@ -330,7 +330,7 @@ window.ORASReadingWindowR2={version:VERSION,render,completeAnaPart};
   if(path!=='/solo-la-tarjeta'||window.__orasMasterIndexLoader)return;
   window.__orasMasterIndexLoader=true;
   const script=document.createElement('script');
-  script.src='/solo-la-tarjeta/oras-master-index-r1.js?v=20261013-master-index-2';
+  script.src='/solo-la-tarjeta/oras-master-index-r1.js?v=20261013-master-index-cover-4';
   script.async=false;
   document.head.appendChild(script);
 })();

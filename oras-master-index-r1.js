@@ -12,7 +12,7 @@ window.__orasMasterIndexR1=true;
 const ROOT='/solo-la-tarjeta';
 const UKEY='oras.universe.v2';
 const GKEY='oras.reading.index.v1';
-const VERSION='20261013-master-index-3';
+const VERSION='20261013-master-index-cover-4';
 
 const ANA=[
   ['estrella','Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`],
@@ -62,9 +62,9 @@ style.textContent=`
 html.oras-master-entry,html.oras-master-entry body{overflow:hidden!important;background:#070706!important}
 .oras-master-cover{position:fixed;z-index:2147483647;inset:0;display:grid;place-items:center;background:#070706;color:#f4ecdc;font-family:Georgia,"Times New Roman",serif}
 .oras-master-cover[hidden]{display:none!important}
-.oras-master-cover-frame{position:relative;height:min(100svh,calc(100vw * 1.5));width:min(100vw,calc(100svh * .6666667));aspect-ratio:2/3;box-shadow:0 0 80px rgba(0,0,0,.5);overflow:hidden;background:#0b0a09}
-.oras-master-cover-img{display:block;width:100%;height:100%;object-fit:cover}
-.oras-master-button{position:absolute;left:50%;top:50.4%;width:31%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);border:0;background:transparent;cursor:pointer;touch-action:manipulation;outline:none}
+.oras-master-cover-frame{position:relative;height:min(100svh,calc(100vw * 1.491624));width:min(100vw,calc(100svh * .670410));aspect-ratio:1373/2048;box-shadow:0 0 80px rgba(0,0,0,.5);overflow:hidden;background:#0b0a09}
+.oras-master-cover-img{display:block;width:100%;height:100%;object-fit:contain}
+.oras-master-button{position:absolute;left:50%;top:49.6%;width:34%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);border:0;background:transparent;cursor:pointer;touch-action:manipulation;outline:none}
 .oras-master-button::before{content:"";position:absolute;inset:-4%;border-radius:50%;border:1px solid transparent;box-shadow:0 0 0 0 rgba(248,239,215,0);transition:border-color .28s ease,box-shadow .28s ease,transform .28s ease}
 .oras-master-button:hover::before,.oras-master-button:focus-visible::before{border-color:rgba(248,239,215,.42);box-shadow:0 0 28px rgba(248,239,215,.18);transform:scale(1.025)}
 .oras-master-button span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -110,8 +110,8 @@ document.documentElement.classList.add('oras-master-entry');
 
 const cover=document.createElement('section');
 cover.className='oras-master-cover';
-cover.setAttribute('aria-label','Portada de ORAS');
-cover.innerHTML=`<div class="oras-master-cover-frame"><img class="oras-master-cover-img" src="${ROOT}/assets/oras-el-archivo-profundo-cover.svg?v=${VERSION}" alt="ORAS · El archivo profundo"><button class="oras-master-button" type="button" aria-label="Abrir índice general de lectura"><span>Abrir índice general de lectura</span></button></div>`;
+cover.setAttribute('aria-label','Portada de ORAS · Lo que queda de las horas');
+cover.innerHTML=`<div class="oras-master-cover-frame"><img class="oras-master-cover-img" src="${ROOT}/assets/oras-portada-final.jpg?v=${VERSION}" alt="ORAS · Lo que queda de las horas"><button class="oras-master-button" type="button" aria-label="Abrir índice general de lectura"><span>Abrir índice general de lectura</span></button></div>`;
 document.body.appendChild(cover);
 
 const index=document.createElement('section');
