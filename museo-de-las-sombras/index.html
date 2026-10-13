@@ -4,19 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#11100f">
-<meta name="description" content="ORAS · El Museo de las Sombras. Arquitectura canónica de la obra expandida R3.">
-<title>ORAS · EL MUSEO DE LAS SOMBRAS · R3</title>
+<meta name="description" content="ORAS · El Museo de las Sombras. Arquitectura, Archivo Profundo, Máquina de las Huellas y Resonador.">
+<title>ORAS · EL MUSEO DE LAS SOMBRAS</title>
 <style>
 :root{--bg:#11100f;--paper:#171614;--ink:#eee8dc;--muted:#aaa293;--gold:#d4bd86;--line:#39352f;--max:860px}
 *{box-sizing:border-box}
-html{background:var(--bg);color-scheme:dark}
+html{background:var(--bg);color-scheme:dark;scroll-behavior:smooth}
 body{margin:0;background:radial-gradient(120% 70% at 50% 0,#211e19 0,var(--bg) 58%);color:var(--ink);font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia,serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:var(--gold)}
 header{min-height:54vh;display:grid;place-items:center;padding:56px 24px 38px;text-align:center;border-bottom:1px solid var(--line)}
 .eyebrow{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
 h1{font-weight:400;font-size:clamp(2.2rem,7vw,5.6rem);line-height:.96;letter-spacing:-.025em;margin:0}
 .subtitle{margin-top:22px;color:var(--gold);font-size:clamp(1rem,2vw,1.2rem);letter-spacing:.06em}
+nav{position:sticky;top:0;z-index:30;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:10px 12px;background:rgba(17,16,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav a{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;padding:7px 10px;border:1px solid transparent;border-radius:999px}
+nav a:hover{border-color:var(--line)}
 main{width:min(var(--max),calc(100% - 36px));margin:0 auto;padding:64px 0 120px}
-article{font-size:clamp(1.05rem,2.1vw,1.24rem);line-height:1.78}
+article,.chapter{font-size:clamp(1.05rem,2.1vw,1.24rem);line-height:1.78}
 h2,h3,h4{font-weight:400;line-height:1.15;margin:3.2em 0 1em;color:#f4eee2}
 h2{font-size:2rem;border-top:1px solid var(--line);padding-top:1.35em}h3{font-size:1.5rem}h4{font-size:1.2rem;color:var(--gold)}
 p{margin:1em 0}
@@ -27,10 +31,35 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.9em}
 ul,ol{padding-left:1.4em}li{margin:.32em 0}
 table{width:100%;border-collapse:collapse;margin:2em 0;font-size:.95em}th,td{border-bottom:1px solid var(--line);padding:.75em .6em;text-align:left;vertical-align:top}th{color:var(--gold);font-weight:400}
 hr{border:0;border-top:1px solid var(--line);margin:3em 0}
-a{color:var(--gold)}
 .status{color:var(--muted);text-align:center;padding:30px 0}
+.kicker{margin:0 0 8px;color:var(--gold);font-size:.72rem;letter-spacing:.23em;text-transform:uppercase}
+.chapter{padding-top:22px}
+.chapter h2{margin-top:2em}
+.chapter .break{display:block;height:1.5rem}
+.machine-shell{margin:72px 0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#0d0c0b;box-shadow:0 32px 90px rgba(0,0,0,.26)}
+.machine-head{padding:28px 28px 20px;border-bottom:1px solid var(--line)}
+.machine-head h2{border:0;padding:0;margin:0 0 8px}
+.machine-head p{color:var(--muted);margin:.35em 0}
+.machine-grid{display:grid;grid-template-columns:minmax(250px,320px) 1fr;gap:0}
+.controls{padding:24px;border-right:1px solid var(--line)}
+.readout{padding:24px;min-height:430px}
+.control{margin-bottom:18px}
+.control label{display:flex;justify-content:space-between;gap:12px;color:#e9e1d4;font-size:.95rem}
+input[type=range]{width:100%;accent-color:#b99c63}
+.buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+button{appearance:none;background:#171614;color:var(--ink);border:1px solid #62594b;border-radius:999px;padding:9px 13px;font:inherit;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+button:hover{border-color:#b99c63;color:#f4e5c5}
+button.primary{border-color:#9f824d;color:#efd69e}
+.coord{font:1rem ui-monospace,SFMono-Regular,Consolas,monospace;color:#ead6a7;margin-bottom:6px}
+.band{color:var(--muted);font-size:.88rem;letter-spacing:.06em;text-transform:uppercase}
+.machine-label{margin-top:28px;color:var(--gold);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase}
+.seed,.resonance,.interference{white-space:pre-line;line-height:1.7}
+.seed{color:#ded6c7}.resonance{color:#ead39d;min-height:120px}
+.interference{opacity:0;margin-top:20px;border-left:2px solid #8e7352;padding-left:14px;color:#d9c8a5;transition:opacity 1.2s ease,filter 1.2s ease;filter:blur(6px)}
+.interference.show{opacity:1;filter:blur(0)}
+.machine-note{padding:18px 24px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
 .footer{border-top:1px solid var(--line);padding-top:30px;margin-top:70px;color:var(--muted);font-size:.9rem;text-align:center}
-@media(max-width:600px){header{min-height:46vh}main{width:min(var(--max),calc(100% - 28px));padding-top:42px}article{line-height:1.68}h2{font-size:1.7rem}}
+@media(max-width:720px){header{min-height:46vh}main{width:min(var(--max),calc(100% - 28px));padding-top:42px}article,.chapter{line-height:1.68}h2{font-size:1.7rem}.machine-grid{grid-template-columns:1fr}.controls{border-right:0;border-bottom:1px solid var(--line)}}
 </style>
 </head>
 <body>
@@ -38,12 +67,378 @@ a{color:var(--gold)}
   <div>
     <div class="eyebrow">ORAS · Lo que queda después de las horas</div>
     <h1>EL MUSEO<br>DE LAS SOMBRAS</h1>
-    <div class="subtitle">Arquitectura canónica · R3</div>
+    <div class="subtitle">Archivo Profundo · Máquina de las Huellas · Resonador</div>
   </div>
 </header>
+<nav aria-label="Navegación de la obra">
+  <a href="#arquitectura">Arquitectura</a>
+  <a href="#xi">XI</a>
+  <a href="#xii">XII</a>
+  <a href="#maquina">Máquina / Azar</a>
+  <a href="#xiii">XIII</a>
+</nav>
 <main>
-  <div id="status" class="status">Abriendo el Archivo Profundo…</div>
-  <article id="document" hidden></article>
+  <section id="arquitectura">
+    <div id="status" class="status">Abriendo el Archivo Profundo…</div>
+    <article id="document" hidden></article>
+  </section>
+
+  <section id="xi" class="chapter">
+    <div class="kicker">EL INVENTARIO DE LAS SOMBRAS</div>
+    <h2>XI. EL ARCHIVO PROFUNDO</h2>
+
+    <p>El problema de los archivos era sencillo.</p>
+    <p>Conservaban las cosas.</p>
+    <p>No conservaban aquello que las unía.</p>
+    <p>Durante años, el museo había reunido fotografías, cuadernos, objetos domésticos, planos, cartas, testimonios grabados y listas de inventario. Las salas crecían. Los depósitos crecían. Los catálogos crecían.</p>
+    <p>Y, sin embargo, algo seguía faltando.</p>
+    <p>Nadie sabía exactamente qué.</p>
+    <p>El archivero empezó a sospecharlo una tarde de invierno.</p>
+    <p>Estaba revisando tres fichas aparentemente inconexas.</p>
+    <p>La primera describía una silla desplazada unos centímetros respecto a una mesa.</p>
+    <p>La segunda registraba una fotografía en la que aparecía una ventana cerrada.</p>
+    <p>La tercera mencionaba un botón de nácar hallado en una caja sin identificar.</p>
+    <p>No tenían relación.</p>
+    <p>No compartían fecha.</p>
+    <p>No compartían procedencia.</p>
+    <p>No compartían contexto.</p>
+    <p>Pero al leerlas seguidas tuvo la sensación de que estaban hablando de la misma ausencia.</p>
+    <p>La intuición le pareció absurda.</p>
+    <p>Intentó olvidarla.</p>
+    <p>No pudo.</p>
+    <p>Durante semanas revisó expedientes antiguos.</p>
+    <p>Encontró referencias dispersas.</p>
+    <p>Notas incompletas.</p>
+    <p>Anotaciones marginales.</p>
+    <p>Correcciones realizadas por personas que ya no trabajaban allí.</p>
+    <p>En varias ocasiones apareció la misma expresión.</p>
+    <p>Archivo Profundo.</p>
+    <p>Nunca figuraba una localización.</p>
+    <p>Nunca una descripción.</p>
+    <p>Nunca un responsable.</p>
+    <p>Al principio pensó que se trataba de una denominación provisional.</p>
+    <p>Después creyó que era una sección desaparecida.</p>
+    <p>Más tarde consideró que quizá nunca hubiera existido.</p>
+    <p>Las tres hipótesis resultaron insuficientes.</p>
+    <p>El Archivo Profundo aparecía con demasiada frecuencia para ser una invención.</p>
+    <p>Y con demasiada ambigüedad para ser un lugar normal.</p>
+    <p>Una madrugada encontró un memorando sin fecha.</p>
+    <p>Sólo contenía seis líneas.</p>
+    <blockquote>El Museo conserva objetos.<br><br>El Archivo Profundo conserva relaciones.<br><br>No confundir ambos fondos.<br><br>La diferencia es esencial.<br><br>Las pérdidas comienzan cuando deja de comprenderse.<br><br>No destruir.</blockquote>
+    <p>No había firma.</p>
+    <p>El archivero leyó el documento varias veces.</p>
+    <p>Después volvió a examinar las fichas.</p>
+    <p>La silla.</p>
+    <p>La ventana.</p>
+    <p>El botón.</p>
+    <p>De repente comprendió el problema.</p>
+    <p>El museo catalogaba cosas.</p>
+    <p>La memoria rara vez recordaba cosas.</p>
+    <p>La memoria recordaba conexiones.</p>
+    <p>Una silla junto a una mesa.</p>
+    <p>Una ventana observada desde una cocina.</p>
+    <p>Un botón cosido a una camisa.</p>
+    <p>Cuando desaparecían las relaciones, los objetos sobrevivían sólo como materia.</p>
+    <p>El museo conservaba los restos.</p>
+    <p>La memoria había desaparecido mucho antes.</p>
+    <p>A partir de entonces comenzó una investigación sistemática.</p>
+    <p>Encontró más referencias.</p>
+    <p>Ninguna era completamente coherente.</p>
+    <p>Algunas describían el Archivo Profundo como una dependencia subterránea.</p>
+    <p>Otras como una categoría documental.</p>
+    <p>Otras parecían considerarlo un procedimiento.</p>
+    <p>Un texto especialmente deteriorado afirmaba:</p>
+    <blockquote>El Archivo Profundo no es un lugar.<br><br>Es una forma de clasificar lo que permanece cuando las clasificaciones fracasan.</blockquote>
+    <p>Durante meses intentó establecer una definición definitiva.</p>
+    <p>Fracasó.</p>
+    <p>La imposibilidad terminó por convencerlo de que estaba cerca de la verdad.</p>
+    <p>Las cosas fáciles de definir pertenecían al museo.</p>
+    <p>Las difíciles parecían pertenecer al Archivo Profundo.</p>
+    <p>Una noche encontró un plano.</p>
+    <p>Mostraba todas las salas conocidas.</p>
+    <p>Los depósitos.</p>
+    <p>Las oficinas.</p>
+    <p>Los almacenes.</p>
+    <p>Los talleres de restauración.</p>
+    <p>Y un espacio sin numeración.</p>
+    <p>No tenía puertas.</p>
+    <p>No tenía medidas.</p>
+    <p>No tenía escala.</p>
+    <p>Sólo una inscripción escrita a lápiz.</p>
+    <p>Archivo Profundo.</p>
+    <p>El archivero contempló el plano durante varios minutos.</p>
+    <p>Después lo archivó.</p>
+    <p>No porque hubiera resuelto el enigma.</p>
+    <p>Porque acababa de comprender que el enigma era el propio archivo.</p>
+  </section>
+
+  <section id="xii" class="chapter">
+    <div class="kicker">EL INVENTARIO DE LAS SOMBRAS</div>
+    <h2>XII. LA MÁQUINA DE LAS HUELLAS</h2>
+    <p>La máquina no parecía una máquina.</p>
+    <p>Ésa fue la primera dificultad.</p>
+    <p>Quienes esperaban engranajes encontraban estanterías.</p>
+    <p>Quienes esperaban estanterías encontraban diagramas.</p>
+    <p>Quienes buscaban diagramas encontraban listas.</p>
+    <p>Nadie regresaba con una descripción idéntica.</p>
+    <p>El archivero la descubrió al final de un corredor que no figuraba en ningún plano actualizado.</p>
+    <p>La estancia estaba vacía.</p>
+    <p>O casi vacía.</p>
+    <p>En el centro había una estructura imposible de clasificar.</p>
+    <p>No era grande.</p>
+    <p>No imponía respeto.</p>
+    <p>No producía ruido.</p>
+    <p>No emitía luz.</p>
+    <p>Parecía esperar.</p>
+    <p>La mesa de control estaba cubierta por fichas.</p>
+    <p>Miles de fichas.</p>
+    <p>Algunas describían objetos.</p>
+    <p>Otras contenían nombres.</p>
+    <p>Otras recogían errores documentales.</p>
+    <p>Había incluso tarjetas dedicadas a contradicciones.</p>
+    <p>Durante varios días examinó el material.</p>
+    <p>Todas las fichas compartían una característica.</p>
+    <p>Ninguna estaba dedicada a una cosa aislada.</p>
+    <p>Cada una describía una relación.</p>
+    <p>Un nombre asociado a una fotografía.</p>
+    <p>Un objeto vinculado a una ausencia.</p>
+    <p>Una fecha incompatible con un testimonio.</p>
+    <p>Un error que sobrevivía mejor que los documentos que lo habían originado.</p>
+    <p>La lógica resultaba extraña.</p>
+    <p>Pero también familiar.</p>
+    <p>Era exactamente la lógica que había sospechado en el Archivo Profundo.</p>
+    <p>Entonces encontró un cuaderno.</p>
+    <p>Sólo contenía esquemas.</p>
+    <p>No había explicaciones.</p>
+    <p>En una página aparecía un cubo.</p>
+    <p>Tres ejes.</p>
+    <p>MATERIALIDAD.</p>
+    <p>INSCRIPCIÓN.</p>
+    <p>SOMBRA.</p>
+    <p>El centro estaba señalado.</p>
+    <p>14,14,14.</p>
+    <p>Junto a él alguien había escrito:</p>
+    <blockquote>Máxima ambigüedad.</blockquote>
+    <p>En otra página aparecían palabras distribuidas alrededor del esquema.</p>
+    <p>ECO.</p>
+    <p>AUSENCIA.</p>
+    <p>ERROR.</p>
+    <p>SOMBRA.</p>
+    <p>TESTIMONIO.</p>
+    <p>ESPEJO.</p>
+    <p>CONTRADICCIÓN.</p>
+    <p>No parecían categorías.</p>
+    <p>Parecían fuerzas.</p>
+    <p>Como si la memoria estuviera compuesta por tensiones invisibles.</p>
+    <p>El archivero siguió leyendo.</p>
+    <p>La letra cambiaba cada pocas páginas.</p>
+    <p>Distintas personas habían trabajado sobre el mismo documento.</p>
+    <p>Algunas anotaciones eran incompatibles entre sí.</p>
+    <p>Nadie había intentado corregirlas.</p>
+    <p>Todas permanecían.</p>
+    <p>La contradicción parecía formar parte del método.</p>
+    <p>Los últimos folios hablaban del Resonador.</p>
+    <p>No estaba claro si era un mecanismo.</p>
+    <p>Un procedimiento.</p>
+    <p>Un programa.</p>
+    <p>O una teoría.</p>
+    <p>Las descripciones diferían.</p>
+    <p>Sin embargo, todas coincidían en un punto.</p>
+    <p>El Resonador operaba únicamente sobre huellas.</p>
+    <p>Nunca sobre hechos completos.</p>
+    <p>Una huella era suficiente.</p>
+    <p>Una sombra bastaba.</p>
+    <p>Una ausencia incluso podía resultar útil.</p>
+    <p>La desaparición absoluta, en cambio, impedía cualquier operación.</p>
+    <p>Por primera vez apareció una referencia indirecta a una región excluida.</p>
+    <p>No se mencionaba su nombre.</p>
+    <p>Sólo la condición que la definía.</p>
+    <blockquote>Allí donde ya no queda ninguna huella,<br><br>el Resonador no puede trabajar.</blockquote>
+    <p>El archivero comprendió que estaba leyendo los límites del sistema.</p>
+    <p>No sus capacidades.</p>
+    <p>Sus límites.</p>
+    <p>La diferencia lo inquietó.</p>
+    <p>Toda tecnología prometía ampliar lo posible.</p>
+    <p>Aquella parecía diseñada para delimitar lo imposible.</p>
+    <p>Continuó avanzando entre fichas y diagramas.</p>
+    <p>En una carpeta encontró una nota aislada.</p>
+    <p>No llevaba firma.</p>
+    <p>No llevaba fecha.</p>
+    <p>No llevaba sello del museo.</p>
+    <p>Sólo una frase.</p>
+    <p>La leyó una vez.</p>
+    <p>Después otra.</p>
+    <p>Y otra más.</p>
+    <p>Decía:</p>
+    <blockquote>El Resonador no conserva nada.<br><br>No recupera nada.<br><br>No explica nada.<br><br>Produce formas temporales de sentido.</blockquote>
+    <p>El archivero cerró la carpeta.</p>
+    <p>Durante varios minutos permaneció inmóvil.</p>
+    <p>La máquina seguía en silencio.</p>
+    <p>El museo también.</p>
+    <p>Y por primera vez sospechó que todo lo que había visto hasta entonces no era más que una preparación.</p>
+    <p>Algo permanecía fuera del sistema.</p>
+    <p>Algo que ni el Archivo Profundo ni la Máquina de las Huellas podían alcanzar.</p>
+    <p>Todavía no conocía su nombre.</p>
+    <p>Pero ya avanzaba hacia él.</p>
+  </section>
+
+  <section id="maquina" class="machine-shell" aria-label="Máquina de las Huellas">
+    <div class="machine-head">
+      <div class="kicker">ARCHIVO PROFUNDO</div>
+      <h2>LA MÁQUINA DE LAS HUELLAS</h2>
+      <p>27 × 27 × 27 · MATERIALIDAD × INSCRIPCIÓN × SOMBRA</p>
+      <p>El cubo no representa la obra: interviene en ella.</p>
+    </div>
+    <div class="machine-grid">
+      <div class="controls">
+        <div class="control"><label>X · MATERIALIDAD <span id="xv">14</span></label><input id="mx" type="range" min="1" max="27" value="14"></div>
+        <div class="control"><label>Y · INSCRIPCIÓN <span id="yv">14</span></label><input id="my" type="range" min="1" max="27" value="14"></div>
+        <div class="control"><label>Z · SOMBRA <span id="zv">14</span></label><input id="mz" type="range" min="1" max="27" value="14"></div>
+        <div class="buttons">
+          <button id="azar" class="primary" type="button">AZAR</button>
+          <button id="centro" type="button">CENTRO</button>
+          <button id="espejo" type="button">ESPEJO</button>
+          <button id="ora" type="button">BOTÓN DE NÁCAR</button>
+        </div>
+        <div class="buttons"><button id="resonar" class="primary" type="button">ACTIVAR RESONANCIA</button></div>
+      </div>
+      <div class="readout">
+        <div id="coord" class="coord"></div>
+        <div id="band" class="band"></div>
+        <div class="machine-label">Huella</div>
+        <div id="seed" class="seed"></div>
+        <div class="machine-label">Forma temporal de sentido</div>
+        <div id="resonance" class="resonance"></div>
+        <div id="interference" class="interference"></div>
+      </div>
+    </div>
+    <div class="machine-note">AZAR elige una posición. ESPEJO aplica (28−x, 28−y, 28−z). El centro (14,14,14) fuerza interferencia. El botón de nácar no es una anomalía: es la primera ora reconocida.</div>
+  </section>
+
+  <section id="xiii" class="chapter">
+    <div class="kicker">EL INVENTARIO DE LAS SOMBRAS</div>
+    <h2>XIII. EL RESONADOR</h2>
+    <p>Durante varios días el archivero no tocó la máquina.</p>
+    <p>La observaba.</p>
+    <p>No había interruptores.</p>
+    <p>Ni pantallas.</p>
+    <p>Ni instrucciones.</p>
+    <p>Sólo fichas.</p>
+    <p>Miles de fichas.</p>
+    <p>Al principio creyó que estaban incompletas.</p>
+    <p>Después comprendió que la incompletitud era deliberada.</p>
+    <p>No describían cosas.</p>
+    <p>Describían relaciones.</p>
+    <p>Una fotografía que contradecía un inventario.</p>
+    <p>Un nombre escrito de cuatro maneras distintas.</p>
+    <p>Una llave presente en tres testimonios y ausente de todos los registros.</p>
+    <p>Un error repetido durante décadas.</p>
+    <p>La máquina parecía interesarse menos por los hechos que por las tensiones entre ellos.</p>
+    <p>Una mañana reunió varias fichas sobre la mesa.</p>
+    <p>Una silla.</p>
+    <p>Una fotografía.</p>
+    <p>Un testimonio.</p>
+    <p>Aparecieron unas líneas.</p>
+    <p>Finas.</p>
+    <p>Casi invisibles.</p>
+    <p>Unían documentos aparentemente inconexos.</p>
+    <p>Al mover una ficha, cambiaban.</p>
+    <p>La máquina no explicaba.</p>
+    <p>Relacionaba.</p>
+    <span class="break"></span>
+    <p>Entre los documentos encontró un cuaderno.</p>
+    <p>En una página aparecía un cubo.</p>
+    <p>Tres ejes.</p>
+    <p>MATERIALIDAD.</p>
+    <p>INSCRIPCIÓN.</p>
+    <p>SOMBRA.</p>
+    <p>En el centro:</p>
+    <p>14,14,14.</p>
+    <p>Debajo:</p>
+    <blockquote>Máxima ambigüedad.</blockquote>
+    <p>Las fichas también tenían tres números.</p>
+    <p>Comprendió entonces que no eran registros.</p>
+    <p>Eran posiciones.</p>
+    <p>Estados.</p>
+    <p>Cuánto quedaba de algo.</p>
+    <p>Cuánto estaba inscrito.</p>
+    <p>Cuánto se había alejado de aquello que alguna vez fue.</p>
+    <span class="break"></span>
+    <p>Comenzó a experimentar.</p>
+    <p>A veces aparecía una palabra.</p>
+    <blockquote>ECO</blockquote>
+    <p>O:</p>
+    <blockquote>AUSENCIA<br><br>ERROR<br><br>CONTRADICCIÓN</blockquote>
+    <p>Una vez:</p>
+    <blockquote>ESPEJO</blockquote>
+    <p>La palabra permaneció unos segundos.</p>
+    <p>Después desapareció.</p>
+    <span class="break"></span>
+    <p>El objeto decisivo fue un botón de nácar.</p>
+    <p>Una ficha incompleta.</p>
+    <p>Sin fecha.</p>
+    <p>Sin propietario.</p>
+    <p>Sin procedencia.</p>
+    <p>Añadió otra huella.</p>
+    <p>Después otra.</p>
+    <p>Después una nota marginal.</p>
+    <blockquote>Ella siempre cosía los botones dos veces.</blockquote>
+    <p>La mesa se llenó de líneas.</p>
+    <p>Apareció una palabra.</p>
+    <blockquote>RESONANCIA</blockquote>
+    <p>Y luego un texto.</p>
+    <blockquote>Hubo un botón.<br><br>La camisa desapareció antes.<br><br>Nadie recuerda quién la llevaba.<br><br>La costura sobrevivió en una frase.<br><br>Por eso el museo conservó la duda.</blockquote>
+    <p>El archivero buscó aquellas frases.</p>
+    <p>No estaban en ninguna ficha.</p>
+    <p>Los elementos sí.</p>
+    <p>La frase no.</p>
+    <p>No había sido recuperada.</p>
+    <p>Había surgido.</p>
+    <span class="break"></span>
+    <p>Continuó trabajando durante semanas.</p>
+    <p>Aprendió que el Resonador no producía respuestas.</p>
+    <p>Producía estados.</p>
+    <p>A veces un poema.</p>
+    <p>A veces una contradicción.</p>
+    <p>A veces nada.</p>
+    <p>Una tarde alcanzó el centro del esquema.</p>
+    <p>14,14,14.</p>
+    <p>Las líneas desaparecieron.</p>
+    <p>Después apareció un único mensaje.</p>
+    <blockquote>[INTERFERENCIA DETECTADA]<br><br>Tres versiones coinciden.<br><br>Ninguna describe la misma cosa.</blockquote>
+    <p>Comprendió entonces que aquel punto no era el centro del conocimiento.</p>
+    <p>Era el centro de la ambigüedad.</p>
+    <span class="break"></span>
+    <p>Más tarde intentó explorar el límite del sistema.</p>
+    <p>Introdujo fichas vacías.</p>
+    <p>Sin objeto.</p>
+    <p>Sin descripción.</p>
+    <p>Sin huella.</p>
+    <p>La máquina no respondió.</p>
+    <p>Finalmente apareció una frase.</p>
+    <blockquote>NO EXISTEN HUELLAS SUFICIENTES.</blockquote>
+    <p>Entonces comprendió el verdadero límite del sistema.</p>
+    <p>Incluso una ausencia necesita una huella.</p>
+    <p>Algo que permita afirmar:</p>
+    <blockquote>aquí faltaba algo.</blockquote>
+    <p>Sin eso no había operación posible.</p>
+    <p>Ni resonancia.</p>
+    <p>Ni sombra.</p>
+    <p>Ni memoria.</p>
+    <span class="break"></span>
+    <p>Aquella noche cerró el cuaderno.</p>
+    <p>La máquina permaneció inmóvil.</p>
+    <p>Como siempre.</p>
+    <p>Pero ya no interpretó el silencio como inactividad.</p>
+    <p>Sino como espera.</p>
+    <p>Esperaba una huella.</p>
+    <p>Una relación.</p>
+    <p>Una tensión.</p>
+    <p>Algo suficiente para comenzar.</p>
+    <p>Y comprendió por fin la inscripción encontrada meses atrás:</p>
+    <blockquote>El Resonador no conserva nada.<br><br>No recupera nada.<br><br>No explica nada.<br><br><strong>Produce formas temporales de sentido.</strong></blockquote>
+  </section>
+
   <div class="footer">ORAS · EL MUSEO DE LAS SOMBRAS</div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -55,24 +450,31 @@ a{color:var(--gold)}
     const response=await fetch('../ORAS_MUSEO_DE_LAS_SOMBRAS_ARQUITECTURA_CANONICA_R3.md?'+Date.now(),{cache:'no-store'});
     if(!response.ok) throw new Error('No se pudo abrir el documento');
     const md=await response.text();
-    if(window.marked){
-      marked.setOptions({gfm:true,breaks:false});
-      article.innerHTML=marked.parse(md);
-    }else{
-      const pre=document.createElement('pre');
-      pre.textContent=md;
-      article.appendChild(pre);
-    }
-    status.remove();
-    article.hidden=false;
-  }catch(err){
-    status.textContent='El Archivo Profundo no está disponible en este momento.';
-    const p=document.createElement('p');
-    p.style.textAlign='center';
-    p.innerHTML='<a href="../ORAS_MUSEO_DE_LAS_SOMBRAS_ARQUITECTURA_CANONICA_R3.md">Abrir el documento canónico</a>';
-    status.insertAdjacentElement('afterend',p);
-  }
+    if(window.marked){marked.setOptions({gfm:true,breaks:false});article.innerHTML=marked.parse(md)}
+    else{const pre=document.createElement('pre');pre.textContent=md;article.appendChild(pre)}
+    status.remove();article.hidden=false;
+  }catch(err){status.textContent='El Archivo Profundo no está disponible en este momento.'}
 })();
+
+const OBJ=['botón de nácar','tarjeta usada','fotografía doblada','silla desplazada','llave sin puerta','reloj detenido','vaso vacío','carta incompleta','espejo pequeño','fragmento de mapa','entrada de cine','etiqueta arrancada','pañuelo olvidado','plato sin pareja','cuaderno húmedo','nombre borrado','planta crecida','puerta azul','ventana cerrada','maleta antigua','billete perforado','miga de pan','caja anónima','señal oxidada','archivo perdido','lámpara apagada','huella irreconocible'];
+const TEN=['espera','ausencia','contradicción','eco','persistencia','desaparición','regreso','sustitución','error','testimonio','borrado','doble presencia','olvido','demora','deriva','reaparición','resonancia','silencio','incertidumbre','proximidad','distancia','pérdida','contagio','sombra','reflejo','transformación','huella'];
+const ECO=['nadie recuerda cuándo apareció','varias versiones sobreviven','una descripción sustituyó al objeto','hay fotografías incompatibles','la sombra llegó antes','quedó un gesto','algo continúa esperando','no existe consenso','la ciudad lo olvidó','el museo lo conserva','permanece fuera de los planos','algunos discuten su existencia','el nombre ya no coincide','la inscripción persiste','no hay testigos directos','se detectó demasiado tarde','una ausencia ocupa su lugar','todo parece correcto','alguien vuelve a mencionarlo','hay rastros suficientes','se conserva parcialmente','todavía produce dudas','fue registrado por error','ninguna explicación basta','el recuerdo cambió de forma','sólo queda la relación','todavía resuena'];
+const REL=['ECO','CONTRADICCIÓN','SUSTITUCIÓN','PROCEDENCIA','TESTIMONIO','BORRADO','ERROR','ESPEJO','CONTAGIO','AUSENCIA','REAPARICIÓN','DUPLICADO','SOMBRA'];
+const mx=document.getElementById('mx'),my=document.getElementById('my'),mz=document.getElementById('mz');
+let mirror=false;
+function mc(n){return 28-n}
+function point(){const p={x:+mx.value,y:+my.value,z:+mz.value};return mirror?{x:mc(p.x),y:mc(p.y),z:mc(p.z)}:p}
+function band(z){if(z<=4)return'PRESENTE';if(z<=8)return'ATENUADO';if(z<=12)return'DOCUMENTAL';if(z<=16)return'INDIRECTO';if(z<=20)return'RESIDUAL';return'UMBRAL_DE_LO_REPRESENTABLE'}
+function relation(p){return REL[(p.x+p.y+p.z-3)%REL.length]}
+function updateMachine(){document.getElementById('xv').textContent=mx.value;document.getElementById('yv').textContent=my.value;document.getElementById('zv').textContent=mz.value;const p=point();document.getElementById('coord').textContent=`(${p.x},${p.y},${p.z})${mirror?' · ESPEJO':''}`;document.getElementById('band').textContent=band(p.z);document.getElementById('seed').textContent=`${OBJ[p.x-1]}.\nAsociado a: ${TEN[p.y-1]}.\n${ECO[(p.x+p.y-2)%27]}.\nRelación: ${relation(p)}.`}
+[mx,my,mz].forEach(el=>el.addEventListener('input',updateMachine));
+document.getElementById('azar').onclick=()=>{mx.value=1+Math.floor(Math.random()*27);my.value=1+Math.floor(Math.random()*27);mz.value=1+Math.floor(Math.random()*27);updateMachine();document.getElementById('resonance').textContent='';document.getElementById('interference').className='interference'};
+document.getElementById('centro').onclick=()=>{mx.value=my.value=mz.value=14;updateMachine()};
+document.getElementById('espejo').onclick=()=>{mirror=!mirror;updateMachine()};
+document.getElementById('ora').onclick=()=>{mx.value=1;my.value=14;mz.value=9+Math.floor(Math.random()*9);updateMachine();document.getElementById('seed').textContent='botón de nácar.\nSin propietario. Sin prenda. Sin procedencia.\nY, sin embargo, sigue produciendo relaciones.\nORA.'};
+function shadowLine(z,obj){const b=band(z);if(b==='PRESENTE')return`El ${obj} todavía pertenece al presente.`;if(b==='ATENUADO')return`El ${obj} empieza a retirarse de lo visible.`;if(b==='DOCUMENTAL')return`Del ${obj} queda ya más registro que presencia.`;if(b==='INDIRECTO')return`El ${obj} llega por una descripción que no basta.`;if(b==='RESIDUAL')return`Del ${obj} persiste una relación y casi nada más.`;return`El ${obj} apenas conserva forma representable.`}
+document.getElementById('resonar').onclick=()=>{const p=point(),obj=OBJ[p.x-1],ten=TEN[p.y-1],eco=ECO[(p.x+p.y-2)%27],out=document.getElementById('resonance'),inter=document.getElementById('interference');let text;if(obj==='botón de nácar'){const variants=['Hubo un botón.\nLa camisa desapareció antes.','El botón sobrevivió a la prenda.','Sólo quedó la costura.','El objeto nunca pudo verificarse.','No sabemos qué camisa perdió el botón.\nY, sin embargo, el botón sigue diciendo cosas.'];text=variants[Math.floor(Math.random()*variants.length)]}else{text=`Hubo un ${obj}.\n${shadowLine(p.z,obj)}\nLa tensión fue ${ten}.\n${eco}.\nRelación: ${relation(p)}.`}out.textContent=text;inter.className='interference';inter.textContent='';const central=p.x===14&&p.y===14&&p.z===14;if(central||Math.random()>.88){setTimeout(()=>{inter.textContent='[INTERFERENCIA DETECTADA]\n'+(central?'Tres versiones coinciden.\nNinguna describe la misma cosa.':['La interpretación inversa sigue siendo plausible.','Parte del registro ya no es recuperable.','La huella parece sobrevivir mejor que aquello que la produjo.'][Math.floor(Math.random()*3)]);inter.className='interference show'},500)}};
+updateMachine();
 </script>
 </body>
 </html>
