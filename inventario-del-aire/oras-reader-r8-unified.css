@@ -1,0 +1,166 @@
+/* EL INVENTARIO DEL AIRE · R8
+   Capa tipográfica unificada.
+   Misma caja, medida, cuerpo, interlineado y aparición en los 30 capítulos y epílogo.
+   ATLAS / AZAR conserva su anchura funcional, pero comparte el mismo régimen de entrada. */
+
+:root{
+  --oras-copy-width:820px;
+  --oras-copy-height:82svh;
+  --oras-font:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia,"Times New Roman",serif;
+  --oras-body-size:clamp(1.04rem,1.42vw,1.20rem);
+  --oras-body-leading:1.72;
+  --oras-paragraph-gap:1.08em;
+  --oras-heading-leading:1.18;
+}
+
+/* Una sola caja de lectura para todos los capítulos. */
+body.oras-reader-active .story-panel:not(.atlas-panel) .panel-copy,
+body.oras-reader-active .story-panel[data-chapter="deep-archive"] .panel-copy,
+body.oras-reader-active .story-panel[data-chapter="trace-machine"] .panel-copy,
+body.oras-reader-active .story-panel[data-chapter="resonator"] .panel-copy{
+  width:min(var(--oras-copy-width),calc(100vw - 42px));
+  max-height:var(--oras-copy-height);
+  margin:0 auto;
+  padding:clamp(1.3rem,2.8vw,2.15rem) clamp(1.15rem,3vw,2.2rem);
+  font-family:var(--oras-font);
+  font-kerning:normal;
+  font-variant-ligatures:common-ligatures;
+  text-rendering:optimizeLegibility;
+  background:linear-gradient(90deg,rgba(7,7,7,.56),rgba(7,7,7,.31) 74%,rgba(7,7,7,.08));
+  border-left:1px solid rgba(255,255,255,.16);
+  box-shadow:0 24px 70px rgba(0,0,0,.18);
+}
+
+/* La Habitación Cero mantiene su luz distinta, no una tipografía distinta. */
+body[data-world="zero"].oras-reader-active .story-panel:not(.atlas-panel) .panel-copy{
+  width:min(var(--oras-copy-width),calc(100vw - 42px));
+  max-height:var(--oras-copy-height);
+  font-family:var(--oras-font);
+  background:linear-gradient(90deg,rgba(18,18,17,.45),rgba(18,18,17,.20) 75%,rgba(18,18,17,.05));
+}
+
+.story-panel h1,
+.story-panel h2,
+.story-panel h3,
+.story-panel .volume-label,
+.story-panel p{
+  font-family:var(--oras-font)!important;
+  text-align:left!important;
+  text-wrap:pretty;
+  hyphens:none;
+}
+
+.story-panel p,
+.story-panel p.story-card,
+.story-panel p.pearl-arrival,
+.story-panel p.pearl-departure{
+  font-size:var(--oras-body-size)!important;
+  line-height:var(--oras-body-leading)!important;
+  font-weight:400!important;
+  letter-spacing:.002em!important;
+  margin:0 0 var(--oras-paragraph-gap)!important;
+  max-width:none!important;
+}
+.story-panel p:last-child{margin-bottom:0!important}
+
+.story-panel h1{
+  font-size:clamp(2rem,5vw,3.8rem)!important;
+  line-height:1.06!important;
+  letter-spacing:.005em!important;
+  margin:0 0 1.08em!important;
+}
+.story-panel h2{
+  font-size:clamp(1.72rem,3.8vw,2.75rem)!important;
+  line-height:1.08!important;
+  letter-spacing:.008em!important;
+  margin:0 0 1.08em!important;
+}
+.story-panel h3{
+  font-size:clamp(1.10rem,2.05vw,1.34rem)!important;
+  line-height:var(--oras-heading-leading)!important;
+  font-weight:400!important;
+  font-variant:small-caps!important;
+  letter-spacing:.055em!important;
+  margin:0 0 1.45em!important;
+}
+.story-panel .volume-label{
+  font-size:.78rem!important;
+  line-height:1.25!important;
+  letter-spacing:.16em!important;
+  text-transform:uppercase;
+  margin:0 0 1rem!important;
+}
+
+/* Una sola coreografía textual para todos los capítulos.
+   Las transiciones aleatorias pueden seguir afectando al fondo fotográfico,
+   pero ya no cambian el modo en que entra la caja de lectura. */
+.story-panel .panel-copy,
+.story-panel[data-transition="tr-down"] .panel-copy,
+.story-panel[data-transition="tr-up"] .panel-copy,
+.story-panel[data-transition="tr-left"] .panel-copy,
+.story-panel[data-transition="tr-right"] .panel-copy,
+.story-panel[data-transition="tr-fade"] .panel-copy,
+.story-panel[data-transition="tr-flash"] .panel-copy{
+  opacity:0;
+  transform:translateY(12px)!important;
+  filter:none!important;
+  transition:opacity .62s ease,transform .78s cubic-bezier(.2,.78,.2,1)!important;
+}
+.story-panel.is-reading .panel-copy{
+  opacity:1;
+  transform:none!important;
+  filter:none!important;
+}
+
+/* Aparición palabra a palabra idéntica: breve barrido horizontal y opacidad. */
+.display-word{
+  opacity:0;
+  clip-path:inset(0 100% 0 0);
+  transform:translateX(-.08em);
+  transition-property:opacity,clip-path,transform!important;
+  transition-duration:.18s,.24s,.24s!important;
+  transition-timing-function:linear,linear,ease!important;
+  transition-delay:var(--reveal-delay,0s)!important;
+}
+.story-panel.is-reading .display-word{
+  opacity:1;
+  clip-path:inset(0);
+  transform:none;
+}
+
+/* Los ecos persistentes comparten cuerpo e interlineado, aunque sigan siendo marginales. */
+.atlas-r7-echo p{
+  font-family:var(--oras-font)!important;
+  font-size:calc(var(--oras-body-size) * .92)!important;
+  line-height:var(--oras-body-leading)!important;
+}
+
+/* La máquina sigue siendo una máquina, pero su texto no rompe la cadencia general. */
+.atlas-panel .panel-copy{
+  font-family:var(--oras-font);
+  line-height:var(--oras-body-leading);
+  opacity:0;
+  transform:translateY(12px)!important;
+  filter:none!important;
+  transition:opacity .62s ease,transform .78s cubic-bezier(.2,.78,.2,1)!important;
+}
+.atlas-panel.is-reading .panel-copy{opacity:1;transform:none!important}
+.atlas-r5-output,.atlas-r6-output,.atlas-r6-trace,.atlas-r6-consequence{line-height:var(--oras-body-leading)!important}
+
+@media(max-width:700px){
+  :root{--oras-copy-height:84dvh;--oras-body-size:clamp(1rem,4.15vw,1.10rem);--oras-body-leading:1.68;--oras-paragraph-gap:1.02em}
+  body.oras-reader-active .story-panel:not(.atlas-panel) .panel-copy,
+  body.oras-reader-active .story-panel[data-chapter="deep-archive"] .panel-copy,
+  body.oras-reader-active .story-panel[data-chapter="trace-machine"] .panel-copy,
+  body.oras-reader-active .story-panel[data-chapter="resonator"] .panel-copy,
+  body[data-world="zero"].oras-reader-active .story-panel:not(.atlas-panel) .panel-copy{
+    width:min(calc(100vw - 24px),var(--oras-copy-width));
+    max-height:var(--oras-copy-height);
+    padding:1.15rem 1rem;
+    border-left:0;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .story-panel .panel-copy,.display-word{opacity:1!important;transform:none!important;clip-path:none!important;transition:none!important}
+}
