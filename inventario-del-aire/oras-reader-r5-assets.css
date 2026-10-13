@@ -1,0 +1,20 @@
+/* ORAS · fondos definitivos XI–XIII
+   Se aplican sobre el mismo sistema fotográfico del lector R5.
+   ATLAS/AZAR comparte el espacio visual de XII para mantener continuidad narrativa. */
+body[data-chapter="deep-archive"] .photo-layer.bg-current,
+body[data-chapter="deep-archive"] .photo-layer.bg-enter{
+  background-image:url('./assets-r5/city/11-archivo-profundo.webp')!important;
+  background-position:center center!important;
+}
+body[data-chapter="trace-machine"] .photo-layer.bg-current,
+body[data-chapter="trace-machine"] .photo-layer.bg-enter,
+body[data-chapter="atlas"] .photo-layer.bg-current,
+body[data-chapter="atlas"] .photo-layer.bg-enter{
+  background-image:url('./assets-r5/city/12-maquina-huellas.webp')!important;
+  background-position:center center!important;
+}
+body[data-chapter="resonator"] .photo-layer.bg-current,
+body[data-chapter="resonator"] .photo-layer.bg-enter{
+  background-image:url('./assets-r5/city/13-resonador.webp')!important;
+  background-position:center center!important;
+}
