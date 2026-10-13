@@ -1,0 +1,7 @@
+/* ATLAS / AZAR · R7 · ArchivoPersistente */
+.atlas-r7-echo{margin:1.3rem 0 1.6rem;padding:.85rem 0 .7rem 1rem;border-left:1px solid rgba(224,188,118,.42);color:rgba(244,239,229,.78);font-family:Georgia,"Times New Roman",serif}
+.atlas-r7-echo>span{display:block;margin-bottom:.38rem;font-size:.62rem;letter-spacing:.16em;color:rgba(239,221,184,.42)}
+.atlas-r7-echo p{margin:0;font-size:.95em;line-height:1.62;font-style:italic}
+#mirror .atlas-mirror-variant{margin-top:1rem;padding-top:.9rem;border-top:1px solid rgba(244,239,229,.14);opacity:.82}
+#mirror .atlas-mirror-variant::before{content:"versión persistente";display:block;margin-bottom:.5rem;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;opacity:.45}
+#mirror .atlas-mirror-variant p{margin:.2rem 0;white-space:pre-line}
