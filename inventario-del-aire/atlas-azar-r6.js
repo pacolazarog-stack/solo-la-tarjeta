@@ -204,8 +204,7 @@ class MachineAudio{
   startSpin(){
     if(!this.ensure())return;
     clearInterval(this.spinTimer);
-    let speed=62;
-    this.spinTimer=setInterval(()=>this.tick(.006+Math.random()*.008),speed);
+    this.spinTimer=setInterval(()=>this.tick(.006+Math.random()*.008),62);
   }
   stopSpin(){clearInterval(this.spinTimer);this.spinTimer=0;}
   stopReel(i){
@@ -221,7 +220,7 @@ class MachineAudio{
     const base=map[kind]||440,t=this.ctx.currentTime;
     [1,kind==='ESPEJO'?1.012:1.5].forEach((m,i)=>{
       const o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type=i?'sine':'triangle';o.frequency.value=base*m;
-      g.gain.setValueAtTime(i?.012:.018,t+i*.08);g.gain.exponentialRampToValueAtTime(.0001,t+.34+i*.09);
+      g.gain.setValueAtTime(i ? .012 : .018,t+i*.08);g.gain.exponentialRampToValueAtTime(.0001,t+.34+i*.09);
       o.connect(g).connect(this.ctx.destination);o.start(t+i*.08);o.stop(t+.38+i*.09);
     });
   }
