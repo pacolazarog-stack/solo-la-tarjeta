@@ -12,7 +12,7 @@ window.__orasMasterIndexR1=true;
 const ROOT='/solo-la-tarjeta';
 const UKEY='oras.universe.v2';
 const GKEY='oras.reading.index.v1';
-const VERSION='20261013-master-index-cover-4';
+const VERSION='20261013-master-index-4';
 
 const ANA=[
   ['estrella','Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`],
@@ -24,6 +24,8 @@ const ANA=[
   ['afuego','Epílogo · A fuego lento',`${ROOT}/epilogo/`]
 ];
 
+/* Los ids ciu-10…ciu-13 conservan la identidad anterior para mantener el
+   checklist ya leído; cambia únicamente la posición y el número visible. */
 const EXPANSION=[
   ['inv-1','I. El recibidor'],['inv-2','II. La habitación del reloj'],['inv-3','III. La cocina'],['inv-4','IV. El pasillo'],
   ['inv-5','V. El dormitorio'],['inv-6','VI. El jardín'],['inv-7','VII. Inventario'],['inv-8','VIII. Salida'],
@@ -31,7 +33,8 @@ const EXPANSION=[
   ['som-5','V. Conversación'],['som-6','VI. Inventario de ausencias móviles'],['som-7','VII. El taller'],['som-8','VIII. El oficio'],['som-9','IX. Último recorrido'],
   ['ciu-1','I. La plaza'],['ciu-2','II. El archivero'],['ciu-3','III. La fuente'],['ciu-4','IV. Los resistentes'],
   ['ciu-5','V. El mapa imposible'],['ciu-6','VI. Teoría'],['ciu-7','VII. El museo'],['ciu-8','VIII. El visitante'],['ciu-9','IX. Invierno'],
-  ['ciu-10','X. La última sala'],['ciu-11','XI. El Archivo Profundo'],['ciu-12','XII. La Máquina de las Huellas'],['atlas','ATLAS / AZAR'],['ciu-13','XIII. El Resonador'],['zero','Epílogo · La Habitación Número Cero']
+  ['ciu-11','X. El Archivo Profundo'],['ciu-12','XI. La Máquina de las Huellas'],['atlas','ATLAS / AZAR'],['ciu-13','XII. El Resonador'],['ciu-10','XIII. La última sala'],
+  ['zero','Epílogo · La Habitación Número Cero']
 ];
 
 const readJSON=(key,fallback={})=>{try{return JSON.parse(localStorage.getItem(key)||'null')||fallback}catch(_){return fallback}};
@@ -62,9 +65,9 @@ style.textContent=`
 html.oras-master-entry,html.oras-master-entry body{overflow:hidden!important;background:#070706!important}
 .oras-master-cover{position:fixed;z-index:2147483647;inset:0;display:grid;place-items:center;background:#070706;color:#f4ecdc;font-family:Georgia,"Times New Roman",serif}
 .oras-master-cover[hidden]{display:none!important}
-.oras-master-cover-frame{position:relative;height:min(100svh,calc(100vw * 1.491624));width:min(100vw,calc(100svh * .670410));aspect-ratio:1373/2048;box-shadow:0 0 80px rgba(0,0,0,.5);overflow:hidden;background:#0b0a09}
-.oras-master-cover-img{display:block;width:100%;height:100%;object-fit:contain}
-.oras-master-button{position:absolute;left:50%;top:49.6%;width:34%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);border:0;background:transparent;cursor:pointer;touch-action:manipulation;outline:none}
+.oras-master-cover-frame{position:relative;height:min(100svh,calc(100vw * 1.5));width:min(100vw,calc(100svh * .6666667));aspect-ratio:2/3;box-shadow:0 0 80px rgba(0,0,0,.5);overflow:hidden;background:#0b0a09}
+.oras-master-cover-img{display:block;width:100%;height:100%;object-fit:cover}
+.oras-master-button{position:absolute;left:50%;top:50.4%;width:31%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);border:0;background:transparent;cursor:pointer;touch-action:manipulation;outline:none}
 .oras-master-button::before{content:"";position:absolute;inset:-4%;border-radius:50%;border:1px solid transparent;box-shadow:0 0 0 0 rgba(248,239,215,0);transition:border-color .28s ease,box-shadow .28s ease,transform .28s ease}
 .oras-master-button:hover::before,.oras-master-button:focus-visible::before{border-color:rgba(248,239,215,.42);box-shadow:0 0 28px rgba(248,239,215,.18);transform:scale(1.025)}
 .oras-master-button span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -110,8 +113,8 @@ document.documentElement.classList.add('oras-master-entry');
 
 const cover=document.createElement('section');
 cover.className='oras-master-cover';
-cover.setAttribute('aria-label','Portada de ORAS · Lo que queda de las horas');
-cover.innerHTML=`<div class="oras-master-cover-frame"><img class="oras-master-cover-img" src="${ROOT}/assets/oras-portada-final.jpg?v=${VERSION}" alt="ORAS · Lo que queda de las horas"><button class="oras-master-button" type="button" aria-label="Abrir índice general de lectura"><span>Abrir índice general de lectura</span></button></div>`;
+cover.setAttribute('aria-label','Portada de ORAS');
+cover.innerHTML=`<div class="oras-master-cover-frame"><img class="oras-master-cover-img" src="${ROOT}/assets/oras-el-archivo-profundo-cover.svg?v=${VERSION}" alt="ORAS · Lo que queda de las horas"><button class="oras-master-button" type="button" aria-label="Abrir índice general de lectura"><span>Abrir índice general de lectura</span></button></div>`;
 document.body.appendChild(cover);
 
 const index=document.createElement('section');
@@ -141,15 +144,11 @@ function render(){
 
   const inv=EXPANSION.slice(0,8);
   const som=EXPANSION.slice(8,17);
-  const cityPre=EXPANSION.slice(17,29);
-  const atlas=EXPANSION[29];
-  const city13=EXPANSION[30];
+  const city=EXPANSION.slice(17,31);
   const zero=EXPANSION[31];
   const rowsFor=list=>list.map(([id,label])=>row(id,label,invHref(id),expansionDone(id))).join('');
   const count=list=>list.filter(([id])=>expansionDone(id)).length;
-  const atlasRow=row(atlas[0],atlas[1],invHref(atlas[0]),expansionDone(atlas[0]),'irrupción no numerada','oras-mi-machine');
-  const cityRows=rowsFor(cityPre)+atlasRow+row(city13[0],city13[1],invHref(city13[0]),expansionDone(city13[0]));
-  const cityCount=count(cityPre)+count([atlas])+count([city13]);
+  const cityRows=city.map(([id,label])=>row(id,label,invHref(id),expansionDone(id),id==='atlas'?'irrupción no numerada':'',id==='atlas'?'oras-mi-machine':'')).join('');
   const zeroRow=row(zero[0],zero[1],invHref(zero[0]),expansionDone(zero[0]));
 
   const firstUnread=[
@@ -164,7 +163,7 @@ function render(){
     <header class="oras-mi-top"><div><div class="oras-mi-kicker">ORAS · Lo que queda de las horas</div><h1 class="oras-mi-title">Índice de lectura</h1><p class="oras-mi-sub">Cada lectura deja una huella.</p></div><div class="oras-mi-progress"><strong>${p.done}/${p.total}</strong>huellas leídas</div></header>
     <section class="oras-mi-section"><div class="oras-mi-section-head"><div><div class="oras-mi-roman">I · LA VIDA</div><h2>Trilogía I</h2></div></div>${workBlock('1','SOLO LA TARJETA',soloRows,bool(u.soloComplete)?1:0,1)}${workBlock('2','ANA KLAUDYA',anaRows,anaCount,ANA.length)}${workBlock('3','CENICIENTO',cenRows,bool(u.cenicientoComplete)?1:0,1)}</section>
     <section class="oras-mi-section"><div class="oras-mi-section-head"><div><div class="oras-mi-roman">II · EL UMBRAL</div><h2>EL ESPEJO</h2></div></div>${workBlock('','32 fragmentos',mirrorRows,bool(u.mirrorReadComplete)?1:0,1)}</section>
-    <section class="oras-mi-section"><div class="oras-mi-section-head"><div><div class="oras-mi-roman">III · LA EXPANSIÓN</div><h2>Trilogía II</h2></div></div>${workBlock('4','EL INVENTARIO DEL AIRE',rowsFor(inv),count(inv),inv.length)}${workBlock('5','EL OFICIO DE LAS SOMBRAS',rowsFor(som),count(som),som.length)}${workBlock('6','LA CIUDAD QUE APRENDIÓ A OLVIDAR',cityRows,cityCount,14)}</section>
+    <section class="oras-mi-section"><div class="oras-mi-section-head"><div><div class="oras-mi-roman">III · LA EXPANSIÓN</div><h2>Trilogía II</h2></div></div>${workBlock('4','EL INVENTARIO DEL AIRE',rowsFor(inv),count(inv),inv.length)}${workBlock('5','EL OFICIO DE LAS SOMBRAS',rowsFor(som),count(som),som.length)}${workBlock('6','LA CIUDAD QUE APRENDIÓ A OLVIDAR',cityRows,count(city),city.length)}</section>
     <section class="oras-mi-section"><div class="oras-mi-section-head"><div><div class="oras-mi-roman">IV · EL CERO</div><h2>La Habitación Número Cero</h2></div></div>${workBlock('','EPÍLOGO',zeroRow,expansionDone('zero')?1:0,1)}<a class="oras-mi-continue" href="${firstUnread}">${p.done===p.total?'Volver a leer':'Continuar por la primera huella pendiente'}</a></section>`;
 }
 
