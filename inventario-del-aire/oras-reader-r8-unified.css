@@ -9,7 +9,7 @@
   --oras-font:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia,"Times New Roman",serif;
   --oras-body-size:clamp(1.04rem,1.42vw,1.20rem);
   --oras-body-leading:1.72;
-  --oras-paragraph-gap:1.08em;
+  --oras-paragraph-gap:.92em;
   --oras-heading-leading:1.18;
 }
 
@@ -91,9 +91,7 @@ body[data-world="zero"].oras-reader-active .story-panel:not(.atlas-panel) .panel
   margin:0 0 1rem!important;
 }
 
-/* Una sola coreografía textual para todos los capítulos.
-   Las transiciones aleatorias pueden seguir afectando al fondo fotográfico,
-   pero ya no cambian el modo en que entra la caja de lectura. */
+/* Una sola coreografía textual para todos los capítulos. */
 .story-panel .panel-copy,
 .story-panel[data-transition="tr-down"] .panel-copy,
 .story-panel[data-transition="tr-up"] .panel-copy,
@@ -112,7 +110,6 @@ body[data-world="zero"].oras-reader-active .story-panel:not(.atlas-panel) .panel
   filter:none!important;
 }
 
-/* Aparición palabra a palabra idéntica: breve barrido horizontal y opacidad. */
 .display-word{
   opacity:0;
   clip-path:inset(0 100% 0 0);
@@ -128,15 +125,35 @@ body[data-world="zero"].oras-reader-active .story-panel:not(.atlas-panel) .panel
   transform:none;
 }
 
-/* Los ecos persistentes comparten cuerpo e interlineado, aunque sigan siendo marginales. */
+/* Ecos persistentes: forman parte de la misma caja de lectura, no una segunda columna. */
+.atlas-r7-echo{
+  width:100%;
+  max-width:100%;
+  margin:1.05rem 0 .25rem!important;
+  padding:.82rem 0 .25rem 1rem!important;
+  border-left:1px solid rgba(224,188,118,.42);
+}
 .atlas-r7-echo p{
   font-family:var(--oras-font)!important;
-  font-size:calc(var(--oras-body-size) * .92)!important;
-  line-height:var(--oras-body-leading)!important;
+  font-size:calc(var(--oras-body-size) * .90)!important;
+  line-height:1.62!important;
+  overflow-wrap:anywhere;
 }
 
-/* La máquina sigue siendo una máquina, pero su texto no rompe la cadencia general. */
-.atlas-panel .panel-copy{
+/* ATLAS / AZAR necesita anchura de instrumento, no anchura de página literaria. */
+body.oras-reader-active .story-panel.atlas-panel,
+body.oras-reader-active .story-panel.atlas-panel-r6{
+  align-items:center;
+}
+body.oras-reader-active .story-panel.atlas-panel .panel-copy,
+body.oras-reader-active .story-panel.atlas-panel-r6 .panel-copy{
+  width:min(1420px,calc(100vw - 28px))!important;
+  max-width:none!important;
+  max-height:92svh!important;
+  margin:0 auto!important;
+  padding:clamp(.85rem,1.55vw,1.35rem) clamp(.9rem,1.8vw,1.55rem)!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
   font-family:var(--oras-font);
   line-height:var(--oras-body-leading);
   opacity:0;
@@ -144,11 +161,64 @@ body[data-world="zero"].oras-reader-active .story-panel:not(.atlas-panel) .panel
   filter:none!important;
   transition:opacity .62s ease,transform .78s cubic-bezier(.2,.78,.2,1)!important;
 }
-.atlas-panel.is-reading .panel-copy{opacity:1;transform:none!important}
+.atlas-panel.is-reading .panel-copy,.atlas-panel-r6.is-reading .panel-copy{opacity:1;transform:none!important}
+
+.atlas-panel-r6 .atlas-r6-title{
+  margin-bottom:.72rem!important;
+  padding-bottom:.42rem!important;
+  font-size:clamp(1.5rem,2.45vw,2.25rem)!important;
+}
+.atlas-panel-r6 .atlas-r6-body{
+  grid-template-columns:minmax(0,1fr) minmax(0,1.08fr)!important;
+  gap:clamp(.8rem,1.6vw,1.45rem)!important;
+  align-items:stretch!important;
+  min-width:0;
+}
+.atlas-panel-r6 .atlas-r6-machine,
+.atlas-panel-r6 .atlas-r6-result{
+  min-width:0!important;
+  min-height:0!important;
+  height:min(68svh,590px);
+}
+.atlas-panel-r6 .atlas-r6-machine{
+  padding:clamp(.95rem,1.65vw,1.45rem)!important;
+  gap:1rem!important;
+}
+.atlas-panel-r6 .atlas-r6-reel{min-height:clamp(112px,16svh,145px)!important}
+.atlas-panel-r6 .atlas-r6-reel strong{font-size:clamp(2.8rem,5.4vw,5rem)!important}
+.atlas-panel-r6 .atlas-r6-result{
+  padding:clamp(.9rem,1.5vw,1.35rem)!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+}
+.atlas-panel-r6 .atlas-r6-kind{
+  width:100%;
+  max-width:100%;
+  font-size:clamp(1.55rem,2.45vw,2.55rem)!important;
+  letter-spacing:.105em!important;
+  line-height:1.06!important;
+  white-space:nowrap;
+  overflow:visible;
+}
+.atlas-panel-r6 .atlas-r6-trace{
+  min-height:3.6em!important;
+  margin-top:.72rem!important;
+  font-size:clamp(1rem,1.35vw,1.18rem)!important;
+  line-height:1.58!important;
+}
+.atlas-panel-r6 .atlas-r6-coordinate{margin-top:.82rem!important;font-size:clamp(1.25rem,2.35vw,1.95rem)!important}
+.atlas-panel-r6 .atlas-r6-map{width:min(100%,285px)!important;margin:.72rem auto 0!important}
+.atlas-panel-r6 .atlas-r6-consequence{margin-top:.55rem!important;padding-top:.5rem!important}
 .atlas-r5-output,.atlas-r6-output,.atlas-r6-trace,.atlas-r6-consequence{line-height:var(--oras-body-leading)!important}
 
+@media(max-width:900px){
+  .atlas-panel-r6 .atlas-r6-body{grid-template-columns:1fr!important}
+  .atlas-panel-r6 .atlas-r6-machine,.atlas-panel-r6 .atlas-r6-result{height:auto;min-height:auto!important}
+  .atlas-panel-r6 .atlas-r6-kind{white-space:normal}
+}
+
 @media(max-width:700px){
-  :root{--oras-copy-height:84dvh;--oras-body-size:clamp(1rem,4.15vw,1.10rem);--oras-body-leading:1.68;--oras-paragraph-gap:1.02em}
+  :root{--oras-copy-height:84dvh;--oras-body-size:clamp(1rem,4.15vw,1.10rem);--oras-body-leading:1.68;--oras-paragraph-gap:.88em}
   body.oras-reader-active .story-panel:not(.atlas-panel) .panel-copy,
   body.oras-reader-active .story-panel[data-chapter="deep-archive"] .panel-copy,
   body.oras-reader-active .story-panel[data-chapter="trace-machine"] .panel-copy,
@@ -158,6 +228,12 @@ body[data-world="zero"].oras-reader-active .story-panel:not(.atlas-panel) .panel
     max-height:var(--oras-copy-height);
     padding:1.15rem 1rem;
     border-left:0;
+  }
+  body.oras-reader-active .story-panel.atlas-panel .panel-copy,
+  body.oras-reader-active .story-panel.atlas-panel-r6 .panel-copy{
+    width:calc(100vw - 12px)!important;
+    max-height:92dvh!important;
+    padding:.75rem!important;
   }
 }
 
