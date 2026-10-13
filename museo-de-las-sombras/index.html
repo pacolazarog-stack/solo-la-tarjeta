@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#11100f">
+<meta name="description" content="ORAS · El Museo de las Sombras. Arquitectura canónica de la obra expandida R3.">
+<title>ORAS · EL MUSEO DE LAS SOMBRAS · R3</title>
+<style>
+:root{--bg:#11100f;--paper:#171614;--ink:#eee8dc;--muted:#aaa293;--gold:#d4bd86;--line:#39352f;--max:860px}
+*{box-sizing:border-box}
+html{background:var(--bg);color-scheme:dark}
+body{margin:0;background:radial-gradient(120% 70% at 50% 0,#211e19 0,var(--bg) 58%);color:var(--ink);font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia,serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+header{min-height:54vh;display:grid;place-items:center;padding:56px 24px 38px;text-align:center;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+h1{font-weight:400;font-size:clamp(2.2rem,7vw,5.6rem);line-height:.96;letter-spacing:-.025em;margin:0}
+.subtitle{margin-top:22px;color:var(--gold);font-size:clamp(1rem,2vw,1.2rem);letter-spacing:.06em}
+main{width:min(var(--max),calc(100% - 36px));margin:0 auto;padding:64px 0 120px}
+article{font-size:clamp(1.05rem,2.1vw,1.24rem);line-height:1.78}
+h2,h3,h4{font-weight:400;line-height:1.15;margin:3.2em 0 1em;color:#f4eee2}
+h2{font-size:2rem;border-top:1px solid var(--line);padding-top:1.35em}h3{font-size:1.5rem}h4{font-size:1.2rem;color:var(--gold)}
+p{margin:1em 0}
+blockquote{margin:2.2em 0;padding:.15em 0 .15em 1.25em;border-left:2px solid #88734d;color:#e5d8bd;font-style:italic}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0d0c0b;border:1px solid #302d28;border-radius:8px;padding:18px 20px;line-height:1.55;color:#ddd4c4}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.9em}
+:not(pre)>code{background:#25221e;border-radius:4px;padding:.08em .3em;color:#e7cf96}
+ul,ol{padding-left:1.4em}li{margin:.32em 0}
+table{width:100%;border-collapse:collapse;margin:2em 0;font-size:.95em}th,td{border-bottom:1px solid var(--line);padding:.75em .6em;text-align:left;vertical-align:top}th{color:var(--gold);font-weight:400}
+hr{border:0;border-top:1px solid var(--line);margin:3em 0}
+a{color:var(--gold)}
+.status{color:var(--muted);text-align:center;padding:30px 0}
+.footer{border-top:1px solid var(--line);padding-top:30px;margin-top:70px;color:var(--muted);font-size:.9rem;text-align:center}
+@media(max-width:600px){header{min-height:46vh}main{width:min(var(--max),calc(100% - 28px));padding-top:42px}article{line-height:1.68}h2{font-size:1.7rem}}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="eyebrow">ORAS · Lo que queda después de las horas</div>
+    <h1>EL MUSEO<br>DE LAS SOMBRAS</h1>
+    <div class="subtitle">Arquitectura canónica · R3</div>
+  </div>
+</header>
+<main>
+  <div id="status" class="status">Abriendo el Archivo Profundo…</div>
+  <article id="document" hidden></article>
+  <div class="footer">ORAS · EL MUSEO DE LAS SOMBRAS</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+(async()=>{
+  const status=document.getElementById('status');
+  const article=document.getElementById('document');
+  try{
+    const response=await fetch('../ORAS_MUSEO_DE_LAS_SOMBRAS_ARQUITECTURA_CANONICA_R3.md?'+Date.now(),{cache:'no-store'});
+    if(!response.ok) throw new Error('No se pudo abrir el documento');
+    const md=await response.text();
+    if(window.marked){
+      marked.setOptions({gfm:true,breaks:false});
+      article.innerHTML=marked.parse(md);
+    }else{
+      const pre=document.createElement('pre');
+      pre.textContent=md;
+      article.appendChild(pre);
+    }
+    status.remove();
+    article.hidden=false;
+  }catch(err){
+    status.textContent='El Archivo Profundo no está disponible en este momento.';
+    const p=document.createElement('p');
+    p.style.textAlign='center';
+    p.innerHTML='<a href="../ORAS_MUSEO_DE_LAS_SOMBRAS_ARQUITECTURA_CANONICA_R3.md">Abrir el documento canónico</a>';
+    status.insertAdjacentElement('afterend',p);
+  }
+})();
+</script>
+</body>
+</html>
