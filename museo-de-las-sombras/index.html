@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#11100f">
-<meta name="description" content="ORAS · El Museo de las Sombras. Arquitectura, Archivo Profundo, Máquina de las Huellas, Atlas/Azar y Resonador.">
+<meta name="description" content="ORAS · El Museo de las Sombras. Capítulos XI–XIII y Atlas/Azar de la Máquina de las Huellas.">
 <title>ORAS · EL MUSEO DE LAS SOMBRAS</title>
 <style>
 :root{--bg:#11100f;--paper:#171614;--ink:#eee8dc;--muted:#aaa293;--gold:#d4bd86;--line:#39352f;--max:860px}
@@ -20,28 +20,18 @@ nav{position:sticky;top:0;z-index:30;display:flex;gap:8px;justify-content:center
 nav a{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;padding:7px 10px;border:1px solid transparent;border-radius:999px}
 nav a:hover{border-color:var(--line)}
 main{width:min(var(--max),calc(100% - 36px));margin:0 auto;padding:64px 0 120px}
-article,.chapter{font-size:clamp(1.05rem,2.1vw,1.24rem);line-height:1.78}
-h2,h3,h4{font-weight:400;line-height:1.15;margin:3.2em 0 1em;color:#f4eee2}
-h2{font-size:2rem;border-top:1px solid var(--line);padding-top:1.35em}h3{font-size:1.5rem}h4{font-size:1.2rem;color:var(--gold)}
+.chapter{font-size:clamp(1.05rem,2.1vw,1.24rem);line-height:1.78;padding-top:22px}
+h2{font-weight:400;line-height:1.15;margin:2em 0 1em;color:#f4eee2;font-size:2rem;border-top:1px solid var(--line);padding-top:1.35em}
 p{margin:1em 0}
 blockquote{margin:2.2em 0;padding:.15em 0 .15em 1.25em;border-left:2px solid #88734d;color:#e5d8bd;font-style:italic}
-pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0d0c0b;border:1px solid #302d28;border-radius:8px;padding:18px 20px;line-height:1.55;color:#ddd4c4}
-code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.9em}
-:not(pre)>code{background:#25221e;border-radius:4px;padding:.08em .3em;color:#e7cf96}
-ul,ol{padding-left:1.4em}li{margin:.32em 0}
-table{width:100%;border-collapse:collapse;margin:2em 0;font-size:.95em}th,td{border-bottom:1px solid var(--line);padding:.75em .6em;text-align:left;vertical-align:top}th{color:var(--gold);font-weight:400}
-hr{border:0;border-top:1px solid var(--line);margin:3em 0}
-.status{color:var(--muted);text-align:center;padding:30px 0}
 .kicker{margin:0 0 8px;color:var(--gold);font-size:.72rem;letter-spacing:.23em;text-transform:uppercase}
-.chapter{padding-top:22px}
-.chapter h2{margin-top:2em}
 .chapter .break{display:block;height:1.5rem}
 .atlas-embed-shell{position:relative;width:min(1220px,calc(100vw - 30px));margin:80px 0 80px 50%;transform:translateX(-50%);border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0d0c0b;box-shadow:0 32px 90px rgba(0,0,0,.3)}
 .atlas-embed-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;padding:24px 26px;border-bottom:1px solid var(--line)}
 .atlas-embed-head h2{margin:4px 0 0;padding:0;border:0}.atlas-embed-head p{margin:.35em 0 0;color:var(--muted);font-size:.9rem}.atlas-embed-head a{white-space:nowrap;text-decoration:none;border:1px solid #62594b;border-radius:999px;padding:9px 13px;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
 .atlas-frame{display:block;width:100%;height:min(920px,92vh);min-height:720px;border:0;background:#100f0d}
 .footer{border-top:1px solid var(--line);padding-top:30px;margin-top:70px;color:var(--muted);font-size:.9rem;text-align:center}
-@media(max-width:720px){header{min-height:46vh}main{width:min(var(--max),calc(100% - 28px));padding-top:42px}article,.chapter{line-height:1.68}h2{font-size:1.7rem}.atlas-embed-shell{width:100vw;border-radius:0}.atlas-embed-head{display:grid;padding:18px 16px}.atlas-embed-head a{justify-self:start}.atlas-frame{height:88vh;min-height:680px}}
+@media(max-width:720px){header{min-height:46vh}main{width:min(var(--max),calc(100% - 28px));padding-top:42px}.chapter{line-height:1.68}h2{font-size:1.7rem}.atlas-embed-shell{width:100vw;border-radius:0}.atlas-embed-head{display:grid;padding:18px 16px}.atlas-embed-head a{justify-self:start}.atlas-frame{height:88vh;min-height:680px}}
 </style>
 </head>
 <body>
@@ -53,18 +43,12 @@ hr{border:0;border-top:1px solid var(--line);margin:3em 0}
   </div>
 </header>
 <nav aria-label="Navegación de la obra">
-  <a href="#arquitectura">Arquitectura</a>
   <a href="#xi">XI</a>
   <a href="#xii">XII</a>
   <a href="#maquina">Atlas / Azar</a>
   <a href="#xiii">XIII</a>
 </nav>
 <main>
-  <section id="arquitectura">
-    <div id="status" class="status">Abriendo el Archivo Profundo…</div>
-    <article id="document" hidden></article>
-  </section>
-
   <section id="xi" class="chapter">
     <div class="kicker">EL INVENTARIO DE LAS SOMBRAS</div>
     <h2>XI. EL ARCHIVO PROFUNDO</h2>
@@ -98,7 +82,7 @@ hr{border:0;border-top:1px solid var(--line);margin:3em 0}
   </section>
 
   <section id="maquina" class="atlas-embed-shell" aria-label="Atlas y Azar de la Máquina de las Huellas">
-    <div class="atlas-embed-head"><div><div class="kicker">ARCHIVO PROFUNDO · CUBO 27³</div><h2>ATLAS / AZAR · MÁQUINA DE LAS HUELLAS</h2><p>El Atlas conoce la arquitectura. El Azar la atraviesa mediante X → Y → CENTRO → Z.</p></div><a href="./atlas.html#atlas">Abrir a pantalla completa</a></div>
+    <div class="atlas-embed-head"><div><div class="kicker">MÁQUINA DE LAS HUELLAS · CUBO 27³</div><h2>ATLAS / AZAR</h2><p>El Atlas muestra coordenadas y huellas. El Azar recorre X → Y → CENTRO → Z.</p></div><a href="./atlas.html#atlas">Abrir a pantalla completa</a></div>
     <iframe class="atlas-frame" src="./atlas.html#atlas" title="Atlas y Azar interactivos de la Máquina de las Huellas" loading="lazy"></iframe>
   </section>
 
@@ -117,20 +101,5 @@ hr{border:0;border-top:1px solid var(--line);margin:3em 0}
 
   <div class="footer">ORAS · EL MUSEO DE LAS SOMBRAS</div>
 </main>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script>
-(async()=>{
-  const status=document.getElementById('status');
-  const article=document.getElementById('document');
-  try{
-    const response=await fetch('../ORAS_MUSEO_DE_LAS_SOMBRAS_ARQUITECTURA_CANONICA_R3.md?'+Date.now(),{cache:'no-store'});
-    if(!response.ok) throw new Error('No se pudo abrir el documento');
-    const md=await response.text();
-    if(window.marked){marked.setOptions({gfm:true,breaks:false});article.innerHTML=marked.parse(md)}
-    else{const pre=document.createElement('pre');pre.textContent=md;article.appendChild(pre)}
-    status.remove();article.hidden=false;
-  }catch(err){status.textContent='El Archivo Profundo no está disponible en este momento.'}
-})();
-</script>
 </body>
 </html>
