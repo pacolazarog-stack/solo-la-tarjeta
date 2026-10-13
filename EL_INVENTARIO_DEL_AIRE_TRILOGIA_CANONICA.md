@@ -98,7 +98,6 @@ La dejó donde estaba.
 La cama seguía hecha.
 Las almohadas hundidas.
 La colcha sin arrugas.
-Había algo insoportablemente preciso en aquella escena.
 Como si cada objeto hubiese decidido permanecer inmóvil para no empeorar las cosas.
 Abrió el armario.
 Ropa.
@@ -116,6 +115,7 @@ Era la primera frase del día que no le pareció equivocada.
 Al atardecer salió al jardín.
 Las plantas habían crecido sin permiso. Las raíces ignoraban la nostalgia y los árboles seguían a lo suyo: crecer, torcerse, dar sombra.
 Ninguno parecía obligado a recordar.
+
 Miró la fachada.
 La casa parecía más pequeña desde fuera.
 Siempre ocurría.
@@ -134,17 +134,10 @@ Conserva una hora.
 Conserva un gesto.
 Falta una mirada.
 Los objetos sobreviven mejor que las explicaciones.
-Aquello no era un inventario.
-Era otra cosa.
-Lo entendió de golpe.
 Había venido creyendo que las personas dejaban objetos.
 Pero quizá ocurría al revés.
 Quizá los objetos eran quienes dejaban personas.
 Pequeñas huellas.
-Formas de presencia.
-Residuos de atención.
-Nada más.
-Nada menos.
 
 ## VIII. Salida
 
@@ -153,10 +146,8 @@ No quería que entrara polvo.
 Ni lluvia.
 Ni aire nuevo.
 La casa no estaba esperando a nadie.
-Eso también lo entendió tarde.
 No esperaba.
 Recordaba.
-Era distinto.
 Al salir, dejó la libreta sobre la cómoda del recibidor.
 Junto al reloj detenido.
 No se llevó una sola página.
@@ -174,8 +165,6 @@ Y el aire inmóvil de una casa que había aprendido a recordar sin ayuda de nadi
 ## I. La estación
 
 El tren llegó vacío.
-No sin pasajeros.
-Vacío.
 Los pasajeros ocupaban los asientos.
 El tren ocupaba el andén.
 Pero algo faltaba.
@@ -196,7 +185,7 @@ Para comprobar una sospecha.
 
 ## II. El revisor
 
-El revisor llevaba cuarenta años trabajando y nunca había tenido problemas.
+El revisor llevaba más de treinta años trabajando y nunca había tenido problemas.
 Los horarios, los gobiernos y los uniformes cambiaban; los retrasos permanecían.
 Era una profesión razonable: medir el movimiento de las personas.
 Aquella mañana encontró algo extraño.
@@ -263,7 +252,7 @@ Miró al hombre.
 Miró el asiento de enfrente.
 Siguió caminando.
 Después nada.
-Sin embargo, por alguna razón inexplicable, el hombre tuvo la certeza de haber formulado la pregunta correcta.
+Sin embargo, el hombre tuvo la certeza de haber formulado la pregunta correcta.
 No la más inteligente.
 La correcta.
 
@@ -304,17 +293,10 @@ Por primera vez en mucho tiempo sintió alivio.
 
 ## VIII. El oficio
 
-La revelación tardó más de lo esperado.
-No llegó en una estación, ni en un tren, ni frente a una sombra concreta.
-Llegó una tarde cualquiera, mientras revisaba sus notas.
-Entonces comprendió que estaba equivocado.
 No eran viajeros perdidos.
 No eran recuerdos.
 No eran fantasmas.
 Eran trayectos.
-Los viajes también envejecían. También dejaban restos: personas que ya no estaban, conversaciones terminadas, despedidas olvidadas, encuentros irrepetibles.
-Todo eso permanecía suspendido en algún lugar, como una estela.
-Las sombras eran simplemente la forma visible de esa persistencia.
 
 ## IX. Último recorrido
 
@@ -337,9 +319,6 @@ No de golpe.
 No como una aparición.
 Se desvaneció despacio.
 Como una tarea terminada.
-Entonces comprendió.
-No había estado observando una presencia.
-Había estado asistiendo a una despedida.
 Y algunas despedidas, pensó mientras el andén se vaciaba, necesitan décadas para completarse.
 
 # VOLUMEN III
@@ -406,8 +385,6 @@ Había personas que recordaban agua donde ya no existía ninguna prueba.
 
 Con el tiempo comenzaron a encontrarse.
 En silencio.
-Sin asociaciones.
-Sin manifiestos.
 No parecían conspiradores.
 Parecían supervivientes.
 Cada uno recordaba algo distinto.
@@ -495,10 +472,6 @@ Luego hizo una pregunta mejor.
 
 El archivero envejeció.
 La ciudad también.
-Las desapariciones se hicieron menos frecuentes.
-O quizá más.
-Nadie estaba seguro.
-Había dejado de ser fácil distinguirlas.
 Algunas pérdidas ocurrían tan despacio que sólo se percibían después de muchos años.
 Como la erosión.
 Como la distancia.
@@ -524,188 +497,834 @@ Miraban edificios conocidos.
 Plazas conocidas.
 Puertas conocidas.
 Y durante un instante muy breve no estaban completamente seguros de quién conservaba a quién.
-La ciudad.
-O ellos.
+
+## XI. EL ARCHIVO PROFUNDO
+
+El problema de los archivos era sencillo.
+Conservaban las cosas.
+No conservaban aquello que las unía.
+
+Una tarde de invierno, el archivero revisaba tres fichas aparentemente inconexas.
+Una silla desplazada unos centímetros respecto a una mesa.
+Una fotografía en la que aparecía una ventana cerrada.
+Un botón de nácar hallado en una caja sin identificar.
+
+No compartían fecha.
+No compartían procedencia.
+No compartían contexto.
+Pero leídas seguidas parecían hablar de la misma ausencia.
+
+Durante semanas encontró referencias dispersas a una expresión:
+Archivo Profundo.
+Nunca figuraba una localización.
+Nunca una descripción.
+Nunca un responsable.
+
+Una madrugada encontró un memorando sin fecha.
+Sólo contenía seis líneas:
+
+El Museo conserva objetos.
+El Archivo Profundo conserva relaciones.
+No confundir ambos fondos.
+La diferencia es esencial.
+Las pérdidas comienzan cuando deja de comprenderse.
+No destruir.
+
+El archivero volvió a las tres fichas.
+La silla.
+La ventana.
+El botón.
+El museo catalogaba cosas.
+La memoria recordaba conexiones.
+
+Siguió buscando.
+Una noche encontró un plano.
+Mostraba todas las salas conocidas.
+Los depósitos.
+Las oficinas.
+Los almacenes.
+Los talleres de restauración.
+Y un espacio sin numeración.
+
+No tenía puertas.
+No tenía medidas.
+No tenía escala.
+
+Sólo una inscripción escrita a lápiz:
+
+Archivo Profundo.
+
+El archivero contempló el plano durante varios minutos.
+Después lo archivó.
+
+## XII. LA MÁQUINA DE LAS HUELLAS
+
+La máquina no parecía una máquina.
+Ésa fue la primera dificultad.
+Quienes esperaban engranajes encontraban estanterías.
+Quienes esperaban estanterías encontraban diagramas.
+Quienes buscaban diagramas encontraban listas.
+Nadie regresaba con una descripción idéntica.
+
+El archivero la descubrió al final de un corredor que no figuraba en ningún plano actualizado.
+La estancia estaba vacía.
+O casi vacía.
+En el centro había una estructura imposible de clasificar.
+No era grande.
+No imponía respeto.
+No producía ruido.
+No emitía luz.
+Parecía esperar.
+
+La mesa de control estaba cubierta por fichas.
+Miles de fichas.
+Algunas describían objetos.
+Otras contenían nombres.
+Otras recogían errores documentales.
+Había incluso tarjetas dedicadas a contradicciones.
+Durante varios días examinó el material.
+Todas las fichas compartían una característica.
+Ninguna estaba dedicada a una cosa aislada.
+Cada una describía una relación.
+Un nombre asociado a una fotografía.
+Un objeto vinculado a una ausencia.
+Una fecha incompatible con un testimonio.
+Un error que sobrevivía mejor que los documentos que lo habían originado.
+La lógica resultaba extraña.
+Pero también familiar.
+Era exactamente la lógica que había sospechado en el Archivo Profundo.
+
+Entonces encontró un cuaderno.
+Sólo contenía esquemas.
+No había explicaciones.
+En una página aparecía un cubo.
+Tres ejes.
+MATERIALIDAD.
+INSCRIPCIÓN.
+SOMBRA.
+El centro estaba señalado.
+14,14,14.
+Junto a él alguien había escrito:
+Máxima ambigüedad.
+
+En otra página aparecían palabras distribuidas alrededor del esquema.
+ECO.
+AUSENCIA.
+ERROR.
+SOMBRA.
+TESTIMONIO.
+ESPEJO.
+CONTRADICCIÓN.
+No parecían categorías.
+Parecían fuerzas.
+Como si la memoria estuviera compuesta por tensiones invisibles.
+
+El archivero siguió leyendo.
+La letra cambiaba cada pocas páginas.
+Distintas personas habían trabajado sobre el mismo documento.
+Algunas anotaciones eran incompatibles entre sí.
+Nadie había intentado corregirlas.
+Todas permanecían.
+La contradicción parecía formar parte del método.
+
+Los últimos folios hablaban del Resonador.
+No estaba claro si era un mecanismo.
+Un procedimiento.
+Un programa.
+O una teoría.
+Las descripciones diferían.
+Sin embargo, todas coincidían en un punto.
+El Resonador operaba únicamente sobre huellas.
+Nunca sobre hechos completos.
+Una huella era suficiente.
+Una sombra bastaba.
+Una ausencia incluso podía resultar útil.
+La desaparición absoluta, en cambio, impedía cualquier operación.
+
+Por primera vez apareció una referencia indirecta a una región excluida.
+No se mencionaba su nombre.
+Sólo la condición que la definía:
+
+Allí donde ya no queda ninguna huella,
+el Resonador no puede trabajar.
+
+El archivero comprendió que estaba leyendo los límites del sistema.
+No sus capacidades.
+Sus límites.
+La diferencia lo inquietó.
+Toda tecnología prometía ampliar lo posible.
+Aquella parecía diseñada para delimitar lo imposible.
+
+Continuó avanzando entre fichas y diagramas.
+En una carpeta encontró una nota aislada.
+No llevaba firma.
+No llevaba fecha.
+No llevaba sello del museo.
+Sólo una frase.
+La leyó una vez.
+Después otra.
+Y otra más.
+Decía:
+
+El Resonador no conserva nada.
+No recupera nada.
+No explica nada.
+Produce formas temporales de sentido.
+
+El archivero cerró la carpeta.
+Durante varios minutos permaneció inmóvil.
+La máquina seguía en silencio.
+El museo también.
+Y por primera vez sospechó que todo lo que había visto hasta entonces no era más que una preparación.
+Algo permanecía fuera del sistema.
+Algo que ni el Archivo Profundo ni la Máquina de las Huellas podían alcanzar.
+
+# ATLAS / AZAR
+
+La máquina ya estaba funcionando.
+
+No esperaba al visitante.
+
+Respiraba.
+
+Tres ventanas.
+
+X.
+
+Y.
+
+Z.
+
+En cada una, un número.
+
+Debajo, una única acción:
+
+ACCIONAR AZAR.
+
+No generar.
+
+No calcular.
+
+No analizar.
+
+Accionar.
+
+Al pulsar, los tres números comienzan a girar.
+
+Durante el giro no existe MATERIALIDAD.
+
+No existe INSCRIPCIÓN.
+
+No existe SOMBRA.
+
+Sólo números.
+
+X se detiene.
+
+Después Y.
+
+Después Z.
+
+La máquina parece decidir.
+
+No calcular.
+
+Entonces aparece primero una palabra.
+
+Puede decir:
+
+RESONANCIA.
+
+INTERFERENCIA.
+
+ORA.
+
+AUSENCIA.
+
+CONTRADICCIÓN.
+
+ESPEJO.
+
+ERROR.
+
+Sólo después aparece la coordenada.
+
+Y sólo después:
+
+MATERIALIDAD · INSCRIPCIÓN · SOMBRA.
+
+El Atlas conserva la posición.
+
+Y las posiciones anteriores.
+
+Pero la coordenada no es el resultado.
+
+La máquina no produce resultados.
+
+Produce consecuencias.
+
+Cada activación deja una huella.
+
+La partida desaparece.
+
+La huella no.
+
+Una resonancia puede decir:
+
+La relación apareció antes que la explicación.
+
+Dos huellas que no se conocían comenzaron a decir lo mismo.
+
+Nada fue recuperado. Algo, sin embargo, volvió a tener sentido.
+
+Una interferencia puede decir:
+
+Tres versiones coinciden. Ninguna describe la misma cosa.
+
+La coincidencia aumentó la duda.
+
+La señal se hizo más clara justo cuando dejó de ser fiable.
+
+Una ORA puede decir:
+
+Casi todo había desaparecido. La capacidad de relación no.
+
+La procedencia se perdió. La huella siguió diciendo cosas.
+
+Lo que quedaba era insuficiente para explicar y suficiente para resonar.
+
+Una ausencia puede decir:
+
+Algo falta. Todavía queda bastante para saber que falta.
+
+La ausencia conserva un borde.
+
+No apareció el objeto. Apareció el lugar que había dejado.
+
+Una contradicción puede decir:
+
+Dos testimonios se excluyen y sobreviven juntos.
+
+La corrección no eliminó el error.
+
+Una versión niega a la otra. Las dos dejan huella.
+
+Un espejo puede decir:
+
+La misma huella permite una lectura inversa.
+
+Lo que el archivo afirma puede regresar cambiado.
+
+La relación vuelve desde el otro lado.
+
+Un error puede decir:
+
+El error fue registrado antes que la cosa.
+
+Una equivocación sobrevivió a su causa.
+
+Nadie corrigió la ficha. La ficha siguió trabajando.
+
+Después la máquina puede mostrar únicamente:
+
+La jugada ha dejado una huella.
+
+O:
+
+La consecuencia no está aquí.
+
+Porque algunas consecuencias no aparecen inmediatamente.
+
+Una huella puede quedar latente.
+
+Volver varias jugadas después.
+
+Volver en otra visita.
+
+Aparecer en el Archivo Profundo.
+
+En la Máquina de las Huellas.
+
+En el Resonador.
+
+O atravesar el Espejo.
+
+El Espejo nunca la recibe intacta.
+
+La multiplica.
+
+Una huella puede producir otra versión.
+
+Y ambas permanecen.
+
+La coordenada 14,14,14 obedece una regla propia.
+
+No importa cómo se haya alcanzado.
+
+Siempre produce:
+
+INTERFERENCIA.
+
+Tres versiones coinciden.
+
+Ninguna describe la misma cosa.
+
+Las dos jugadas posteriores quedan contaminadas.
+
+Una ORA aumenta la posibilidad de persistencia.
+
+Una CONTRADICCIÓN aumenta la posibilidad de duplicados, errores e interferencias.
+
+El azar deja de ser neutral.
+
+El Archivo empieza a recordar las jugadas.
+
+Y la máquina empieza a recordar al visitante.
+
+Después de suficientes activaciones puede ocurrir algo distinto.
+
+La pantalla dice:
+
+NO SE HA REGISTRADO.
+
+NINGUNA CONSECUENCIA.
+
+Nada más.
+
+El visitante puede creer que ha perdido.
+
+Puede marcharse.
+
+Pero la ausencia de consecuencia también queda registrada.
+
+Más tarde algo cambia.
+
+Una nota.
+
+Una ficha.
+
+Una resonancia.
+
+Una versión del Espejo.
+
+Entonces quizá comprenda que la máquina no estaba esperando un premio.
+
+Estaba seleccionando una huella.
+
+En ocasiones excepcionales ocurre otra cosa.
+
+No aparece una categoría nueva.
+
+No aparece un premio.
+
+La máquina devuelve una resonancia aparentemente normal.
+
+Después una coordenada cambia.
+
+Una palabra desaparece.
+
+Un sonido no se comporta como los demás.
+
+Mucho después puede aparecer una referencia:
+
+BN-01.
+
+No explica nada.
+
+BN-01 no crea una huella.
+
+Altera una que ya existía.
+
+La regla queda en el Archivo:
+
+Toda jugada produce una huella.
+
+Toda huella puede volver.
+
+Algunas huellas terminan formando parte del Archivo.
+
+La última inscripción no pertenece al visitante.
+
+Tampoco está claro quién la escribió:
+
+El visitante cree que acciona la máquina.
+
+La máquina cree otra cosa.
+
+## XIII. EL RESONADOR
+
+Durante varios días el archivero no tocó la máquina.
+La observaba.
+
+Volvió al cuaderno.
+
+Después reunió varias fichas sobre la mesa.
+Una silla.
+Una fotografía.
+Un testimonio.
+
+Aparecieron unas líneas.
+Finas.
+Casi invisibles.
+Unían documentos aparentemente inconexos.
+Al mover una ficha, cambiaban.
+
+La máquina no explicaba.
+Relacionaba.
+
+Comenzó a experimentar.
+A veces aparecía una palabra.
+ECO.
+AUSENCIA.
+ERROR.
+CONTRADICCIÓN.
+Una vez:
+ESPEJO.
+La palabra permaneció unos segundos.
+Después desapareció.
+
+El objeto decisivo fue un botón de nácar.
+Una ficha incompleta.
+Sin fecha.
+Sin propietario.
+Sin procedencia.
+
+Añadió otra huella.
+Después otra.
+Después una nota marginal:
+
+Ella siempre cosía los botones dos veces.
+
+La mesa se llenó de líneas.
+Apareció una palabra.
+
+RESONANCIA.
+
+Y luego un texto:
+
+Hubo un botón.
+La camisa desapareció antes.
+Nadie recuerda quién la llevaba.
+La costura sobrevivió en una frase.
+Por eso el museo conservó la duda.
+
+El archivero buscó aquellas frases.
+No estaban en ninguna ficha.
+Los elementos sí.
+La frase no.
+No había sido recuperada.
+Había surgido.
+
+Continuó trabajando durante semanas.
+A veces aparecía un poema.
+A veces una contradicción.
+A veces nada.
+
+Una tarde volvió al punto 14,14,14.
+Las líneas desaparecieron.
+Después apareció un único mensaje:
+
+[INTERFERENCIA DETECTADA]
+
+Tres versiones coinciden.
+Ninguna describe la misma cosa.
+
+Más tarde intentó explorar el límite del sistema.
+Introdujo fichas vacías.
+Sin objeto.
+Sin descripción.
+Sin huella.
+
+La máquina no respondió.
+
+Finalmente apareció una frase:
+
+NO EXISTEN HUELLAS SUFICIENTES.
+
+Entonces comprendió el verdadero límite del sistema.
+
+Incluso una ausencia necesita una huella.
 
 # EPÍLOGO
 
 # La habitación número cero
 
 Muchos años después de la muerte del archivero, el museo seguía abierto.
+
 No recibía demasiadas visitas.
+
 Tampoco las necesitaba.
+
 Los visitantes llegaban.
+
 Leían.
+
 Dudaban.
+
 Se marchaban.
+
 Era suficiente.
+
 Las ciudades nunca habían dependido de las multitudes para recordar.
+
 Sólo de unos pocos obstinados.
+
 Una mañana apareció una caja.
+
 Nadie supo quién la dejó.
+
 No llevaba remitente.
+
 Ni fecha.
+
 Ni dirección.
-Sólo una etiqueta.
-Escrita a mano.
+
+Sólo una etiqueta escrita a mano.
+
 Decía:
-Para la habitación número cero.
-El museo no tenía una habitación número cero.
+
+Para la Habitación Número Cero.
+
+El museo no tenía una Habitación Número Cero.
+
 Aun así, todos comprendieron inmediatamente a qué se refería.
 
 La caja permaneció varios días cerrada.
+
 Nadie quería abrirla.
+
 No por miedo.
+
 Por respeto.
+
 Como si hacerlo fuera alterar algo que aún no había decidido existir.
+
 Finalmente reunieron a los responsables.
+
 Abrieron la tapa.
+
 Dentro encontraron una única carpeta.
+
 Y una hoja.
-La hoja contenía apenas una frase.
-Decía:
+
+La hoja contenía apenas una frase:
+
 Esta sala contiene todo lo que fue olvidado antes de poder ser recordado.
+
 Nada más.
 
-Al principio pensaron que estaba vacía.
-Después comprendieron su error.
-La carpeta contenía cientos de fichas.
-Nombres.
-Direcciones.
-Descripciones.
-Referencias.
-Objetos.
-Calles.
-Rostros.
-Tiendas.
-Conversaciones.
-Todo aquello había desaparecido.
-Pero existía una diferencia.
-Nadie lo recordaba.
-Ni una sola persona.
-No había testimonios.
-No había fotografías conservadas en cajas familiares.
-No había discusiones entre vecinos.
-No había recuerdos incompatibles.
-Nada.
-Aquello era el resto de algo que había sido olvidado por completo.
+Al principio pensaron que la carpeta estaba vacía.
 
-Hasta ese momento, el museo se había dedicado a conservar discrepancias.
-La existencia de una memoria era precisamente lo que justificaba la exposición.
-Alguien recordaba la fuente.
-Alguien recordaba el banco.
-Alguien recordaba la puerta azul.
-Ahora tenían delante otra categoría.
-Cosas que habían desaparecido sin dejar testigos.
-Ausencias absolutas.
+Después comprendieron su error.
+
+Contenía cientos de fichas.
+
+La mayoría apenas conservaba unas pocas palabras.
+
+En algunas no era posible determinar a qué se referían.
+
+En otras, ni siquiera eso.
 
 Pasaron semanas intentando decidir qué hacer.
+
 Algunas personas defendían catalogarlo.
+
 Otras querían investigarlo.
+
 Hubo quien propuso destruir la carpeta.
+
 La idea parecía razonable.
+
 Si nadie recordaba aquellas cosas, ¿por qué conservarlas?
+
 La discusión duró meses.
+
 Porque la pregunta era más difícil de lo que parecía.
+
 ¿Qué responsabilidad tenemos con aquello que ya no puede ser amado?
 
 Finalmente construyeron una nueva sala.
+
 No la numeraron.
+
 No figuraba en los planos.
+
 No aparecía en los folletos.
+
 No estaba señalizada.
+
 Había que conocer su existencia para encontrarla.
+
 La llamaron:
-Habitación número cero.
+
+Habitación Número Cero.
 
 La sala estaba vacía.
+
 Completamente vacía.
+
 Ni vitrinas.
+
 Ni paneles.
+
 Ni fotografías.
+
 Sólo una habitación blanca.
+
 Silenciosa.
-En el centro.
-Sobre una pared.
-La frase de la hoja original.
+
+En el centro de una pared, la frase de la hoja original.
+
 Nada más.
+
 Los visitantes entraban.
+
 Permanecían allí unos minutos.
+
 Y salían confundidos.
+
 Algunos se enfadaban.
+
 Otros sonreían.
+
 Muchos regresaban a las demás salas.
+
 Como si de pronto comprendieran mejor el valor de las cosas recordadas.
 
 Con el paso del tiempo ocurrió algo extraño.
+
 La habitación comenzó a convertirse en la más visitada.
+
 No porque contuviera algo.
+
 Sino porque no contenía nada.
+
 La gente entraba.
+
 Y pensaba.
+
 En los amigos cuyos nombres ya no podía reconstruir.
+
 En las voces olvidadas.
+
 En las fotografías que nadie tomó.
+
 En las calles demolidas antes de ser importantes.
+
 En los amores tan breves que apenas dejaron una marca.
-La habitación actuaba como un espejo extraño.
-No exhibía pérdidas.
-Las provocaba.
 
 Décadas más tarde, una investigadora intentó estudiar el fenómeno.
+
 Revisó archivos.
+
 Entrevistas.
+
 Estadísticas.
+
 Cuestionarios.
+
 Todo parecía absurdo.
+
 La sala no mostraba información.
+
 No ofrecía pruebas.
+
 No enseñaba ninguna colección.
+
 Y, sin embargo, era el espacio que más tiempo retenía a los visitantes.
+
 Terminó su informe con una frase prudente.
+
 Una frase que nadie consiguió mejorar después.
+
 Escribió:
+
 Las demás habitaciones contienen cosas que desaparecieron.
-La habitación número cero contiene la posibilidad de desaparecer.
+
+La Habitación Número Cero contiene la posibilidad de desaparecer.
 
 Con los años la ciudad siguió cambiando.
+
 Calles nuevas.
+
 Edificios nuevos.
+
 Nuevos mapas.
+
 Nuevas generaciones.
+
 El museo también cambió.
+
 Pero la habitación permaneció igual.
+
 Vacía.
+
 Silenciosa.
+
 Inútil.
+
 Necesaria.
 
 Una tarde, al cerrar el museo, la encargada encontró un botón en el suelo de la habitación.
 
 Era pequeño, de nácar, con un resto de hilo todavía prendido.
 
-Lo dejó en recepción, junto al libro de visitas.
+Lo sostuvo unos segundos.
 
-Pasaron semanas.
+Después volvió a mirar la sala.
+
+Vacía.
+
+La observó de nuevo.
+
+Vacía.
+
+Lo llevó a recepción y lo dejó junto al libro de visitas.
+
+No abrió ninguna ficha.
+
+No informó a nadie.
+
+Pasaron las semanas.
 
 Nadie preguntó por él.
 
-Una mañana, al limpiar el mostrador, lo sostuvo entre los dedos. El hilo se le había pegado al paño.
+Una mañana, al limpiar el mostrador, el hilo se le quedó prendido en el paño.
 
 Lo desprendió con cuidado.
 
-Después volvió a dejar el botón junto al libro.
+Después volvió a dejar el botón en su sitio.
 
-Años después apareció una ficha entre los papeles del museo.
+Meses más tarde apareció una nota entre los papeles del museo.
+
+No llevaba fecha.
+
+No llevaba firma.
 
 Decía:
 
-«Una mujer encontró un botón de nácar».
+Se encontró un botón de nácar en la Habitación Número Cero.
+
+Nada más.
+
+La nota permaneció un tiempo entre documentos sin clasificar.
+
+Después desapareció.
+
+Años más tarde apareció una ficha.
+
+Sólo contenía una línea:
+
+Una mujer encontró un botón de nácar.
 
 Nadie recordaba el episodio.
 
-Guardaron la ficha en la carpeta.
+Algunas personas aseguraban que el botón había permanecido durante meses junto al libro de visitas.
 
-En el mostrador, junto al libro de visitas, el botón ya no estaba.
+Otras sostenían que nunca salió de la sala.
+
+Nadie pudo demostrar ninguna de las dos versiones.
+
+En el mostrador ya no había ningún botón.
 
 Nadie supo decir desde cuándo.
