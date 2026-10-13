@@ -477,28 +477,7 @@ Como la erosión.
 Como la distancia.
 Como ciertas despedidas.
 
-## X. La última sala
-
-Cuando el archivero murió, encontraron entre sus papeles un mensaje.
-No estaba dirigido a nadie.
-Decía solamente:
-Las personas creen que recuerdan las ciudades.
-Es al revés.
-Nada más.
-El museo colocó la frase en la última sala.
-Bajo un cristal sencillo.
-Sin explicaciones.
-Sin contexto.
-Sin biografía.
-Los visitantes la leían.
-Después regresaban a la calle.
-Y algunos experimentaban una sensación extraña.
-Miraban edificios conocidos.
-Plazas conocidas.
-Puertas conocidas.
-Y durante un instante muy breve no estaban completamente seguros de quién conservaba a quién.
-
-## XI. EL ARCHIVO PROFUNDO
+## X. EL ARCHIVO PROFUNDO
 
 El problema de los archivos era sencillo.
 Conservaban las cosas.
@@ -557,7 +536,7 @@ Archivo Profundo.
 El archivero contempló el plano durante varios minutos.
 Después lo archivó.
 
-## XII. LA MÁQUINA DE LAS HUELLAS
+## XI. LA MÁQUINA DE LAS HUELLAS
 
 La máquina no parecía una máquina.
 Ésa fue la primera dificultad.
@@ -645,7 +624,7 @@ Por primera vez apareció una referencia indirecta a una región excluida.
 No se mencionaba su nombre.
 Sólo la condición que la definía:
 
-Allí donde ya no queda ninguna huella,
+Allí donde ya no queda huella suficiente,
 el Resonador no puede trabajar.
 
 El archivero comprendió que estaba leyendo los límites del sistema.
@@ -951,7 +930,7 @@ El visitante cree que acciona la máquina.
 
 La máquina cree otra cosa.
 
-## XIII. EL RESONADOR
+## XII. EL RESONADOR
 
 Durante varios días el archivero no tocó la máquina.
 La observaba.
@@ -974,7 +953,6 @@ Relacionaba.
 
 Comenzó a experimentar.
 A veces aparecía una palabra.
-ECO.
 AUSENCIA.
 ERROR.
 CONTRADICCIÓN.
@@ -1022,12 +1000,9 @@ A veces nada.
 
 Una tarde volvió al punto 14,14,14.
 Las líneas desaparecieron.
-Después apareció un único mensaje:
+Apareció un único mensaje:
 
 [INTERFERENCIA DETECTADA]
-
-Tres versiones coinciden.
-Ninguna describe la misma cosa.
 
 Más tarde intentó explorar el límite del sistema.
 Introdujo fichas vacías.
@@ -1044,6 +1019,27 @@ NO EXISTEN HUELLAS SUFICIENTES.
 Entonces comprendió el verdadero límite del sistema.
 
 Incluso una ausencia necesita una huella.
+
+## XIII. La última sala
+
+Cuando el archivero murió, encontraron entre sus papeles un mensaje.
+No estaba dirigido a nadie.
+Decía solamente:
+Las personas creen que recuerdan las ciudades.
+Es al revés.
+Nada más.
+El museo colocó la frase en la última sala.
+Bajo un cristal sencillo.
+Sin explicaciones.
+Sin contexto.
+Sin biografía.
+Los visitantes la leían.
+Después regresaban a la calle.
+Y algunos experimentaban una sensación extraña.
+Miraban edificios conocidos.
+Plazas conocidas.
+Puertas conocidas.
+Y durante un instante muy breve no estaban completamente seguros de quién conservaba a quién.
 
 # EPÍLOGO
 
