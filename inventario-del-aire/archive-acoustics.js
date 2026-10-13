@@ -7,7 +7,6 @@
    ======================================================= */
 
 const ARCHIVE_CHAPTERS=new Set(['deep-archive','trace-machine','atlas','resonator']);
-const FOUNDATION_NODES=new Set(['tarjeta','nombre','reloj']);
 const OBJECTS=[
   'botón de nácar','tarjeta usada','fotografía doblada','silla desplazada','llave sin puerta','reloj detenido',
   'vaso vacío','carta incompleta','espejo pequeño','fragmento de mapa','entrada de cine','etiqueta arrancada',
@@ -66,7 +65,7 @@ class ArchiveAcoustics{
   }
 
   syncMaster(){
-    const target=this.enabled&&this.active?.72:0;
+    const target=this.enabled&&this.active?0.72:0;
     const now=this.ctx.currentTime;
     const gain=this.master.gain;
     gain.cancelScheduledValues(now);
