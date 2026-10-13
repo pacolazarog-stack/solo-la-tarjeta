@@ -32,13 +32,13 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
-          import base64, re, zlib
+          import base64, zlib
 
-          workflow = Path('.github/workflows/sync-oras-canon.yml').read_text(encoding='utf-8')
-          m = re.search(r'ORAS_CANON_Z:\s*>-\s*\n((?:\s{12,}[^\n]*\n)+)\s{8}run:', workflow)
-          if not m:
-              raise RuntimeError('No se encontró el canon comprimido de ORAS')
-          payload = ''.join(line.strip() for line in m.group(1).splitlines())
+          lines = Path('.github/workflows/sync-oras-canon.yml').read_text(encoding='utf-8').splitlines()
+          marker = next(i for i, line in enumerate(lines) if 'ORAS_CANON_Z:' in line)
+          payload = lines[marker + 1].strip()
+          if not payload:
+              raise RuntimeError('El canon comprimido de ORAS está vacío')
           text = zlib.decompress(base64.b64decode(payload)).decode('utf-8')
 
           required = [
@@ -55,10 +55,14 @@ jobs:
           missing = [s for s in required if s not in text]
           if missing:
               raise RuntimeError('El canon comprimido no contiene la versión definitiva: '+repr(missing))
-          old = text.find('## XIII. La última sala')
-          zero = text.find('# EPÍLOGO')
-          if not (0 < old < zero):
-              raise RuntimeError('La última sala no precede inmediatamente al epílogo')
+          pos_x = text.find('## X. EL ARCHIVO PROFUNDO')
+          pos_xi = text.find('## XI. LA MÁQUINA DE LAS HUELLAS')
+          pos_atlas = text.find('# ATLAS / AZAR')
+          pos_xii = text.find('## XII. EL RESONADOR')
+          pos_xiii = text.find('## XIII. La última sala')
+          pos_zero = text.find('# EPÍLOGO')
+          if not (0 < pos_x < pos_xi < pos_atlas < pos_xii < pos_xiii < pos_zero):
+              raise RuntimeError('La secuencia X–XIII no está en el orden canónico')
 
           Path('EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md').write_text(text, encoding='utf-8')
           PY
