@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#100f0d">
+<title>ATLAS / AZAR · MÁQUINA DE LAS HUELLAS · ORAS</title>
+<style>
+:root{--bg:#100f0d;--bar:#15120f;--paper:#f1eadf;--ink:#211d19;--muted:#9d8f82;--gold:#d4bd86;--red:#8b3a30;--line:#ffffff24}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:#f4ede5;font-family:Georgia,"Times New Roman",serif}button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+header{position:sticky;top:0;z-index:30;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:10px 16px;background:#15120ff2;border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.brand{color:inherit;text-decoration:none}.brand strong{display:block;font-size:14px;letter-spacing:.09em;font-weight:400}.brand small{display:block;margin-top:3px;font-size:10px;letter-spacing:.08em;color:#b8aa9c}.tabs{display:flex;gap:8px}.btn,.tab{border:1px solid #ffffff44;background:#211d19;color:#f4ede5;border-radius:999px;padding:8px 14px}.tab.active,.btn.primary{background:#efe6db;color:#211d19;border-color:#efe6db}.back{text-align:right}.back a{color:#cdbb98;font-size:11px;letter-spacing:.1em;text-decoration:none}
+main{min-height:calc(100vh - 58px)}.view{min-height:calc(100vh - 58px);padding:28px;overflow:auto}.shell{width:min(1220px,96%);margin:0 auto;padding-bottom:42px}
+.architecture-axis{display:grid;grid-template-columns:1fr auto 1.2fr auto 1fr;align-items:center;gap:12px;margin:0 0 22px;padding:13px 16px;border:1px solid #ffffff1d;background:#15120f88;border-radius:16px}.architecture-node{text-align:center}.architecture-node strong{display:block;font-size:13px;letter-spacing:.1em;font-weight:400}.architecture-node span{display:block;margin-top:4px;font-size:10px;letter-spacing:.08em;color:#9d8f82}.architecture-node.core strong{font-size:16px;color:#efe6db}.architecture-arrow{font-size:18px;color:#7c6b5b}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:28px;margin:4px 0 20px}.kicker,.label{font-size:10px;letter-spacing:.16em;color:#9d8f82;text-transform:uppercase}.head h1{margin:5px 0 6px;font-size:clamp(28px,4vw,48px);font-weight:400;letter-spacing:.08em}.head p{margin:0;color:#a99b8d;max-width:49em;line-height:1.5}.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.controls label{display:grid;grid-template-columns:auto 1fr 30px;align-items:center;gap:10px;background:#1d1915;border:1px solid #ffffff1e;border-radius:12px;padding:12px}.controls input{width:100%;accent-color:#c9ad77}.controls strong{text-align:right;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-weight:400;color:#ead6a7}
+.layout{display:grid;grid-template-columns:minmax(350px,1fr) minmax(320px,.9fr);gap:18px}.map-card,.data article{border:1px solid #ffffff1d;background:#15120f;border-radius:16px}.map-card{padding:16px;min-height:520px;display:grid;grid-template-rows:minmax(0,1fr) auto}.map{min-height:430px;display:grid;place-items:center}.map svg{display:block;width:min(100%,620px);height:auto}.map-note{padding:12px 4px 0;color:#8f8174;font-size:10px;line-height:1.55;letter-spacing:.05em}.data{display:grid;gap:12px}.data article{padding:18px}.big{margin:8px 0;font-size:clamp(27px,4vw,44px);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#efe6db}.meta{font-size:11px;line-height:1.65;color:#a99b8d}.seed{margin-top:10px;font-size:18px;line-height:1.55;color:#e8dece}.chips{display:grid;gap:7px;margin-top:10px}.chip{display:grid;grid-template-columns:118px 1fr;gap:10px;padding:7px 0;border-top:1px solid #ffffff12;font-size:10px;line-height:1.5}.chip strong{color:#d8c9ba;letter-spacing:.06em;font-weight:400}.chip span{color:#9d8f82}.resonance{min-height:82px;margin-top:10px;white-space:pre-line;color:#ead39d;line-height:1.6}.interference{display:none;margin-top:12px;padding-left:12px;border-left:2px solid #8e7352;white-space:pre-line;color:#d9c8a5}.interference.show{display:block}
+.cube-grid-line{stroke:#ffffff16;stroke-width:.55}.cube-axis-line{stroke:#ffffff35;stroke-width:.9}.cube-center-node{fill:#efe6db;stroke:#100f0d;stroke-width:2}.cube-current-node{fill:#d4bd86;stroke:#100f0d;stroke-width:2}.cube-mirror-node{fill:none;stroke:#b46f65;stroke-width:2}.cube-history-path{fill:none;stroke:#d4bd8670;stroke-width:1.4}.cube-history-node{fill:#d4bd86;opacity:.5}.cube-route-path{fill:none;stroke:#b46f65;stroke-width:2;stroke-dasharray:5 4}.cube-z-ring{fill:none;stroke:#d4bd86;stroke-width:2.5;opacity:.8}
+/* AZAR */
+#chance{padding:0;overflow:hidden}.chance-nav{position:sticky;top:59px;z-index:20;display:flex;align-items:center;justify-content:center;gap:10px;padding:12px;background:#15120ff0;border-bottom:1px solid #ffffff1d}.chance-seed{font-size:10px;letter-spacing:.06em;color:#cbbeb1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:58vw}.chance-architecture{width:min(900px,88vw);margin:22px auto 0;text-align:center;font-size:11px;letter-spacing:.08em;color:#9d8f82;line-height:1.55}.chance-architecture strong{color:#d8c9ba;font-weight:400}.chance-wrap{min-height:calc(100vh - 145px);display:flex;align-items:center;justify-content:center;gap:24px;padding:36px 18px 70px}.chance-center{width:min(860px,72vw);text-align:center;padding:38px 24px;border-block:1px solid #ffffff22}.chance-title{font-size:14px;letter-spacing:.16em;color:#cbbeb1;margin-bottom:18px}.chance-stage-label{font-size:11px;letter-spacing:.14em;color:#9d8f82;margin-bottom:22px;text-transform:uppercase}.chance-current{font-size:clamp(25px,4vw,42px);line-height:1.32;max-width:26em;margin:0 auto}.chance-current small{display:block;margin-top:14px;font-size:13px;line-height:1.5;color:#d7c8b7}.chance-pos{margin-top:22px;font-size:11px;line-height:1.55;color:#8f8174}.chance-arrow{font-size:28px;min-width:48px}.chance-graph{width:min(420px,86vw);margin:28px auto 0}.chance-graph svg{width:100%;height:auto;display:block}
+@media(max-width:900px){header{grid-template-columns:1fr auto;grid-template-areas:"brand back" "tabs tabs"}.brand{grid-area:brand}.tabs{grid-area:tabs;justify-content:center}.back{grid-area:back}.architecture-axis{grid-template-columns:1fr}.architecture-arrow{transform:rotate(90deg)}.head{display:grid}.actions{justify-content:flex-start}.layout{grid-template-columns:1fr}.map-card{min-height:auto}.map{min-height:360px}}
+@media(max-width:680px){.view{padding:18px 10px}.shell{width:100%}.controls{grid-template-columns:1fr}.map{min-height:300px}.chip{grid-template-columns:1fr}.chance-nav{top:92px;flex-wrap:wrap}.chance-wrap{gap:7px;padding:30px 8px 50px}.chance-center{width:min(100%,78vw);padding:24px 8px}.chance-arrow{padding:7px 10px;min-width:38px}.chance-pos{font-size:9px}}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="./"><strong>ATLAS / AZAR · MÁQUINA DE LAS HUELLAS</strong><small>ORAS · EL MUSEO DE LAS SOMBRAS · Cubo 27³</small></a>
+  <div class="tabs"><button class="tab active" data-view="atlas">ATLAS</button><button class="tab" data-view="chance">AZAR</button></div>
+  <div class="back"><a href="./">VOLVER A XI–XIII</a></div>
+</header>
+<main>
+<section id="atlas" class="view">
+<div class="shell">
+  <div class="architecture-axis">
+    <div class="architecture-node"><strong>HUELLAS 27²</strong><span>729 celdas semilla</span></div><div class="architecture-arrow">→</div>
+    <div class="architecture-node core"><strong>CUBO 27³</strong><span>19.683 estados relacionales</span></div><div class="architecture-arrow">→</div>
+    <div class="architecture-node"><strong>ATLAS / AZAR</strong><span>conocer / atravesar</span></div>
+  </div>
+  <div class="head"><div><div class="kicker">ARCHIVO PROFUNDO · ATLAS</div><h1>CUBO 27³</h1><p>El Atlas conserva la lógica funcional de La Granada del 27: navega X/Y/Z, muestra la posición sobre una proyección gráfica 27×27, señala el centro y el espejo, y mantiene el historial de las huellas atravesadas.</p></div><div class="actions"><button class="btn" id="center">Centro · 14·14·14</button><button class="btn primary" id="random">Azar espacial</button><button class="btn" id="mirror">Espejo XYZ</button><button class="btn" id="pearl">Botón de nácar</button></div></div>
+  <div class="controls">
+    <label>X · MATERIALIDAD <input id="x" type="range" min="1" max="27" value="14"><strong id="xv">14</strong></label>
+    <label>Y · INSCRIPCIÓN <input id="y" type="range" min="1" max="27" value="14"><strong id="yv">14</strong></label>
+    <label>Z · SOMBRA <input id="z" type="range" min="1" max="27" value="14"><strong id="zv">14</strong></label>
+  </div>
+  <div class="layout">
+    <div class="map-card"><div id="map" class="map"></div><div class="map-note">PROYECCIÓN XY · punto dorado: posición actual · punto claro: centro absoluto · círculo rojo: espejo XYZ · línea: recorrido reciente. Z se expresa como profundidad del estado, no como tiempo.</div></div>
+    <div class="data">
+      <article><div class="label">POSICIÓN DEL CUBO</div><div class="big" id="coord"></div><div class="meta" id="envelope"></div><div class="meta" id="mirrorMeta"></div><div class="meta" id="band"></div></article>
+      <article><div class="label">HUELLA · CELDA XY</div><div class="seed" id="seed"></div><div class="meta" id="seedMeta"></div></article>
+      <article><div class="label">RELACIONES ACTIVAS</div><div class="chips" id="relations"></div></article>
+      <article><div class="label">RESONADOR</div><div class="resonance" id="resonance">La máquina espera una huella.</div><div class="interference" id="interference"></div><div style="margin-top:14px"><button class="btn primary" id="resonate">Activar resonancia</button></div></article>
+    </div>
+  </div>
+</div>
+</section>
+<section id="chance" class="view hidden">
+  <div class="chance-nav"><button class="btn primary" id="roll">Atravesar otra posición</button><button class="btn" id="toAtlas">Ver en Atlas</button><span class="chance-seed" id="chanceSeed"></span></div>
+  <div class="chance-architecture"><strong>AZAR⁴</strong> atraviesa el mismo cubo mediante la secuencia canónica <strong>X → Y → CENTRO → Z</strong>. No crea otro sistema: cambia la forma de recorrerlo.</div>
+  <div class="chance-wrap"><button class="btn chance-arrow" id="prev">‹</button><div class="chance-center"><div class="chance-title">AZAR · ATRAVESAR EL CUBO 27³</div><div class="chance-stage-label" id="stageLabel"></div><div class="chance-current" id="chanceCurrent"></div><div class="chance-pos" id="chancePos"></div><div class="chance-graph" id="chanceGraph"></div></div><button class="btn chance-arrow" id="next">›</button></div>
+</section>
+</main>
+<script>
+(()=>{
+const SIZE=27,CENTER=14;
+const OBJ=['botón de nácar','tarjeta usada','fotografía doblada','silla desplazada','llave sin puerta','reloj detenido','vaso vacío','carta incompleta','espejo pequeño','fragmento de mapa','entrada de cine','etiqueta arrancada','pañuelo olvidado','plato sin pareja','cuaderno húmedo','nombre borrado','planta crecida','puerta azul','ventana cerrada','maleta antigua','billete perforado','miga de pan','caja anónima','señal oxidada','archivo perdido','lámpara apagada','huella irreconocible'];
+const TEN=['espera','ausencia','contradicción','eco','persistencia','desaparición','regreso','sustitución','error','testimonio','borrado','doble presencia','olvido','demora','deriva','reaparición','resonancia','silencio','incertidumbre','proximidad','distancia','pérdida','contagio','sombra','reflejo','transformación','huella'];
+const ECO=['nadie recuerda cuándo apareció','varias versiones sobreviven','una descripción sustituyó al objeto','hay fotografías incompatibles','la sombra llegó antes','quedó un gesto','algo continúa esperando','no existe consenso','la ciudad lo olvidó','el museo lo conserva','permanece fuera de los planos','algunos discuten su existencia','el nombre ya no coincide','la inscripción persiste','no hay testigos directos','se detectó demasiado tarde','una ausencia ocupa su lugar','todo parece correcto','alguien vuelve a mencionarlo','hay rastros suficientes','se conserva parcialmente','todavía produce dudas','fue registrado por error','ninguna explicación basta','el recuerdo cambió de forma','sólo queda la relación','todavía resuena'];
+const REL=['ECO','CONTRADICCIÓN','SUSTITUCIÓN','PROCEDENCIA','TESTIMONIO','BORRADO','ERROR','ESPEJO','CONTAGIO','AUSENCIA','REAPARICIÓN','DUPLICADO','SOMBRA'];
+const $=s=>document.querySelector(s);const state={x:14,y:14,z:14};let history=[{...state}],hit=null,focus=0;
+const pad=n=>String(n).padStart(2,'0');
+const rand=n=>{if(globalThis.crypto?.getRandomValues){const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}return Math.floor(Math.random()*n)};
+const mirror=p=>({x:28-p.x,y:28-p.y,z:28-p.z});
+const envelope=p=>Math.max(Math.abs(p.x-CENTER),Math.abs(p.y-CENTER),Math.abs(p.z-CENTER));
+const band=z=>z<=4?'PRESENTE':z<=8?'ATENUADO':z<=12?'DOCUMENTAL':z<=16?'INDIRECTO':z<=20?'RESIDUAL':'UMBRAL DE LO REPRESENTABLE';
+const relAt=p=>REL[(p.x+p.y+p.z-3)%REL.length];
+const cell=(x,y)=>({object:OBJ[x-1],tension:TEN[y-1],echo:ECO[(x+y-2)%27]});
+function setPoint(p,remember=true){state.x=p.x;state.y=p.y;state.z=p.z;if(remember){history.push({...state});history=history.slice(-18)}renderAtlas()}
+function svg(point,{route=null}={}){const n=27,g=9,p=13,w=p*2+n*g,gx=x=>p+(x-1)*g+g/2,gy=y=>p+(27-y)*g+g/2,m=mirror(point);let s=`<svg viewBox="0 0 ${w} ${w}" role="img" aria-label="Atlas gráfico 27 por 27. Posición ${point.x}, ${point.y}, profundidad ${point.z}">`;
+for(let i=0;i<=27;i++){const q=p+i*g,cl=i===13||i===14?'cube-axis-line':'cube-grid-line';s+=`<path d="M${p} ${q}H${p+27*g} M${q} ${p}V${p+27*g}" class="${cl}"/>`}
+if(history.length>1)s+=`<polyline class="cube-history-path" points="${history.map(q=>`${gx(q.x)},${gy(q.y)}`).join(' ')}"/>`;
+history.slice(-17,-1).forEach(q=>s+=`<circle class="cube-history-node" cx="${gx(q.x)}" cy="${gy(q.y)}" r="1.7"/>`);
+if(route?.length)s+=`<polyline class="cube-route-path" points="${route.map(q=>`${gx(q.x)},${gy(q.y)}`).join(' ')}"/>`;
+s+=`<circle class="cube-center-node" cx="${gx(14)}" cy="${gy(14)}" r="5"><title>Centro absoluto · 14·14·14</title></circle>`;
+s+=`<circle class="cube-mirror-node" cx="${gx(m.x)}" cy="${gy(m.y)}" r="6"><title>Espejo XYZ · ${m.x}·${m.y}·${m.z}</title></circle>`;
+s+=`<circle class="cube-current-node" cx="${gx(point.x)}" cy="${gy(point.y)}" r="5.5"><title>Posición actual · ${point.x}·${point.y}·${point.z}</title></circle>`;
+s+=`<circle class="cube-z-ring" cx="${gx(point.x)}" cy="${gy(point.y)}" r="${6+Math.abs(point.z-14)*.28}"><title>Profundidad Z · ${point.z}</title></circle>`;return s+'</svg>'}
+function relationsHTML(p){const m=mirror(p),c=cell(p.x,p.y),neigh=6-[p.x===1||p.x===27?1:0]-[p.y===1||p.y===27?1:0]-[p.z===1||p.z===27?1:0];const rows=[['RELACIÓN',relAt(p)],['ESPEJO XYZ',`(${pad(m.x)}, ${pad(m.y)}, ${pad(m.z)})`],['ENVOLVENTE',`k=${envelope(p)} · lado ${2*envelope(p)+1}`],['VECINDAD',`${neigh} vecinos ortogonales`],['TENSIÓN',c.tension.toUpperCase()],['ECO',c.echo],['ORA',p.x===1?'botón de nácar · fertilidad persistente':'sin clasificación especial']];return rows.map(r=>`<div class="chip"><strong>${r[0]}</strong><span>${r[1]}</span></div>`).join('')}
+function renderAtlas(){['x','y','z'].forEach(k=>{$('#'+k).value=state[k];$('#'+k+'v').textContent=pad(state[k])});const p={...state},m=mirror(p),c=cell(p.x,p.y),k=envelope(p);$('#coord').textContent=`(${pad(p.x)}, ${pad(p.y)}, ${pad(p.z)})`;$('#envelope').textContent=k===0?'CENTRO ABSOLUTO · k=0 · MÁXIMA AMBIGÜEDAD':`ENVOLVENTE k=${k} · lado ${2*k+1}`;$('#mirrorMeta').textContent=`ESPEJO XYZ · (${pad(m.x)}, ${pad(m.y)}, ${pad(m.z)})`;$('#band').textContent=`SOMBRA Z · ${band(p.z)}`;$('#seed').textContent=`${c.object}. ${c.echo}.`;$('#seedMeta').textContent=`MATERIALIDAD ${pad(p.x)} · INSCRIPCIÓN ${pad(p.y)} · tensión: ${c.tension}`;$('#relations').innerHTML=relationsHTML(p);$('#map').innerHTML=svg(p)}
+function shadowLine(p,obj){const b=band(p.z);if(b==='PRESENTE')return`El ${obj} todavía pertenece al presente.`;if(b==='ATENUADO')return`El ${obj} empieza a retirarse de lo visible.`;if(b==='DOCUMENTAL')return`Del ${obj} queda ya más registro que presencia.`;if(b==='INDIRECTO')return`El ${obj} llega por una descripción que no basta.`;if(b==='RESIDUAL')return`Del ${obj} persiste una relación y casi nada más.`;return`El ${obj} apenas conserva forma representable.`}
+function resonate(p=state){const c=cell(p.x,p.y),out=$('#resonance'),inter=$('#interference');let text;if(c.object==='botón de nácar'){const v=['Hubo un botón.\nLa camisa desapareció antes.','El botón sobrevivió a la prenda.','Sólo quedó la costura.','El objeto nunca pudo verificarse.','No sabemos qué camisa perdió el botón.\nY, sin embargo, el botón sigue diciendo cosas.'];text=v[rand(v.length)]}else{text=`Hubo un ${c.object}.\n${shadowLine(p,c.object)}\nLa tensión fue ${c.tension}.\n${c.echo}.\nRelación: ${relAt(p)}.`}out.textContent=text;inter.className='interference';inter.textContent='';if(p.x===14&&p.y===14&&p.z===14){inter.textContent='[INTERFERENCIA DETECTADA]\nTres versiones coinciden.\nNinguna describe la misma cosa.';inter.className='interference show'}else if(rand(9)===0){inter.textContent='[CLASIFICACIÓN INESTABLE]\nResonancia e interferencia no pueden distinguirse con certeza.';inter.className='interference show'}}
+['x','y','z'].forEach(k=>$('#'+k).addEventListener('input',e=>{state[k]=+e.target.value;history.push({...state});history=history.slice(-18);renderAtlas()}));
+$('#center').onclick=()=>setPoint({x:14,y:14,z:14});$('#random').onclick=()=>setPoint({x:rand(27)+1,y:rand(27)+1,z:rand(27)+1});$('#mirror').onclick=()=>setPoint(mirror(state));$('#pearl').onclick=()=>setPoint({x:1,y:14,z:9+rand(9)});$('#resonate').onclick=()=>resonate();
+function buildChance(){hit={x:rand(27)+1,y:rand(27)+1,z:rand(27)+1};focus=0;paintChance()}
+function chanceSequence(){const p=hit,c={x:14,y:14,z:14};return[
+{key:'X',point:{...p},role:'POSICIÓN ELEGIDA',text:`${cell(p.x,p.y).object}.`,sub:`MATERIALIDAD ${pad(p.x)} · celda XY (${pad(p.x)}, ${pad(p.y)}) · ${cell(p.x,p.y).echo}.`},
+{key:'Y',point:{x:p.y,y:p.x,z:p.z},role:'ESPEJO DE LA CELDA XY',text:`${cell(p.y,p.x).object}.`,sub:`Lectura recíproca XY (${pad(p.y)}, ${pad(p.x)}) · tensión: ${cell(p.y,p.x).tension}.`},
+{key:'CENTRO',point:c,role:'CENTRO ABSOLUTO',text:'[INTERFERENCIA DETECTADA]',sub:'Tres versiones coinciden. Ninguna describe la misma cosa.'},
+{key:'Z',point:{...p},role:'PROFUNDIDAD · SOMBRA',text:shadowLine(p,cell(p.x,p.y).object),sub:`Z=${pad(p.z)} · ${band(p.z)} · relación ${relAt(p)}.`}
+]}
+function paintChance(){const seq=chanceSequence(),s=seq[focus],m=mirror(hit),route=[seq[0].point,seq[1].point,seq[2].point,seq[3].point];$('#stageLabel').textContent=`AZAR⁴ · ${s.key} · ${s.role} · X → Y → CENTRO → Z`;$('#chanceCurrent').innerHTML=`${s.text}<small>${s.sub}</small>`;$('#chancePos').textContent=`posición elegida (${pad(hit.x)}, ${pad(hit.y)}, ${pad(hit.z)}) · k=${envelope(hit)} · espejo XYZ (${pad(m.x)}, ${pad(m.y)}, ${pad(m.z)}) · etapa ${focus+1}/4`;$('#chanceSeed').textContent=`27³ · (${pad(hit.x)}, ${pad(hit.y)}, ${pad(hit.z)}) · k=${envelope(hit)}`;$('#chanceGraph').innerHTML=svg(s.point,{route})}
+$('#roll').onclick=buildChance;$('#prev').onclick=()=>{focus=(focus+3)%4;paintChance()};$('#next').onclick=()=>{focus=(focus+1)%4;paintChance()};$('#toAtlas').onclick=()=>{setPoint(hit);show('atlas')};
+function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('hidden',v.id!==id));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===id));if(id==='atlas')renderAtlas();else paintChance();location.hash=id}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>show(b.dataset.view));
+renderAtlas();buildChance();const h=location.hash.slice(1);if(h==='chance')show('chance');
+})();
+</script>
+</body>
+</html>
