@@ -2,8 +2,11 @@
 'use strict';
 const KEY='oras.reading.index.v1';
 const GO=new URLSearchParams(location.search).get('go');
-const VERSION=1;
+const VERSION=2;
 
+/* Los identificadores ciu-10…ciu-13 conservan la identidad histórica de cada
+   capítulo para no perder checks ya almacenados. Cambia el número visible, no
+   la huella persistente asociada al capítulo. */
 const MAP=[
   ['inv-1',/\bI\.?\s+EL RECIBIDOR\b/],['inv-2',/\bII\.?\s+LA HABITACI[ÓO]N DEL RELOJ\b/],['inv-3',/\bIII\.?\s+LA COCINA\b/],['inv-4',/\bIV\.?\s+EL PASILLO\b/],
   ['inv-5',/\bV\.?\s+EL DORMITORIO\b/],['inv-6',/\bVI\.?\s+EL JARD[ÍI]N\b/],['inv-7',/\bVII\.?\s+INVENTARIO\b/],['inv-8',/\bVIII\.?\s+SALIDA\b/],
@@ -11,7 +14,10 @@ const MAP=[
   ['som-5',/\bV\.?\s+CONVERSACI[ÓO]N\b/],['som-6',/\bVI\.?\s+INVENTARIO DE AUSENCIAS M[ÓO]VILES\b/],['som-7',/\bVII\.?\s+EL TALLER\b/],['som-8',/\bVIII\.?\s+EL OFICIO\b/],['som-9',/\bIX\.?\s+[ÚU]LTIMO RECORRIDO\b/],
   ['ciu-1',/\bI\.?\s+LA PLAZA\b/],['ciu-2',/\bII\.?\s+EL ARCHIVERO\b/],['ciu-3',/\bIII\.?\s+LA FUENTE\b/],['ciu-4',/\bIV\.?\s+LOS RESISTENTES\b/],
   ['ciu-5',/\bV\.?\s+EL MAPA IMPOSIBLE\b/],['ciu-6',/\bVI\.?\s+TEOR[ÍI]A\b/],['ciu-7',/\bVII\.?\s+EL MUSEO\b/],['ciu-8',/\bVIII\.?\s+EL VISITANTE\b/],['ciu-9',/\bIX\.?\s+INVIERNO\b/],
-  ['ciu-10',/\bX\.?\s+LA [ÚU]LTIMA SALA\b/],['ciu-11',/\bXI\.?\s+EL ARCHIVO PROFUNDO\b/],['ciu-12',/\bXII\.?\s+LA M[ÁA]QUINA DE LAS HUELLAS\b/],['ciu-13',/\bXIII\.?\s+EL RESONADOR\b/],
+  ['ciu-11',/\bX\.?\s+EL ARCHIVO PROFUNDO\b/],
+  ['ciu-12',/\bXI\.?\s+LA M[ÁA]QUINA DE LAS HUELLAS\b/],
+  ['ciu-13',/\bXII\.?\s+EL RESONADOR\b/],
+  ['ciu-10',/\bXIII\.?\s+LA [ÚU]LTIMA SALA\b/],
   ['zero',/HABITACI[ÓO]N N[ÚU]MERO CERO/]
 ];
 
