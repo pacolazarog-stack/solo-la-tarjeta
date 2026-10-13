@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -23,6 +23,52 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sincronizar secuencia canónica final de ORAS
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, re, zlib
+
+          workflow = Path('.github/workflows/sync-oras-canon.yml').read_text(encoding='utf-8')
+          m = re.search(r'ORAS_CANON_Z:\s*>-\s*\n((?:\s{12,}[^\n]*\n)+)\s{8}run:', workflow)
+          if not m:
+              raise RuntimeError('No se encontró el canon comprimido de ORAS')
+          payload = ''.join(line.strip() for line in m.group(1).splitlines())
+          text = zlib.decompress(base64.b64decode(payload)).decode('utf-8')
+
+          required = [
+              '## IX. Invierno',
+              '## X. EL ARCHIVO PROFUNDO',
+              '## XI. LA MÁQUINA DE LAS HUELLAS',
+              '# ATLAS / AZAR',
+              '## XII. EL RESONADOR',
+              '## XIII. La última sala',
+              'Allí donde ya no queda huella suficiente,',
+              'A veces aparecía una palabra.\nAUSENCIA.\nERROR.\nCONTRADICCIÓN.',
+              'Apareció un único mensaje:\n\n[INTERFERENCIA DETECTADA]'
+          ]
+          missing = [s for s in required if s not in text]
+          if missing:
+              raise RuntimeError('El canon comprimido no contiene la versión definitiva: '+repr(missing))
+          old = text.find('## XIII. La última sala')
+          zero = text.find('# EPÍLOGO')
+          if not (0 < old < zero):
+              raise RuntimeError('La última sala no precede inmediatamente al epílogo')
+
+          Path('EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md').write_text(text, encoding='utf-8')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Fija la secuencia canónica final de La Ciudad que Aprendió a Olvidar [skip ci]"
+            git push origin HEAD:main
+          fi
 
       - name: Configurar Pages
         uses: actions/configure-pages@v5
@@ -35,6 +81,9 @@ jobs:
           node --check oras-screen-transition.js
           node --check ceniciento/el-espejo.js
           node --check inventario-del-aire/oras-expansion.js
+          node --check inventario-del-aire/r8-canonical-headings.js
+          node --check inventario-del-aire/oras-r9-echo-remap.js
+          node --check inventario-del-aire/oras-general-progress-r1.js
           grep -Fq '20261013-audio-groups-1' narrative-universe.js
           grep -Fq 'ou-solo-ana-forward' narrative-universe.js
           grep -Fq 'oras:ana-portrait' narrative-universe.js
@@ -54,6 +103,9 @@ jobs:
           grep -Fq 'autoplay loop src="ana-klaudya.m4a"' elegia-breve/index.html
           grep -Fq "window.addEventListener('oras:ana-portrait',showPortraitFromJourney)" elegia-breve/index.html
           grep -Fq '../oras-screen-transition.js?v=20261013-audio-groups-1' inventario-del-aire/index.html
+          grep -Fq '20261013-r9-order-1' inventario-del-aire/index.html
+          grep -Fq '## X. EL ARCHIVO PROFUNDO' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
+          grep -Fq '## XIII. La última sala' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
           ! grep -Fq 'Relato breve digital inmersivo' index.html
           grep -Fq 'maintainSilence' ceniciento/el-espejo.js
           grep -Fq 'playMechanicalStep' ceniciento/el-espejo.js
@@ -61,7 +113,7 @@ jobs:
           grep -Fq 'finalContinue.addEventListener' ceniciento/el-espejo.js
           ! grep -Fq "mark.textContent='flag'" ceniciento/el-espejo.js
           grep -Fq 'solo-la-tarjeta-fondo.mp3' inventario-del-aire/index.html
-          echo 'PASS: música inicial activa, continuidad Solo-Ana y Flores-retrato-Ceniciento validadas; transiciones audiovisuales conservadas.'
+          echo 'PASS: canon final X–XIII, persistencia de huellas y continuidad audiovisual validados.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
