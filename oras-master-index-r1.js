@@ -12,7 +12,7 @@ window.__orasMasterIndexR1=true;
 const ROOT='/solo-la-tarjeta';
 const UKEY='oras.universe.v2';
 const GKEY='oras.reading.index.v1';
-const VERSION='20261013-master-index-1';
+const VERSION='20261013-master-index-2';
 
 const ANA=[
   ['estrella','Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`],
@@ -43,8 +43,7 @@ function anaDone(key,state){
   if(key==='afuego')return bool(state.anaComplete)||((state.anaParts?.interludio===true)&&(state.anaParts?.epilogo===true));
   return state.anaParts?.[key]===true;
 }
-function expansionDone(id){return general().done?.[id]?.done===true||general().done?.[id]===true;}
-
+function expansionDone(id){const g=general();return g.done?.[id]?.done===true||g.done?.[id]===true;}
 function allLeaves(){
   const u=life();
   return [
@@ -84,7 +83,6 @@ html.oras-master-entry,html.oras-master-entry body{overflow:hidden!important;bac
 .oras-mi-section-head{display:flex;justify-content:space-between;gap:16px;align-items:baseline;margin-bottom:14px}
 .oras-mi-roman{font-size:.72rem;letter-spacing:.18em;color:rgba(238,228,210,.45);text-transform:uppercase}
 .oras-mi-section h2{margin:.2rem 0 0;font-weight:400;font-size:clamp(1.35rem,2.4vw,1.85rem)}
-.oras-mi-count{font:500 .68rem/1 system-ui,sans-serif;color:rgba(238,228,210,.42);letter-spacing:.08em}
 .oras-mi-work{margin:12px 0 0;padding:0;border-top:1px solid rgba(238,228,210,.08)}
 .oras-mi-work-head{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;padding:14px 0 9px}
 .oras-mi-num{font-size:.78rem;color:rgba(238,228,210,.45)}
@@ -114,7 +112,6 @@ const cover=document.createElement('section');
 cover.className='oras-master-cover';
 cover.setAttribute('aria-label','Portada de ORAS');
 cover.innerHTML=`<div class="oras-master-cover-frame"><img class="oras-master-cover-img" src="${ROOT}/assets/oras-el-archivo-profundo.webp?v=${VERSION}" alt="ORAS · El archivo profundo"><button class="oras-master-button" type="button" aria-label="Abrir índice general de lectura"><span>Abrir índice general de lectura</span></button></div>`;
-
 document.body.appendChild(cover);
 
 const index=document.createElement('section');
@@ -134,27 +131,32 @@ function workBlock(num,title,rows,done,total){
 function invHref(id){return `${ROOT}/inventario-del-aire/?go=${encodeURIComponent(id)}&v=${VERSION}`;}
 
 function render(){
-  const u=life(), g=general(), p=progress();
+  const u=life(), p=progress();
   const anaRows=ANA.map(([id,label,href])=>row('ana-'+id,label,href,anaDone(id,u))).join('');
   const anaCount=ANA.filter(([id])=>anaDone(id,u)).length;
   const soloRows=row('solo','SOLO LA TARJETA',`${ROOT}/?read=solo`,bool(u.soloComplete),'texto continuo');
   const cenRows=row('ceniciento','CENICIENTO',`${ROOT}/ceniciento/`,bool(u.cenicientoComplete),'texto continuo');
   const mirrorReady=bool(u.soloComplete)&&bool(u.cenicientoComplete)&&(bool(u.anaComplete)||anaCount===ANA.length);
-  const mirrorRows=row('mirror','EL ESPEJO',mirrorReady?`${ROOT}/ceniciento/?mirror=1`:'#',bool(u.mirrorReadComplete),'32 fragmentos',mirrorReady?'':'oras-mi-locked');
+  const mirrorRows=row('mirror','EL ESPEJO',mirrorReady?`${ROOT}/ceniciento/`:'#',bool(u.mirrorReadComplete),'32 fragmentos · acceso desde Ceniciento',mirrorReady?'':'oras-mi-locked');
 
-  const inv=EXPANSION.slice(0,8), som=EXPANSION.slice(8,17), city=EXPANSION.slice(17,30), atlas=EXPANSION[30], city13=EXPANSION[31], zero=EXPANSION[32];
+  const inv=EXPANSION.slice(0,8);
+  const som=EXPANSION.slice(8,17);
+  const cityPre=EXPANSION.slice(17,29);
+  const atlas=EXPANSION[29];
+  const city13=EXPANSION[30];
+  const zero=EXPANSION[31];
   const rowsFor=list=>list.map(([id,label])=>row(id,label,invHref(id),expansionDone(id))).join('');
   const count=list=>list.filter(([id])=>expansionDone(id)).length;
   const atlasRow=row(atlas[0],atlas[1],invHref(atlas[0]),expansionDone(atlas[0]),'irrupción no numerada','oras-mi-machine');
-  const cityRows=rowsFor(city)+atlasRow+row(city13[0],city13[1],invHref(city13[0]),expansionDone(city13[0]));
-  const cityCount=count(city)+count([atlas])+count([city13]);
+  const cityRows=rowsFor(cityPre)+atlasRow+row(city13[0],city13[1],invHref(city13[0]),expansionDone(city13[0]));
+  const cityCount=count(cityPre)+count([atlas])+count([city13]);
   const zeroRow=row(zero[0],zero[1],invHref(zero[0]),expansionDone(zero[0]));
 
   const firstUnread=[
     !bool(u.soloComplete)&&`${ROOT}/?read=solo`,
     ...ANA.map(([id,,href])=>!anaDone(id,u)&&href),
     !bool(u.cenicientoComplete)&&`${ROOT}/ceniciento/`,
-    mirrorReady&&!bool(u.mirrorReadComplete)&&`${ROOT}/ceniciento/?mirror=1`,
+    mirrorReady&&!bool(u.mirrorReadComplete)&&`${ROOT}/ceniciento/`,
     ...EXPANSION.map(([id])=>!expansionDone(id)&&invHref(id))
   ].find(Boolean)||`${ROOT}/?read=solo`;
 
@@ -162,7 +164,7 @@ function render(){
     <header class="oras-mi-top"><div><div class="oras-mi-kicker">ORAS · Lo que queda de las horas</div><h1 class="oras-mi-title">Índice de lectura</h1><p class="oras-mi-sub">Cada lectura deja una huella.</p></div><div class="oras-mi-progress"><strong>${p.done}/${p.total}</strong>huellas leídas</div></header>
     <section class="oras-mi-section"><div class="oras-mi-section-head"><div><div class="oras-mi-roman">I · LA VIDA</div><h2>Trilogía I</h2></div></div>${workBlock('1','SOLO LA TARJETA',soloRows,bool(u.soloComplete)?1:0,1)}${workBlock('2','ANA KLAUDYA',anaRows,anaCount,ANA.length)}${workBlock('3','CENICIENTO',cenRows,bool(u.cenicientoComplete)?1:0,1)}</section>
     <section class="oras-mi-section"><div class="oras-mi-section-head"><div><div class="oras-mi-roman">II · EL UMBRAL</div><h2>EL ESPEJO</h2></div></div>${workBlock('','32 fragmentos',mirrorRows,bool(u.mirrorReadComplete)?1:0,1)}</section>
-    <section class="oras-mi-section"><div class="oras-mi-section-head"><div><div class="oras-mi-roman">III · LA EXPANSIÓN</div><h2>Trilogía II</h2></div></div>${workBlock('4','EL INVENTARIO DEL AIRE',rowsFor(inv),count(inv),inv.length)}${workBlock('5','EL OFICIO DE LAS SOMBRAS',rowsFor(som),count(som),som.length)}${workBlock('6','LA CIUDAD QUE APRENDIÓ A OLVIDAR',cityRows,cityCount,15)}</section>
+    <section class="oras-mi-section"><div class="oras-mi-section-head"><div><div class="oras-mi-roman">III · LA EXPANSIÓN</div><h2>Trilogía II</h2></div></div>${workBlock('4','EL INVENTARIO DEL AIRE',rowsFor(inv),count(inv),inv.length)}${workBlock('5','EL OFICIO DE LAS SOMBRAS',rowsFor(som),count(som),som.length)}${workBlock('6','LA CIUDAD QUE APRENDIÓ A OLVIDAR',cityRows,cityCount,14)}</section>
     <section class="oras-mi-section"><div class="oras-mi-section-head"><div><div class="oras-mi-roman">IV · EL CERO</div><h2>La Habitación Número Cero</h2></div></div>${workBlock('','EPÍLOGO',zeroRow,expansionDone('zero')?1:0,1)}<a class="oras-mi-continue" href="${firstUnread}">${p.done===p.total?'Volver a leer':'Continuar por la primera huella pendiente'}</a></section>`;
 }
 
@@ -173,7 +175,5 @@ index.querySelector('.oras-mi-close').addEventListener('click',closeIndex);
 addEventListener('keydown',e=>{if(e.key==='Escape'&&index.classList.contains('is-open'))closeIndex()});
 addEventListener('storage',e=>{if((e.key===UKEY||e.key===GKEY)&&index.classList.contains('is-open'))render()});
 addEventListener('pageshow',()=>{if(index.classList.contains('is-open'))render()});
-
 if(qs.get('indice')==='1')openIndex();
-
 })();
