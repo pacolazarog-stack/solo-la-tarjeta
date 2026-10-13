@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -23,56 +23,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Sincronizar secuencia canónica final de ORAS
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          import base64, zlib
-
-          lines = Path('.github/workflows/sync-oras-canon.yml').read_text(encoding='utf-8').splitlines()
-          marker = next(i for i, line in enumerate(lines) if 'ORAS_CANON_Z:' in line)
-          payload = lines[marker + 1].strip()
-          if not payload:
-              raise RuntimeError('El canon comprimido de ORAS está vacío')
-          text = zlib.decompress(base64.b64decode(payload)).decode('utf-8')
-
-          required = [
-              '## IX. Invierno',
-              '## X. EL ARCHIVO PROFUNDO',
-              '## XI. LA MÁQUINA DE LAS HUELLAS',
-              '# ATLAS / AZAR',
-              '## XII. EL RESONADOR',
-              '## XIII. La última sala',
-              'Allí donde ya no queda huella suficiente,',
-              'A veces aparecía una palabra.\nAUSENCIA.\nERROR.\nCONTRADICCIÓN.',
-              'Apareció un único mensaje:\n\n[INTERFERENCIA DETECTADA]'
-          ]
-          missing = [s for s in required if s not in text]
-          if missing:
-              raise RuntimeError('El canon comprimido no contiene la versión definitiva: '+repr(missing))
-          pos_x = text.find('## X. EL ARCHIVO PROFUNDO')
-          pos_xi = text.find('## XI. LA MÁQUINA DE LAS HUELLAS')
-          pos_atlas = text.find('# ATLAS / AZAR')
-          pos_xii = text.find('## XII. EL RESONADOR')
-          pos_xiii = text.find('## XIII. La última sala')
-          pos_zero = text.find('# EPÍLOGO')
-          if not (0 < pos_x < pos_xi < pos_atlas < pos_xii < pos_xiii < pos_zero):
-              raise RuntimeError('La secuencia X–XIII no está en el orden canónico')
-
-          Path('EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md').write_text(text, encoding='utf-8')
-          PY
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
-          if ! git diff --cached --quiet; then
-            git commit -m "Fija la secuencia canónica final de La Ciudad que Aprendió a Olvidar [skip ci]"
-            git push origin HEAD:main
-          fi
 
       - name: Configurar Pages
         uses: actions/configure-pages@v5
@@ -109,7 +59,12 @@ jobs:
           grep -Fq '../oras-screen-transition.js?v=20261013-audio-groups-1' inventario-del-aire/index.html
           grep -Fq '20261013-r9-order-1' inventario-del-aire/index.html
           grep -Fq '## X. EL ARCHIVO PROFUNDO' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
+          grep -Fq '## XI. LA MÁQUINA DE LAS HUELLAS' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
+          grep -Fq '# ATLAS / AZAR' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
+          grep -Fq '## XII. EL RESONADOR' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
           grep -Fq '## XIII. La última sala' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
+          grep -Fq 'Allí donde ya no queda huella suficiente,' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
+          grep -Fq '[INTERFERENCIA DETECTADA]' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
           ! grep -Fq 'Relato breve digital inmersivo' index.html
           grep -Fq 'maintainSilence' ceniciento/el-espejo.js
           grep -Fq 'playMechanicalStep' ceniciento/el-espejo.js
