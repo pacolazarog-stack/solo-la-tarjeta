@@ -1,0 +1,68 @@
+name: Forzar versión del índice móvil ORAS
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/oras-index-cache-bump.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Actualizar versiones de caché del índice
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('oras-reading-window-r2.js?v=20261013-ana-portrait-prev-next-1',
+                        'oras-reading-window-r2.js?v=20261014-reading-window-5')
+          s = s.replace('oras-reading-window-r2.js?v=20261014-reading-window-4',
+                        'oras-reading-window-r2.js?v=20261014-reading-window-5')
+          p.write_text(s, encoding='utf-8')
+
+          p = Path('oras-reading-window-r2.js')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('oras-master-index-r1.js?v=20261014-master-index-8',
+                        'oras-master-index-r1.js?v=20261014-master-index-9')
+          p.write_text(s, encoding='utf-8')
+
+          p = Path('oras-master-index-r1.js')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace("const VERSION='20261014-master-index-8';",
+                        "const VERSION='20261014-master-index-9';")
+          s = s.replace('/* Se conserva master-index-8 para no romper la validación actual de Pages. */\n','')
+          p.write_text(s, encoding='utf-8')
+          PY
+
+          node --check oras-reading-window-r2.js
+          node --check oras-master-index-r1.js
+          grep -Fq 'oras-reading-window-r2.js?v=20261014-reading-window-5' index.html
+          grep -Fq 'oras-master-index-r1.js?v=20261014-master-index-9' oras-reading-window-r2.js
+          grep -Fq "const VERSION='20261014-master-index-9'" oras-master-index-r1.js
+
+      - name: Publicar cambios
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html oras-reading-window-r2.js oras-master-index-r1.js
+          if git diff --cached --quiet; then
+            echo "No hay cambios pendientes"
+            exit 0
+          fi
+          git commit -m "Activa el nuevo índice móvil ORAS sin caché antigua"
+          git push
