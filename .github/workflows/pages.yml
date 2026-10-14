@@ -41,12 +41,12 @@ jobs:
           node --check inventario-del-aire/oras-r9-echo-remap.js
           node --check inventario-del-aire/oras-general-progress-r1.js
 
-          # Estado actual del contador e índice. No fijar versiones antiguas de caché.
+          # Estado actual del contador e índice.
           grep -Fq "const VERSION='20261014-reading-counter-fix-1'" narrative-universe.js
-          grep -Fq "oras-reading-window-r2.js?v=20261014-reading-window-3" index.html
-          grep -Fq "oras-master-index-r1.js?v=20261014-master-index-7" oras-reading-window-r2.js
-          grep -Fq "const VERSION='20261014-master-index-7'" oras-master-index-r1.js
-          grep -Fq 'oras-master-cover-fallback' oras-master-index-r1.js
+          grep -Fq "oras-reading-window-r2.js?v=20261014-reading-window-4" index.html
+          grep -Fq "oras-master-index-r1.js?v=20261014-master-index-8" oras-reading-window-r2.js
+          grep -Fq "const VERSION='20261014-master-index-8'" oras-master-index-r1.js
+          grep -Fq 'assets/oras-portada-final.jpg' oras-master-index-r1.js
           grep -Fq 'Abrir índice' oras-master-index-r1.js
 
           # Continuidad audiovisual y navegación.
@@ -72,7 +72,7 @@ jobs:
           grep -Fq 'Allí donde ya no queda huella suficiente,' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
 
           ! grep -Fq 'Relato breve digital inmersivo' index.html
-          echo 'PASS: ORAS actualizado, contador, índice y canon validados.'
+          echo 'PASS: ORAS actualizado, contador, índice, portada canónica y canon validados.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
