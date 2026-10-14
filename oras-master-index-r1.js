@@ -13,7 +13,7 @@ const ROOT='/solo-la-tarjeta';
 const UKEY='oras.universe.v2';
 const GKEY='oras.reading.index.v1';
 const OPENKEY='oras.master.index.open.v1';
-const VERSION='20261014-master-index-11';
+const VERSION='20261014-master-index-12';
 
 const ANA=[
   ['estrella','Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`],
@@ -239,6 +239,16 @@ function render(){
   const expansionCount=invCount+oficioCount+ciudadCount;
   const pct=Math.round((p.done/p.total)*100);
 
+  // Índice progresivo: sólo se muestra lo que el lector ha desbloqueado.
+  const showAna=solo;
+  const showCeniciento=solo;
+  const showMirror=mirrorReady||mirror||mirrorCrossed;
+  const showExpansion=mirrorCrossed;
+  const showInventario=showExpansion;
+  const showOficio=showExpansion&&invCount===INVENTARIO.length;
+  const showCiudad=showOficio&&oficioCount===OFICIO.length;
+  const showZero=showCiudad&&ciudadCount===CIUDAD.length;
+
   const anaParts=ANA.map(([id,label,href])=>chip('ana-'+id,label,href,anaDone(id,u))).join('');
   const invParts=INVENTARIO.map(([id,label])=>chip(id,label,invHref(id),expansionDone(id))).join('');
   const oficioParts=OFICIO.map(([id,label])=>chip(id,label,invHref(id),expansionDone(id))).join('');
@@ -246,20 +256,20 @@ function render(){
 
   const firstUnread=[
     !solo&&`${ROOT}/?read=solo`,
-    ...ANA.map(([id,,href])=>!anaDone(id,u)&&href),
-    !cen&&`${ROOT}/elegia-breve/#epilogo`,
-    mirrorReady&&!mirror&&`${ROOT}/ceniciento/?mirror=1`,
-    ...(mirrorCrossed?INVENTARIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
-    ...(mirrorCrossed?OFICIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
-    ...(mirrorCrossed?CIUDAD.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
-    mirrorCrossed&&!zeroDone&&invHref('zero')
+    ...(showAna?ANA.map(([id,,href])=>!anaDone(id,u)&&href):[]),
+    showAna&&anaComplete&&!cen&&`${ROOT}/elegia-breve/#epilogo`,
+    showMirror&&!mirrorCrossed&&`${ROOT}/ceniciento/?mirror=1`,
+    ...(showInventario?INVENTARIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
+    ...(showOficio?OFICIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
+    ...(showCiudad?CIUDAD.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
+    showZero&&!zeroDone&&invHref('zero')
   ].find(Boolean)||`${ROOT}/?read=solo`;
 
   index.querySelector('.oras-mi-shell').innerHTML=`
     <header class="oras-mi-hero">
       <div class="oras-mi-kicker">ORAS · Lo que queda de las horas</div>
       <h1 class="oras-mi-title">Índice de lectura</h1>
-      <p class="oras-mi-sub">Cada lectura deja una huella.</p>
+      <p class="oras-mi-sub">Cada lectura deja una huella. Cada huella abre la siguiente puerta.</p>
       <div class="oras-mi-progress-card" aria-label="${p.done} de ${p.total} huellas leídas">
         <div class="oras-mi-progress-num">${p.done}/${p.total}<small>huellas leídas</small></div>
         <div class="oras-mi-progress-track"><span class="oras-mi-progress-fill" style="width:${pct}%"></span></div>
@@ -269,27 +279,27 @@ function render(){
 
     <section class="oras-mi-section">
       ${sectionHead('I · LA VIDA',`${lifeWorks}/3`)}
-      ${card({id:'solo',mark:'1',title:'Solo la tarjeta',meta:solo?'completa':'pendiente',done:solo,href:`${ROOT}/?read=solo`})}
-      ${card({id:'ana',mark:'AK',title:'Ana Klaudya',meta:`${anaCount}/8 huellas`,done:anaComplete,parts:anaParts,open:open.has('ana')})}
-      ${card({id:'ceniciento',mark:'3',title:'Ceniciento',meta:'acceso únicamente por el interrogante',done:cen,href:'',locked:true})}
+      ${card({id:'solo',mark:'1',title:'Solo la tarjeta',meta:solo?'completa':'primera puerta',done:solo,href:`${ROOT}/?read=solo`})}
+      ${showAna?card({id:'ana',mark:'AK',title:'Ana Klaudya',meta:`${anaCount}/8 huellas`,done:anaComplete,parts:anaParts,open:open.has('ana')}):''}
+      ${showCeniciento?card({id:'ceniciento',mark:'3',title:'Ceniciento',meta:'sólo puede abrirse desde el interrogante de ANA KLAUDYA',done:cen,href:'',locked:true}):''}
     </section>
 
-    <section class="oras-mi-section">
+    ${showMirror?`<section class="oras-mi-section">
       ${sectionHead('II · EL UMBRAL',mirror?'1/1':'0/1')}
       ${card({id:'mirror',mark:'◇',title:'El Espejo',meta:'32 fragmentos',done:mirror,href:`${ROOT}/ceniciento/?mirror=1`,locked:!mirrorReady&&!mirror})}
-    </section>
+    </section>`:''}
 
-    <section class="oras-mi-section">
-      ${sectionHead('III · LA EXPANSIÓN',mirrorCrossed?`${expansionCount}/${INVENTARIO.length+OFICIO.length+CIUDAD.length}`:'bloqueada')}
-      ${card({id:'inventario',mark:'4',title:'El inventario del aire',meta:mirrorCrossed?`${invCount}/${INVENTARIO.length} huellas`:'atraviesa EL ESPEJO',done:invCount===INVENTARIO.length,parts:invParts,open:open.has('inventario'),locked:!mirrorCrossed})}
-      ${card({id:'oficio',mark:'5',title:'El oficio de las sombras',meta:mirrorCrossed?`${oficioCount}/${OFICIO.length} huellas`:'atraviesa EL ESPEJO',done:oficioCount===OFICIO.length,parts:oficioParts,open:open.has('oficio'),locked:!mirrorCrossed})}
-      ${card({id:'ciudad',mark:'6',title:'La ciudad que aprendió a olvidar',meta:mirrorCrossed?`${ciudadCount}/${CIUDAD.length} huellas`:'atraviesa EL ESPEJO',done:ciudadCount===CIUDAD.length,parts:ciudadParts,open:open.has('ciudad'),locked:!mirrorCrossed})}
-    </section>
+    ${showExpansion?`<section class="oras-mi-section">
+      ${sectionHead('III · LA EXPANSIÓN',`${expansionCount}/${INVENTARIO.length+OFICIO.length+CIUDAD.length}`)}
+      ${showInventario?card({id:'inventario',mark:'4',title:'El inventario del aire',meta:`${invCount}/${INVENTARIO.length} huellas`,done:invCount===INVENTARIO.length,parts:invParts,open:open.has('inventario')}):''}
+      ${showOficio?card({id:'oficio',mark:'5',title:'El oficio de las sombras',meta:`${oficioCount}/${OFICIO.length} huellas`,done:oficioCount===OFICIO.length,parts:oficioParts,open:open.has('oficio')}):''}
+      ${showCiudad?card({id:'ciudad',mark:'6',title:'La ciudad que aprendió a olvidar',meta:`${ciudadCount}/${CIUDAD.length} huellas`,done:ciudadCount===CIUDAD.length,parts:ciudadParts,open:open.has('ciudad')}):''}
+    </section>`:''}
 
-    <section class="oras-mi-section">
-      ${sectionHead('IV · EL CERO',mirrorCrossed?(zeroDone?'1/1':'0/1'):'bloqueado')}
-      ${card({id:'zero',mark:'0',title:'La Habitación Número Cero',meta:mirrorCrossed?(zeroDone?'completa':'pendiente'):'atraviesa EL ESPEJO',done:zeroDone,href:invHref('zero'),locked:!mirrorCrossed})}
-    </section>`;
+    ${showZero?`<section class="oras-mi-section">
+      ${sectionHead('IV · EL CERO',zeroDone?'1/1':'0/1')}
+      ${card({id:'zero',mark:'0',title:'La Habitación Número Cero',meta:zeroDone?'completa':'pendiente',done:zeroDone,href:invHref('zero')})}
+    </section>`:''}`;
 
   index.querySelector('.oras-mi-bottom').innerHTML=`
     <button class="oras-mi-home" type="button" data-home><span class="oras-mi-bottom-icon">⌂</span><span>Inicio</span></button>
