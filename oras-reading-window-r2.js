@@ -2,8 +2,9 @@
 'use strict';
 
 const STORAGE='oras.universe.v2';
-const VERSION='20261013-ana-portrait-prev-next-1';
+const VERSION='20261014-global-index-window-2';
 const BASE='/solo-la-tarjeta';
+const MASTER_VERSION='20261014-master-index-14';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -93,23 +94,25 @@ if(!box){
   document.body.appendChild(box);
 }
 box.setAttribute('aria-label','Índice canónico de ORAS');
+function openCanonicalIndex(){
+  if(window.ORASMasterIndex?.open){window.ORASMasterIndex.open();return;}
+  let script=document.querySelector('script[data-oras-master-index-global]');
+  if(!script){script=document.createElement('script');script.dataset.orasMasterIndexGlobal='1';script.src=BASE+'/oras-master-index-r1.js?v='+MASTER_VERSION;script.addEventListener('load',()=>window.ORASMasterIndex?.open?.(),{once:true});document.head.appendChild(script)}
+}
 const canonicalSummary=box.querySelector('summary');
 if(canonicalSummary&&!canonicalSummary.dataset.orasCanonicalIndex){
   canonicalSummary.dataset.orasCanonicalIndex='1';
-  canonicalSummary.addEventListener('click',event=>{
-    event.preventDefault();
-    event.stopPropagation();
-    location.href=BASE+'/?indice=1';
-  });
+  canonicalSummary.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();openCanonicalIndex();});
 }
 function enforceCanonicalIndexLinks(){
   document.querySelectorAll('a').forEach(a=>{
     const label=(a.textContent||'').trim().toLowerCase();
-    if(label==='índice'||label==='indice'||label==='índice oras'||label==='indice oras')a.href=BASE+'/?indice=1';
+    if(label==='índice'||label==='indice'||label==='índice oras'||label==='indice oras'){a.href='#oras-index';a.dataset.orasIndexOpen='1';}
   });
 }
 enforceCanonicalIndexLinks();
 new MutationObserver(enforceCanonicalIndexLinks).observe(document.body,{childList:true,subtree:true});
+document.addEventListener('click',event=>{const a=event.target.closest?.('a[data-oras-index-open]');if(!a)return;event.preventDefault();openCanonicalIndex();});
 
 let lastSignature='';
 function render(force=false){

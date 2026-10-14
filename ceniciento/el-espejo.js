@@ -2,7 +2,7 @@
 'use strict';
 const ROOT='/solo-la-tarjeta/';
 const STORAGE='oras.universe.v2';
-const VERSION='20261014-espejo-esperpento-1';
+const VERSION='20261014-persistent-reading-2';
 const INVENTORY_URL=ROOT+'inventario-del-aire/?from=mirror&v='+VERSION;
 const scenes=[
 `No era la misma historia.`,
@@ -91,22 +91,7 @@ function releasePause(){
   locked=false;lockedScene=null;
 }
 function resetReadingCycleForInventory(){
-  try{
-    const raw=localStorage.getItem(STORAGE);
-    const saved=raw?JSON.parse(raw):{};
-    const next=Object.assign({},saved,{
-      anaComplete:false,
-      anaParts:{estrella:false,elegia:false,ojos:false,labios:false,cabello:false,piel:false,interludio:false,epilogo:false},
-      soloComplete:false,
-      cenicientoComplete:false,
-      mirrorReadComplete:true,
-      mirrorCrossed:true,
-      realityDeformed:true,
-      mirrorCrossedAt:saved.mirrorCrossedAt||Date.now(),
-      returnedFromCeniciento:true
-    });
-    localStorage.setItem(STORAGE,JSON.stringify(next));
-  }catch(_){}
+  try{const raw=localStorage.getItem(STORAGE);const saved=raw?JSON.parse(raw):{};localStorage.setItem(STORAGE,JSON.stringify(Object.assign({},saved,{mirrorReadComplete:true,mirrorCrossed:true,realityDeformed:true,mirrorCrossedAt:saved.mirrorCrossedAt||Date.now(),returnedFromCeniciento:false})))}catch(_){}
 }
 function enterInventory(){
   try{window.top.location.href=INVENTORY_URL}catch(_){location.href=INVENTORY_URL}

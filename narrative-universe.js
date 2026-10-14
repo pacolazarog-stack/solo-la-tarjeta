@@ -10,7 +10,7 @@
 const STORAGE='oras.universe.v2';
 const GENERAL='oras.reading.index.v1';
 const LEGACY='https://cdn.jsdelivr.net/gh/pacolazarog-stack/solo-la-tarjeta@ab1f9b3574c94da479674391c14e2908f7247048/narrative-universe.js';
-const VERSION='20261014-reading-counter-fix-2';
+const VERSION='20261014-manual-reset-only-1';
 const ANA_KEYS=Object.freeze(['estrella','elegia','ojos','labios','cabello','piel','interludio','epilogo']);
 
 function readState(){
@@ -46,29 +46,7 @@ function clearGeneralVisits(){
   conceptual de haber atravesado antes el espejo (realityDeformed) puede
   conservarse, pero nunca cuenta como lectura ni desbloquea rutas.
 */
-function clearStaleVisitsAfterRestart(){
-  const state=readState();
-  const general=readGeneral();
-  const resetShape=
-    state.returnedFromCeniciento===true &&
-    state.anaComplete===false &&
-    state.soloComplete===false &&
-    state.cenicientoComplete===false;
-  if(!resetShape)return;
-
-  const staleParts=ANA_KEYS.some(key=>state.anaParts?.[key]===true);
-  const staleGeneral=Object.values(general.done||{}).some(value=>value===true||value?.done===true);
-  const staleMirror=state.mirrorReadComplete===true||state.mirrorCrossed===true;
-  if(!staleParts&&!staleGeneral&&!staleMirror)return;
-
-  clearGeneralVisits();
-  writeState({
-    anaParts:emptyAnaParts(),
-    mirrorReadComplete:false,
-    mirrorCrossed:false
-  });
-  try{window.dispatchEvent(new CustomEvent('oras:full-reset'))}catch(_){}
-}
+function clearStaleVisitsAfterRestart(){return;}
 
 /*
   CENICIENTO no debe depender exclusivamente del evento `ended`: el reproductor

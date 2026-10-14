@@ -2,10 +2,11 @@
 'use strict';
 
 const PATH=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');
-if(PATH!=='/solo-la-tarjeta')return;
+if(!PATH.startsWith('/solo-la-tarjeta'))return;
+const IS_ROOT=PATH==='/solo-la-tarjeta';
 
 const qs=new URLSearchParams(location.search);
-if(qs.has('read')||qs.has('origen')||qs.get('auto')==='1'||qs.has('from'))return;
+const COVER_ENTRY=IS_ROOT&&!qs.has('read')&&!qs.has('origen')&&qs.get('auto')!=='1'&&!qs.has('from')&&qs.get('indice')!=='1';
 if(window.__orasMasterIndexR1)return;
 window.__orasMasterIndexR1=true;
 
@@ -13,7 +14,7 @@ const ROOT='/solo-la-tarjeta';
 const UKEY='oras.universe.v2';
 const GKEY='oras.reading.index.v1';
 const OPENKEY='oras.master.index.open.v1';
-const VERSION='20261014-master-index-13';
+const VERSION='20261014-master-index-14';
 
 const ANA=[
   ['estrella','Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`],
@@ -188,15 +189,32 @@ html.oras-master-entry,html.oras-master-entry body{overflow:hidden!important;bac
   .oras-mi-card-main{grid-template-columns:40px 16px minmax(0,1fr) 36px}.oras-mi-card-mark{width:40px;height:40px}.oras-mi-parts{padding-left:68px}.oras-mi-card-title{font-size:.94rem}
 }
 @media(prefers-reduced-motion:reduce){.oras-master-button::before,.oras-mi-card-action .chev{transition:none}}
+/* ORAS · ventana canónica móvil + umbral de portada */
+.oras-entry-bridge{position:fixed;z-index:2147483646;inset:0;background:#fff;opacity:0;visibility:hidden;pointer-events:none}.oras-entry-bridge.is-active{visibility:visible;animation:orasWhiteBreath 2.9s ease-in-out forwards}
+@keyframes orasWhiteBreath{0%{opacity:0}18%{opacity:1}38%{opacity:.92}52%{opacity:1}68%{opacity:.88}82%{opacity:1}100%{opacity:.22}}
+.oras-master-cover-frame{transform:scale(1);transform-origin:50% 50.4%;transition:transform 1.05s cubic-bezier(.56,.02,.2,1),filter 1.05s ease}.oras-master-cover.is-entering .oras-master-cover-frame{transform:scale(7.8);filter:blur(1.8px) brightness(1.28)}
+.oras-master-cover.is-entering .oras-master-button{transform:translate(-50%,-50%) perspective(700px) rotateY(86deg) scale(.62);opacity:.05;transition:transform .82s cubic-bezier(.5,.02,.18,1),opacity .62s ease}.oras-master-cover.is-entering .oras-master-button::before{border-color:rgba(255,255,255,.78);background:rgba(255,255,255,.12);box-shadow:0 0 70px rgba(255,255,255,.58)}
+.oras-master-index{align-items:center;justify-content:center;padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));background:rgba(5,5,5,.70);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow:hidden}.oras-master-index.is-open{display:flex}.oras-master-index.from-entry{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}.oras-master-index.from-entry .oras-mi-shell{animation:orasIndexAppear 1.55s .38s both cubic-bezier(.22,.65,.28,1)}
+@keyframes orasIndexAppear{0%{opacity:0;transform:translateY(24px) scale(.965);filter:blur(7px)}100%{opacity:1;transform:none;filter:none}}
+.oras-mi-shell{position:relative;width:min(900px,calc(100vw - 24px));height:min(92svh,880px);max-height:calc(100svh - 22px);margin:0;padding:max(22px,env(safe-area-inset-top)) 18px calc(94px + env(safe-area-inset-bottom));overflow:auto;border:1px solid rgba(224,194,129,.34);border-radius:22px;background:radial-gradient(circle at 50% -8%,rgba(104,77,37,.16),transparent 26%),linear-gradient(180deg,#0f0e0c,#060606 62%);box-shadow:0 28px 90px rgba(0,0,0,.58),inset 0 1px rgba(255,255,255,.025);overscroll-behavior:contain}.oras-mi-bottom{grid-template-columns:minmax(0,.8fr) minmax(0,.95fr) minmax(0,1.25fr);width:min(860px,calc(100vw - 42px))}
+.oras-mi-reset{border:1px solid rgba(255,77,77,.75);background:linear-gradient(180deg,rgba(128,12,12,.96),rgba(79,7,7,.98));color:#fff1ee;box-shadow:0 0 16px rgba(190,18,18,.18)}.oras-mi-reset:hover,.oras-mi-reset:focus-visible{background:linear-gradient(180deg,#a61212,#700909);outline:none}
+@media(max-width:700px){.oras-master-index{padding:6px}.oras-mi-shell{width:calc(100vw - 12px);height:calc(100svh - 12px);max-height:none;border-radius:18px;padding:14px 9px calc(86px + env(safe-area-inset-bottom))}.oras-mi-bottom{width:calc(100vw - 20px);grid-template-columns:.78fr .9fr 1.2fr;gap:5px}.oras-mi-bottom a,.oras-mi-bottom button{font-size:.76rem;min-height:46px;padding:0 8px}}
+@media(max-width:390px){.oras-mi-bottom a,.oras-mi-bottom button{font-size:.7rem;gap:4px}.oras-mi-bottom-icon{font-size:.82rem}}
+
 `;
 document.head.appendChild(style);
-document.documentElement.classList.add('oras-master-entry');
+if(COVER_ENTRY)document.documentElement.classList.add('oras-master-entry');
 
 const cover=document.createElement('section');
 cover.className='oras-master-cover';
 cover.setAttribute('aria-label','Portada de ORAS');
 cover.innerHTML=`<div class="oras-master-cover-frame"><img class="oras-master-cover-img" src="${ROOT}/assets/oras-portada-final.jpg?v=${VERSION}" alt="ORAS · El archivo profundo"><button class="oras-master-button" type="button" aria-label="Abrir índice general de lectura"><span>Abrir índice general de lectura</span></button></div>`;
+cover.hidden=!COVER_ENTRY;
 document.body.appendChild(cover);
+const entryBridge=document.createElement('div');
+entryBridge.className='oras-entry-bridge';
+entryBridge.hidden=true;
+document.body.appendChild(entryBridge);
 
 const index=document.createElement('section');
 index.className='oras-master-index';
@@ -317,7 +335,8 @@ function render(){
     </section>`:''}`;
 
   index.querySelector('.oras-mi-bottom').innerHTML=`
-    <button class="oras-mi-home" type="button" data-home><span class="oras-mi-bottom-icon">⌂</span><span>Inicio</span></button>
+    <button class="oras-mi-reset" type="button" data-reset><span class="oras-mi-bottom-icon">●</span><span>Reiniciar</span></button>
+    <button class="oras-mi-home" type="button" data-home><span class="oras-mi-bottom-icon">×</span><span>Cerrar</span></button>
     <a class="oras-mi-continue" href="${firstUnread}"><span class="oras-mi-bottom-icon">▤</span><span>${p.done===p.total?'Volver a leer':'Continuar'}</span></a>`;
 
   index.querySelectorAll('[data-toggle]').forEach(button=>{
@@ -337,23 +356,32 @@ function render(){
       }
     });
   });
+  index.querySelector('[data-reset]')?.addEventListener('click',()=>{
+    try{localStorage.removeItem(UKEY)}catch(_){}
+    try{localStorage.removeItem(GKEY)}catch(_){}
+    try{sessionStorage.removeItem(OPENKEY)}catch(_){}
+    try{localStorage.setItem(UKEY,JSON.stringify({soloComplete:false,anaComplete:false,anaParts:Object.fromEntries(ANA.map(([id])=>[id,false])),cenicientoComplete:false,cenicientoUnlocked:false,mirrorReadComplete:false,mirrorCrossed:false,realityDeformed:false,returnedFromCeniciento:false}))}catch(_){}
+    try{window.dispatchEvent(new CustomEvent('oras:manual-reset'))}catch(_){}
+    location.href=ROOT+'/?indice=1&reinicio=1';
+  });
   index.querySelector('[data-home]')?.addEventListener('click',closeIndex);
 }
 
-function openIndex(){
-  render();
-  index.classList.add('is-open');
-  cover.hidden=true;
-  index.scrollTop=0;
-  index.querySelector('.oras-mi-close')?.focus({preventScroll:true});
+function openIndex(options={}){
+  render();cover.hidden=true;document.documentElement.classList.remove('oras-master-entry');
+  if(options.fromEntry)index.classList.add('from-entry');index.classList.add('is-open');index.scrollTop=0;
+  setTimeout(()=>index.querySelector('.oras-mi-close')?.focus({preventScroll:true}),options.fromEntry?900:0);
+  if(options.fromEntry)setTimeout(()=>index.classList.remove('from-entry'),2700);
 }
-function closeIndex(){
-  index.classList.remove('is-open');
-  cover.hidden=false;
-  cover.querySelector('.oras-master-button')?.focus({preventScroll:true});
+function closeIndex(){index.classList.remove('is-open','from-entry');document.documentElement.classList.remove('oras-master-entry');}
+function enterFromCover(){
+  if(cover.classList.contains('is-entering'))return;const button=cover.querySelector('.oras-master-button');if(button)button.disabled=true;
+  cover.classList.add('is-entering');entryBridge.hidden=false;requestAnimationFrame(()=>entryBridge.classList.add('is-active'));
+  setTimeout(()=>{cover.hidden=true;openIndex({fromEntry:true})},920);
+  setTimeout(()=>{entryBridge.classList.remove('is-active');entryBridge.hidden=true},3200);
 }
-
-cover.querySelector('.oras-master-button').addEventListener('click',openIndex);
+window.ORASMasterIndex={open:()=>openIndex(),close:closeIndex,render,reset:()=>index.querySelector('[data-reset]')?.click()};
+cover.querySelector('.oras-master-button').addEventListener('click',enterFromCover);
 index.querySelector('.oras-mi-close').addEventListener('click',closeIndex);
 addEventListener('keydown',event=>{if(event.key==='Escape'&&index.classList.contains('is-open'))closeIndex();});
 addEventListener('storage',event=>{if((event.key===UKEY||event.key===GKEY)&&index.classList.contains('is-open'))render();});
