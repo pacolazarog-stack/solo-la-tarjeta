@@ -6,11 +6,15 @@ El índice general de **ORAS · Lo que queda de las horas** es el único índice
 
 Sustituye cualquier índice parcial o autónomo anterior, incluido el índice propio de **ANA KLAUDYA**. Desde las piezas de la obra, cualquier acceso denominado «Índice» debe conducir al índice general de ORAS.
 
-El índice no es sólo un menú: representa el estado narrativo real de la lectura y debe respetar los bloqueos estructurales de la obra.
+El índice no es sólo un menú: representa el estado narrativo real de la lectura. **No anticipa el contenido todavía no descubierto.** Sus elementos aparecen conforme el lector abre las sucesivas puertas de la obra.
 
 ---
 
-## 2. Arquitectura de acceso
+## 2. Arquitectura de acceso y revelación progresiva
+
+### Estado inicial
+
+Al comenzar un ciclo nuevo, el índice muestra **únicamente SOLO LA TARJETA**. Ningún otro título, sección o tarjeta debe ser visible ni accesible.
 
 ### I · LA VIDA
 
@@ -18,13 +22,24 @@ El índice no es sólo un menú: representa el estado narrativo real de la lectu
 2. **ANA KLAUDYA**
 3. **CENICIENTO**
 
-**CENICIENTO constituye la única excepción a los accesos directos del índice.** No puede abrirse desde su tarjeta, desde «Continuar» ni mediante ningún atajo de navegación. Su única puerta narrativa es el **interrogante** que aparece dentro del recorrido de ANA KLAUDYA.
+Cuando **SOLO LA TARJETA** queda completada, se revela **ANA KLAUDYA** y, dentro de su tarjeta, quedan disponibles sus ocho partes:
+
+- Prólogo · Siguiendo una tarjeta
+- Elegía breve para Ana Klaudya
+- En tus ojos
+- En tus labios
+- Tu cabello
+- Tu piel
+- Interludio · Iba a llevarte flores
+- Epílogo · A fuego lento · Flores
+
+En ese mismo estadio puede figurar **CENICIENTO** en el índice, pero **sin acceso directo**. CENICIENTO constituye la excepción absoluta del sistema: no puede abrirse desde su tarjeta, desde «Continuar» ni mediante ningún atajo de navegación. Su única puerta narrativa es el **interrogante** que aparece dentro del recorrido de ANA KLAUDYA.
 
 ### II · EL UMBRAL
 
 **EL ESPEJO**
 
-El acceso al Espejo no es libre. Lo habilitan las rutas narrativas del recorrido de ANA KLAUDYA una vez cumplidas las condiciones de LA VIDA. El índice puede mostrarlo, pero sólo debe permitir atravesarlo cuando esa puerta haya sido alcanzada narrativamente.
+EL ESPEJO no se anticipa en el índice. Sólo aparece cuando LA VIDA ha cumplido sus condiciones narrativas y la puerta del umbral ha sido alcanzada.
 
 ### III · LA EXPANSIÓN
 
@@ -32,28 +47,31 @@ El acceso al Espejo no es libre. Lo habilitan las rutas narrativas del recorrido
 5. **EL OFICIO DE LAS SOMBRAS**
 6. **LA CIUDAD QUE APRENDIÓ A OLVIDAR**
 
+LA EXPANSIÓN sólo se revela después de haber atravesado efectivamente EL ESPEJO. Dentro de ella, el índice mantiene la misma lógica de descubrimiento: primero EL INVENTARIO DEL AIRE; completado éste, EL OFICIO DE LAS SOMBRAS; completado éste, LA CIUDAD QUE APRENDIÓ A OLVIDAR.
+
 ### IV · EL CERO
 
 **LA HABITACIÓN NÚMERO CERO**
+
+LA HABITACIÓN NÚMERO CERO sólo aparece después de completar LA CIUDAD QUE APRENDIÓ A OLVIDAR.
 
 ---
 
 ## 3. Regla absoluta del umbral
 
-**Nada de EL INVENTARIO DEL AIRE, EL OFICIO DE LAS SOMBRAS, LA CIUDAD QUE APRENDIÓ A OLVIDAR ni LA HABITACIÓN NÚMERO CERO puede visitarse antes de haber atravesado EL ESPEJO.**
+**Nada de EL INVENTARIO DEL AIRE, EL OFICIO DE LAS SOMBRAS, LA CIUDAD QUE APRENDIÓ A OLVIDAR ni LA HABITACIÓN NÚMERO CERO puede mostrarse ni visitarse antes de haber atravesado EL ESPEJO.**
 
-No basta con que EL ESPEJO esté visible, descubierto o iniciado. Debe existir un estado persistente e inequívoco de tránsito consumado:
+No basta con que EL ESPEJO esté descubierto o iniciado. Debe existir un estado persistente e inequívoco de tránsito consumado:
 
 `mirrorCrossed === true`
 
 Mientras ese estado no exista:
 
-- las tarjetas de LA EXPANSIÓN y EL CERO permanecen visibles pero bloqueadas en el índice;
-- sus subbotones no son operativos;
+- LA EXPANSIÓN y EL CERO no aparecen en el índice;
 - «Continuar» no puede saltar a ninguna de esas zonas;
 - un acceso directo por URL a la segunda trilogía o a LA HABITACIÓN NÚMERO CERO debe devolver al índice canónico.
 
-Una vez atravesado EL ESPEJO, la expansión queda desbloqueada.
+Una vez atravesado EL ESPEJO, se revela EL INVENTARIO DEL AIRE y comienza la liberación progresiva de la segunda mitad de ORAS.
 
 ---
 
@@ -74,9 +92,11 @@ La navegación debe distinguir como mínimo:
 
 `realityDeformed` registra la consecuencia estética y narrativa permanente del cruce.
 
-La regla de desbloqueo es:
+La regla de desbloqueo de LA EXPANSIÓN es:
 
 `expansionUnlocked = mirrorCrossed === true`
+
+La visibilidad del índice es siempre consecuencia del estado narrativo alcanzado, nunca una previsualización de etapas futuras.
 
 ---
 
@@ -128,13 +148,13 @@ El lector debe reconocer el espacio, pero sentir que algo ya no coincide del tod
 
 ## 8. Regla de los botones
 
-Cada botón del índice debe conducir exactamente a la pantalla, pieza o fragmento que nombra.
+Cada botón visible del índice debe conducir exactamente a la pantalla, pieza o fragmento que nombra.
 
-Única excepción: **CENICIENTO**, cuya tarjeta carece de acceso directo y remite narrativamente al interrogante de ANA KLAUDYA.
+Única excepción: **CENICIENTO**, cuya tarjeta carece siempre de acceso directo. Su presencia en el índice sólo registra que forma parte de LA VIDA; su entrada efectiva se produce exclusivamente mediante el interrogante de ANA KLAUDYA.
 
-EL ESPEJO sólo puede abrirse cuando las rutas de ANA KLAUDYA hayan habilitado su tránsito.
+EL ESPEJO sólo aparece y puede abrirse cuando las rutas de LA VIDA hayan habilitado su tránsito.
 
-LA EXPANSIÓN y EL CERO sólo pueden abrirse después de `mirrorCrossed === true`.
+LA EXPANSIÓN sólo aparece después de `mirrorCrossed === true`, y sus obras se revelan de manera sucesiva conforme se completa la anterior.
 
 ---
 
@@ -142,7 +162,7 @@ LA EXPANSIÓN y EL CERO sólo pueden abrirse después de `mirrorCrossed === true
 
 El regreso al índice después del cruce no deshace el cruce.
 
-El índice continúa siendo el mismo lugar funcional, pero su estado ha cambiado: la segunda trilogía queda abierta y EL ESPEJO figura como atravesado.
+El índice continúa siendo el mismo lugar funcional, pero conserva todo lo que ya ha sido descubierto en el ciclo actual y sólo añade las puertas nuevas que el recorrido vaya habilitando.
 
 La navegación debe encarnar así la ley narrativa central del umbral:
 
@@ -154,7 +174,7 @@ La navegación debe encarnar así la ley narrativa central del umbral:
 
 **Reiniciar ORAS abre un ciclo de lectura completamente nuevo.**
 
-En el instante del reinicio, el índice canónico debe mostrar **0/43 huellas leídas**. Ninguna pieza, fragmento o territorio puede conservar la condición de visitado del ciclo anterior.
+En el instante del reinicio, el índice canónico debe mostrar **0/43 huellas leídas** y, visualmente, **sólo SOLO LA TARJETA**. Ninguna pieza, fragmento o territorio posterior puede conservar la condición de visible, visitado o desbloqueado del ciclo anterior.
 
 El reinicio borra, a efectos de navegación y recuento:
 
@@ -175,6 +195,6 @@ Por tanto, tras reiniciar:
 
 `oras.reading.index.v1.done = {}`
 
-LA EXPANSIÓN y EL CERO vuelven a quedar bloqueados hasta atravesar de nuevo EL ESPEJO, y CENICIENTO vuelve a carecer de acceso directo: sólo puede alcanzarse otra vez mediante el interrogante.
+ANA KLAUDYA vuelve a permanecer oculta hasta completar SOLO LA TARJETA; CENICIENTO vuelve a ser sólo accesible mediante el interrogante; EL ESPEJO y toda LA EXPANSIÓN desaparecen del índice hasta que el nuevo ciclo vuelva a alcanzarlos.
 
-La huella conceptual `realityDeformed` puede conservarse como cicatriz narrativa de un cruce anterior, porque expresa que volver al mismo lugar nunca restaura exactamente la realidad. **Esa cicatriz no cuenta como lectura, no suma ninguna de las 43 huellas y no desbloquea ninguna ruta.**
+La huella conceptual `realityDeformed` puede conservarse como cicatriz narrativa de un cruce anterior, porque expresa que volver al mismo lugar nunca restaura exactamente la realidad. **Esa cicatriz no cuenta como lectura, no suma ninguna de las 43 huellas, no hace visible contenido futuro y no desbloquea ninguna ruta.**
