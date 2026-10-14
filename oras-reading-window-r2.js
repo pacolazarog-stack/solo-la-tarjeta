@@ -53,7 +53,7 @@ style.textContent=`
 .ou-reading-window-r2>summary::before{content:"";width:5px;height:5px;border-radius:50%;background:#e9cf91}
 .ou-reading-window-r2 .ou-rw-panel{display:none!important}
 body.mirror .ou-reading-window-r2{display:none!important}
-body.oras-ana-static-final .world *,body.oras-ana-static-final .portrait-finale,body.oras-ana-static-final .portrait-finale *,body.oras-ana-static-final .pulse-field,body.oras-ana-static-final .pulse-field::before,body.oras-ana-static-final .pulse-field::after,body.oras-ana-static-final .layer-warm,body.oras-ana-static-final .heat-final{animation:none!important;transition:none!important;filter:none!important;-webkit-filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;will-change:auto!important}
+body.oras-ana-static-final .world *,body.oras-ana-static-final .portrait-finale,body.oras-ana-static-final .portrait-finale *{animation:none!important;transition:none!important;filter:none!important;-webkit-filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;will-change:auto!important}
 body.oras-ana-static-final .portrait-finale img{opacity:1!important}
 body.oras-ana-static-final #journeyNav,body.oras-ana-static-final #journeyNav button,body.oras-ana-static-final .portrait-question,body.oras-ana-static-final .ou-reading-window-r2,body.oras-ana-static-final #orasSunoVolume{pointer-events:auto!important}
 body.oras-ana-static-final #journeyNav{z-index:2147483600!important}
@@ -122,7 +122,7 @@ function setupTracking(){
       if(b.classList.contains('portrait-revealed')){
         b.classList.add('oras-ana-static-final');
         completeAnaPart('elegia');
-        document.querySelectorAll('.pulse-field,.layer-warm,.heat-final').forEach(el=>{try{el.getAnimations().forEach(a=>a.cancel())}catch(_){}});
+        
       }
     };
     new MutationObserver(stabilize).observe(document.body,{attributes:true,attributeFilter:['class']});

@@ -22,12 +22,7 @@ if(IS_ANA){
   perfStyle.textContent=`
     body.oras-ana-static-final .world *,
     body.oras-ana-static-final .portrait-finale,
-    body.oras-ana-static-final .portrait-finale *,
-    body.oras-ana-static-final .pulse-field,
-    body.oras-ana-static-final .pulse-field::before,
-    body.oras-ana-static-final .pulse-field::after,
-    body.oras-ana-static-final .layer-warm,
-    body.oras-ana-static-final .heat-final{
+    body.oras-ana-static-final .portrait-finale *{
       animation:none!important;
       transition:none!important;
       filter:none!important;
@@ -49,9 +44,7 @@ if(IS_ANA){
     const finalVisible=b.classList.contains('portrait-revealed')||b.dataset.ouCompletedAnaFinal==='true';
     if(finalVisible&&!b.classList.contains('oras-ana-static-final')){
       b.classList.add('oras-ana-static-final');
-      document.querySelectorAll('.pulse-field,.layer-warm,.heat-final').forEach(el=>{
-        try{el.getAnimations().forEach(a=>a.cancel())}catch(_){}
-      });
+      
     }
   };
   const armAnaStability=()=>{
