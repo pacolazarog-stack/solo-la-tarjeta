@@ -12,7 +12,7 @@ window.__orasMasterIndexR1=true;
 const ROOT='/solo-la-tarjeta';
 const UKEY='oras.universe.v2';
 const GKEY='oras.reading.index.v1';
-const VERSION='20261014-master-index-7';
+const VERSION='20261014-master-index-8';
 
 const ANA=[
   ['estrella','Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`],
@@ -68,7 +68,7 @@ html.oras-master-entry,html.oras-master-entry body{overflow:hidden!important;bac
 .oras-master-cover{position:fixed;z-index:2147483647;inset:0;display:grid;place-items:center;background:#070706;color:#f4ecdc;font-family:Georgia,"Times New Roman",serif}
 .oras-master-cover[hidden]{display:none!important}
 .oras-master-cover-frame{position:relative;height:min(100svh,calc(100vw * 1.5));width:min(100vw,calc(100svh * .6666667));aspect-ratio:2/3;box-shadow:0 0 80px rgba(0,0,0,.5);overflow:hidden;background:#0b0a09}
-.oras-master-cover-img{display:none!important}.oras-master-cover-fallback{display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 42%,rgba(76,65,49,.22),transparent 31%),linear-gradient(180deg,#17130f 0%,#090807 62%,#030303 100%);color:#efe5d2;text-align:center}.oras-master-cover-title{font:400 clamp(4.5rem,13vw,8.5rem)/.88 Georgia,serif;letter-spacing:.08em;text-indent:.08em}.oras-master-cover-sub{margin-top:1.1rem;font:italic clamp(1rem,2.3vw,1.35rem)/1.2 Georgia,serif;letter-spacing:.035em;color:rgba(239,229,210,.76)}.oras-master-cover-hint{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);font:500 .66rem/1.2 system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:rgba(239,229,210,.42);white-space:nowrap}
+.oras-master-cover-img{display:block;width:100%;height:100%;object-fit:cover}.oras-master-cover-fallback{display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 42%,rgba(76,65,49,.22),transparent 31%),linear-gradient(180deg,#17130f 0%,#090807 62%,#030303 100%);color:#efe5d2;text-align:center}.oras-master-cover-title{font:400 clamp(4.5rem,13vw,8.5rem)/.88 Georgia,serif;letter-spacing:.08em;text-indent:.08em}.oras-master-cover-sub{margin-top:1.1rem;font:italic clamp(1rem,2.3vw,1.35rem)/1.2 Georgia,serif;letter-spacing:.035em;color:rgba(239,229,210,.76)}.oras-master-cover-hint{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);font:500 .66rem/1.2 system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:rgba(239,229,210,.42);white-space:nowrap}
 .oras-master-button{position:absolute;left:50%;top:50.4%;width:31%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);border:0;background:transparent;cursor:pointer;touch-action:manipulation;outline:none}
 .oras-master-button::before{content:"";position:absolute;inset:-4%;border-radius:50%;border:1px solid transparent;box-shadow:0 0 0 0 rgba(248,239,215,0);transition:border-color .28s ease,box-shadow .28s ease,transform .28s ease}
 .oras-master-button:hover::before,.oras-master-button:focus-visible::before{border-color:rgba(248,239,215,.42);box-shadow:0 0 28px rgba(248,239,215,.18);transform:scale(1.025)}
@@ -116,7 +116,7 @@ document.documentElement.classList.add('oras-master-entry');
 const cover=document.createElement('section');
 cover.className='oras-master-cover';
 cover.setAttribute('aria-label','Portada de ORAS');
-cover.innerHTML=`<div class="oras-master-cover-frame oras-master-cover-fallback"><div class="oras-master-cover-title">ORAS</div><div class="oras-master-cover-sub">Lo que queda de las horas</div><div class="oras-master-cover-hint">Abrir índice</div><button class="oras-master-button" type="button" aria-label="Abrir índice general de lectura"><span>Abrir índice general de lectura</span></button></div>`;
+cover.innerHTML=`<div class="oras-master-cover-frame"><img class="oras-master-cover-img" src="${ROOT}/assets/oras-portada-final.jpg?v=${VERSION}" alt="ORAS · El archivo profundo"><button class="oras-master-button" type="button" aria-label="Abrir índice general de lectura"><span>Abrir índice general de lectura</span></button></div>`;
 document.body.appendChild(cover);
 
 const index=document.createElement('section');
