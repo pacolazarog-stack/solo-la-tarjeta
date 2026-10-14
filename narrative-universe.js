@@ -3,17 +3,21 @@
 
 /*
   ORAS · puente de compatibilidad del contador de lecturas.
-  Conserva íntegra la versión publicada inmediatamente anterior y corrige dos
-  desajustes de estado: el cierre real de CENICIENTO y el reinicio de ANA tras
-  EL ESPEJO.
+  Conserva íntegra la versión publicada inmediatamente anterior y corrige tres
+  desajustes de estado: el cierre real de CENICIENTO, el reinicio de ANA tras
+  EL ESPEJO y el borrado total de huellas al comenzar un nuevo ciclo.
 */
 const STORAGE='oras.universe.v2';
+const GENERAL='oras.reading.index.v1';
 const LEGACY='https://cdn.jsdelivr.net/gh/pacolazarog-stack/solo-la-tarjeta@ab1f9b3574c94da479674391c14e2908f7247048/narrative-universe.js';
-const VERSION='20261014-reading-counter-fix-1';
+const VERSION='20261014-reading-counter-fix-2';
 const ANA_KEYS=Object.freeze(['estrella','elegia','ojos','labios','cabello','piel','interludio','epilogo']);
 
 function readState(){
   try{return JSON.parse(localStorage.getItem(STORAGE)||'{}')||{}}catch(_){return {}}
+}
+function readGeneral(){
+  try{return JSON.parse(localStorage.getItem(GENERAL)||'{}')||{}}catch(_){return {}}
 }
 function writeState(patch={}){
   try{
@@ -25,23 +29,45 @@ function writeState(patch={}){
   }catch(_){return readState()}
 }
 function emptyAnaParts(){return Object.fromEntries(ANA_KEYS.map(key=>[key,false]));}
+function clearGeneralVisits(){
+  try{
+    const current=readGeneral();
+    localStorage.setItem(GENERAL,JSON.stringify(Object.assign({},current,{done:{}})));
+  }catch(_){
+    try{localStorage.setItem(GENERAL,JSON.stringify({done:{}}))}catch(__){}
+  }
+}
 
 /*
-  La implementación heredada reinicia los tres trabajos al terminar EL ESPEJO,
-  pero podía dejar las ocho marcas internas de ANA KLAUDYA a true. El índice
-  nuevo reconstruía entonces anaComplete y hacía reaparecer una lectura ya
-  reiniciada. Si estamos inequívocamente en ese estado de retorno, limpiamos
-  también las ocho marcas internas.
+  CANON ORAS · REINICIO TOTAL DE LECTURA
+  Un reinicio abre un ciclo completamente nuevo: ninguna de las 43 huellas
+  anteriores puede continuar marcada como visitada. Se limpia LA VIDA, el
+  estado contable de EL ESPEJO, toda LA EXPANSIÓN y EL CERO. La posible huella
+  conceptual de haber atravesado antes el espejo (realityDeformed) puede
+  conservarse, pero nunca cuenta como lectura ni desbloquea rutas.
 */
-function clearStaleAnaAfterMirror(){
+function clearStaleVisitsAfterRestart(){
   const state=readState();
-  const staleParts=ANA_KEYS.some(key=>state.anaParts?.[key]===true);
+  const general=readGeneral();
   const resetShape=
     state.returnedFromCeniciento===true &&
     state.anaComplete===false &&
     state.soloComplete===false &&
     state.cenicientoComplete===false;
-  if(resetShape&&staleParts)writeState({anaParts:emptyAnaParts()});
+  if(!resetShape)return;
+
+  const staleParts=ANA_KEYS.some(key=>state.anaParts?.[key]===true);
+  const staleGeneral=Object.values(general.done||{}).some(value=>value===true||value?.done===true);
+  const staleMirror=state.mirrorReadComplete===true||state.mirrorCrossed===true;
+  if(!staleParts&&!staleGeneral&&!staleMirror)return;
+
+  clearGeneralVisits();
+  writeState({
+    anaParts:emptyAnaParts(),
+    mirrorReadComplete:false,
+    mirrorCrossed:false
+  });
+  try{window.dispatchEvent(new CustomEvent('oras:full-reset'))}catch(_){}
 }
 
 /*
@@ -89,12 +115,12 @@ function installCenicientoFinishBridge(){
 }
 
 function installFixes(){
-  clearStaleAnaAfterMirror();
-  addEventListener('oras:mirror-returned',clearStaleAnaAfterMirror);
-  addEventListener('pageshow',clearStaleAnaAfterMirror);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)clearStaleAnaAfterMirror()});
-  setTimeout(clearStaleAnaAfterMirror,0);
-  setTimeout(clearStaleAnaAfterMirror,650);
+  clearStaleVisitsAfterRestart();
+  addEventListener('oras:mirror-returned',clearStaleVisitsAfterRestart);
+  addEventListener('pageshow',clearStaleVisitsAfterRestart);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)clearStaleVisitsAfterRestart()});
+  setTimeout(clearStaleVisitsAfterRestart,0);
+  setTimeout(clearStaleVisitsAfterRestart,650);
   installCenicientoFinishBridge();
 }
 
