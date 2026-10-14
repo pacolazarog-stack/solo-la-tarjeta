@@ -14,13 +14,10 @@
   <title>ANA KLAUDYA</title>
   <link rel="preload" as="image" href="ana-klaudya-fotografia.jpg">
   <script data-poem-entry>
-  document.documentElement.classList.add("publication-pending");
   if(['estrella','ojos','sonrisa','cabello','piel','interludio','epilogo','ceniciento'].includes(window.location.hash.slice(1))){document.documentElement.classList.add('poem-route-loading');}
   </script>
 
   <style>
-    .publication-pending body{visibility:hidden}
-    .publication-pending::before{content:"Preparando la lectura…";position:fixed;inset:0;display:grid;place-items:center;background:#eef1e9;color:#201d19;z-index:2147483647;font:18px/1.5 Georgia,serif}
     :root{
       --paper:#eef1e9;
       --ink:#201d19;
@@ -822,6 +819,11 @@ body.portrait-revealed .portrait-finale{opacity:1!important;visibility:visible!i
 body.portrait-revealed .portrait-finale img{opacity:1!important;visibility:visible!important;filter:none!important}
 body.portrait-revealed .portrait-image-area,body.portrait-revealed .portrait-image-wrap{opacity:1!important;visibility:visible!important}
 </style>
+
+  <script id="oras-ana-release-gate">
+    document.documentElement.classList.remove('publication-pending');
+    addEventListener('pageshow',()=>document.documentElement.classList.remove('publication-pending'));
+  </script>
 </head>
 
 <body class="locked" data-publication="web">
