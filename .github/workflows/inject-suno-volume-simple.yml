@@ -1,0 +1,38 @@
+name: Activar volumen compacto ORAS
+
+on:
+  push:
+    paths:
+      - '.github/workflows/inject-suno-volume-simple.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Insertar control en todas las páginas
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' f; do
+            if ! grep -q 'oras-suno-volume-r1.js' "$f"; then
+              sed -i 's#</body>#<script src="/solo-la-tarjeta/oras-suno-volume-r1.js?v=20261014-suno-volume-1"></script>\n</body>#' "$f"
+            fi
+          done < <(find . -type f -name '*.html' -print0)
+          grep -RIl 'oras-suno-volume-r1.js' --include='*.html' . | head -n 1
+      - name: Commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm -f .github/workflows/inject-suno-volume-simple.yml .github/workflows/oras-suno-volume.yml
+          git add -A
+          git commit -m 'ORAS: activa el control de volumen tipo Suno en todas las pantallas'
+          git pull --rebase origin main
+          git push
