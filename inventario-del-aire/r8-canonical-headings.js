@@ -9,9 +9,9 @@ if(!book)return;
   IX · Invierno
   X · El Archivo Profundo
   XI · La Máquina de las Huellas
-  ATLAS / AZAR
   XII · El Resonador
   XIII · La última sala
+  ATLAS / AZAR · interludio documental
   EPÍLOGO · La Habitación Número Cero
 */
 const HEADINGS=new Map([
@@ -51,7 +51,39 @@ function normalizeR8Headings(){
   return changed;
 }
 
-function run(){normalizeR8Headings();}
+
+function ensureAtlasLabel(atlas){
+  if(atlas.nextElementSibling?.dataset?.orasAtlasDocument==='1')return;
+  const p=document.createElement('p');
+  p.dataset.orasAtlasDocument='1';
+  p.textContent='Documento recuperado del Archivo Profundo.';
+  p.style.cssText='margin:.2rem 0 1.35rem;font-style:italic;opacity:.62;letter-spacing:.03em';
+  atlas.insertAdjacentElement('afterend',p);
+}
+function placeAtlasAfterLastRoom(){
+  const atlas=book.querySelector('h3[data-chapter="atlas"]');
+  const last=book.querySelector('h3[data-chapter="last-room"]');
+  if(!atlas||!last)return false;
+  const headings=[...book.querySelectorAll('h3[data-chapter]')];
+  const ai=headings.indexOf(atlas), li=headings.indexOf(last);
+  if(ai===li+1){ensureAtlasLabel(atlas);return false;}
+  const block=[];
+  let node=atlas;
+  while(node){
+    const next=node.nextSibling;
+    block.push(node);
+    node=next;
+    if(node?.nodeType===1 && node.matches?.('h3[data-chapter]'))break;
+  }
+  const refreshed=[...book.querySelectorAll('h3[data-chapter]')];
+  const lastNow=book.querySelector('h3[data-chapter="last-room"]');
+  const anchor=refreshed[refreshed.indexOf(lastNow)+1]||null;
+  for(const n of block)book.insertBefore(n,anchor);
+  ensureAtlasLabel(atlas);
+  return true;
+}
+
+function run(){normalizeR8Headings();placeAtlasAfterLastRoom();}
 
 if(book.classList.contains('ready'))run();
 const mo=new MutationObserver(()=>{

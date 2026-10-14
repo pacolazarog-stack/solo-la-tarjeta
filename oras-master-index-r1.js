@@ -13,7 +13,7 @@ const ROOT='/solo-la-tarjeta';
 const UKEY='oras.universe.v2';
 const GKEY='oras.reading.index.v1';
 const OPENKEY='oras.master.index.open.v1';
-const VERSION='20261014-master-index-12';
+const VERSION='20261014-master-index-13';
 
 const ANA=[
   ['estrella','Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`],
@@ -59,16 +59,19 @@ const CIUDAD=[
   ['ciu-6','VI. Teoría'],
   ['ciu-7','VII. El museo'],
   ['ciu-8','VIII. El visitante'],
-  ['ciu-9','IX. Invierno'],
-  ['ciu-11','X. El Archivo Profundo'],
-  ['ciu-12','XI. La Máquina de las Huellas'],
-  ['atlas','ATLAS / AZAR'],
-  ['ciu-13','XII. El Resonador'],
-  ['ciu-10','XIII. La última sala']
+  ['ciu-9','IX. Invierno']
 ];
 
+const ARCHIVERO=[
+  ['ciu-11','X. El Archivo Profundo'],
+  ['ciu-12','XI. La Máquina de las Huellas'],
+  ['ciu-13','XII. El Resonador'],
+  ['ciu-10','XIII. La Última Sala']
+];
+
+const ATLAS=['atlas','ATLAS / AZAR'];
 const ZERO=['zero','Epílogo · La Habitación Número Cero'];
-const EXPANSION=[...INVENTARIO,...OFICIO,...CIUDAD,ZERO];
+const EXPANSION=[...INVENTARIO,...OFICIO,...CIUDAD,...ARCHIVERO,ATLAS,ZERO];
 
 const readJSON=(key,fallback={})=>{try{return JSON.parse(localStorage.getItem(key)||'null')||fallback}catch(_){return fallback}};
 const life=()=>readJSON(UKEY,{});
@@ -234,12 +237,14 @@ function render(){
   const invCount=countDone(INVENTARIO);
   const oficioCount=countDone(OFICIO);
   const ciudadCount=countDone(CIUDAD);
+  const archiveroCount=countDone(ARCHIVERO);
+  const atlasDone=expansionDone('atlas');
   const zeroDone=expansionDone('zero');
   const lifeWorks=[solo,anaComplete,cen].filter(Boolean).length;
   const expansionCount=invCount+oficioCount+ciudadCount;
   const pct=Math.round((p.done/p.total)*100);
 
-  // Índice progresivo: sólo se muestra lo que el lector ha desbloqueado.
+  // Índice progresivo y emocional: el lector no ve todavía lo que no ha alcanzado.
   const showAna=solo;
   const showCeniciento=solo;
   const showMirror=mirrorReady||mirror||mirrorCrossed;
@@ -247,12 +252,14 @@ function render(){
   const showInventario=showExpansion;
   const showOficio=showExpansion&&invCount===INVENTARIO.length;
   const showCiudad=showOficio&&oficioCount===OFICIO.length;
-  const showZero=showCiudad&&ciudadCount===CIUDAD.length;
+  const showArchivero=showCiudad&&ciudadCount===CIUDAD.length;
+  const showAtlas=showArchivero&&archiveroCount===ARCHIVERO.length;
+  const showZero=showAtlas&&atlasDone;
 
   const anaParts=ANA.map(([id,label,href])=>chip('ana-'+id,label,href,anaDone(id,u))).join('');
   const invParts=INVENTARIO.map(([id,label])=>chip(id,label,invHref(id),expansionDone(id))).join('');
   const oficioParts=OFICIO.map(([id,label])=>chip(id,label,invHref(id),expansionDone(id))).join('');
-  const ciudadParts=CIUDAD.map(([id,label])=>chip(id,label,invHref(id),expansionDone(id),id==='atlas'?'is-atlas':'')).join('');
+  const ciudadParts=CIUDAD.map(([id,label])=>chip(id,label,invHref(id),expansionDone(id))).join('');
 
   const firstUnread=[
     !solo&&`${ROOT}/?read=solo`,
@@ -262,6 +269,8 @@ function render(){
     ...(showInventario?INVENTARIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
     ...(showOficio?OFICIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
     ...(showCiudad?CIUDAD.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
+    ...(showArchivero?ARCHIVERO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
+    showAtlas&&!atlasDone&&invHref('atlas'),
     showZero&&!zeroDone&&invHref('zero')
   ].find(Boolean)||`${ROOT}/?read=solo`;
 
@@ -293,12 +302,18 @@ function render(){
       ${sectionHead('III · LA EXPANSIÓN',`${expansionCount}/${INVENTARIO.length+OFICIO.length+CIUDAD.length}`)}
       ${showInventario?card({id:'inventario',mark:'4',title:'El inventario del aire',meta:`${invCount}/${INVENTARIO.length} huellas`,done:invCount===INVENTARIO.length,parts:invParts,open:open.has('inventario')}):''}
       ${showOficio?card({id:'oficio',mark:'5',title:'El oficio de las sombras',meta:`${oficioCount}/${OFICIO.length} huellas`,done:oficioCount===OFICIO.length,parts:oficioParts,open:open.has('oficio')}):''}
-      ${showCiudad?card({id:'ciudad',mark:'6',title:'La ciudad que aprendió a olvidar',meta:`${ciudadCount}/${CIUDAD.length} huellas`,done:ciudadCount===CIUDAD.length,parts:ciudadParts,open:open.has('ciudad')}):''}
+      ${showCiudad?card({id:'ciudad',mark:'6',title:'La ciudad que aprendió a olvidar',meta:`${ciudadCount}/${CIUDAD.length} huellas · I–IX`,done:ciudadCount===CIUDAD.length,parts:ciudadParts,open:open.has('ciudad')}):''}
     </section>`:''}
 
-    ${showZero?`<section class="oras-mi-section">
-      ${sectionHead('IV · EL CERO',zeroDone?'1/1':'0/1')}
-      ${card({id:'zero',mark:'0',title:'La Habitación Número Cero',meta:zeroDone?'completa':'pendiente',done:zeroDone,href:invHref('zero')})}
+    ${showArchivero?`<section class="oras-mi-section">
+      ${sectionHead('IV · EL ARCHIVERO',`${archiveroCount}/${ARCHIVERO.length}`)}
+      ${ARCHIVERO.map(([id,label],i)=>card({id,mark:['X','XI','XII','XIII'][i],title:label.replace(/^[XVI]+\.\s*/,''),meta:expansionDone(id)?'leída':'pendiente',done:expansionDone(id),href:invHref(id)})).join('')}
+    </section>`:''}
+
+    ${showAtlas?`<section class="oras-mi-section">
+      ${sectionHead('V · EL CERO',`${(atlasDone?1:0)+(zeroDone?1:0)}/2`)}
+      ${card({id:'atlas',mark:'A/Z',title:'ATLAS / AZAR',meta:'Interludio documental · Documento recuperado del Archivo Profundo',done:atlasDone,href:invHref('atlas')})}
+      ${showZero?card({id:'zero',mark:'0',title:'La Habitación Número Cero',meta:zeroDone?'completa':'última pieza',done:zeroDone,href:invHref('zero')}):''}
     </section>`:''}`;
 
   index.querySelector('.oras-mi-bottom').innerHTML=`

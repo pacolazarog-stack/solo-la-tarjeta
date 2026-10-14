@@ -45,15 +45,26 @@ EL ESPEJO no se anticipa en el índice. Sólo aparece cuando LA VIDA ha cumplido
 
 4. **EL INVENTARIO DEL AIRE**
 5. **EL OFICIO DE LAS SOMBRAS**
-6. **LA CIUDAD QUE APRENDIÓ A OLVIDAR**
+6. **LA CIUDAD QUE APRENDIÓ A OLVIDAR · I–IX**
 
-LA EXPANSIÓN sólo se revela después de haber atravesado efectivamente EL ESPEJO. Dentro de ella, el índice mantiene la misma lógica de descubrimiento: primero EL INVENTARIO DEL AIRE; completado éste, EL OFICIO DE LAS SOMBRAS; completado éste, LA CIUDAD QUE APRENDIÓ A OLVIDAR.
+LA EXPANSIÓN sólo se revela después de haber atravesado efectivamente EL ESPEJO. Dentro de ella, el índice mantiene la misma lógica de descubrimiento: primero EL INVENTARIO DEL AIRE; completado éste, EL OFICIO DE LAS SOMBRAS; completado éste, LA CIUDAD QUE APRENDIÓ A OLVIDAR hasta **IX · Invierno**.
 
-### IV · EL CERO
+### IV · EL ARCHIVERO
 
-**LA HABITACIÓN NÚMERO CERO**
+- **X · EL ARCHIVO PROFUNDO**
+- **XI · LA MÁQUINA DE LAS HUELLAS**
+- **XII · EL RESONADOR**
+- **XIII · LA ÚLTIMA SALA**
 
-LA HABITACIÓN NÚMERO CERO sólo aparece después de completar LA CIUDAD QUE APRENDIÓ A OLVIDAR.
+Esta sección conserva al lector dentro de la historia del archivero. **LA ÚLTIMA SALA** culmina el arco humano del archivero.
+
+### V · EL CERO
+
+**ATLAS / AZAR** aparece como pieza autónoma, sin número, y se presenta como **INTERLUDIO DOCUMENTAL**:
+
+> Documento recuperado del Archivo Profundo.
+
+Después aparece **LA HABITACIÓN NÚMERO CERO**, última pieza absoluta de ORAS. Nada puede situarse detrás de ella.
 
 ---
 
@@ -198,3 +209,26 @@ Por tanto, tras reiniciar:
 ANA KLAUDYA vuelve a permanecer oculta hasta completar SOLO LA TARJETA; CENICIENTO vuelve a ser sólo accesible mediante el interrogante; EL ESPEJO y toda LA EXPANSIÓN desaparecen del índice hasta que el nuevo ciclo vuelva a alcanzarlos.
 
 La huella conceptual `realityDeformed` puede conservarse como cicatriz narrativa de un cruce anterior, porque expresa que volver al mismo lugar nunca restaura exactamente la realidad. **Esa cicatriz no cuenta como lectura, no suma ninguna de las 43 huellas, no hace visible contenido futuro y no desbloquea ninguna ruta.**
+
+
+---
+
+## 11. Canon definitivo del arco emocional
+
+El orden definitivo del tramo final es:
+
+**LA CIUDAD QUE APRENDIÓ A OLVIDAR I–IX → EL ARCHIVERO X–XIII → ATLAS / AZAR → LA HABITACIÓN NÚMERO CERO.**
+
+La secuencia emocional profunda de ORAS es:
+
+**persona → amor → presencia → tiempo → ausencia → memoria → ciudad → archivero → muerte → documentos supervivientes → cero.**
+
+Las teorías sostienen la emoción; no la sustituyen.
+
+ATLAS / AZAR no forma parte de la numeración X–XIII. Es un documento superviviente y debe distinguirse gráficamente como tal.
+
+LA HABITACIÓN NÚMERO CERO permanece intacta y cierra toda la obra. No existe XIV, coda ni explicación posterior.
+
+La última frase absoluta de ORAS es:
+
+> **Nadie supo decir desde cuándo.**
