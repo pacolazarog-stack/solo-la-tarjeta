@@ -1,0 +1,301 @@
+name: Restaurar índice móvil global y entrada ORAS
+
+on:
+  push:
+    paths:
+      - '.github/workflows/restore-oras-mobile-index-and-entry.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Aplicar índice global, reinicio manual y entrada inmersiva
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          master_version='20261014-master-index-14'
+          reading_version='20261014-global-index-window-2'
+          mirror_version='20261014-persistent-reading-2'
+
+          # ---------------------------------------------------------------
+          # 1) Índice maestro: global, modal real, progresivo, reinicio rojo.
+          # ---------------------------------------------------------------
+          p=Path('oras-master-index-r1.js')
+          s=p.read_text(encoding='utf-8')
+
+          s=s.replace("const PATH=location.pathname.replace(/\\/index\\.html$/i,'/').replace(/\\/+$/,'');\nif(PATH!=='/solo-la-tarjeta')return;\n\nconst qs=new URLSearchParams(location.search);\nif(qs.has('read')||qs.has('origen')||qs.get('auto')==='1'||qs.has('from'))return;",
+                      "const PATH=location.pathname.replace(/\\/index\\.html$/i,'/').replace(/\\/+$/,'');\nif(!PATH.startsWith('/solo-la-tarjeta'))return;\nconst IS_ROOT=PATH==='/solo-la-tarjeta';\n\nconst qs=new URLSearchParams(location.search);\nconst COVER_ENTRY=IS_ROOT&&!qs.has('read')&&!qs.has('origen')&&qs.get('auto')!=='1'&&!qs.has('from')&&qs.get('indice')!=='1';")
+          s=re.sub(r"const VERSION='[^']+';",f"const VERSION='{master_version}';",s,count=1)
+
+          css_anchor='@media(prefers-reduced-motion:reduce){.oras-master-button::before,.oras-mi-card-action .chev{transition:none}}'
+          extra_css=r'''
+/* ORAS · ventana canónica móvil y entrada a través del botón */
+.oras-entry-bridge{position:fixed;z-index:2147483646;inset:0;background:#fff;opacity:0;visibility:hidden;pointer-events:none}
+.oras-entry-bridge.is-active{visibility:visible;animation:orasWhiteBreath 2.9s ease-in-out forwards}
+@keyframes orasWhiteBreath{0%{opacity:0}18%{opacity:1}38%{opacity:.92}52%{opacity:1}68%{opacity:.88}82%{opacity:1}100%{opacity:.22}}
+.oras-master-cover-frame{transform:scale(1);transform-origin:50% 50.4%;transition:transform 1.05s cubic-bezier(.56,.02,.2,1),filter 1.05s ease,opacity .9s ease}
+.oras-master-cover.is-entering .oras-master-cover-frame{transform:scale(7.8);filter:blur(1.8px) brightness(1.28)}
+.oras-master-cover.is-entering .oras-master-button{transform:translate(-50%,-50%) perspective(700px) rotateY(86deg) scale(.62);opacity:.05;transition:transform .82s cubic-bezier(.5,.02,.18,1),opacity .62s ease}
+.oras-master-cover.is-entering .oras-master-button::before{border-color:rgba(255,255,255,.78);background:rgba(255,255,255,.12);box-shadow:0 0 70px rgba(255,255,255,.58)}
+.oras-master-index{align-items:center;justify-content:center;padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));background:rgba(5,5,5,.70);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow:hidden}
+.oras-master-index.is-open{display:flex}
+.oras-master-index.from-entry{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+.oras-master-index.from-entry .oras-mi-shell{animation:orasIndexAppear 1.55s .38s both cubic-bezier(.22,.65,.28,1)}
+@keyframes orasIndexAppear{0%{opacity:0;transform:translateY(24px) scale(.965);filter:blur(7px)}100%{opacity:1;transform:none;filter:none}}
+.oras-mi-shell{position:relative;width:min(900px,calc(100vw - 24px));height:min(92svh,880px);max-height:calc(100svh - 22px);margin:0;padding:max(22px,env(safe-area-inset-top)) 18px calc(94px + env(safe-area-inset-bottom));overflow:auto;border:1px solid rgba(224,194,129,.34);border-radius:22px;background:radial-gradient(circle at 50% -8%,rgba(104,77,37,.16),transparent 26%),linear-gradient(180deg,#0f0e0c,#060606 62%);box-shadow:0 28px 90px rgba(0,0,0,.58),inset 0 1px rgba(255,255,255,.025);overscroll-behavior:contain}
+.oras-mi-close{position:fixed}
+.oras-mi-bottom{grid-template-columns:minmax(0,.8fr) minmax(0,.95fr) minmax(0,1.25fr);width:min(860px,calc(100vw - 42px))}
+.oras-mi-reset{border:1px solid rgba(255,77,77,.75);background:linear-gradient(180deg,rgba(128,12,12,.96),rgba(79,7,7,.98));color:#fff1ee;box-shadow:0 0 16px rgba(190,18,18,.18)}
+.oras-mi-reset:hover,.oras-mi-reset:focus-visible{background:linear-gradient(180deg,#a61212,#700909);outline:none}
+@media(max-width:700px){
+  .oras-master-index{padding:6px}
+  .oras-mi-shell{width:calc(100vw - 12px);height:calc(100svh - 12px);max-height:none;border-radius:18px;padding:14px 9px calc(86px + env(safe-area-inset-bottom))}
+  .oras-mi-bottom{width:calc(100vw - 20px);grid-template-columns:.78fr .9fr 1.2fr;gap:5px}.oras-mi-bottom a,.oras-mi-bottom button{font-size:.76rem;min-height:46px;padding:0 8px}
+  .oras-mi-reset .oras-mi-bottom-icon{font-size:.86rem}
+}
+@media(max-width:390px){.oras-mi-bottom a,.oras-mi-bottom button{font-size:.7rem;gap:4px}.oras-mi-bottom-icon{font-size:.82rem}}
+'''
+          if 'oras-entry-bridge' not in s:
+              if css_anchor not in s: raise SystemExit('No se encontró ancla CSS del índice')
+              s=s.replace(css_anchor,css_anchor+extra_css,1)
+
+          s=s.replace("document.documentElement.classList.add('oras-master-entry');",
+                      "if(COVER_ENTRY)document.documentElement.classList.add('oras-master-entry');")
+          s=s.replace("document.body.appendChild(cover);",
+                      "cover.hidden=!COVER_ENTRY;\ndocument.body.appendChild(cover);\n\nconst entryBridge=document.createElement('div');\nentryBridge.className='oras-entry-bridge';\nentryBridge.hidden=true;\ndocument.body.appendChild(entryBridge);",1)
+
+          old_bottom='''  index.querySelector('.oras-mi-bottom').innerHTML=`\n    <button class="oras-mi-home" type="button" data-home><span class="oras-mi-bottom-icon">⌂</span><span>Inicio</span></button>\n    <a class="oras-mi-continue" href="${firstUnread}"><span class="oras-mi-bottom-icon">▤</span><span>${p.done===p.total?'Volver a leer':'Continuar'}</span></a>`;'''
+          new_bottom='''  index.querySelector('.oras-mi-bottom').innerHTML=`\n    <button class="oras-mi-reset" type="button" data-reset><span class="oras-mi-bottom-icon">●</span><span>Reiniciar</span></button>\n    <button class="oras-mi-home" type="button" data-home><span class="oras-mi-bottom-icon">×</span><span>Cerrar</span></button>\n    <a class="oras-mi-continue" href="${firstUnread}"><span class="oras-mi-bottom-icon">▤</span><span>${p.done===p.total?'Volver a leer':'Continuar'}</span></a>`;'''
+          if old_bottom not in s: raise SystemExit('No se encontró la botonera inferior')
+          s=s.replace(old_bottom,new_bottom,1)
+
+          hook="  index.querySelector('[data-home]')?.addEventListener('click',closeIndex);"
+          reset_code=r'''  index.querySelector('[data-reset]')?.addEventListener('click',()=>{
+    try{localStorage.removeItem(UKEY)}catch(_){}
+    try{localStorage.removeItem(GKEY)}catch(_){}
+    try{sessionStorage.removeItem(OPENKEY)}catch(_){}
+    try{localStorage.setItem(UKEY,JSON.stringify({
+      soloComplete:false,
+      anaComplete:false,
+      anaParts:Object.fromEntries(ANA.map(([id])=>[id,false])),
+      cenicientoComplete:false,
+      cenicientoUnlocked:false,
+      mirrorReadComplete:false,
+      mirrorCrossed:false,
+      realityDeformed:false,
+      returnedFromCeniciento:false
+    }))}catch(_){}
+    try{window.dispatchEvent(new CustomEvent('oras:manual-reset'))}catch(_){}
+    location.href=ROOT+'/?indice=1&reinicio=1';
+  });
+'''
+          if reset_code.strip() not in s:
+              s=s.replace(hook,reset_code+hook,1)
+
+          old_open=r'''function openIndex(){
+  render();
+  index.classList.add('is-open');
+  cover.hidden=true;
+  index.scrollTop=0;
+  index.querySelector('.oras-mi-close')?.focus({preventScroll:true});
+}
+function closeIndex(){
+  index.classList.remove('is-open');
+  cover.hidden=false;
+  cover.querySelector('.oras-master-button')?.focus({preventScroll:true});
+}
+
+cover.querySelector('.oras-master-button').addEventListener('click',openIndex);'''
+          new_open=r'''function openIndex(options={}){
+  render();
+  cover.hidden=true;
+  document.documentElement.classList.remove('oras-master-entry');
+  if(options.fromEntry)index.classList.add('from-entry');
+  index.classList.add('is-open');
+  index.scrollTop=0;
+  setTimeout(()=>index.querySelector('.oras-mi-close')?.focus({preventScroll:true}),options.fromEntry?900:0);
+  if(options.fromEntry)setTimeout(()=>index.classList.remove('from-entry'),2700);
+}
+function closeIndex(){
+  index.classList.remove('is-open','from-entry');
+  document.documentElement.classList.remove('oras-master-entry');
+}
+function enterFromCover(){
+  if(cover.classList.contains('is-entering'))return;
+  const button=cover.querySelector('.oras-master-button');
+  if(button)button.disabled=true;
+  cover.classList.add('is-entering');
+  entryBridge.hidden=false;
+  requestAnimationFrame(()=>entryBridge.classList.add('is-active'));
+  setTimeout(()=>{
+    cover.hidden=true;
+    openIndex({fromEntry:true});
+  },920);
+  setTimeout(()=>{
+    entryBridge.classList.remove('is-active');
+    entryBridge.hidden=true;
+  },3200);
+}
+window.ORASMasterIndex={open:()=>openIndex(),close:closeIndex,render,reset:()=>index.querySelector('[data-reset]')?.click()};
+
+cover.querySelector('.oras-master-button').addEventListener('click',enterFromCover);'''
+          if old_open not in s: raise SystemExit('No se encontró openIndex/closeIndex')
+          s=s.replace(old_open,new_open,1)
+
+          if "if(qs.get('indice')==='1')" not in s:
+              s=s.replace("document.addEventListener('visibilitychange',()=>{if(!document.hidden&&index.classList.contains('is-open'))render();});",
+                          "document.addEventListener('visibilitychange',()=>{if(!document.hidden&&index.classList.contains('is-open'))render();});\nif(qs.get('indice')==='1')requestAnimationFrame(()=>openIndex());",1)
+
+          p.write_text(s,encoding='utf-8')
+
+          # ---------------------------------------------------------------
+          # 2) Ventana de lecturas: abre el modal en el lugar actual.
+          # ---------------------------------------------------------------
+          p=Path('oras-reading-window-r2.js')
+          s=p.read_text(encoding='utf-8')
+          s=re.sub(r"const VERSION='[^']+';",f"const VERSION='{reading_version}';",s,count=1)
+          anchor="const BASE='/solo-la-tarjeta';"
+          if "const MASTER_VERSION=" not in s:
+              s=s.replace(anchor,anchor+f"\nconst MASTER_VERSION='{master_version}';",1)
+
+          old_listener=r'''const canonicalSummary=box.querySelector('summary');
+if(canonicalSummary&&!canonicalSummary.dataset.orasCanonicalIndex){
+  canonicalSummary.dataset.orasCanonicalIndex='1';
+  canonicalSummary.addEventListener('click',event=>{
+    event.preventDefault();
+    event.stopPropagation();
+    location.href=BASE+'/?indice=1';
+  });
+}'''
+          new_listener=r'''function openCanonicalIndex(){
+  if(window.ORASMasterIndex?.open){window.ORASMasterIndex.open();return;}
+  let script=document.querySelector('script[data-oras-master-index-global]');
+  if(!script){
+    script=document.createElement('script');
+    script.dataset.orasMasterIndexGlobal='1';
+    script.src=BASE+'/oras-master-index-r1.js?v='+MASTER_VERSION;
+    script.addEventListener('load',()=>window.ORASMasterIndex?.open?.(),{once:true});
+    document.head.appendChild(script);
+  }else script.addEventListener('load',()=>window.ORASMasterIndex?.open?.(),{once:true});
+}
+const canonicalSummary=box.querySelector('summary');
+if(canonicalSummary&&!canonicalSummary.dataset.orasCanonicalIndex){
+  canonicalSummary.dataset.orasCanonicalIndex='1';
+  canonicalSummary.addEventListener('click',event=>{
+    event.preventDefault();
+    event.stopPropagation();
+    openCanonicalIndex();
+  });
+}'''
+          if old_listener not in s: raise SystemExit('No se encontró listener del índice canónico')
+          s=s.replace(old_listener,new_listener,1)
+          s=s.replace("if(label==='índice'||label==='indice'||label==='índice oras'||label==='indice oras')a.href=BASE+'/?indice=1';",
+                      "if(label==='índice'||label==='indice'||label==='índice oras'||label==='indice oras'){a.href='#oras-index';a.dataset.orasIndexOpen='1';}")
+          if "data-oras-index-open" not in s:
+              s=s.replace("enforceCanonicalIndexLinks();\nnew MutationObserver(enforceCanonicalIndexLinks).observe(document.body,{childList:true,subtree:true});",
+                          "enforceCanonicalIndexLinks();\nnew MutationObserver(enforceCanonicalIndexLinks).observe(document.body,{childList:true,subtree:true});\ndocument.addEventListener('click',event=>{const a=event.target.closest?.('a[data-oras-index-open]');if(!a)return;event.preventDefault();openCanonicalIndex();});",1)
+          p.write_text(s,encoding='utf-8')
+
+          # ---------------------------------------------------------------
+          # 3) EL ESPEJO ya no reinicia ninguna lectura al cruzarlo.
+          # ---------------------------------------------------------------
+          p=Path('ceniciento/el-espejo.js')
+          s=p.read_text(encoding='utf-8')
+          s=re.sub(r"const VERSION='[^']+';",f"const VERSION='{mirror_version}';",s,count=1)
+          s=re.sub(r'''function resetReadingCycleForInventory\(\)\{.*?\n\}\nfunction enterInventory\(\)\{''',r'''function resetReadingCycleForInventory(){
+  try{
+    const raw=localStorage.getItem(STORAGE);
+    const saved=raw?JSON.parse(raw):{};
+    const next=Object.assign({},saved,{
+      mirrorReadComplete:true,
+      mirrorCrossed:true,
+      realityDeformed:true,
+      mirrorCrossedAt:saved.mirrorCrossedAt||Date.now(),
+      returnedFromCeniciento:false
+    });
+    localStorage.setItem(STORAGE,JSON.stringify(next));
+  }catch(_){}
+}
+function enterInventory(){''',s,count=1,flags=re.S)
+          p.write_text(s,encoding='utf-8')
+
+          # ---------------------------------------------------------------
+          # 4) Desactiva cualquier reinicio automático heredado.
+          # ---------------------------------------------------------------
+          p=Path('narrative-universe.js')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace("const VERSION='20261014-reading-counter-fix-2';","const VERSION='20261014-manual-reset-only-1';",1)
+          s=re.sub(r'''/\*\n  CANON ORAS · REINICIO TOTAL DE LECTURA.*?function clearStaleVisitsAfterRestart\(\)\{.*?\n\}\n\n/\*\n  CENICIENTO''',r'''/*
+  CANON ORAS · REINICIO EXCLUSIVAMENTE MANUAL.
+  El estado de lectura persiste hasta que el lector pulse el botón rojo Reiniciar.
+*/
+function clearStaleVisitsAfterRestart(){return;}
+
+/*
+  CENICIENTO''',s,count=1,flags=re.S)
+          p.write_text(s,encoding='utf-8')
+
+          # ---------------------------------------------------------------
+          # 5) Carga el índice maestro en todas las superficies narrativas.
+          # ---------------------------------------------------------------
+          master_tag=f'<script data-oras-master-index-global="1" src="/solo-la-tarjeta/oras-master-index-r1.js?v={master_version}"></script>'
+          for html in Path('.').rglob('*.html'):
+              if '.git' in html.parts or '.github' in html.parts: continue
+              text=html.read_text(encoding='utf-8')
+              if html.as_posix()!='index.html' and 'narrative-universe.js' not in text and 'oras-reading-window-r2.js' not in text:
+                  continue
+              text=re.sub(r'\n?<script[^>]*data-oras-master-index-global[^>]*>\s*</script>\n?','\n',text)
+              text=re.sub(r'\n?<script[^>]*src=["\'][^"\']*oras-master-index-r1\.js\?v=[^"\']+["\'][^>]*>\s*</script>\n?','\n',text)
+              text=text.replace('</body>',master_tag+'\n</body>',1)
+              text=re.sub(r'el-espejo\.js\?v=[^"\']+',f'el-espejo.js?v={mirror_version}',text)
+              text=re.sub(r'narrative-universe\.js\?v=[^"\']+', 'narrative-universe.js?v=20261014-manual-reset-only-1',text)
+              text=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+',f'oras-reading-window-r2.js?v={reading_version}',text)
+              html.write_text(text,encoding='utf-8')
+
+          # Mantener futuros bumps coherentes.
+          bp=Path('.github/workflows/bump-ana-universe-cache.yml')
+          if bp.exists():
+              b=bp.read_text(encoding='utf-8')
+              b=b.replace("version = '20261014-reading-counter-fix-2'","version = '20261014-manual-reset-only-1'")
+              b=re.sub(r"reading_version = '[^']+'",f"reading_version = '{reading_version}'",b,count=1)
+              if "master_version =" not in b:
+                  b=b.replace("nav_version = '20261012-ceniciento-linear-nav-1'",f"nav_version = '20261012-ceniciento-linear-nav-1'\n          master_version = '{master_version}'",1)
+              b=b.replace("updated = re.sub(r'oras-reading-window-r2\\.js\\?v=[^\"\\'<>\\s]+',f'oras-reading-window-r2.js?v={reading_version}',updated)",
+                          "updated = re.sub(r'oras-reading-window-r2\\.js\\?v=[^\"\\'<>\\s]+',f'oras-reading-window-r2.js?v={reading_version}',updated)\n              updated = re.sub(r'oras-master-index-r1\\.js\\?v=[^\"\\'<>\\s]+',f'oras-master-index-r1.js?v={master_version}',updated)")
+              bp.write_text(b,encoding='utf-8')
+
+      - name: Validar núcleo ORAS
+        run: |
+          set -euo pipefail
+          node --check oras-master-index-r1.js
+          node --check oras-reading-window-r2.js
+          node --check narrative-universe.js
+          node --check ceniciento/el-espejo.js
+          grep -Fq "const COVER_ENTRY=" oras-master-index-r1.js
+          grep -Fq "data-reset" oras-master-index-r1.js
+          grep -Fq "window.ORASMasterIndex=" oras-master-index-r1.js
+          grep -Fq "clearStaleVisitsAfterRestart(){return;}" narrative-universe.js
+          grep -Fq "mirrorCrossed:true" ceniciento/el-espejo.js
+          if grep -Fq "anaComplete:false" ceniciento/el-espejo.js; then echo 'ERROR: El Espejo sigue reiniciando ANA'; exit 1; fi
+
+      - name: Publicar cambios
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add oras-master-index-r1.js oras-reading-window-r2.js narrative-universe.js ceniciento/el-espejo.js .github/workflows/bump-ana-universe-cache.yml '*.html' '**/*.html' 2>/dev/null || true
+          git add -u
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "ORAS: restaura índice móvil global, entrada inmersiva y reinicio manual"
+          git pull --rebase origin main
+          git push
