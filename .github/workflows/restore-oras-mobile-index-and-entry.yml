@@ -31,7 +31,7 @@ jobs:
           grep -Fq "window.ORASMasterIndex=" oras-master-index-r1.js
           grep -Fq "clearStaleVisitsAfterRestart(){return;}" narrative-universe.js
           if grep -Fq "anaComplete:false" ceniciento/el-espejo.js; then
-            echo 'ERROR: El Espejo aún reinicia LA VIDA'
+            echo "ERROR: El Espejo aún reinicia LA VIDA"
             exit 1
           fi
       - name: Publicar cambios
@@ -44,3 +44,4 @@ jobs:
           git commit -m "ORAS: restaura índice móvil global, entrada inmersiva y reinicio manual"
           git pull --rebase origin main
           git push
+# activación 2026-10-14
