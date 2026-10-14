@@ -16,31 +16,35 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
-      - name: Bump ORAS counter and index cache keys
+      - name: Fix ORAS cover and cache keys
         shell: python
         run: |
           from pathlib import Path
 
           rw = Path('oras-reading-window-r2.js')
           text = rw.read_text(encoding='utf-8')
-          text = text.replace("const VERSION='20261013-ana-portrait-prev-next-1';", "const VERSION='20261014-reading-window-2';")
-          text = text.replace("/solo-la-tarjeta/oras-master-index-r1.js?v=20261013-master-index-cover-4", "/solo-la-tarjeta/oras-master-index-r1.js?v=20261014-master-index-5")
+          text = text.replace('/solo-la-tarjeta/oras-master-index-r1.js?v=20261014-master-index-5', '/solo-la-tarjeta/oras-master-index-r1.js?v=20261014-master-index-6')
           rw.write_text(text, encoding='utf-8')
+
+          master = Path('oras-master-index-r1.js')
+          text = master.read_text(encoding='utf-8')
+          text = text.replace("const VERSION='20261014-master-index-5';", "const VERSION='20261014-master-index-6';")
+          text = text.replace('assets/oras-el-archivo-profundo-cover.svg', 'assets/oras-portada-final.jpg')
+          master.write_text(text, encoding='utf-8')
 
           idx = Path('index.html')
           text = idx.read_text(encoding='utf-8')
-          text = text.replace('narrative-universe.js?v=20261013-audio-groups-1', 'narrative-universe.js?v=20261014-reading-counter-fix-1')
-          text = text.replace('/solo-la-tarjeta/oras-reading-window-r2.js?v=20261013-ana-portrait-prev-next-1', '/solo-la-tarjeta/oras-reading-window-r2.js?v=20261014-reading-window-2')
+          text = text.replace('/solo-la-tarjeta/oras-reading-window-r2.js?v=20261014-reading-window-2', '/solo-la-tarjeta/oras-reading-window-r2.js?v=20261014-reading-window-3')
           idx.write_text(text, encoding='utf-8')
 
-      - name: Commit cache fix
+      - name: Commit ORAS cover fix
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html oras-reading-window-r2.js
+          git add index.html oras-reading-window-r2.js oras-master-index-r1.js
           if git diff --cached --quiet; then
             echo "No changes needed"
             exit 0
           fi
-          git commit -m "Actualiza caché del índice y contador ORAS"
+          git commit -m "Corrige la portada del índice ORAS"
           git push origin main
