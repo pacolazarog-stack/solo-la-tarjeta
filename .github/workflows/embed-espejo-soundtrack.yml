@@ -1,0 +1,151 @@
+name: Incrustar música sincronizada en EL ESPEJO
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/oras-espejo-centro-datos.b64'
+      - '.github/workflows/embed-espejo-soundtrack.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  embed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reconstruir MP3
+        run: |
+          base64 -d assets/oras-espejo-centro-datos.b64 > assets/oras-espejo-centro-datos.mp3
+          test -s assets/oras-espejo-centro-datos.mp3
+      - name: Sincronizar EL ESPEJO con la música
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('ceniciento/el-espejo.js')
+          s=p.read_text()
+
+          s=s.replace("const VERSION='20261014-persistent-reading-2';", "const VERSION='20261014-espejo-soundtrack-1';")
+          needle="const INVENTORY_URL=ROOT+'inventario-del-aire/?from=mirror&v='+VERSION;"
+          repl=needle+"\nconst MIRROR_AUDIO_URL=ROOT+'assets/oras-espejo-centro-datos.mp3?v='+VERSION;\nconst MIRROR_AUDIO_DURATION=138.014;"
+          if 'MIRROR_AUDIO_URL' not in s:
+              assert needle in s
+              s=s.replace(needle,repl,1)
+
+          old="let started=false,locked=false,lockedScene=null,finished=false,finalReady=false;\nlet lastTouchY=null,finalContinue=null,silenceTimer=0;"
+          new="let started=false,locked=false,lockedScene=null,finished=false,finalReady=false;\nlet lastTouchY=null,finalContinue=null,silenceTimer=0;\nlet soundtrack=null,soundtrackEnded=false,soundtrackTicker=0,audioGate=null;"
+          assert old in s
+          s=s.replace(old,new,1)
+
+          s=s.replace("doc.querySelectorAll('audio').forEach(audio=>{", "doc.querySelectorAll('audio:not(.oras-mirror-soundtrack)').forEach(audio=>{", 1)
+
+          marker="function maintainSilence(){\n  silenceMirror();\n  clearInterval(silenceTimer);\n  silenceTimer=setInterval(silenceMirror,90);\n}\n"
+          assert marker in s
+          add=r'''function maintainSilence(){
+  silenceMirror();
+  clearInterval(silenceTimer);
+  silenceTimer=setInterval(silenceMirror,90);
+}
+
+function ensureAudioGate(){
+  if(audioGate)return audioGate;
+  const style=document.createElement('style');
+  style.id='oras-mirror-audio-gate-style';
+  style.textContent=`
+  .oras-mirror-audio-gate{position:fixed;z-index:2147483646;inset:0;display:grid;place-items:center;background:#080808;color:#eee9df;font-family:Georgia,serif}
+  .oras-mirror-audio-gate[hidden]{display:none!important}
+  .oras-mirror-audio-gate button{min-width:190px;min-height:48px;padding:12px 20px;border:1px solid rgba(238,233,223,.36);border-radius:999px;background:rgba(8,8,8,.92);color:inherit;font:inherit;letter-spacing:.08em;text-transform:uppercase}
+  .mirror-final-continue[disabled]{opacity:.44!important;cursor:default!important}
+  `;
+  document.head.appendChild(style);
+  audioGate=document.createElement('div');
+  audioGate.className='oras-mirror-audio-gate';
+  audioGate.hidden=true;
+  const b=document.createElement('button');
+  b.type='button';b.textContent='iniciar EL ESPEJO';b.setAttribute('aria-label','Iniciar EL ESPEJO con su música');
+  b.addEventListener('click',()=>{
+    const a=ensureSoundtrack();
+    a.currentTime=0;soundtrackEnded=false;
+    a.play().then(()=>{audioGate.hidden=true;sceneNodes[0]?.focus({preventScroll:true});startSoundtrackTicker()}).catch(()=>{});
+  });
+  audioGate.append(b);document.body.append(audioGate);return audioGate;
+}
+function ensureSoundtrack(){
+  if(soundtrack)return soundtrack;
+  soundtrack=document.createElement('audio');
+  soundtrack.className='oras-mirror-soundtrack';
+  soundtrack.preload='auto';soundtrack.src=MIRROR_AUDIO_URL;soundtrack.loop=false;soundtrack.volume=.78;
+  soundtrack.setAttribute('playsinline','');
+  soundtrack.addEventListener('ended',()=>{soundtrackEnded=true;stopSoundtrackTicker();updateFinalGate()});
+  soundtrack.addEventListener('timeupdate',updateFinalGate);
+  document.body.append(soundtrack);
+  return soundtrack;
+}
+function formatRemaining(seconds){
+  seconds=Math.max(0,Math.ceil(seconds));
+  const m=Math.floor(seconds/60),ss=String(seconds%60).padStart(2,'0');
+  return `${m}:${ss}`;
+}
+function updateFinalGate(){
+  if(!finalContinue||!finalReady)return;
+  const a=ensureSoundtrack();
+  const remaining=Math.max(0,(Number.isFinite(a.duration)?a.duration:MIRROR_AUDIO_DURATION)-a.currentTime);
+  soundtrackEnded=soundtrackEnded||a.ended||remaining<=.06;
+  finalContinue.hidden=false;
+  finalContinue.disabled=!soundtrackEnded;
+  finalContinue.textContent=soundtrackEnded?'seguir':`espera · ${formatRemaining(remaining)}`;
+  finalContinue.setAttribute('aria-label',soundtrackEnded?'Seguir hacia EL INVENTARIO DEL AIRE':`La salida se abrirá cuando termine la música. Quedan ${Math.ceil(remaining)} segundos`);
+}
+function stopSoundtrackTicker(){clearInterval(soundtrackTicker);soundtrackTicker=0}
+function startSoundtrackTicker(){stopSoundtrackTicker();soundtrackTicker=setInterval(updateFinalGate,250)}
+function startSoundtrack(){
+  const a=ensureSoundtrack();
+  soundtrackEnded=false;a.pause();a.currentTime=0;
+  const promise=a.play();
+  startSoundtrackTicker();
+  if(promise&&typeof promise.catch==='function')promise.catch(()=>{ensureAudioGate().hidden=false;stopSoundtrackTicker()});
+}
+function resetSoundtrack(){
+  stopSoundtrackTicker();soundtrackEnded=false;
+  if(soundtrack){try{soundtrack.pause();soundtrack.currentTime=0}catch(_){}}
+  if(audioGate)audioGate.hidden=true;
+}
+'''
+          s=s.replace(marker,add,1)
+
+          old="function finishMirror(){\n  if(finished||!finalReady)return;"
+          new="function finishMirror(){\n  if(finished||!finalReady||!soundtrackEnded)return;"
+          assert old in s
+          s=s.replace(old,new,1)
+
+          old="  finalReady=true;\n  const finalScene=sceneNodes[sceneNodes.length-1];\n  finalScene.classList.add('mirror-finished');\n  if(finalContinue)finalContinue.hidden=false;"
+          new="  finalReady=true;\n  const finalScene=sceneNodes[sceneNodes.length-1];\n  finalScene.classList.add('mirror-finished');\n  updateFinalGate();"
+          assert old in s
+          s=s.replace(old,new,1)
+
+          old="  maintainSilence();\n  updateMirrorDeformation();"
+          new="  maintainSilence();\n  startSoundtrack();\n  updateMirrorDeformation();"
+          assert old in s
+          s=s.replace(old,new,1)
+
+          old="window.addEventListener('oras:mirror-reset',()=>{\n  clearInterval(silenceTimer);"
+          new="window.addEventListener('oras:mirror-reset',()=>{\n  clearInterval(silenceTimer);\n  resetSoundtrack();"
+          assert old in s
+          s=s.replace(old,new,1)
+
+          p.write_text(s)
+          PY
+          node --check ceniciento/el-espejo.js
+      - name: Limpiar archivo de transporte y publicar
+        run: |
+          rm -f assets/oras-espejo-centro-datos.b64
+          rm -f .github/workflows/embed-espejo-soundtrack.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Incrusta y sincroniza la música de EL ESPEJO'
+          git push origin main
