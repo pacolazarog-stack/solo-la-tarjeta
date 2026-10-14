@@ -20,7 +20,6 @@ if(IS_ANA){
   const perfStyle=document.createElement('style');
   perfStyle.id='oras-ana-final-stability-r1';
   perfStyle.textContent=`
-    body.oras-ana-static-final .world *,
     body.oras-ana-static-final .portrait-finale,
     body.oras-ana-static-final .portrait-finale *{
       animation:none!important;

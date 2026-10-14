@@ -265,6 +265,6 @@ addEventListener('beforeunload',()=>{holdClarity();stopAudio()});
 Promise.allSettled([loadStory(),loadSequence(),loadNarration()]).then(rs=>{check();if(rs[0].status==='rejected'){status.textContent='error al cargar el texto';document.querySelector('.hint').textContent='No se ha podido cargar el cuento. Recarga la página.'}else if(rs[2].status==='rejected'&&!audioReady&&!activeMode){status.textContent='texto listo · audio no disponible';document.querySelector('.hint').textContent='La lectura está disponible. Recarga la página para volver a cargar el audio.'}});
 })();
 </script>
-<script src="/solo-la-tarjeta/oras-suno-volume-r1.js?v=20261015-suno-volume-8"></script>
+<script src="/solo-la-tarjeta/oras-suno-volume-r1.js?v=20261015-suno-volume-9"></script>
 </body>
 </html>
