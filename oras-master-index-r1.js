@@ -13,7 +13,7 @@ const ROOT='/solo-la-tarjeta';
 const UKEY='oras.universe.v2';
 const GKEY='oras.reading.index.v1';
 const OPENKEY='oras.master.index.open.v1';
-const VERSION='20261014-master-index-10';
+const VERSION='20261014-master-index-11';
 
 const ANA=[
   ['estrella','Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`],
@@ -208,11 +208,13 @@ function chip(id,label,href,done,extra=''){
 }
 function card({id,mark,title,meta,done,href='',parts='',open=false,locked=false}){
   const hasParts=Boolean(parts);
-  const action=hasParts
-    ? `<button class="oras-mi-card-action" type="button" data-toggle="${id}" aria-expanded="${open}" aria-label="${open?'Cerrar':'Abrir'} ${title}"><span class="chev">⌄</span></button>`
-    : `<a class="oras-mi-card-action" href="${locked?'#':href}" ${locked?'aria-disabled="true" tabindex="-1"':''} aria-label="Abrir ${title}"><span>›</span></a>`;
+  const action=locked
+    ? `<button class="oras-mi-card-action" type="button" disabled aria-label="${title}: bloqueado hasta atravesar EL ESPEJO"><span>⌁</span></button>`
+    : hasParts
+      ? `<button class="oras-mi-card-action" type="button" data-toggle="${id}" aria-expanded="${open}" aria-label="${open?'Cerrar':'Abrir'} ${title}"><span class="chev">⌄</span></button>`
+      : `<a class="oras-mi-card-action" href="${href}" aria-label="Abrir ${title}"><span>›</span></a>`;
   const titleNode=href&&!hasParts&&!locked?`<a class="oras-mi-card-title" href="${href}">${title}</a>`:`<span class="oras-mi-card-title">${title}</span>`;
-  return `<article class="oras-mi-card ${locked?'is-locked':''}" data-card="${id}" data-open="${open}"><div class="oras-mi-card-main"><div class="oras-mi-card-mark" aria-hidden="true">${mark}</div><span class="oras-mi-state ${done?'is-done':''}" aria-hidden="true"></span><div class="oras-mi-card-copy">${titleNode}<span class="oras-mi-card-meta">${meta}</span></div>${action}</div>${hasParts?`<div class="oras-mi-parts" id="parts-${id}">${parts}</div>`:''}</article>`;
+  return `<article class="oras-mi-card ${locked?'is-locked':''}" data-card="${id}" data-open="${open}"><div class="oras-mi-card-main"><div class="oras-mi-card-mark" aria-hidden="true">${mark}</div><span class="oras-mi-state ${done?'is-done':''}" aria-hidden="true"></span><div class="oras-mi-card-copy">${titleNode}<span class="oras-mi-card-meta">${meta}</span></div>${action}</div>${hasParts&&!locked?`<div class="oras-mi-parts" id="parts-${id}">${parts}</div>`:''}</article>`;
 }
 function sectionHead(label,count){
   return `<div class="oras-mi-section-head"><span class="oras-mi-section-name">${label}</span><span class="oras-mi-section-line"></span><span class="oras-mi-section-count">${count}</span></div>`;
@@ -227,6 +229,7 @@ function render(){
   const solo=bool(u.soloComplete);
   const cen=bool(u.cenicientoComplete);
   const mirror=bool(u.mirrorReadComplete);
+  const mirrorCrossed=u.mirrorCrossed===true;
   const mirrorReady=solo&&cen&&anaComplete;
   const invCount=countDone(INVENTARIO);
   const oficioCount=countDone(OFICIO);
@@ -246,10 +249,10 @@ function render(){
     ...ANA.map(([id,,href])=>!anaDone(id,u)&&href),
     !cen&&`${ROOT}/elegia-breve/#epilogo`,
     mirrorReady&&!mirror&&`${ROOT}/ceniciento/?mirror=1`,
-    ...INVENTARIO.map(([id])=>!expansionDone(id)&&invHref(id)),
-    ...OFICIO.map(([id])=>!expansionDone(id)&&invHref(id)),
-    ...CIUDAD.map(([id])=>!expansionDone(id)&&invHref(id)),
-    !zeroDone&&invHref('zero')
+    ...(mirrorCrossed?INVENTARIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
+    ...(mirrorCrossed?OFICIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
+    ...(mirrorCrossed?CIUDAD.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
+    mirrorCrossed&&!zeroDone&&invHref('zero')
   ].find(Boolean)||`${ROOT}/?read=solo`;
 
   index.querySelector('.oras-mi-shell').innerHTML=`
@@ -277,15 +280,15 @@ function render(){
     </section>
 
     <section class="oras-mi-section">
-      ${sectionHead('III · LA EXPANSIÓN',`${expansionCount}/${INVENTARIO.length+OFICIO.length+CIUDAD.length}`)}
-      ${card({id:'inventario',mark:'4',title:'El inventario del aire',meta:`${invCount}/${INVENTARIO.length} huellas`,done:invCount===INVENTARIO.length,parts:invParts,open:open.has('inventario')})}
-      ${card({id:'oficio',mark:'5',title:'El oficio de las sombras',meta:`${oficioCount}/${OFICIO.length} huellas`,done:oficioCount===OFICIO.length,parts:oficioParts,open:open.has('oficio')})}
-      ${card({id:'ciudad',mark:'6',title:'La ciudad que aprendió a olvidar',meta:`${ciudadCount}/${CIUDAD.length} huellas`,done:ciudadCount===CIUDAD.length,parts:ciudadParts,open:open.has('ciudad')})}
+      ${sectionHead('III · LA EXPANSIÓN',mirrorCrossed?`${expansionCount}/${INVENTARIO.length+OFICIO.length+CIUDAD.length}`:'bloqueada')}
+      ${card({id:'inventario',mark:'4',title:'El inventario del aire',meta:mirrorCrossed?`${invCount}/${INVENTARIO.length} huellas`:'atraviesa EL ESPEJO',done:invCount===INVENTARIO.length,parts:invParts,open:open.has('inventario'),locked:!mirrorCrossed})}
+      ${card({id:'oficio',mark:'5',title:'El oficio de las sombras',meta:mirrorCrossed?`${oficioCount}/${OFICIO.length} huellas`:'atraviesa EL ESPEJO',done:oficioCount===OFICIO.length,parts:oficioParts,open:open.has('oficio'),locked:!mirrorCrossed})}
+      ${card({id:'ciudad',mark:'6',title:'La ciudad que aprendió a olvidar',meta:mirrorCrossed?`${ciudadCount}/${CIUDAD.length} huellas`:'atraviesa EL ESPEJO',done:ciudadCount===CIUDAD.length,parts:ciudadParts,open:open.has('ciudad'),locked:!mirrorCrossed})}
     </section>
 
     <section class="oras-mi-section">
-      ${sectionHead('IV · EL CERO',zeroDone?'1/1':'0/1')}
-      ${card({id:'zero',mark:'0',title:'La Habitación Número Cero',meta:zeroDone?'completa':'pendiente',done:zeroDone,href:invHref('zero')})}
+      ${sectionHead('IV · EL CERO',mirrorCrossed?(zeroDone?'1/1':'0/1'):'bloqueado')}
+      ${card({id:'zero',mark:'0',title:'La Habitación Número Cero',meta:mirrorCrossed?(zeroDone?'completa':'pendiente'):'atraviesa EL ESPEJO',done:zeroDone,href:invHref('zero'),locked:!mirrorCrossed})}
     </section>`;
 
   index.querySelector('.oras-mi-bottom').innerHTML=`

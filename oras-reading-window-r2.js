@@ -2,7 +2,7 @@
 'use strict';
 
 const STORAGE='oras.universe.v2';
-const VERSION='20261013-ana-portrait-prev-next-1';
+const VERSION='20261014-canonical-index-1';
 const BASE='/solo-la-tarjeta';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
@@ -55,7 +55,7 @@ style.textContent=`
 .ou-reading-window-r2>summary::-webkit-details-marker{display:none}
 .ou-reading-window-r2>summary::before{content:"";width:5px;height:5px;border-radius:50%;background:rgba(244,225,177,.82);box-shadow:0 0 8px rgba(244,225,177,.35)}
 .ou-reading-window-r2[open]>summary::before{background:#f4e1b1}
-.ou-reading-window-r2 .ou-rw-panel{position:absolute;left:0;bottom:calc(100% + 8px);width:min(340px,calc(100vw - 24px));max-height:min(54vh,430px);overflow:auto;padding:11px 12px 12px;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(13,13,13,.76);box-shadow:0 12px 40px rgba(0,0,0,.24);backdrop-filter:blur(11px);-webkit-backdrop-filter:blur(11px);scrollbar-width:thin}
+.ou-reading-window-r2 .ou-rw-panel{display:none!important;position:absolute;left:0;bottom:calc(100% + 8px);width:min(340px,calc(100vw - 24px));max-height:min(54vh,430px);overflow:auto;padding:11px 12px 12px;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(13,13,13,.76);box-shadow:0 12px 40px rgba(0,0,0,.24);backdrop-filter:blur(11px);-webkit-backdrop-filter:blur(11px);scrollbar-width:thin}
 .ou-reading-window-r2 .ou-rw-piece{padding:5px 0;font-size:12px;line-height:1.35;color:rgba(247,241,232,.78)}
 .ou-reading-window-r2 .ou-rw-piece+.ou-rw-piece{border-top:1px solid rgba(255,255,255,.08)}
 .ou-reading-window-r2 .ou-rw-piece[data-done="true"]{color:#fff5dd}
@@ -92,6 +92,24 @@ if(!box){
   box.innerHTML='<summary>Lecturas</summary><div class="ou-rw-panel" role="status" aria-live="polite"></div>';
   document.body.appendChild(box);
 }
+box.setAttribute('aria-label','Índice canónico de ORAS');
+const canonicalSummary=box.querySelector('summary');
+if(canonicalSummary&&!canonicalSummary.dataset.orasCanonicalIndex){
+  canonicalSummary.dataset.orasCanonicalIndex='1';
+  canonicalSummary.addEventListener('click',event=>{
+    event.preventDefault();
+    event.stopPropagation();
+    location.href=BASE+'/?indice=1';
+  });
+}
+function enforceCanonicalIndexLinks(){
+  document.querySelectorAll('a').forEach(a=>{
+    const label=(a.textContent||'').trim().toLowerCase();
+    if(label==='índice'||label==='indice'||label==='índice oras'||label==='indice oras')a.href=BASE+'/?indice=1';
+  });
+}
+enforceCanonicalIndexLinks();
+new MutationObserver(enforceCanonicalIndexLinks).observe(document.body,{childList:true,subtree:true});
 
 let lastSignature='';
 function render(force=false){
@@ -110,7 +128,7 @@ function render(force=false){
   lastSignature=signature;
   const summary=box.querySelector('summary');
   const panel=box.querySelector('.ou-rw-panel');
-  summary.textContent=`Lecturas · ${completed}/3`;
+  summary.textContent='Índice ORAS';
   const partRows=ANA_PARTS.map(([key,label,href])=>`<a class="ou-rw-part" data-done="${parts[key]===true}" href="${href}"><span class="ou-rw-mark">${parts[key]===true?'✓':'·'}</span><span>${label}</span></a>`).join('');
   panel.innerHTML=`
     <div class="ou-rw-piece" data-done="${computedAna}">
@@ -330,7 +348,7 @@ window.ORASReadingWindowR2={version:VERSION,render,completeAnaPart};
   if(path!=='/solo-la-tarjeta'||window.__orasMasterIndexLoader)return;
   window.__orasMasterIndexLoader=true;
   const script=document.createElement('script');
-  script.src='/solo-la-tarjeta/oras-master-index-r1.js?v=20261014-master-index-10';
+  script.src='/solo-la-tarjeta/oras-master-index-r1.js?v=20261014-master-index-11';
   script.async=false;
   document.head.appendChild(script);
 })();

@@ -2,7 +2,7 @@
 'use strict';
 const ROOT='/solo-la-tarjeta/';
 const STORAGE='oras.universe.v2';
-const VERSION='20261014-mirror-direct-5';
+const VERSION='20261014-espejo-esperpento-1';
 const INVENTORY_URL=ROOT+'inventario-del-aire/?from=mirror&v='+VERSION;
 const scenes=[
 `No era la misma historia.`,
@@ -41,6 +41,37 @@ const scenes=[
 const pauseAt=new Set([14,15,17,26,30]);
 const mirror=document.getElementById('mirror');
 if(!mirror)return;
+
+const deformStyle=document.createElement('style');
+deformStyle.id='oras-mirror-deformation-r1';
+deformStyle.textContent=`
+body.mirror #mirror{--mirror-shift:0px;--mirror-skew:0deg;--mirror-scale:1;--mirror-blur:0px;--mirror-shadow:0px;isolation:isolate;background:#080808!important}
+body.mirror #mirror::before{content:"";position:fixed;z-index:1;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent 0 48.7%,rgba(242,236,222,.025) 49.45%,rgba(242,236,222,.13) 49.8%,rgba(255,255,255,.025) 50.15%,transparent 51.1% 100%);transform:translateX(var(--mirror-shift));mix-blend-mode:screen;opacity:.72}
+body.mirror #mirror::after{content:"";position:fixed;z-index:1;inset:-8%;pointer-events:none;background:radial-gradient(58% 42% at 28% 50%,rgba(255,255,255,.035),transparent 68%),radial-gradient(52% 46% at 74% 52%,rgba(255,255,255,.022),transparent 72%),linear-gradient(96deg,transparent 43%,rgba(255,255,255,.018) 49%,rgba(0,0,0,.18) 50.6%,transparent 57%);filter:blur(1.2px);opacity:.8}
+body.mirror .mirror-scene{z-index:2;perspective:900px}
+body.mirror .mirror-copy{transform:translateX(var(--mirror-shift)) skewX(var(--mirror-skew)) scaleX(var(--mirror-scale));filter:blur(var(--mirror-blur));text-shadow:var(--mirror-shadow) 0 rgba(247,241,232,.16);transition:transform .18s linear,filter .18s linear,text-shadow .18s linear}
+body.mirror #mirror[data-phase="deformacion"] .mirror-copy{letter-spacing:.004em}
+body.mirror #mirror[data-phase="salida"]::before{opacity:.42}
+@media(prefers-reduced-motion:reduce){body.mirror .mirror-copy{transform:none!important;filter:none!important;text-shadow:none!important}body.mirror #mirror::before,body.mirror #mirror::after{opacity:.16!important}}
+`;
+document.head.appendChild(deformStyle);
+
+let warpRAF=0;
+function updateMirrorDeformation(){
+  warpRAF=0;
+  const max=Math.max(1,mirror.scrollHeight-mirror.clientHeight);
+  const p=Math.max(0,Math.min(1,mirror.scrollTop/max));
+  const bell=Math.sin(Math.PI*p);
+  const wave=Math.sin(p*Math.PI*8.5);
+  mirror.style.setProperty('--mirror-shift',(wave*5.2*bell + p*.8).toFixed(2)+'px');
+  mirror.style.setProperty('--mirror-skew',(wave*.72*bell + p*.10).toFixed(3)+'deg');
+  mirror.style.setProperty('--mirror-scale',(1 + bell*.013 + p*.0015).toFixed(4));
+  mirror.style.setProperty('--mirror-blur',(bell*.18).toFixed(2)+'px');
+  mirror.style.setProperty('--mirror-shadow',(wave*2.1*bell).toFixed(2)+'px');
+  mirror.dataset.phase=p<.24?'entrada':p<.76?'deformacion':'salida';
+}
+mirror.addEventListener('scroll',()=>{if(!warpRAF)warpRAF=requestAnimationFrame(updateMirrorDeformation)},{passive:true});
+
 let started=false,locked=false,lockedScene=null,finished=false,finalReady=false;
 let lastTouchY=null,finalContinue=null,silenceTimer=0;
 const sceneNodes=[];
@@ -68,7 +99,10 @@ function resetReadingCycleForInventory(){
       anaParts:{estrella:false,elegia:false,ojos:false,labios:false,cabello:false,piel:false,interludio:false,epilogo:false},
       soloComplete:false,
       cenicientoComplete:false,
-      mirrorReadComplete:false,
+      mirrorReadComplete:true,
+      mirrorCrossed:true,
+      realityDeformed:true,
+      mirrorCrossedAt:saved.mirrorCrossedAt||Date.now(),
       returnedFromCeniciento:true
     });
     localStorage.setItem(STORAGE,JSON.stringify(next));
@@ -247,6 +281,7 @@ function start(){
   if(finalContinue){finalContinue.hidden=true;finalContinue.disabled=false;finalContinue.textContent='seguir'}
   mirror.style.transition='';mirror.style.opacity='';mirror.hidden=false;document.body.classList.add('mirror');mirror.scrollTop=0;
   maintainSilence();
+  updateMirrorDeformation();
   sceneNodes[0].focus({preventScroll:true});
 }
 window.addEventListener('oras:mirror-start',start);

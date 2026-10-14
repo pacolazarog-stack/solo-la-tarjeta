@@ -2,7 +2,20 @@
 'use strict';
 const KEY='oras.reading.index.v1';
 const GO=new URLSearchParams(location.search).get('go');
-const VERSION=4;
+const VERSION=5;
+const UNIVERSE='oras.universe.v2';
+const universeState=()=>{try{return JSON.parse(localStorage.getItem(UNIVERSE)||'{}')||{}}catch(_){return {}}};
+if(universeState().mirrorCrossed!==true){
+  location.replace('/solo-la-tarjeta/?indice=1&bloqueado=expansion');
+  return;
+}
+document.documentElement.classList.add('oras-after-mirror');
+const residue=document.createElement('style');
+residue.id='oras-after-mirror-residue-r1';
+residue.textContent=`
+html.oras-after-mirror body::after{content:"";position:fixed;z-index:2147480000;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent 0 49.15%,rgba(255,255,255,.016) 49.45%,rgba(15,14,13,.055) 50.05%,rgba(255,255,255,.012) 50.45%,transparent 50.8% 100%),radial-gradient(65% 90% at 50% 46%,transparent 72%,rgba(12,10,8,.055));mix-blend-mode:screen;opacity:.72}
+`;
+document.head.appendChild(residue);
 
 /* Los identificadores ciu-10…ciu-13 conservan la identidad histórica de cada
    capítulo para no perder checks ya almacenados. Cambia el número visible, no
