@@ -147,3 +147,34 @@ El índice continúa siendo el mismo lugar funcional, pero su estado ha cambiado
 La navegación debe encarnar así la ley narrativa central del umbral:
 
 **volver no equivale a regresar al estado anterior.**
+
+---
+
+## 10. Canon de reinicio
+
+**Reiniciar ORAS abre un ciclo de lectura completamente nuevo.**
+
+En el instante del reinicio, el índice canónico debe mostrar **0/43 huellas leídas**. Ninguna pieza, fragmento o territorio puede conservar la condición de visitado del ciclo anterior.
+
+El reinicio borra, a efectos de navegación y recuento:
+
+- SOLO LA TARJETA;
+- las ocho partes de ANA KLAUDYA;
+- CENICIENTO;
+- EL ESPEJO como leído y como atravesado;
+- las ocho huellas de EL INVENTARIO DEL AIRE;
+- las nueve huellas de EL OFICIO DE LAS SOMBRAS;
+- las catorce huellas de LA CIUDAD QUE APRENDIÓ A OLVIDAR;
+- LA HABITACIÓN NÚMERO CERO.
+
+Por tanto, tras reiniciar:
+
+`mirrorReadComplete === false`
+
+`mirrorCrossed === false`
+
+`oras.reading.index.v1.done = {}`
+
+LA EXPANSIÓN y EL CERO vuelven a quedar bloqueados hasta atravesar de nuevo EL ESPEJO, y CENICIENTO vuelve a carecer de acceso directo: sólo puede alcanzarse otra vez mediante el interrogante.
+
+La huella conceptual `realityDeformed` puede conservarse como cicatriz narrativa de un cruce anterior, porque expresa que volver al mismo lugar nunca restaura exactamente la realidad. **Esa cicatriz no cuenta como lectura, no suma ninguna de las 43 huellas y no desbloquea ninguna ruta.**
