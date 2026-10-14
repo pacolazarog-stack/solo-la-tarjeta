@@ -12,7 +12,7 @@ window.__orasMasterIndexR1=true;
 const ROOT='/solo-la-tarjeta';
 const UKEY='oras.universe.v2';
 const GKEY='oras.reading.index.v1';
-const VERSION='20261013-master-index-4';
+const VERSION='20261014-master-index-5';
 
 const ANA=[
   ['estrella','Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`],
@@ -21,7 +21,8 @@ const ANA=[
   ['labios','En tus labios',`${ROOT}/sonrisa/`],
   ['cabello','Tu cabello',`${ROOT}/cabello/`],
   ['piel','Tu piel',`${ROOT}/piel/`],
-  ['afuego','Epílogo · A fuego lento',`${ROOT}/epilogo/`]
+  ['interludio','Interludio · Iba a llevarte flores',`${ROOT}/interludio/`],
+  ['epilogo','Epílogo · A fuego lento · Flores',`${ROOT}/epilogo/`]
 ];
 
 /* Los ids ciu-10…ciu-13 conservan la identidad anterior para mantener el
@@ -43,8 +44,9 @@ const general=()=>readJSON(GKEY,{done:{}});
 const bool=v=>v===true;
 
 function anaDone(key,state){
-  if(key==='afuego')return bool(state.anaComplete)||((state.anaParts?.interludio===true)&&(state.anaParts?.epilogo===true));
-  return state.anaParts?.[key]===true;
+  const parts=state.anaParts&&typeof state.anaParts==='object'?state.anaParts:null;
+  if(parts)return parts[key]===true;
+  return bool(state.anaComplete);
 }
 function expansionDone(id){const g=general();return g.done?.[id]?.done===true||g.done?.[id]===true;}
 function allLeaves(){
