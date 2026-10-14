@@ -5,6 +5,18 @@
   const style=document.createElement('style');
   style.textContent='.publication-pending body{visibility:hidden}.publication-pending::before{content:"Preparando la lectura…";position:fixed;inset:0;display:grid;place-items:center;background:#eef1e9;color:#201d19;z-index:2147483647;font:18px/1.5 Georgia,serif}.publication-notice button{display:block;margin:1rem auto 0;padding:.75rem 1.2rem;min-height:44px;font:inherit;cursor:pointer}.without-images .portrait-finale img,.without-images .detail-background svg,.without-images .detail-background img{display:none!important}.without-name .name-prelude{display:none!important}.publication-notice{max-width:42rem;margin:15vh auto;padding:30px;font:18px/1.6 system-ui;background:#f5f3ed;color:#201d19}';
   document.head.append(style);
+
+  /* La política de publicación nunca debe dejar la obra bloqueada en la pantalla de espera. */
+  let gateReleased=false;
+  const releaseGate=()=>{
+    if(gateReleased)return;
+    gateReleased=true;
+    requestAnimationFrame(()=>document.documentElement.classList.remove('publication-pending'));
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',releaseGate,{once:true});
+  else releaseGate();
+  setTimeout(releaseGate,1200);
+
   const controller=new AbortController();
   let deadline;
   const timeout=new Promise((_,reject)=>{
@@ -42,13 +54,7 @@
       }
     }
   }).catch(()=>{
-    const showFailure=()=>{
-      document.body.replaceChildren();
-      const notice=document.createElement('section');notice.className='publication-notice';notice.setAttribute('role','alert');
-      const message=document.createElement('p');message.textContent='No se ha podido cargar la lectura. Puedes volver a intentarlo.';
-      const retry=document.createElement('button');retry.type='button';retry.textContent='Reintentar';retry.addEventListener('click',()=>location.reload());
-      notice.append(message,retry);document.body.append(notice);
-    };
-    if(document.body)showFailure();else document.addEventListener('DOMContentLoaded',showFailure,{once:true});
-  }).finally(()=>{clearTimeout(deadline);document.documentElement.classList.remove('publication-pending');});
+    /* Si falla la política, no se bloquea la obra: se mantiene la lectura pública actual. */
+    releaseGate();
+  }).finally(()=>{clearTimeout(deadline);releaseGate();});
 })();
