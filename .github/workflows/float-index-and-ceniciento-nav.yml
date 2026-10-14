@@ -1,0 +1,74 @@
+name: Ajustar índice flotante y navegación de Ceniciento
+
+on:
+  push:
+    paths:
+      - '.github/workflows/float-index-and-ceniciento-nav.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Aplicar ajustes canónicos
+        shell: python
+        run: |
+          from pathlib import Path
+
+          # 1. Índice ORAS: ventana realmente flotante en escritorio.
+          p = Path('oras-master-index-r1.js')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace("const VERSION='20261014-master-index-14';", "const VERSION='20261014-master-index-15';")
+          old = ".oras-master-index{align-items:center;justify-content:center;padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));background:rgba(5,5,5,.70);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow:hidden}.oras-master-index.is-open{display:flex}.oras-master-index.from-entry{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}.oras-master-index.from-entry .oras-mi-shell{animation:orasIndexAppear 1.55s .38s both cubic-bezier(.22,.65,.28,1)}"
+          new = ".oras-master-index{align-items:center;justify-content:center;padding:max(34px,env(safe-area-inset-top)) max(34px,env(safe-area-inset-right)) max(34px,env(safe-area-inset-bottom)) max(34px,env(safe-area-inset-left));background:rgba(3,3,3,.62);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}.oras-master-index.is-open{display:flex}.oras-master-index.from-entry{background:rgba(3,3,3,.34);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}.oras-master-index.from-entry .oras-mi-shell{animation:orasIndexAppear 1.55s .38s both cubic-bezier(.22,.65,.28,1)}"
+          if old not in s:
+              raise SystemExit('No se encontró el bloque principal del índice')
+          s = s.replace(old, new)
+
+          old = ".oras-mi-shell{position:relative;width:min(900px,calc(100vw - 24px));height:min(92svh,880px);max-height:calc(100svh - 22px);margin:0;padding:max(22px,env(safe-area-inset-top)) 18px calc(94px + env(safe-area-inset-bottom));overflow:auto;border:1px solid rgba(224,194,129,.34);border-radius:22px;background:radial-gradient(circle at 50% -8%,rgba(104,77,37,.16),transparent 26%),linear-gradient(180deg,#0f0e0c,#060606 62%);box-shadow:0 28px 90px rgba(0,0,0,.58),inset 0 1px rgba(255,255,255,.025);overscroll-behavior:contain}.oras-mi-bottom{grid-template-columns:minmax(0,.8fr) minmax(0,.95fr) minmax(0,1.25fr);width:min(860px,calc(100vw - 42px))}"
+          new = ".oras-mi-shell{position:relative;width:min(820px,calc(100vw - 72px));height:min(82svh,760px);max-height:calc(100svh - 72px);margin:0;padding:max(22px,env(safe-area-inset-top)) 18px calc(94px + env(safe-area-inset-bottom));overflow:auto;border:1px solid rgba(224,194,129,.42);border-radius:26px;background:radial-gradient(circle at 50% -8%,rgba(104,77,37,.18),transparent 26%),linear-gradient(180deg,#0f0e0c,#060606 62%);box-shadow:0 34px 110px rgba(0,0,0,.72),0 0 0 1px rgba(255,255,255,.015),inset 0 1px rgba(255,255,255,.03);overscroll-behavior:contain}.oras-mi-bottom{grid-template-columns:minmax(0,.8fr) minmax(0,.95fr) minmax(0,1.25fr);width:min(780px,calc(100vw - 110px));bottom:max(46px,calc((100svh - min(82svh,760px))/2 + 10px))}"
+          if old not in s:
+              raise SystemExit('No se encontró el bloque de la ventana del índice')
+          s = s.replace(old, new)
+
+          # Ancla la X visualmente al ángulo superior derecho de la ventana.
+          marker = ".oras-mi-reset{border:1px solid rgba(255,77,77,.75);"
+          anchor = ".oras-mi-close{right:max(46px,calc((100vw - min(820px,calc(100vw - 72px)))/2 + 14px));top:max(46px,calc((100svh - min(82svh,760px))/2 + 14px));background:rgba(8,8,8,.70);box-shadow:0 8px 26px rgba(0,0,0,.32)}\n"
+          if anchor not in s:
+              if marker not in s:
+                  raise SystemExit('No se encontró el anclaje CSS para la X')
+              s = s.replace(marker, anchor + marker)
+
+          # En móvil conserva ventana casi completa, pero con margen visible.
+          old = "@media(max-width:700px){.oras-master-index{padding:6px}.oras-mi-shell{width:calc(100vw - 12px);height:calc(100svh - 12px);max-height:none;border-radius:18px;padding:14px 9px calc(86px + env(safe-area-inset-bottom))}.oras-mi-bottom{width:calc(100vw - 20px);grid-template-columns:.78fr .9fr 1.2fr;gap:5px}.oras-mi-bottom a,.oras-mi-bottom button{font-size:.76rem;min-height:46px;padding:0 8px}}"
+          new = "@media(max-width:700px){.oras-master-index{padding:8px}.oras-mi-shell{width:calc(100vw - 16px);height:calc(100svh - 16px);max-height:none;border-radius:20px;padding:14px 9px calc(86px + env(safe-area-inset-bottom))}.oras-mi-close{right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top))}.oras-mi-bottom{width:calc(100vw - 28px);bottom:8px;grid-template-columns:.78fr .9fr 1.2fr;gap:5px}.oras-mi-bottom a,.oras-mi-bottom button{font-size:.76rem;min-height:46px;padding:0 8px}}"
+          if old not in s:
+              raise SystemExit('No se encontró el bloque móvil del índice')
+          s = s.replace(old, new)
+          p.write_text(s, encoding='utf-8')
+
+          # 2. CENICIENTO: al final, la misma gramática "Anterior / Siguiente".
+          p = Path('ceniciento/index.html')
+          s = p.read_text(encoding='utf-8')
+          hook = """<script data-oras-ceniciento-endnav-labels=\"1\">\n(()=>{\n  const apply=()=>{\n    const nav=document.querySelector('.ou-ceniciento-endnav');\n    if(!nav)return;\n    const items=[...nav.querySelectorAll('a,button')].filter(el=>!el.hidden);\n    if(items[0]){items[0].textContent='Anterior';items[0].setAttribute('aria-label','Anterior');}\n    if(items[1]){items[1].textContent='Siguiente';items[1].setAttribute('aria-label','Siguiente');}\n  };\n  apply();\n  new MutationObserver(apply).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','class']});\n})();\n</script>\n"""
+          if 'data-oras-ceniciento-endnav-labels="1"' not in s:
+              s = s.replace('</body>', hook + '</body>')
+          p.write_text(s, encoding='utf-8')
+
+      - name: Guardar cambios
+        run: |
+          if git diff --quiet; then
+            echo "Sin cambios"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add oras-master-index-r1.js ceniciento/index.html
+          git commit -m "ORAS: convierte el índice en ventana flotante y unifica Ceniciento"
+          git push
