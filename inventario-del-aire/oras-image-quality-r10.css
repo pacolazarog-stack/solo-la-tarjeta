@@ -1,0 +1,105 @@
+/* ORAS · auditoría visual R10 · fondos de máxima definición
+   Esta capa prevalece sobre los mapas históricos R2/R5 y evita que el lector
+   vuelva a activos de menor resolución o tratamientos que resten nitidez. */
+
+.photo-stage .photo-layer,
+.photo-stage .photo-layer.bg-current,
+.photo-stage .photo-layer.bg-enter{
+  filter:none!important;
+  image-rendering:auto!important;
+  background-size:cover!important;
+  background-repeat:no-repeat!important;
+  transform:none;
+}
+
+/* I · EL INVENTARIO DEL AIRE · colección fotográfica R4 */
+body[data-chapter="house"] .photo-layer.bg-current,
+body[data-chapter="house"] .photo-layer.bg-enter{
+  background-image:url('./assets-r4/house/08-salida.webp')!important;
+  background-position:center center!important;
+}
+body[data-chapter="entry"] .photo-layer.bg-current,
+body[data-chapter="entry"] .photo-layer.bg-enter{background-image:url('./assets-r4/house/01-recibidor.webp')!important}
+body[data-chapter="clock"] .photo-layer.bg-current,
+body[data-chapter="clock"] .photo-layer.bg-enter{background-image:url('./assets-r4/house/02-reloj.webp')!important}
+body[data-chapter="kitchen"] .photo-layer.bg-current,
+body[data-chapter="kitchen"] .photo-layer.bg-enter{background-image:url('./assets-r4/house/03-cocina.webp')!important}
+body[data-chapter="corridor"] .photo-layer.bg-current,
+body[data-chapter="corridor"] .photo-layer.bg-enter{background-image:url('./assets-r4/house/04-pasillo.webp')!important}
+body[data-chapter="bedroom"] .photo-layer.bg-current,
+body[data-chapter="bedroom"] .photo-layer.bg-enter{background-image:url('./assets-r4/house/05-dormitorio.webp')!important}
+body[data-chapter="garden"] .photo-layer.bg-current,
+body[data-chapter="garden"] .photo-layer.bg-enter{background-image:url('./assets-r4/house/06-jardin.webp')!important}
+body[data-chapter="inventory"] .photo-layer.bg-current,
+body[data-chapter="inventory"] .photo-layer.bg-enter{background-image:url('./assets-r4/house/07-inventario.webp')!important}
+body[data-chapter="exit"] .photo-layer.bg-current,
+body[data-chapter="exit"] .photo-layer.bg-enter{background-image:url('./assets-r4/house/08-salida.webp')!important}
+
+/* II · EL OFICIO DE LAS SOMBRAS · colección R4 */
+body[data-chapter="train"] .photo-layer.bg-current,
+body[data-chapter="train"] .photo-layer.bg-enter,
+body[data-chapter="station"] .photo-layer.bg-current,
+body[data-chapter="station"] .photo-layer.bg-enter{background-image:url('./assets-r4/train/01-estacion.webp')!important}
+body[data-chapter="inspector"] .photo-layer.bg-current,
+body[data-chapter="inspector"] .photo-layer.bg-enter{background-image:url('./assets-r4/train/02-revisor.webp')!important}
+body[data-chapter="shadows"] .photo-layer.bg-current,
+body[data-chapter="shadows"] .photo-layer.bg-enter{background-image:url('./assets-r4/train/03-sombras.webp')!important}
+body[data-chapter="row-seven"] .photo-layer.bg-current,
+body[data-chapter="row-seven"] .photo-layer.bg-enter{background-image:url('./assets-r4/train/04-fila-siete.webp')!important}
+body[data-chapter="conversation"] .photo-layer.bg-current,
+body[data-chapter="conversation"] .photo-layer.bg-enter{background-image:url('./assets-r4/train/05-conversacion.webp')!important}
+body[data-chapter="mobile-inventory"] .photo-layer.bg-current,
+body[data-chapter="mobile-inventory"] .photo-layer.bg-enter{background-image:url('./assets-r4/train/06-inventario-ausencias-moviles.webp')!important}
+body[data-chapter="workshop"] .photo-layer.bg-current,
+body[data-chapter="workshop"] .photo-layer.bg-enter{background-image:url('./assets-r4/train/07-taller.webp')!important}
+body[data-chapter="office"] .photo-layer.bg-current,
+body[data-chapter="office"] .photo-layer.bg-enter{background-image:url('./assets-r4/train/08-oficio.webp')!important}
+body[data-chapter="last-journey"] .photo-layer.bg-current,
+body[data-chapter="last-journey"] .photo-layer.bg-enter{background-image:url('./assets-r4/train/09-ultimo-recorrido.webp')!important}
+
+/* III · LA CIUDAD QUE APRENDIÓ A OLVIDAR · colección R4 + R5 definitiva */
+body[data-chapter="city"] .photo-layer.bg-current,
+body[data-chapter="city"] .photo-layer.bg-enter,
+body[data-chapter="plaza"] .photo-layer.bg-current,
+body[data-chapter="plaza"] .photo-layer.bg-enter{background-image:url('./assets-r4/city/01-plaza.webp')!important}
+body[data-chapter="archivist"] .photo-layer.bg-current,
+body[data-chapter="archivist"] .photo-layer.bg-enter{background-image:url('./assets-r4/city/02-archivero.webp')!important}
+body[data-chapter="fountain"] .photo-layer.bg-current,
+body[data-chapter="fountain"] .photo-layer.bg-enter{background-image:url('./assets-r4/city/03-fuente.webp')!important}
+body[data-chapter="resisters"] .photo-layer.bg-current,
+body[data-chapter="resisters"] .photo-layer.bg-enter{background-image:url('./assets-r4/city/04-resistentes.webp')!important}
+body[data-chapter="map"] .photo-layer.bg-current,
+body[data-chapter="map"] .photo-layer.bg-enter{background-image:url('./assets-r4/city/05-mapa-imposible.webp')!important}
+body[data-chapter="theory"] .photo-layer.bg-current,
+body[data-chapter="theory"] .photo-layer.bg-enter{background-image:url('./assets-r4/city/06-teoria.webp')!important}
+body[data-chapter="museum"] .photo-layer.bg-current,
+body[data-chapter="museum"] .photo-layer.bg-enter{background-image:url('./assets-r4/city/07-museo.webp')!important}
+body[data-chapter="visitor"] .photo-layer.bg-current,
+body[data-chapter="visitor"] .photo-layer.bg-enter{background-image:url('./assets-r4/city/08-visitante.webp')!important}
+body[data-chapter="winter"] .photo-layer.bg-current,
+body[data-chapter="winter"] .photo-layer.bg-enter{background-image:url('./assets-r4/city/09-invierno.webp')!important}
+body[data-chapter="last-room"] .photo-layer.bg-current,
+body[data-chapter="last-room"] .photo-layer.bg-enter{background-image:url('./assets-r4/city/10-ultima-sala.webp')!important}
+body[data-chapter="deep-archive"] .photo-layer.bg-current,
+body[data-chapter="deep-archive"] .photo-layer.bg-enter{background-image:url('./assets-r5/city/11-archivo-profundo.webp')!important}
+body[data-chapter="trace-machine"] .photo-layer.bg-current,
+body[data-chapter="trace-machine"] .photo-layer.bg-enter,
+body[data-chapter="atlas"] .photo-layer.bg-current,
+body[data-chapter="atlas"] .photo-layer.bg-enter{background-image:url('./assets-r5/city/12-maquina-huellas.webp')!important}
+body[data-chapter="resonator"] .photo-layer.bg-current,
+body[data-chapter="resonator"] .photo-layer.bg-enter{background-image:url('./assets-r5/city/13-resonador.webp')!important}
+
+/* IV · EL CERO */
+body[data-chapter="zero"] .photo-layer.bg-current,
+body[data-chapter="zero"] .photo-layer.bg-enter{background-image:url('./assets-r4/zero/01-habitacion-cero.webp')!important}
+
+/* No suavizar ópticamente fotografías de alta resolución. */
+body.r4-photo-active .photo-stage{filter:none!important}
+body.r4-photo-active .photo-layer::after{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+@media(min-width:1200px){
+  .photo-stage .photo-layer{background-position:center center}
+}
