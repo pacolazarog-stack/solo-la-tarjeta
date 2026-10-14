@@ -71,6 +71,61 @@ body.read .ou-ceniciento-endnav{
 }
 body.read .ou-ceniciento-endnav.ou-visible{transform:none!important}
 
+/* Botonera superior: misma gramática lineal y transparente que el resto de ORAS. */
+.controls{
+  position:fixed!important;
+  z-index:82!important;
+  top:max(14px,env(safe-area-inset-top))!important;
+  right:max(16px,env(safe-area-inset-right))!important;
+  display:flex!important;
+  align-items:stretch!important;
+  justify-content:flex-end!important;
+  gap:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-top:1px solid rgba(255,250,241,.42)!important;
+  border-bottom:1px solid rgba(255,250,241,.18)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.controls button{
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:38px!important;
+  margin:0!important;
+  padding:8px 13px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:rgba(255,250,241,.84)!important;
+  box-shadow:none!important;
+  text-shadow:0 1px 5px rgba(0,0,0,.92)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  font:500 .62rem/1 Arial,Helvetica,sans-serif!important;
+  letter-spacing:.10em!important;
+  text-transform:uppercase!important;
+  opacity:.9!important;
+  transition:opacity .22s ease,background-color .22s ease!important;
+}
+.controls button+button{border-left:1px solid rgba(255,250,241,.22)!important}
+.controls button:hover,
+.controls button:focus-visible{
+  background:rgba(255,255,255,.055)!important;
+  color:#fffaf1!important;
+  opacity:1!important;
+  outline:0!important;
+}
+.controls button:active{background:rgba(255,255,255,.09)!important}
+.controls button[hidden]{display:none!important}
+.voice:not(.revealing) .controls .voice-only{display:flex!important}
+
 @media(max-width:700px){
   .ou-ceniciento-endnav{
     bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;
@@ -82,6 +137,17 @@ body.read .ou-ceniciento-endnav.ou-visible{transform:none!important}
     min-height:48px!important;
     padding:8px 8px!important;
     font-size:.66rem!important;
+    letter-spacing:.07em!important;
+  }
+  .controls{
+    top:calc(8px + env(safe-area-inset-top,0px))!important;
+    right:calc(10px + env(safe-area-inset-right,0px))!important;
+    max-width:calc(100% - 20px)!important;
+  }
+  .controls button{
+    min-height:34px!important;
+    padding:7px 9px!important;
+    font-size:.55rem!important;
     letter-spacing:.07em!important;
   }
 }
