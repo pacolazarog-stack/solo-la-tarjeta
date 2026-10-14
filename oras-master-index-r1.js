@@ -13,8 +13,7 @@ const ROOT='/solo-la-tarjeta';
 const UKEY='oras.universe.v2';
 const GKEY='oras.reading.index.v1';
 const OPENKEY='oras.master.index.open.v1';
-/* Se conserva master-index-8 para no romper la validación actual de Pages. */
-const VERSION='20261014-master-index-8';
+const VERSION='20261014-master-index-9';
 
 const ANA=[
   ['estrella','Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`],
