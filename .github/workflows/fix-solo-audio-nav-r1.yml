@@ -25,7 +25,7 @@ jobs:
               if '.git' in p.parts:
                   continue
               s=p.read_text(encoding='utf-8')
-              s=re.sub(r'oras-suno-volume-r1\.js\?v=[^"\'<>\s]+','oras-suno-volume-r1.js?v=20261014-suno-volume-4',s)
+              s=re.sub(r'oras-suno-volume-r1\.js\?v=[^"\'<>\s]+','oras-suno-volume-r1.js?v=20261014-suno-volume-5',s)
               p.write_text(s,encoding='utf-8')
 
           p=Path('index.html')
@@ -92,5 +92,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html '*.html' '**/*.html'
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "ORAS: un solo audio y navegación anterior-siguiente en Solo"
+          git commit -m "ORAS: actualiza caché del control de audio con silencio"
           git push
