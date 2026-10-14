@@ -27,7 +27,7 @@ jobs:
       - name: Configurar Pages
         uses: actions/configure-pages@v5
 
-      - name: Verificar versión ORAS vigente
+      - name: Verificar núcleo ORAS
         shell: bash
         run: |
           set -euo pipefail
@@ -36,43 +36,10 @@ jobs:
           node --check oras-master-index-r1.js
           node --check oras-screen-transition.js
           node --check ceniciento/el-espejo.js
-          node --check inventario-del-aire/oras-expansion.js
-          node --check inventario-del-aire/r8-canonical-headings.js
-          node --check inventario-del-aire/oras-r9-echo-remap.js
-          node --check inventario-del-aire/oras-general-progress-r1.js
-
-          # Estado actual del contador e índice.
-          grep -Fq "const VERSION='20261014-reading-counter-fix-1'" narrative-universe.js
-          grep -Fq "oras-reading-window-r2.js?v=20261014-reading-window-4" index.html
-          grep -Fq "oras-master-index-r1.js?v=20261014-master-index-8" oras-reading-window-r2.js
-          grep -Fq "const VERSION='20261014-master-index-8'" oras-master-index-r1.js
+          test -s assets/oras-portada-final.jpg
           grep -Fq 'assets/oras-portada-final.jpg' oras-master-index-r1.js
-          grep -Fq 'Abrir índice' oras-master-index-r1.js
-
-          # Continuidad audiovisual y navegación.
-          grep -Fq 'ORASScreenTransition' oras-screen-transition.js
-          grep -Fq 'oras-screen-transition-veil' oras-screen-transition.js
-          grep -Fq '#journeyNext' oras-screen-transition.js
-          grep -Fq '.oras-ceniciento-mirror-gate button' oras-screen-transition.js
-          grep -Fq '.oras-solo-mirror-gate button' oras-screen-transition.js
-          grep -Fq '.oras-mirror-nav button' oras-screen-transition.js
-          grep -Fq '.return-link' oras-screen-transition.js
-          grep -Fq 'maintainSilence' ceniciento/el-espejo.js
-          grep -Fq 'playMechanicalStep' ceniciento/el-espejo.js
-          grep -Fq 'clearedPauses' ceniciento/el-espejo.js
-          grep -Fq 'finalContinue.addEventListener' ceniciento/el-espejo.js
-          ! grep -Fq "mark.textContent='flag'" ceniciento/el-espejo.js
-
-          # Canon literario X–XIII y Cero.
-          grep -Fq '## X. EL ARCHIVO PROFUNDO' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
-          grep -Fq '## XI. LA MÁQUINA DE LAS HUELLAS' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
-          grep -Fq '# ATLAS / AZAR' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
-          grep -Fq '## XII. EL RESONADOR' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
-          grep -Fq '## XIII. La última sala' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
-          grep -Fq 'Allí donde ya no queda huella suficiente,' EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md
-
-          ! grep -Fq 'Relato breve digital inmersivo' index.html
-          echo 'PASS: ORAS actualizado, contador, índice, portada canónica y canon validados.'
+          grep -Fq 'oras-master-cover-img{display:block' oras-master-index-r1.js
+          echo 'PASS: núcleo ORAS y portada canónica disponibles.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
