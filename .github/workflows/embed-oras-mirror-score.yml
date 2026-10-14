@@ -1,0 +1,82 @@
+name: Incrustar banda sonora en EL ESPEJO
+
+on:
+  push:
+    paths:
+      - '.github/workflows/embed-oras-mirror-score.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  embed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Descargar audio y sincronizar EL ESPEJO
+        env:
+          SCORE_URL: "https://production-273614-media-export.storage.googleapis.com/c9016949-e023-404a-a0b9-5e34c9db6ab1/original.m4a?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=descript-api%40production-273614.iam.gserviceaccount.com%2F20261014%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20261014T174941Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&X-Goog-Signature=0fd1c04c4139b7ecf9ccaef957335a87ff634fa8c8baa9699efa3841016b578e3d4e52fb9410bfb9f0fd0d5be73ee58303f4e687a41bad8106501c764632d80a61571c3813fbefef3fa6a4484b30f60f8caf6bf4ace87869228cce3259e6198a09b08f665f884223d1052724903e60cc3c1e796ef649a392ea469cdaec0ad16ac4d21d7ba1611567697bb4e02aa3c343cc47c516dd88bf920505bd97f6730e3faf4d8da10fb3ca2571df62af5880d46858e4d2a203ec79dc4ef448370db4e1711f607c7abb35c3ba230e5d89be268cd7a2da6132052eb72c88ce4023a14ae389fc12eaf8fb2f1f67f85559530c3d782be5eeb776c9f06eac8c34c32719535969"
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+          curl -fL --retry 3 "$SCORE_URL" -o assets/oras-el-espejo-centro-de-datos.m4a
+          test -s assets/oras-el-espejo-centro-de-datos.m4a
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('ceniciento/el-espejo.js')
+          t=p.read_text()
+          t=t.replace("const VERSION='20261014-persistent-reading-2';", "const VERSION='20261014-mirror-score-1';")
+          needle="let started=false,locked=false,lockedScene=null,finished=false,finalReady=false;\nlet lastTouchY=null,finalContinue=null,silenceTimer=0;"
+          repl="""let started=false,locked=false,lockedScene=null,finished=false,finalReady=false;\nlet lastTouchY=null,finalContinue=null,silenceTimer=0;\nlet scoreStarted=false,scoreEnded=false,scoreTimer=0,scoreGate=null;\nconst MIRROR_SCORE_URL=ROOT+'assets/oras-el-espejo-centro-de-datos.m4a?v='+VERSION;\nconst mirrorScore=document.createElement('audio');\nmirrorScore.dataset.orasMirrorScore='1';\nmirrorScore.preload='auto';\nmirrorScore.playsInline=true;\nmirrorScore.loop=false;\nmirrorScore.volume=.82;\nmirrorScore.src=MIRROR_SCORE_URL;\ndocument.body.appendChild(mirrorScore);\nfunction fmtRemain(value){const s=Math.max(0,Math.ceil(value||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}\nfunction updateFinalScoreGate(){\n  if(!finalContinue)return;\n  if(!finalReady){finalContinue.hidden=true;return}\n  finalContinue.hidden=false;\n  if(scoreEnded){finalContinue.disabled=false;finalContinue.textContent='seguir';return}\n  finalContinue.disabled=true;\n  const duration=Number.isFinite(mirrorScore.duration)?mirrorScore.duration:138.048;\n  finalContinue.textContent='escuchar · '+fmtRemain(duration-mirrorScore.currentTime);\n}\nfunction markScoreEnded(){\n  scoreEnded=true;\n  clearInterval(scoreTimer);scoreTimer=0;\n  updateFinalScoreGate();\n}\nfunction startScoreClock(){\n  clearInterval(scoreTimer);\n  scoreTimer=setInterval(updateFinalScoreGate,250);\n}\nfunction createScoreGate(){\n  if(scoreGate)return scoreGate;\n  scoreGate=document.createElement('button');\n  scoreGate.type='button';scoreGate.className='mirror-score-gate';scoreGate.textContent='iniciar';\n  scoreGate.setAttribute('aria-label','Iniciar EL ESPEJO con su banda sonora');\n  scoreGate.addEventListener('click',()=>{\n    mirrorScore.currentTime=0;\n    mirrorScore.play().then(()=>{scoreStarted=true;scoreGate.hidden=true;mirror.style.overflowY='auto';startScoreClock()}).catch(()=>{});\n  });\n  mirror.appendChild(scoreGate);\n  return scoreGate;\n}\nfunction beginMirrorScore(){\n  scoreEnded=false;scoreStarted=false;\n  try{mirrorScore.pause();mirrorScore.currentTime=0}catch(_){}\n  const play=mirrorScore.play();\n  if(play&&typeof play.then==='function')play.then(()=>{scoreStarted=true;const g=createScoreGate();g.hidden=true;mirror.style.overflowY='auto';startScoreClock()}).catch(()=>{const g=createScoreGate();g.hidden=false;mirror.style.overflowY='hidden'});\n}\nmirrorScore.addEventListener('ended',markScoreEnded);"""
+          if needle not in t: raise SystemExit('No se encontró el bloque de estado de EL ESPEJO')
+          t=t.replace(needle,repl,1)
+          old="""/* EL ESPEJO NO TIENE CAMA SONORA. Se silencian de forma continua todas las\n   pistas HTML heredadas. El único sonido permitido aquí es el clac mecánico\n   idéntico de los botones «seguir». */"""
+          t=t.replace(old,"""/* EL ESPEJO tiene una banda sonora propia. Se silencian de forma continua\n   las pistas heredadas de CENICIENTO, pero nunca la banda del propio ESPEJO. */""")
+          t=t.replace("doc.querySelectorAll('audio').forEach(audio=>{", "doc.querySelectorAll('audio:not([data-oras-mirror-score=\"1\"])').forEach(audio=>{",1)
+          t=t.replace("if(finished||!finalReady)return;", "if(finished||!finalReady||!scoreEnded)return;",1)
+          t=t.replace("if(finalContinue)finalContinue.hidden=false;", "updateFinalScoreGate();",1)
+          oldstart="""  if(finalContinue){finalContinue.hidden=true;finalContinue.disabled=false;finalContinue.textContent='seguir'}\n  mirror.style.transition='';mirror.style.opacity='';mirror.hidden=false;document.body.classList.add('mirror');mirror.scrollTop=0;\n  maintainSilence();\n  updateMirrorDeformation();"""
+          newstart="""  if(finalContinue){finalContinue.hidden=true;finalContinue.disabled=true;finalContinue.textContent='escuchar'}\n  mirror.style.transition='';mirror.style.opacity='';mirror.hidden=false;document.body.classList.add('mirror');mirror.scrollTop=0;\n  maintainSilence();\n  beginMirrorScore();\n  updateMirrorDeformation();"""
+          if oldstart not in t: raise SystemExit('No se encontró start()')
+          t=t.replace(oldstart,newstart,1)
+          oldreset="""  clearInterval(silenceTimer);\n  started=false;finished=false;finalReady=false;locked=false;lockedScene=null;\n  clearedPauses.clear();"""
+          newreset="""  clearInterval(silenceTimer);clearInterval(scoreTimer);scoreTimer=0;\n  try{mirrorScore.pause();mirrorScore.currentTime=0}catch(_){}\n  scoreStarted=false;scoreEnded=false;\n  if(scoreGate)scoreGate.hidden=true;\n  started=false;finished=false;finalReady=false;locked=false;lockedScene=null;\n  clearedPauses.clear();"""
+          if oldreset not in t: raise SystemExit('No se encontró reset')
+          t=t.replace(oldreset,newreset,1)
+          css="""
+const scoreStyle=document.createElement('style');
+scoreStyle.id='oras-mirror-score-r1';
+scoreStyle.textContent=`
+body.mirror .mirror-score-gate{position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);min-width:112px;min-height:52px;padding:12px 24px;border:1px solid rgba(247,241,232,.34);border-radius:999px;background:rgba(8,8,8,.88);color:#f7f1e8;font:italic 1rem Georgia,serif;letter-spacing:.04em;cursor:pointer;backdrop-filter:blur(10px)}
+body.mirror .mirror-score-gate[hidden]{display:none!important}
+body.mirror .mirror-final-continue:disabled{opacity:.58;cursor:wait;border-bottom-color:rgba(255,250,241,.15)}
+`;
+document.head.appendChild(scoreStyle);
+"""
+          anchor="document.head.appendChild(deformStyle);\n"
+          if anchor not in t: raise SystemExit('No se encontró estilo espejo')
+          t=t.replace(anchor,anchor+css,1)
+          p.write_text(t)
+
+          h=Path('ceniciento/index.html')
+          s=h.read_text()
+          s=s.replace('el-espejo.js?v=20261014-persistent-reading-2','el-espejo.js?v=20261014-mirror-score-1')
+          h.write_text(s)
+          PY
+          node --check ceniciento/el-espejo.js
+          rm -f .github/workflows/embed-oras-mirror-score.yml
+      - name: Confirmar cambios
+        run: |
+          git status --short
+          test -f assets/oras-el-espejo-centro-de-datos.m4a
+          grep -q '20261014-mirror-score-1' ceniciento/el-espejo.js
+          grep -q 'data-oras-mirror-score' ceniciento/el-espejo.js
+      - name: Publicar cambio
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Incrusta y sincroniza la banda sonora de EL ESPEJO'
+          git push
