@@ -6,7 +6,7 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261014-master-index-15';
-const VERSION='20261013-ana-portrait-prev-next-1';
+const VERSION='20261015-ana-live-pulse-portrait-1';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -53,10 +53,6 @@ style.textContent=`
 .ou-reading-window-r2>summary::before{content:"";width:5px;height:5px;border-radius:50%;background:#e9cf91}
 .ou-reading-window-r2 .ou-rw-panel{display:none!important}
 body.mirror .ou-reading-window-r2{display:none!important}
-body.oras-ana-static-final .portrait-finale,body.oras-ana-static-final .portrait-finale *{animation:none!important;transition:none!important;filter:none!important;-webkit-filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;will-change:auto!important}
-body.oras-ana-static-final .portrait-finale img{opacity:1!important}
-body.oras-ana-static-final #journeyNav,body.oras-ana-static-final #journeyNav button,body.oras-ana-static-final .portrait-question,body.oras-ana-static-final .ou-reading-window-r2,body.oras-ana-static-final #orasSunoVolume{pointer-events:auto!important}
-body.oras-ana-static-final #journeyNav{z-index:2147483600!important}
 @media(max-width:700px){.ou-reading-window-r2{left:max(57px,calc(env(safe-area-inset-left) + 57px));bottom:max(10px,env(safe-area-inset-bottom))}.ou-reading-window-r2>summary{font-size:11px;min-height:29px;padding:5px 9px}}
 `;
 document.head.appendChild(style);
@@ -117,16 +113,12 @@ function setupTracking(){
     }
   }
   if(path.endsWith('/elegia-breve')){
-    const stabilize=()=>{
+    const markElegia=()=>{
       const b=document.body;if(!b)return;
-      if(b.classList.contains('portrait-revealed')){
-        b.classList.add('oras-ana-static-final');
-        completeAnaPart('elegia');
-        
-      }
+      if(b.classList.contains('portrait-revealed')) completeAnaPart('elegia');
     };
-    new MutationObserver(stabilize).observe(document.body,{attributes:true,attributeFilter:['class']});
-    stabilize();
+    new MutationObserver(markElegia).observe(document.body,{attributes:true,attributeFilter:['class']});
+    markElegia();
   }
   addEventListener('message',e=>{
     if(e.origin!==location.origin)return;
