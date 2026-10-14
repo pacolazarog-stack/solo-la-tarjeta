@@ -2,7 +2,7 @@
 'use strict';
 
 const STORAGE='oras.universe.v2';
-const VERSION='20261014-global-index-window-2';
+const VERSION='20261013-ana-portrait-prev-next-1';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261014-master-index-14';
 const ANA_PARTS=Object.freeze([
