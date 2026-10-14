@@ -36,10 +36,12 @@ jobs:
           node --check oras-master-index-r1.js
           node --check oras-screen-transition.js
           node --check ceniciento/el-espejo.js
+          node --check ceniciento/el-espejo-soundtrack.js
           test -s assets/oras-portada-final.jpg
+          test -s assets/oras-espejo-centro-datos.b64
           grep -Fq 'assets/oras-portada-final.jpg' oras-master-index-r1.js
           grep -Fq 'oras-master-cover-img{display:block' oras-master-index-r1.js
-          echo 'PASS: núcleo ORAS y portada canónica disponibles.'
+          echo 'PASS: núcleo ORAS, portada y banda sonora de EL ESPEJO disponibles.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
@@ -62,6 +64,34 @@ jobs:
           if [ -d nmwp-international/ceniciento ]; then
             cp ceniciento/ceniciento-voz-completa.mp3 nmwp-international/ceniciento/ceniciento-voz-completa.mp3
           fi
+
+      - name: Preparar música de EL ESPEJO
+        shell: bash
+        run: |
+          set -euo pipefail
+          base64 -d assets/oras-espejo-centro-datos.b64 > assets/oras-espejo-centro-datos.mp3
+          test -s assets/oras-espejo-centro-datos.mp3
+          bytes=$(wc -c < assets/oras-espejo-centro-datos.mp3)
+          test "$bytes" -gt 800000
+          test "$bytes" -lt 900000
+
+      - name: Incrustar controlador musical de EL ESPEJO
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('ceniciento/index.html')
+          s=p.read_text()
+          tag='<script data-oras-mirror-soundtrack="v2" src="/solo-la-tarjeta/ceniciento/el-espejo-soundtrack.js?v=20261014-espejo-soundtrack-2"></script>'
+          if tag not in s:
+              needle='<script data-oras-mirror="true" src="el-espejo.js?v=20261014-persistent-reading-2"></script>'
+              if needle not in s:
+                  raise RuntimeError('No se encontró el cargador canónico de EL ESPEJO')
+              s=s.replace(needle, needle+'\n'+tag, 1)
+              p.write_text(s)
+          PY
+          grep -Fq 'el-espejo-soundtrack.js?v=20261014-espejo-soundtrack-2' ceniciento/index.html
 
       - name: Empaquetar sitio
         uses: actions/upload-pages-artifact@v3
