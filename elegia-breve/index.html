@@ -12,6 +12,7 @@
   <meta property="og:type" content="article">
   <meta property="og:locale" content="es_ES">
   <title>ANA KLAUDYA</title>
+  <link rel="preload" as="image" href="ana-klaudya-fotografia.jpg">
   <script data-poem-entry>
   document.documentElement.classList.add("publication-pending");
   if(['estrella','ojos','sonrisa','cabello','piel','interludio','epilogo','ceniciento'].includes(window.location.hash.slice(1))){document.documentElement.classList.add('poem-route-loading');}
@@ -738,7 +739,7 @@
       .heat-final.is-burning{animation:none}
       .scroll-cue{animation:none}
     }
-  body.eyes-open *,body.eyes-open *::before,body.eyes-open *::after{animation-play-state:paused!important}
+  body.eyes-open .portrait-finale *,body.eyes-open .portrait-finale *::before,body.eyes-open .portrait-finale *::after{animation-play-state:paused!important}
 
 /* Recorrido y lectura en vertical. */
 .journey-nav[hidden]{display:none!important}
@@ -806,6 +807,20 @@ body.reading-ready .pulse-field::before{animation:pulseA var(--pulse-duration) e
 body.reading-ready .pulse-field::after{animation:pulseB var(--pulse-duration) ease-in-out infinite!important}
 body.portrait-revealed .portrait-finale{opacity:1!important;visibility:visible!important;background:#1b1711!important}
 body.portrait-revealed .portrait-finale img{opacity:1!important;visibility:visible!important}
+</style>
+
+<style id="oras-ana-pulse-portrait-r2">
+/* Pulso canónico: siempre vivo, ligero y sin filtros de pantalla completa. */
+.pulse-field{animation:orasPulseField 1.85s ease-in-out infinite!important;animation-play-state:running!important;filter:none!important;will-change:opacity,transform!important}
+.pulse-field::before{animation:orasPulseA 1.85s ease-in-out infinite!important;animation-play-state:running!important}
+.pulse-field::after{animation:orasPulseB 1.85s ease-in-out infinite!important;animation-play-state:running!important}
+body.eyes-open .pulse-field,body.eyes-open .pulse-field::before,body.eyes-open .pulse-field::after{animation-play-state:running!important}
+@keyframes orasPulseField{0%,100%{opacity:.40;transform:scale(1)}10%{opacity:.82;transform:scale(1.018)}18%{opacity:.48;transform:scale(1.004)}33%{opacity:.72;transform:scale(1.013)}44%{opacity:.43;transform:scale(1)}}
+@keyframes orasPulseA{0%,100%{opacity:.24;transform:scale(1)}10%{opacity:.62;transform:scale(1.035)}18%{opacity:.30;transform:scale(1.008)}33%{opacity:.52;transform:scale(1.025)}44%{opacity:.26;transform:scale(1)}}
+@keyframes orasPulseB{0%,100%{opacity:.15;transform:scale(1.006)}10%{opacity:.42;transform:scale(1.05)}18%{opacity:.19;transform:scale(1.012)}33%{opacity:.34;transform:scale(1.038)}44%{opacity:.17;transform:scale(1.006)}}
+body.portrait-revealed .portrait-finale{opacity:1!important;visibility:visible!important}
+body.portrait-revealed .portrait-finale img{opacity:1!important;visibility:visible!important;filter:none!important}
+body.portrait-revealed .portrait-image-area,body.portrait-revealed .portrait-image-wrap{opacity:1!important;visibility:visible!important}
 </style>
 </head>
 
@@ -984,31 +999,31 @@ body.portrait-revealed .portrait-finale img{opacity:1!important;visibility:visib
       const revealPortrait=()=>{
         if(body.classList.contains('portrait-revealed')) return;
         portraitRequested=true;
-        const reveal=()=>{
-          if(!anaPortrait.naturalWidth) return;
-          portraitFinale.setAttribute('aria-hidden','false');
-          portraitFinale.style.visibility='visible';
-          portraitFinale.style.opacity='1';
-          portraitFinale.style.background='#1b1711';
-          anaPortrait.style.visibility='visible';
-          anaPortrait.style.opacity='1';
-          body.classList.remove('oras-ana-static-final');
-          body.classList.add('portrait-revealed');
-          anaNavigation.hidden=true;
-          body.classList.remove('ana-navigation-ready');
-          const finalJourneyNav=document.getElementById('journeyNav');
-          setJourney('elegia');
-          if(finalJourneyNav)finalJourneyNav.hidden=false;
-          clearTimeout(portraitRevealTimer);
-          portraitRevealTimer=setTimeout(()=>{
-            if(!body.classList.contains('portrait-revealed') || !cenicientoFrame.hidden)return;
-            questionGrowthActive=true;
-            anaNavigation.hidden=false;
-            body.classList.add('ana-navigation-ready');
-          },25000);
-        };
-        if(anaPortrait.complete) reveal();
-        else anaPortrait.addEventListener('load',reveal,{once:true});
+        clearTimeout(portraitRevealTimer);
+        body.classList.remove('oras-ana-static-final');
+        portraitFinale.setAttribute('aria-hidden','false');
+        portraitFinale.style.opacity='1';
+        portraitFinale.style.visibility='visible';
+        anaPortrait.loading='eager';
+        anaPortrait.decoding='async';
+        anaPortrait.style.opacity='1';
+        anaPortrait.style.visibility='visible';
+        body.classList.add('portrait-revealed');
+        anaNavigation.hidden=true;
+        body.classList.remove('ana-navigation-ready');
+        const finalJourneyNav=document.getElementById('journeyNav');
+        setJourney('elegia');
+        if(finalJourneyNav)finalJourneyNav.hidden=false;
+        if(!anaPortrait.complete || !anaPortrait.naturalWidth){
+          const raw=anaPortrait.getAttribute('src')||'ana-klaudya-fotografia.jpg';
+          anaPortrait.src=raw.split('?')[0]+'?v=20261015-portrait-r2';
+        }
+        portraitRevealTimer=setTimeout(()=>{
+          if(!body.classList.contains('portrait-revealed') || !cenicientoFrame.hidden)return;
+          questionGrowthActive=true;
+          anaNavigation.hidden=false;
+          body.classList.add('ana-navigation-ready');
+        },25000);
       };
       let mixContext=null, musicGain=null;
       let ambientLevel=Number(musicLevel.value)/100;
