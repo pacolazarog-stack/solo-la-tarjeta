@@ -12,7 +12,7 @@ window.__orasMasterIndexR1=true;
 const ROOT='/solo-la-tarjeta';
 const UKEY='oras.universe.v2';
 const GKEY='oras.reading.index.v1';
-const VERSION='20261014-master-index-5';
+const VERSION='20261014-master-index-6';
 
 const ANA=[
   ['estrella','Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`],
@@ -116,7 +116,7 @@ document.documentElement.classList.add('oras-master-entry');
 const cover=document.createElement('section');
 cover.className='oras-master-cover';
 cover.setAttribute('aria-label','Portada de ORAS');
-cover.innerHTML=`<div class="oras-master-cover-frame"><img class="oras-master-cover-img" src="${ROOT}/assets/oras-el-archivo-profundo-cover.svg?v=${VERSION}" alt="ORAS · Lo que queda de las horas"><button class="oras-master-button" type="button" aria-label="Abrir índice general de lectura"><span>Abrir índice general de lectura</span></button></div>`;
+cover.innerHTML=`<div class="oras-master-cover-frame"><img class="oras-master-cover-img" src="${ROOT}/assets/oras-portada-final.jpg?v=${VERSION}" alt="ORAS · Lo que queda de las horas"><button class="oras-master-button" type="button" aria-label="Abrir índice general de lectura"><span>Abrir índice general de lectura</span></button></div>`;
 document.body.appendChild(cover);
 
 const index=document.createElement('section');
