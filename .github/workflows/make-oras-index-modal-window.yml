@@ -1,4 +1,4 @@
-name: Convertir índice ORAS en ventana modal canónica
+name: Aplicar arquitectura emocional definitiva ORAS
 
 on:
   push:
@@ -17,142 +17,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Convertir índice en ventana modal global
-        shell: python
-        run: |
-          from pathlib import Path
+      - name: Aplicar arquitectura emocional definitiva
+        run: python scripts/apply_oras_final_architecture.py
 
-          def rep(text, old, new, label):
-              if old not in text:
-                  raise SystemExit(f'No se encontró patrón: {label}')
-              return text.replace(old, new, 1)
-
-          # ------------------------------------------------------------
-          # 1) MASTER INDEX: disponible desde cualquier pantalla y como ventana
-          # ------------------------------------------------------------
-          p = Path('oras-master-index-r1.js')
-          t = p.read_text(encoding='utf-8')
-          t = t.replace("const VERSION='20261014-master-index-11';", "const VERSION='20261014-master-index-12';")
-          t = rep(
-              t,
-              "const PATH=location.pathname.replace(/\\/index\\.html$/i,'/').replace(/\\/+$/,'');\nif(PATH!=='/solo-la-tarjeta')return;\n\nconst qs=new URLSearchParams(location.search);\nif(qs.has('read')||qs.has('origen')||qs.get('auto')==='1'||qs.has('from'))return;",
-              "const PATH=location.pathname.replace(/\\/index\\.html$/i,'/').replace(/\\/+$/,'');\nconst IS_ROOT=PATH==='/solo-la-tarjeta';\n\nconst qs=new URLSearchParams(location.search);",
-              'quitar limitación a portada'
-          )
-          t = t.replace(
-              ".oras-master-index{position:fixed;z-index:2147483647;inset:0;display:none;background:radial-gradient(circle at 50% -12%,rgba(80,61,33,.16),transparent 30%),var(--oras-bg);color:var(--oras-ink);font-family:Georgia,\"Times New Roman\",serif;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(223,197,138,.32) transparent}",
-              ".oras-master-index{position:fixed;z-index:2147483647;left:50%;top:50%;width:min(940px,calc(100vw - 28px));height:min(92svh,900px);transform:translate(-50%,-50%);display:none;background:radial-gradient(circle at 50% -12%,rgba(80,61,33,.16),transparent 30%),var(--oras-bg);color:var(--oras-ink);font-family:Georgia,\"Times New Roman\",serif;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(223,197,138,.32) transparent;border:1px solid rgba(223,197,138,.26);border-radius:22px;box-shadow:0 28px 100px rgba(0,0,0,.62),0 0 0 100vmax rgba(0,0,0,.58);backdrop-filter:blur(14px)}"
-          )
-          t = t.replace(
-              "  .oras-mi-shell{width:min(100% - 18px,920px);padding-top:max(14px,env(safe-area-inset-top));padding-bottom:calc(86px + env(safe-area-inset-bottom))}",
-              "  .oras-master-index{width:calc(100vw - 12px);height:calc(100svh - 12px);border-radius:17px}.oras-mi-shell{width:min(100% - 18px,920px);padding-top:max(14px,env(safe-area-inset-top));padding-bottom:calc(86px + env(safe-area-inset-bottom))}"
-          )
-          t = rep(
-              t,
-              "document.head.appendChild(style);\ndocument.documentElement.classList.add('oras-master-entry');\n\nconst cover=document.createElement('section');\ncover.className='oras-master-cover';\ncover.setAttribute('aria-label','Portada de ORAS');\ncover.innerHTML=`<div class=\"oras-master-cover-frame\"><img class=\"oras-master-cover-img\" src=\"${ROOT}/assets/oras-portada-final.jpg?v=${VERSION}\" alt=\"ORAS · El archivo profundo\"><button class=\"oras-master-button\" type=\"button\" aria-label=\"Abrir índice general de lectura\"><span>Abrir índice general de lectura</span></button></div>`;\ndocument.body.appendChild(cover);",
-              "document.head.appendChild(style);\n\nlet cover=null;\nif(IS_ROOT){\n  cover=document.createElement('section');\n  cover.className='oras-master-cover';\n  cover.setAttribute('aria-label','Portada de ORAS');\n  cover.innerHTML=`<div class=\"oras-master-cover-frame\"><img class=\"oras-master-cover-img\" src=\"${ROOT}/assets/oras-portada-final.jpg?v=${VERSION}\" alt=\"ORAS · El archivo profundo\"><button class=\"oras-master-button\" type=\"button\" aria-label=\"Abrir índice general de lectura\"><span>Abrir índice general de lectura</span></button></div>`;\n  document.body.appendChild(cover);\n}",
-              'portada sólo en raíz'
-          )
-          t = rep(
-              t,
-              "function openIndex(){\n  render();\n  index.classList.add('is-open');\n  cover.hidden=true;\n  index.scrollTop=0;\n  index.querySelector('.oras-mi-close')?.focus({preventScroll:true});\n}\nfunction closeIndex(){\n  index.classList.remove('is-open');\n  cover.hidden=false;\n  cover.querySelector('.oras-master-button')?.focus({preventScroll:true});\n}\n\ncover.querySelector('.oras-master-button').addEventListener('click',openIndex);",
-              "function openIndex(){\n  render();\n  document.documentElement.classList.add('oras-master-entry');\n  index.classList.add('is-open');\n  if(cover)cover.hidden=true;\n  index.scrollTop=0;\n  index.querySelector('.oras-mi-close')?.focus({preventScroll:true});\n}\nfunction closeIndex(){\n  index.classList.remove('is-open');\n  document.documentElement.classList.remove('oras-master-entry');\n  if(cover){\n    cover.hidden=false;\n    cover.querySelector('.oras-master-button')?.focus({preventScroll:true});\n  }\n}\n\ncover?.querySelector('.oras-master-button')?.addEventListener('click',openIndex);",
-              'abrir/cerrar ventana'
-          )
-          t = rep(
-              t,
-              "document.addEventListener('visibilitychange',()=>{if(!document.hidden&&index.classList.contains('is-open'))render();});\nif(qs.get('indice')==='1')openIndex();\n})();",
-              "document.addEventListener('visibilitychange',()=>{if(!document.hidden&&index.classList.contains('is-open'))render();});\naddEventListener('oras:index-open',openIndex);\nwindow.ORASCanonicalIndex={version:VERSION,open:openIndex,close:closeIndex,render};\nif(qs.get('indice')==='1')openIndex();\n})();",
-              'API de ventana canónica'
-          )
-          p.write_text(t,encoding='utf-8')
-
-          # ------------------------------------------------------------
-          # 2) ANTIGUO ÍNDICE ANA: deja de desplegar lista; abre ventana ORAS
-          # ------------------------------------------------------------
-          p = Path('oras-reading-window-r2.js')
-          t = p.read_text(encoding='utf-8')
-          t = t.replace("const VERSION='20261013-ana-portrait-prev-next-1';", "const VERSION='20261014-index-window-1';")
-          t = t.replace("  summary.textContent=`Lecturas · ${completed}/3`;", "  summary.textContent='Índice ORAS';")
-          insert = """
-function openCanonicalIndex(event){
-  if(event){event.preventDefault();event.stopPropagation();}
-  box.removeAttribute('open');
-  const fire=()=>window.dispatchEvent(new CustomEvent('oras:index-open'));
-  if(window.ORASCanonicalIndex?.open){window.ORASCanonicalIndex.open();return;}
-  if(!window.__orasMasterIndexLoader){
-    window.__orasMasterIndexLoader=true;
-    const script=document.createElement('script');
-    script.src='/solo-la-tarjeta/oras-master-index-r1.js?v=20261014-master-index-12';
-    script.async=false;
-    script.addEventListener('load',fire,{once:true});
-    document.head.appendChild(script);
-  }else fire();
-}
-box.querySelector('summary')?.addEventListener('click',openCanonicalIndex,true);
-box.querySelector('.ou-rw-panel')?.setAttribute('aria-hidden','true');
-"""
-          marker = "render(true);\nsetupTracking();"
-          if marker not in t:
-              raise SystemExit('No se encontró inserción del índice canónico')
-          t = t.replace(marker, insert + "\n" + marker, 1)
-          old_loader = """(()=>{
-  const path=location.pathname.replace(/\\/index\\.html$/i,'/').replace(/\\/+$/,'');
-  if(path!=='/solo-la-tarjeta'||window.__orasMasterIndexLoader)return;
-  window.__orasMasterIndexLoader=true;
-  const script=document.createElement('script');
-  script.src='/solo-la-tarjeta/oras-master-index-r1.js?v=20261014-master-index-11';
-  script.async=false;
-  document.head.appendChild(script);
-})();"""
-          new_loader = """(()=>{
-  if(window.__orasMasterIndexLoader)return;
-  window.__orasMasterIndexLoader=true;
-  const script=document.createElement('script');
-  script.src='/solo-la-tarjeta/oras-master-index-r1.js?v=20261014-master-index-12';
-  script.async=false;
-  document.head.appendChild(script);
-})();"""
-          if old_loader not in t:
-              raise SystemExit('No se encontró loader del índice maestro')
-          t = t.replace(old_loader,new_loader,1)
-          p.write_text(t,encoding='utf-8')
-
-          # ------------------------------------------------------------
-          # 3) Canon escrito: índice = ventana superpuesta, no página
-          # ------------------------------------------------------------
-          p=Path('ORAS_CANON_NAVEGACION_Y_ESPEJO_R1.md')
-          t=p.read_text(encoding='utf-8')
-          note="""
-
-## 7. Forma canónica del índice
-
-El índice general de ORAS no constituye una página narrativa independiente. Es una **ventana modal superpuesta** a la pantalla desde la que se invoca.
-
-- Se abre sin abandonar la pieza o pantalla actual.
-- Conserva visible, oscurecido, el lugar narrativo de procedencia.
-- En móvil ocupa casi toda la pantalla, pero mantiene margen y borde para conservar inequívocamente su condición de ventana.
-- Al cerrarlo, el lector vuelve exactamente al punto desde el que lo abrió.
-- El antiguo índice propio de ANA KLAUDYA queda sustituido por esta misma ventana canónica.
-
-La navegación interna desde la ventana sí puede trasladar al lector a otra pieza cuando pulsa deliberadamente uno de sus accesos habilitados.
-"""
-          if '## 7. Forma canónica del índice' not in t:
-              p.write_text(t.rstrip()+note+'\n',encoding='utf-8')
-
-      - name: Validar JavaScript
+      - name: Validar
         run: |
           node --check oras-master-index-r1.js
-          node --check oras-reading-window-r2.js
+          node --check inventario-del-aire/r8-canonical-headings.js
+          grep -Fq "IV · EL ARCHIVERO" oras-master-index-r1.js
+          grep -Fq "V · EL CERO" oras-master-index-r1.js
+          grep -Fq "Documento recuperado del Archivo Profundo" oras-master-index-r1.js
+          grep -Fq "placeAtlasAfterLastRoom" inventario-del-aire/r8-canonical-headings.js
+          grep -Fq "Nadie supo decir desde cuándo." ORAS_CANON_NAVEGACION_Y_ESPEJO_R1.md
 
-      - name: Commit
+      - name: Commit y publicar
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add oras-master-index-r1.js oras-reading-window-r2.js ORAS_CANON_NAVEGACION_Y_ESPEJO_R1.md
-          if git diff --cached --quiet; then
-            echo "Sin cambios"
-            exit 0
-          fi
-          git commit -m "Convierte el índice canónico ORAS en ventana modal"
+          git add oras-master-index-r1.js inventario-del-aire/r8-canonical-headings.js inventario-del-aire/index.html ORAS_CANON_NAVEGACION_Y_ESPEJO_R1.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "ORAS: fija la arquitectura emocional definitiva"
+          git pull --rebase origin main
           git push
