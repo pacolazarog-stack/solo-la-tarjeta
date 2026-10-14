@@ -17,162 +17,45 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Aplicar liberación progresiva del índice
-        shell: python
+      - name: Aplicar liberación progresiva
         run: |
+          python3 - <<'PY'
           from pathlib import Path
-          import re
-
           p=Path('oras-master-index-r1.js')
           s=p.read_text(encoding='utf-8')
-          s=re.sub(r"const VERSION='[^']+';","const VERSION='20261014-master-index-12';",s,count=1)
+          s=s.replace("const VERSION='20261014-master-index-11';","const VERSION='20261014-master-index-12';")
 
-          new_render=r'''function render(){
-  const u=life();
-  const p=progress();
-  const open=getOpen();
-  const anaCount=ANA.filter(([id])=>anaDone(id,u)).length;
-  const anaComplete=anaCount===ANA.length||bool(u.anaComplete);
-  const solo=bool(u.soloComplete);
-  const cen=bool(u.cenicientoComplete);
-  const mirror=bool(u.mirrorReadComplete);
-  const mirrorCrossed=u.mirrorCrossed===true;
-  const mirrorReady=solo&&cen&&anaComplete;
-  const invCount=countDone(INVENTARIO);
-  const oficioCount=countDone(OFICIO);
-  const ciudadCount=countDone(CIUDAD);
-  const zeroDone=expansionDone('zero');
-  const lifeWorks=[solo,anaComplete,cen].filter(Boolean).length;
-  const expansionCount=invCount+oficioCount+ciudadCount;
-  const pct=Math.round((p.done/p.total)*100);
+          anchor="""  const pct=Math.round((p.done/p.total)*100);\n\n  const anaParts="""
+          insert="""  const pct=Math.round((p.done/p.total)*100);\n\n  // Índice progresivo: sólo se muestra lo que el lector ha desbloqueado.\n  const showAna=solo;\n  const showCeniciento=solo;\n  const showMirror=mirrorReady||mirror||mirrorCrossed;\n  const showExpansion=mirrorCrossed;\n  const showInventario=showExpansion;\n  const showOficio=showExpansion&&invCount===INVENTARIO.length;\n  const showCiudad=showOficio&&oficioCount===OFICIO.length;\n  const showZero=showCiudad&&ciudadCount===CIUDAD.length;\n\n  const anaParts="""
+          if anchor not in s: raise SystemExit('anchor progreso no encontrado')
+          s=s.replace(anchor,insert,1)
 
-  /* Liberación progresiva canónica. Al inicio sólo existe SOLO LA TARJETA. */
-  const showAna=solo;
-  const showCeniciento=solo;
-  const showMirror=mirrorReady||mirror||mirrorCrossed;
-  const showExpansion=mirrorCrossed;
-  const showInventario=showExpansion;
-  const showOficio=showExpansion&&invCount===INVENTARIO.length;
-  const showCiudad=showOficio&&oficioCount===OFICIO.length;
-  const showZero=showCiudad&&ciudadCount===CIUDAD.length;
+          s=s.replace("""    ...ANA.map(([id,,href])=>!anaDone(id,u)&&href),\n    !cen&&`${ROOT}/elegia-breve/#epilogo`,\n    mirrorReady&&!mirror&&`${ROOT}/ceniciento/?mirror=1`,\n    ...(mirrorCrossed?INVENTARIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),\n    ...(mirrorCrossed?OFICIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),\n    ...(mirrorCrossed?CIUDAD.map(([id])=>!expansionDone(id)&&invHref(id)):[]),\n    mirrorCrossed&&!zeroDone&&invHref('zero')""","""    ...(showAna?ANA.map(([id,,href])=>!anaDone(id,u)&&href):[]),\n    showAna&&anaComplete&&!cen&&`${ROOT}/elegia-breve/#epilogo`,\n    showMirror&&!mirrorCrossed&&`${ROOT}/ceniciento/?mirror=1`,\n    ...(showInventario?INVENTARIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),\n    ...(showOficio?OFICIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),\n    ...(showCiudad?CIUDAD.map(([id])=>!expansionDone(id)&&invHref(id)):[]),\n    showZero&&!zeroDone&&invHref('zero')""",1)
 
-  const anaParts=ANA.map(([id,label,href])=>chip('ana-'+id,label,href,anaDone(id,u))).join('');
-  const invParts=INVENTARIO.map(([id,label])=>chip(id,label,invHref(id),expansionDone(id))).join('');
-  const oficioParts=OFICIO.map(([id,label])=>chip(id,label,invHref(id),expansionDone(id))).join('');
-  const ciudadParts=CIUDAD.map(([id,label])=>chip(id,label,invHref(id),expansionDone(id),id==='atlas'?'is-atlas':'')).join('');
+          s=s.replace("""      <p class=\"oras-mi-sub\">Cada lectura deja una huella.</p>""","""      <p class=\"oras-mi-sub\">Cada lectura deja una huella. Cada huella abre la siguiente puerta.</p>""",1)
 
-  const firstUnread=[
-    !solo&&`${ROOT}/?read=solo`,
-    ...(solo?ANA.map(([id,,href])=>!anaDone(id,u)&&href):[]),
-    solo&&anaComplete&&!cen&&`${ROOT}/elegia-breve/#epilogo`,
-    mirrorReady&&!mirrorCrossed&&`${ROOT}/ceniciento/?mirror=1`,
-    ...(showInventario?INVENTARIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
-    ...(showOficio?OFICIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
-    ...(showCiudad?CIUDAD.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
-    showZero&&!zeroDone&&invHref('zero')
-  ].find(Boolean)||`${ROOT}/?read=solo`;
+          s=s.replace("""      ${card({id:'solo',mark:'1',title:'Solo la tarjeta',meta:solo?'completa':'pendiente',done:solo,href:`${ROOT}/?read=solo`})}\n      ${card({id:'ana',mark:'AK',title:'Ana Klaudya',meta:`${anaCount}/8 huellas`,done:anaComplete,parts:anaParts,open:open.has('ana')})}\n      ${card({id:'ceniciento',mark:'3',title:'Ceniciento',meta:'acceso únicamente por el interrogante',done:cen,href:'',locked:true})}""","""      ${card({id:'solo',mark:'1',title:'Solo la tarjeta',meta:solo?'completa':'primera puerta',done:solo,href:`${ROOT}/?read=solo`})}\n      ${showAna?card({id:'ana',mark:'AK',title:'Ana Klaudya',meta:`${anaCount}/8 huellas`,done:anaComplete,parts:anaParts,open:open.has('ana')}):''}\n      ${showCeniciento?card({id:'ceniciento',mark:'3',title:'Ceniciento',meta:'sólo puede abrirse desde el interrogante de ANA KLAUDYA',done:cen,href:'',locked:true}):''}""",1)
 
-  const lifeCards=[
-    card({id:'solo',mark:'1',title:'Solo la tarjeta',meta:solo?'completa':'primera puerta',done:solo,href:`${ROOT}/?read=solo`}),
-    showAna?card({id:'ana',mark:'AK',title:'Ana Klaudya',meta:`${anaCount}/8 huellas`,done:anaComplete,parts:anaParts,open:open.has('ana')}):'',
-    showCeniciento?card({id:'ceniciento',mark:'3',title:'Ceniciento',meta:'sólo puede abrirse desde el interrogante de ANA KLAUDYA',done:cen,href:'',locked:true}):''
-  ].join('');
+          mirror_block="""\n    <section class=\"oras-mi-section\">\n      ${sectionHead('II · EL UMBRAL',mirror?'1/1':'0/1')}\n      ${card({id:'mirror',mark:'◇',title:'El Espejo',meta:'32 fragmentos',done:mirror,href:`${ROOT}/ceniciento/?mirror=1`,locked:!mirrorReady&&!mirror})}\n    </section>\n"""
+          mirror_new="""\n    ${showMirror?`<section class=\"oras-mi-section\">\n      ${sectionHead('II · EL UMBRAL',mirror?'1/1':'0/1')}\n      ${card({id:'mirror',mark:'◇',title:'El Espejo',meta:'32 fragmentos',done:mirror,href:`${ROOT}/ceniciento/?mirror=1`,locked:!mirrorReady&&!mirror})}\n    </section>`:''}\n"""
+          if mirror_block not in s: raise SystemExit('bloque espejo no encontrado')
+          s=s.replace(mirror_block,mirror_new,1)
 
-  const mirrorSection=showMirror?`
-    <section class="oras-mi-section">
-      ${sectionHead('II · EL UMBRAL',mirror?'1/1':'0/1')}
-      ${card({id:'mirror',mark:'◇',title:'El Espejo',meta:'32 fragmentos',done:mirror,href:`${ROOT}/ceniciento/?mirror=1`,locked:!mirrorReady&&!mirror})}
-    </section>`:'';
-
-  const expansionCards=[
-    showInventario?card({id:'inventario',mark:'4',title:'El inventario del aire',meta:`${invCount}/${INVENTARIO.length} huellas`,done:invCount===INVENTARIO.length,parts:invParts,open:open.has('inventario')}):'',
-    showOficio?card({id:'oficio',mark:'5',title:'El oficio de las sombras',meta:`${oficioCount}/${OFICIO.length} huellas`,done:oficioCount===OFICIO.length,parts:oficioParts,open:open.has('oficio')}):'',
-    showCiudad?card({id:'ciudad',mark:'6',title:'La ciudad que aprendió a olvidar',meta:`${ciudadCount}/${CIUDAD.length} huellas`,done:ciudadCount===CIUDAD.length,parts:ciudadParts,open:open.has('ciudad')}):''
-  ].join('');
-
-  const expansionSection=showExpansion?`
-    <section class="oras-mi-section">
-      ${sectionHead('III · LA EXPANSIÓN',`${expansionCount}/${INVENTARIO.length+OFICIO.length+CIUDAD.length}`)}
-      ${expansionCards}
-    </section>`:'';
-
-  const zeroSection=showZero?`
-    <section class="oras-mi-section">
-      ${sectionHead('IV · EL CERO',zeroDone?'1/1':'0/1')}
-      ${card({id:'zero',mark:'0',title:'La Habitación Número Cero',meta:zeroDone?'completa':'pendiente',done:zeroDone,href:invHref('zero')})}
-    </section>`:'';
-
-  index.querySelector('.oras-mi-shell').innerHTML=`
-    <header class="oras-mi-hero">
-      <div class="oras-mi-kicker">ORAS · Lo que queda de las horas</div>
-      <h1 class="oras-mi-title">Índice de lectura</h1>
-      <p class="oras-mi-sub">Cada lectura deja una huella. Cada huella abre la siguiente puerta.</p>
-      <div class="oras-mi-progress-card" aria-label="${p.done} de ${p.total} huellas leídas">
-        <div class="oras-mi-progress-num">${p.done}/${p.total}<small>huellas leídas</small></div>
-        <div class="oras-mi-progress-track"><span class="oras-mi-progress-fill" style="width:${pct}%"></span></div>
-        <div class="oras-mi-progress-pct">${pct}%</div>
-      </div>
-    </header>
-
-    <section class="oras-mi-section">
-      ${sectionHead('I · LA VIDA',`${lifeWorks}/3`)}
-      ${lifeCards}
-    </section>
-    ${mirrorSection}
-    ${expansionSection}
-    ${zeroSection}`;
-
-  index.querySelector('.oras-mi-bottom').innerHTML=`
-    <button class="oras-mi-home" type="button" data-home><span class="oras-mi-bottom-icon">⌂</span><span>Inicio</span></button>
-    <a class="oras-mi-continue" href="${firstUnread}"><span class="oras-mi-bottom-icon">▤</span><span>${p.done===p.total?'Volver a leer':'Continuar'}</span></a>`;
-
-  index.querySelectorAll('[data-toggle]').forEach(button=>{
-    button.addEventListener('click',()=>{
-      const id=button.dataset.toggle;
-      const cardNode=index.querySelector(`[data-card="${id}"]`);
-      if(!cardNode)return;
-      const next=cardNode.dataset.open!=='true';
-      cardNode.dataset.open=String(next);
-      button.setAttribute('aria-expanded',String(next));
-      button.setAttribute('aria-label',`${next?'Cerrar':'Abrir'} ${cardNode.querySelector('.oras-mi-card-title')?.textContent||id}`);
-      const set=getOpen();
-      next?set.add(id):set.delete(id);
-      saveOpen(set);
-      if(next&&matchMedia('(max-width:700px)').matches){
-        setTimeout(()=>cardNode.scrollIntoView({block:'nearest',behavior:'smooth'}),40);
-      }
-    });
-  });
-  index.querySelector('[data-home]')?.addEventListener('click',closeIndex);
-}
-'''
-
-          pattern=r'function render\(\)\{.*?\n\}\n\nfunction openIndex\(\)\{'
-          if not re.search(pattern,s,flags=re.S):
-              raise SystemExit('No se encontró render() canónico')
-          s=re.sub(pattern,new_render+'\nfunction openIndex(){',s,count=1,flags=re.S)
+          expansion_block="""\n    <section class=\"oras-mi-section\">\n      ${sectionHead('III · LA EXPANSIÓN',mirrorCrossed?`${expansionCount}/${INVENTARIO.length+OFICIO.length+CIUDAD.length}`:'bloqueada')}\n      ${card({id:'inventario',mark:'4',title:'El inventario del aire',meta:mirrorCrossed?`${invCount}/${INVENTARIO.length} huellas`:'atraviesa EL ESPEJO',done:invCount===INVENTARIO.length,parts:invParts,open:open.has('inventario'),locked:!mirrorCrossed})}\n      ${card({id:'oficio',mark:'5',title:'El oficio de las sombras',meta:mirrorCrossed?`${oficioCount}/${OFICIO.length} huellas`:'atraviesa EL ESPEJO',done:oficioCount===OFICIO.length,parts:oficioParts,open:open.has('oficio'),locked:!mirrorCrossed})}\n      ${card({id:'ciudad',mark:'6',title:'La ciudad que aprendió a olvidar',meta:mirrorCrossed?`${ciudadCount}/${CIUDAD.length} huellas`:'atraviesa EL ESPEJO',done:ciudadCount===CIUDAD.length,parts:ciudadParts,open:open.has('ciudad'),locked:!mirrorCrossed})}\n    </section>\n\n    <section class=\"oras-mi-section\">\n      ${sectionHead('IV · EL CERO',mirrorCrossed?(zeroDone?'1/1':'0/1'):'bloqueado')}\n      ${card({id:'zero',mark:'0',title:'La Habitación Número Cero',meta:mirrorCrossed?(zeroDone?'completa':'pendiente'):'atraviesa EL ESPEJO',done:zeroDone,href:invHref('zero'),locked:!mirrorCrossed})}\n    </section>"""
+          expansion_new="""\n    ${showExpansion?`<section class=\"oras-mi-section\">\n      ${sectionHead('III · LA EXPANSIÓN',`${expansionCount}/${INVENTARIO.length+OFICIO.length+CIUDAD.length}`)}\n      ${showInventario?card({id:'inventario',mark:'4',title:'El inventario del aire',meta:`${invCount}/${INVENTARIO.length} huellas`,done:invCount===INVENTARIO.length,parts:invParts,open:open.has('inventario')}):''}\n      ${showOficio?card({id:'oficio',mark:'5',title:'El oficio de las sombras',meta:`${oficioCount}/${OFICIO.length} huellas`,done:oficioCount===OFICIO.length,parts:oficioParts,open:open.has('oficio')}):''}\n      ${showCiudad?card({id:'ciudad',mark:'6',title:'La ciudad que aprendió a olvidar',meta:`${ciudadCount}/${CIUDAD.length} huellas`,done:ciudadCount===CIUDAD.length,parts:ciudadParts,open:open.has('ciudad')}):''}\n    </section>`:''}\n\n    ${showZero?`<section class=\"oras-mi-section\">\n      ${sectionHead('IV · EL CERO',zeroDone?'1/1':'0/1')}\n      ${card({id:'zero',mark:'0',title:'La Habitación Número Cero',meta:zeroDone?'completa':'pendiente',done:zeroDone,href:invHref('zero')})}\n    </section>`:''}"""
+          if expansion_block not in s: raise SystemExit('bloque expansión no encontrado')
+          s=s.replace(expansion_block,expansion_new,1)
           p.write_text(s,encoding='utf-8')
+          PY
 
-          # Forzar nueva URL pública del índice en cualquier HTML que la cargue.
-          for html in Path('.').rglob('*.html'):
-              h=html.read_text(encoding='utf-8')
-              n=re.sub(r'oras-master-index-r1\.js\?v=[^"\'<>\s]+','oras-master-index-r1.js?v=20261014-master-index-12',h)
-              if n!=h: html.write_text(n,encoding='utf-8')
-
-      - name: Validar
+      - name: Validar y publicar
         run: |
           node --check oras-master-index-r1.js
           grep -Fq "const showAna=solo;" oras-master-index-r1.js
-          grep -Fq "const showMirror=mirrorReady||mirror||mirrorCrossed;" oras-master-index-r1.js
-          grep -Fq "const showOficio=showExpansion&&invCount===INVENTARIO.length;" oras-master-index-r1.js
           grep -Fq "sólo puede abrirse desde el interrogante" oras-master-index-r1.js
-
-      - name: Publicar
-        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add oras-master-index-r1.js '*.html' */index.html 2>/dev/null || true
-          if git diff --cached --quiet; then exit 0; fi
+          git add oras-master-index-r1.js
           git commit -m "ORAS: libera el índice de forma progresiva"
           git pull --rebase origin main
           git push
