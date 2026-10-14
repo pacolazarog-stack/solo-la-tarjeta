@@ -2,7 +2,7 @@
 'use strict';
 const ROOT='/solo-la-tarjeta/';
 const STORAGE='oras.universe.v2';
-const VERSION='20261012-mirror-gates-4';
+const VERSION='20261014-mirror-direct-5';
 const INVENTORY_URL=ROOT+'inventario-del-aire/?from=mirror&v='+VERSION;
 const scenes=[
 `No era la misma historia.`,
@@ -256,4 +256,17 @@ window.addEventListener('oras:mirror-reset',()=>{
   clearedPauses.clear();
   mirror.style.transition='';mirror.style.opacity='';mirror.hidden=true;document.body.classList.remove('mirror');
 });
+
+/* Acceso exacto desde el índice: abre EL ESPEJO, no CENICIENTO. */
+const directMirrorRequested=new URLSearchParams(location.search).get('mirror')==='1';
+if(directMirrorRequested){
+  let state={};
+  try{state=JSON.parse(localStorage.getItem(STORAGE)||'{}')||{}}catch(_){}
+  const allowed=state.anaComplete===true&&state.soloComplete===true&&state.cenicientoComplete===true;
+  if(allowed){
+    requestAnimationFrame(()=>requestAnimationFrame(start));
+  }else{
+    location.replace(ROOT+'?indice=1');
+  }
+}
 })();

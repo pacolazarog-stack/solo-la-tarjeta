@@ -2,7 +2,7 @@
 'use strict';
 const KEY='oras.reading.index.v1';
 const GO=new URLSearchParams(location.search).get('go');
-const VERSION=3;
+const VERSION=4;
 
 /* Los identificadores ciu-10…ciu-13 conservan la identidad histórica de cada
    capítulo para no perder checks ya almacenados. Cambia el número visible, no
@@ -20,6 +20,13 @@ const MAP=[
   ['ciu-10',/\bXIII\.?\s+LA [ÚU]LTIMA SALA\b/],
   ['zero',/HABITACI[ÓO]N N[ÚU]MERO CERO/]
 ];
+
+const TARGET_KEYS={
+  'inv-1':'entry','inv-2':'clock','inv-3':'kitchen','inv-4':'corridor','inv-5':'bedroom','inv-6':'garden','inv-7':'inventory','inv-8':'exit',
+  'som-1':'station','som-2':'inspector','som-3':'shadows','som-4':'row-seven','som-5':'conversation','som-6':'mobile-inventory','som-7':'workshop','som-8':'office','som-9':'last-journey',
+  'ciu-1':'plaza','ciu-2':'archivist','ciu-3':'fountain','ciu-4':'resisters','ciu-5':'map','ciu-6':'theory','ciu-7':'museum','ciu-8':'visitor','ciu-9':'winter',
+  'ciu-11':'deep-archive','ciu-12':'trace-machine','atlas':'atlas','ciu-13':'resonator','ciu-10':'last-room'
+};
 
 const norm=s=>(s||'').replace(/\s+/g,' ').trim().toUpperCase();
 const read=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'null')||{version:VERSION,done:{}}}catch(_){return{version:VERSION,done:{}}}};
@@ -42,10 +49,18 @@ function zeroTarget(){
     null;
 }
 function panelForId(id){
-  if(id==='atlas')return document.querySelector('.story-panel.atlas-panel-r6,.story-panel.atlas-panel');
   if(id==='zero'){
     const marker=zeroTarget();
     return marker?.closest('.story-panel')||marker||null;
+  }
+  if(id==='atlas'){
+    const atlas=document.querySelector('.story-panel.atlas-panel-r6,.story-panel.atlas-panel,[data-chapter="atlas"]');
+    return atlas?.closest('.story-panel')||atlas||null;
+  }
+  const key=TARGET_KEYS[id];
+  if(key){
+    const marker=document.querySelector(`[data-chapter="${key}"]`);
+    if(marker)return marker.closest('.story-panel')||marker;
   }
   return [...document.querySelectorAll('.story-panel')].find(p=>idForPanel(p)===id)||null;
 }

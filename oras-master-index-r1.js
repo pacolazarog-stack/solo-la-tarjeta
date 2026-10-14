@@ -13,7 +13,7 @@ const ROOT='/solo-la-tarjeta';
 const UKEY='oras.universe.v2';
 const GKEY='oras.reading.index.v1';
 const OPENKEY='oras.master.index.open.v1';
-const VERSION='20261014-master-index-9';
+const VERSION='20261014-master-index-10';
 
 const ANA=[
   ['estrella','Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`],
@@ -157,7 +157,7 @@ html.oras-master-entry,html.oras-master-entry body{overflow:hidden!important;bac
 .oras-mi-section-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}.oras-mi-section-name{font:500 .78rem/1.1 system-ui,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:rgba(243,231,207,.72);white-space:nowrap}.oras-mi-section-line{height:1px;flex:1;background:var(--oras-line-soft)}.oras-mi-section-count{font:500 .68rem/1 system-ui,sans-serif;color:rgba(243,231,207,.5);white-space:nowrap}
 
 .oras-mi-card{margin:8px 0;border:1px solid var(--oras-line);border-radius:var(--oras-radius);overflow:hidden;background:linear-gradient(180deg,rgba(18,16,13,.95),rgba(10,10,9,.97));box-shadow:0 8px 28px rgba(0,0,0,.12)}
-.oras-mi-card.is-locked{opacity:.46}
+.oras-mi-card.is-locked{opacity:.46}.oras-mi-card.is-locked .oras-mi-card-action{pointer-events:none;cursor:default}
 .oras-mi-card-main{display:grid;grid-template-columns:54px 22px minmax(0,1fr) var(--oras-control);gap:11px;align-items:center;min-height:68px;padding:7px 9px 7px 8px}
 .oras-mi-card-mark{width:54px;height:54px;border-radius:13px;display:grid;place-items:center;border:1px solid rgba(223,197,138,.16);background:radial-gradient(circle at 30% 25%,rgba(235,205,143,.14),transparent 45%),linear-gradient(145deg,#19150f,#090908);font:400 1.1rem/1 Georgia,serif;letter-spacing:.03em;color:rgba(241,219,165,.86)}
 .oras-mi-state{width:18px;height:18px;border:1px solid rgba(241,219,165,.45);border-radius:50%;display:grid;place-items:center;color:#161109;background:transparent;font:800 11px/1 system-ui,sans-serif}
@@ -244,8 +244,8 @@ function render(){
   const firstUnread=[
     !solo&&`${ROOT}/?read=solo`,
     ...ANA.map(([id,,href])=>!anaDone(id,u)&&href),
-    !cen&&`${ROOT}/ceniciento/`,
-    mirrorReady&&!mirror&&`${ROOT}/ceniciento/`,
+    !cen&&`${ROOT}/elegia-breve/#epilogo`,
+    mirrorReady&&!mirror&&`${ROOT}/ceniciento/?mirror=1`,
     ...INVENTARIO.map(([id])=>!expansionDone(id)&&invHref(id)),
     ...OFICIO.map(([id])=>!expansionDone(id)&&invHref(id)),
     ...CIUDAD.map(([id])=>!expansionDone(id)&&invHref(id)),
@@ -268,12 +268,12 @@ function render(){
       ${sectionHead('I · LA VIDA',`${lifeWorks}/3`)}
       ${card({id:'solo',mark:'1',title:'Solo la tarjeta',meta:solo?'completa':'pendiente',done:solo,href:`${ROOT}/?read=solo`})}
       ${card({id:'ana',mark:'AK',title:'Ana Klaudya',meta:`${anaCount}/8 huellas`,done:anaComplete,parts:anaParts,open:open.has('ana')})}
-      ${card({id:'ceniciento',mark:'3',title:'Ceniciento',meta:cen?'completa':'pendiente',done:cen,href:`${ROOT}/ceniciento/`})}
+      ${card({id:'ceniciento',mark:'3',title:'Ceniciento',meta:'acceso únicamente por el interrogante',done:cen,href:'',locked:true})}
     </section>
 
     <section class="oras-mi-section">
       ${sectionHead('II · EL UMBRAL',mirror?'1/1':'0/1')}
-      ${card({id:'mirror',mark:'◇',title:'El Espejo',meta:'32 fragmentos',done:mirror,href:`${ROOT}/ceniciento/`,locked:!mirrorReady&&!mirror})}
+      ${card({id:'mirror',mark:'◇',title:'El Espejo',meta:'32 fragmentos',done:mirror,href:`${ROOT}/ceniciento/?mirror=1`,locked:!mirrorReady&&!mirror})}
     </section>
 
     <section class="oras-mi-section">
