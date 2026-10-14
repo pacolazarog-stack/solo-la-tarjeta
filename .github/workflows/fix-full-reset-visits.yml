@@ -1,0 +1,67 @@
+name: Corregir reinicio completo de huellas ORAS
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-full-reset-visits.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reiniciar todas las huellas al comenzar un nuevo ciclo
+        shell: python
+        run: |
+          from pathlib import Path
+
+          p = Path('narrative-universe.js')
+          s = p.read_text(encoding='utf-8')
+
+          s = s.replace("const STORAGE='oras.universe.v2';\n", "const STORAGE='oras.universe.v2';\nconst GENERAL='oras.reading.index.v1';\n", 1)
+          s = s.replace("const VERSION='20261014-reading-counter-fix-1';", "const VERSION='20261014-reading-counter-fix-2';", 1)
+
+          old = '''function emptyAnaParts(){return Object.fromEntries(ANA_KEYS.map(key=>[key,false]));}\n\n/*\n  La implementación heredada reinicia los tres trabajos al terminar EL ESPEJO,\n  pero podía dejar las ocho marcas internas de ANA KLAUDYA a true. El índice\n  nuevo reconstruía entonces anaComplete y hacía reaparecer una lectura ya\n  reiniciada. Si estamos inequívocamente en ese estado de retorno, limpiamos\n  también las ocho marcas internas.\n*/\nfunction clearStaleAnaAfterMirror(){\n  const state=readState();\n  const staleParts=ANA_KEYS.some(key=>state.anaParts?.[key]===true);\n  const resetShape=\n    state.returnedFromCeniciento===true &&\n    state.anaComplete===false &&\n    state.soloComplete===false &&\n    state.cenicientoComplete===false;\n  if(resetShape&&staleParts)writeState({anaParts:emptyAnaParts()});\n}\n'''
+
+          new = '''function emptyAnaParts(){return Object.fromEntries(ANA_KEYS.map(key=>[key,false]));}\nfunction readGeneral(){\n  try{return JSON.parse(localStorage.getItem(GENERAL)||'{}')||{}}catch(_){return {}}\n}\nfunction clearGeneralVisits(){\n  try{\n    const current=readGeneral();\n    localStorage.setItem(GENERAL,JSON.stringify(Object.assign({},current,{done:{}})));\n  }catch(_){\n    try{localStorage.setItem(GENERAL,JSON.stringify({done:{}}))}catch(__){}\n  }\n}\n\n/*\n  CANON ORAS: un reinicio abre un ciclo de lectura nuevo. Ninguna huella anterior\n  puede seguir marcada como visitada. Se conservan sólo recuerdos no contables\n  (por ejemplo realityDeformed), pero se limpian VIDA, ESPEJO, EXPANSIÓN y CERO.\n*/\nfunction clearStaleVisitsAfterRestart(){\n  const state=readState();\n  const general=readGeneral();\n  const staleParts=ANA_KEYS.some(key=>state.anaParts?.[key]===true);\n  const staleGeneral=Object.values(general.done||{}).some(value=>value===true||value?.done===true);\n  const staleMirror=state.mirrorReadComplete===true||state.mirrorCrossed===true;\n  const resetShape=\n    state.returnedFromCeniciento===true &&\n    state.anaComplete===false &&\n    state.soloComplete===false &&\n    state.cenicientoComplete===false;\n  if(!resetShape||(!staleParts&&!staleGeneral&&!staleMirror))return;\n\n  clearGeneralVisits();\n  writeState({\n    anaParts:emptyAnaParts(),\n    mirrorReadComplete:false,\n    mirrorCrossed:false\n  });\n}\n'''
+
+          if old not in s:
+              raise SystemExit('No se encontró el bloque de reinicio anterior')
+          s = s.replace(old, new, 1)
+          s = s.replace('clearStaleAnaAfterMirror();', 'clearStaleVisitsAfterRestart();')
+          s = s.replace("addEventListener('oras:mirror-returned',clearStaleAnaAfterMirror);", "addEventListener('oras:mirror-returned',clearStaleVisitsAfterRestart);")
+          s = s.replace("addEventListener('pageshow',clearStaleAnaAfterMirror);", "addEventListener('pageshow',clearStaleVisitsAfterRestart);")
+          s = s.replace("document.addEventListener('visibilitychange',()=>{if(!document.hidden)clearStaleAnaAfterMirror()});", "document.addEventListener('visibilitychange',()=>{if(!document.hidden)clearStaleVisitsAfterRestart()});")
+          s = s.replace('setTimeout(clearStaleAnaAfterMirror,0);', 'setTimeout(clearStaleVisitsAfterRestart,0);')
+          s = s.replace('setTimeout(clearStaleAnaAfterMirror,650);', 'setTimeout(clearStaleVisitsAfterRestart,650);')
+          p.write_text(s, encoding='utf-8')
+
+          # La rutina global que actualiza URLs no debe volver a imponer una caché antigua.
+          w = Path('.github/workflows/bump-ana-universe-cache.yml')
+          ws = w.read_text(encoding='utf-8')
+          ws = ws.replace("version = '20261013-audio-groups-1'", "version = '20261014-reading-counter-fix-2'", 1)
+          w.write_text(ws, encoding='utf-8')
+
+      - name: Validar sintaxis
+        run: |
+          node --check narrative-universe.js
+          grep -Fq "const GENERAL='oras.reading.index.v1';" narrative-universe.js
+          grep -Fq "clearGeneralVisits();" narrative-universe.js
+          grep -Fq "mirrorCrossed:false" narrative-universe.js
+          grep -Fq "version = '20261014-reading-counter-fix-2'" .github/workflows/bump-ana-universe-cache.yml
+
+      - name: Publicar corrección
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add narrative-universe.js .github/workflows/bump-ana-universe-cache.yml
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "ORAS: reinicia todas las huellas al comenzar un nuevo ciclo"
+          git push
