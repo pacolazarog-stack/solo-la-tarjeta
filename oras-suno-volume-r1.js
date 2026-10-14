@@ -4,11 +4,62 @@ if(window.__orasSunoVolumeInstalled)return;
 window.__orasSunoVolumeInstalled=true;
 
 /* Salvaguarda de ANA KLAUDYA: la pantalla "Preparando la lectura…" nunca puede quedar bloqueada indefinidamente. */
-if(location.pathname.includes('/elegia-breve/')){
+const IS_ANA=location.pathname.includes('/elegia-breve/');
+if(IS_ANA){
   const releaseAnaGate=()=>document.documentElement.classList.remove('publication-pending');
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(releaseAnaGate,120),{once:true});
   else setTimeout(releaseAnaGate,120);
   setTimeout(releaseAnaGate,1800);
+
+  /*
+    En el final restaurado de ANA KLAUDYA no se mantienen animaciones, filtros ni
+    transiciones de pantalla completa. Conservamos la imagen y la composición,
+    pero liberamos la GPU para que Anterior, Siguiente, Índice ORAS y audio
+    respondan siempre. Esta clase sólo se activa al llegar al retrato/final.
+  */
+  const perfStyle=document.createElement('style');
+  perfStyle.id='oras-ana-final-stability-r1';
+  perfStyle.textContent=`
+    body.oras-ana-static-final .world *,
+    body.oras-ana-static-final .portrait-finale,
+    body.oras-ana-static-final .portrait-finale *,
+    body.oras-ana-static-final .pulse-field,
+    body.oras-ana-static-final .pulse-field::before,
+    body.oras-ana-static-final .pulse-field::after,
+    body.oras-ana-static-final .layer-warm,
+    body.oras-ana-static-final .heat-final{
+      animation:none!important;
+      transition:none!important;
+      filter:none!important;
+      -webkit-filter:none!important;
+      backdrop-filter:none!important;
+      -webkit-backdrop-filter:none!important;
+      will-change:auto!important;
+    }
+    body.oras-ana-static-final .portrait-finale img{opacity:1!important;transition:none!important;filter:none!important}
+    body.oras-ana-static-final #journeyNav,
+    body.oras-ana-static-final #journeyNav button,
+    body.oras-ana-static-final #orasSunoVolume,
+    body.oras-ana-static-final .ou-reading-window-r2{pointer-events:auto!important}
+    body.oras-ana-static-final #journeyNav{z-index:2147483600!important}
+  `;
+  document.head.appendChild(perfStyle);
+  const stabilizeAna=()=>{
+    const b=document.body;if(!b)return;
+    const finalVisible=b.classList.contains('portrait-revealed')||b.dataset.ouCompletedAnaFinal==='true';
+    if(finalVisible&&!b.classList.contains('oras-ana-static-final')){
+      b.classList.add('oras-ana-static-final');
+      document.querySelectorAll('.pulse-field,.layer-warm,.heat-final').forEach(el=>{
+        try{el.getAnimations().forEach(a=>a.cancel())}catch(_){}
+      });
+    }
+  };
+  const armAnaStability=()=>{
+    stabilizeAna();
+    if(document.body)new MutationObserver(stabilizeAna).observe(document.body,{attributes:true,attributeFilter:['class','data-ou-completed-ana-final']});
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',armAnaStability,{once:true});else armAnaStability();
+  setTimeout(stabilizeAna,250);setTimeout(stabilizeAna,1800);
 }
 
 const STORE='oras.master.volume.v1';
