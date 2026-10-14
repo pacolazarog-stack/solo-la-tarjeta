@@ -2,7 +2,7 @@
 'use strict';
 
 const STORAGE='oras.universe.v2';
-const VERSION='20261014-reading-window-3';
+const VERSION='20261013-ana-portrait-prev-next-1';
 const BASE='/solo-la-tarjeta';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
