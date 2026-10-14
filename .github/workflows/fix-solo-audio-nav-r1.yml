@@ -24,7 +24,7 @@ jobs:
               if '.git' in p.parts:
                   continue
               s=p.read_text(encoding='utf-8')
-              s=re.sub(r'oras-suno-volume-r1\.js\?v=[^"\'<>\s]+','oras-suno-volume-r1.js?v=20261014-suno-volume-6',s)
+              s=re.sub(r'oras-suno-volume-r1\.js\?v=[^"\'<>\s]+','oras-suno-volume-r1.js?v=20261014-suno-volume-7',s)
               s=re.sub(r'ana-klaudya/publication\.js\?v=[^"\'<>\s]+','ana-klaudya/publication.js?v=20261014-ana-stable-1',s)
               s=re.sub(r'\.\./ana-klaudya/publication\.js\?v=[^"\'<>\s]+','../ana-klaudya/publication.js?v=20261014-ana-stable-1',s)
               p.write_text(s,encoding='utf-8')
