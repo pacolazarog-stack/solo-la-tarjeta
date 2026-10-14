@@ -20,23 +20,19 @@ jobs:
           from pathlib import Path
           import re
 
-          # Fuerza versión nueva del mando único de audio en todas las pantallas que ya lo cargan.
           for p in Path('.').rglob('*.html'):
               if '.git' in p.parts:
                   continue
               s=p.read_text(encoding='utf-8')
-              s=re.sub(r'oras-suno-volume-r1\.js\?v=[^"\'<>\s]+','oras-suno-volume-r1.js?v=20261014-suno-volume-5',s)
+              s=re.sub(r'oras-suno-volume-r1\.js\?v=[^"\'<>\s]+','oras-suno-volume-r1.js?v=20261014-suno-volume-6',s)
               p.write_text(s,encoding='utf-8')
 
           p=Path('index.html')
           s=p.read_text(encoding='utf-8')
-
-          # Oculta el antiguo botón blanco de audio desde el primer frame, sin depender de JS tardío.
           hard_hide='''<style id="oras-single-audio-control-r1">\n.sound-toggle,#soundToggle{display:none!important;visibility:hidden!important;pointer-events:none!important}\n</style>'''
           if 'id="oras-single-audio-control-r1"' not in s:
               s=s.replace('</head>',hard_hide+'\n</head>',1)
 
-          # Navegación fija Anterior / Siguiente para SOLO LA TARJETA.
           solo_nav=r'''<script id="oras-solo-prev-next-r1">
           (()=>{
             'use strict';
@@ -44,39 +40,15 @@ jobs:
             window.__orasSoloPrevNextR1=true;
             const clean=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');
             if(clean!=='/solo-la-tarjeta')return;
-
             const style=document.createElement('style');
-            style.textContent=`
-              #orasSoloPrevNext{position:fixed;z-index:2147483644;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);display:grid;grid-template-columns:1fr 1fr;width:min(360px,calc(100vw - 250px));min-width:230px;height:42px;border-top:1px solid rgba(255,255,255,.34);background:rgba(8,8,8,.08);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
-              #orasSoloPrevNext button{appearance:none;border:0;background:transparent;color:#fffaf1;text-shadow:0 1px 4px rgba(0,0,0,.9);font:500 12px/1 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.04em;cursor:pointer}
-              #orasSoloPrevNext button+button{border-left:1px solid rgba(255,255,255,.22)}
-              #orasSoloPrevNext button:focus-visible{outline:1px solid rgba(255,255,255,.65);outline-offset:-2px}
-              @media(max-width:700px){#orasSoloPrevNext{bottom:max(10px,env(safe-area-inset-bottom));width:min(220px,calc(100vw - 132px));min-width:160px;height:40px}#orasSoloPrevNext button{font-size:11px}}
-            `;
+            style.textContent=`#orasSoloPrevNext{position:fixed;z-index:2147483644;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);display:grid;grid-template-columns:1fr 1fr;width:min(360px,calc(100vw - 250px));min-width:230px;height:42px;border-top:1px solid rgba(255,255,255,.34);background:rgba(8,8,8,.08);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}#orasSoloPrevNext button{appearance:none;border:0;background:transparent;color:#fffaf1;text-shadow:0 1px 4px rgba(0,0,0,.9);font:500 12px/1 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.04em;cursor:pointer}#orasSoloPrevNext button+button{border-left:1px solid rgba(255,255,255,.22)}#orasSoloPrevNext button:focus-visible{outline:1px solid rgba(255,255,255,.65);outline-offset:-2px}@media(max-width:700px){#orasSoloPrevNext{bottom:max(10px,env(safe-area-inset-bottom));width:min(220px,calc(100vw - 132px));min-width:160px;height:40px}#orasSoloPrevNext button{font-size:11px}}`;
             document.head.appendChild(style);
-
             const nav=document.createElement('nav');
             nav.id='orasSoloPrevNext';nav.setAttribute('aria-label','Navegación de SOLO LA TARJETA');
             nav.innerHTML='<button type="button" data-dir="-1" aria-label="Anterior">Anterior</button><button type="button" data-dir="1" aria-label="Siguiente">Siguiente</button>';
             document.body.appendChild(nav);
-
-            const centers=()=>{
-              const preferred=[...document.querySelectorAll('.dusk-beat,.hero,.two-days-passage,.paris-section,.closing-section,.pre-final')];
-              const visible=preferred.filter(el=>{const r=el.getBoundingClientRect();return r.height>8&&getComputedStyle(el).display!=='none'});
-              return visible.length?visible:[];
-            };
-            const move=dir=>{
-              const nodes=centers();
-              const y=scrollY+innerHeight*.50;
-              if(nodes.length){
-                const pts=nodes.map(el=>({el,y:el.offsetTop+Math.min(el.offsetHeight/2,innerHeight*.45)})).sort((a,b)=>a.y-b.y);
-                let target=null;
-                if(dir>0)target=pts.find(p=>p.y>y+24)||pts.at(-1);
-                else target=[...pts].reverse().find(p=>p.y<y-24)||pts[0];
-                if(target){scrollTo({top:Math.max(0,target.y-innerHeight*.48),behavior:'smooth'});return;}
-              }
-              scrollBy({top:dir*innerHeight*.78,behavior:'smooth'});
-            };
+            const centers=()=>{const preferred=[...document.querySelectorAll('.dusk-beat,.hero,.two-days-passage,.paris-section,.closing-section,.pre-final')];return preferred.filter(el=>{const r=el.getBoundingClientRect();return r.height>8&&getComputedStyle(el).display!=='none'})};
+            const move=dir=>{const nodes=centers();const y=scrollY+innerHeight*.50;if(nodes.length){const pts=nodes.map(el=>({el,y:el.offsetTop+Math.min(el.offsetHeight/2,innerHeight*.45)})).sort((a,b)=>a.y-b.y);let target=null;if(dir>0)target=pts.find(p=>p.y>y+24)||pts.at(-1);else target=[...pts].reverse().find(p=>p.y<y-24)||pts[0];if(target){scrollTo({top:Math.max(0,target.y-innerHeight*.48),behavior:'smooth'});return;}}scrollBy({top:dir*innerHeight*.78,behavior:'smooth'});};
             nav.addEventListener('click',e=>{const b=e.target.closest('button[data-dir]');if(b)move(Number(b.dataset.dir))});
           })();
           </script>'''
@@ -92,5 +64,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html '*.html' '**/*.html'
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "ORAS: actualiza caché del control de audio con silencio"
+          git commit -m "ORAS: actualiza caché del audio y libera ANA KLAUDYA"
           git push
