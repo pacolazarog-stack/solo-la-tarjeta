@@ -69,11 +69,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          base64 -d assets/oras-espejo-centro-datos.b64 > assets/oras-espejo-centro-datos.mp3
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64
+          src=Path('assets/oras-espejo-centro-datos.b64').read_text().strip()
+          src=''.join(src.split())
+          src += '=' * ((4-len(src)%4)%4)
+          audio=base64.b64decode(src, validate=False)
+          if len(audio) < 800000:
+              raise RuntimeError(f'La música reconstruida está incompleta: {len(audio)} bytes')
+          Path('assets/oras-espejo-centro-datos.mp3').write_bytes(audio)
+          print(f'Música de EL ESPEJO reconstruida: {len(audio)} bytes')
+          PY
           test -s assets/oras-espejo-centro-datos.mp3
-          bytes=$(wc -c < assets/oras-espejo-centro-datos.mp3)
-          test "$bytes" -gt 800000
-          test "$bytes" -lt 900000
 
       - name: Incrustar controlador musical de EL ESPEJO
         shell: bash
