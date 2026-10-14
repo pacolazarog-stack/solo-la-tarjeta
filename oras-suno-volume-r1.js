@@ -3,23 +3,29 @@
 if(window.__orasSunoVolumeInstalled)return;
 window.__orasSunoVolumeInstalled=true;
 
+/* Salvaguarda de ANA KLAUDYA: la pantalla "Preparando la lectura…" nunca puede quedar bloqueada indefinidamente. */
+if(location.pathname.includes('/elegia-breve/')){
+  const releaseAnaGate=()=>document.documentElement.classList.remove('publication-pending');
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(releaseAnaGate,120),{once:true});
+  else setTimeout(releaseAnaGate,120);
+  setTimeout(releaseAnaGate,1800);
+}
+
 const STORE='oras.master.volume.v1';
 const style=document.createElement('style');
-style.id='oras-suno-volume-style-r4';
+style.id='oras-suno-volume-style-r3';
 style.textContent=`
 #orasSunoVolume{position:fixed;z-index:2147483646;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
 #orasSunoVolume .oras-vol-button{width:42px;height:42px;border:1px solid rgba(255,255,255,.17);border-radius:9px;background:rgba(9,9,9,.86);display:grid;place-items:center;color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.26);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer;padding:0}
 #orasSunoVolume .oras-vol-button:hover,#orasSunoVolume .oras-vol-button:focus-visible{background:rgba(22,22,22,.96);outline:none;border-color:rgba(255,255,255,.30)}
 #orasSunoVolume .oras-vol-button svg{width:20px;height:20px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-#orasSunoVolume .oras-vol-pop{position:absolute;left:50%;bottom:50px;width:54px;height:206px;padding:10px 6px 8px;border:1px solid rgba(255,255,255,.14);border-radius:11px;background:rgba(9,9,9,.92);box-shadow:0 8px 26px rgba(0,0,0,.30);backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px);display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:6px;opacity:0;visibility:hidden;transform:translate(-50%,6px);transition:opacity .16s ease,transform .16s ease,visibility .16s ease}
+#orasSunoVolume .oras-vol-pop{position:absolute;left:50%;bottom:50px;width:54px;height:206px;padding:10px 6px 8px;border:1px solid rgba(255,255,255,.14);border-radius:11px;background:rgba(9,9,9,.92);box-shadow:0 8px 26px rgba(0,0,0,.30);backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px);display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:7px;opacity:0;visibility:hidden;transform:translate(-50%,6px);transition:opacity .16s ease,transform .16s ease,visibility .16s ease}
 #orasSunoVolume[data-open="true"] .oras-vol-pop{opacity:1;visibility:visible;transform:translate(-50%,0)}
 #orasSunoVolume .oras-vol-track{position:relative;width:30px;height:126px;display:grid;place-items:center;overflow:visible}
 #orasSunoVolume .oras-vol-range{position:absolute;width:118px;height:24px;margin:0;transform:rotate(-90deg);transform-origin:center;accent-color:#fff;cursor:pointer}
 #orasSunoVolume .oras-vol-value{width:100%;text-align:center;color:rgba(255,255,255,.72);font:500 9px/1 system-ui,sans-serif;letter-spacing:.02em}
-#orasSunoVolume .oras-vol-mute{appearance:none;width:38px;min-height:24px;padding:4px 3px;border:1px solid rgba(255,255,255,.15);border-radius:6px;background:rgba(255,255,255,.045);color:rgba(255,255,255,.86);font:600 9px/1 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.03em;cursor:pointer}
-#orasSunoVolume .oras-vol-mute:hover,#orasSunoVolume .oras-vol-mute:focus-visible{background:rgba(255,255,255,.10);outline:none;border-color:rgba(255,255,255,.30)}
-#orasSunoVolume[data-muted="true"] .oras-vol-mute{background:rgba(255,255,255,.14);color:#fff}
-/* Un solo mando visible. Los controles históricos siguen funcionando como backend, pero no se muestran. */
+#orasSunoVolume .oras-vol-mute{appearance:none;width:100%;min-height:26px;padding:3px 2px;border:0;border-top:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.82);font:500 9px/1 system-ui,sans-serif;cursor:pointer}
+#orasSunoVolume .oras-vol-mute:hover,#orasSunoVolume .oras-vol-mute:focus-visible{color:#fff;outline:none}
 body.oras-suno-volume-ready .music,
 body.oras-suno-volume-ready .sound-toggle,
 body.oras-suno-volume-ready #ambientToggle,
@@ -35,14 +41,13 @@ document.head.appendChild(style);
 const root=document.createElement('div');
 root.id='orasSunoVolume';
 root.dataset.open='false';
-root.dataset.muted='false';
-root.innerHTML=`<div class="oras-vol-pop" role="group" aria-label="Volumen"><div class="oras-vol-track"><input class="oras-vol-range" type="range" min="0" max="100" step="1" aria-label="Volumen"></div><span class="oras-vol-value"></span><button class="oras-vol-mute" type="button" aria-pressed="false">Silencio</button></div><button class="oras-vol-button" type="button" aria-label="Volumen" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z"></path><path class="oras-wave-1" d="M16 9.5a4 4 0 0 1 0 5"></path><path class="oras-wave-2" d="M18.5 7a7.5 7.5 0 0 1 0 10"></path></svg></button>`;
+root.innerHTML=`<div class="oras-vol-pop" role="group" aria-label="Volumen"><div class="oras-vol-track"><input class="oras-vol-range" type="range" min="0" max="100" step="1" aria-label="Volumen"></div><span class="oras-vol-value"></span><button class="oras-vol-mute" type="button" aria-label="Silenciar">Silencio</button></div><button class="oras-vol-button" type="button" aria-label="Volumen" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z"></path><path class="oras-wave-1" d="M16 9.5a4 4 0 0 1 0 5"></path><path class="oras-wave-2" d="M18.5 7a7.5 7.5 0 0 1 0 10"></path></svg></button>`;
 document.body.appendChild(root);
 
 const button=root.querySelector('.oras-vol-button');
 const range=root.querySelector('.oras-vol-range');
 const value=root.querySelector('.oras-vol-value');
-const mute=root.querySelector('.oras-vol-mute');
+const muteButton=root.querySelector('.oras-vol-mute');
 let lastNonZero=80;
 try{lastNonZero=Math.max(1,Math.min(100,Number(localStorage.getItem(STORE)||80)))}catch(_){}
 range.value=String(lastNonZero);
@@ -59,10 +64,8 @@ function renderIcon(level){
   root.querySelector('.oras-wave-2').style.display=level>45?'':'none';
   button.setAttribute('aria-label',level>0?`Volumen ${level} %`:'Volumen silenciado');
   value.textContent=level+'%';
-  const muted=level===0;
-  root.dataset.muted=String(muted);
-  mute.setAttribute('aria-pressed',String(muted));
-  mute.textContent=muted?'Activar':'Silencio';
+  muteButton.textContent=level>0?'Silencio':'Activar';
+  muteButton.setAttribute('aria-label',level>0?'Silenciar':'Activar sonido');
 }
 
 async function tryStartAudio(){
@@ -106,11 +109,7 @@ function sync(){
 }
 
 range.addEventListener('input',()=>apply(range.value,true));
-mute.addEventListener('click',e=>{
-  e.stopPropagation();
-  const current=Number(range.value)||0;
-  apply(current>0?0:lastNonZero,true);
-});
+muteButton.addEventListener('click',e=>{e.stopPropagation();const current=Number(range.value)||0;apply(current>0?0:lastNonZero,true)});
 button.addEventListener('click',e=>{
   e.stopPropagation();
   const open=root.dataset.open!=='true';
