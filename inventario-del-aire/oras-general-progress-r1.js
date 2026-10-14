@@ -2,7 +2,7 @@
 'use strict';
 const KEY='oras.reading.index.v1';
 const GO=new URLSearchParams(location.search).get('go');
-const VERSION=2;
+const VERSION=3;
 
 /* Los identificadores ciu-10…ciu-13 conservan la identidad histórica de cada
    capítulo para no perder checks ya almacenados. Cambia el número visible, no
@@ -36,8 +36,17 @@ function idForPanel(panel){
   const title=norm(heading?.textContent||'');
   return MAP.find(([,re])=>re.test(title))?.[0]||null;
 }
+function zeroTarget(){
+  return document.querySelector('[data-world-marker="zero"]') ||
+    [...document.querySelectorAll('h1,h2,h3,.volume-label')].find(el=>/HABITACI[ÓO]N N[ÚU]MERO CERO/.test(norm(el.textContent||''))) ||
+    null;
+}
 function panelForId(id){
   if(id==='atlas')return document.querySelector('.story-panel.atlas-panel-r6,.story-panel.atlas-panel');
+  if(id==='zero'){
+    const marker=zeroTarget();
+    return marker?.closest('.story-panel')||marker||null;
+  }
   return [...document.querySelectorAll('.story-panel')].find(p=>idForPanel(p)===id)||null;
 }
 
@@ -63,21 +72,33 @@ function wirePanel(panel){
     visible=true;consider();
   }
 }
+function wireZero(){
+  const target=zeroTarget();
+  if(!target||target.dataset.orasZeroProgress==='1')return;
+  target.dataset.orasZeroProgress='1';
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(entries=>{
+      if(entries.some(e=>e.isIntersecting)){mark('zero');io.disconnect();}
+    },{threshold:.45});
+    io.observe(target);
+  }
+}
 function wireAtlas(){
   document.querySelectorAll('.atlas-r6-spin,[data-atlas-spin],.atlas-r5-spin').forEach(btn=>{
     if(btn.dataset.orasGeneralProgress)return;
     btn.dataset.orasGeneralProgress='1';btn.addEventListener('click',()=>mark('atlas'),{once:true});
   });
 }
-function scan(){document.querySelectorAll('.story-panel').forEach(wirePanel);wireAtlas();}
+function scan(){document.querySelectorAll('.story-panel').forEach(wirePanel);wireAtlas();wireZero();}
 
 let goDone=false;
 function goToRequested(){
   if(goDone||!GO)return;
-  const panel=panelForId(GO);if(!panel)return;
+  const target=GO==='zero'?zeroTarget():panelForId(GO);
+  if(!target)return;
   goDone=true;
-  requestAnimationFrame(()=>panel.scrollIntoView({block:'start',behavior:'auto'}));
-  setTimeout(()=>panel.focus?.({preventScroll:true}),120);
+  requestAnimationFrame(()=>target.scrollIntoView({block:'start',behavior:'auto'}));
+  setTimeout(()=>target.focus?.({preventScroll:true}),120);
 }
 
 const mo=new MutationObserver(()=>{scan();goToRequested()});
