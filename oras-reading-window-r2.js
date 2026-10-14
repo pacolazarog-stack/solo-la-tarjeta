@@ -2,7 +2,7 @@
 'use strict';
 
 const STORAGE='oras.universe.v2';
-const VERSION='20261014-reading-window-2';
+const VERSION='20261014-reading-window-3';
 const BASE='/solo-la-tarjeta';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
@@ -330,7 +330,7 @@ window.ORASReadingWindowR2={version:VERSION,render,completeAnaPart};
   if(path!=='/solo-la-tarjeta'||window.__orasMasterIndexLoader)return;
   window.__orasMasterIndexLoader=true;
   const script=document.createElement('script');
-  script.src='/solo-la-tarjeta/oras-master-index-r1.js?v=20261014-master-index-6';
+  script.src='/solo-la-tarjeta/oras-master-index-r1.js?v=20261014-master-index-7';
   script.async=false;
   document.head.appendChild(script);
 })();
