@@ -8,7 +8,6 @@ import {setDeformed} from './transitions.js';
 let scrollRAF=0;
 let pauseObserver=null;
 let audioEnded=false;
-let activeContainer=null;
 let cleanupFns=[];
 
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -16,14 +15,11 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 export function cleanupMirror(){
   pauseObserver?.disconnect();pauseObserver=null;
   cleanupFns.forEach(fn=>{try{fn();}catch{}});cleanupFns=[];
-  activeContainer=null;audioEnded=false;scrollRAF=0;
+  audioEnded=false;scrollRAF=0;
 }
 
 function fragmentHTML(text){return text.split(/\n\n+/).map(block=>`<p>${block.split('\n').map(esc).join('<br>')}</p>`).join('');}
-function timeLabel(seconds){
-  seconds=Math.max(0,Math.ceil(seconds||0));
-  return `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`;
-}
+function timeLabel(seconds){seconds=Math.max(0,Math.ceil(seconds||0));return `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`;}
 
 function setFinalGate(host,current=0,duration=0){
   const button=host.querySelector('[data-mirror-final]');
@@ -49,12 +45,13 @@ function updateWarp(container){
 function bindPauses(container){
   pauseObserver=new IntersectionObserver(entries=>{
     for(const entry of entries){
-      if(!entry.isIntersecting||entry.intersectionRatio<.72)return;
+      if(!entry.isIntersecting||entry.intersectionRatio<.72)continue;
       const scene=entry.target;
-      if(scene.dataset.passed==='1')return;
+      if(scene.dataset.passed==='1')continue;
       container.classList.add('is-paused');
       scene.classList.add('awaiting-follow');
       scene.querySelector('[data-mirror-follow]')?.removeAttribute('hidden');
+      break;
     }
   },{root:container,threshold:[.72,.9]});
   container.querySelectorAll('[data-mirror-pause]').forEach(scene=>pauseObserver.observe(scene));
@@ -93,7 +90,7 @@ export function renderMirror(host){
   }).join('');
   host.innerHTML=`<section class="oras-mirror-shell"><header class="oras-mirror-head"><span>II · EL UMBRAL</span><strong>EL ESPEJO</strong><button type="button" data-index>Índice</button></header><div class="oras-mirror-scroll" data-mirror-scroll>${scenes}</div></section>`;
   host.querySelector('[data-index]')?.addEventListener('click',openIndex);
-  const container=host.querySelector('[data-mirror-scroll]');activeContainer=container;
+  const container=host.querySelector('[data-mirror-scroll]');
   bindPauses(container);
   const onScroll=()=>{if(!scrollRAF)scrollRAF=requestAnimationFrame(()=>updateWarp(container));};
   container.addEventListener('scroll',onScroll,{passive:true});cleanupFns.push(()=>container.removeEventListener('scroll',onScroll));
