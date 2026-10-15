@@ -1,3 +1,4 @@
+# trigger 2026-10-15 02:05
 name: Fix ANA start failsafe
 on:
   push:
