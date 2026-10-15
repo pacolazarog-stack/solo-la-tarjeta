@@ -24,6 +24,7 @@ jobs:
           node --check core/router.js
           node --check core/index-modal.js
           node --check core/reader.js
+          node --check core/ana-scenes.js
           node --check core/audio.js
           node --check core/ceniciento.js
           node --check core/mirror.js
@@ -31,9 +32,19 @@ jobs:
           node --check core/transitions.js
           node --check content/manifest.js
           node --check content/life-sources.js
+          node --check content/life-scenes.js
           node --check content/mirror-scenes.js
           node --check scripts/oras-audit.mjs
           node scripts/oras-audit.mjs
+          test -s ana-scenes.css
+          test -s estrella/umbral.jpg
+          test -s ojos/ojos-ana.svg
+          test -s sonrisa/labios-ana.jpg
+          test -s elegia-breve/ana-klaudya-fotografia.jpg
+          test -s interludio/mundo-flores.png
+          test -s interludio/mundo-flores-yin-yang.png
+          test -s interludio/cebolla-pan.png
+          test -s epilogo/cotan-imperative.webp
       - name: Install Playwright Chromium
         shell: bash
         run: |
