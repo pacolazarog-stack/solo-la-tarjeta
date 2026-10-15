@@ -31,103 +31,22 @@ jobs:
   const nacre=document.createElement('style');
   nacre.id='oras-nacre-roulette-r1-style';
   nacre.textContent=`
-  .oras-master-index{
-    --roulette-size:min(90vw,86svh,900px);
-    background:radial-gradient(circle at 50% 42%,rgba(89,66,35,.18),transparent 34%),rgba(3,3,3,.72)!important;
-    backdrop-filter:blur(15px) saturate(.9)!important;
-    -webkit-backdrop-filter:blur(15px) saturate(.9)!important;
-    padding:clamp(10px,2.6vmin,28px)!important;
-    overflow:hidden!important;
-  }
-  .oras-mi-shell{
-    position:relative!important;
-    width:var(--roulette-size)!important;
-    height:var(--roulette-size)!important;
-    max-width:none!important;max-height:none!important;
-    aspect-ratio:1!important;
-    margin:auto!important;padding:0!important;
-    overflow:visible!important;
-    border-radius:50%!important;
-    border:1px solid rgba(245,222,168,.72)!important;
-    background:
-      radial-gradient(circle at 33% 24%,rgba(255,255,255,.33),transparent 9%),
-      radial-gradient(circle at 72% 69%,rgba(255,225,177,.16),transparent 13%),
-      conic-gradient(from 12deg,rgba(255,255,255,.09),rgba(142,106,65,.08),rgba(255,245,216,.13),rgba(96,74,47,.07),rgba(255,255,255,.1)),
-      radial-gradient(circle at 50% 50%,#cdbb98 0 22%,#6b5941 22.4% 23.2%,#17130f 23.5% 73%,#aa9166 73.2% 74%,#d7c6a4 74.3% 78%,#3a3024 78.2% 79%,#0b0907 79.2% 100%)!important;
-    box-shadow:0 34px 120px rgba(0,0,0,.8),0 0 46px rgba(214,186,129,.13),inset 0 0 0 3px rgba(255,255,255,.035),inset 0 0 54px rgba(247,229,189,.11)!important;
-  }
-  .oras-mi-shell::before{
-    content:"";position:absolute;z-index:1;left:50%;top:50%;width:39%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;
-    background:
-      radial-gradient(circle at 36% 31%,rgba(255,255,255,.9) 0 2%,transparent 10%),
-      radial-gradient(circle at 65% 68%,rgba(242,204,167,.2),transparent 14%),
-      conic-gradient(from 25deg,#f4ead4,#cdbba1,#fff6df,#c5b096,#efe2cc,#bca98e,#fbf3dd);
-    border:1px solid rgba(100,74,43,.55);
-    box-shadow:inset 0 0 34px rgba(88,60,35,.2),0 0 0 7px rgba(225,204,166,.14),0 5px 26px rgba(0,0,0,.35)
-  }
-  .oras-mi-shell::after{
-    content:"•  •\A•  •";white-space:pre;position:absolute;z-index:2;left:50%;top:51%;transform:translate(-50%,-50%);color:#2a2118;font:700 clamp(17px,2.2vmin,28px)/.62 Georgia,serif;letter-spacing:.25em;text-align:center;opacity:.88;text-shadow:0 1px rgba(255,255,255,.25);pointer-events:none
-  }
-  .oras-mi-hero{position:absolute!important;z-index:5!important;left:50%!important;top:42%!important;transform:translate(-50%,-50%)!important;width:32%!important;padding:0!important;text-align:center!important;pointer-events:none}
-  .oras-mi-kicker{font:600 clamp(.44rem,.75vmin,.62rem)/1.15 system-ui,sans-serif!important;letter-spacing:.19em!important;color:rgba(40,31,22,.64)!important}
-  .oras-mi-title{margin:.25rem 0 0!important;font:400 clamp(1.3rem,3.3vmin,2.55rem)/.93 Georgia,serif!important;color:#281f17!important;text-shadow:0 1px rgba(255,255,255,.45)!important}
-  .oras-mi-sub{display:none!important}
-  .oras-mi-progress-card{margin:.6rem auto 0!important;width:88%!important;display:block!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important}
-  .oras-mi-progress-num{font:400 clamp(1.05rem,2.55vmin,2rem)/1 Georgia,serif!important;color:#2d2319!important}.oras-mi-progress-num small{margin-top:2px!important;font-size:clamp(.42rem,.72vmin,.58rem)!important;color:rgba(45,35,25,.62)!important}
-  .oras-mi-progress-track{height:3px!important;margin:.42rem auto 0!important;width:76%!important;background:rgba(45,35,25,.14)!important}.oras-mi-progress-fill{background:linear-gradient(90deg,#815f2c,#bc8d45)!important;box-shadow:none!important}.oras-mi-progress-pct{display:none!important}
+  .oras-master-index{--roulette-size:min(90vw,86svh,900px);background:radial-gradient(circle at 50% 42%,rgba(89,66,35,.18),transparent 34%),rgba(3,3,3,.72)!important;backdrop-filter:blur(15px) saturate(.9)!important;-webkit-backdrop-filter:blur(15px) saturate(.9)!important;padding:clamp(10px,2.6vmin,28px)!important;overflow:hidden!important}
+  .oras-mi-shell{position:relative!important;width:var(--roulette-size)!important;height:var(--roulette-size)!important;max-width:none!important;max-height:none!important;aspect-ratio:1!important;margin:auto!important;padding:0!important;overflow:visible!important;border-radius:50%!important;border:1px solid rgba(245,222,168,.72)!important;background:radial-gradient(circle at 33% 24%,rgba(255,255,255,.33),transparent 9%),radial-gradient(circle at 72% 69%,rgba(255,225,177,.16),transparent 13%),conic-gradient(from 12deg,rgba(255,255,255,.09),rgba(142,106,65,.08),rgba(255,245,216,.13),rgba(96,74,47,.07),rgba(255,255,255,.1)),radial-gradient(circle at 50% 50%,#cdbb98 0 22%,#6b5941 22.4% 23.2%,#17130f 23.5% 73%,#aa9166 73.2% 74%,#d7c6a4 74.3% 78%,#3a3024 78.2% 79%,#0b0907 79.2% 100%)!important;box-shadow:0 34px 120px rgba(0,0,0,.8),0 0 46px rgba(214,186,129,.13),inset 0 0 0 3px rgba(255,255,255,.035),inset 0 0 54px rgba(247,229,189,.11)!important}
+  .oras-mi-shell::before{content:"";position:absolute;z-index:1;left:50%;top:50%;width:39%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;background:radial-gradient(circle at 36% 31%,rgba(255,255,255,.9) 0 2%,transparent 10%),radial-gradient(circle at 65% 68%,rgba(242,204,167,.2),transparent 14%),conic-gradient(from 25deg,#f4ead4,#cdbba1,#fff6df,#c5b096,#efe2cc,#bca98e,#fbf3dd);border:1px solid rgba(100,74,43,.55);box-shadow:inset 0 0 34px rgba(88,60,35,.2),0 0 0 7px rgba(225,204,166,.14),0 5px 26px rgba(0,0,0,.35)}
+  .oras-mi-shell::after{content:"•  •\A•  •";white-space:pre;position:absolute;z-index:2;left:50%;top:51%;transform:translate(-50%,-50%);color:#2a2118;font:700 clamp(17px,2.2vmin,28px)/.62 Georgia,serif;letter-spacing:.25em;text-align:center;opacity:.88;text-shadow:0 1px rgba(255,255,255,.25);pointer-events:none}
+  .oras-mi-hero{position:absolute!important;z-index:5!important;left:50%!important;top:42%!important;transform:translate(-50%,-50%)!important;width:32%!important;padding:0!important;text-align:center!important;pointer-events:none}.oras-mi-kicker{font:600 clamp(.44rem,.75vmin,.62rem)/1.15 system-ui,sans-serif!important;letter-spacing:.19em!important;color:rgba(40,31,22,.64)!important}.oras-mi-title{margin:.25rem 0 0!important;font:400 clamp(1.3rem,3.3vmin,2.55rem)/.93 Georgia,serif!important;color:#281f17!important;text-shadow:0 1px rgba(255,255,255,.45)!important}.oras-mi-sub{display:none!important}
+  .oras-mi-progress-card{margin:.6rem auto 0!important;width:88%!important;display:block!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important}.oras-mi-progress-num{font:400 clamp(1.05rem,2.55vmin,2rem)/1 Georgia,serif!important;color:#2d2319!important}.oras-mi-progress-num small{margin-top:2px!important;font-size:clamp(.42rem,.72vmin,.58rem)!important;color:rgba(45,35,25,.62)!important}.oras-mi-progress-track{height:3px!important;margin:.42rem auto 0!important;width:76%!important;background:rgba(45,35,25,.14)!important}.oras-mi-progress-fill{background:linear-gradient(90deg,#815f2c,#bc8d45)!important;box-shadow:none!important}.oras-mi-progress-pct{display:none!important}
   .oras-mi-section{display:contents!important}.oras-mi-section-head{display:none!important}
-  .oras-mi-card{
-    position:absolute!important;z-index:7!important;margin:0!important;width:var(--roulette-card,116px)!important;min-width:0!important;border:0!important;border-radius:18px!important;overflow:visible!important;background:transparent!important;box-shadow:none!important;transition:transform .2s ease,opacity .2s ease!important
-  }
-  .oras-mi-card:hover{transform:translate(-50%,-50%) scale(1.04)!important}
-  .oras-mi-card-main{display:flex!important;flex-direction:column!important;gap:4px!important;align-items:center!important;justify-content:center!important;min-height:0!important;padding:0!important;text-align:center!important}
-  .oras-mi-card-mark{order:1;width:clamp(38px,5.2vmin,62px)!important;height:clamp(38px,5.2vmin,62px)!important;border-radius:50%!important;border:1px solid rgba(231,202,145,.56)!important;background:radial-gradient(circle at 35% 28%,rgba(255,245,215,.18),transparent 28%),linear-gradient(145deg,#2b241b,#0d0b09)!important;box-shadow:0 5px 14px rgba(0,0,0,.28),inset 0 0 0 2px rgba(255,255,255,.025)!important;font-size:clamp(.72rem,1.6vmin,1.05rem)!important;color:#ead2a1!important}
-  .oras-mi-state{order:2;position:absolute!important;right:14%!important;top:31%!important;width:15px!important;height:15px!important;font-size:8px!important;z-index:3!important;border-color:rgba(236,209,156,.68)!important;background:#15110d!important;color:#23190e!important}.oras-mi-state.is-done{background:#f0d69d!important}
-  .oras-mi-card-copy{order:3;width:100%!important;min-width:0!important}.oras-mi-card-title{font:400 clamp(.62rem,1.2vmin,.92rem)/1.02 Georgia,serif!important;color:#f2dfba!important;text-shadow:0 2px 5px #000!important;display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden!important}.oras-mi-card-meta{display:none!important}
-  .oras-mi-card-action{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;border:0!important;border-radius:18px!important;background:transparent!important;color:transparent!important;z-index:6!important}.oras-mi-card-action span{opacity:0!important}.oras-mi-card-action:hover,.oras-mi-card-action:focus-visible{outline:1px solid rgba(235,204,145,.68)!important;outline-offset:5px!important;background:rgba(235,204,145,.04)!important}
-  .oras-mi-card.is-locked{opacity:.38!important;filter:saturate(.5)!important}.oras-mi-card.is-locked .oras-mi-card-mark::after{content:"⌕";font:700 .72rem/1 system-ui,sans-serif;position:absolute;right:-2px;bottom:-2px;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;background:#17120d;color:#dfc58a;border:1px solid rgba(223,197,138,.6)}
-  .oras-mi-card[data-open="true"]{z-index:20!important}
-  .oras-mi-parts{position:fixed!important;z-index:2147483647!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:min(54vw,500px)!important;max-height:min(58svh,540px)!important;display:none!important;grid-template-columns:1fr!important;gap:7px!important;padding:18px!important;overflow:auto!important;border:1px solid rgba(224,194,129,.58)!important;border-radius:28px!important;background:radial-gradient(circle at 50% 0,rgba(90,67,35,.2),transparent 34%),rgba(9,8,7,.97)!important;box-shadow:0 22px 80px rgba(0,0,0,.78)!important}
-  .oras-mi-card[data-open="true"] .oras-mi-parts{display:grid!important}
-  .oras-mi-chip{min-height:40px!important;border-radius:999px!important;background:rgba(24,20,14,.94)!important;color:#f0dfbd!important;font-size:.78rem!important}
-  .oras-mi-close{position:fixed!important;z-index:2147483647!important;right:max(18px,calc((100vw - var(--roulette-size))/2 + 2%))!important;top:max(18px,calc((100svh - var(--roulette-size))/2 + 2%))!important;background:#100d0a!important;border-color:rgba(232,205,153,.62)!important;color:#f1dfba!important;box-shadow:0 6px 24px rgba(0,0,0,.4)!important}
-  .oras-mi-bottom{position:fixed!important;z-index:2147483647!important;left:50%!important;bottom:max(14px,calc((100svh - var(--roulette-size))/2 + 2.3%))!important;transform:translateX(-50%)!important;width:auto!important;display:flex!important;gap:9px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
-  .oras-mi-bottom a,.oras-mi-bottom button{min-height:42px!important;height:42px!important;width:42px!important;padding:0!important;border-radius:50%!important;display:grid!important;place-items:center!important;font-size:0!important;box-shadow:0 5px 18px rgba(0,0,0,.35)!important}.oras-mi-bottom-icon{font-size:1rem!important;margin:0!important}
-  .oras-mi-reset{background:linear-gradient(180deg,#a91c18,#650b09)!important;border-color:#d87363!important;color:#fff1e9!important}.oras-mi-home{background:#16110d!important;border-color:rgba(228,199,143,.55)!important;color:#f0d7a7!important}.oras-mi-continue{width:auto!important;min-width:96px!important;padding:0 16px!important;border-radius:999px!important;font-size:.74rem!important;background:linear-gradient(180deg,#ead096,#c39d5d)!important;color:#24190d!important;border-color:#f1d9a4!important}.oras-mi-continue .oras-mi-bottom-icon{display:none!important}
-  @media(max-width:700px){
-    .oras-master-index{--roulette-size:min(96vw,86svh);padding:6px!important}.oras-mi-shell{border-width:1px!important}.oras-mi-hero{top:43%!important;width:35%!important}.oras-mi-title{font-size:clamp(1.05rem,5vw,1.55rem)!important}.oras-mi-kicker{display:none!important}.oras-mi-card-title{font-size:clamp(.52rem,2.2vw,.72rem)!important}.oras-mi-card-mark{width:clamp(34px,10vw,48px)!important;height:clamp(34px,10vw,48px)!important}.oras-mi-parts{width:min(82vw,420px)!important;max-height:62svh!important;padding:14px!important}.oras-mi-bottom{bottom:max(8px,calc((100svh - var(--roulette-size))/2 + 1%))!important}.oras-mi-close{right:10px!important;top:10px!important}
-  }
+  .oras-mi-card{position:absolute!important;z-index:7!important;margin:0!important;width:var(--roulette-card,116px)!important;min-width:0!important;border:0!important;border-radius:18px!important;overflow:visible!important;background:transparent!important;box-shadow:none!important;transition:transform .2s ease,opacity .2s ease!important}.oras-mi-card:hover{transform:translate(-50%,-50%) scale(1.04)!important}.oras-mi-card-main{display:flex!important;flex-direction:column!important;gap:4px!important;align-items:center!important;justify-content:center!important;min-height:0!important;padding:0!important;text-align:center!important}.oras-mi-card-mark{order:1;width:clamp(38px,5.2vmin,62px)!important;height:clamp(38px,5.2vmin,62px)!important;border-radius:50%!important;border:1px solid rgba(231,202,145,.56)!important;background:radial-gradient(circle at 35% 28%,rgba(255,245,215,.18),transparent 28%),linear-gradient(145deg,#2b241b,#0d0b09)!important;box-shadow:0 5px 14px rgba(0,0,0,.28),inset 0 0 0 2px rgba(255,255,255,.025)!important;font-size:clamp(.72rem,1.6vmin,1.05rem)!important;color:#ead2a1!important}.oras-mi-state{order:2;position:absolute!important;right:14%!important;top:31%!important;width:15px!important;height:15px!important;font-size:8px!important;z-index:3!important;border-color:rgba(236,209,156,.68)!important;background:#15110d!important;color:#23190e!important}.oras-mi-state.is-done{background:#f0d69d!important}.oras-mi-card-copy{order:3;width:100%!important;min-width:0!important}.oras-mi-card-title{font:400 clamp(.62rem,1.2vmin,.92rem)/1.02 Georgia,serif!important;color:#f2dfba!important;text-shadow:0 2px 5px #000!important;display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden!important}.oras-mi-card-meta{display:none!important}.oras-mi-card-action{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;border:0!important;border-radius:18px!important;background:transparent!important;color:transparent!important;z-index:6!important}.oras-mi-card-action span{opacity:0!important}.oras-mi-card-action:hover,.oras-mi-card-action:focus-visible{outline:1px solid rgba(235,204,145,.68)!important;outline-offset:5px!important;background:rgba(235,204,145,.04)!important}.oras-mi-card.is-locked{opacity:.38!important;filter:saturate(.5)!important}.oras-mi-card[data-open="true"]{z-index:20!important}
+  .oras-mi-parts{position:fixed!important;z-index:2147483647!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:min(54vw,500px)!important;max-height:min(58svh,540px)!important;display:none!important;grid-template-columns:1fr!important;gap:7px!important;padding:18px!important;overflow:auto!important;border:1px solid rgba(224,194,129,.58)!important;border-radius:28px!important;background:radial-gradient(circle at 50% 0,rgba(90,67,35,.2),transparent 34%),rgba(9,8,7,.97)!important;box-shadow:0 22px 80px rgba(0,0,0,.78)!important}.oras-mi-card[data-open="true"] .oras-mi-parts{display:grid!important}.oras-mi-chip{min-height:40px!important;border-radius:999px!important;background:rgba(24,20,14,.94)!important;color:#f0dfbd!important;font-size:.78rem!important}
+  .oras-mi-close{position:fixed!important;z-index:2147483647!important;right:max(18px,calc((100vw - var(--roulette-size))/2 + 2%))!important;top:max(18px,calc((100svh - var(--roulette-size))/2 + 2%))!important;background:#100d0a!important;border-color:rgba(232,205,153,.62)!important;color:#f1dfba!important;box-shadow:0 6px 24px rgba(0,0,0,.4)!important}.oras-mi-bottom{position:fixed!important;z-index:2147483647!important;left:50%!important;bottom:max(14px,calc((100svh - var(--roulette-size))/2 + 2.3%))!important;transform:translateX(-50%)!important;width:auto!important;display:flex!important;gap:9px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}.oras-mi-bottom a,.oras-mi-bottom button{min-height:42px!important;height:42px!important;width:42px!important;padding:0!important;border-radius:50%!important;display:grid!important;place-items:center!important;font-size:0!important;box-shadow:0 5px 18px rgba(0,0,0,.35)!important}.oras-mi-bottom-icon{font-size:1rem!important;margin:0!important}.oras-mi-reset{background:linear-gradient(180deg,#a91c18,#650b09)!important;border-color:#d87363!important;color:#fff1e9!important}.oras-mi-home{background:#16110d!important;border-color:rgba(228,199,143,.55)!important;color:#f0d7a7!important}.oras-mi-continue{width:auto!important;min-width:96px!important;padding:0 16px!important;border-radius:999px!important;font-size:.74rem!important;background:linear-gradient(180deg,#ead096,#c39d5d)!important;color:#24190d!important;border-color:#f1d9a4!important}.oras-mi-continue .oras-mi-bottom-icon{display:none!important}
+  @media(max-width:700px){.oras-master-index{--roulette-size:min(96vw,86svh);padding:6px!important}.oras-mi-shell{border-width:1px!important}.oras-mi-hero{top:43%!important;width:35%!important}.oras-mi-title{font-size:clamp(1.05rem,5vw,1.55rem)!important}.oras-mi-kicker{display:none!important}.oras-mi-card-title{font-size:clamp(.52rem,2.2vw,.72rem)!important}.oras-mi-card-mark{width:clamp(34px,10vw,48px)!important;height:clamp(34px,10vw,48px)!important}.oras-mi-parts{width:min(82vw,420px)!important;max-height:62svh!important;padding:14px!important}.oras-mi-bottom{bottom:max(8px,calc((100svh - var(--roulette-size))/2 + 1%))!important}.oras-mi-close{right:10px!important;top:10px!important}}
   @media(max-width:430px){.oras-master-index{--roulette-size:min(98vw,82svh)}.oras-mi-shell::before{width:42%}.oras-mi-hero{width:37%}.oras-mi-bottom a,.oras-mi-bottom button{height:38px!important;min-height:38px!important;width:38px!important}.oras-mi-continue{width:auto!important;min-width:84px!important}}
   `;
   document.head.appendChild(nacre);
-
-  const positionCards=()=>{
-    const shell=index.querySelector('.oras-mi-shell');
-    if(!shell)return;
-    const cards=[...shell.querySelectorAll('.oras-mi-card')].filter(el=>el.offsetParent!==null);
-    const n=cards.length;
-    if(!n)return;
-    const rect=shell.getBoundingClientRect();
-    const size=Math.min(rect.width,rect.height);
-    const radius=size*(n<=3?.37:n<=6?.39:n<=9?.405:.415);
-    const cardSize=Math.max(70,Math.min(n<=5?132:n<=9?108:92,size*(n<=5?.16:n<=9?.13:.105)));
-    shell.style.setProperty('--roulette-card',cardSize+'px');
-    cards.forEach((card,i)=>{
-      const angle=-Math.PI/2+(Math.PI*2*i/n);
-      const x=rect.width/2+Math.cos(angle)*radius;
-      const y=rect.height/2+Math.sin(angle)*radius;
-      card.style.left=x+'px';card.style.top=y+'px';card.style.transform='translate(-50%,-50%)';
-    });
-  };
-  let raf=0;
-  const schedule=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>requestAnimationFrame(positionCards));};
-  const shell=index.querySelector('.oras-mi-shell');
-  if(shell)new MutationObserver(schedule).observe(shell,{childList:true,subtree:true,attributes:true,attributeFilter:['data-open']});
-  addEventListener('resize',schedule,{passive:true});
-  addEventListener('orientationchange',schedule,{passive:true});
-  const originalOpen=window.ORASMasterIndex?.open;
-  if(originalOpen)window.ORASMasterIndex.open=()=>{originalOpen();schedule();};
-  schedule();
+  const positionCards=()=>{const shell=index.querySelector('.oras-mi-shell');if(!shell)return;const cards=[...shell.querySelectorAll('.oras-mi-card')].filter(el=>el.offsetParent!==null);const n=cards.length;if(!n)return;const rect=shell.getBoundingClientRect();const size=Math.min(rect.width,rect.height);const radius=size*(n<=3?.37:n<=6?.39:n<=9?.405:.415);const cardSize=Math.max(70,Math.min(n<=5?132:n<=9?108:92,size*(n<=5?.16:n<=9?.13:.105)));shell.style.setProperty('--roulette-card',cardSize+'px');cards.forEach((card,i)=>{const angle=-Math.PI/2+(Math.PI*2*i/n);const x=rect.width/2+Math.cos(angle)*radius;const y=rect.height/2+Math.sin(angle)*radius;card.style.left=x+'px';card.style.top=y+'px';card.style.transform='translate(-50%,-50%)';});};
+  let raf=0;const schedule=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>requestAnimationFrame(positionCards));};const shell=index.querySelector('.oras-mi-shell');if(shell)new MutationObserver(schedule).observe(shell,{childList:true,subtree:true,attributes:true,attributeFilter:['data-open']});addEventListener('resize',schedule,{passive:true});addEventListener('orientationchange',schedule,{passive:true});const originalOpen=window.ORASMasterIndex?.open;if(originalOpen)window.ORASMasterIndex.open=()=>{originalOpen();schedule();};schedule();
 })();
 /* ORAS_NACRE_ROULETTE_R1_END */
 '''
@@ -154,3 +73,4 @@ jobs:
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "ORAS: convierte el índice en ruleta circular de nácar"
           git push
+# trigger 2026-10-15T03:16+02:00
