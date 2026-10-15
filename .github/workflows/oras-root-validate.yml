@@ -25,14 +25,19 @@ jobs:
           node --check core/index-modal.js
           node --check core/reader.js
           node --check core/audio.js
+          node --check core/ceniciento.js
+          node --check core/mirror.js
           node --check core/transitions.js
           node --check content/manifest.js
           node --check content/life-sources.js
+          node --check content/mirror-scenes.js
           node --input-type=module - <<'JS'
           import {LEAVES,TOTAL} from './content/manifest.js';
+          import {MIRROR_SCENES} from './content/mirror-scenes.js';
           if(TOTAL!==43) throw new Error(`TOTAL must be 43, got ${TOTAL}`);
           if(LEAVES.length!==43) throw new Error(`LEAVES must contain 43 leaves, got ${LEAVES.length}`);
           const ids=new Set(LEAVES.map(x=>x.id));
           if(ids.size!==43) throw new Error('Leaf ids must be unique');
           if(LEAVES.find(x=>x.id==='ceniciento')?.exclusive!=='interrogante') throw new Error('Ceniciento must remain exclusive to the interrogante');
+          if(MIRROR_SCENES.length!==32) throw new Error(`EL ESPEJO must contain 32 fragments, got ${MIRROR_SCENES.length}`);
           JS
