@@ -1,4 +1,4 @@
-import {LEAVES} from '../content/manifest.js';
+import {LEAVES,EXPANSION_IDS} from '../content/manifest.js';
 import {LIFE_SOURCES,LIFE_IDS} from '../content/life-sources.js';
 import {loadState,markVisited} from './state.js';
 import {isUnlocked} from './progress.js';
@@ -6,12 +6,13 @@ import {openIndex} from './index-modal.js';
 import {mountAudioDock,clearAudioDock} from './audio.js';
 import {renderCeniciento,cleanupCeniciento} from './ceniciento.js';
 import {renderMirror,cleanupMirror} from './mirror.js';
+import {renderExpansion,cleanupExpansion} from './expansion.js';
 
 let host=null;
 let observer=null;
 let lineObserver=null;
 let portraitTimer=null;
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 function leaf(id){return LEAVES.find(x=>x.id===id)||null;}
 function lifeIndex(id){return LIFE_IDS.indexOf(id);}
@@ -104,8 +105,8 @@ function renderLocked(){
 
 function cleanupRoute(){
   observer?.disconnect();lineObserver?.disconnect();clearTimeout(portraitTimer);
-  cleanupCeniciento();cleanupMirror();clearAudioDock();
-  document.body.classList.remove('oras-ceniciento-gate','oras-ceniciento-reading','oras-mirror-reading','oras-ana-reading');
+  cleanupCeniciento();cleanupMirror();cleanupExpansion();clearAudioDock();
+  document.body.classList.remove('oras-ceniciento-gate','oras-ceniciento-reading','oras-mirror-reading','oras-ana-reading','oras-expansion-reading');
 }
 
 export async function renderCurrent(){
@@ -115,6 +116,7 @@ export async function renderCurrent(){
   if(!id){document.body.classList.remove('oras-reading');host.hidden=true;host.innerHTML='';return;}
   if(id==='ceniciento')return renderCeniciento(host);
   if(id==='espejo')return renderMirror(host);
+  if(EXPANSION_IDS.includes(id))return renderExpansion(host,id);
   if(!LIFE_IDS.includes(id))return;
   const item=leaf(id);
   if(!item||!isUnlocked(item,loadState()))return renderLocked();
