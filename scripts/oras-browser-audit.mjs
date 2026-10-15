@@ -15,10 +15,7 @@ const scenarios=[
 const browser=await chromium.launch({headless:true});
 let failures=[];
 
-async function seed(page,state){
-  await page.addInitScript(s=>localStorage.setItem('oras.root.v1',JSON.stringify(s)),state);
-}
-
+async function seed(page,state){await page.addInitScript(s=>localStorage.setItem('oras.root.v1',JSON.stringify(s)),state);}
 async function inspect(page,name){
   const body=await page.locator('body').boundingBox();
   if(!body||body.width<100||body.height<100)failures.push(`${name}: body invisible`);
@@ -31,52 +28,46 @@ async function inspect(page,name){
 
 for(const s of scenarios){
   const page=await browser.newPage({viewport:s.viewport});
-  const errors=[];
-  page.on('pageerror',e=>errors.push(String(e)));
-  page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
-  await page.goto(new URL(s.path,base).href,{waitUntil:'networkidle'});
-  await page.waitForTimeout(500);
-  await inspect(page,s.name);
-  if(errors.length)failures.push(`${s.name}: ${errors.join(' | ')}`);
-  await page.close();
+  const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
+  await page.goto(new URL(s.path,base).href,{waitUntil:'networkidle'});await page.waitForTimeout(500);await inspect(page,s.name);
+  if(errors.length)failures.push(`${s.name}: ${errors.join(' | ')}`);await page.close();
+}
+
+const lifeReady={version:1,cycleId:1,visited:{solo:true,'ana-prologo':true,'ana-elegia':true,'ana-ojos':true,'ana-labios':true,'ana-cabello':true,'ana-piel':true,'ana-interludio':true},mirror:{available:false,completed:false,crossed:false},realityDeformed:false,audio:{enabled:false,volume:.8}};
+const anaCases=[
+  ['mobile-ana-prologo','ana-prologo','.oras-ana-stage[data-scene="prologo"]'],
+  ['mobile-ana-ojos','ana-ojos','.oras-ana-stage[data-scene="ojos"]'],
+  ['mobile-ana-labios','ana-labios','.oras-ana-stage[data-scene="labios"]'],
+  ['mobile-ana-cabello','ana-cabello','.oras-ana-stage[data-scene="cabello"]'],
+  ['mobile-ana-piel','ana-piel','.oras-ana-stage[data-scene="piel"]'],
+  ['mobile-ana-interludio','ana-interludio','.oras-interlude-stage'],
+  ['mobile-ana-epilogue','ana-epilogo','.oras-ana-stage[data-scene="epilogo"]']
+];
+for(const [name,id,selector] of anaCases){
+  const page=await browser.newPage({viewport:{width:390,height:844}});await seed(page,lifeReady);
+  const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
+  await page.goto(base+`?read=${id}`,{waitUntil:'networkidle'});await page.waitForTimeout(900);await inspect(page,name);
+  if(await page.locator(selector).count()!==1)failures.push(`${name}: scenic stage missing`);
+  if(errors.length)failures.push(`${name}: ${errors.join(' | ')}`);await page.close();
 }
 
 const completed={version:1,cycleId:1,visited:{solo:true,'ana-prologo':true,'ana-elegia':true,'ana-ojos':true,'ana-labios':true,'ana-cabello':true,'ana-piel':true,'ana-interludio':true,'ana-epilogo':true,ceniciento:true,espejo:true},mirror:{available:true,completed:true,crossed:true},realityDeformed:true,audio:{enabled:false,volume:.8}};
-
 for(const [name,path,viewport] of [
   ['desktop-expansion','./?read=inv-1',{width:1440,height:1100}],
   ['mobile-expansion','./?read=inv-1',{width:390,height:844}],
   ['desktop-archive','./?read=ciu-10',{width:1440,height:1100}],
 ]){
-  const page=await browser.newPage({viewport});
-  await seed(page,completed);
+  const page=await browser.newPage({viewport});await seed(page,completed);
   const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
-  await page.goto(new URL(path,base).href,{waitUntil:'networkidle'});
-  await page.waitForTimeout(700);
-  await inspect(page,name);
-  if(errors.length)failures.push(`${name}: ${errors.join(' | ')}`);
-  await page.close();
+  await page.goto(new URL(path,base).href,{waitUntil:'networkidle'});await page.waitForTimeout(700);await inspect(page,name);
+  if(errors.length)failures.push(`${name}: ${errors.join(' | ')}`);await page.close();
 }
 
-// ANA epilogue: ensure portrait target exists and route is not blank.
 {
-  const state={version:1,cycleId:1,visited:{solo:true,'ana-prologo':true,'ana-elegia':true,'ana-ojos':true,'ana-labios':true,'ana-cabello':true,'ana-piel':true,'ana-interludio':true},mirror:{available:false,completed:false,crossed:false},realityDeformed:false,audio:{enabled:false,volume:.8}};
+  const state={version:1,cycleId:1,visited:{...completed.visited},mirror:{available:true,completed:false,crossed:false},realityDeformed:false,audio:{enabled:false,volume:.8}};delete state.visited.espejo;
   const page=await browser.newPage({viewport:{width:390,height:844}});await seed(page,state);
-  await page.goto(base+'?read=ana-epilogo',{waitUntil:'networkidle'});await page.waitForTimeout(500);
-  await inspect(page,'mobile-ana-epilogue');
-  if(await page.locator('[data-portrait]').count()!==1)failures.push('mobile-ana-epilogue: portrait missing');
-  await page.close();
-}
-
-// Mirror visual shell: canonical gate state seeded.
-{
-  const state={version:1,cycleId:1,visited:{...completed.visited},mirror:{available:true,completed:false,crossed:false},realityDeformed:false,audio:{enabled:false,volume:.8}};
-  delete state.visited.espejo;
-  const page=await browser.newPage({viewport:{width:390,height:844}});await seed(page,state);
-  await page.goto(base+'?read=espejo',{waitUntil:'networkidle'});await page.waitForTimeout(700);
-  await inspect(page,'mobile-mirror');
-  if(await page.locator('.oras-mirror-scene').count()!==32)failures.push('mobile-mirror: mirror does not render 32 scenes');
-  await page.close();
+  await page.goto(base+'?read=espejo',{waitUntil:'networkidle'});await page.waitForTimeout(700);await inspect(page,'mobile-mirror');
+  if(await page.locator('.oras-mirror-scene').count()!==32)failures.push('mobile-mirror: mirror does not render 32 scenes');await page.close();
 }
 
 await browser.close();
