@@ -34,7 +34,7 @@ function sectionsByH2(md,anchor){
   return out;
 }
 function extractH2(md,pattern){
-  const lines=md.split(/\r?\n/);let current=null,out=[];
+  const lines=md.split(/\r?\n/);let current=null;
   for(const line of lines){
     if(/^##\s+/.test(line)){
       if(current&&pattern.test(current.title))return current;
@@ -88,13 +88,10 @@ async function loadCorpus(){
 }
 
 function navigate(id){history.pushState({},'',`?read=${encodeURIComponent(id)}`);window.dispatchEvent(new CustomEvent('oras:route'));}
-function prevNext(id){
-  const i=EXPANSION_IDS.indexOf(id),s=loadState();
-  const prev=i>0?EXPANSION_IDS[i-1]:'espejo';
-  const next=i>=0&&i<EXPANSION_IDS.length-1?EXPANSION_IDS[i+1]:null;
-  return {prev,next:next&&isUnlocked(leaf(next),s)?next:null};
+function adjacent(id){
+  const i=EXPANSION_IDS.indexOf(id);
+  return {prev:i>0?EXPANSION_IDS[i-1]:'espejo',next:i>=0&&i<EXPANSION_IDS.length-1?EXPANSION_IDS[i+1]:null};
 }
-
 function worldMarkup(world){
   return `<div class="oras-expansion-world is-${world}" aria-hidden="true"><div class="oras-expansion-layer a"></div><div class="oras-expansion-layer b"></div><div class="oras-expansion-grid"></div><div class="oras-expansion-residue"></div></div>`;
 }
@@ -102,12 +99,19 @@ function bindVisible(host){
   const io=new IntersectionObserver(entries=>entries.forEach(e=>e.isIntersecting&&e.target.classList.add('is-visible')),{rootMargin:'0px 0px -10% 0px',threshold:.04});
   host.querySelectorAll('.oras-expansion-line').forEach(x=>io.observe(x));cleanupFns.push(()=>io.disconnect());
 }
+function unlockNextButtons(host,next){
+  if(!next)return;
+  const item=leaf(next);
+  if(!item||!isUnlocked(item,loadState()))return;
+  host.querySelectorAll('[data-next-expansion]').forEach(b=>{b.disabled=false;b.hidden=false;});
+}
 function bindEnd(host,id,next){
   const end=host.querySelector('[data-expansion-end]');if(!end)return;
   const io=new IntersectionObserver(entries=>{
     if(!entries.some(e=>e.isIntersecting))return;
     markVisited(id);host.classList.add('is-complete');io.disconnect();
-    const b=host.querySelector('[data-next-expansion]');if(b&&next){b.disabled=false;b.hidden=false;}
+    unlockNextButtons(host,next);
+    if(!next)host.querySelector('[data-finish-expansion]')?.removeAttribute('hidden');
   },{threshold:.55});io.observe(end);cleanupFns.push(()=>io.disconnect());
 }
 
@@ -123,13 +127,14 @@ export async function renderExpansion(host,id=qid()){
   host.querySelector('[data-index]')?.addEventListener('click',openIndex);
   try{
     const corpus=await loadCorpus(),spec=corpus[id];if(!spec)throw new Error('Fragmento no localizado');
-    const {prev,next}=prevNext(id);
+    const {prev,next}=adjacent(id),nextOpen=next&&isUnlocked(leaf(next),loadState());
     const prose=spec.lines.map((p,i)=>`<p class="oras-expansion-line" style="--i:${i}">${esc(p).replace(/\n/g,'<br>')}</p>`).join('');
     const doc=spec.documental?'<div class="oras-document-stamp">DOCUMENTO RECUPERADO</div>':'';
-    host.innerHTML=`<section class="oras-expansion-shell ${spec.documental?'is-documental':''}">${worldMarkup(spec.world)}<header class="oras-reader-head oras-expansion-head"><span>${esc(spec.kicker)}</span><button data-index>Índice ORAS</button></header><article class="oras-expansion-copy">${doc}<p class="oras-expansion-kicker">${esc(spec.kicker)}</p><h1>${esc(item.title)}</h1>${prose}<div class="oras-read-end" data-expansion-end aria-hidden="true"></div><button type="button" class="oras-expansion-next" data-next-expansion ${next?'hidden disabled':'hidden'}>Seguir</button></article><nav class="oras-reader-nav oras-expansion-nav"><button data-prev-expansion>Anterior</button><button data-index>Índice</button><button data-next-expansion ${next?'disabled':'disabled'}>${next?'Siguiente':'Final'}</button></nav></section>`;
+    host.innerHTML=`<section class="oras-expansion-shell ${spec.documental?'is-documental':''}">${worldMarkup(spec.world)}<header class="oras-reader-head oras-expansion-head"><span>${esc(spec.kicker)}</span><button data-index>Índice ORAS</button></header><article class="oras-expansion-copy">${doc}<p class="oras-expansion-kicker">${esc(spec.kicker)}</p><h1>${esc(item.title)}</h1>${prose}<div class="oras-read-end" data-expansion-end aria-hidden="true"></div>${next?`<button type="button" class="oras-expansion-next" data-next-expansion ${nextOpen?'':'hidden disabled'}>Seguir</button>`:'<button type="button" class="oras-expansion-next" data-finish-expansion hidden>Índice ORAS</button>'}</article><nav class="oras-reader-nav oras-expansion-nav"><button data-prev-expansion>Anterior</button><button data-index>Índice</button>${next?`<button data-next-expansion ${nextOpen?'':'disabled'}>Siguiente</button>`:'<button data-finish-expansion hidden>Índice ORAS</button>'}</nav></section>`;
     host.querySelectorAll('[data-index]').forEach(b=>b.addEventListener('click',openIndex));
     host.querySelectorAll('[data-prev-expansion]').forEach(b=>b.addEventListener('click',()=>navigate(prev)));
     host.querySelectorAll('[data-next-expansion]').forEach(b=>b.addEventListener('click',()=>{if(!b.disabled&&next)navigate(next);}));
+    host.querySelectorAll('[data-finish-expansion]').forEach(b=>b.addEventListener('click',openIndex));
     bindVisible(host);bindEnd(host,id,next);
     scrollTo({top:0,left:0,behavior:'auto'});
   }catch(err){
