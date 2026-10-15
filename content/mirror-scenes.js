@@ -1,0 +1,37 @@
+export const MIRROR_SCENES=[
+'No era la misma historia.',
+'Parecían tres.',
+'Una empezaba con una tarjeta.',
+'Otra con un nombre.',
+'Otra con un reloj.',
+'Parecían distintas.\nLo eran.\nY no lo eran.',
+'Las misiones sencillas eran las que más miedo daban.',
+'Los ojos no cabían en una descripción.',
+'El tiempo había rectificado.',
+'Paco creyó durante mucho tiempo que las historias importantes empiezan cuando sucede algo extraordinario.\nNo era verdad.',
+'Una historia empezó porque una máquina no aceptó una tarjeta.',
+'Otra, porque una presencia no cabía dentro de las palabras.',
+'Otra, porque un hombre descubrió demasiado tarde quién lo había estado mirando.',
+'La tarjeta ya no hacía falta.',
+'La cita, en cambio, sí.',
+'Los ojos de estatua.',
+'Había estado viendo a Paco.',
+'El joven estaba desapareciendo.',
+'Hay cosas que sólo existen mientras duran.',
+'Un viaje.\nUna conversación.\nUna tarde.\nUna fotografía enviada desde París.\nUna voz.\nUna edad.',
+'Hay otras que permanecen.',
+'No porque duren más.\nSino porque cambian de lugar.',
+'La tarjeta dejó de servir.\nLa mirada no.',
+'El hechizo se extinguía.',
+'La noche no admitía trucos.',
+'Me pides el pan.',
+'La mesa.\nLa cebolla.\nLas migas.\nLas manos.',
+'Nada de aquello parecía extraordinario.\nY, sin embargo, allí terminaban las tres historias.',
+'No en la juventud.\nNo en el deseo.\nNo en la casualidad.\nNo en el prodigio.',
+'En una presencia.',
+'A veces, una persona entra en la vida de otra porque una máquina se niega a aceptar una tarjeta.\nA veces, una mirada tarda años en comprender lo que está viendo.\nA veces, un hombre recorre una ciudad entera para descubrir algo que siempre estuvo delante de él.',
+'El origen suele parecer insignificante.\n\nHabía pasado sesenta y dos años asistiendo a transformaciones que nadie le había consultado.\n\nElla nunca había visto al joven.\n\nLa cita, en cambio, sí.\n\nAl hombre que era.\n\nHay historias que empiezan antes.\nTodo esto ocurrió después.\n\nY, aun así, no era el final.\n\nPorque nadie regresa al mismo lugar.\nNi siquiera cuando vuelve.'
+];
+
+export const MIRROR_PAUSES=new Set([14,15,17,26,30]);
+export const MIRROR_SOUNDTRACK='./assets/oras-el-espejo-centro-de-datos.m4a';
