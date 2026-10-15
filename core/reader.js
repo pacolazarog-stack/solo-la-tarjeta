@@ -131,9 +131,10 @@ export async function renderCurrent(){
     const lines=await extract(LIFE_SOURCES[id].source,id);
     const prev=navId(-1),nextCandidate=candidateNavId(1),next=navId(1);
     const prose=lines.map((text,i)=>`<p class="oras-text-line" style="--i:${i}">${esc(text)}</p>`).join('');
-    host.innerHTML=`<section class="oras-reader-shell ${esc(LIFE_SOURCES[id].theme)}">${worldMarkup(id)}<header class="oras-reader-head"><span>${id==='solo'?'I · LA VIDA':'ANA KLAUDYA'}</span><button data-index>Índice ORAS</button></header><article class="oras-reader-copy"><h1>${esc(item.title)}</h1>${prose}<div class="oras-read-end" data-read-end aria-hidden="true"></div>${portraitMarkup(id)}</article><nav class="oras-reader-nav" aria-label="Navegación de lectura"><button data-prev ${prev?'':'disabled'}>Anterior</button><button data-index>Índice</button><button data-next ${next?'':'disabled'} data-target="${esc(nextCandidate||'')}">Siguiente</button></nav></section>`;
+    const soloFirst=id==='solo';
+    host.innerHTML=`<section class="oras-reader-shell ${esc(LIFE_SOURCES[id].theme)}">${worldMarkup(id)}<header class="oras-reader-head"><span>${soloFirst?'I · LA VIDA':'ANA KLAUDYA'}</span><button data-index>Índice ORAS</button></header><article class="oras-reader-copy"><h1>${esc(item.title)}</h1>${prose}<div class="oras-read-end" data-read-end aria-hidden="true"></div>${portraitMarkup(id)}</article><nav class="oras-reader-nav" aria-label="Navegación de lectura"><button data-prev ${(!soloFirst&&!prev)?'disabled':''}>Anterior</button><button data-index>Índice</button><button data-next ${next?'':'disabled'} data-target="${esc(nextCandidate||'')}">Siguiente</button></nav></section>`;
     host.querySelectorAll('[data-index]').forEach(b=>b.addEventListener('click',openIndex));
-    host.querySelector('[data-prev]')?.addEventListener('click',()=>navigate(prev));
+    host.querySelector('[data-prev]')?.addEventListener('click',()=>{if(soloFirst)openIndex();else navigate(prev);});
     host.querySelector('[data-next]')?.addEventListener('click',e=>{if(e.currentTarget.disabled)return;markVisited(id);navigate(e.currentTarget.dataset.target);});
 
     lineObserver=new IntersectionObserver(entries=>entries.forEach(e=>e.isIntersecting&&e.target.classList.add('is-visible')),{rootMargin:'0px 0px -12% 0px',threshold:.05});
