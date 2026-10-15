@@ -1,4 +1,4 @@
-# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r1 · preview limpio escenas ANA+SOLO+CENICIENTO+ESPEJO r3
+# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r1 · preview limpio completo hasta EL CERO r4
 name: Publicar SOLO LA TARJETA
 
 on:
@@ -46,7 +46,7 @@ jobs:
           grep -Fq 'assets/oras-portada-final.jpg' oras-master-index-r1.js
           grep -Fq 'oras-master-cover-img{display:block' oras-master-index-r1.js
           grep -Fq 'el-espejo-soundtrack.js?v=20261014-espejo-soundtrack-3' ceniciento/index.html
-          echo 'PASS: núcleo ORAS, entrada ANA, ruleta de nácar y banda sonora de EL ESPEJO disponibles.'
+          echo 'PASS: núcleo ORAS legado disponible mientras se publica el preview limpio.'
 
       - name: Activar índice circular de nácar en todo ORAS
         shell: bash
@@ -56,13 +56,9 @@ jobs:
           from pathlib import Path
           tag='<script defer src="/solo-la-tarjeta/oras-nacre-roulette-r1.js?v=20261015-nacre-roulette-1"></script>'
           for p in Path('.').rglob('*.html'):
-              if '.git' in p.parts:
-                  continue
+              if '.git' in p.parts: continue
               s=p.read_text(encoding='utf-8')
-              if 'oras-master-index-r1.js' not in s:
-                  continue
-              if 'oras-nacre-roulette-r1.js' in s:
-                  continue
+              if 'oras-master-index-r1.js' not in s or 'oras-nacre-roulette-r1.js' in s: continue
               if '</body>' in s:
                   s=s.replace('</body>',tag+'\n</body>',1)
                   p.write_text(s,encoding='utf-8')
@@ -79,8 +75,7 @@ jobs:
           s=p.read_text(encoding='utf-8')
           tag='<script defer src="/solo-la-tarjeta/ana-entry-failsafe-r1.js?v=20261015-ana-entry-failsafe-1"></script>'
           if 'ana-entry-failsafe-r1.js' not in s:
-              if '</body>' not in s:
-                  raise RuntimeError('No se encontró </body> en ANA KLAUDYA')
+              if '</body>' not in s: raise RuntimeError('No se encontró </body> en ANA KLAUDYA')
               s=s.replace('</body>',tag+'\n</body>',1)
               p.write_text(s,encoding='utf-8')
           PY
@@ -94,8 +89,7 @@ jobs:
           from pathlib import Path
           import hashlib
           parts = sorted(Path('ceniciento/voz-parts').glob('*.bin'))
-          if len(parts) != 14:
-              raise RuntimeError('Faltan partes de la voz de Ceniciento')
+          if len(parts) != 14: raise RuntimeError('Faltan partes de la voz de Ceniciento')
           audio = b''.join(part.read_bytes() for part in parts)
           if hashlib.sha256(audio).hexdigest() != '5bf334d4dcfcffa240d455719795ee9687293395467b93b220219fb8b158d55b':
               raise RuntimeError('La grabación no coincide con el audio completo')
@@ -133,7 +127,14 @@ jobs:
           test -s "$PREVIEW/ceniciento-scene.css"
           test -s "$PREVIEW/core/mirror.js"
           test -s "$PREVIEW/mirror-scene.css"
-          echo 'PASS: preview ORAS raíz limpia incorporado sin sustituir main.'
+          test -s "$PREVIEW/core/expansion.js"
+          test -s "$PREVIEW/content/expansion-scenes.js"
+          test -s "$PREVIEW/expansion-scenes.css"
+          test -s "$PREVIEW/inventario-del-aire/assets-r4/house/01-recibidor.webp"
+          test -s "$PREVIEW/inventario-del-aire/assets-r4/train/01-estacion.webp"
+          test -s "$PREVIEW/inventario-del-aire/assets-r4/city/01-plaza.webp"
+          test -s "$PREVIEW/inventario-del-aire/assets-r4/zero/01-habitacion-cero.webp"
+          echo 'PASS: preview ORAS raíz limpia completo incorporado sin sustituir main.'
 
       - name: Empaquetar sitio
         uses: actions/upload-pages-artifact@v3
