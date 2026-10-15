@@ -40,6 +40,7 @@ jobs:
           test -s solo-scene.css
           test -s ana-scenes.css
           test -s ceniciento-scene.css
+          test -s mirror-scene.css
           test -s index-legacy.html
           test -s estrella/umbral.jpg
           test -s ojos/ojos-ana.svg
@@ -49,6 +50,8 @@ jobs:
           test -s interludio/mundo-flores-yin-yang.png
           test -s interludio/cebolla-pan.png
           test -s epilogo/cotan-imperative.webp
+          test -s assets/oras-el-espejo-centro-de-datos.m4a
+          test "$(wc -c < assets/oras-el-espejo-centro-de-datos.m4a)" -gt 800000
           for n in 01 02 03 04 05 06 07 08 09; do test -s "ceniciento/frames-stable/$n.webp"; done
       - name: Install Playwright Chromium
         shell: bash
