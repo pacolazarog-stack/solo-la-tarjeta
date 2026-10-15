@@ -108,6 +108,25 @@ jobs:
             cp ceniciento/ceniciento-voz-completa.mp3 nmwp-international/ceniciento/ceniciento-voz-completa.mp3
           fi
 
+      - name: Incorporar preview público de ORAS raíz limpia
+        shell: bash
+        run: |
+          set -euo pipefail
+          PREVIEW='oras-raiz-limpia-preview'
+          rm -rf "$PREVIEW"
+          mkdir -p "$PREVIEW"
+          git fetch --no-tags --depth=1 origin oras-raiz-limpia
+          git archive FETCH_HEAD | tar -x -C "$PREVIEW"
+          rm -rf "$PREVIEW/.github"
+          if [ -f ceniciento/ceniciento-voz-completa.mp3 ]; then
+            mkdir -p "$PREVIEW/ceniciento"
+            cp ceniciento/ceniciento-voz-completa.mp3 "$PREVIEW/ceniciento/ceniciento-voz-completa.mp3"
+          fi
+          test -s "$PREVIEW/index.html"
+          test -s "$PREVIEW/oras.js"
+          test -s "$PREVIEW/core/reader.js"
+          echo 'PASS: preview ORAS raíz limpia incorporado sin sustituir main.'
+
       - name: Empaquetar sitio
         uses: actions/upload-pages-artifact@v3
         with:
