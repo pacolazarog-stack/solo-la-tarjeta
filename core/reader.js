@@ -37,31 +37,34 @@ async function extract(source,id){
   return lines;
 }
 
+function candidateNavId(delta){
+  const i=lifeIndex(routeId());
+  return i<0?null:(LIFE_IDS[i+delta]||null);
+}
 function navId(delta){
-  const id=routeId(),i=lifeIndex(id);
-  if(i<0)return null;
-  const target=LIFE_IDS[i+delta];
-  if(!target)return null;
+  const target=candidateNavId(delta);
   const item=leaf(target);
   return item&&isUnlocked(item,loadState())?target:null;
 }
-
 function navigate(id){
   if(!id)return;
   history.pushState({},'',`?read=${encodeURIComponent(id)}`);
   window.dispatchEvent(new CustomEvent('oras:route'));
+}
+function refreshLifeNext(){
+  const next=candidateNavId(1),item=leaf(next),button=host?.querySelector('[data-next]');
+  if(!button||!next||!item)return;
+  if(isUnlocked(item,loadState())){button.disabled=false;button.dataset.target=next;}
 }
 
 function worldMarkup(id){
   const ana=id.startsWith('ana-');
   return `<div class="oras-reading-world ${ana?'is-ana':'is-solo'}" aria-hidden="true"><div class="oras-world-base"></div><div class="oras-world-pulse"></div><div class="oras-world-grain"></div>${id==='solo'?'<div class="oras-world-stars"></div><div class="oras-world-orb"></div>':''}</div>`;
 }
-
 function portraitMarkup(id){
   if(id!=='ana-epilogo')return '';
   return `<div class="oras-ana-portrait" data-portrait aria-hidden="true"><img src="./elegia-breve/ana-klaudya-fotografia.jpg" alt="Ana Klaudya"><button class="oras-question" data-question aria-label="Abrir Ceniciento desde el interrogante">?</button></div>`;
 }
-
 function installQuestion(){
   const q=host?.querySelector('[data-question]');
   if(!q)return;
@@ -70,7 +73,6 @@ function installQuestion(){
     window.dispatchEvent(new CustomEvent('oras:route'));
   });
 }
-
 function revealPortrait(){
   const portrait=host?.querySelector('[data-portrait]');
   if(!portrait)return;
@@ -78,7 +80,6 @@ function revealPortrait(){
   portrait.setAttribute('aria-hidden','false');
   installQuestion();
 }
-
 function watchRead(id){
   observer?.disconnect();
   clearTimeout(portraitTimer);
@@ -88,13 +89,13 @@ function watchRead(id){
     if(entries.some(e=>e.isIntersecting)){
       markVisited(id);
       host?.classList.add('is-complete');
+      refreshLifeNext();
       observer?.disconnect();
       if(id==='ana-epilogo')portraitTimer=setTimeout(revealPortrait,6000);
     }
   },{threshold:.6});
   observer.observe(sentinel);
 }
-
 function renderLocked(){
   clearAudioDock();
   document.body.classList.add('oras-reading');
@@ -102,7 +103,6 @@ function renderLocked(){
   host.innerHTML=`<section class="oras-reader-shell"><header class="oras-reader-head"><span>ORAS</span><button data-index>Índice</button></header><div class="oras-reader-lock"><p>Esta puerta todavía no está abierta.</p><button data-index>Abrir índice</button></div></section>`;
   host.querySelectorAll('[data-index]').forEach(b=>b.addEventListener('click',openIndex));
 }
-
 function cleanupRoute(){
   observer?.disconnect();lineObserver?.disconnect();clearTimeout(portraitTimer);
   cleanupCeniciento();cleanupMirror();cleanupExpansion();clearAudioDock();
@@ -129,12 +129,12 @@ export async function renderCurrent(){
 
   try{
     const lines=await extract(LIFE_SOURCES[id].source,id);
-    const prev=navId(-1),next=navId(1);
+    const prev=navId(-1),nextCandidate=candidateNavId(1),next=navId(1);
     const prose=lines.map((text,i)=>`<p class="oras-text-line" style="--i:${i}">${esc(text)}</p>`).join('');
-    host.innerHTML=`<section class="oras-reader-shell ${esc(LIFE_SOURCES[id].theme)}">${worldMarkup(id)}<header class="oras-reader-head"><span>${id==='solo'?'I · LA VIDA':'ANA KLAUDYA'}</span><button data-index>Índice ORAS</button></header><article class="oras-reader-copy"><h1>${esc(item.title)}</h1>${prose}<div class="oras-read-end" data-read-end aria-hidden="true"></div>${portraitMarkup(id)}</article><nav class="oras-reader-nav" aria-label="Navegación de lectura"><button data-prev ${prev?'':'disabled'}>Anterior</button><button data-index>Índice</button><button data-next ${next?'':'disabled'}>Siguiente</button></nav></section>`;
+    host.innerHTML=`<section class="oras-reader-shell ${esc(LIFE_SOURCES[id].theme)}">${worldMarkup(id)}<header class="oras-reader-head"><span>${id==='solo'?'I · LA VIDA':'ANA KLAUDYA'}</span><button data-index>Índice ORAS</button></header><article class="oras-reader-copy"><h1>${esc(item.title)}</h1>${prose}<div class="oras-read-end" data-read-end aria-hidden="true"></div>${portraitMarkup(id)}</article><nav class="oras-reader-nav" aria-label="Navegación de lectura"><button data-prev ${prev?'':'disabled'}>Anterior</button><button data-index>Índice</button><button data-next ${next?'':'disabled'} data-target="${esc(nextCandidate||'')}">Siguiente</button></nav></section>`;
     host.querySelectorAll('[data-index]').forEach(b=>b.addEventListener('click',openIndex));
     host.querySelector('[data-prev]')?.addEventListener('click',()=>navigate(prev));
-    host.querySelector('[data-next]')?.addEventListener('click',()=>{markVisited(id);navigate(next);});
+    host.querySelector('[data-next]')?.addEventListener('click',e=>{if(e.currentTarget.disabled)return;markVisited(id);navigate(e.currentTarget.dataset.target);});
 
     lineObserver=new IntersectionObserver(entries=>entries.forEach(e=>e.isIntersecting&&e.target.classList.add('is-visible')),{rootMargin:'0px 0px -12% 0px',threshold:.05});
     host.querySelectorAll('.oras-text-line').forEach(p=>lineObserver.observe(p));
