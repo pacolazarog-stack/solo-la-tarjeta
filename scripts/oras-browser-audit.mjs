@@ -1,5 +1,6 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs';
+import {EXPANSION_IDS} from '../content/manifest.js';
 
 const base='http://127.0.0.1:4173/';
 const shots='browser-audit';
@@ -78,14 +79,34 @@ for(const [name,path,mode] of [
 }
 
 const completed={version:1,cycleId:1,visited:{solo:true,'ana-prologo':true,'ana-elegia':true,'ana-ojos':true,'ana-labios':true,'ana-cabello':true,'ana-piel':true,'ana-interludio':true,'ana-epilogo':true,ceniciento:true,espejo:true},mirror:{available:true,completed:true,crossed:true},realityDeformed:true,audio:{enabled:false,volume:.8}};
-for(const [name,path,viewport] of [
-  ['desktop-expansion','./?read=inv-1',{width:1440,height:1100}],
-  ['mobile-expansion','./?read=inv-1',{width:390,height:844}],
-  ['desktop-archive','./?read=ciu-10',{width:1440,height:1100}],
-]){
-  const page=await browser.newPage({viewport});await seed(page,completed);
+function stateForExpansion(target){
+  const state=structuredClone(completed),i=EXPANSION_IDS.indexOf(target);
+  for(let n=0;n<i;n++)state.visited[EXPANSION_IDS[n]]=true;
+  return state;
+}
+const expansionCases=[
+  ['desktop-house','inv-1','house',{width:1440,height:1100}],
+  ['mobile-train','som-1','train',{width:390,height:844}],
+  ['mobile-city','ciu-1','city',{width:390,height:844}],
+  ['desktop-archive','ciu-10','archive',{width:1440,height:1100}],
+  ['mobile-machine','ciu-11','archive',{width:390,height:844}],
+  ['mobile-resonator','ciu-12','archive',{width:390,height:844}],
+  ['mobile-last-room','ciu-13','archive',{width:390,height:844}],
+  ['mobile-atlas','ciu-14','atlas',{width:390,height:844}],
+  ['mobile-zero','zero','zero',{width:390,height:844}],
+];
+for(const [name,id,kind,viewport] of expansionCases){
+  const page=await browser.newPage({viewport});await seed(page,stateForExpansion(id));
   const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
-  await page.goto(new URL(path,base).href,{waitUntil:'networkidle'});await page.waitForTimeout(700);await inspect(page,name);
+  await page.goto(base+`?read=${id}`,{waitUntil:'networkidle'});await page.waitForTimeout(850);await inspect(page,name);
+  if(await page.locator(`.oras-expansion-scene.is-${kind}`).count()!==1)failures.push(`${name}: ${kind} scenic world missing`);
+  if(await page.locator('.oras-expansion-scene img').count()!==1)failures.push(`${name}: scenic image missing`);
+  if(await page.locator('.oras-expansion-line').count()<1)failures.push(`${name}: canonical text missing`);
+  if(id==='ciu-14'&&await page.locator('.oras-document-stamp').count()!==1)failures.push('mobile-atlas: documentary stamp missing');
+  if(id==='zero'){
+    const text=await page.locator('.oras-expansion-copy').innerText();
+    if(!text.includes('Nadie supo decir desde cuándo.'))failures.push('mobile-zero: canonical final line missing');
+  }
   if(errors.length)failures.push(`${name}: ${errors.join(' | ')}`);await page.close();
 }
 
