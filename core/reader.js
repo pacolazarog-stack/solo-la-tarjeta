@@ -11,7 +11,7 @@ import {renderExpansion,cleanupExpansion} from './expansion.js';
 import {renderAnaScene,cleanupAnaScene} from './ana-scenes.js';
 
 let host=null;
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 function leaf(id){return LEAVES.find(x=>x.id===id)||null;}
 function lifeIndex(id){return LIFE_IDS.indexOf(id);}
