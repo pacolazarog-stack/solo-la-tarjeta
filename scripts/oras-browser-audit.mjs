@@ -30,7 +30,6 @@ for(const s of scenarios){
   if(errors.length)failures.push(`${s.name}: ${errors.join(' | ')}`);await page.close();
 }
 
-// SOLO LA TARJETA: preserve the scenic structure rather than a generic text reader.
 {
   const page=await browser.newPage({viewport:{width:390,height:844}});
   const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
@@ -63,7 +62,6 @@ for(const [name,id,selector] of anaCases){
   if(errors.length)failures.push(`${name}: ${errors.join(' | ')}`);await page.close();
 }
 
-// CENICIENTO: interrogante-only gate plus nine-stage ageing in read and voice modes.
 const cenState={version:1,cycleId:1,visited:{solo:true,'ana-prologo':true,'ana-elegia':true,'ana-ojos':true,'ana-labios':true,'ana-cabello':true,'ana-piel':true,'ana-interludio':true,'ana-epilogo':true},mirror:{available:false,completed:false,crossed:false},realityDeformed:false,audio:{enabled:false,volume:.8}};
 for(const [name,path,mode] of [
   ['mobile-ceniciento-read','?read=ceniciento&via=interrogante&mode=read','read'],
@@ -90,11 +88,21 @@ for(const [name,path,viewport] of [
   await page.goto(new URL(path,base).href,{waitUntil:'networkidle'});await page.waitForTimeout(700);await inspect(page,name);
   if(errors.length)failures.push(`${name}: ${errors.join(' | ')}`);await page.close();
 }
+
+// EL ESPEJO: 32 escenas, cinco pausas obligatorias, deformación y bloqueo por banda sonora.
 {
   const state={version:1,cycleId:1,visited:{...completed.visited},mirror:{available:true,completed:false,crossed:false},realityDeformed:false,audio:{enabled:false,volume:.8}};delete state.visited.espejo;
   const page=await browser.newPage({viewport:{width:390,height:844}});await seed(page,state);
-  await page.goto(base+'?read=espejo',{waitUntil:'networkidle'});await page.waitForTimeout(700);await inspect(page,'mobile-mirror');
-  if(await page.locator('.oras-mirror-scene').count()!==32)failures.push('mobile-mirror: mirror does not render 32 scenes');await page.close();
+  const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
+  await page.goto(base+'?read=espejo',{waitUntil:'networkidle'});await page.waitForTimeout(900);await inspect(page,'mobile-mirror');
+  if(await page.locator('.oras-mirror-scene').count()!==32)failures.push('mobile-mirror: mirror does not render 32 scenes');
+  if(await page.locator('[data-mirror-pause]').count()!==5)failures.push('mobile-mirror: canonical five pauses missing');
+  if(await page.locator('.oras-mirror-progress').count()!==1)failures.push('mobile-mirror: progress scar missing');
+  if(await page.locator('audio').count()!==1)failures.push('mobile-mirror: soundtrack audio missing');
+  if(!(await page.locator('[data-mirror-final]').isDisabled()))failures.push('mobile-mirror: final gate must start locked');
+  const pause=page.locator('[data-mirror-pause]').first();await pause.evaluate(el=>el.scrollIntoView());await page.waitForTimeout(600);
+  if(await pause.locator('[data-mirror-follow]').isHidden())failures.push('mobile-mirror: pause does not reveal seguir');
+  if(errors.length)failures.push(`mobile-mirror: ${errors.join(' | ')}`);await page.close();
 }
 
 await browser.close();
