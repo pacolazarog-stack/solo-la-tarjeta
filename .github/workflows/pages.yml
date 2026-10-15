@@ -1,4 +1,4 @@
-# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r1 · preview limpio escenas ANA+SOLO+CENICIENTO r3
+# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r1 · preview limpio escenas ANA+SOLO+CENICIENTO+ESPEJO r3
 name: Publicar SOLO LA TARJETA
 
 on:
@@ -131,6 +131,8 @@ jobs:
           test -s "$PREVIEW/ana-scenes.css"
           test -s "$PREVIEW/core/ceniciento.js"
           test -s "$PREVIEW/ceniciento-scene.css"
+          test -s "$PREVIEW/core/mirror.js"
+          test -s "$PREVIEW/mirror-scene.css"
           echo 'PASS: preview ORAS raíz limpia incorporado sin sustituir main.'
 
       - name: Empaquetar sitio
