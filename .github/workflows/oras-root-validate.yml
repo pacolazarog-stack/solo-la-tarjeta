@@ -35,12 +35,14 @@ jobs:
           node --check content/life-sources.js
           node --check content/life-scenes.js
           node --check content/mirror-scenes.js
+          node --check content/expansion-scenes.js
           node --check scripts/oras-audit.mjs
           node scripts/oras-audit.mjs
           test -s solo-scene.css
           test -s ana-scenes.css
           test -s ceniciento-scene.css
           test -s mirror-scene.css
+          test -s expansion-scenes.css
           test -s index-legacy.html
           test -s estrella/umbral.jpg
           test -s ojos/ojos-ana.svg
@@ -53,6 +55,11 @@ jobs:
           test -s assets/oras-el-espejo-centro-de-datos.m4a
           test "$(wc -c < assets/oras-el-espejo-centro-de-datos.m4a)" -gt 800000
           for n in 01 02 03 04 05 06 07 08 09; do test -s "ceniciento/frames-stable/$n.webp"; done
+          for f in 01-recibidor 02-reloj 03-cocina 04-pasillo 05-dormitorio 06-jardin 07-inventario 08-salida; do test -s "inventario-del-aire/assets-r4/house/$f.webp"; done
+          for f in 01-estacion 02-revisor 03-sombras 04-fila-siete 05-conversacion 06-inventario-ausencias-moviles 07-taller 08-oficio 09-ultimo-recorrido; do test -s "inventario-del-aire/assets-r4/train/$f.webp"; done
+          for f in 01-plaza 02-archivero 03-fuente 04-resistentes 05-mapa-imposible 06-teoria 07-museo 08-visitante 09-invierno 10-ultima-sala; do test -s "inventario-del-aire/assets-r4/city/$f.webp"; done
+          for f in 11-archivo-profundo 12-maquina-huellas 13-resonador; do test -s "inventario-del-aire/assets-r5/city/$f.webp"; done
+          test -s inventario-del-aire/assets-r4/zero/01-habitacion-cero.webp
       - name: Install Playwright Chromium
         shell: bash
         run: |
