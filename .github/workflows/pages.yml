@@ -1,4 +1,4 @@
-# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2
+# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1
 name: Publicar SOLO LA TARJETA
 
 on:
@@ -36,6 +36,7 @@ jobs:
           node --check oras-reading-window-r2.js
           node --check oras-master-index-r1.js
           node --check oras-screen-transition.js
+          node --check oras-nacre-roulette-r1.js
           node --check ceniciento/el-espejo.js
           node --check ceniciento/el-espejo-soundtrack.js
           test -s assets/oras-portada-final.jpg
@@ -44,7 +45,28 @@ jobs:
           grep -Fq 'assets/oras-portada-final.jpg' oras-master-index-r1.js
           grep -Fq 'oras-master-cover-img{display:block' oras-master-index-r1.js
           grep -Fq 'el-espejo-soundtrack.js?v=20261014-espejo-soundtrack-3' ceniciento/index.html
-          echo 'PASS: núcleo ORAS, portada y banda sonora de EL ESPEJO disponibles.'
+          echo 'PASS: núcleo ORAS, portada, ruleta de nácar y banda sonora de EL ESPEJO disponibles.'
+
+      - name: Activar índice circular de nácar en todo ORAS
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          tag='<script defer src="/solo-la-tarjeta/oras-nacre-roulette-r1.js?v=20261015-nacre-roulette-1"></script>'
+          for p in Path('.').rglob('*.html'):
+              if '.git' in p.parts:
+                  continue
+              s=p.read_text(encoding='utf-8')
+              if 'oras-master-index-r1.js' not in s:
+                  continue
+              if 'oras-nacre-roulette-r1.js' in s:
+                  continue
+              if '</body>' in s:
+                  s=s.replace('</body>',tag+'\n</body>',1)
+                  p.write_text(s,encoding='utf-8')
+          PY
+          grep -RFl 'oras-nacre-roulette-r1.js?v=20261015-nacre-roulette-1' --include='*.html' . | head -n 1 | grep -q .
 
       - name: Preparar voz de Ceniciento
         shell: bash
