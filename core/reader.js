@@ -7,17 +7,23 @@ import {mountAudioDock,clearAudioDock} from './audio.js';
 import {renderCeniciento,cleanupCeniciento} from './ceniciento.js';
 import {renderMirror,cleanupMirror} from './mirror.js';
 import {renderExpansion,cleanupExpansion} from './expansion.js';
+import {renderAnaScene,cleanupAnaScene} from './ana-scenes.js';
 
 let host=null;
 let observer=null;
 let lineObserver=null;
-let portraitTimer=null;
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const htmlText=s=>String(s??'').split('\n').map(esc).join('<br>');
 
 function leaf(id){return LEAVES.find(x=>x.id===id)||null;}
 function lifeIndex(id){return LIFE_IDS.indexOf(id);}
 function routeId(){return new URLSearchParams(location.search).get('read');}
-function canonicalText(node){return (node?.textContent||'').replace(/\s+/g,' ').trim();}
+function nodeText(node){
+  if(!node)return '';
+  const clone=node.cloneNode(true);
+  clone.querySelectorAll('br').forEach(br=>br.replaceWith('\n'));
+  return (clone.textContent||'').replace(/[ \t]+/g,' ').replace(/\n\s+/g,'\n').trim();
+}
 
 async function extract(source,id){
   const res=await fetch(source,{cache:'no-store'});
@@ -26,13 +32,15 @@ async function extract(source,id){
   const spec=LIFE_SOURCES[id];
   const nodes=[];
   for(const selector of spec?.selectors||[])doc.querySelectorAll(selector).forEach(n=>nodes.push(n));
-  if(!nodes.length)doc.querySelectorAll('main p,article p,main .line').forEach(n=>nodes.push(n));
+  if(!nodes.length)doc.querySelectorAll('main .line,article .line,main p,article p').forEach(n=>nodes.push(n));
   const seen=new Set(),lines=[];
   for(const n of nodes){
-    const text=canonicalText(n);
-    if(!text||seen.has(text))continue;
-    if(/^(Anterior|Siguiente|Inicio|Índice|Volver|Cerrar|Repetir|Música|Voz)$/i.test(text))continue;
-    seen.add(text);lines.push(text);
+    const text=nodeText(n);
+    const key=text.replace(/\s+/g,' ').trim();
+    if(!key||seen.has(key))continue;
+    if(/^(Anterior|Siguiente|Inicio|Índice|Volver|Cerrar|Repetir|Música|Voz)$/i.test(key))continue;
+    seen.add(key);
+    lines.push({text,wait:Number(n.dataset?.wait)||null,className:n.className||''});
   }
   return lines;
 }
@@ -46,9 +54,10 @@ function navId(delta){
   const item=leaf(target);
   return item&&isUnlocked(item,loadState())?target:null;
 }
-function navigate(id){
+function navigate(id,via){
   if(!id)return;
-  history.pushState({},'',`?read=${encodeURIComponent(id)}`);
+  const qs=new URLSearchParams();qs.set('read',id);if(via)qs.set('via',via);
+  history.pushState({},'',`?${qs.toString()}`);
   window.dispatchEvent(new CustomEvent('oras:route'));
 }
 function refreshLifeNext(){
@@ -58,40 +67,15 @@ function refreshLifeNext(){
 }
 
 function worldMarkup(id){
-  const ana=id.startsWith('ana-');
-  return `<div class="oras-reading-world ${ana?'is-ana':'is-solo'}" aria-hidden="true"><div class="oras-world-base"></div><div class="oras-world-pulse"></div><div class="oras-world-grain"></div>${id==='solo'?'<div class="oras-world-stars"></div><div class="oras-world-orb"></div>':''}</div>`;
-}
-function portraitMarkup(id){
-  if(id!=='ana-epilogo')return '';
-  return `<div class="oras-ana-portrait" data-portrait aria-hidden="true"><img src="./elegia-breve/ana-klaudya-fotografia.jpg" alt="Ana Klaudya"><button class="oras-question" data-question aria-label="Abrir Ceniciento desde el interrogante">?</button></div>`;
-}
-function installQuestion(){
-  const q=host?.querySelector('[data-question]');
-  if(!q)return;
-  q.addEventListener('click',()=>{
-    history.pushState({},'',`?read=ceniciento&via=interrogante`);
-    window.dispatchEvent(new CustomEvent('oras:route'));
-  });
-}
-function revealPortrait(){
-  const portrait=host?.querySelector('[data-portrait]');
-  if(!portrait)return;
-  portrait.classList.add('is-visible');
-  portrait.setAttribute('aria-hidden','false');
-  installQuestion();
+  return `<div class="oras-reading-world is-solo" aria-hidden="true"><div class="oras-world-base"></div><div class="oras-world-grain"></div><div class="oras-world-stars"></div><div class="oras-world-orb"></div></div>`;
 }
 function watchRead(id){
   observer?.disconnect();
-  clearTimeout(portraitTimer);
   const sentinel=host?.querySelector('[data-read-end]');
   if(!sentinel)return;
   observer=new IntersectionObserver(entries=>{
     if(entries.some(e=>e.isIntersecting)){
-      markVisited(id);
-      host?.classList.add('is-complete');
-      refreshLifeNext();
-      observer?.disconnect();
-      if(id==='ana-epilogo')portraitTimer=setTimeout(revealPortrait,6000);
+      markVisited(id);host?.classList.add('is-complete');refreshLifeNext();observer?.disconnect();
     }
   },{threshold:.6});
   observer.observe(sentinel);
@@ -104,8 +88,8 @@ function renderLocked(){
   host.querySelectorAll('[data-index]').forEach(b=>b.addEventListener('click',openIndex));
 }
 function cleanupRoute(){
-  observer?.disconnect();lineObserver?.disconnect();clearTimeout(portraitTimer);
-  cleanupCeniciento();cleanupMirror();cleanupExpansion();clearAudioDock();
+  observer?.disconnect();lineObserver?.disconnect();
+  cleanupAnaScene();cleanupCeniciento();cleanupMirror();cleanupExpansion();clearAudioDock();
   document.body.classList.remove('oras-ceniciento-gate','oras-ceniciento-reading','oras-mirror-reading','oras-ana-reading','oras-expansion-reading');
 }
 
@@ -122,26 +106,28 @@ export async function renderCurrent(){
   if(!item||!isUnlocked(item,loadState()))return renderLocked();
 
   document.body.classList.add('oras-reading');
-  document.body.classList.toggle('oras-ana-reading',id.startsWith('ana-'));
   host.hidden=false;
-  host.innerHTML=`<section class="oras-reader-shell is-loading">${worldMarkup(id)}<header class="oras-reader-head"><span>${id==='solo'?'I · LA VIDA':'ANA KLAUDYA'}</span><button data-index>Índice ORAS</button></header><div class="oras-reader-loading">Abriendo la lectura…</div></section>`;
+  host.innerHTML=`<section class="oras-reader-shell is-loading"><header class="oras-reader-head"><span>${id==='solo'?'I · LA VIDA':'ANA KLAUDYA'}</span><button data-index>Índice ORAS</button></header><div class="oras-reader-loading">Abriendo la lectura…</div></section>`;
   host.querySelector('[data-index]')?.addEventListener('click',openIndex);
 
   try{
-    const lines=await extract(LIFE_SOURCES[id].source,id);
+    const lines=id==='ana-interludio'?[]:await extract(LIFE_SOURCES[id].source,id);
     const prev=navId(-1),nextCandidate=candidateNavId(1),next=navId(1);
-    const prose=lines.map((text,i)=>`<p class="oras-text-line" style="--i:${i}">${esc(text)}</p>`).join('');
+    if(id.startsWith('ana-')){
+      renderAnaScene(host,{id,item,lines,prev,nextCandidate,next,openIndex,navigate});
+      scrollTo({top:0,left:0,behavior:'auto'});
+      return;
+    }
+
+    const prose=lines.map((line,i)=>`<p class="oras-text-line" style="--i:${i}">${htmlText(line.text)}</p>`).join('');
     const soloFirst=id==='solo';
-    host.innerHTML=`<section class="oras-reader-shell ${esc(LIFE_SOURCES[id].theme)}">${worldMarkup(id)}<header class="oras-reader-head"><span>${soloFirst?'I · LA VIDA':'ANA KLAUDYA'}</span><button data-index>Índice ORAS</button></header><article class="oras-reader-copy"><h1>${esc(item.title)}</h1>${prose}<div class="oras-read-end" data-read-end aria-hidden="true"></div>${portraitMarkup(id)}</article><nav class="oras-reader-nav" aria-label="Navegación de lectura"><button data-prev ${(!soloFirst&&!prev)?'disabled':''}>Anterior</button><button data-index>Índice</button><button data-next ${next?'':'disabled'} data-target="${esc(nextCandidate||'')}">Siguiente</button></nav></section>`;
+    host.innerHTML=`<section class="oras-reader-shell ${esc(LIFE_SOURCES[id].theme)}">${worldMarkup(id)}<header class="oras-reader-head"><span>I · LA VIDA</span><button data-index>Índice ORAS</button></header><article class="oras-reader-copy"><h1>${esc(item.title)}</h1>${prose}<div class="oras-read-end" data-read-end aria-hidden="true"></div></article><nav class="oras-reader-nav" aria-label="Navegación de lectura"><button data-prev ${(!soloFirst&&!prev)?'disabled':''}>Anterior</button><button data-index>Índice</button><button data-next ${next?'':'disabled'} data-target="${esc(nextCandidate||'')}">Siguiente</button></nav></section>`;
     host.querySelectorAll('[data-index]').forEach(b=>b.addEventListener('click',openIndex));
     host.querySelector('[data-prev]')?.addEventListener('click',()=>{if(soloFirst)openIndex();else navigate(prev);});
     host.querySelector('[data-next]')?.addEventListener('click',e=>{if(e.currentTarget.disabled)return;markVisited(id);navigate(e.currentTarget.dataset.target);});
-
     lineObserver=new IntersectionObserver(entries=>entries.forEach(e=>e.isIntersecting&&e.target.classList.add('is-visible')),{rootMargin:'0px 0px -12% 0px',threshold:.05});
     host.querySelectorAll('.oras-text-line').forEach(p=>lineObserver.observe(p));
-    watchRead(id);
-    mountAudioDock(host,id);
-    scrollTo({top:0,left:0,behavior:'auto'});
+    watchRead(id);mountAudioDock(host,id);scrollTo({top:0,left:0,behavior:'auto'});
   }catch(err){
     clearAudioDock();
     host.innerHTML=`<section class="oras-reader-shell"><header class="oras-reader-head"><span>ORAS</span><button data-index>Índice</button></header><div class="oras-reader-lock"><p>No se ha podido cargar el texto canónico.</p><small>${esc(err.message)}</small></div></section>`;
