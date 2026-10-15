@@ -24,6 +24,7 @@ jobs:
           node --check core/router.js
           node --check core/index-modal.js
           node --check core/reader.js
+          node --check core/solo-scene.js
           node --check core/ana-scenes.js
           node --check core/audio.js
           node --check core/ceniciento.js
@@ -36,7 +37,9 @@ jobs:
           node --check content/mirror-scenes.js
           node --check scripts/oras-audit.mjs
           node scripts/oras-audit.mjs
+          test -s solo-scene.css
           test -s ana-scenes.css
+          test -s index-legacy.html
           test -s estrella/umbral.jpg
           test -s ojos/ojos-ana.svg
           test -s sonrisa/labios-ana.jpg
