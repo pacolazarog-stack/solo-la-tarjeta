@@ -5,7 +5,7 @@ export function countVisited(state=loadState()){return LEAVES.reduce((n,x)=>n+(s
 export function anaComplete(state=loadState()){return ANA_IDS.every(id=>state.visited[id]);}
 export function soloComplete(state=loadState()){return !!state.visited.solo;}
 export function cenicientoComplete(state=loadState()){return !!state.visited.ceniciento;}
-export function mirrorReady(state=loadState()){return soloComplete(state)&&anaComplete(state)&&cenicientoComplete(state);}
+export function mirrorReady(state=loadState()){return soloComplete(state)&&anaComplete(state)&&cenicientoComplete(state)&&state.mirror.available===true;}
 export function isUnlocked(item,state=loadState()){
   if(item.id==='solo') return true;
   if(item.section==='ana') return soloComplete(state);
