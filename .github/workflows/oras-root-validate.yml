@@ -32,21 +32,5 @@ jobs:
           node --check content/manifest.js
           node --check content/life-sources.js
           node --check content/mirror-scenes.js
-          node --input-type=module - <<'JS'
-          import fs from 'node:fs';
-          import {LEAVES,TOTAL,EXPANSION_IDS} from './content/manifest.js';
-          import {MIRROR_SCENES} from './content/mirror-scenes.js';
-          if(TOTAL!==43) throw new Error(`TOTAL must be 43, got ${TOTAL}`);
-          if(LEAVES.length!==43) throw new Error(`LEAVES must contain 43 leaves, got ${LEAVES.length}`);
-          const ids=new Set(LEAVES.map(x=>x.id));
-          if(ids.size!==43) throw new Error('Leaf ids must be unique');
-          if(EXPANSION_IDS.length!==32) throw new Error(`Expansion must contain 32 leaves, got ${EXPANSION_IDS.length}`);
-          if(LEAVES.find(x=>x.id==='ceniciento')?.exclusive!=='interrogante') throw new Error('Ceniciento must remain exclusive to the interrogante');
-          if(MIRROR_SCENES.length!==32) throw new Error(`EL ESPEJO must contain 32 fragments, got ${MIRROR_SCENES.length}`);
-          if(LEAVES.findIndex(x=>x.id==='ciu-14')<LEAVES.findIndex(x=>x.id==='ciu-13')) throw new Error('ATLAS / AZAR must follow LA ÚLTIMA SALA');
-          if(LEAVES.at(-1)?.id!=='zero') throw new Error('Habitación Número Cero must be the final leaf');
-          const corpus=fs.readFileSync('EL_INVENTARIO_DEL_AIRE_TRILOGIA_CANONICA.md','utf8');
-          if(!corpus.trimEnd().endsWith('Nadie supo decir desde cuándo.')) throw new Error('Canonical final sentence has changed');
-          const revised=fs.readFileSync('inventario-del-aire/CAPITULOS_XI_XIII_ORAS.md','utf8');
-          for(const h of ['XI. LA MÁQUINA DE LAS HUELLAS','XII. EL RESONADOR','XIII. La última sala']) if(!revised.includes(h)) throw new Error(`Missing revised chapter: ${h}`);
-          JS
+          node --check scripts/oras-audit.mjs
+          node scripts/oras-audit.mjs
