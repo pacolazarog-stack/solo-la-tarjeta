@@ -63,6 +63,22 @@ for(const [name,id,selector] of anaCases){
   if(errors.length)failures.push(`${name}: ${errors.join(' | ')}`);await page.close();
 }
 
+// CENICIENTO: interrogante-only gate plus nine-stage ageing in read and voice modes.
+const cenState={version:1,cycleId:1,visited:{solo:true,'ana-prologo':true,'ana-elegia':true,'ana-ojos':true,'ana-labios':true,'ana-cabello':true,'ana-piel':true,'ana-interludio':true,'ana-epilogo':true},mirror:{available:false,completed:false,crossed:false},realityDeformed:false,audio:{enabled:false,volume:.8}};
+for(const [name,path,mode] of [
+  ['mobile-ceniciento-read','?read=ceniciento&via=interrogante&mode=read','read'],
+  ['mobile-ceniciento-voice','?read=ceniciento&via=interrogante&mode=voice','voice'],
+]){
+  const page=await browser.newPage({viewport:{width:390,height:844}});await seed(page,cenState);
+  const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
+  await page.goto(base+path,{waitUntil:'networkidle'});await page.waitForTimeout(900);await inspect(page,name);
+  if(await page.locator('.oras-ceniciento-world').count()!==1)failures.push(`${name}: scenic world missing`);
+  if(await page.locator('[data-cen-bg]').count()!==2)failures.push(`${name}: crossfade background pair missing`);
+  if(mode==='voice'&&await page.locator('.oras-ceniciento-portrait').count()!==1)failures.push(`${name}: portrait missing`);
+  if(mode==='read'&&await page.locator('.oras-ceniciento-line').count()<10)failures.push(`${name}: canonical reading text missing`);
+  if(errors.length)failures.push(`${name}: ${errors.join(' | ')}`);await page.close();
+}
+
 const completed={version:1,cycleId:1,visited:{solo:true,'ana-prologo':true,'ana-elegia':true,'ana-ojos':true,'ana-labios':true,'ana-cabello':true,'ana-piel':true,'ana-interludio':true,'ana-epilogo':true,ceniciento:true,espejo:true},mirror:{available:true,completed:true,crossed:true},realityDeformed:true,audio:{enabled:false,volume:.8}};
 for(const [name,path,viewport] of [
   ['desktop-expansion','./?read=inv-1',{width:1440,height:1100}],
