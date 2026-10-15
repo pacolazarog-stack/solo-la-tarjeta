@@ -11,7 +11,7 @@ import {renderExpansion,cleanupExpansion} from './expansion.js';
 import {renderAnaScene,cleanupAnaScene} from './ana-scenes.js';
 
 let host=null;
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
 
 function leaf(id){return LEAVES.find(x=>x.id===id)||null;}
 function lifeIndex(id){return LIFE_IDS.indexOf(id);}
@@ -45,6 +45,23 @@ function navId(delta){const target=candidateNavId(delta),item=leaf(target);retur
 function navigate(id,via){if(!id)return;const qs=new URLSearchParams();qs.set('read',id);if(via)qs.set('via',via);history.pushState({},'',`?${qs.toString()}`);window.dispatchEvent(new CustomEvent('oras:route'))}
 function renderLocked(){clearAudioDock();document.body.classList.add('oras-reading');host.hidden=false;host.innerHTML=`<section class="oras-reader-shell"><header class="oras-reader-head"><span>ORAS</span><button data-index>Índice</button></header><div class="oras-reader-lock"><p>Esta puerta todavía no está abierta.</p><button data-index>Abrir índice</button></div></section>`;host.querySelectorAll('[data-index]').forEach(b=>b.addEventListener('click',openIndex))}
 function cleanupRoute(){cleanupSoloScene();cleanupAnaScene();cleanupCeniciento();cleanupMirror();cleanupExpansion();clearAudioDock();document.body.classList.remove('oras-ceniciento-gate','oras-ceniciento-reading','oras-mirror-reading','oras-ana-reading','oras-expansion-reading','oras-solo-reading')}
+function resumeAnaThreshold(host,navigate){
+  const q=new URLSearchParams(location.search),state=loadState();
+  if(q.get('resume')!=='interrogante'||state.visited['ana-epilogo']!==true)return;
+  const paced=host.querySelector('[data-paced]');
+  if(paced&&!paced.disabled)paced.click();
+  host.querySelectorAll('.oras-ana-line').forEach(x=>x.classList.add('is-visible'));
+  const status=host.querySelector('[data-status]');if(status)status.textContent='Silencio.';
+  if(paced)paced.textContent='Volver a leer';
+  if(host.querySelector('.oras-ana-portrait'))return;
+  const wrap=document.createElement('div');
+  wrap.className='oras-ana-portrait';
+  wrap.setAttribute('aria-hidden','true');
+  wrap.innerHTML='<img src="./elegia-breve/ana-klaudya-fotografia.jpg" alt="Ana Klaudya"><button class="oras-question" type="button" aria-label="Abrir Ceniciento desde el interrogante">?</button>';
+  host.appendChild(wrap);
+  wrap.querySelector('.oras-question')?.addEventListener('click',()=>navigate('ceniciento','interrogante'));
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{wrap.classList.add('is-visible');wrap.setAttribute('aria-hidden','false');}));
+}
 
 export async function renderCurrent(){
   if(!host)return;
@@ -68,6 +85,7 @@ export async function renderCurrent(){
     const lines=id==='ana-interludio'?[]:await extract(LIFE_SOURCES[id].source,id);
     if(id.startsWith('ana-')){
       renderAnaScene(host,{id,item,lines,prev,nextCandidate,next,openIndex,navigate});
+      if(id==='ana-epilogo')resumeAnaThreshold(host,navigate);
       scrollTo({top:0,left:0,behavior:'auto'});
     }
   }catch(err){
