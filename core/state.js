@@ -11,7 +11,8 @@ export function loadState(){
 
 export function saveState(state){localStorage.setItem(KEY,JSON.stringify(state));window.dispatchEvent(new CustomEvent('oras:state',{detail:state}));return state;}
 export function mutate(fn){const s=loadState();fn(s);return saveState(s);}
-export function markVisited(id){return mutate(s=>{s.visited[id]=true;if(id==='ceniciento')s.mirror.available=true;if(id==='espejo'){s.mirror.completed=true;s.mirror.crossed=true;s.realityDeformed=true;}});}
+export function markVisited(id){return mutate(s=>{s.visited[id]=true;if(id==='espejo'){s.mirror.completed=true;s.mirror.crossed=true;s.realityDeformed=true;}});}
+export function allowMirror(){return mutate(s=>{if(s.visited.ceniciento===true)s.mirror.available=true;});}
 export function resetCycle(){return mutate(s=>{const scar=s.realityDeformed;s.cycleId=(s.cycleId||1)+1;s.visited={};s.mirror={available:false,completed:false,crossed:false};s.realityDeformed=scar;});}
 export function setAudio(patch){return mutate(s=>{s.audio={...s.audio,...patch};});}
 export {KEY};
