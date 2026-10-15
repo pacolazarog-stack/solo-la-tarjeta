@@ -9,12 +9,10 @@ const scenarios=[
   {name:'desktop-cover',viewport:{width:1440,height:1100},path:'./'},
   {name:'desktop-index-0',viewport:{width:1440,height:1100},path:'./?indice=1'},
   {name:'mobile-index-0',viewport:{width:390,height:844},path:'./?indice=1'},
-  {name:'mobile-solo',viewport:{width:390,height:844},path:'./?read=solo'},
 ];
 
 const browser=await chromium.launch({headless:true});
 let failures=[];
-
 async function seed(page,state){await page.addInitScript(s=>localStorage.setItem('oras.root.v1',JSON.stringify(s)),state);}
 async function inspect(page,name){
   const body=await page.locator('body').boundingBox();
@@ -25,12 +23,26 @@ async function inspect(page,name){
   if(overflow)failures.push(`${name}: horizontal overflow`);
   await page.screenshot({path:`${shots}/${name}.png`,fullPage:true});
 }
-
 for(const s of scenarios){
   const page=await browser.newPage({viewport:s.viewport});
   const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
   await page.goto(new URL(s.path,base).href,{waitUntil:'networkidle'});await page.waitForTimeout(500);await inspect(page,s.name);
   if(errors.length)failures.push(`${s.name}: ${errors.join(' | ')}`);await page.close();
+}
+
+// SOLO LA TARJETA: preserve the scenic structure rather than a generic text reader.
+{
+  const page=await browser.newPage({viewport:{width:390,height:844}});
+  const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
+  await page.goto(base+'?read=solo',{waitUntil:'networkidle'});await page.waitForTimeout(900);await inspect(page,'mobile-solo');
+  if(await page.locator('.oras-solo-world').count()!==1)failures.push('mobile-solo: scenic world missing');
+  if(await page.locator('.solo-dawn-dark,.solo-sunset,.solo-night,.solo-final-moon').count()<4)failures.push('mobile-solo: day/night layers missing');
+  if(await page.locator('.solo-copy article p').count()<40)failures.push('mobile-solo: canonical narrative not mounted');
+  if(await page.locator('.two-days-passage').count()!==1)failures.push('mobile-solo: two-days passage missing');
+  if(await page.locator('.tower-photo img,.photo-layer img').count()<1)failures.push('mobile-solo: photographic layer missing');
+  await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));await page.waitForTimeout(1200);
+  if(await page.locator('[data-next]').isDisabled())failures.push('mobile-solo: next did not unlock at end');
+  if(errors.length)failures.push(`mobile-solo: ${errors.join(' | ')}`);await page.close();
 }
 
 const lifeReady={version:1,cycleId:1,visited:{solo:true,'ana-prologo':true,'ana-elegia':true,'ana-ojos':true,'ana-labios':true,'ana-cabello':true,'ana-piel':true,'ana-interludio':true},mirror:{available:false,completed:false,crossed:false},realityDeformed:false,audio:{enabled:false,volume:.8}};
@@ -62,7 +74,6 @@ for(const [name,path,viewport] of [
   await page.goto(new URL(path,base).href,{waitUntil:'networkidle'});await page.waitForTimeout(700);await inspect(page,name);
   if(errors.length)failures.push(`${name}: ${errors.join(' | ')}`);await page.close();
 }
-
 {
   const state={version:1,cycleId:1,visited:{...completed.visited},mirror:{available:true,completed:false,crossed:false},realityDeformed:false,audio:{enabled:false,volume:.8}};delete state.visited.espejo;
   const page=await browser.newPage({viewport:{width:390,height:844}});await seed(page,state);
