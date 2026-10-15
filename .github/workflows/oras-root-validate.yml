@@ -34,3 +34,25 @@ jobs:
           node --check content/mirror-scenes.js
           node --check scripts/oras-audit.mjs
           node scripts/oras-audit.mjs
+      - name: Install Playwright Chromium
+        shell: bash
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Start local ORAS server
+        shell: bash
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/oras-http.log 2>&1 &
+          echo $! > /tmp/oras-http.pid
+          for i in {1..30}; do curl -fsS http://127.0.0.1:4173/ >/dev/null && break; sleep 1; done
+      - name: Browser audit desktop and mobile
+        shell: bash
+        run: node scripts/oras-browser-audit.mjs
+      - name: Upload browser audit screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: oras-browser-audit-${{ github.sha }}
+          path: browser-audit/
+          if-no-files-found: ignore
