@@ -1,4 +1,4 @@
-import {loadState,markVisited} from './state.js';
+import {loadState,markVisited,allowMirror} from './state.js';
 import {anaComplete} from './progress.js';
 import {openIndex} from './index-modal.js';
 import {mountAudioDock,clearAudioDock} from './audio.js';
@@ -29,6 +29,7 @@ function backToAna(){
 
 function toMirror(){
   markVisited('ceniciento');
+  allowMirror();
   history.pushState({},'','?read=espejo');
   window.dispatchEvent(new CustomEvent('oras:route'));
 }
@@ -53,14 +54,15 @@ function bindCommon(host){
 }
 function revealFollow(host){
   markVisited('ceniciento');
-  const button=host.querySelector('[data-follow-mirror]');
-  if(button){button.hidden=false;button.disabled=false;button.focus({preventScroll:true});}
+  const buttons=[...host.querySelectorAll('[data-follow-mirror]')];
+  buttons.forEach(button=>{button.hidden=false;button.disabled=false;});
+  buttons.find(button=>button.closest('.oras-ceniciento-follow'))?.focus({preventScroll:true});
 }
 
 async function renderRead(host){
   const lines=await loadText();
   const prose=lines.map((x,i)=>`<p class="oras-ceniciento-line" style="--i:${i}">${esc(x)}</p>`).join('');
-  host.innerHTML=`<section class="oras-reader-shell oras-ceniciento-shell">${shellHeader()}<div class="oras-ceniciento-world" aria-hidden="true"><img data-ceniciento-frame src="${framePath(1)}" alt=""><div></div></div><article class="oras-ceniciento-copy"><h1>CENICIENTO</h1>${prose}<div class="oras-read-end" data-ceniciento-end aria-hidden="true"></div><div class="oras-ceniciento-follow"><button type="button" class="oras-primary oras-primary-dark" data-follow-mirror hidden>Seguir</button></div></article><nav class="oras-reader-nav oras-reader-nav-dark"><button type="button" data-back-ana>Anterior</button><button type="button" data-index>Índice</button><button type="button" data-follow-mirror disabled>Seguir</button></nav></section>`;
+  host.innerHTML=`<section class="oras-reader-shell oras-ceniciento-shell">${shellHeader()}<div class="oras-ceniciento-world" aria-hidden="true"><img data-ceniciento-frame src="${framePath(1)}" alt=""><div></div></div><article class="oras-ceniciento-copy"><h1>CENICIENTO</h1>${prose}<div class="oras-read-end" data-ceniciento-end aria-hidden="true"></div><div class="oras-ceniciento-follow"><button type="button" class="oras-primary oras-primary-dark" data-follow-mirror hidden disabled>Seguir</button></div></article><nav class="oras-reader-nav oras-reader-nav-dark"><button type="button" data-back-ana>Anterior</button><button type="button" data-index>Índice</button><button type="button" data-follow-mirror disabled>Seguir</button></nav></section>`;
   bindCommon(host);
   host.querySelectorAll('[data-follow-mirror]').forEach(b=>b.addEventListener('click',()=>{if(!b.disabled)toMirror();}));
   const frame=host.querySelector('[data-ceniciento-frame]');
@@ -79,9 +81,9 @@ async function renderRead(host){
 }
 
 function renderVoice(host){
-  host.innerHTML=`<section class="oras-reader-shell oras-ceniciento-shell oras-ceniciento-voice">${shellHeader()}<div class="oras-ceniciento-world is-voice" aria-hidden="true"><img data-ceniciento-frame src="${framePath(1)}" alt=""><div></div></div><div class="oras-ceniciento-voice-copy"><p class="oras-kicker">voz · partitura emocional</p><h1>CENICIENTO</h1><p data-voice-time>0:00</p><button type="button" class="oras-primary oras-primary-dark" data-follow-mirror hidden>Seguir</button></div></section>`;
+  host.innerHTML=`<section class="oras-reader-shell oras-ceniciento-shell oras-ceniciento-voice">${shellHeader()}<div class="oras-ceniciento-world is-voice" aria-hidden="true"><img data-ceniciento-frame src="${framePath(1)}" alt=""><div></div></div><div class="oras-ceniciento-voice-copy"><p class="oras-kicker">voz · partitura emocional</p><h1>CENICIENTO</h1><p data-voice-time>0:00</p><button type="button" class="oras-primary oras-primary-dark" data-follow-mirror hidden disabled>Seguir</button></div></section>`;
   bindCommon(host);
-  const follow=host.querySelector('[data-follow-mirror]');follow.addEventListener('click',toMirror);
+  const follow=host.querySelector('[data-follow-mirror]');follow.addEventListener('click',()=>{if(!follow.disabled)toMirror();});
   const frame=host.querySelector('[data-ceniciento-frame]');
   const time=host.querySelector('[data-voice-time]');
   mountAudioDock(host,'ceniciento',{src:'./ceniciento/CENICIENTO_completo.m4a',loop:false,autoplay:true,label:'Voz Ceniciento',onTime:({current,duration})=>{
