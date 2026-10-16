@@ -1,4 +1,4 @@
-# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r2 · preview limpio completo hasta EL CERO r4 · navegación unificada r4
+# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r3 · preview limpio completo hasta EL CERO r4 · navegación unificada r4
 name: Publicar SOLO LA TARJETA
 
 on:
@@ -74,13 +74,13 @@ jobs:
           from pathlib import Path
           p=Path('elegia-breve/index.html')
           s=p.read_text(encoding='utf-8')
-          tag='<script defer src="/solo-la-tarjeta/ana-entry-failsafe-r1.js?v=20261016-ana-entry-failsafe-2"></script>'
+          tag='<script defer src="/solo-la-tarjeta/ana-entry-failsafe-r1.js?v=20261016-ana-entry-failsafe-3"></script>'
           if 'ana-entry-failsafe-r1.js' not in s:
               if '</body>' not in s: raise RuntimeError('No se encontró </body> en ANA KLAUDYA')
               s=s.replace('</body>',tag+'\n</body>',1)
               p.write_text(s,encoding='utf-8')
           PY
-          grep -Fq 'ana-entry-failsafe-r1.js?v=20261016-ana-entry-failsafe-2' elegia-breve/index.html
+          grep -Fq 'ana-entry-failsafe-r1.js?v=20261016-ana-entry-failsafe-3' elegia-breve/index.html
 
       - name: Preparar voz de Ceniciento
         shell: bash
