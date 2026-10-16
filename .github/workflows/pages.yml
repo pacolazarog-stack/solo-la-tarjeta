@@ -1,4 +1,4 @@
-# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r1 · preview limpio completo hasta EL CERO r4 · navegación unificada r2
+# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r1 · preview limpio completo hasta EL CERO r4 · navegación unificada r4
 name: Publicar SOLO LA TARJETA
 
 on:
@@ -143,7 +143,7 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
-          tag='<script defer src="/solo-la-tarjeta/oras-unified-nav-r1.js?v=20261016-unified-nav-2"></script>'
+          tag='<script defer src="/solo-la-tarjeta/oras-unified-nav-r1.js?v=20261016-unified-nav-4"></script>'
           excluded={'nmwp','nmwp-international'}
           count=0
           for p in Path('.').rglob('*.html'):
@@ -170,8 +170,8 @@ jobs:
               raise RuntimeError('No se inyectó la navegación ORAS')
           print(f'PASS: navegación ORAS unificada inyectada en {count} páginas.')
           PY
-          grep -Fq 'oras-unified-nav-r1.js?v=20261016-unified-nav-2' index.html
-          grep -Fq 'oras-unified-nav-r1.js?v=20261016-unified-nav-2' oras-raiz-limpia-preview/index.html
+          grep -Fq 'oras-unified-nav-r1.js?v=20261016-unified-nav-4' index.html
+          grep -Fq 'oras-unified-nav-r1.js?v=20261016-unified-nav-4' oras-raiz-limpia-preview/index.html
 
       - name: Empaquetar sitio
         uses: actions/upload-pages-artifact@v3
