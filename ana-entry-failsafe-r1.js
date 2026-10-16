@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
-if(window.__orasAnaEntryFailsafeR6)return;
-window.__orasAnaEntryFailsafeR6=true;
+if(window.__orasAnaEntryFailsafeR7)return;
+window.__orasAnaEntryFailsafeR7=true;
 
 const ANA_ROOT='/solo-la-tarjeta/elegia-breve';
 const POEM_ROUTES=new Set(['estrella','ojos','sonrisa','cabello','piel','interludio','epilogo','ceniciento']);
@@ -9,7 +9,7 @@ const isAnaRoot=()=>location.pathname.replace(/\/index\.html$/i,'/').replace(/\/
 const route=()=>location.hash.replace(/^#/,'').toLowerCase();
 
 const style=document.createElement('style');
-style.id='oras-ana-direct-route-r6';
+style.id='oras-ana-direct-route-r7';
 style.textContent=`
 html[data-oras-ana-route="estrella"] #cenicientoFrame,
 html[data-oras-ana-route="estrella"] #cenicientoFrame[hidden]{
@@ -46,12 +46,35 @@ function unlockChild(frame,piece){
   }catch(_){}
 }
 
+function releaseDirectRoute(){
+  if(!isAnaRoot())return;
+  const root=document.documentElement;
+  const body=document.body;
+  const frame=document.getElementById('cenicientoFrame');
+  const backdrop=document.getElementById('poemBackdrop');
+  root.removeAttribute('data-oras-ana-route');
+  root.classList.remove('poem-route-loading','ceniciento-open');
+  if(backdrop){backdrop.hidden=true;backdrop.classList.remove('is-leaving');}
+  if(frame){
+    frame.hidden=true;
+    frame.classList.remove('sonrisa-transition','sonrisa-visible','sonrisa-leaving','interlude-transition');
+    frame.removeAttribute('aria-busy');
+    for(const prop of ['display','opacity','visibility','pointer-events','z-index','background'])frame.style.removeProperty(prop);
+    const src=frame.getAttribute('src')||'';
+    if(src.includes('/estrella/'))frame.removeAttribute('src');
+  }
+  if(body){
+    body.classList.remove('ceniciento-open','sonrisa-open','eyes-open');
+    if(body.classList.contains('reading-ready'))body.classList.remove('locked');
+  }
+}
+
 function applyDirectRoute(){
   if(!isAnaRoot())return;
   const piece=route();
   const root=document.documentElement;
   if(!POEM_ROUTES.has(piece)){
-    root.removeAttribute('data-oras-ana-route');
+    releaseDirectRoute();
     return;
   }
   root.setAttribute('data-oras-ana-route',piece);
@@ -73,7 +96,7 @@ function applyDirectRoute(){
   frame.classList.remove('sonrisa-leaving');
   frame.removeAttribute('aria-busy');
 
-  const expected=`../${piece}/?music=parent&v=20261016-ana-direct-route-r6`;
+  const expected=`../${piece}/?music=parent&v=20261016-ana-direct-route-r7`;
   const current=frame.getAttribute('src')||'';
   if(!current.includes(`/${piece}/`))frame.src=expected;
 
