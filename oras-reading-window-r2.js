@@ -6,27 +6,25 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261014-master-index-15';
-const VERSION='20261016-root-stable-2';
+const VERSION='20261016-root-stable-3';
+const ANA_DOC=`${BASE}/elegia-breve/?v=20261016-ana-route-2`;
 const CURRENT_PATH=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');
 
-/*
- * La raíz ya usa la navegación ORAS unificada. Neutralizamos antes de que
- * se ejecuten los bloques inline heredados de SOLO LA TARJETA.
- */
+/* La raíz usa exclusivamente la navegación ORAS unificada. */
 if(CURRENT_PATH===BASE){
   window.__orasSoloPrevNextR1=true;
   window.__orasSoloAutoIntroInstalled=true;
 }
 
 const ANA_PARTS=Object.freeze([
-  ['estrella','Siguiendo una tarjeta',`${BASE}/elegia-breve/#estrella`],
-  ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
-  ['ojos','En tus ojos',`${BASE}/elegia-breve/#ojos`],
-  ['labios','En tus labios',`${BASE}/elegia-breve/#sonrisa`],
-  ['cabello','Tu cabello',`${BASE}/elegia-breve/#cabello`],
-  ['piel','Tu piel',`${BASE}/elegia-breve/#piel`],
-  ['interludio','Interludio · Iba a llevarte flores',`${BASE}/elegia-breve/#interludio`],
-  ['epilogo','Epílogo · A fuego lento · Flores',`${BASE}/elegia-breve/#epilogo`]
+  ['estrella','Siguiendo una tarjeta',`${ANA_DOC}#estrella`],
+  ['elegia','Elegía breve para Ana Klaudya',ANA_DOC],
+  ['ojos','En tus ojos',`${ANA_DOC}#ojos`],
+  ['labios','En tus labios',`${ANA_DOC}#sonrisa`],
+  ['cabello','Tu cabello',`${ANA_DOC}#cabello`],
+  ['piel','Tu piel',`${ANA_DOC}#piel`],
+  ['interludio','Interludio · Iba a llevarte flores',`${ANA_DOC}#interludio`],
+  ['epilogo','Epílogo · A fuego lento · Flores',`${ANA_DOC}#epilogo`]
 ]);
 
 const emptyParts=()=>Object.fromEntries(ANA_PARTS.map(([k])=>[k,false]));
@@ -56,13 +54,12 @@ function completeAnaPart(key){
 
 /* El índice antiguo deja de ser una segunda botonera. */
 const style=document.createElement('style');
-style.id='oras-reading-window-stable-r5';
+style.id='oras-reading-window-stable-r6';
 style.textContent=`
 .ou-reading-checklist,.ou-reading-window-r2{display:none!important}
 body.mirror .ou-reading-window-r2{display:none!important}
 `;
 document.head.appendChild(style);
-
 document.querySelector('.ou-reading-window-r2')?.remove();
 
 function openIndex(){
@@ -77,12 +74,15 @@ function openIndex(){
   }
 }
 
-/* ANA y la raíz cargan siempre la navegación ORAS única. */
+/* La botonera global sólo se instala en documentos principales de ORAS.
+   Las piezas hijas de ANA viven dentro de un iframe y no deben crear otra. */
 function ensureUnifiedNav(){
+  const isAnaChild=['/estrella','/ojos','/sonrisa','/cabello','/piel','/interludio','/epilogo'].some(s=>CURRENT_PATH.endsWith(s));
+  if(isAnaChild)return;
   if(window.__orasUnifiedNavR4||document.querySelector('script[data-oras-unified-nav-core]'))return;
   const script=document.createElement('script');
   script.dataset.orasUnifiedNavCore='1';
-  script.src=`${BASE}/oras-unified-nav-r1.js?v=20261016-unified-nav-5`;
+  script.src=`${BASE}/oras-unified-nav-r1.js?v=20261016-unified-nav-7`;
   script.defer=true;
   document.body.appendChild(script);
 }
@@ -127,28 +127,9 @@ function setupTracking(){
   addEventListener('oras:ana-part-complete',e=>completeAnaPart(e.detail?.part));
 }
 
-/* Ruta directa de ANA: comprobaciones finitas, sin observador recursivo. */
-function stabilizeDirectAnaRoute(){
-  if(!CURRENT_PATH.endsWith('/elegia-breve'))return;
-  const frame=document.getElementById('cenicientoFrame');
-  if(!frame)return;
-  const directPieces=new Set(['estrella','ojos','sonrisa','cabello','piel','interludio','epilogo','ceniciento']);
-  const enforce=()=>{
-    const piece=location.hash.slice(1);
-    if(!directPieces.has(piece))return;
-    frame.hidden=false;
-    if(piece==='estrella')frame.classList.add('sonrisa-visible');
-  };
-  frame.addEventListener('load',enforce);
-  addEventListener('hashchange',enforce);
-  addEventListener('popstate',enforce);
-  enforce();
-  setTimeout(enforce,250);
-  setTimeout(enforce,1200);
-}
-
+/* IMPORTANTE: este módulo ya no toca cenicientoFrame ni la ruta directa de ANA.
+   openPoem()/syncPoemRoute() son la única autoridad sobre el iframe. */
 setupTracking();
-stabilizeDirectAnaRoute();
 ensureUnifiedNav();
 window.ORASReadingWindowR2={version:VERSION,completeAnaPart,openIndex};
 })();
