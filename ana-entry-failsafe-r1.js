@@ -1,32 +1,26 @@
 (()=>{
 'use strict';
-if(window.__orasAnaEntryFailsafeR5)return;
-window.__orasAnaEntryFailsafeR5=true;
+if(window.__orasAnaEntryFailsafeR6)return;
+window.__orasAnaEntryFailsafeR6=true;
 
 const ANA_ROOT='/solo-la-tarjeta/elegia-breve';
 const POEM_ROUTES=new Set(['estrella','ojos','sonrisa','cabello','piel','interludio','epilogo','ceniciento']);
 const isAnaRoot=()=>location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'')===ANA_ROOT;
 const route=()=>location.hash.replace(/^#/,'').toLowerCase();
-let directRouteTimer=0;
-let directObserver=null;
 
-function forceFrameVisible(frame){
-  frame.hidden=false;
-  frame.classList.add('sonrisa-transition','sonrisa-visible');
-  frame.classList.remove('sonrisa-leaving');
-  frame.removeAttribute('aria-busy');
-  frame.style.setProperty('display','block','important');
-  frame.style.setProperty('opacity','1','important');
-  frame.style.setProperty('visibility','visible','important');
-  frame.style.setProperty('pointer-events','auto','important');
-  frame.style.setProperty('z-index','2147482000','important');
+const style=document.createElement('style');
+style.id='oras-ana-route-guard-r6';
+style.textContent=`
+html.oras-estrella-route #cenicientoFrame{
+  display:block!important;
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+  z-index:2147482000!important;
+  background:#090e19!important;
 }
-
-function releaseFrameOverride(frame){
-  if(!frame)return;
-  for(const prop of ['display','opacity','visibility','pointer-events','z-index'])frame.style.removeProperty(prop);
-  frame.classList.add('sonrisa-visible');
-}
+`;
+document.head.appendChild(style);
 
 function releaseChildGate(frame,piece){
   try{
@@ -48,32 +42,21 @@ function releaseChildGate(frame,piece){
       }
       const poem=doc.getElementById('poem');
       if(poem)poem.style.setProperty('visibility','visible','important');
-      setTimeout(()=>{
-        try{
-          if(!isAnaRoot()||route()!=='estrella')return;
-          const win=frame.contentWindow;
-          const childDoc=frame.contentDocument;
-          if(childDoc?.documentElement)childDoc.documentElement.classList.remove('publication-pending');
-          if(childDoc?.body){
-            childDoc.body.style.setProperty('visibility','visible','important');
-            childDoc.body.style.setProperty('opacity','1','important');
-          }
-          const childPoem=childDoc?.getElementById('poem');
-          if(childPoem?.hidden){
-            if(typeof win?.completeMoon==='function')win.completeMoon();
-            else childPoem.hidden=false;
-          }
-        }catch(_){}
-      },15000);
     }
     return true;
   }catch(_){return false;}
 }
 
-function stopDirectGuard(frame){
-  if(directRouteTimer){clearInterval(directRouteTimer);directRouteTimer=0;}
-  if(directObserver){directObserver.disconnect();directObserver=null;}
-  releaseFrameOverride(frame);
+function scheduleChildRelease(frame,piece){
+  const keep=()=>{
+    if(!isAnaRoot()||route()!==piece)return;
+    releaseChildGate(frame,piece);
+  };
+  frame.addEventListener('load',keep,{once:true});
+  keep();
+  setTimeout(keep,100);
+  setTimeout(keep,450);
+  setTimeout(keep,1400);
 }
 
 function revealPoemRoute(){
@@ -89,6 +72,7 @@ function revealPoemRoute(){
   if(!body||!frame)return false;
 
   root.classList.remove('publication-pending','poem-route-loading','oras-master-entry');
+  root.classList.toggle('oras-estrella-route',piece==='estrella');
   root.classList.add('ceniciento-open');
   body.classList.add('journey-started','ceniciento-open','sonrisa-open');
   body.classList.toggle('eyes-open',piece==='ojos');
@@ -97,39 +81,17 @@ function revealPoemRoute(){
   if(entry)entry.classList.add('is-open');
   if(backdrop)backdrop.hidden=false;
 
-  forceFrameVisible(frame);
+  frame.hidden=false;
+  frame.classList.add('sonrisa-transition','sonrisa-visible');
+  frame.classList.remove('sonrisa-leaving');
+  frame.removeAttribute('aria-busy');
   frame.classList.toggle('interlude-transition',piece==='interludio');
 
-  const expected=`../${piece}/?music=parent&v=20261016-ana-direct-route-r5`;
+  const expected=`../${piece}/?music=parent&v=20261016-ana-direct-route-r6`;
   const current=frame.getAttribute('src')||'';
   if(!current || !current.includes(`/${piece}/`))frame.src=expected;
 
-  if(directRouteTimer)clearInterval(directRouteTimer);
-  if(directObserver)directObserver.disconnect();
-
-  directObserver=new MutationObserver(()=>{
-    if(!isAnaRoot()||route()!==piece)return;
-    forceFrameVisible(frame);
-  });
-  directObserver.observe(frame,{attributes:true,attributeFilter:['hidden','class','style','src','aria-busy']});
-
-  directRouteTimer=setInterval(()=>{
-    if(!isAnaRoot()||route()!==piece){stopDirectGuard(frame);return;}
-    forceFrameVisible(frame);
-    releaseChildGate(frame,piece);
-  },160);
-
-  const keepAlive=()=>{
-    if(!isAnaRoot()||route()!==piece)return;
-    forceFrameVisible(frame);
-    releaseChildGate(frame,piece);
-  };
-  frame.addEventListener('load',keepAlive);
-  keepAlive();
-  setTimeout(keepAlive,80);
-  setTimeout(keepAlive,350);
-  setTimeout(keepAlive,1200);
-
+  scheduleChildRelease(frame,piece);
   return true;
 }
 
@@ -137,13 +99,14 @@ function restoreAnaEntry(){
   if(!isAnaRoot())return;
   if(revealPoemRoute())return;
 
+  const root=document.documentElement;
   const body=document.body;
   const entry=document.getElementById('entry');
   const button=document.getElementById('entryButton');
   const frame=document.getElementById('cenicientoFrame');
   if(!body||!entry)return;
 
-  if(frame)stopDirectGuard(frame);
+  root.classList.remove('oras-estrella-route');
 
   const genuineReading=
     body.classList.contains('journey-started')||
@@ -156,7 +119,7 @@ function restoreAnaEntry(){
 
   if(genuineReading)return;
 
-  document.documentElement.classList.remove('publication-pending','poem-route-loading','oras-master-entry');
+  root.classList.remove('publication-pending','poem-route-loading','oras-master-entry');
   body.classList.add('locked');
   body.classList.remove('portrait-revealed');
   entry.classList.remove('is-open');
@@ -172,11 +135,10 @@ function restoreAnaEntry(){
 
 const schedule=delay=>setTimeout(restoreAnaEntry,delay);
 addEventListener('DOMContentLoaded',()=>schedule(0),{once:true});
-addEventListener('pageshow',()=>schedule(80));
-addEventListener('load',()=>schedule(180),{once:true});
+addEventListener('pageshow',()=>schedule(60));
+addEventListener('load',()=>schedule(120),{once:true});
 addEventListener('hashchange',()=>schedule(0));
 addEventListener('popstate',()=>schedule(0));
-schedule(450);
-schedule(1000);
-schedule(2200);
+schedule(350);
+schedule(900);
 })();
