@@ -1,13 +1,14 @@
 (()=>{
 'use strict';
-if(window.__orasAnaEntryFailsafeR4)return;
-window.__orasAnaEntryFailsafeR4=true;
+if(window.__orasAnaEntryFailsafeR5)return;
+window.__orasAnaEntryFailsafeR5=true;
 
 const ANA_ROOT='/solo-la-tarjeta/elegia-breve';
 const POEM_ROUTES=new Set(['estrella','ojos','sonrisa','cabello','piel','interludio','epilogo','ceniciento']);
 const isAnaRoot=()=>location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'')===ANA_ROOT;
 const route=()=>location.hash.replace(/^#/,'').toLowerCase();
 let directRouteTimer=0;
+let directObserver=null;
 
 function forceFrameVisible(frame){
   frame.hidden=false;
@@ -46,14 +47,17 @@ function releaseChildGate(frame,piece){
         intro.style.setProperty('opacity','1','important');
       }
       const poem=doc.getElementById('poem');
-      // Mantiene la dramaturgia lunar, pero impide un negro indefinido.
+      if(poem)poem.style.setProperty('visibility','visible','important');
       setTimeout(()=>{
         try{
           if(!isAnaRoot()||route()!=='estrella')return;
           const win=frame.contentWindow;
           const childDoc=frame.contentDocument;
           if(childDoc?.documentElement)childDoc.documentElement.classList.remove('publication-pending');
-          if(childDoc?.body)childDoc.body.style.setProperty('visibility','visible','important');
+          if(childDoc?.body){
+            childDoc.body.style.setProperty('visibility','visible','important');
+            childDoc.body.style.setProperty('opacity','1','important');
+          }
           const childPoem=childDoc?.getElementById('poem');
           if(childPoem?.hidden){
             if(typeof win?.completeMoon==='function')win.completeMoon();
@@ -61,10 +65,15 @@ function releaseChildGate(frame,piece){
           }
         }catch(_){}
       },15000);
-      if(poem)poem.style.setProperty('visibility','visible','important');
     }
     return true;
   }catch(_){return false;}
+}
+
+function stopDirectGuard(frame){
+  if(directRouteTimer){clearInterval(directRouteTimer);directRouteTimer=0;}
+  if(directObserver){directObserver.disconnect();directObserver=null;}
+  releaseFrameOverride(frame);
 }
 
 function revealPoemRoute(){
@@ -91,25 +100,35 @@ function revealPoemRoute(){
   forceFrameVisible(frame);
   frame.classList.toggle('interlude-transition',piece==='interludio');
 
-  const expected=`../${piece}/?music=parent&v=20261016-ana-direct-route-r4`;
-  if(!frame.getAttribute('src'))frame.src=expected;
+  const expected=`../${piece}/?music=parent&v=20261016-ana-direct-route-r5`;
+  const current=frame.getAttribute('src')||'';
+  if(!current || !current.includes(`/${piece}/`))frame.src=expected;
 
-  clearInterval(directRouteTimer);
-  const started=Date.now();
+  if(directRouteTimer)clearInterval(directRouteTimer);
+  if(directObserver)directObserver.disconnect();
+
+  directObserver=new MutationObserver(()=>{
+    if(!isAnaRoot()||route()!==piece)return;
+    forceFrameVisible(frame);
+  });
+  directObserver.observe(frame,{attributes:true,attributeFilter:['hidden','class','style','src','aria-busy']});
+
   directRouteTimer=setInterval(()=>{
-    if(!isAnaRoot()||route()!==piece){clearInterval(directRouteTimer);directRouteTimer=0;releaseFrameOverride(frame);return;}
+    if(!isAnaRoot()||route()!==piece){stopDirectGuard(frame);return;}
     forceFrameVisible(frame);
     releaseChildGate(frame,piece);
-    if(Date.now()-started>6000){clearInterval(directRouteTimer);directRouteTimer=0;releaseFrameOverride(frame);}
-  },120);
+  },160);
 
-  frame.addEventListener('load',()=>{
+  const keepAlive=()=>{
+    if(!isAnaRoot()||route()!==piece)return;
     forceFrameVisible(frame);
     releaseChildGate(frame,piece);
-    setTimeout(()=>releaseChildGate(frame,piece),80);
-    setTimeout(()=>releaseChildGate(frame,piece),350);
-    setTimeout(()=>releaseFrameOverride(frame),900);
-  },{once:true});
+  };
+  frame.addEventListener('load',keepAlive);
+  keepAlive();
+  setTimeout(keepAlive,80);
+  setTimeout(keepAlive,350);
+  setTimeout(keepAlive,1200);
 
   return true;
 }
@@ -123,6 +142,8 @@ function restoreAnaEntry(){
   const button=document.getElementById('entryButton');
   const frame=document.getElementById('cenicientoFrame');
   if(!body||!entry)return;
+
+  if(frame)stopDirectGuard(frame);
 
   const genuineReading=
     body.classList.contains('journey-started')||
@@ -154,6 +175,7 @@ addEventListener('DOMContentLoaded',()=>schedule(0),{once:true});
 addEventListener('pageshow',()=>schedule(80));
 addEventListener('load',()=>schedule(180),{once:true});
 addEventListener('hashchange',()=>schedule(0));
+addEventListener('popstate',()=>schedule(0));
 schedule(450);
 schedule(1000);
 schedule(2200);
