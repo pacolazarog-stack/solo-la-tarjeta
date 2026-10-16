@@ -1,0 +1,51 @@
+name: Aplicar guardia visual de Siguiendo una tarjeta
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "estrella-standalone-guard-r1.js"
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Inyectar guardia autónomo una sola vez
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('estrella/index.html')
+          s=p.read_text(encoding='utf-8')
+          tag='<script src="/solo-la-tarjeta/estrella-standalone-guard-r1.js?v=20261016-star-guard-1"></script>'
+          if 'estrella-standalone-guard-r1.js' not in s:
+              if '</body>' not in s:
+                  raise RuntimeError('No se encontró </body> en estrella/index.html')
+              s=s.replace('</body>',tag+'\n</body>',1)
+              p.write_text(s,encoding='utf-8')
+          PY
+          grep -Fq 'estrella-standalone-guard-r1.js?v=20261016-star-guard-1' estrella/index.html
+      - name: Guardar cambio
+        shell: bash
+        run: |
+          if git diff --quiet -- estrella/index.html; then
+            echo 'Guardia ya presente.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add estrella/index.html
+          git commit -m 'ORAS: activa guardia visual autónomo de Siguiendo una tarjeta'
+          git push
+      - name: Publicar Pages
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref main
