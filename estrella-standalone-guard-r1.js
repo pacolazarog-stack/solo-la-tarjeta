@@ -38,4 +38,5 @@ else release();
 addEventListener('pageshow',release);
 setTimeout(release,120);
 setTimeout(release,900);
+// r1.1: cambio intencional para activar la inyección única del guardia.
 })();
