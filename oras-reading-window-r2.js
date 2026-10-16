@@ -6,18 +6,13 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261014-master-index-15';
-const VERSION='20261016-root-stable-4';
-const ANA_DOC=`${BASE}/elegia-breve/?v=20261016-ana-route-3`;
+const VERSION='20261016-root-stable-5';
+const ANA_DOC=`${BASE}/elegia-breve/?v=20261016-ana-route-4`;
 const CURRENT_PATH=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');
 const params=new URLSearchParams(location.search);
 const STAR_STANDALONE=`${BASE}/estrella/?music=parent&standalone=1&from=ana`;
+const STAR_MUSIC_STATE='oras.ana.star.music.v1';
 
-/*
- * El prólogo deja de depender del iframe heredado. Cualquier entrada real a
- * #estrella se convierte en una escena autónoma de primer nivel. Así se rompe
- * el bucle elegia-breve -> iframe -> estrella -> elegia-breve que dejaba la
- * pantalla crema sin contenido en Edge.
- */
 function leaveForStandaloneStar(){
   if(window.parent!==window)return false;
   if(!CURRENT_PATH.endsWith('/elegia-breve'))return false;
@@ -28,24 +23,67 @@ function leaveForStandaloneStar(){
 if(leaveForStandaloneStar())return;
 addEventListener('hashchange',leaveForStandaloneStar);
 
-/* Al volver del prólogo autónomo, entrar directamente en la lectura de ANA.
-   Usamos el botón nativo ya enlazado al closure de ANA para conservar su
-   estado interno de lectura, voz y scroll. */
 function resumeAnaAfterPrologue(){
   if(!CURRENT_PATH.endsWith('/elegia-breve')||params.get('afterPrologue')!=='1')return;
   const clean=new URL(location.href);
   clean.searchParams.delete('afterPrologue');
   try{history.replaceState(null,'',clean.pathname+clean.search+clean.hash);}catch(_){ }
+
+  const forceCleanAna=()=>{
+    const root=document.documentElement;
+    const body=document.body;
+    root?.classList.remove('poem-route-loading','ceniciento-open');
+    body?.classList.remove('ceniciento-open','sonrisa-open','eyes-open','locked','prelude','voice-open','portrait-revealed');
+    body?.classList.add('journey-started','sound-ready','reading-ready');
+    const backdrop=document.getElementById('poemBackdrop');
+    if(backdrop){backdrop.hidden=true;backdrop.classList.remove('is-leaving');}
+    const frame=document.getElementById('cenicientoFrame');
+    if(frame){
+      frame.hidden=true;
+      frame.classList.remove('sonrisa-transition','sonrisa-visible','sonrisa-leaving','interlude-transition');
+      frame.removeAttribute('aria-busy');
+      frame.removeAttribute('src');
+      for(const prop of ['display','opacity','visibility','pointer-events','z-index','background'])frame.style.removeProperty(prop);
+    }
+    const entry=document.getElementById('entry');
+    entry?.classList.add('is-open');
+    const reading=document.getElementById('reading');
+    if(reading){reading.style.removeProperty('visibility');reading.style.removeProperty('opacity');reading.style.removeProperty('display');}
+    const finale=document.getElementById('portraitFinale');
+    finale?.setAttribute('aria-hidden','true');
+  };
+
+  const restoreMusic=()=>{
+    const music=document.getElementById('voiceMusic');
+    if(!music)return;
+    try{
+      const saved=JSON.parse(sessionStorage.getItem(STAR_MUSIC_STATE)||'null');
+      if(saved&&Number.isFinite(saved.time))music.currentTime=Math.max(0,saved.time);
+      if(saved&&Number.isFinite(saved.volume))music.volume=Math.max(0,Math.min(1,saved.volume));
+      if(saved?.playing){
+        music.muted=false;
+        music.play().catch(()=>{});
+      }
+      sessionStorage.removeItem(STAR_MUSIC_STATE);
+    }catch(_){ }
+  };
+
   const resume=()=>{
     const read=document.getElementById('anaRead');
-    if(read){read.click();return true;}
-    return false;
+    if(!read)return false;
+    forceCleanAna();
+    read.click();
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      forceCleanAna();
+      window.scrollTo({top:Math.max(0,window.innerHeight*.25),left:0,behavior:'auto'});
+      restoreMusic();
+    }));
+    setTimeout(()=>{forceCleanAna();restoreMusic();},240);
+    return true;
   };
   if(!resume())addEventListener('DOMContentLoaded',()=>setTimeout(resume,0),{once:true});
 }
 
-/* En la escena autónoma, la continuidad aparece sólo cuando la última frase
-   ha sido revelada. */
 function installStandaloneStarContinuation(){
   if(window.parent!==window||!CURRENT_PATH.endsWith('/estrella')||params.get('standalone')!=='1')return;
   const install=()=>{
@@ -58,12 +96,60 @@ function installStandaloneStarContinuation(){
 #orasStarContinue:focus-visible{outline:2px solid #ead5a5;outline-offset:3px}
 `;
     document.head.appendChild(style);
+
+    const localMusic=document.createElement('audio');
+    localMusic.id='orasStarLocalMusic';
+    localMusic.src=`${BASE}/elegia-breve/ana-klaudya.m4a`;
+    localMusic.preload='auto';
+    localMusic.loop=true;
+    localMusic.volume=.30;
+    localMusic.setAttribute('playsinline','');
+    localMusic.style.display='none';
+    document.body.appendChild(localMusic);
+
+    const musicStart=document.getElementById('musicStart');
+    const musicEnabled=document.getElementById('musicEnabled');
+    const musicLevel=document.getElementById('musicLevel');
+    const musicValue=document.getElementById('musicValue');
+
+    const syncLocalVolume=()=>{
+      const level=musicLevel?Number(musicLevel.value)/100:.30;
+      localMusic.volume=Math.max(0,Math.min(.8,Number.isFinite(level)?level:.30));
+      localMusic.muted=musicEnabled?!musicEnabled.checked:false;
+      if(musicValue&&musicLevel)musicValue.textContent=musicLevel.value+' %';
+    };
+    const startLocalMusic=()=>{
+      syncLocalVolume();
+      localMusic.muted=false;
+      if(musicEnabled)musicEnabled.checked=true;
+      const play=localMusic.play();
+      if(play&&typeof play.then==='function'){
+        play.then(()=>{if(musicStart)musicStart.hidden=true;}).catch(()=>{if(musicStart){musicStart.hidden=false;musicStart.textContent='Activar música';}});
+      }
+    };
+    syncLocalVolume();
+    localMusic.play().then(()=>{if(musicStart)musicStart.hidden=true;}).catch(()=>{if(musicStart){musicStart.hidden=false;musicStart.textContent='Activar música';}});
+    musicStart?.addEventListener('click',startLocalMusic);
+    musicEnabled?.addEventListener('change',()=>{
+      syncLocalVolume();
+      if(musicEnabled.checked)startLocalMusic();
+      else localMusic.pause();
+    });
+    musicLevel?.addEventListener('input',syncLocalVolume);
+    document.addEventListener('pointerdown',()=>{
+      if(musicEnabled?.checked&&localMusic.paused)startLocalMusic();
+    },{once:true,capture:true});
+
     const a=document.createElement('a');
     a.id='orasStarContinue';
     a.href=`${ANA_DOC}&afterPrologue=1`;
     a.textContent='Continuar · Ana Klaudya →';
     a.setAttribute('aria-label','Continuar a Ana Klaudya');
+    a.addEventListener('click',()=>{
+      try{sessionStorage.setItem(STAR_MUSIC_STATE,JSON.stringify({time:localMusic.currentTime||0,volume:localMusic.volume,playing:!localMusic.paused&&!localMusic.muted}));}catch(_){ }
+    });
     document.body.appendChild(a);
+
     const final=[...document.querySelectorAll('.phrase')].at(-1);
     if(!final){a.classList.add('is-ready');return;}
     const reveal=()=>{
@@ -81,7 +167,6 @@ function installStandaloneStarContinuation(){
   else install();
 }
 
-/* La raíz usa exclusivamente la navegación ORAS unificada. */
 if(CURRENT_PATH===BASE){
   window.__orasSoloPrevNextR1=true;
   window.__orasSoloAutoIntroInstalled=true;
@@ -123,9 +208,8 @@ function completeAnaPart(key){
   writeState({anaParts:parts,anaComplete:anaComplete(parts)});
 }
 
-/* El índice antiguo deja de ser una segunda botonera. */
 const style=document.createElement('style');
-style.id='oras-reading-window-stable-r7';
+style.id='oras-reading-window-stable-r8';
 style.textContent=`
 .ou-reading-checklist,.ou-reading-window-r2{display:none!important}
 body.mirror .ou-reading-window-r2{display:none!important}
@@ -145,8 +229,6 @@ function openIndex(){
   }
 }
 
-/* La botonera global sólo se instala en documentos principales de ORAS.
-   Las piezas hijas de ANA no deben crear otra. */
 function ensureUnifiedNav(){
   const isAnaChild=['/estrella','/ojos','/sonrisa','/cabello','/piel','/interludio','/epilogo'].some(s=>CURRENT_PATH.endsWith(s));
   if(isAnaChild)return;
