@@ -1,150 +1,24 @@
-# Mantiene canónicas la navegación, los finales de relectura y las versiones públicas del recorrido ORAS.
+# Workflow legado conservado sólo para ejecución manual.
+# No debe reescribir archivos de producción automáticamente en cada push.
 name: Force ORAS universe cache refresh
+
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
+
 permissions:
-  contents: write
+  contents: read
+
 jobs:
-  bump:
-    if: github.actor != 'github-actions[bot]'
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Bump universe script URLs and current navigation styles
+      - name: Verificar scripts ORAS sin modificar el repositorio
         shell: bash
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-
-          version = '20261014-reading-counter-fix-2'
-          reading_version = '20261013-ana-portrait-prev-next-1'
-          nav_version = '20261012-ceniciento-linear-nav-1'
-          nav_link = f'<link rel="stylesheet" href="../oras-ceniciento-nav-r1.css?v={nav_version}">'
-
-          solo_intro = r'''<script data-oras-solo-auto-intro="v1">
-          (()=>{
-            'use strict';
-            if(window.__orasSoloAutoIntroInstalled)return;
-            window.__orasSoloAutoIntroInstalled=true;
-
-            const path=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'')||'/';
-            if(path!=='/solo-la-tarjeta')return;
-
-            const begin=()=>{
-              if(window.scrollY>8)return;
-              const title=document.querySelector('.hero h1');
-              if(!title)return;
-
-              const root=document.documentElement;
-              const oldScrollBehavior=root.style.scrollBehavior;
-              const oldOverscroll=root.style.overscrollBehavior;
-              const scrollKeys=new Set(['ArrowDown','ArrowUp','PageDown','PageUp','Home','End',' ']);
-              let locked=true;
-
-              const preventScroll=event=>{
-                if(!locked)return;
-                event.preventDefault();
-              };
-              const preventKey=event=>{
-                if(!locked||!scrollKeys.has(event.key))return;
-                const target=event.target;
-                const tag=target?.tagName;
-                if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT'||target?.isContentEditable)return;
-                event.preventDefault();
-              };
-
-              addEventListener('wheel',preventScroll,{passive:false,capture:true});
-              addEventListener('touchmove',preventScroll,{passive:false,capture:true});
-              addEventListener('keydown',preventKey,{capture:true});
-
-              const release=()=>{
-                if(!locked)return;
-                locked=false;
-                removeEventListener('wheel',preventScroll,true);
-                removeEventListener('touchmove',preventScroll,true);
-                removeEventListener('keydown',preventKey,true);
-                root.style.scrollBehavior=oldScrollBehavior;
-                root.style.overscrollBehavior=oldOverscroll;
-                document.body?.classList.remove('oras-solo-auto-intro');
-                try{window.dispatchEvent(new CustomEvent('oras:solo-auto-intro-end'))}catch(_){}
-              };
-
-              root.style.scrollBehavior='auto';
-              root.style.overscrollBehavior='none';
-              document.body?.classList.add('oras-solo-auto-intro');
-
-              const rect=title.getBoundingClientRect();
-              const origin=window.scrollY;
-              const destination=Math.max(0,origin+rect.top+rect.height/2-window.innerHeight/2);
-              if(destination<=origin+2){release();return}
-
-              const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches===true;
-              const duration=reduced?1400:7800;
-              const started=performance.now();
-              try{window.dispatchEvent(new CustomEvent('oras:solo-auto-intro-start',{detail:{destination,duration}}))}catch(_){}
-
-              const frame=now=>{
-                if(!locked)return;
-                const p=Math.max(0,Math.min(1,(now-started)/duration));
-                const eased=p*p*(3-2*p);
-                window.scrollTo(0,origin+(destination-origin)*eased);
-                if(p<1){requestAnimationFrame(frame)}else{window.scrollTo(0,destination);requestAnimationFrame(release)}
-              };
-              requestAnimationFrame(frame);
-            };
-
-            if(document.readyState==='complete'){setTimeout(begin,240)}else{addEventListener('load',()=>setTimeout(begin,240),{once:true})}
-          })();
-          </script>'''
-
-          for p in Path('.').rglob('*.html'):
-              s = p.read_text(encoding='utf-8')
-              updated = re.sub(r'narrative-universe\.js\?v=[^"\'<>\s]+',f'narrative-universe.js?v={version}',s)
-              updated = re.sub(r'oras-reading-window-r2\.js\?v=[^"\'<>\s]+',f'oras-reading-window-r2.js?v={reading_version}',updated)
-              if p.as_posix() == 'index.html':
-                  updated = updated.replace('      <div class="work-subtitle">Relato breve digital inmersivo</div>\n', '')
-                  updated = updated.replace('<div class="work-subtitle">Relato breve digital inmersivo</div>', '')
-                  updated = re.sub(r'\n?<script data-oras-solo-auto-intro="v1">.*?</script>\n?','\n',updated,flags=re.S)
-                  updated = updated.replace('</body>', solo_intro + '\n</body>', 1)
-              if p.as_posix() == 'ceniciento/index.html':
-                  updated = re.sub(r'\n?<link rel="stylesheet" href="\.\./oras-ceniciento-nav-r1\.css\?v=[^"]+">','',updated)
-                  updated = updated.replace('</head>', nav_link + '\n</head>', 1)
-              if updated != s:p.write_text(updated, encoding='utf-8')
-
-          ana = Path('elegia-breve/index.html')
-          s = ana.read_text(encoding='utf-8')
-          s = s.replace("          const finalJourneyNav=document.getElementById('journeyNav');\n          if(finalJourneyNav)finalJourneyNav.hidden=true;","          const finalJourneyNav=document.getElementById('journeyNav');\n          setJourney('elegia');\n          if(finalJourneyNav)finalJourneyNav.hidden=false;")
-          if 'window.ORASSetJourney=setJourney;' not in s:s=s.replace("      function goJourney(piece){","      window.ORASSetJourney=setJourney;\n      function goJourney(piece){",1)
-          s = re.sub(r'\n?\s*<div class="epilogue-invitation" id="epilogueInvitation" hidden>.*?</div>\s*','\n',s,count=1,flags=re.S)
-          s = re.sub(r'^\s*document\.getElementById\(["\']epilogueInvitation["\']\)\.hidden=true;\s*\n?','',s,flags=re.M)
-          s = re.sub(r'\s*let epilogueAlreadyRead=false;\s*try\{.*?document\.getElementById\(["\']epilogueInvitation["\']\)\.hidden=epilogueAlreadyRead;\s*','\n',s,count=1,flags=re.S)
-          s = s.replace("      for(const id of ['anaEpilogue','readEpilogue'])document.getElementById(id).addEventListener('click',openEpilogue);","      document.getElementById('anaEpilogue').addEventListener('click',openEpilogue);")
-          s = re.sub(r'^\s*\.epilogue-invitation\{[^\n]*\}\s*\n?', '', s, flags=re.M)
-          s = re.sub(r'^\s*\.epilogue-invitation\[hidden\]\{[^\n]*\}\s*\n?', '', s, flags=re.M)
-          if 'const elegiaAlreadyReadAtFinal=()=>{' not in s:s=s.replace("      const startFinalSequence=()=>{","""      const elegiaAlreadyReadAtFinal=()=>{\n        try{const saved=JSON.parse(localStorage.getItem('oras.universe.v2')||'{}');return saved?.anaParts?.elegia===true;}catch(_){return false;}\n      };\n\n      const startFinalSequence=()=>{""",1)
-          old_final = """          finalHeat.classList.add('show-calor');\n          intensifyWarmWithCalor();\n},4500);"""
-          new_final = """          finalHeat.classList.add('show-calor');\n          intensifyWarmWithCalor();\n          if(elegiaAlreadyReadAtFinal()){\n            clearTimeout(finalPortraitTimer);\n            finalPortraitTimer=setTimeout(()=>{\n              finalPortraitTimer=null;\n              if(cenicientoFrame.hidden && body.classList.contains('reading-ready'))revealPortrait();\n            },4000);\n          }\n},4500);"""
-          if old_final in s:s=s.replace(old_final,new_final,1)
-          ana.write_text(s,encoding='utf-8')
-
-          rw = Path('oras-reading-window-r2.js')
-          r = rw.read_text(encoding='utf-8')
-          r = re.sub(r"const VERSION='[^']+';","const VERSION='20261013-ana-portrait-prev-next-1';",r,count=1)
-          old_reveal = "      body.classList.add('portrait-revealed');"
-          new_reveal = "      body.classList.add('portrait-revealed');\n      try{window.ORASSetJourney?.('elegia')}catch(_){}"
-          if new_reveal not in r and old_reveal in r:r=r.replace(old_reveal,new_reveal,1)
-          rw.write_text(r,encoding='utf-8')
-          PY
-      - name: Commit refreshed URLs
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -u
-          if git diff --cached --quiet; then exit 0; fi
-          git commit -m "ORAS: actualiza caché de navegación y transiciones"
-          git push
+          node --check narrative-universe.js
+          node --check oras-reading-window-r2.js
+          node --check oras-unified-nav-r1.js
+          node --check oras-master-index-r1.js
+          echo 'PASS: workflow de caché en modo manual y no mutante.'
