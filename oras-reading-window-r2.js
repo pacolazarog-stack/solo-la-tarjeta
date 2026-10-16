@@ -6,7 +6,18 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261014-master-index-15';
-const VERSION='20261013-ana-portrait-prev-next-1';
+const VERSION='20261016-root-stable-2';
+const CURRENT_PATH=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');
+
+/*
+ * La raíz ya usa la navegación ORAS unificada. Neutralizamos antes de que
+ * se ejecuten los bloques inline heredados de SOLO LA TARJETA.
+ */
+if(CURRENT_PATH===BASE){
+  window.__orasSoloPrevNextR1=true;
+  window.__orasSoloAutoIntroInstalled=true;
+}
+
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/elegia-breve/#estrella`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -45,7 +56,7 @@ function completeAnaPart(key){
 
 /* El índice antiguo deja de ser una segunda botonera. */
 const style=document.createElement('style');
-style.id='oras-reading-window-stable-r4';
+style.id='oras-reading-window-stable-r5';
 style.textContent=`
 .ou-reading-checklist,.ou-reading-window-r2{display:none!important}
 body.mirror .ou-reading-window-r2{display:none!important}
@@ -66,7 +77,7 @@ function openIndex(){
   }
 }
 
-/* ANA carga siempre la navegación ORAS única desde su propio núcleo. */
+/* ANA y la raíz cargan siempre la navegación ORAS única. */
 function ensureUnifiedNav(){
   if(window.__orasUnifiedNavR4||document.querySelector('script[data-oras-unified-nav-core]'))return;
   const script=document.createElement('script');
@@ -87,7 +98,7 @@ function observeEnd(selector,key,ratio=.55){
   io.observe(target);
 }
 function setupTracking(){
-  const path=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');
+  const path=CURRENT_PATH;
   if(path.endsWith('/estrella'))observeEnd('.phrase','estrella');
   if(path.endsWith('/ojos'))observeEnd('.line','ojos');
   if(path.endsWith('/sonrisa'))observeEnd('.line','labios');
@@ -116,13 +127,9 @@ function setupTracking(){
   addEventListener('oras:ana-part-complete',e=>completeAnaPart(e.detail?.part));
 }
 
-/*
- * Ruta directa de ANA: comprobaciones finitas, sin MutationObserver sobre
- * class/style/src y sin intervalos. La lógica principal vive en openPoem().
- */
+/* Ruta directa de ANA: comprobaciones finitas, sin observador recursivo. */
 function stabilizeDirectAnaRoute(){
-  const path=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');
-  if(!path.endsWith('/elegia-breve'))return;
+  if(!CURRENT_PATH.endsWith('/elegia-breve'))return;
   const frame=document.getElementById('cenicientoFrame');
   if(!frame)return;
   const directPieces=new Set(['estrella','ojos','sonrisa','cabello','piel','interludio','epilogo','ceniciento']);
@@ -144,12 +151,4 @@ setupTracking();
 stabilizeDirectAnaRoute();
 ensureUnifiedNav();
 window.ORASReadingWindowR2={version:VERSION,completeAnaPart,openIndex};
-
-if(location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'')===BASE&&!window.__orasMasterIndexLoader){
-  window.__orasMasterIndexLoader=true;
-  const script=document.createElement('script');
-  script.src=`${BASE}/oras-master-index-r1.js?v=${MASTER_VERSION}`;
-  script.async=false;
-  document.head.appendChild(script);
-}
 })();
