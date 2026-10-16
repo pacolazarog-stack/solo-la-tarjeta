@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
-if(window.__orasUnifiedNavR3)return;
-window.__orasUnifiedNavR3=true;
+if(window.__orasUnifiedNavR4)return;
+window.__orasUnifiedNavR4=true;
 
 const ROOT='/solo-la-tarjeta';
 const qs=()=>new URLSearchParams(location.search);
@@ -79,7 +79,7 @@ function current(){
 }
 
 const style=document.createElement('style');
-style.id='oras-unified-nav-r3-style';
+style.id='oras-unified-nav-r4-style';
 style.textContent=`
 #orasUnifiedNav{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:2147483645;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;width:min(560px,calc(100vw - 24px));height:48px;border:1px solid rgba(255,255,255,.14);border-radius:14px;overflow:hidden;background:rgba(10,10,10,.88);color:#f3eee6;box-shadow:0 8px 30px rgba(0,0,0,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
 #orasUnifiedNav[hidden]{display:none!important}
@@ -126,6 +126,15 @@ function soloMove(dir){
  scrollBy({top:dir*innerHeight*.82,behavior:'smooth'});
 }
 
+function nativeAnaMove(dir,id){
+ if(!ANA_ORDER.includes(id))return false;
+ if(id==='ana-estrella'&&dir<0)return false;
+ if(id==='ana-epilogo'&&dir>0)return false;
+ const native=document.getElementById(dir<0?'journeyPrevious':'journeyNext');
+ if(native&&!native.disabled){native.click();return true;}
+ return false;
+}
+
 function epilogueNext(){
  const candidates=[...document.querySelectorAll('button,a,[role="button"]')].filter(el=>{
    if(el.closest('#orasUnifiedNav'))return false;
@@ -140,8 +149,7 @@ function epilogueNext(){
  });
  if(qmark){qmark.click();return;}
  const portrait=document.querySelector('.portrait-finale');
- if(portrait){portrait.scrollIntoView({block:'end',behavior:'smooth'});return;}
- // Permanecer en el epílogo si todavía no ha aparecido la puerta narrativa.
+ if(portrait){portrait.scrollIntoView({block:'end',behavior:'smooth'});}
 }
 
 function move(dir){
@@ -149,6 +157,7 @@ function move(dir){
  if(!id)return;
  if(id==='solo'){soloMove(dir);return;}
  if(id==='ana-epilogo'&&dir>0){epilogueNext();return;}
+ if(nativeAnaMove(dir,id)){setTimeout(update,0);return;}
  const i=ORDER.indexOf(id);
  if(i<0)return;
  const target=i+dir;
