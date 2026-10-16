@@ -1,21 +1,20 @@
 (() => {
   const script=document.currentScript;
   const root=new URL('./',script.src);
-  document.documentElement.classList.add('publication-pending');
+
+  /*
+   * La política de publicación se comprueba en segundo plano.
+   * Nunca ocultamos el body mientras esperamos: dentro de iframes esa
+   * compuerta podía dejar SIGUIENDO UNA TARJETA permanentemente en negro.
+   */
+  document.documentElement.classList.remove('publication-pending');
   const style=document.createElement('style');
-  style.textContent='.publication-pending body{visibility:hidden}.publication-pending::before{content:"Preparando la lectura…";position:fixed;inset:0;display:grid;place-items:center;background:#eef1e9;color:#201d19;z-index:2147483647;font:18px/1.5 Georgia,serif}.publication-notice button{display:block;margin:1rem auto 0;padding:.75rem 1.2rem;min-height:44px;font:inherit;cursor:pointer}.without-images .portrait-finale img,.without-images .detail-background svg,.without-images .detail-background img{display:none!important}.without-name .name-prelude{display:none!important}.publication-notice{max-width:42rem;margin:15vh auto;padding:30px;font:18px/1.6 system-ui;background:#f5f3ed;color:#201d19}body:has(.heat-final.is-shown) .pulse-field,body:has(.heat-final.is-shown) .pulse-field::before,body:has(.heat-final.is-shown) .pulse-field::after,body:has(.heat-final.is-shown) .layer-warm{animation:none!important;will-change:auto!important}body:has(.heat-final.is-shown) .layer-warm{filter:none!important}';
+  style.textContent='.publication-notice button{display:block;margin:1rem auto 0;padding:.75rem 1.2rem;min-height:44px;font:inherit;cursor:pointer}.without-images .portrait-finale img,.without-images .detail-background svg,.without-images .detail-background img{display:none!important}.without-name .name-prelude{display:none!important}.publication-notice{max-width:42rem;margin:15vh auto;padding:30px;font:18px/1.6 system-ui;background:#f5f3ed;color:#201d19}body:has(.heat-final.is-shown) .pulse-field,body:has(.heat-final.is-shown) .pulse-field::before,body:has(.heat-final.is-shown) .pulse-field::after,body:has(.heat-final.is-shown) .layer-warm{animation:none!important;will-change:auto!important}body:has(.heat-final.is-shown) .layer-warm{filter:none!important}';
   document.head.append(style);
 
-  /* La política de publicación nunca debe dejar la obra bloqueada en la pantalla de espera. */
-  let gateReleased=false;
-  const releaseGate=()=>{
-    if(gateReleased)return;
-    gateReleased=true;
-    requestAnimationFrame(()=>document.documentElement.classList.remove('publication-pending'));
-  };
+  const releaseGate=()=>document.documentElement.classList.remove('publication-pending');
+  releaseGate();
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',releaseGate,{once:true});
-  else releaseGate();
-  setTimeout(releaseGate,1200);
 
   const controller=new AbortController();
   let deadline;
