@@ -1,0 +1,70 @@
+name: Aislar Siguiendo una tarjeta
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Aislar estrella y ajustar Pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path('estrella/index.html')
+          s=p.read_text(encoding='utf-8')
+          patterns=[
+            r'<script data-oras-universe="v1"[^>]*></script>\s*',
+            r'<script data-oras-mirror-nav="v2"[^>]*></script>\s*',
+            r'<script data-oras-reading-window="r2"[^>]*></script>\s*',
+            r'<script data-oras-master-index-global="1"[^>]*></script>\s*',
+            r'<script src="/solo-la-tarjeta/oras-suno-volume-r1\.js\?v=[^"]+"></script>\s*',
+            r'<script src="/solo-la-tarjeta/estrella-standalone-guard-r[12]\.js\?v=[^"]+"></script>\s*',
+          ]
+          for pat in patterns:
+            s=re.sub(pat,'',s)
+          tag='<script src="/solo-la-tarjeta/estrella-standalone-core-r1.js?v=20261016-star-core-1"></script>'
+          if 'estrella-standalone-core-r1.js' not in s:
+            s=s.replace('</body>',tag+'\n</body>',1)
+          p.write_text(s,encoding='utf-8')
+
+          w=Path('.github/workflows/pages.yml')
+          t=w.read_text(encoding='utf-8')
+          t=t.replace("          t=re.sub(r'oras-reading-window-r2\\.js\\?v=[^\"\\\']+', 'oras-reading-window-r2.js?v=20261016-root-stable-6', t)\n",'')
+          t=t.replace("          t=re.sub(r'oras-suno-volume-r1\\.js\\?v=[^\"\\\']+', 'oras-suno-volume-r1.js?v=20261016-suno-volume-10', t)\n",'')
+          old="          grep -Fq 'oras-reading-window-r2.js?v=20261016-root-stable-6' estrella/index.html\n          grep -Fq 'oras-suno-volume-r1.js?v=20261016-suno-volume-10' estrella/index.html\n"
+          new="          grep -Fq 'estrella-standalone-core-r1.js?v=20261016-star-core-1' estrella/index.html\n          ! grep -Fq 'data-oras-reading-window=\"r2\"' estrella/index.html\n          ! grep -Fq 'oras-suno-volume-r1.js' estrella/index.html\n"
+          if old in t:
+            t=t.replace(old,new,1)
+          elif 'estrella-standalone-core-r1.js?v=20261016-star-core-1' not in t:
+            raise RuntimeError('No se localizaron las comprobaciones antiguas de estrella en pages.yml')
+          w.write_text(t,encoding='utf-8')
+          PY
+          grep -Fq 'estrella-standalone-core-r1.js?v=20261016-star-core-1' estrella/index.html
+          ! grep -Fq 'data-oras-reading-window="r2"' estrella/index.html
+          ! grep -Fq 'oras-suno-volume-r1.js' estrella/index.html
+          grep -Fq 'estrella-standalone-core-r1.js?v=20261016-star-core-1' .github/workflows/pages.yml
+      - name: Guardar aislamiento
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add estrella/index.html .github/workflows/pages.yml
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'ORAS: aisla Siguiendo una tarjeta de scripts globales'
+          git push
+      - name: Publicar Pages
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml --ref main
