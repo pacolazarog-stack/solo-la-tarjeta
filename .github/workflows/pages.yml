@@ -1,4 +1,4 @@
-# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r4 · preview limpio completo hasta EL CERO r4 · navegación unificada r4
+# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r4 · preview limpio completo hasta EL CERO r4 · navegación unificada r4 · estrella core r1
 name: Publicar SOLO LA TARJETA
 
 on:
@@ -83,6 +83,58 @@ jobs:
           PY
           grep -Fq 'oras-reading-window-r2.js?v=20261016-estrella-direct-1' elegia-breve/index.html
           grep -Fq 'ana-entry-failsafe-r1.js?v=20261016-ana-entry-failsafe-4' elegia-breve/index.html
+
+      - name: Corregir núcleo directo de ANA KLAUDYA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('elegia-breve/index.html')
+          s=p.read_text(encoding='utf-8')
+
+          old="""        prologueActive=asPrologue;
+        cenicientoFrame.hidden=false;
+        cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
+        setJourney(piece);
+"""
+          new="""        prologueActive=asPrologue;
+        cenicientoFrame.hidden=false;
+        for(const prop of ['display','opacity','visibility','pointer-events','z-index','background'])cenicientoFrame.style.removeProperty(prop);
+        if(piece==='estrella'){
+          cenicientoFrame.classList.add('sonrisa-visible');
+          cenicientoFrame.style.setProperty('display','block','important');
+          cenicientoFrame.style.setProperty('opacity','1','important');
+          cenicientoFrame.style.setProperty('visibility','visible','important');
+          cenicientoFrame.style.setProperty('pointer-events','auto','important');
+          cenicientoFrame.style.setProperty('z-index','2147482000','important');
+          cenicientoFrame.style.setProperty('background','#090e19','important');
+        }
+        cenicientoFrame.setAttribute('title',piece==='estrella'?'Prólogo de Ana Klaudya':document.title);
+        setJourney(piece);
+"""
+          if old not in s:
+              raise RuntimeError('No se encontró el bloque openPoem esperado')
+          s=s.replace(old,new,1)
+
+          old2="""      window.addEventListener('popstate',syncPoemRoute);
+      window.addEventListener('hashchange',syncPoemRoute);
+      window.addEventListener('message',event=>{
+"""
+          new2="""      window.addEventListener('popstate',syncPoemRoute);
+      window.addEventListener('hashchange',syncPoemRoute);
+      // Entrada directa: si la página nace con #estrella (o cualquier pieza),
+      // monta la ruta inmediatamente sin depender de parches externos.
+      syncPoemRoute(); // 20261016-estrella-core-r1
+      window.addEventListener('message',event=>{
+"""
+          if old2 not in s:
+              raise RuntimeError('No se encontró el bloque syncPoemRoute esperado')
+          s=s.replace(old2,new2,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+          grep -Fq '20261016-estrella-core-r1' elegia-breve/index.html
+          grep -Fq "cenicientoFrame.style.setProperty('opacity','1','important')" elegia-breve/index.html
 
       - name: Preparar voz de Ceniciento
         shell: bash
