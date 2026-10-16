@@ -72,17 +72,13 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
-          import re
           p=Path('elegia-breve/index.html')
           s=p.read_text(encoding='utf-8')
-          # Romper explícitamente la caché del script que contiene el blindaje de #estrella.
-          s=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+',
-                   'oras-reading-window-r2.js?v=20261016-estrella-direct-1',s)
-          # No conservar una referencia vieja del failsafe si ya hubiera sido inyectada.
-          s=re.sub(r'<script[^>]+ana-entry-failsafe-r1\.js\?v=[^>]+></script>\s*','',s)
+          s=s.replace('oras-reading-window-r2.js?v=20261013-ana-portrait-prev-next-1','oras-reading-window-r2.js?v=20261016-estrella-direct-1')
           tag='<script defer src="/solo-la-tarjeta/ana-entry-failsafe-r1.js?v=20261016-ana-entry-failsafe-4"></script>'
-          if '</body>' not in s: raise RuntimeError('No se encontró </body> en ANA KLAUDYA')
-          s=s.replace('</body>',tag+'\n</body>',1)
+          if 'ana-entry-failsafe-r1.js' not in s:
+              if '</body>' not in s: raise RuntimeError('No se encontró </body> en ANA KLAUDYA')
+              s=s.replace('</body>',tag+'\n</body>',1)
           p.write_text(s,encoding='utf-8')
           PY
           grep -Fq 'oras-reading-window-r2.js?v=20261016-estrella-direct-1' elegia-breve/index.html
