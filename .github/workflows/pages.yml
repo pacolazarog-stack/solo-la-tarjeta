@@ -1,4 +1,4 @@
-# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r6 · preview limpio completo hasta EL CERO r4 · navegación unificada r8 · estrella autónoma r1
+# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r6 · preview limpio completo hasta EL CERO r4 · navegación unificada r8 · estrella autónoma r2
 name: Publicar SOLO LA TARJETA
 
 on:
@@ -75,7 +75,7 @@ jobs:
           p=Path('elegia-breve/index.html')
           s=p.read_text(encoding='utf-8')
           import re
-          s=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r2.js?v=20261016-root-stable-4', s)
+          s=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r2.js?v=20261016-root-stable-5', s)
           tag='<script defer src="/solo-la-tarjeta/ana-entry-failsafe-r1.js?v=20261016-ana-entry-failsafe-6"></script>'
           if 'ana-entry-failsafe-r1.js' not in s:
               if '</body>' not in s: raise RuntimeError('No se encontró </body> en ANA KLAUDYA')
@@ -87,13 +87,13 @@ jobs:
           e=Path('estrella/index.html')
           t=e.read_text(encoding='utf-8')
           t=t.replace('../ana-klaudya/publication.js','../ana-klaudya/publication.js?v=20261016-publication-visible-1')
-          t=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r2.js?v=20261016-root-stable-4', t)
+          t=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r2.js?v=20261016-root-stable-5', t)
           e.write_text(t,encoding='utf-8')
           PY
-          grep -Fq 'oras-reading-window-r2.js?v=20261016-root-stable-4' elegia-breve/index.html
+          grep -Fq 'oras-reading-window-r2.js?v=20261016-root-stable-5' elegia-breve/index.html
           grep -Fq 'ana-entry-failsafe-r1.js?v=20261016-ana-entry-failsafe-6' elegia-breve/index.html
           grep -Fq 'publication.js?v=20261016-publication-visible-1' estrella/index.html
-          grep -Fq 'oras-reading-window-r2.js?v=20261016-root-stable-4' estrella/index.html
+          grep -Fq 'oras-reading-window-r2.js?v=20261016-root-stable-5' estrella/index.html
 
       - name: Corregir núcleo directo de ANA KLAUDYA
         shell: bash
