@@ -1,4 +1,4 @@
-# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r6 · preview limpio completo hasta EL CERO r4 · navegación unificada r4 · estrella core r2
+# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r6 · preview limpio completo hasta EL CERO r4 · navegación unificada r7 · estrella core r2
 name: Publicar SOLO LA TARJETA
 
 on:
@@ -83,9 +83,15 @@ jobs:
               import re
               s=re.sub(r'ana-entry-failsafe-r1\.js\?v=[^"\']+', 'ana-entry-failsafe-r1.js?v=20261016-ana-entry-failsafe-6', s)
           p.write_text(s,encoding='utf-8')
+
+          e=Path('estrella/index.html')
+          t=e.read_text(encoding='utf-8')
+          t=t.replace('../ana-klaudya/publication.js','../ana-klaudya/publication.js?v=20261016-publication-visible-1')
+          e.write_text(t,encoding='utf-8')
           PY
           grep -Fq 'oras-reading-window-r2.js?v=20261016-estrella-direct-2' elegia-breve/index.html
           grep -Fq 'ana-entry-failsafe-r1.js?v=20261016-ana-entry-failsafe-6' elegia-breve/index.html
+          grep -Fq 'publication.js?v=20261016-publication-visible-1' estrella/index.html
 
       - name: Corregir núcleo directo de ANA KLAUDYA
         shell: bash
@@ -191,7 +197,7 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
-          tag='<script defer src="/solo-la-tarjeta/oras-unified-nav-r1.js?v=20261016-unified-nav-4"></script>'
+          tag='<script defer src="/solo-la-tarjeta/oras-unified-nav-r1.js?v=20261016-unified-nav-7"></script>'
           excluded={'nmwp','nmwp-international'}
           count=0
           for p in Path('.').rglob('*.html'):
@@ -218,8 +224,8 @@ jobs:
               raise RuntimeError('No se inyectó la navegación ORAS')
           print(f'PASS: navegación ORAS unificada inyectada en {count} páginas.')
           PY
-          grep -Fq 'oras-unified-nav-r1.js?v=20261016-unified-nav-4' index.html
-          grep -Fq 'oras-unified-nav-r1.js?v=20261016-unified-nav-4' oras-raiz-limpia-preview/index.html
+          grep -Fq 'oras-unified-nav-r1.js?v=20261016-unified-nav-7' index.html
+          grep -Fq 'oras-unified-nav-r1.js?v=20261016-unified-nav-7' oras-raiz-limpia-preview/index.html
 
       - name: Empaquetar sitio
         uses: actions/upload-pages-artifact@v3
