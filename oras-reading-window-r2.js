@@ -6,7 +6,7 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261014-master-index-15';
-const VERSION='20261013-ana-portrait-prev-next-1';
+const VERSION='20261016-ana-direct-estrella-r4';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -127,7 +127,55 @@ function setupTracking(){
   addEventListener('oras:ana-part-complete',e=>completeAnaPart(e.detail?.part));
 }
 
+function stabilizeDirectAnaRoute(){
+  const path=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');
+  if(!path.endsWith('/elegia-breve'))return;
+  const frame=document.getElementById('cenicientoFrame');
+  if(!frame)return;
+  const directPieces=new Set(['estrella','ojos','sonrisa','cabello','piel','interludio','epilogo','ceniciento']);
+  let applying=false;
+  const clearForce=()=>{
+    frame.style.removeProperty('display');
+    frame.style.removeProperty('opacity');
+    frame.style.removeProperty('visibility');
+    frame.style.removeProperty('pointer-events');
+    frame.style.removeProperty('z-index');
+  };
+  const enforce=()=>{
+    if(applying)return;
+    const piece=location.hash.slice(1);
+    if(!directPieces.has(piece)){clearForce();return;}
+    applying=true;
+    try{
+      frame.hidden=false;
+      frame.classList.add('sonrisa-transition','sonrisa-visible');
+      frame.style.setProperty('display','block','important');
+      frame.style.setProperty('opacity','1','important');
+      frame.style.setProperty('visibility','visible','important');
+      frame.style.setProperty('pointer-events','auto','important');
+      frame.style.setProperty('z-index','2147482000','important');
+      const expected=`/${piece}/`;
+      const src=frame.getAttribute('src')||'';
+      if(!src || !src.includes(expected)){
+        frame.setAttribute('src',`../${piece}/?music=parent&v=20261016-direct-route-r4`);
+      }
+    }finally{applying=false;}
+  };
+  const observer=new MutationObserver(()=>queueMicrotask(enforce));
+  observer.observe(frame,{attributes:true,attributeFilter:['hidden','class','style','src']});
+  frame.addEventListener('load',enforce);
+  addEventListener('hashchange',enforce);
+  addEventListener('popstate',enforce);
+  enforce();
+  setTimeout(enforce,0);
+  setTimeout(enforce,250);
+  setTimeout(enforce,800);
+  setTimeout(enforce,1800);
+  setTimeout(enforce,3500);
+}
+
 setupTracking();
+stabilizeDirectAnaRoute();
 addEventListener('storage',e=>{if(e.key===STORAGE){/* state is read lazily by the canonical index */}});
 window.ORASReadingWindowR2={version:VERSION,completeAnaPart,openIndex};
 
