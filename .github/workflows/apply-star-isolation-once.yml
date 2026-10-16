@@ -1,6 +1,10 @@
 name: Aislar Siguiendo una tarjeta
 
 on:
+  push:
+    branches: ["main"]
+    paths:
+      - "estrella-standalone-core-r1.js"
   workflow_dispatch:
 
 permissions:
