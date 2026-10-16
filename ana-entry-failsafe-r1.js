@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
-if(window.__orasAnaEntryFailsafeR3)return;
-window.__orasAnaEntryFailsafeR3=true;
+if(window.__orasAnaEntryFailsafeR4)return;
+window.__orasAnaEntryFailsafeR4=true;
 
 const ANA_ROOT='/solo-la-tarjeta/elegia-breve';
 const POEM_ROUTES=new Set(['estrella','ojos','sonrisa','cabello','piel','interludio','epilogo','ceniciento']);
@@ -25,6 +25,46 @@ function releaseFrameOverride(frame){
   if(!frame)return;
   for(const prop of ['display','opacity','visibility','pointer-events','z-index'])frame.style.removeProperty(prop);
   frame.classList.add('sonrisa-visible');
+}
+
+function releaseChildGate(frame,piece){
+  try{
+    const doc=frame.contentDocument;
+    if(!doc||!doc.documentElement||!doc.body)return false;
+    doc.documentElement.classList.remove('publication-pending');
+    doc.body.style.setProperty('visibility','visible','important');
+    doc.body.style.setProperty('opacity','1','important');
+    const main=doc.querySelector('main');
+    if(main){
+      main.style.setProperty('visibility','visible','important');
+      main.style.setProperty('opacity','1','important');
+    }
+    if(piece==='estrella'){
+      const intro=doc.querySelector('.intro');
+      if(intro){
+        intro.style.setProperty('visibility','visible','important');
+        intro.style.setProperty('opacity','1','important');
+      }
+      const poem=doc.getElementById('poem');
+      // Mantiene la dramaturgia lunar, pero impide un negro indefinido.
+      setTimeout(()=>{
+        try{
+          if(!isAnaRoot()||route()!=='estrella')return;
+          const win=frame.contentWindow;
+          const childDoc=frame.contentDocument;
+          if(childDoc?.documentElement)childDoc.documentElement.classList.remove('publication-pending');
+          if(childDoc?.body)childDoc.body.style.setProperty('visibility','visible','important');
+          const childPoem=childDoc?.getElementById('poem');
+          if(childPoem?.hidden){
+            if(typeof win?.completeMoon==='function')win.completeMoon();
+            else childPoem.hidden=false;
+          }
+        }catch(_){}
+      },15000);
+      if(poem)poem.style.setProperty('visibility','visible','important');
+    }
+    return true;
+  }catch(_){return false;}
 }
 
 function revealPoemRoute(){
@@ -51,7 +91,7 @@ function revealPoemRoute(){
   forceFrameVisible(frame);
   frame.classList.toggle('interlude-transition',piece==='interludio');
 
-  const expected=`../${piece}/?music=parent&v=20261016-ana-direct-route-r3`;
+  const expected=`../${piece}/?music=parent&v=20261016-ana-direct-route-r4`;
   if(!frame.getAttribute('src'))frame.src=expected;
 
   clearInterval(directRouteTimer);
@@ -59,11 +99,15 @@ function revealPoemRoute(){
   directRouteTimer=setInterval(()=>{
     if(!isAnaRoot()||route()!==piece){clearInterval(directRouteTimer);directRouteTimer=0;releaseFrameOverride(frame);return;}
     forceFrameVisible(frame);
+    releaseChildGate(frame,piece);
     if(Date.now()-started>6000){clearInterval(directRouteTimer);directRouteTimer=0;releaseFrameOverride(frame);}
   },120);
 
   frame.addEventListener('load',()=>{
     forceFrameVisible(frame);
+    releaseChildGate(frame,piece);
+    setTimeout(()=>releaseChildGate(frame,piece),80);
+    setTimeout(()=>releaseChildGate(frame,piece),350);
     setTimeout(()=>releaseFrameOverride(frame),900);
   },{once:true});
 
