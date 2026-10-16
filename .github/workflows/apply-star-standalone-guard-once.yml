@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "estrella-standalone-guard-r1.js"
+      - "estrella-standalone-guard-r2.js"
 
 permissions:
   contents: write
@@ -17,33 +17,37 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Inyectar guardia autónomo una sola vez
+      - name: Instalar guardia autónomo r2
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
+          import re
           p=Path('estrella/index.html')
           s=p.read_text(encoding='utf-8')
-          tag='<script src="/solo-la-tarjeta/estrella-standalone-guard-r1.js?v=20261016-star-guard-1"></script>'
-          if 'estrella-standalone-guard-r1.js' not in s:
+          tag='<script src="/solo-la-tarjeta/estrella-standalone-guard-r2.js?v=20261016-star-guard-2"></script>'
+          if 'estrella-standalone-guard-r1.js' in s:
+              s=re.sub(r'<script src="/solo-la-tarjeta/estrella-standalone-guard-r1\.js\?v=[^"]+"></script>',tag,s,count=1)
+          elif 'estrella-standalone-guard-r2.js' not in s:
               if '</body>' not in s:
                   raise RuntimeError('No se encontró </body> en estrella/index.html')
               s=s.replace('</body>',tag+'\n</body>',1)
-              p.write_text(s,encoding='utf-8')
+          p.write_text(s,encoding='utf-8')
           PY
-          grep -Fq 'estrella-standalone-guard-r1.js?v=20261016-star-guard-1' estrella/index.html
+          grep -Fq 'estrella-standalone-guard-r2.js?v=20261016-star-guard-2' estrella/index.html
+          ! grep -Fq 'estrella-standalone-guard-r1.js' estrella/index.html
       - name: Guardar cambio
         shell: bash
         run: |
           if git diff --quiet -- estrella/index.html; then
-            echo 'Guardia ya presente.'
+            echo 'Guardia r2 ya presente.'
             exit 0
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add estrella/index.html
-          git commit -m 'ORAS: activa guardia visual autónomo de Siguiendo una tarjeta'
+          git commit -m 'ORAS: activa guardia r2 de Siguiendo una tarjeta'
           git push
       - name: Publicar Pages
         env:
