@@ -4,6 +4,7 @@ if(window.__orasUnifiedNavR4)return;
 window.__orasUnifiedNavR4=true;
 
 const ROOT='/solo-la-tarjeta';
+const ANA_DOC=`${ROOT}/elegia-breve/?v=20261016-ana-route-1`;
 const qs=()=>new URLSearchParams(location.search);
 const cleanPath=()=>location.pathname.replace(/\/index\.html$/i,'').replace(/\/+$/,'');
 const hash=()=>location.hash.replace(/^#/,'').toLowerCase();
@@ -19,14 +20,14 @@ const ORDER=['solo',...ANA_ORDER,'ceniciento','mirror',...EXP_ORDER];
 
 const ROUTES={
  solo:`${ROOT}/?read=solo`,
- 'ana-estrella':`${ROOT}/elegia-breve/#estrella`,
- 'ana-elegia':`${ROOT}/elegia-breve/`,
- 'ana-ojos':`${ROOT}/elegia-breve/#ojos`,
- 'ana-labios':`${ROOT}/elegia-breve/#sonrisa`,
- 'ana-cabello':`${ROOT}/elegia-breve/#cabello`,
- 'ana-piel':`${ROOT}/elegia-breve/#piel`,
- 'ana-interludio':`${ROOT}/elegia-breve/#interludio`,
- 'ana-epilogo':`${ROOT}/elegia-breve/#epilogo`,
+ 'ana-estrella':`${ANA_DOC}#estrella`,
+ 'ana-elegia':ANA_DOC,
+ 'ana-ojos':`${ANA_DOC}#ojos`,
+ 'ana-labios':`${ANA_DOC}#sonrisa`,
+ 'ana-cabello':`${ANA_DOC}#cabello`,
+ 'ana-piel':`${ANA_DOC}#piel`,
+ 'ana-interludio':`${ANA_DOC}#interludio`,
+ 'ana-epilogo':`${ANA_DOC}#epilogo`,
  ceniciento:`${ROOT}/ceniciento/`,
  mirror:`${ROOT}/ceniciento/?mirror=1`,
  ...Object.fromEntries(EXP_ORDER.map(id=>[id,`${ROOT}/inventario-del-aire/?go=${encodeURIComponent(id)}`]))
