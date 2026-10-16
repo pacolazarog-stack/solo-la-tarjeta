@@ -9,136 +9,88 @@ const isAnaRoot=()=>location.pathname.replace(/\/index\.html$/i,'/').replace(/\/
 const route=()=>location.hash.replace(/^#/,'').toLowerCase();
 
 const style=document.createElement('style');
-style.id='oras-ana-route-guard-r6';
+style.id='oras-ana-direct-route-r6';
 style.textContent=`
-html.oras-estrella-route #cenicientoFrame{
-  display:block!important;
-  opacity:1!important;
-  visibility:visible!important;
-  pointer-events:auto!important;
-  z-index:2147482000!important;
-  background:#090e19!important;
+html[data-oras-ana-route="estrella"] #cenicientoFrame,
+html[data-oras-ana-route="estrella"] #cenicientoFrame[hidden]{
+ display:block!important;
+ opacity:1!important;
+ visibility:visible!important;
+ pointer-events:auto!important;
+ z-index:2147482000!important;
+ background:#090e19!important;
 }
+html[data-oras-ana-route="estrella"] #poemBackdrop{display:block!important;}
 `;
 document.head.appendChild(style);
 
-function releaseChildGate(frame,piece){
+function unlockChild(frame,piece){
   try{
     const doc=frame.contentDocument;
-    if(!doc||!doc.documentElement||!doc.body)return false;
+    if(!doc?.documentElement||!doc.body)return;
     doc.documentElement.classList.remove('publication-pending');
     doc.body.style.setProperty('visibility','visible','important');
     doc.body.style.setProperty('opacity','1','important');
-    const main=doc.querySelector('main');
-    if(main){
-      main.style.setProperty('visibility','visible','important');
-      main.style.setProperty('opacity','1','important');
-    }
     if(piece==='estrella'){
+      const main=doc.querySelector('main');
+      if(main){
+        main.style.setProperty('visibility','visible','important');
+        main.style.setProperty('opacity','1','important');
+      }
       const intro=doc.querySelector('.intro');
       if(intro){
         intro.style.setProperty('visibility','visible','important');
         intro.style.setProperty('opacity','1','important');
       }
-      const poem=doc.getElementById('poem');
-      if(poem)poem.style.setProperty('visibility','visible','important');
     }
-    return true;
-  }catch(_){return false;}
+  }catch(_){}
 }
 
-function scheduleChildRelease(frame,piece){
-  const keep=()=>{
-    if(!isAnaRoot()||route()!==piece)return;
-    releaseChildGate(frame,piece);
-  };
-  frame.addEventListener('load',keep,{once:true});
-  keep();
-  setTimeout(keep,100);
-  setTimeout(keep,450);
-  setTimeout(keep,1400);
-}
-
-function revealPoemRoute(){
-  if(!isAnaRoot())return false;
+function applyDirectRoute(){
+  if(!isAnaRoot())return;
   const piece=route();
-  if(!POEM_ROUTES.has(piece))return false;
-
   const root=document.documentElement;
+  if(!POEM_ROUTES.has(piece)){
+    root.removeAttribute('data-oras-ana-route');
+    return;
+  }
+  root.setAttribute('data-oras-ana-route',piece);
+  root.classList.remove('publication-pending','poem-route-loading','oras-master-entry');
+  root.classList.add('ceniciento-open');
+
   const body=document.body;
-  const entry=document.getElementById('entry');
   const frame=document.getElementById('cenicientoFrame');
   const backdrop=document.getElementById('poemBackdrop');
-  if(!body||!frame)return false;
+  if(!body||!frame)return;
 
-  root.classList.remove('publication-pending','poem-route-loading','oras-master-entry');
-  root.classList.toggle('oras-estrella-route',piece==='estrella');
-  root.classList.add('ceniciento-open');
   body.classList.add('journey-started','ceniciento-open','sonrisa-open');
   body.classList.toggle('eyes-open',piece==='ojos');
   body.classList.remove('locked');
-
-  if(entry)entry.classList.add('is-open');
   if(backdrop)backdrop.hidden=false;
 
   frame.hidden=false;
   frame.classList.add('sonrisa-transition','sonrisa-visible');
   frame.classList.remove('sonrisa-leaving');
   frame.removeAttribute('aria-busy');
-  frame.classList.toggle('interlude-transition',piece==='interludio');
 
   const expected=`../${piece}/?music=parent&v=20261016-ana-direct-route-r6`;
   const current=frame.getAttribute('src')||'';
-  if(!current || !current.includes(`/${piece}/`))frame.src=expected;
+  if(!current.includes(`/${piece}/`))frame.src=expected;
 
-  scheduleChildRelease(frame,piece);
-  return true;
+  unlockChild(frame,piece);
+  frame.addEventListener('load',()=>unlockChild(frame,piece),{once:true});
 }
 
-function restoreAnaEntry(){
-  if(!isAnaRoot())return;
-  if(revealPoemRoute())return;
-
-  const root=document.documentElement;
-  const body=document.body;
-  const entry=document.getElementById('entry');
-  const button=document.getElementById('entryButton');
-  const frame=document.getElementById('cenicientoFrame');
-  if(!body||!entry)return;
-
-  root.classList.remove('oras-estrella-route');
-
-  const genuineReading=
-    body.classList.contains('journey-started')||
-    body.classList.contains('reading-ready')||
-    body.classList.contains('prelude')||
-    body.classList.contains('voice-open')||
-    body.classList.contains('ceniciento-open')||
-    body.classList.contains('eyes-open')||
-    (frame&&frame.hidden===false);
-
-  if(genuineReading)return;
-
-  root.classList.remove('publication-pending','poem-route-loading','oras-master-entry');
-  body.classList.add('locked');
-  body.classList.remove('portrait-revealed');
-  entry.classList.remove('is-open');
-  entry.removeAttribute('hidden');
-  entry.style.removeProperty('opacity');
-  entry.style.removeProperty('visibility');
-  entry.style.removeProperty('pointer-events');
-  if(button){
-    button.disabled=false;
-    button.textContent='▶ Comenzar';
-  }
+function schedule(){
+  applyDirectRoute();
+  setTimeout(applyDirectRoute,120);
+  setTimeout(applyDirectRoute,700);
+  setTimeout(applyDirectRoute,1800);
 }
 
-const schedule=delay=>setTimeout(restoreAnaEntry,delay);
-addEventListener('DOMContentLoaded',()=>schedule(0),{once:true});
-addEventListener('pageshow',()=>schedule(60));
-addEventListener('load',()=>schedule(120),{once:true});
-addEventListener('hashchange',()=>schedule(0));
-addEventListener('popstate',()=>schedule(0));
-schedule(350);
-schedule(900);
+addEventListener('DOMContentLoaded',schedule,{once:true});
+addEventListener('pageshow',applyDirectRoute);
+addEventListener('hashchange',applyDirectRoute);
+addEventListener('popstate',applyDirectRoute);
+if(document.readyState!=='loading')schedule();
 })();
