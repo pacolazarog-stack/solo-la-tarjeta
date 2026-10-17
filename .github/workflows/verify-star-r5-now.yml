@@ -1,0 +1,28 @@
+name: Verificar estrella r5 ahora
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/verify-star-r5-now.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exigir r5 en GitHub Pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://pacolazarog-stack.github.io/solo-la-tarjeta/estrella/?music=parent&standalone=1&from=ana&v=aa6c97b21c3224af3f679b44de527f06da5f7b96"
+          curl -fLsS -H 'Cache-Control: no-cache' "$URL" -o /tmp/star.html
+          grep -Fq '<output id="musicValue">80 %</output>' /tmp/star.html
+          grep -Fq 'id="musicLevel" type="range" min="0" max="100" value="80"' /tmp/star.html
+          grep -Fq '<button id="musicStart" type="button">Reproducir música</button>' /tmp/star.html
+          grep -Fq 'orasStarInlineNav' /tmp/star.html
+          grep -Fq 'orasStarInlineAudio' /tmp/star.html
+          grep -Fq 'star-r5-final-marker' /tmp/star.html
+          echo 'PASS: r5 pública completa: 80 %, música visible, audio y navegación.'
