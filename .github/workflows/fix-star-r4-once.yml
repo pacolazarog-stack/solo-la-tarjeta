@@ -1,0 +1,38 @@
+name: Fijar núcleo estrella r4 una vez
+
+on:
+  push:
+    paths:
+      - 'estrella-standalone-core-r4.js'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Sustituir referencia del núcleo estrella
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('estrella/index.html')
+          s=p.read_text(encoding='utf-8')
+          import re
+          s2=re.sub(r'<script src="/solo-la-tarjeta/estrella-standalone-core-r1\.js\?v=[^"]+"></script>',
+                    '<script src="/solo-la-tarjeta/estrella-standalone-core-r4.js"></script>',s)
+          if s2==s:
+              raise SystemExit('No se encontró la referencia antigua de estrella')
+          p.write_text(s2,encoding='utf-8')
+          PY
+      - name: Guardar sustitución
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add estrella/index.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'ANA: fija núcleo estrella r4 en el HTML fuente'
+          git push origin HEAD:main
