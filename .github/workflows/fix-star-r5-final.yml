@@ -16,69 +16,36 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Fijar volumen, controles y rutas versionadas de estrella
+      - name: Fijar estrella en 80 por ciento y controles visibles
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
-
-          token='20261017-star-r5-final'
-
-          # 1) El HTML base debe nacer correcto incluso antes de ejecutar JS.
           p=Path('estrella/index.html')
           s=p.read_text(encoding='utf-8')
           s=s.replace('<output id="musicValue">30 %</output>','<output id="musicValue">80 %</output>')
-          s=s.replace('<input id="musicLevel" type="range" min="0" max="80" value="30">','<input id="musicLevel" type="range" min="0" max="100" value="80">')
-          # El botón de música debe existir visualmente desde el primer pintado.
+          s=s.replace('id="musicLevel" type="range" min="0" max="80" value="30"','id="musicLevel" type="range" min="0" max="100" value="80"')
           s=s.replace('<button id="musicStart" type="button" hidden>Activar música</button>','<button id="musicStart" type="button">Reproducir música</button>')
-          # Versionar el núcleo autónomo.
-          s=s.replace('<script src="/solo-la-tarjeta/estrella-standalone-core-r4.js"></script>',f'<script src="/solo-la-tarjeta/estrella-standalone-core-r4.js?v={token}"></script>')
-          p.write_text(s,encoding='utf-8')
-
-          # 2) ANA siempre carga estrella con una versión nueva.
-          p=Path('elegia-breve/index.html')
-          s=p.read_text(encoding='utf-8')
-          s=s.replace("else cenicientoFrame.src='../'+piece+'/?music=parent&v=20261010-ceniciento-score40-v3-audio'+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'')+(piece==='ceniciento'&&entrySource==='question'?'&via=question':'');",
-                      "else cenicientoFrame.src='../'+piece+'/?music=parent&v='+(piece==='estrella'?'20261017-star-r5-final':'20261010-ceniciento-score40-v3-audio')+(asPrologue?'&prologue=1':'')+(continuingOpening&&piece==='epilogo'?'&opening=seen':'')+(piece==='ceniciento'&&entrySource==='question'?'&via=question':'');")
-          p.write_text(s,encoding='utf-8')
-
-          # 3) Cualquier enlace autónomo exacto a estrella se versiona también.
-          exts={'.html','.js','.mjs','.css','.md','.yml','.yaml'}
-          for q in Path('.').rglob('*'):
-              if not q.is_file() or q.suffix.lower() not in exts or '.git' in q.parts:
-                  continue
-              try: t=q.read_text(encoding='utf-8')
-              except Exception: continue
-              old=t
-              t=t.replace('estrella/?music=parent&standalone=1&from=ana',f'estrella/?music=parent&standalone=1&from=ana&v={token}')
-              t=t.replace('/estrella/?music=parent&standalone=1&from=ana',f'/estrella/?music=parent&standalone=1&from=ana&v={token}')
-              if t!=old:
-                  q.write_text(t,encoding='utf-8')
-
-          # Marca inequívoca para auditoría pública.
-          p=Path('estrella/index.html')
-          s=p.read_text(encoding='utf-8')
           if 'star-r5-final-marker' not in s:
               s=s.replace('</body>','<!-- star-r5-final-marker -->\n</body>',1)
           p.write_text(s,encoding='utf-8')
           PY
-
           grep -Fq '<output id="musicValue">80 %</output>' estrella/index.html
-          grep -Fq 'max="100" value="80"' estrella/index.html
-          grep -Fq '>Reproducir música</button>' estrella/index.html
+          grep -Fq 'id="musicLevel" type="range" min="0" max="100" value="80"' estrella/index.html
+          grep -Fq '<button id="musicStart" type="button">Reproducir música</button>' estrella/index.html
+          grep -Fq 'orasStarInlineNav' estrella/index.html
+          grep -Fq 'orasStarInlineAudio' estrella/index.html
           grep -Fq 'star-r5-final-marker' estrella/index.html
-          grep -Fq "piece==='estrella'?'20261017-star-r5-final'" elegia-breve/index.html
-
       - name: Guardar corrección
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add estrella/index.html elegia-breve/index.html .
+          git add estrella/index.html
           if git diff --cached --quiet; then
-            echo 'Sin cambios: r5 ya estaba aplicado.'
+            echo 'Sin cambios: estrella ya corregida.'
             exit 0
           fi
-          git commit -m 'ANA: fija estrella r5 con música 80 y navegación versionada'
+          git commit -m 'ANA: fija estrella en 80 y muestra controles'
           git push origin HEAD:main
