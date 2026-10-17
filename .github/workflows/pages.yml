@@ -1,4 +1,4 @@
-# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r8 · preview limpio completo hasta EL CERO r4 · navegación unificada r8 · estrella autónoma r4
+# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r8 · preview limpio completo hasta EL CERO r4 · navegación unificada r8 · estrella autónoma r5
 name: Publicar SOLO LA TARJETA
 
 on:
@@ -40,6 +40,7 @@ jobs:
           node --check oras-unified-nav-r1.js
           node --check ana-entry-failsafe-r1.js
           node --check oras-suno-volume-r1.js
+          node --check estrella-standalone-core-r1.js
           node --check ceniciento/el-espejo.js
           node --check ceniciento/el-espejo-soundtrack.js
           test -s assets/oras-portada-final.jpg
@@ -92,8 +93,10 @@ jobs:
               t=t.replace('../ana-klaudya/publication.js','../ana-klaudya/publication.js?v=20261016-publication-visible-1')
           t=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r2.js?v=20261016-root-stable-6', t)
           t=re.sub(r'oras-suno-volume-r1\.js\?v=[^"\']+', 'oras-suno-volume-r1.js?v=20261016-suno-volume-10', t)
+          t=re.sub(r'estrella-standalone-core-r1\.js\?v=[^"\']+', 'estrella-standalone-core-r1.js?v=20261017-star-core-2', t)
           e.write_text(t,encoding='utf-8')
           PY
+          grep -Fq 'estrella-standalone-core-r1.js?v=20261017-star-core-2' estrella/index.html
           echo 'PASS: referencias de ANA y estrella normalizadas sin bloquear el despliegue.'
 
       - name: Corregir núcleo directo de ANA KLAUDYA
