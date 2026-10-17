@@ -180,10 +180,10 @@ main{padding-bottom:140px;gap:6vw}
 </div>
 <p class="status" id="status" role="status">La luna se está formando.</p>
 <div class="music-controls">
-<button id="musicStart" type="button" hidden>Activar música</button>
+<button id="musicStart" type="button">Reproducir música</button>
 <label><input id="musicEnabled" type="checkbox" checked> Música de fondo</label>
-<label for="musicLevel">Volumen <output id="musicValue">30 %</output></label>
-<input id="musicLevel" type="range" min="0" max="80" value="30">
+<label for="musicLevel">Volumen <output id="musicValue">80 %</output></label>
+<input id="musicLevel" type="range" min="0" max="100" value="80">
 </div>
 </section>
 <article class="poem" id="poem" aria-label="Siguiendo una tarjeta" hidden>
@@ -348,5 +348,6 @@ nav?.querySelector('[data-index]')?.addEventListener('click',()=>{location.href=
 nav?.querySelector('[data-next]')?.addEventListener('click',()=>{save();location.href=BASE+'/elegia-breve/?v=20261017-ana-inline-2&afterPrologue=1'});
 })();
 </script>
+<!-- star-r5-final-marker -->
 </body>
 </html>
