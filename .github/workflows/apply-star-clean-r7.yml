@@ -34,3 +34,4 @@ jobs:
           git add estrella/index.html
           git commit -m "ANA: deja Siguiendo una tarjeta sin música ni botones" || exit 0
           git push
+# trigger-r7
