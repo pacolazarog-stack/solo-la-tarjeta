@@ -14,24 +14,41 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Sustituir runtime por versión limpia
+      - name: Consolidar estrella limpia y desbloquear Pages
         run: |
           python - <<'PY'
           from pathlib import Path
+
+          # Estrella: mantener exclusivamente el runtime limpio r7.
           p=Path('estrella/index.html')
           s=p.read_text(encoding='utf-8')
           old='<script src="/solo-la-tarjeta/estrella-standalone-core-r4.js?v=20261017-runtime-r6"></script>'
           new='<script src="/solo-la-tarjeta/estrella-clean-r7.js?v=20261017-clean-r7"></script>'
-          if old not in s:
-              raise SystemExit('No se encontró el runtime r6 esperado')
-          s=s.replace(old,new,1)
+          if old in s:
+              s=s.replace(old,new,1)
+          if 'estrella-clean-r7.js?v=20261017-clean-r7' not in s:
+              raise SystemExit('La estrella no carga clean r7')
           p.write_text(s,encoding='utf-8')
+
+          # Pages: dejar de exigir el runtime r4 retirado y verificar clean r7.
+          q=Path('.github/workflows/pages.yml')
+          t=q.read_text(encoding='utf-8')
+          t=t.replace("if 'estrella-standalone-core-r4.js' not in t:\n              raise RuntimeError('estrella/index.html no carga el núcleo autónomo r4')",
+                      "if 'estrella-clean-r7.js' not in t:\n              raise RuntimeError('estrella/index.html no carga la escena limpia r7')")
+          t=t.replace("grep -Fq 'estrella-standalone-core-r4.js' estrella/index.html",
+                      "grep -Fq 'estrella-clean-r7.js?v=20261017-clean-r7' estrella/index.html")
+          t=t.replace("PASS: referencias de ANA y estrella r4 normalizadas sin bloquear el despliegue.",
+                      "PASS: referencias de ANA y estrella limpia r7 normalizadas sin bloquear el despliegue.")
+          t=t.replace('estrella autónoma r7','estrella limpia r7')
+          if "if 'estrella-clean-r7.js' not in t:" not in t:
+              raise SystemExit('No se pudo actualizar la validación de Pages')
+          q.write_text(t,encoding='utf-8')
           PY
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add estrella/index.html
-          git commit -m "ANA: deja Siguiendo una tarjeta sin música ni botones" || exit 0
+          git add estrella/index.html .github/workflows/pages.yml
+          git commit -m "ANA: desbloquea Pages para estrella limpia r7" || exit 0
           git push
-# trigger-r7
+# trigger-r7-pages-2
