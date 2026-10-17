@@ -1,0 +1,39 @@
+name: Parchear Pages estrella limpia r7
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Actualizar comprobación de estrella en Pages
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('.github/workflows/pages.yml')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace("if 'estrella-standalone-core-r4.js' not in t:\n              raise RuntimeError('estrella/index.html no carga el núcleo autónomo r4')",
+                      "if 'estrella-clean-r7.js' not in t:\n              raise RuntimeError('estrella/index.html no carga la escena limpia r7')")
+          s=s.replace("grep -Fq 'estrella-standalone-core-r4.js' estrella/index.html",
+                      "grep -Fq 'estrella-clean-r7.js?v=20261017-clean-r7' estrella/index.html")
+          s=s.replace("PASS: referencias de ANA y estrella r4 normalizadas sin bloquear el despliegue.",
+                      "PASS: referencias de ANA y estrella limpia r7 normalizadas sin bloquear el despliegue.")
+          if "if 'estrella-clean-r7.js' not in t:" not in s:
+              raise SystemExit('No se actualizó la comprobación Python')
+          if "grep -Fq 'estrella-clean-r7.js?v=20261017-clean-r7' estrella/index.html" not in s:
+              raise SystemExit('No se actualizó la comprobación shell')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Guardar parche
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/workflows/pages.yml
+          git commit -m "ANA: Pages acepta estrella limpia r7" || exit 0
+          git push
