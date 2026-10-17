@@ -1,0 +1,37 @@
+name: Verificar estrella pública
+
+on:
+  workflow_run:
+    workflows: ["Publicar SOLO LA TARJETA"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comprobar HTML público de estrella
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://pacolazarog-stack.github.io/solo-la-tarjeta/estrella/?music=parent&standalone=1&from=ana&v=${{ github.event.workflow_run.head_sha }}"
+          echo "URL=$URL"
+          ok=0
+          for i in 1 2 3 4 5 6; do
+            echo "Intento $i"
+            curl -fLsS -H 'Cache-Control: no-cache' "$URL" -o /tmp/star.html || true
+            if grep -Fq 'orasStarInlineNav' /tmp/star.html && grep -Fq 'orasStarInlineAudio' /tmp/star.html; then
+              ok=1
+              break
+            fi
+            sleep 10
+          done
+          echo '--- marcadores ---'
+          grep -nE 'orasStarInlineNav|orasStarInlineAudio|estrella-standalone-core-r4' /tmp/star.html || true
+          echo '--- cabecera HTML ---'
+          head -n 20 /tmp/star.html || true
+          test "$ok" -eq 1
+          echo 'PASS: GitHub Pages sirve la estrella autocontenida.'
