@@ -1,0 +1,36 @@
+name: Aplicar estrella limpia r7
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-star-clean-r7.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sustituir runtime por versión limpia
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('estrella/index.html')
+          s=p.read_text(encoding='utf-8')
+          old='<script src="/solo-la-tarjeta/estrella-standalone-core-r4.js?v=20261017-runtime-r6"></script>'
+          new='<script src="/solo-la-tarjeta/estrella-clean-r7.js?v=20261017-clean-r7"></script>'
+          if old not in s:
+              raise SystemExit('No se encontró el runtime r6 esperado')
+          s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add estrella/index.html
+          git commit -m "ANA: deja Siguiendo una tarjeta sin música ni botones" || exit 0
+          git push
