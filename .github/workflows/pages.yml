@@ -1,4 +1,4 @@
-# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r8 · preview limpio completo hasta EL CERO r4 · navegación unificada r8 · estrella autónoma r7
+# EL ESPEJO · banda sonora canónica v3 · ANA pulses-photo restore v2 · ORAS nacre roulette r1 · ANA entry failsafe r8 · preview limpio completo hasta EL CERO r4 · navegación unificada r8 · estrella limpia r7
 name: Publicar SOLO LA TARJETA
 
 on:
@@ -41,7 +41,7 @@ jobs:
           node --check ana-entry-failsafe-r1.js
           node --check oras-suno-volume-r1.js
           node --check estrella-standalone-core-r1.js
-          node --check estrella-standalone-core-r4.js
+          node --check estrella-clean-r7.js
           node --check ceniciento/el-espejo.js
           node --check ceniciento/el-espejo-soundtrack.js
           test -s assets/oras-portada-final.jpg
@@ -94,12 +94,12 @@ jobs:
               t=t.replace('../ana-klaudya/publication.js','../ana-klaudya/publication.js?v=20261016-publication-visible-1')
           t=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r2.js?v=20261016-root-stable-6', t)
           t=re.sub(r'oras-suno-volume-r1\.js\?v=[^"\']+', 'oras-suno-volume-r1.js?v=20261016-suno-volume-10', t)
-          if 'estrella-standalone-core-r4.js' not in t:
-              raise RuntimeError('estrella/index.html no carga el núcleo autónomo r4')
+          if 'estrella-clean-r7.js' not in t:
+              raise RuntimeError('estrella/index.html no carga la escena limpia r7')
           e.write_text(t,encoding='utf-8')
           PY
-          grep -Fq 'estrella-standalone-core-r4.js' estrella/index.html
-          echo 'PASS: referencias de ANA y estrella r4 normalizadas sin bloquear el despliegue.'
+          grep -Fq 'estrella-clean-r7.js?v=20261017-clean-r7' estrella/index.html
+          echo 'PASS: referencias de ANA y estrella limpia r7 normalizadas sin bloquear el despliegue.'
 
       - name: Corregir núcleo directo de ANA KLAUDYA
         shell: bash
