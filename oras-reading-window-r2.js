@@ -6,7 +6,7 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261014-master-index-15';
-const VERSION='20261013-ana-portrait-prev-next-1';
+const VERSION='20261018-ana-expansive-pulse-r5';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -44,7 +44,7 @@ function completeAnaPart(key){
 }
 
 const style=document.createElement('style');
-style.id='oras-reading-window-stable-r4';
+style.id='oras-reading-window-stable-r5';
 style.textContent=`
 .ou-reading-checklist{display:none!important}
 .ou-reading-window-r2{position:fixed;z-index:2147483000;left:max(62px,calc(env(safe-area-inset-left) + 62px));bottom:max(12px,env(safe-area-inset-bottom));font-family:Georgia,"Times New Roman",serif;color:#f7f1e8}
@@ -57,10 +57,48 @@ body.oras-ana-static-final .portrait-finale,body.oras-ana-static-final .portrait
 body.oras-ana-static-final .portrait-finale img{opacity:1!important}
 body.oras-ana-static-final #journeyNav,body.oras-ana-static-final #journeyNav button,body.oras-ana-static-final .portrait-question,body.oras-ana-static-final .ou-reading-window-r2,body.oras-ana-static-final #orasSunoVolume{pointer-events:auto!important}
 body.oras-ana-static-final #journeyNav{z-index:2147483600!important}
-body.oras-ana-warm-transition .pulse-field{animation:pulseField var(--pulse-duration) linear infinite!important;animation-play-state:running!important}
-body.oras-ana-warm-transition .pulse-field::before{animation:pulseA var(--pulse-duration) ease-in-out infinite!important;animation-play-state:running!important}
-body.oras-ana-warm-transition .pulse-field::after{animation:pulseB var(--pulse-duration) ease-in-out infinite!important;animation-play-state:running!important}
-body.oras-ana-warm-transition .layer-warm{animation:warmBreath var(--pulse-duration) linear infinite!important;animation-play-state:running!important;transition:opacity 14s cubic-bezier(.18,.72,.2,1)!important}
+
+body.oras-ana-warm-transition .pulse-field{
+  opacity:1!important;
+  transform-origin:50% 54%!important;
+  animation:orasFinalField 2.65s ease-in-out infinite!important;
+  animation-play-state:running!important;
+  will-change:transform,opacity,filter!important;
+}
+body.oras-ana-warm-transition .pulse-field::before{
+  inset:-16%!important;
+  background:radial-gradient(68% 54% at 50% 54%,rgba(37,111,74,.46) 0%,rgba(45,116,80,.34) 35%,rgba(35,92,65,.18) 62%,rgba(30,78,56,0) 82%)!important;
+  animation:orasFinalPulseA 2.65s ease-in-out infinite!important;
+  animation-play-state:running!important;
+  will-change:transform,opacity!important;
+}
+body.oras-ana-warm-transition .pulse-field::after{
+  inset:-22%!important;
+  background:radial-gradient(78% 62% at 50% 57%,rgba(131,171,119,.28) 0%,rgba(75,132,94,.20) 41%,rgba(37,93,67,.10) 67%,rgba(28,78,56,0) 87%)!important;
+  animation:orasFinalPulseB 2.65s ease-in-out infinite!important;
+  animation-play-state:running!important;
+  will-change:transform,opacity!important;
+}
+body.oras-ana-warm-transition .layer-warm{
+  animation:warmBreath var(--pulse-duration) linear infinite!important;
+  animation-play-state:running!important;
+  transition:opacity 14s cubic-bezier(.18,.72,.2,1)!important;
+}
+@keyframes orasFinalField{
+  0%,100%{transform:scale(.985);filter:saturate(1) brightness(1);opacity:.72}
+  42%{transform:scale(1.045);filter:saturate(1.16) brightness(.96);opacity:1}
+  58%{transform:scale(1.06);filter:saturate(1.10) brightness(.975);opacity:.90}
+}
+@keyframes orasFinalPulseA{
+  0%,100%{opacity:.20;transform:scale(.90)}
+  42%{opacity:.86;transform:scale(1.08)}
+  58%{opacity:.58;transform:scale(1.15)}
+}
+@keyframes orasFinalPulseB{
+  0%,100%{opacity:.14;transform:scale(.94)}
+  42%{opacity:.52;transform:scale(1.13)}
+  58%{opacity:.34;transform:scale(1.20)}
+}
 @media(max-width:700px){.ou-reading-window-r2{left:max(57px,calc(env(safe-area-inset-left) + 57px));bottom:max(10px,env(safe-area-inset-bottom))}.ou-reading-window-r2>summary{font-size:11px;min-height:29px;padding:5px 9px}}
 `;
 document.head.appendChild(style);
