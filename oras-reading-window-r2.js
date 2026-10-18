@@ -6,7 +6,7 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261014-master-index-15';
-const VERSION='20261013-ana-portrait-prev-next-1';
+const VERSION='20261018-ana-start-elegia-1';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -62,7 +62,20 @@ function setupElegia(){
   const question=document.getElementById('cenicientoLink');
   const prev=document.getElementById('journeyPrevious');
   const next=document.getElementById('journeyNext');
+  const entryButton=document.getElementById('entryButton');
+  const anaRead=document.getElementById('anaRead');
   let started=false,raf=0,photoTimer=0,revealing=false;
+
+  /* En la portada de ANA KLAUDYA, COMENZAR entra en la Elegía.
+     El prólogo «Siguiendo una tarjeta» queda accesible como pieza separada,
+     pero no se abre automáticamente desde COMENZAR. */
+  entryButton?.addEventListener('click',e=>{
+    if(location.hash)return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    try{window.dispatchEvent(new CustomEvent('oras:reading-start'));}catch(_){}
+    if(anaRead){anaRead.click();return;}
+  },true);
 
   const setElegiaJourney=()=>{try{window.ORASSetJourney?.('elegia');}catch(_){}};
   setElegiaJourney();setTimeout(setElegiaJourney,0);setTimeout(setElegiaJourney,700);
