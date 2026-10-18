@@ -25,10 +25,11 @@ jobs:
           import re
           version='20261018-canonical-nav-final-1'
           changed=[]
+          pattern=r"oras-reading-window-r2\.js\?v=[^\"'<>\s]+"
           for p in Path('.').rglob('*.html'):
               if '.git' in p.parts: continue
               s=p.read_text(encoding='utf-8')
-              t=re.sub(r'oras-reading-window-r2\.js\?v=[^"\'<>\s]+',f'oras-reading-window-r2.js?v={version}',s)
+              t=re.sub(pattern,f'oras-reading-window-r2.js?v={version}',s)
               if t!=s:
                   p.write_text(t,encoding='utf-8')
                   changed.append(str(p))
