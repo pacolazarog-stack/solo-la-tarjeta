@@ -6,7 +6,7 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261018-r3-progress-1';
-const VERSION='20261018-ana-final-rescue-r8';
+const VERSION='20261018-ana-final-rescue-r9';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -82,7 +82,7 @@ function setupElegia(){
   const rescueFinal=()=>{
     if(rescueDone)return;
     rescueDone=true;
-    try{recording?.pause();}catch(_){}
+    try{recording?.pause();recording?.removeAttribute('controls');}catch(_){}
     try{if(dialog?.open)dialog.close();}catch(_){}
     if(dialog){dialog.style.display='none';dialog.setAttribute('aria-hidden','true');}
     body.classList.remove('voice-open','locked');
@@ -105,6 +105,13 @@ function setupElegia(){
     completeAnaPart('elegia');
   };
 
+  const nearEnd=()=>{
+    if(!recording)return false;
+    const duration=recording.duration;
+    if(!Number.isFinite(duration)||duration<=0)return recording.currentTime>=99;
+    return duration-recording.currentTime<=1.5;
+  };
+
   recording?.addEventListener('ended',rescueFinal);
   recording?.addEventListener('play',()=>{
     lastMediaTime=recording.currentTime||0;
@@ -113,25 +120,32 @@ function setupElegia(){
   recording?.addEventListener('seeked',()=>{
     lastMediaTime=recording.currentTime||0;
     lastAdvanceAt=performance.now();
+    if(nearEnd())rescueFinal();
+  });
+  recording?.addEventListener('pause',()=>{
+    if(nearEnd())rescueFinal();
+  });
+  recording?.addEventListener('timeupdate',()=>{
+    if(nearEnd())rescueFinal();
   });
 
-  /* Rescate independiente de timeupdate/ended. Edge puede mostrar 1:40 / 1:40
-     y no completar el EOF; este reloj externo detecta ese atasco. */
+  /* Reloj externo: también actúa si Edge se queda mostrando 1:40 / 1:40
+     y cambia a paused sin emitir ended. */
   setInterval(()=>{
-    if(rescueDone||!recording||recording.paused||recording.seeking)return;
+    if(rescueDone||!recording||recording.seeking)return;
     const now=performance.now();
     const current=recording.currentTime||0;
     const duration=recording.duration;
     if(current>lastMediaTime+.015){lastMediaTime=current;lastAdvanceAt=now;}
     if(Number.isFinite(duration)&&duration>0){
       const remaining=duration-current;
-      if(remaining<=.85 || (remaining<=3.5 && now-lastAdvanceAt>=650))rescueFinal();
+      if(remaining<=1.5 || (remaining<=5 && now-lastAdvanceAt>=650))rescueFinal();
     }else if(current>=99 && now-lastAdvanceAt>=650){
       rescueFinal();
     }
   },100);
 
-  if(recording?.ended)rescueFinal();
+  if(recording?.ended||nearEnd())rescueFinal();
 
   if('MutationObserver'in window){
     const markPortrait=()=>{
