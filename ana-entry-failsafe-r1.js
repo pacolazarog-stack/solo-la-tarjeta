@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
-if(window.__orasAnaEntryFailsafeR8)return;
-window.__orasAnaEntryFailsafeR8=true;
+if(window.__orasAnaEntryFailsafeR9)return;
+window.__orasAnaEntryFailsafeR9=true;
 
 const ANA_ROOT='/solo-la-tarjeta/elegia-breve';
 const POEM_ROUTES=new Set(['estrella','ojos','sonrisa','cabello','piel','interludio','epilogo','ceniciento']);
@@ -11,7 +11,7 @@ const isAnaRoot=()=>location.pathname.replace(/\/index\.html$/i,'/').replace(/\/
 const route=()=>location.hash.replace(/^#/,'').toLowerCase();
 
 const style=document.createElement('style');
-style.id='oras-ana-direct-route-r8';
+style.id='oras-ana-direct-route-r9';
 style.textContent=`
 html[data-oras-ana-route="estrella"] #cenicientoFrame,
 html[data-oras-ana-route="estrella"] #cenicientoFrame[hidden]{
@@ -28,6 +28,11 @@ html[data-oras-ana-resumed="1"] body{overflow:auto!important;touch-action:auto!i
 html[data-oras-ana-resumed="1"] .entry{opacity:0!important;visibility:hidden!important;pointer-events:none!important;}
 html[data-oras-ana-resumed="1"] #poemBackdrop,html[data-oras-ana-resumed="1"] #cenicientoFrame{display:none!important;visibility:hidden!important;pointer-events:none!important;}
 html[data-oras-ana-fallback="1"] #reading .line{opacity:1!important;visibility:visible!important;filter:none!important;transform:none!important;}
+/* Tras el prólogo no hay botón de comienzo: la cartela permanece cinco segundos. */
+html[data-oras-ana-after-star="1"] #entryButton{display:none!important;}
+html[data-oras-ana-after-star="1"] .entry-inner{gap:0!important;}
+/* La navegación general debe permanecer disponible incluso durante la cartela. */
+html[data-oras-ana-after-star="1"] #orasUnifiedNav{display:grid!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;}
 `;
 document.head.appendChild(style);
 
@@ -97,7 +102,7 @@ function applyDirectRoute(){
   frame.classList.remove('sonrisa-leaving');
   frame.removeAttribute('aria-busy');
 
-  const expected=`../${piece}/?music=parent&v=20261016-ana-direct-route-r8`;
+  const expected=`../${piece}/?music=parent&v=20261018-ana-direct-route-r9`;
   const current=frame.getAttribute('src')||'';
   if(!current.includes(`/${piece}/`))frame.src=expected;
 
@@ -127,9 +132,24 @@ function restoreAnaMusic(saved){
     const enabled=document.getElementById('musicEnabled');
     if(enabled)enabled.checked=level>0;
     const slider=document.getElementById('musicLevel');
-    if(slider){const max=Number(slider.max||80);slider.value=String(Math.round(Math.min(max,level*100)));slider.dispatchEvent(new Event('input',{bubbles:true}));}
-    if(level>0)music.play().catch(()=>{});
+    if(slider){
+      const max=Number(slider.max||100);
+      slider.value=String(Math.round(Math.min(max,level*100)));
+      slider.dispatchEvent(new Event('input',{bubbles:true}));
+    }
+    if(saved?.playing!==false&&level>0)music.play().catch(()=>{});
   }catch(_){}
+}
+
+function ensureUnifiedNavVisible(){
+  const reveal=()=>{
+    const nav=document.getElementById('orasUnifiedNav');
+    if(nav){nav.hidden=false;nav.style.removeProperty('display');nav.style.removeProperty('visibility');nav.style.removeProperty('opacity');}
+  };
+  reveal();
+  setTimeout(reveal,120);
+  setTimeout(reveal,700);
+  setTimeout(reveal,1800);
 }
 
 function forceAnaReading(saved=null,fallback=false){
@@ -137,11 +157,12 @@ function forceAnaReading(saved=null,fallback=false){
   const root=document.documentElement,body=document.body;
   if(!body)return false;
   root.removeAttribute('data-oras-ana-route');
+  root.removeAttribute('data-oras-ana-after-star');
   root.classList.remove('publication-pending','poem-route-loading','ceniciento-open','oras-master-entry');
   root.setAttribute('data-oras-ana-resumed','1');
   if(fallback)root.setAttribute('data-oras-ana-fallback','1');
   body.classList.remove('locked','prelude','ceniciento-open','sonrisa-open','eyes-open','voice-open','portrait-revealed');
-  body.classList.add('journey-started','sound-ready','reading-ready','has-scrolled');
+  body.classList.add('journey-started','sound-ready','reading-ready');
   const entry=document.getElementById('entry');
   if(entry)entry.classList.add('is-open');
   const backdrop=document.getElementById('poemBackdrop');
@@ -153,7 +174,8 @@ function forceAnaReading(saved=null,fallback=false){
   const finale=document.getElementById('portraitFinale');
   if(finale)finale.setAttribute('aria-hidden','true');
   restoreAnaMusic(saved);
-  requestAnimationFrame(()=>{window.scrollTo({top:Math.max(0,window.innerHeight*.22),left:0,behavior:'auto'});restoreAnaMusic(saved);});
+  ensureUnifiedNavVisible();
+  requestAnimationFrame(()=>{window.scrollTo({top:0,left:0,behavior:'auto'});restoreAnaMusic(saved);});
   return true;
 }
 
@@ -161,15 +183,43 @@ function resumeFromStar(){
   if(!isAnaRoot()||route())return false;
   const saved=readStarState();
   const qs=new URLSearchParams(location.search);
-  const requested=qs.get('afterPrologue')==='1';
+  const requested=qs.get('afterPrologue')==='1'||qs.get('afterStar')==='1'||qs.get('from')==='star';
+  /* El estado de música guardado al salir de Siguiendo una tarjeta basta para reconocer la transición. */
   if(!saved&&!requested)return false;
-  if(requested){qs.delete('afterPrologue');const q=qs.toString();try{history.replaceState(null,'',location.pathname+(q?'?'+q:''));}catch(_){}}
-  forceAnaReading(saved,false);
-  const read=document.getElementById('anaRead');
-  try{read?.click();}catch(_){}
-  setTimeout(()=>forceAnaReading(saved,false),80);
-  setTimeout(()=>forceAnaReading(saved,false),500);
-  setTimeout(()=>{restoreAnaMusic(saved);try{sessionStorage.removeItem(STAR_MUSIC_STATE);}catch(_){}},1800);
+
+  const root=document.documentElement;
+  root.setAttribute('data-oras-ana-after-star','1');
+  root.classList.remove('publication-pending','poem-route-loading','oras-master-entry');
+  const body=document.body;
+  body?.classList.add('locked','journey-started','sound-ready');
+  body?.classList.remove('reading-ready','prelude','ceniciento-open','sonrisa-open','eyes-open','voice-open','portrait-revealed');
+
+  const entry=document.getElementById('entry');
+  entry?.classList.remove('is-open');
+  const entryButton=document.getElementById('entryButton');
+  if(entryButton)entryButton.hidden=true;
+
+  const backdrop=document.getElementById('poemBackdrop');
+  if(backdrop)backdrop.hidden=true;
+  const frame=document.getElementById('cenicientoFrame');
+  if(frame){frame.hidden=true;frame.removeAttribute('src');}
+
+  /* La música heredada se restaura ya durante la cartela, no cinco segundos después. */
+  restoreAnaMusic(saved);
+  ensureUnifiedNavVisible();
+
+  if(requested){
+    qs.delete('afterPrologue');qs.delete('afterStar');qs.delete('from');
+    const q=qs.toString();
+    try{history.replaceState(null,'',location.pathname+(q?'?'+q:''));}catch(_){}
+  }
+
+  if(window.__orasAnaAfterStarTimer)clearTimeout(window.__orasAnaAfterStarTimer);
+  window.__orasAnaAfterStarTimer=setTimeout(()=>{
+    window.__orasAnaAfterStarTimer=null;
+    forceAnaReading(saved,false);
+    try{sessionStorage.removeItem(STAR_MUSIC_STATE);}catch(_){}
+  },5000);
   return true;
 }
 
