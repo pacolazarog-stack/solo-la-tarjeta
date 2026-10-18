@@ -16,15 +16,13 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
+          import re
           p=Path('elegia-breve/index.html')
           s=p.read_text(encoding='utf-8')
-          old='oras-reading-window-r2.js?v=20261018-ana-inline-start-1'
-          new='oras-reading-window-r2.js?v=20261018-ana-end-stability-2'
-          if old in s:
-              s=s.replace(old,new,1)
-          elif new not in s:
-              raise SystemExit('No se encontró la referencia esperada al script')
-          p.write_text(s,encoding='utf-8')
+          s2,n=re.subn(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r2.js?v=20261018-ana-end-stability-2', s, count=1)
+          if n != 1:
+              raise SystemExit('No se encontró la referencia de oras-reading-window-r2.js')
+          p.write_text(s2,encoding='utf-8')
           PY
           rm -f .github/workflows/bump-ana-end-stability-once.yml
       - name: Publicar cambio
