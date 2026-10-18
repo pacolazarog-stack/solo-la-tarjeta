@@ -6,7 +6,7 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261014-master-index-15';
-const VERSION='20261018-canonical-controls-1';
+const VERSION='20261013-ana-portrait-prev-next-1';
 const ANA_PARTS=Object.freeze([
  ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],['ojos','En tus ojos',`${BASE}/ojos/`],['labios','En tus labios',`${BASE}/sonrisa/`],['cabello','Tu cabello',`${BASE}/cabello/`],['piel','Tu piel',`${BASE}/piel/`],['interludio','Interludio · Iba a llevarte flores',`${BASE}/interludio/`],['epilogo','Epílogo · A fuego lento · Flores',`${BASE}/epilogo/`]
 ]);
