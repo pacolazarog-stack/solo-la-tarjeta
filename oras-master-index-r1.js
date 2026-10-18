@@ -1,392 +1,98 @@
 (()=>{
 'use strict';
-
-const PATH=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');
-if(!PATH.startsWith('/solo-la-tarjeta'))return;
-const IS_ROOT=PATH==='/solo-la-tarjeta';
-
-const qs=new URLSearchParams(location.search);
-const COVER_ENTRY=IS_ROOT&&!qs.has('read')&&!qs.has('origen')&&qs.get('auto')!=='1'&&!qs.has('from')&&qs.get('indice')!=='1';
-if(window.__orasMasterIndexR1)return;
-window.__orasMasterIndexR1=true;
-
+if(window.__orasCanonicalIndexR2)return;
+window.__orasCanonicalIndexR2=true;
+if(window.top!==window.self)return;
 const ROOT='/solo-la-tarjeta';
-const UKEY='oras.universe.v2';
-const GKEY='oras.reading.index.v1';
-const OPENKEY='oras.master.index.open.v1';
-const VERSION='20261014-master-index-15';
+const path=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'')||'/';
+if(!path.startsWith(ROOT))return;
 
-const ANA=[
-  ['estrella','Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`],
-  ['elegia','Elegía breve para Ana Klaudya',`${ROOT}/elegia-breve/`],
-  ['ojos','En tus ojos',`${ROOT}/ojos/`],
-  ['labios','En tus labios',`${ROOT}/sonrisa/`],
-  ['cabello','Tu cabello',`${ROOT}/cabello/`],
-  ['piel','Tu piel',`${ROOT}/piel/`],
-  ['interludio','Interludio · Iba a llevarte flores',`${ROOT}/interludio/`],
-  ['epilogo','Epílogo · A fuego lento · Flores',`${ROOT}/epilogo/`]
+const ROUTE_KEY='oras.canonical.route.v1';
+const POS_KEY='oras.canonical.route.pos.v1';
+const qs=new URLSearchParams(location.search);
+const isRoot=path===ROOT;
+const coverEntry=isRoot&&!qs.has('read')&&qs.get('indice')!=='1'&&qs.get('auto')!=='1'&&!qs.has('from');
+const exp=id=>`${ROOT}/inventario-del-aire/?go=${encodeURIComponent(id)}`;
+const item=(label,href)=>({label,href});
+
+const ROUTES=[
+ {id:'emocional',n:'1',title:'Lectura emocional',subtitle:'El amor, la presencia y la mirada',question:'¿Qué ocurre cuando alguien nos ve de verdad?',culmination:'Ella nunca había visto al joven.',items:[
+  item('Solo la tarjeta',`${ROOT}/?read=solo`),item('Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`),item('Elegía breve para Ana Klaudya',`${ROOT}/elegia-breve/`),item('En tus ojos',`${ROOT}/ojos/`),item('En tus labios',`${ROOT}/sonrisa/`),item('Tu cabello',`${ROOT}/cabello/`),item('Tu piel',`${ROOT}/piel/`),item('Epílogo · A fuego lento',`${ROOT}/epilogo/`),item('Ceniciento',`${ROOT}/ceniciento/`),item('El espejo',`${ROOT}/ceniciento/?mirror=1`)
+ ]},
+ {id:'tiempo',n:'2',title:'El tiempo',subtitle:'El paso de las edades',question:'¿Qué permanece cuando el tiempo se lleva casi todo?',culmination:'A Ceniciento el prodigio le devolvió al hombre que fue para descubrir quién era.',items:[
+  item('Solo la tarjeta',`${ROOT}/?read=solo`),item('Ceniciento',`${ROOT}/ceniciento/`),item('La habitación del reloj',exp('inv-2')),item('Inventario',exp('inv-7')),item('El hombre de la fila siete',exp('som-4')),item('Último recorrido',exp('som-9')),item('Invierno',exp('ciu-9')),item('Habitación Número Cero',exp('zero'))
+ ]},
+ {id:'huellas',n:'3',title:'Las huellas',subtitle:'De la tarjeta al botón de nácar',question:'¿Cómo sigue actuando algo cuando ya no está?',culmination:'Toda huella puede volver.',items:[
+  item('Solo la tarjeta',`${ROOT}/?read=solo`),item('El inventario del aire',exp('inv-1')),item('El Archivo Profundo',exp('ciu-11')),item('La Máquina de las Huellas',exp('ciu-12')),item('Atlas / Azar',exp('atlas')),item('El Resonador',exp('ciu-13')),item('Habitación Número Cero',exp('zero')),item('El botón de nácar final',exp('zero'))
+ ]},
+ {id:'ausencias',n:'4',title:'Las ausencias',subtitle:'Lo que desaparece',question:'¿Qué forma tiene una ausencia?',culmination:'La Habitación Número Cero contiene la posibilidad de desaparecer.',items:[
+  item('La tarjeta ya no hacía falta',`${ROOT}/?read=solo#duskPreFinal`),item('La habitación del reloj',exp('inv-2')),item('La fotografía rota',exp('inv-5')),item('Las sombras',exp('som-3')),item('La ciudad que aprendió a olvidar',exp('ciu-1')),item('El museo',exp('ciu-7')),item('La última sala',exp('ciu-10')),item('Habitación Número Cero',exp('zero'))
+ ]},
+ {id:'espejo',n:'5',title:'El espejo',subtitle:'Las versiones de una misma historia',question:'¿Cuántas lecturas puede tener una misma huella?',culmination:'Parecían tres. Lo eran. Y no lo eran.',items:[
+  item('Solo la tarjeta',`${ROOT}/?read=solo`),item('Ceniciento',`${ROOT}/ceniciento/`),item('El espejo',`${ROOT}/ceniciento/?mirror=1`),item('Espejo · Atlas / Azar',exp('atlas')),item('Contradicción',exp('atlas')),item('Interferencia',exp('atlas')),item('Resonador',exp('ciu-13'))
+ ]},
+ {id:'museo',n:'6',title:'El museo',subtitle:'La construcción de ORAS como sistema',question:'¿Cómo recuerda una civilización?',culmination:'Las personas creen que recuerdan las ciudades. Es al revés.',items:[
+  item('El Inventario del Aire',exp('inv-1')),item('El Oficio de las Sombras',exp('som-1')),item('La Ciudad que Aprendió a Olvidar',exp('ciu-1')),item('Archivo Profundo',exp('ciu-11')),item('Máquina de las Huellas',exp('ciu-12')),item('Resonador',exp('ciu-13')),item('Habitación Número Cero',exp('zero'))
+ ]},
+ {id:'transformacion',n:'7',title:'La transformación',subtitle:'Yang → Yin',question:'¿Cómo deja alguien de buscar para empezar a habitar?',culmination:'Cuando era yang, buscaba el yin. Ahora que soy yin, me basta con mirarte.',items:[
+  item('Solo la tarjeta',`${ROOT}/?read=solo`),item('Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`),item('Elegía breve para Ana Klaudya',`${ROOT}/elegia-breve/`),item('En tus ojos',`${ROOT}/ojos/`),item('En tus labios',`${ROOT}/sonrisa/`),item('Tu cabello',`${ROOT}/cabello/`),item('Tu piel',`${ROOT}/piel/`),item('A fuego lento',`${ROOT}/epilogo/`),item('Ceniciento',`${ROOT}/ceniciento/`),item('El espejo',`${ROOT}/ceniciento/?mirror=1`)
+ ]},
+ {id:'canonica',n:'8',title:'Lectura total',subtitle:'Recorrido canónico',question:'La vida se convierte en memoria; la memoria en sistema; el sistema en ausencia.',culmination:'Tarjeta → Encuentro → Mirada → Huella → Archivo → Resonancia → Ausencia → Cero → Huella.',canonical:true,items:[
+  item('I · Solo la tarjeta',`${ROOT}/?read=solo`),item('Prólogo · Siguiendo una tarjeta',`${ROOT}/estrella/`),item('Elegía breve para Ana Klaudya',`${ROOT}/elegia-breve/`),item('En tus ojos',`${ROOT}/ojos/`),item('En tus labios',`${ROOT}/sonrisa/`),item('Tu cabello',`${ROOT}/cabello/`),item('Tu piel',`${ROOT}/piel/`),item('A fuego lento',`${ROOT}/epilogo/`),item('Ceniciento',`${ROOT}/ceniciento/`),item('II · El espejo',`${ROOT}/ceniciento/?mirror=1`),item('III · El inventario del aire',exp('inv-1')),item('El oficio de las sombras',exp('som-1')),item('La ciudad que aprendió a olvidar',exp('ciu-1')),item('El Archivo Profundo',exp('ciu-11')),item('La Máquina de las Huellas',exp('ciu-12')),item('Atlas / Azar',exp('atlas')),item('El Resonador',exp('ciu-13')),item('IV · Habitación Número Cero',exp('zero'))
+ ]}
 ];
-
-const INVENTARIO=[
-  ['inv-1','I. El recibidor'],
-  ['inv-2','II. La habitación del reloj'],
-  ['inv-3','III. La cocina'],
-  ['inv-4','IV. El pasillo'],
-  ['inv-5','V. El dormitorio'],
-  ['inv-6','VI. El jardín'],
-  ['inv-7','VII. Inventario'],
-  ['inv-8','VIII. Salida']
-];
-
-const OFICIO=[
-  ['som-1','I. La estación'],
-  ['som-2','II. El revisor'],
-  ['som-3','III. Las sombras'],
-  ['som-4','IV. El hombre de la fila siete'],
-  ['som-5','V. Conversación'],
-  ['som-6','VI. Inventario de ausencias móviles'],
-  ['som-7','VII. El taller'],
-  ['som-8','VIII. El oficio'],
-  ['som-9','IX. Último recorrido']
-];
-
-/* Los ids ciu-10…ciu-13 conservan la identidad histórica del checklist. */
-const CIUDAD=[
-  ['ciu-1','I. La plaza'],
-  ['ciu-2','II. El archivero'],
-  ['ciu-3','III. La fuente'],
-  ['ciu-4','IV. Los resistentes'],
-  ['ciu-5','V. El mapa imposible'],
-  ['ciu-6','VI. Teoría'],
-  ['ciu-7','VII. El museo'],
-  ['ciu-8','VIII. El visitante'],
-  ['ciu-9','IX. Invierno']
-];
-
-const ARCHIVERO=[
-  ['ciu-11','X. El Archivo Profundo'],
-  ['ciu-12','XI. La Máquina de las Huellas'],
-  ['ciu-13','XII. El Resonador'],
-  ['ciu-10','XIII. La Última Sala']
-];
-
-const ATLAS=['atlas','ATLAS / AZAR'];
-const ZERO=['zero','Epílogo · La Habitación Número Cero'];
-const EXPANSION=[...INVENTARIO,...OFICIO,...CIUDAD,...ARCHIVERO,ATLAS,ZERO];
-
-const readJSON=(key,fallback={})=>{try{return JSON.parse(localStorage.getItem(key)||'null')||fallback}catch(_){return fallback}};
-const life=()=>readJSON(UKEY,{});
-const general=()=>readJSON(GKEY,{done:{}});
-const bool=v=>v===true;
-
-function anaDone(key,state){
-  const parts=state.anaParts&&typeof state.anaParts==='object'?state.anaParts:null;
-  if(parts)return parts[key]===true;
-  return bool(state.anaComplete);
-}
-function expansionDone(id){
-  const g=general();
-  return g.done?.[id]?.done===true||g.done?.[id]===true;
-}
-function invHref(id){
-  return `${ROOT}/inventario-del-aire/?go=${encodeURIComponent(id)}&v=${VERSION}`;
-}
-function countDone(list){return list.filter(([id])=>expansionDone(id)).length;}
-function allLeaves(){
-  const u=life();
-  return [
-    {id:'solo',done:bool(u.soloComplete)},
-    ...ANA.map(([id])=>({id:'ana-'+id,done:anaDone(id,u)})),
-    {id:'ceniciento',done:bool(u.cenicientoComplete)},
-    {id:'mirror',done:bool(u.mirrorReadComplete)},
-    ...EXPANSION.map(([id])=>({id,done:expansionDone(id)}))
-  ];
-}
-function progress(){
-  const leaves=allLeaves();
-  return {done:leaves.filter(x=>x.done).length,total:leaves.length};
-}
-function getOpen(){
-  try{
-    const parsed=JSON.parse(sessionStorage.getItem(OPENKEY)||'[]');
-    return new Set(Array.isArray(parsed)?parsed:[]);
-  }catch(_){return new Set();}
-}
-function saveOpen(set){
-  try{sessionStorage.setItem(OPENKEY,JSON.stringify([...set]));}catch(_){}
-}
 
 const style=document.createElement('style');
-style.id='oras-master-index-r1-style';
+style.id='oras-canonical-index-r2-style';
 style.textContent=`
-:root{
-  --oras-bg:#060606;
-  --oras-panel:#0d0c0a;
-  --oras-panel-2:#13110e;
-  --oras-line:rgba(224,194,129,.28);
-  --oras-line-soft:rgba(237,226,204,.11);
-  --oras-ink:#f3e7cf;
-  --oras-muted:rgba(243,231,207,.58);
-  --oras-gold:#dfc58a;
-  --oras-gold-2:#f1dba5;
-  --oras-dark:#17120a;
-  --oras-radius:18px;
-  --oras-control:42px;
-}
-html.oras-master-entry,html.oras-master-entry body{overflow:hidden!important;background:#070706!important}
-.oras-master-cover{position:fixed;z-index:2147483647;inset:0;display:grid;place-items:center;background:#070706;color:#f4ecdc;font-family:Georgia,"Times New Roman",serif}
-.oras-master-cover[hidden]{display:none!important}
-.oras-master-cover-frame{position:relative;height:min(100svh,calc(100vw * 1.5));width:min(100vw,calc(100svh * .6666667));aspect-ratio:2/3;box-shadow:0 0 80px rgba(0,0,0,.5);overflow:hidden;background:#0b0a09}
-.oras-master-cover-img{display:block;width:100%;height:100%;object-fit:cover}
-.oras-master-button{position:absolute;left:50%;top:50.4%;width:31%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);border:0;background:transparent;cursor:pointer;touch-action:manipulation;outline:none}
-.oras-master-button::before{content:"";position:absolute;inset:-4%;border-radius:50%;border:1px solid transparent;box-shadow:0 0 0 rgba(248,239,215,0);transition:.24s ease}
-.oras-master-button:hover::before,.oras-master-button:focus-visible::before{border-color:rgba(248,239,215,.42);box-shadow:0 0 28px rgba(248,239,215,.18);transform:scale(1.025)}
-.oras-master-button span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-
-.oras-master-index{position:fixed;z-index:2147483647;inset:0;display:none;background:radial-gradient(circle at 50% -12%,rgba(80,61,33,.16),transparent 30%),var(--oras-bg);color:var(--oras-ink);font-family:Georgia,"Times New Roman",serif;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(223,197,138,.32) transparent}
-.oras-master-index.is-open{display:block}
-.oras-mi-shell{width:min(920px,calc(100vw - 28px));margin:0 auto;padding:max(22px,env(safe-area-inset-top)) 0 calc(92px + env(safe-area-inset-bottom))}
-.oras-mi-close{position:fixed;z-index:20;right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top));width:var(--oras-control);height:var(--oras-control);display:grid;place-items:center;border:1px solid var(--oras-line);border-radius:50%;background:rgba(8,8,8,.86);color:var(--oras-ink);font:300 1.35rem/1 system-ui,sans-serif;cursor:pointer;backdrop-filter:blur(10px)}
-
-.oras-mi-hero{padding:2px 54px 16px 2px}
-.oras-mi-kicker{font:600 .63rem/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.21em;text-transform:uppercase;color:rgba(243,231,207,.48)}
-.oras-mi-title{margin:.28rem 0 0;font:400 clamp(2.25rem,7vw,4rem)/.94 Georgia,"Times New Roman",serif;letter-spacing:.012em}
-.oras-mi-sub{margin:.5rem 0 0;font:italic clamp(.92rem,2.3vw,1.08rem)/1.25 Georgia,serif;color:var(--oras-muted)}
-.oras-mi-progress-card{margin-top:15px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:13px 15px;border:1px solid var(--oras-line);border-radius:var(--oras-radius);background:linear-gradient(135deg,rgba(24,20,14,.9),rgba(10,10,9,.94));box-shadow:inset 0 1px rgba(255,255,255,.025)}
-.oras-mi-progress-num{font:400 1.9rem/1 Georgia,serif;color:#f7ecd7;white-space:nowrap}.oras-mi-progress-num small{display:block;margin-top:4px;font:600 .57rem/1.1 system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--oras-muted)}
-.oras-mi-progress-track{height:6px;border-radius:999px;background:rgba(243,231,207,.13);overflow:hidden}.oras-mi-progress-fill{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#c9aa68,#efd89f);box-shadow:0 0 10px rgba(223,197,138,.22)}
-.oras-mi-progress-pct{font:400 .92rem/1 Georgia,serif;color:var(--oras-muted)}
-
-.oras-mi-section{margin-top:20px}
-.oras-mi-section-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}.oras-mi-section-name{font:500 .78rem/1.1 system-ui,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:rgba(243,231,207,.72);white-space:nowrap}.oras-mi-section-line{height:1px;flex:1;background:var(--oras-line-soft)}.oras-mi-section-count{font:500 .68rem/1 system-ui,sans-serif;color:rgba(243,231,207,.5);white-space:nowrap}
-
-.oras-mi-card{margin:8px 0;border:1px solid var(--oras-line);border-radius:var(--oras-radius);overflow:hidden;background:linear-gradient(180deg,rgba(18,16,13,.95),rgba(10,10,9,.97));box-shadow:0 8px 28px rgba(0,0,0,.12)}
-.oras-mi-card.is-locked{opacity:.46}.oras-mi-card.is-locked .oras-mi-card-action{pointer-events:none;cursor:default}
-.oras-mi-card-main{display:grid;grid-template-columns:54px 22px minmax(0,1fr) var(--oras-control);gap:11px;align-items:center;min-height:68px;padding:7px 9px 7px 8px}
-.oras-mi-card-mark{width:54px;height:54px;border-radius:13px;display:grid;place-items:center;border:1px solid rgba(223,197,138,.16);background:radial-gradient(circle at 30% 25%,rgba(235,205,143,.14),transparent 45%),linear-gradient(145deg,#19150f,#090908);font:400 1.1rem/1 Georgia,serif;letter-spacing:.03em;color:rgba(241,219,165,.86)}
-.oras-mi-state{width:18px;height:18px;border:1px solid rgba(241,219,165,.45);border-radius:50%;display:grid;place-items:center;color:#161109;background:transparent;font:800 11px/1 system-ui,sans-serif}
-.oras-mi-state.is-done{background:var(--oras-gold-2);border-color:var(--oras-gold-2)}.oras-mi-state.is-done::after{content:"✓"}
-.oras-mi-card-copy{min-width:0}.oras-mi-card-title{display:block;color:var(--oras-ink);font:400 clamp(1rem,2.7vw,1.22rem)/1.08 Georgia,serif;text-decoration:none;white-space:normal}.oras-mi-card-meta{display:block;margin-top:4px;font:500 .64rem/1.1 system-ui,sans-serif;letter-spacing:.045em;color:var(--oras-muted)}
-.oras-mi-card-action{width:var(--oras-control);height:var(--oras-control);border:1px solid var(--oras-line);border-radius:50%;display:grid;place-items:center;background:rgba(8,8,8,.42);color:var(--oras-gold-2);cursor:pointer;text-decoration:none;font:400 1rem/1 system-ui,sans-serif;transition:.18s ease}.oras-mi-card-action:hover,.oras-mi-card-action:focus-visible{background:rgba(223,197,138,.09);border-color:rgba(223,197,138,.56);outline:none}.oras-mi-card-action .chev{display:block;transform:rotate(0);transition:transform .18s ease}.oras-mi-card[data-open="true"] .oras-mi-card-action .chev{transform:rotate(180deg)}
-
-.oras-mi-parts{display:none;padding:0 9px 10px 95px}.oras-mi-card[data-open="true"] .oras-mi-parts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
-.oras-mi-chip{min-height:39px;display:grid;grid-template-columns:16px minmax(0,1fr);gap:8px;align-items:center;padding:7px 10px;border:1px solid rgba(223,197,138,.28);border-radius:999px;background:rgba(8,8,8,.52);color:rgba(243,231,207,.88);text-decoration:none;font:400 .79rem/1.14 Georgia,serif;transition:.16s ease}.oras-mi-chip:hover,.oras-mi-chip:focus-visible{background:rgba(223,197,138,.08);border-color:rgba(223,197,138,.5);color:#fff3dc;outline:none}.oras-mi-chip-state{width:15px;height:15px;border:1px solid rgba(241,219,165,.42);border-radius:50%;display:grid;place-items:center;color:#161109;font:800 9px/1 system-ui,sans-serif}.oras-mi-chip[data-done="true"] .oras-mi-chip-state{background:var(--oras-gold-2);border-color:var(--oras-gold-2)}.oras-mi-chip[data-done="true"] .oras-mi-chip-state::after{content:"✓"}.oras-mi-chip.is-atlas .oras-mi-chip-state{border-radius:3px;transform:rotate(45deg)}.oras-mi-chip.is-atlas .oras-mi-chip-state::after{transform:rotate(-45deg)}
-
-.oras-mi-bottom{position:fixed;z-index:15;left:50%;bottom:0;transform:translateX(-50%);width:min(920px,calc(100vw - 18px));display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:9px;padding:10px 0 calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,#060606 58%,rgba(6,6,6,.88) 76%,rgba(6,6,6,0));pointer-events:none}.oras-mi-bottom a,.oras-mi-bottom button{pointer-events:auto;min-height:52px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:9px;font:500 .94rem/1 system-ui,sans-serif;text-decoration:none;cursor:pointer}.oras-mi-home{border:1px solid var(--oras-line);background:rgba(12,11,9,.95);color:var(--oras-ink)}.oras-mi-continue{border:1px solid var(--oras-gold);background:linear-gradient(135deg,#efd8a1,#d6b66f);color:#17120b;box-shadow:0 0 18px rgba(223,197,138,.09)}.oras-mi-bottom-icon{font-size:1rem}
-
-@media(max-width:700px){
-  :root{--oras-radius:15px;--oras-control:38px}
-  .oras-mi-shell{width:min(100% - 18px,920px);padding-top:max(14px,env(safe-area-inset-top));padding-bottom:calc(86px + env(safe-area-inset-bottom))}
-  .oras-mi-close{width:38px;height:38px;right:max(9px,env(safe-area-inset-right));top:max(9px,env(safe-area-inset-top))}
-  .oras-mi-hero{padding-right:43px}.oras-mi-title{font-size:clamp(2rem,10vw,3rem)}
-  .oras-mi-progress-card{grid-template-columns:auto 1fr;gap:10px;padding:11px 12px}.oras-mi-progress-pct{display:none}.oras-mi-progress-num{font-size:1.6rem}
-  .oras-mi-section{margin-top:15px}.oras-mi-section-head{margin-bottom:6px}
-  .oras-mi-card{margin:6px 0}.oras-mi-card-main{grid-template-columns:45px 18px minmax(0,1fr) 38px;gap:9px;min-height:59px;padding:6px 7px 6px 6px}.oras-mi-card-mark{width:45px;height:45px;border-radius:11px;font-size:.92rem}.oras-mi-state{width:16px;height:16px;font-size:9px}.oras-mi-card-title{font-size:1rem}.oras-mi-card-meta{font-size:.58rem}
-  .oras-mi-parts{padding:0 7px 8px 77px}.oras-mi-card[data-open="true"] .oras-mi-parts{grid-template-columns:1fr;gap:5px}.oras-mi-chip{min-height:36px;padding:6px 9px;font-size:.76rem}
-  .oras-mi-bottom{width:calc(100vw - 12px);gap:7px;padding-top:8px}.oras-mi-bottom a,.oras-mi-bottom button{min-height:48px;font-size:.88rem}
-}
-@media(max-width:390px){
-  .oras-mi-card-main{grid-template-columns:40px 16px minmax(0,1fr) 36px}.oras-mi-card-mark{width:40px;height:40px}.oras-mi-parts{padding-left:68px}.oras-mi-card-title{font-size:.94rem}
-}
-@media(prefers-reduced-motion:reduce){.oras-master-button::before,.oras-mi-card-action .chev{transition:none}}
-/* ORAS · ventana canónica móvil + umbral de portada */
-.oras-entry-bridge{position:fixed;z-index:2147483646;inset:0;background:#fff;opacity:0;visibility:hidden;pointer-events:none}.oras-entry-bridge.is-active{visibility:visible;animation:orasWhiteBreath 2.9s ease-in-out forwards}
-@keyframes orasWhiteBreath{0%{opacity:0}18%{opacity:1}38%{opacity:.92}52%{opacity:1}68%{opacity:.88}82%{opacity:1}100%{opacity:.22}}
-.oras-master-cover-frame{transform:scale(1);transform-origin:50% 50.4%;transition:transform 1.05s cubic-bezier(.56,.02,.2,1),filter 1.05s ease}.oras-master-cover.is-entering .oras-master-cover-frame{transform:scale(7.8);filter:blur(1.8px) brightness(1.28)}
-.oras-master-cover.is-entering .oras-master-button{transform:translate(-50%,-50%) perspective(700px) rotateY(86deg) scale(.62);opacity:.05;transition:transform .82s cubic-bezier(.5,.02,.18,1),opacity .62s ease}.oras-master-cover.is-entering .oras-master-button::before{border-color:rgba(255,255,255,.78);background:rgba(255,255,255,.12);box-shadow:0 0 70px rgba(255,255,255,.58)}
-.oras-master-index{align-items:center;justify-content:center;padding:max(34px,env(safe-area-inset-top)) max(34px,env(safe-area-inset-right)) max(34px,env(safe-area-inset-bottom)) max(34px,env(safe-area-inset-left));background:rgba(3,3,3,.62);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}.oras-master-index.is-open{display:flex}.oras-master-index.from-entry{background:rgba(3,3,3,.34);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}.oras-master-index.from-entry .oras-mi-shell{animation:orasIndexAppear 1.55s .38s both cubic-bezier(.22,.65,.28,1)}
-@keyframes orasIndexAppear{0%{opacity:0;transform:translateY(24px) scale(.965);filter:blur(7px)}100%{opacity:1;transform:none;filter:none}}
-.oras-mi-shell{position:relative;width:min(820px,calc(100vw - 72px));height:min(82svh,760px);max-height:calc(100svh - 72px);margin:0;padding:max(22px,env(safe-area-inset-top)) 18px calc(94px + env(safe-area-inset-bottom));overflow:auto;border:1px solid rgba(224,194,129,.42);border-radius:26px;background:radial-gradient(circle at 50% -8%,rgba(104,77,37,.18),transparent 26%),linear-gradient(180deg,#0f0e0c,#060606 62%);box-shadow:0 34px 110px rgba(0,0,0,.72),0 0 0 1px rgba(255,255,255,.015),inset 0 1px rgba(255,255,255,.03);overscroll-behavior:contain}.oras-mi-bottom{grid-template-columns:minmax(0,.8fr) minmax(0,.95fr) minmax(0,1.25fr);width:min(780px,calc(100vw - 110px));bottom:max(46px,calc((100svh - min(82svh,760px))/2 + 10px))}
-.oras-mi-close{right:max(46px,calc((100vw - min(820px,calc(100vw - 72px)))/2 + 14px));top:max(46px,calc((100svh - min(82svh,760px))/2 + 14px));background:rgba(8,8,8,.70);box-shadow:0 8px 26px rgba(0,0,0,.32)}
-.oras-mi-reset{border:1px solid rgba(255,77,77,.75);background:linear-gradient(180deg,rgba(128,12,12,.96),rgba(79,7,7,.98));color:#fff1ee;box-shadow:0 0 16px rgba(190,18,18,.18)}.oras-mi-reset:hover,.oras-mi-reset:focus-visible{background:linear-gradient(180deg,#a61212,#700909);outline:none}
-@media(max-width:700px){.oras-master-index{padding:8px}.oras-mi-shell{width:calc(100vw - 16px);height:calc(100svh - 16px);max-height:none;border-radius:20px;padding:14px 9px calc(86px + env(safe-area-inset-bottom))}.oras-mi-close{right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top))}.oras-mi-bottom{width:calc(100vw - 28px);bottom:8px;grid-template-columns:.78fr .9fr 1.2fr;gap:5px}.oras-mi-bottom a,.oras-mi-bottom button{font-size:.76rem;min-height:46px;padding:0 8px}}
-@media(max-width:390px){.oras-mi-bottom a,.oras-mi-bottom button{font-size:.7rem;gap:4px}.oras-mi-bottom-icon{font-size:.82rem}}
-
+:root{--oc-gold:#e2c989;--oc-ink:#f5ead4;--oc-muted:rgba(245,234,212,.62);--oc-line:rgba(226,201,137,.34)}
+#orasSoloPrevNext,#journeyNav,.journey-nav,.ou-ceniciento-endnav,.oras-ceniciento-nav{display:none!important}
+.oras-cover{position:fixed;z-index:2147483647;inset:0;display:grid;place-items:center;background:#070706}.oras-cover[hidden]{display:none!important}.oras-cover-frame{position:relative;height:min(100svh,calc(100vw*1.5));width:min(100vw,calc(100svh*.666667));aspect-ratio:2/3;overflow:hidden}.oras-cover img{width:100%;height:100%;object-fit:cover;display:block}.oras-cover-enter{position:absolute;left:50%;top:50.4%;width:31%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(255,247,226,.12);background:rgba(0,0,0,.02);cursor:pointer;box-shadow:0 0 0 0 rgba(255,240,200,0);transition:.35s}.oras-cover-enter:hover,.oras-cover-enter:focus-visible{outline:none;border-color:rgba(255,247,226,.48);box-shadow:0 0 42px rgba(255,235,190,.20);transform:translate(-50%,-50%) scale(1.035)}
+.oras-index{position:fixed;z-index:2147483646;inset:0;display:none;place-items:center;padding:18px;background:radial-gradient(circle at 50% 48%,rgba(85,62,31,.18),transparent 42%),rgba(4,4,4,.94);color:var(--oc-ink);font-family:Georgia,'Times New Roman',serif;backdrop-filter:blur(12px)}.oras-index.is-open{display:grid}.oras-index-shell{position:relative;width:min(1180px,calc(100vw - 30px));height:min(900px,calc(100svh - 30px));overflow:auto;border:1px solid var(--oc-line);border-radius:34px;background:radial-gradient(circle at 50% 34%,rgba(117,83,38,.12),transparent 34%),linear-gradient(180deg,#0f0e0c,#060606 70%);box-shadow:0 30px 120px #000;padding:24px 28px 92px}.oras-index-close{position:sticky;z-index:4;float:right;top:0;width:42px;height:42px;border-radius:50%;border:1px solid var(--oc-line);background:#0b0a08;color:var(--oc-ink);font-size:20px;cursor:pointer}.oras-head{text-align:center;padding:4px 52px 8px}.oras-head small{display:block;font:600 .64rem/1.2 system-ui;letter-spacing:.22em;text-transform:uppercase;color:var(--oc-muted)}.oras-head h1{margin:.3rem 0 .15rem;font:400 clamp(2.25rem,6vw,4.4rem)/.95 Georgia}.oras-head p{margin:.4rem auto 0;max-width:62ch;color:var(--oc-muted);font-style:italic}
+.oras-wheel-wrap{display:grid;grid-template-columns:minmax(520px,1.08fr) minmax(320px,.92fr);gap:24px;align-items:center;margin-top:8px}.oras-wheel{position:relative;width:min(62vw,610px);max-width:100%;aspect-ratio:1;margin:auto;border-radius:50%;border:1px solid rgba(226,201,137,.18);background:radial-gradient(circle,rgba(226,201,137,.06) 0 1px,transparent 2px),radial-gradient(circle,transparent 48%,rgba(226,201,137,.05) 49%,transparent 50%);box-shadow:inset 0 0 80px rgba(226,201,137,.025)}.oras-wheel::before,.oras-wheel::after{content:'';position:absolute;inset:13%;border:1px solid rgba(226,201,137,.10);border-radius:50%}.oras-wheel::after{inset:29%}.oras-center{position:absolute;left:50%;top:50%;width:31%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;display:grid;place-items:center;text-align:center;border:1px solid rgba(226,201,137,.38);background:radial-gradient(circle at 40% 32%,#272015,#0b0907 72%);box-shadow:0 0 38px rgba(226,201,137,.09)}.oras-center strong{font:400 clamp(1.3rem,3vw,2.1rem)/1 Georgia;letter-spacing:.08em}.oras-center span{display:block;margin-top:.35rem;font:500 .55rem/1.25 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--oc-muted)}.oras-route-node{--a:0deg;position:absolute;left:50%;top:50%;width:116px;min-height:72px;transform:translate(-50%,-50%) rotate(var(--a)) translateY(-235px) rotate(calc(-1*var(--a)));border:1px solid rgba(226,201,137,.28);border-radius:50%;padding:11px 9px;background:rgba(12,10,8,.92);color:var(--oc-ink);cursor:pointer;text-align:center;font:500 .68rem/1.15 system-ui;box-shadow:0 8px 24px rgba(0,0,0,.35);transition:.22s}.oras-route-node b{display:block;font:400 1rem/1 Georgia;color:var(--oc-gold);margin-bottom:3px}.oras-route-node:hover,.oras-route-node:focus-visible,.oras-route-node.is-selected{outline:none;border-color:rgba(240,215,157,.78);background:#1b160f;box-shadow:0 0 26px rgba(226,201,137,.14)}.oras-route-node.is-canonical{border-width:2px}.oras-route-node.is-canonical::after{content:'CANÓNICA';display:block;margin-top:4px;font-size:.48rem;letter-spacing:.11em;color:var(--oc-gold)}
+.oras-route-panel{min-height:520px;border-left:1px solid rgba(226,201,137,.13);padding:12px 4px 12px 24px}.oras-route-panel h2{margin:.2rem 0;font:400 clamp(1.8rem,4vw,3rem)/1 Georgia}.oras-route-panel .sub{color:var(--oc-gold);font-style:italic;margin:.2rem 0 1rem}.oras-route-question{padding:12px 14px;border-left:2px solid rgba(226,201,137,.55);background:rgba(226,201,137,.035);font-style:italic;line-height:1.4}.oras-route-list{margin:15px 0 0;padding:0;list-style:none;display:grid;gap:5px;max-height:280px;overflow:auto}.oras-route-list li{display:grid;grid-template-columns:26px 1fr;gap:8px;align-items:baseline;padding:6px 7px;border-bottom:1px solid rgba(226,201,137,.09);font-size:.93rem}.oras-route-list .num{color:var(--oc-muted);font:600 .65rem/1 system-ui}.oras-route-start{margin-top:15px;width:100%;min-height:50px;border:1px solid var(--oc-gold);border-radius:999px;background:linear-gradient(135deg,#ecd59b,#cba85e);color:#171109;font:650 .86rem/1 system-ui;letter-spacing:.06em;cursor:pointer}.oras-route-coda{margin-top:12px;color:var(--oc-muted);font-size:.83rem;line-height:1.4}.oras-route-coda strong{color:var(--oc-ink);font-weight:400}
+.oras-toolbar{position:fixed;z-index:2147483645;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);display:grid;grid-template-columns:1fr 1.15fr 1fr;width:min(510px,calc(100vw - 132px));height:46px;border:1px solid rgba(226,201,137,.32);border-radius:999px;background:rgba(8,8,8,.78);backdrop-filter:blur(10px);box-shadow:0 10px 35px rgba(0,0,0,.28);overflow:hidden}.oras-toolbar[hidden]{display:none!important}.oras-toolbar button{border:0;background:transparent;color:#fff5e3;font:600 11px/1 system-ui;letter-spacing:.045em;cursor:pointer}.oras-toolbar button+button{border-left:1px solid rgba(226,201,137,.20)}.oras-toolbar button:disabled{opacity:.28;cursor:default}.oras-toolbar .index{color:var(--oc-gold)}
+@media(max-width:900px){.oras-index{padding:7px}.oras-index-shell{width:calc(100vw - 14px);height:calc(100svh - 14px);padding:14px 12px 84px;border-radius:22px}.oras-wheel-wrap{grid-template-columns:1fr;gap:12px}.oras-wheel{width:min(92vw,520px)}.oras-route-node{width:100px;min-height:65px;transform:translate(-50%,-50%) rotate(var(--a)) translateY(-198px) rotate(calc(-1*var(--a)));font-size:.62rem}.oras-route-panel{min-height:0;border-left:0;border-top:1px solid rgba(226,201,137,.13);padding:15px 4px 4px}.oras-route-list{max-height:210px}.oras-toolbar{width:min(430px,calc(100vw - 118px));height:44px}}
+@media(max-width:560px){.oras-head{padding:2px 42px 6px}.oras-head h1{font-size:2.2rem}.oras-head p{font-size:.87rem}.oras-wheel{width:min(92vw,390px)}.oras-route-node{width:78px;min-height:57px;padding:7px 5px;font-size:.54rem;transform:translate(-50%,-50%) rotate(var(--a)) translateY(-149px) rotate(calc(-1*var(--a)))}.oras-route-node b{font-size:.82rem}.oras-center{width:34%}.oras-center strong{font-size:1.25rem}.oras-toolbar{width:calc(100vw - 112px);min-width:230px;height:42px}.oras-toolbar button{font-size:10px}.oras-route-panel h2{font-size:1.8rem}}
+@media(max-width:390px){.oras-wheel{width:350px;max-width:100%}.oras-route-node{width:72px;min-height:54px;transform:translate(-50%,-50%) rotate(var(--a)) translateY(-133px) rotate(calc(-1*var(--a)));font-size:.5rem}.oras-toolbar{width:calc(100vw - 96px);min-width:215px}}
+@media(prefers-reduced-motion:reduce){.oras-route-node,.oras-cover-enter{transition:none}}
 `;
 document.head.appendChild(style);
-if(COVER_ENTRY)document.documentElement.classList.add('oras-master-entry');
 
 const cover=document.createElement('section');
-cover.className='oras-master-cover';
-cover.setAttribute('aria-label','Portada de ORAS');
-cover.innerHTML=`<div class="oras-master-cover-frame"><img class="oras-master-cover-img" src="${ROOT}/assets/oras-portada-final.jpg?v=${VERSION}" alt="ORAS · El archivo profundo"><button class="oras-master-button" type="button" aria-label="Abrir índice general de lectura"><span>Abrir índice general de lectura</span></button></div>`;
-cover.hidden=!COVER_ENTRY;
+cover.className='oras-cover';cover.hidden=!coverEntry;cover.innerHTML=`<div class="oras-cover-frame"><img src="${ROOT}/assets/oras-portada-final.jpg" alt="ORAS · Lo que queda de las horas"><button class="oras-cover-enter" type="button" aria-label="Entrar en ORAS"></button></div>`;
 document.body.appendChild(cover);
-const entryBridge=document.createElement('div');
-entryBridge.className='oras-entry-bridge';
-entryBridge.hidden=true;
-document.body.appendChild(entryBridge);
 
 const index=document.createElement('section');
-index.className='oras-master-index';
-index.setAttribute('role','dialog');
-index.setAttribute('aria-modal','true');
-index.setAttribute('aria-label','Índice general de ORAS');
-index.innerHTML='<button class="oras-mi-close" type="button" aria-label="Volver a la portada">×</button><div class="oras-mi-shell"></div><nav class="oras-mi-bottom" aria-label="Navegación del índice"></nav>';
+index.className='oras-index';index.setAttribute('aria-label','Índice ORAS · recorridos de lectura');index.innerHTML=`<div class="oras-index-shell"><button class="oras-index-close" type="button" aria-label="Cerrar">×</button><header class="oras-head"><small>ORAS · Lo que queda de las horas</small><h1>Recorridos de lectura</h1><p>Una obra, ocho trayectos. Elige una pregunta y atraviesa ORAS desde ella.</p></header><div class="oras-wheel-wrap"><div class="oras-wheel"><div class="oras-center"><div><strong>ORAS</strong><span>huella · tiempo · memoria</span></div></div></div><aside class="oras-route-panel" aria-live="polite"></aside></div></div>`;
 document.body.appendChild(index);
+const wheel=index.querySelector('.oras-wheel');
+ROUTES.forEach((r,i)=>{const b=document.createElement('button');b.className='oras-route-node'+(r.canonical?' is-canonical':'');b.type='button';b.dataset.route=r.id;b.style.setProperty('--a',`${i*45}deg`);b.innerHTML=`<b>${r.n}</b>${r.title}`;wheel.appendChild(b)});
 
-function chip(id,label,href,done,extra=''){
-  return `<a class="oras-mi-chip ${extra}" data-id="${id}" data-done="${done}" href="${href}"><span class="oras-mi-chip-state" aria-hidden="true"></span><span>${label}</span></a>`;
-}
-function card({id,mark,title,meta,done,href='',parts='',open=false,locked=false}){
-  const hasParts=Boolean(parts);
-  const action=locked
-    ? `<button class="oras-mi-card-action" type="button" disabled aria-label="${title}: bloqueado hasta atravesar EL ESPEJO"><span>⌁</span></button>`
-    : hasParts
-      ? `<button class="oras-mi-card-action" type="button" data-toggle="${id}" aria-expanded="${open}" aria-label="${open?'Cerrar':'Abrir'} ${title}"><span class="chev">⌄</span></button>`
-      : `<a class="oras-mi-card-action" href="${href}" aria-label="Abrir ${title}"><span>›</span></a>`;
-  const titleNode=href&&!hasParts&&!locked?`<a class="oras-mi-card-title" href="${href}">${title}</a>`:`<span class="oras-mi-card-title">${title}</span>`;
-  return `<article class="oras-mi-card ${locked?'is-locked':''}" data-card="${id}" data-open="${open}"><div class="oras-mi-card-main"><div class="oras-mi-card-mark" aria-hidden="true">${mark}</div><span class="oras-mi-state ${done?'is-done':''}" aria-hidden="true"></span><div class="oras-mi-card-copy">${titleNode}<span class="oras-mi-card-meta">${meta}</span></div>${action}</div>${hasParts&&!locked?`<div class="oras-mi-parts" id="parts-${id}">${parts}</div>`:''}</article>`;
-}
-function sectionHead(label,count){
-  return `<div class="oras-mi-section-head"><span class="oras-mi-section-name">${label}</span><span class="oras-mi-section-line"></span><span class="oras-mi-section-count">${count}</span></div>`;
-}
+const toolbar=document.createElement('nav');toolbar.className='oras-toolbar';toolbar.setAttribute('aria-label','Navegación canónica ORAS');toolbar.innerHTML='<button type="button" data-prev>← Atrás</button><button class="index" type="button" data-index>Índice ORAS</button><button type="button" data-next>Adelante →</button>';document.body.appendChild(toolbar);
 
-function render(){
-  const u=life();
-  const p=progress();
-  const open=getOpen();
-  const anaCount=ANA.filter(([id])=>anaDone(id,u)).length;
-  const anaComplete=anaCount===ANA.length||bool(u.anaComplete);
-  const solo=bool(u.soloComplete);
-  const cen=bool(u.cenicientoComplete);
-  const mirror=bool(u.mirrorReadComplete);
-  const mirrorCrossed=u.mirrorCrossed===true;
-  const mirrorReady=solo&&cen&&anaComplete;
-  const invCount=countDone(INVENTARIO);
-  const oficioCount=countDone(OFICIO);
-  const ciudadCount=countDone(CIUDAD);
-  const archiveroCount=countDone(ARCHIVERO);
-  const atlasDone=expansionDone('atlas');
-  const zeroDone=expansionDone('zero');
-  const lifeWorks=[solo,anaComplete,cen].filter(Boolean).length;
-  const expansionCount=invCount+oficioCount+ciudadCount;
-  const pct=Math.round((p.done/p.total)*100);
+let selectedId=localStorage.getItem(ROUTE_KEY)||'canonica';
+if(!ROUTES.some(r=>r.id===selectedId))selectedId='canonica';
+const selected=()=>ROUTES.find(r=>r.id===selectedId)||ROUTES.at(-1);
+const readPos=()=>{const n=Number(sessionStorage.getItem(POS_KEY));return Number.isFinite(n)?Math.max(0,Math.floor(n)):0};
+const writePos=n=>{try{sessionStorage.setItem(POS_KEY,String(n))}catch(_){}};
+const normHref=href=>{try{const u=new URL(href,location.origin);return u.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'')+'|'+u.search+'|'+u.hash}catch(_){return href}};
+const currentNorm=()=>location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'')+'|'+location.search+'|'+location.hash;
+function derivePos(route){const cur=currentNorm();let exact=route.items.findIndex(x=>normHref(x.href)===cur);if(exact>=0)return exact;const p=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');let byPath=route.items.findIndex(x=>{try{return new URL(x.href,location.origin).pathname.replace(/\/+$/,'')===p}catch(_){return false}});return byPath>=0?byPath:Math.min(readPos(),route.items.length-1)}
+function syncToolbar(){const r=selected();let pos=derivePos(r);writePos(pos);toolbar.querySelector('[data-prev]').disabled=pos<=0;toolbar.querySelector('[data-next]').disabled=pos>=r.items.length-1;toolbar.title=`${r.n} · ${r.title} · ${pos+1}/${r.items.length}`}
+function go(delta){const r=selected();let pos=derivePos(r)+delta;if(pos<0||pos>=r.items.length)return;writePos(pos);location.href=r.items[pos].href}
+function selectRoute(id,openPanel=true){const r=ROUTES.find(x=>x.id===id)||ROUTES.at(-1);selectedId=r.id;try{localStorage.setItem(ROUTE_KEY,r.id)}catch(_){};index.querySelectorAll('.oras-route-node').forEach(n=>n.classList.toggle('is-selected',n.dataset.route===r.id));const panel=index.querySelector('.oras-route-panel');panel.innerHTML=`<div class="oras-mi-kicker">RECORRIDO ${r.n}${r.canonical?' · CANÓNICO':''}</div><h2>${r.title}</h2><div class="sub">${r.subtitle}</div><div class="oras-route-question">${r.question}</div><ol class="oras-route-list">${r.items.map((x,i)=>`<li><span class="num">${String(i+1).padStart(2,'0')}</span><span>${x.label}</span></li>`).join('')}</ol><button class="oras-route-start" type="button">Comenzar este recorrido</button><div class="oras-route-coda"><strong>Culminación:</strong> ${r.culmination}</div>`;panel.querySelector('.oras-route-start').addEventListener('click',()=>{writePos(0);closeIndex();location.href=r.items[0].href});if(openPanel)panel.scrollTop=0;syncToolbar()}
+function openIndex(){index.classList.add('is-open');cover.hidden=true;selectRoute(selectedId,false);setTimeout(()=>index.querySelector('.oras-index-close')?.focus({preventScroll:true}),0)}
+function closeIndex(){index.classList.remove('is-open')}
 
-  // Índice progresivo y emocional: el lector no ve todavía lo que no ha alcanzado.
-  const showAna=solo;
-  const showCeniciento=solo;
-  const showMirror=mirrorReady||mirror||mirrorCrossed;
-  const showExpansion=mirrorCrossed;
-  const showInventario=showExpansion;
-  const showOficio=showExpansion&&invCount===INVENTARIO.length;
-  const showCiudad=showOficio&&oficioCount===OFICIO.length;
-  const showArchivero=showCiudad&&ciudadCount===CIUDAD.length;
-  const showAtlas=showArchivero&&archiveroCount===ARCHIVERO.length;
-  const showZero=showAtlas&&atlasDone;
-
-  const anaParts=ANA.map(([id,label,href])=>chip('ana-'+id,label,href,anaDone(id,u))).join('');
-  const invParts=INVENTARIO.map(([id,label])=>chip(id,label,invHref(id),expansionDone(id))).join('');
-  const oficioParts=OFICIO.map(([id,label])=>chip(id,label,invHref(id),expansionDone(id))).join('');
-  const ciudadParts=CIUDAD.map(([id,label])=>chip(id,label,invHref(id),expansionDone(id))).join('');
-
-  const firstUnread=[
-    !solo&&`${ROOT}/?read=solo`,
-    ...(showAna?ANA.map(([id,,href])=>!anaDone(id,u)&&href):[]),
-    showAna&&anaComplete&&!cen&&`${ROOT}/elegia-breve/#epilogo`,
-    showMirror&&!mirrorCrossed&&`${ROOT}/ceniciento/?mirror=1`,
-    ...(showInventario?INVENTARIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
-    ...(showOficio?OFICIO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
-    ...(showCiudad?CIUDAD.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
-    ...(showArchivero?ARCHIVERO.map(([id])=>!expansionDone(id)&&invHref(id)):[]),
-    showAtlas&&!atlasDone&&invHref('atlas'),
-    showZero&&!zeroDone&&invHref('zero')
-  ].find(Boolean)||`${ROOT}/?read=solo`;
-
-  index.querySelector('.oras-mi-shell').innerHTML=`
-    <header class="oras-mi-hero">
-      <div class="oras-mi-kicker">ORAS · Lo que queda de las horas</div>
-      <h1 class="oras-mi-title">Índice de lectura</h1>
-      <p class="oras-mi-sub">Cada lectura deja una huella. Cada huella abre la siguiente puerta.</p>
-      <div class="oras-mi-progress-card" aria-label="${p.done} de ${p.total} huellas leídas">
-        <div class="oras-mi-progress-num">${p.done}/${p.total}<small>huellas leídas</small></div>
-        <div class="oras-mi-progress-track"><span class="oras-mi-progress-fill" style="width:${pct}%"></span></div>
-        <div class="oras-mi-progress-pct">${pct}%</div>
-      </div>
-    </header>
-
-    <section class="oras-mi-section">
-      ${sectionHead('I · LA VIDA',`${lifeWorks}/3`)}
-      ${card({id:'solo',mark:'1',title:'Solo la tarjeta',meta:solo?'completa':'primera puerta',done:solo,href:`${ROOT}/?read=solo`})}
-      ${showAna?card({id:'ana',mark:'AK',title:'Ana Klaudya',meta:`${anaCount}/8 huellas`,done:anaComplete,parts:anaParts,open:open.has('ana')}):''}
-      ${showCeniciento?card({id:'ceniciento',mark:'3',title:'Ceniciento',meta:'sólo puede abrirse desde el interrogante de ANA KLAUDYA',done:cen,href:'',locked:true}):''}
-    </section>
-
-    ${showMirror?`<section class="oras-mi-section">
-      ${sectionHead('II · EL UMBRAL',mirror?'1/1':'0/1')}
-      ${card({id:'mirror',mark:'◇',title:'El Espejo',meta:'32 fragmentos',done:mirror,href:`${ROOT}/ceniciento/?mirror=1`,locked:!mirrorReady&&!mirror})}
-    </section>`:''}
-
-    ${showExpansion?`<section class="oras-mi-section">
-      ${sectionHead('III · LA EXPANSIÓN',`${expansionCount}/${INVENTARIO.length+OFICIO.length+CIUDAD.length}`)}
-      ${showInventario?card({id:'inventario',mark:'4',title:'El inventario del aire',meta:`${invCount}/${INVENTARIO.length} huellas`,done:invCount===INVENTARIO.length,parts:invParts,open:open.has('inventario')}):''}
-      ${showOficio?card({id:'oficio',mark:'5',title:'El oficio de las sombras',meta:`${oficioCount}/${OFICIO.length} huellas`,done:oficioCount===OFICIO.length,parts:oficioParts,open:open.has('oficio')}):''}
-      ${showCiudad?card({id:'ciudad',mark:'6',title:'La ciudad que aprendió a olvidar',meta:`${ciudadCount}/${CIUDAD.length} huellas · I–IX`,done:ciudadCount===CIUDAD.length,parts:ciudadParts,open:open.has('ciudad')}):''}
-    </section>`:''}
-
-    ${showArchivero?`<section class="oras-mi-section">
-      ${sectionHead('IV · EL ARCHIVERO',`${archiveroCount}/${ARCHIVERO.length}`)}
-      ${ARCHIVERO.map(([id,label],i)=>card({id,mark:['X','XI','XII','XIII'][i],title:label.replace(/^[XVI]+\.\s*/,''),meta:expansionDone(id)?'leída':'pendiente',done:expansionDone(id),href:invHref(id)})).join('')}
-    </section>`:''}
-
-    ${showAtlas?`<section class="oras-mi-section">
-      ${sectionHead('V · EL CERO',`${(atlasDone?1:0)+(zeroDone?1:0)}/2`)}
-      ${card({id:'atlas',mark:'A/Z',title:'ATLAS / AZAR',meta:'Interludio documental · Documento recuperado del Archivo Profundo',done:atlasDone,href:invHref('atlas')})}
-      ${showZero?card({id:'zero',mark:'0',title:'La Habitación Número Cero',meta:zeroDone?'completa':'última pieza',done:zeroDone,href:invHref('zero')}):''}
-    </section>`:''}`;
-
-  index.querySelector('.oras-mi-bottom').innerHTML=`
-    <button class="oras-mi-reset" type="button" data-reset><span class="oras-mi-bottom-icon">●</span><span>Reiniciar</span></button>
-    <button class="oras-mi-home" type="button" data-home><span class="oras-mi-bottom-icon">×</span><span>Cerrar</span></button>
-    <a class="oras-mi-continue" href="${firstUnread}"><span class="oras-mi-bottom-icon">▤</span><span>${p.done===p.total?'Volver a leer':'Continuar'}</span></a>`;
-
-  index.querySelectorAll('[data-toggle]').forEach(button=>{
-    button.addEventListener('click',()=>{
-      const id=button.dataset.toggle;
-      const cardNode=index.querySelector(`[data-card="${id}"]`);
-      if(!cardNode)return;
-      const next=cardNode.dataset.open!=='true';
-      cardNode.dataset.open=String(next);
-      button.setAttribute('aria-expanded',String(next));
-      button.setAttribute('aria-label',`${next?'Cerrar':'Abrir'} ${cardNode.querySelector('.oras-mi-card-title')?.textContent||id}`);
-      const set=getOpen();
-      next?set.add(id):set.delete(id);
-      saveOpen(set);
-      if(next&&matchMedia('(max-width:700px)').matches){
-        setTimeout(()=>cardNode.scrollIntoView({block:'nearest',behavior:'smooth'}),40);
-      }
-    });
-  });
-  index.querySelector('[data-reset]')?.addEventListener('click',()=>{
-    try{localStorage.removeItem(UKEY)}catch(_){}
-    try{localStorage.removeItem(GKEY)}catch(_){}
-    try{sessionStorage.removeItem(OPENKEY)}catch(_){}
-    try{localStorage.setItem(UKEY,JSON.stringify({soloComplete:false,anaComplete:false,anaParts:Object.fromEntries(ANA.map(([id])=>[id,false])),cenicientoComplete:false,cenicientoUnlocked:false,mirrorReadComplete:false,mirrorCrossed:false,realityDeformed:false,returnedFromCeniciento:false}))}catch(_){}
-    try{window.dispatchEvent(new CustomEvent('oras:manual-reset'))}catch(_){}
-    location.href=ROOT+'/?indice=1&reinicio=1';
-  });
-  index.querySelector('[data-home]')?.addEventListener('click',closeIndex);
-}
-
-function openIndex(options={}){
-  render();cover.hidden=true;document.documentElement.classList.remove('oras-master-entry');
-  if(options.fromEntry)index.classList.add('from-entry');index.classList.add('is-open');index.scrollTop=0;
-  setTimeout(()=>index.querySelector('.oras-mi-close')?.focus({preventScroll:true}),options.fromEntry?900:0);
-  if(options.fromEntry)setTimeout(()=>index.classList.remove('from-entry'),2700);
-}
-function closeIndex(){index.classList.remove('is-open','from-entry');document.documentElement.classList.remove('oras-master-entry');}
-function enterFromCover(){
-  if(cover.classList.contains('is-entering'))return;const button=cover.querySelector('.oras-master-button');if(button)button.disabled=true;
-  cover.classList.add('is-entering');entryBridge.hidden=false;requestAnimationFrame(()=>entryBridge.classList.add('is-active'));
-  setTimeout(()=>{cover.hidden=true;openIndex({fromEntry:true})},920);
-  setTimeout(()=>{entryBridge.classList.remove('is-active');entryBridge.hidden=true},3200);
-}
-window.ORASMasterIndex={open:()=>openIndex(),close:closeIndex,render,reset:()=>index.querySelector('[data-reset]')?.click()};
-cover.querySelector('.oras-master-button').addEventListener('click',enterFromCover);
-index.querySelector('.oras-mi-close').addEventListener('click',closeIndex);
-addEventListener('keydown',event=>{if(event.key==='Escape'&&index.classList.contains('is-open'))closeIndex();});
-addEventListener('storage',event=>{if((event.key===UKEY||event.key===GKEY)&&index.classList.contains('is-open'))render();});
-addEventListener('pageshow',()=>{if(index.classList.contains('is-open'))render();});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&index.classList.contains('is-open'))render();});
+wheel.addEventListener('click',e=>{const b=e.target.closest('[data-route]');if(b)selectRoute(b.dataset.route)});
+cover.querySelector('.oras-cover-enter').addEventListener('click',openIndex);
+index.querySelector('.oras-index-close').addEventListener('click',closeIndex);
+toolbar.querySelector('[data-index]').addEventListener('click',openIndex);
+toolbar.querySelector('[data-prev]').addEventListener('click',()=>go(-1));
+toolbar.querySelector('[data-next]').addEventListener('click',()=>go(1));
+addEventListener('keydown',e=>{if(e.key==='Escape'&&index.classList.contains('is-open'))closeIndex()});
+window.ORASMasterIndex={open:openIndex,close:closeIndex,selectRoute};
 if(qs.get('indice')==='1')openIndex();
+selectRoute(selectedId,false);syncToolbar();
 })();
