@@ -1,0 +1,46 @@
+name: ORAS canonical routes once
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Actualizar referencias del índice canónico
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          targets=[
+            Path('index.html'),Path('elegia-breve/index.html'),Path('ceniciento/index.html'),
+            Path('estrella/index.html'),Path('ojos/index.html'),Path('sonrisa/index.html'),
+            Path('cabello/index.html'),Path('piel/index.html'),Path('epilogo/index.html'),Path('interludio/index.html')
+          ]
+          new='/solo-la-tarjeta/oras-master-index-r1.js?v=20261018-canonical-routes-1'
+          for p in targets:
+            if not p.exists():
+              continue
+            s=p.read_text(encoding='utf-8')
+            import re
+            s2=re.sub(r'/solo-la-tarjeta/oras-master-index-r1\.js\?v=[^"\']+',new,s)
+            if s2!=s:
+              p.write_text(s2,encoding='utf-8')
+          PY
+          node --check oras-master-index-r1.js
+          git diff --check
+      - name: Commit
+        shell: bash
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html elegia-breve/index.html ceniciento/index.html estrella/index.html ojos/index.html sonrisa/index.html cabello/index.html piel/index.html epilogo/index.html interludio/index.html 2>/dev/null || true
+          git commit -m "ORAS: activa recorridos e índice circular canónico"
+          git push
