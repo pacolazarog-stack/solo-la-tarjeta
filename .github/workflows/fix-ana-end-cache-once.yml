@@ -1,0 +1,35 @@
+name: Fix ANA end cache once
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-ana-end-cache-once.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Forzar runtime estable sin caché antigua
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('elegia-breve/index.html')
+          s=p.read_text(encoding='utf-8')
+          s=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r2.js?v=20261018-ana-end-stability-3', s)
+          p.write_text(s,encoding='utf-8')
+          PY
+          rm -f .github/workflows/fix-ana-end-cache-once.yml
+      - name: Publicar
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add elegia-breve/index.html .github/workflows/fix-ana-end-cache-once.yml
+          git commit -m "ANA: carga runtime final estable sin caché heredada"
+          git push
