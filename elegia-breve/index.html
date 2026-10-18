@@ -1385,17 +1385,32 @@ clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
         voiceAllowed=false;voicePlay.textContent='Volver a escuchar';
         voiceStatus.textContent='Fin de la grabación.';
       });
-      const ensureFinalAtMediaEnd=()=>{
+      let anaPreEndTimer=null;
+      const finalizeBeforeEdgeEOF=()=>{
+        if(body.dataset.anaFinalDone==='1')return;
+        clearTimeout(anaPreEndTimer);anaPreEndTimer=null;
+        try{if(!recording.paused)recording.pause();}catch(_){}
+        finishVoicePass();
+        voiceAllowed=false;voicePlay.textContent='Volver a escuchar';
+        voiceStatus.textContent='Fin de la grabación.';
+      };
+      const armAnaPreEnd=()=>{
+        clearTimeout(anaPreEndTimer);anaPreEndTimer=null;
+        if(body.dataset.anaFinalDone==='1'||recording.paused)return;
+        const duration=recording.duration;
+        if(!Number.isFinite(duration)||duration<=0)return;
+        const remaining=Math.max(0,duration-recording.currentTime);
+        if(remaining<=.55){finalizeBeforeEdgeEOF();return;}
+        anaPreEndTimer=setTimeout(finalizeBeforeEdgeEOF,Math.max(0,(remaining-.42)*1000));
+      };
+      recording.addEventListener('playing',armAnaPreEnd);
+      recording.addEventListener('seeked',armAnaPreEnd);
+      recording.addEventListener('durationchange',armAnaPreEnd);
+      recording.addEventListener('timeupdate',()=>{
         if(body.dataset.anaFinalDone==='1')return;
         const duration=recording.duration;
-        if(Number.isFinite(duration)&&duration>0&&recording.currentTime>=duration-.35){
-          finishVoicePass();
-          voiceAllowed=false;voicePlay.textContent='Volver a escuchar';
-          voiceStatus.textContent='Fin de la grabación.';
-        }
-      };
-      recording.addEventListener('timeupdate',ensureFinalAtMediaEnd);
-      recording.addEventListener('pause',ensureFinalAtMediaEnd);
+        if(Number.isFinite(duration)&&duration>0&&duration-recording.currentTime<=.55)finalizeBeforeEdgeEOF();
+      });
       recording.addEventListener('error',()=>{
         cancelVoiceStart();
         voiceStatus.textContent='No se ha podido cargar el audio. Puedes volver a intentarlo.';
@@ -1752,7 +1767,7 @@ clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
   </script>
 <script data-oras-universe="v1" src="../narrative-universe.js?v=20261014-reading-counter-fix-2"></script>
 <script data-oras-mirror-nav="v2" src="/solo-la-tarjeta/ceniciento/el-espejo-nav.js?v=20261012-mirror-nav-2"></script>
-<script data-oras-reading-window="r2" src="/solo-la-tarjeta/oras-reading-window-r2.js?v=20261018-photo-question-final-1"></script>
+<script data-oras-reading-window="r2" src="/solo-la-tarjeta/oras-reading-window-r2.js?v=20261018-photo-question-final-2"></script>
 <script data-oras-master-index-global="1" src="/solo-la-tarjeta/oras-master-index-r1.js?v=20261018-r3-progress-1"></script>
 <script src="/solo-la-tarjeta/oras-suno-volume-r1.js?v=20261014-suno-volume-7"></script>
 </body>
