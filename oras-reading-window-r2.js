@@ -6,18 +6,14 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261014-master-index-15';
-const VERSION='20261018-star-parent-continuity-1';
-const ANA_DOC=`${BASE}/elegia-breve/?v=20261018-ana-parent-continuity-1`;
+const VERSION='20261018-star-parent-continuity-2';
+const ANA_DOC=`${BASE}/elegia-breve/?v=20261018-ana-parent-continuity-2`;
 const CURRENT_PATH=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');
 const params=new URLSearchParams(location.search);
 const STAR_PARENT=`${ANA_DOC}#estrella`;
 const STAR_MUSIC_STATE='oras.ana.star.music.v1';
 
-/*
- * Regla canónica: Siguiendo una tarjeta NO abandona el documento padre de ANA.
- * El padre conserva el <audio> ambiental y el prólogo vive en el iframe interno.
- * Así no existe un corte de sonido al pasar del prólogo a la cartela ANA KLAUDYA.
- */
+/* Siguiendo una tarjeta permanece dentro del documento padre de ANA. */
 
 function resumeAnaAfterPrologue(){
   if(!CURRENT_PATH.endsWith('/elegia-breve')||params.get('afterPrologue')!=='1')return;
@@ -119,10 +115,12 @@ function completeAnaPart(key){
 }
 
 const style=document.createElement('style');
-style.id='oras-reading-window-stable-r9';
+style.id='oras-reading-window-stable-r10';
 style.textContent=`
 .ou-reading-checklist,.ou-reading-window-r2{display:none!important}
 body.mirror .ou-reading-window-r2{display:none!important}
+html[data-oras-star-transition="1"] #entryButton{display:none!important}
+html[data-oras-star-transition="1"] #orasUnifiedNav{display:grid!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
 `;
 document.head.appendChild(style);
 document.querySelector('.ou-reading-window-r2')?.remove();
@@ -145,9 +143,59 @@ function ensureUnifiedNav(){
   if(window.__orasUnifiedNavR4||document.querySelector('script[data-oras-unified-nav-core]'))return;
   const script=document.createElement('script');
   script.dataset.orasUnifiedNavCore='1';
-  script.src=`${BASE}/oras-unified-nav-r1.js?v=20261018-unified-nav-parent-star-1`;
+  script.src=`${BASE}/oras-unified-nav-r1.js?v=20261018-unified-nav-parent-star-2`;
   script.defer=true;
   document.body.appendChild(script);
+}
+
+function revealUnifiedNav(){
+  ensureUnifiedNav();
+  const reveal=()=>{
+    const nav=document.getElementById('orasUnifiedNav');
+    if(nav){nav.hidden=false;nav.style.removeProperty('display');nav.style.removeProperty('visibility');nav.style.removeProperty('opacity');}
+  };
+  reveal();setTimeout(reveal,80);setTimeout(reveal,300);setTimeout(reveal,900);
+}
+
+function beginStarToElegiaTransition(){
+  if(!CURRENT_PATH.endsWith('/elegia-breve'))return;
+  const root=document.documentElement,body=document.body;
+  const frame=document.getElementById('cenicientoFrame');
+  const backdrop=document.getElementById('poemBackdrop');
+  const entry=document.getElementById('entry');
+  const music=document.getElementById('voiceMusic');
+
+  root.removeAttribute('data-oras-ana-route');
+  root.classList.remove('poem-route-loading','ceniciento-open','publication-pending','oras-master-entry');
+  root.setAttribute('data-oras-star-transition','1');
+  body?.classList.remove('ceniciento-open','sonrisa-open','eyes-open','prelude','voice-open','portrait-revealed','reading-ready');
+  body?.classList.add('locked','journey-started','sound-ready');
+
+  if(backdrop){backdrop.hidden=true;backdrop.classList.remove('is-leaving');}
+  if(frame){
+    frame.hidden=true;frame.removeAttribute('aria-busy');frame.removeAttribute('src');
+    frame.classList.remove('sonrisa-transition','sonrisa-visible','sonrisa-leaving','interlude-transition');
+    for(const prop of ['display','opacity','visibility','pointer-events','z-index','background'])frame.style.removeProperty(prop);
+  }
+  try{history.replaceState(null,'',location.pathname+location.search);}catch(_){ }
+
+  /* El mismo elemento de audio del padre continúa sonando: no se pausa, no se recrea, no se busca. */
+  if(music){music.muted=false;if(music.paused)music.play().catch(()=>{});}
+
+  if(entry)entry.classList.remove('is-open');
+  revealUnifiedNav();
+  completeAnaPart('estrella');
+
+  clearTimeout(window.__orasStarToElegiaTimer);
+  window.__orasStarToElegiaTimer=setTimeout(()=>{
+    window.__orasStarToElegiaTimer=null;
+    root.removeAttribute('data-oras-star-transition');
+    if(entry)entry.classList.add('is-open');
+    body?.classList.remove('locked');
+    const read=document.getElementById('anaRead');
+    if(read)read.click();
+    revealUnifiedNav();
+  },5000);
 }
 
 function observeEnd(selector,key,ratio=.55){
@@ -186,7 +234,7 @@ function setupTracking(){
   addEventListener('message',e=>{
     if(e.origin!==location.origin)return;
     if(e.data?.channel==='ceniciento-music-v1'&&e.data?.type==='interlude-ended')completeAnaPart('interludio');
-    if(e.data?.channel==='oras-star-flow-v1'&&e.data?.type==='complete')completeAnaPart('estrella');
+    if(e.data?.channel==='oras-star-flow-v1'&&e.data?.type==='complete')beginStarToElegiaTransition();
   });
   addEventListener('oras:ana-part-complete',e=>completeAnaPart(e.detail?.part));
 }
