@@ -1,0 +1,33 @@
+name: Activar runtime final ANA R6
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/bump-ana-end-runtime-r6.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  bump-runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Actualizar versión del runtime de ANA
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('elegia-breve/index.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('oras-reading-window-r2.js?v=20261013-ana-portrait-prev-next-1','oras-reading-window-r2.js?v=20261018-ana-end-stable-r6')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Publicar cambio
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add elegia-breve/index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Forzar carga runtime final ANA R6'
+          git push
