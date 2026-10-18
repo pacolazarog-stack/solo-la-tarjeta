@@ -126,6 +126,19 @@ jobs:
           if old_music in s:
               s = s.replace(old_music, new_music, 1)
           path.write_text(s, encoding='utf-8')
+
+          # ANA KLAUDYA: COMENZAR debe entrar en la elegía, nunca abrir #estrella.
+          path = Path('elegia-breve/index.html')
+          s = path.read_text(encoding='utf-8')
+          old_start = """      entryButton.addEventListener('click',()=>{\n        if(entryButton.disabled)return;\n        window.dispatchEvent(new CustomEvent('oras:reading-start'));\n        entryButton.disabled=true;\n        body.classList.add('journey-started','sound-ready');\n        entry.classList.add('is-open');\n        if(prologuePlayed){beginPrelude(false);setJourney('elegia');}\n        else {prologueNameReady=false;openPoem('estrella',true);}\n      });"""
+          new_start = """      entryButton.addEventListener('click',()=>{\n        if(entryButton.disabled)return;\n        window.dispatchEvent(new CustomEvent('oras:reading-start'));\n        entryButton.disabled=true;\n        body.classList.add('journey-started','sound-ready');\n        entry.classList.add('is-open');\n        prologuePlayed=true;\n        prologueNameReady=false;\n        beginPrelude(false);\n        setJourney('elegia');\n      });"""
+          if old_start in s:
+              s = s.replace(old_start, new_start, 1)
+          elif "openPoem('estrella',true)" in s:
+              raise SystemExit('ANA sigue conteniendo una apertura automática de estrella desde COMENZAR')
+          s = s.replace('oras-reading-window-r2.js?v=20261018-ana-start-elegia-1','oras-reading-window-r2.js?v=20261018-ana-inline-start-1')
+          s = s.replace('oras-reading-window-r2.js?v=20261018-ana-end-stable-r6','oras-reading-window-r2.js?v=20261018-ana-inline-start-1')
+          path.write_text(s, encoding='utf-8')
           PY
       - name: Comprobar los estados canónicos
         shell: bash
@@ -139,13 +152,14 @@ jobs:
           grep -q 'id="full" type="button" disabled>Poema completo' estrella/index.html
           grep -q "full.addEventListener" estrella/index.html
           grep -q 'id="musicStart" type="button" hidden' estrella/index.html
+          ! grep -q "openPoem('estrella',true)" elegia-breve/index.html
       - name: Guardar cambios
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ojos/index.html sonrisa/index.html cabello/index.html piel/index.html estrella/index.html epilogo/index.html
+          git add ojos/index.html sonrisa/index.html cabello/index.html piel/index.html estrella/index.html epilogo/index.html elegia-breve/index.html
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "ORAS: poemas con música y lectura pausada por defecto"
+          git commit -m "ORAS: fija estados canónicos y entrada de ANA"
           git push
