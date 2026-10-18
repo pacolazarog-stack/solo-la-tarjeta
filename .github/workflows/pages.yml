@@ -1,4 +1,4 @@
-# EL ESPEJO · banda sonora canónica v3 · ANA fotografía final r6
+# ORAS · recorridos canónicos v1 · índice circular mejorado
 name: Publicar SOLO LA TARJETA
 
 on:
@@ -42,9 +42,11 @@ jobs:
           test -s assets/oras-el-espejo-centro-de-datos.m4a
           test "$(wc -c < assets/oras-el-espejo-centro-de-datos.m4a)" -gt 800000
           grep -Fq 'assets/oras-portada-final.jpg' oras-master-index-r1.js
-          grep -Fq 'oras-master-cover-img{display:block' oras-master-index-r1.js
+          grep -Fq 'Recorridos de lectura' oras-master-index-r1.js
+          grep -Fq 'oras-toolbar' oras-master-index-r1.js
+          grep -Fq "id:'canonica'" oras-master-index-r1.js
           grep -Fq 'el-espejo-soundtrack.js?v=20261014-espejo-soundtrack-3' ceniciento/index.html
-          echo 'PASS: núcleo ORAS, portada y banda sonora de EL ESPEJO disponibles.'
+          echo 'PASS: núcleo ORAS, ocho recorridos, índice circular, botonera y sonido disponibles.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
