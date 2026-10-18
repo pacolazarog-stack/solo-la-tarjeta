@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#090e19">
 <title>Siguiendo una tarjeta</title>
 <style>
-:root{color-scheme:dark;--ink:#f8eee4;--rose:#ead5a5;--gold:#d6b877;--muted:#c3c6cf}
+:root{color-scheme:dark;--ink:#f8eee4;--rose:#ead5a5;--gold:#d6b877}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:#090e19;color:var(--ink)}
 body{font-family:Georgia,'Times New Roman',serif;min-height:100svh;overflow-x:hidden;isolation:isolate}
@@ -16,15 +16,11 @@ body{font-family:Georgia,'Times New Roman',serif;min-height:100svh;overflow-x:hi
 .detail-background.is-clear img{filter:blur(0) contrast(1.04)}
 body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(9,14,25,.58),rgba(9,14,25,.38) 48%,rgba(9,14,25,.58)),radial-gradient(ellipse at 50% 45%,transparent,#090e1966);opacity:1;transition:opacity 18s ease-in-out}
 body.detail-clear:before{opacity:.65}
-main{max-width:1160px;margin:0 auto;padding:76px 6vw 132px;display:grid;grid-template-columns:.8fr 1.2fr;gap:6vw;align-items:start}
+main{max-width:1160px;margin:0 auto;padding:76px 6vw 130px;display:grid;grid-template-columns:.8fr 1.2fr;gap:6vw;align-items:start}
 .intro{position:sticky;top:54px;padding-top:40px}
 .kicker{font:11px/1.8 system-ui,sans-serif;letter-spacing:.26em;color:var(--gold);text-transform:uppercase}
 h1{font-weight:400;font-size:clamp(43px,5.5vw,76px);letter-spacing:-.05em;line-height:1.02;margin:22px 0 24px;text-shadow:0 2px 12px #000}
 h1 em{font-weight:400;color:var(--rose)}
-.music-controls{display:grid;gap:11px;margin-top:24px;max-width:270px;color:var(--muted);font:12px/1.5 system-ui,sans-serif}
-.music-controls button{justify-self:start;border:1px solid rgba(234,213,165,.55);border-radius:999px;background:rgba(6,10,17,.28);color:var(--ink);padding:10px 16px;min-height:42px;cursor:pointer;backdrop-filter:blur(5px)}
-.music-controls button:hover{background:rgba(234,213,165,.12)}
-.music-controls label{display:flex;gap:10px;align-items:center}.music-controls output{margin-left:auto}.music-controls input{accent-color:var(--rose)}.music-controls input[type=range]{width:100%}
 .poem{padding:35px 0 25px;text-shadow:0 2px 6px #000,0 0 18px #090e19;font-size:clamp(20px,2.3vw,27px);line-height:1.7;letter-spacing:-.015em}
 .phrase{margin:0 0 48px;line-height:1.85;transition:opacity 1.2s ease,filter 1.2s ease;opacity:1}
 .phrase.hidden-phrase{visibility:hidden;opacity:0;filter:blur(4px)}
@@ -43,17 +39,16 @@ h1 em{font-weight:400;color:var(--rose)}
 .final-crescent::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:#08101e}
 .world-final-moon svg{position:absolute;inset:0;width:100%;height:100%}
 .yin-body,.yin-outline{opacity:0;transition:opacity 4.75s ease}.yin-dots{opacity:0;transition:opacity 4.35s ease .4s}.yin-dots circle{transform-box:fill-box;transform-origin:center;transform:scale(.46);transition:transform 4.35s ease .4s}.is-home .final-crescent{opacity:0}.is-home .yin-body,.is-home .yin-outline,.is-home .yin-dots{opacity:1}.is-home .yin-dots circle{transform:scale(1)}
-.oras-nav{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:1000;display:grid;grid-template-columns:1fr 1fr;width:min(420px,calc(100vw - 28px));border:1px solid rgba(255,255,255,.18);border-radius:14px;overflow:hidden;background:rgba(8,12,20,.62);backdrop-filter:blur(10px);box-shadow:0 8px 30px rgba(0,0,0,.25)}
-.oras-nav button{appearance:none;border:0;background:transparent;color:var(--ink);height:48px;padding:0 16px;font:500 13px/1 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}.oras-nav button+button{border-left:1px solid rgba(255,255,255,.12)}.oras-nav button:hover{background:rgba(255,255,255,.08)}
 @keyframes cometCore{0%{left:50%;top:5%;transform:translate(-50%,-50%) scale(.72)}34%{left:62%;top:8.5%;transform:translate(-50%,-50%) scale(.94)}56%{left:72%;top:11.5%;transform:translate(-50%,-50%) scale(1)}78%{left:82%;top:14%;transform:translate(-50%,-50%) scale(.96)}100%{left:90%;top:16%;transform:translate(-50%,-50%) scale(.72)}}
 @keyframes cometTail{0%{left:50%;top:5%;opacity:0;transform:translate(-100%,-50%) rotate(12deg) scaleX(.12)}34%{left:62%;top:8.5%;opacity:.78;transform:translate(-100%,-50%) rotate(12deg) scaleX(.72)}56%{left:72%;top:11.5%;opacity:.96;transform:translate(-100%,-50%) rotate(12deg) scaleX(1)}78%{left:82%;top:14%;opacity:.9;transform:translate(-100%,-50%) rotate(12deg) scaleX(1.1)}100%{left:90%;top:16%;opacity:0;transform:translate(-100%,-50%) rotate(12deg) scaleX(.78)}}
-@media(max-width:760px){main{display:block;padding:22px 7vw 116px}.intro{position:static;padding-top:10px}.kicker{font-size:9px;letter-spacing:.18em}h1{font-size:clamp(40px,11vw,64px);margin:10px 0 12px}.music-controls{max-width:none;margin-top:16px}.poem{margin-top:28px;padding-top:0;font-size:clamp(18px,4.8vw,25px);line-height:1.8}.phrase{margin-bottom:40px}.ending{margin-top:48px}.world-final-moon{width:82px}.world-comet-tail{width:250px;height:2.5px}.oras-nav{bottom:max(8px,env(safe-area-inset-bottom));width:calc(100vw - 20px);border-radius:12px}.oras-nav button{height:44px;font-size:12px}}
+@media(max-width:760px){main{display:block;padding:22px 7vw 110px}.intro{position:static;padding-top:10px}.kicker{font-size:9px;letter-spacing:.18em}h1{font-size:clamp(40px,11vw,64px);margin:10px 0 12px}.poem{margin-top:28px;padding-top:0;font-size:clamp(18px,4.8vw,25px);line-height:1.8}.phrase{margin-bottom:40px}.ending{margin-top:48px}.world-final-moon{width:82px}.world-comet-tail{width:250px;height:2.5px}}
 @media(prefers-reduced-motion:reduce){.detail-background img,body:before,.phrase,.world-final-moon,.final-crescent,.yin-body,.yin-outline,.yin-dots,.yin-dots circle{transition:none!important}.world-comet{display:none}.detail-background img{filter:none}.world-final-moon{opacity:1;transform:translate(-50%,-50%)}.final-crescent{opacity:0}.yin-body,.yin-outline,.yin-dots{opacity:1}.yin-dots circle{transform:scale(1)}}
 </style>
+<script>try{localStorage.setItem('oras.master.volume.v1','100')}catch(_){}</script>
 </head>
 <body>
 <div class="detail-background" aria-hidden="true">
-  <img src="umbral.jpg?v=20261018-music-nav" alt="" decoding="async">
+  <img src="umbral.jpg?v=20261018-unified-1" alt="" decoding="async">
   <div class="celestial-scene" id="celestialScene">
     <div class="world-comet" id="worldComet"><span class="world-comet-tail"></span><span class="world-comet-core"></span></div>
     <div class="world-final-moon" id="homeMoon">
@@ -71,11 +66,6 @@ h1 em{font-weight:400;color:var(--rose)}
   <section class="intro" aria-labelledby="title">
     <div class="kicker">Prólogo · Ana Klaudya</div>
     <h1 id="title">Siguiendo<br><em>una tarjeta.</em></h1>
-    <div class="music-controls" aria-label="Música">
-      <button id="musicStart" type="button">Reproducir música</button>
-      <label for="musicLevel">Volumen <output id="musicValue">100 %</output></label>
-      <input id="musicLevel" type="range" min="0" max="100" value="100">
-    </div>
   </section>
   <article class="poem" id="poem" aria-label="Siguiendo una tarjeta" hidden>
     <p class="phrase hidden-phrase" data-wait="6200">Siguiendo una tarjeta,<br>encontré un lugar.</p>
@@ -87,44 +77,25 @@ h1 em{font-weight:400;color:var(--rose)}
     <p class="phrase hidden-phrase ending" data-wait="7000">me basta con mirarte.</p>
   </article>
 </main>
-<nav class="oras-nav" aria-label="Navegación de lectura">
-  <button id="prev" type="button">← Anterior</button>
-  <button id="next" type="button">Siguiente →</button>
-</nav>
-<audio id="music" src="../elegia-breve/ana-klaudya.m4a?v=20261018-star-100" preload="auto" loop playsinline></audio>
+<audio id="orasStarMusic" src="../elegia-breve/ana-klaudya.m4a?v=20261018-unified-1" preload="auto" loop playsinline autoplay></audio>
 <script>
 (()=>{
 'use strict';
-const bg=document.querySelector('.detail-background');
-const img=bg.querySelector('img');
-const scene=document.getElementById('celestialScene');
-const comet=document.getElementById('worldComet');
-const poem=document.getElementById('poem');
-const phrases=[...document.querySelectorAll('.phrase')];
+const bg=document.querySelector('.detail-background'),img=bg.querySelector('img'),scene=document.getElementById('celestialScene'),comet=document.getElementById('worldComet'),poem=document.getElementById('poem'),phrases=[...document.querySelectorAll('.phrase')],audio=document.getElementById('orasStarMusic');
 const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-const audio=document.getElementById('music');
-const musicStart=document.getElementById('musicStart');
-const musicLevel=document.getElementById('musicLevel');
-const musicValue=document.getElementById('musicValue');
-const BASE='/solo-la-tarjeta';
+audio.volume=1;audio.muted=false;
 function clarify(){requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(()=>{bg.classList.add('is-clear');document.body.classList.add('detail-clear')},175)))}
 if(img.complete)clarify();else img.addEventListener('load',clarify,{once:true});
-function reveal(i=0){if(i>=phrases.length)return;const p=phrases[i];p.classList.remove('hidden-phrase');setTimeout(()=>reveal(i+1),Number(p.dataset.wait)||5000)}
+function reveal(i=0){if(i>=phrases.length)return;phrases[i].classList.remove('hidden-phrase');setTimeout(()=>reveal(i+1),Number(phrases[i].dataset.wait)||5000)}
 function startPoem(){poem.hidden=false;reveal(0)}
-audio.volume=1;
-musicLevel.value='100';musicValue.textContent='100 %';
-function updateButton(){musicStart.textContent=audio.paused?'Reproducir música':'Pausar música'}
-function playMusic(){audio.volume=Number(musicLevel.value)/100;const p=audio.play();if(p&&p.catch)p.catch(()=>{});updateButton()}
-musicStart.addEventListener('click',()=>{if(audio.paused)playMusic();else{audio.pause();updateButton()}});
-musicLevel.addEventListener('input',()=>{audio.volume=Number(musicLevel.value)/100;musicValue.textContent=musicLevel.value+' %'});
-audio.addEventListener('play',updateButton);audio.addEventListener('pause',updateButton);
-window.addEventListener('pointerdown',()=>{if(audio.paused)playMusic()},{once:true,capture:true});
-try{playMusic()}catch(_){updateButton()}
-document.getElementById('prev').addEventListener('click',()=>{location.href=BASE+'/?read=solo'});
-document.getElementById('next').addEventListener('click',()=>{location.href=BASE+'/elegia-breve/?v=20261018-star-nav&afterPrologue=1'});
+function tryPlay(){audio.volume=1;audio.muted=false;const p=audio.play();if(p&&p.catch)p.catch(()=>{})}
+tryPlay();
+addEventListener('pointerdown',tryPlay,{once:true,capture:true});addEventListener('keydown',tryPlay,{once:true,capture:true});
 if(reduced){scene.classList.add('is-awake','is-home');startPoem();return}
 setTimeout(()=>{comet.classList.add('is-active');scene.classList.add('is-awake','is-home');setTimeout(startPoem,10050)},3600);
 })();
 </script>
+<script src="/solo-la-tarjeta/oras-suno-volume-r1.js?v=20261018-star-unified-1"></script>
+<script src="/solo-la-tarjeta/oras-unified-nav-r1.js?v=20261018-star-unified-1"></script>
 </body>
 </html>
