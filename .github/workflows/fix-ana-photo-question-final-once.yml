@@ -1,4 +1,4 @@
-name: Corrige final ANA con watchdog independiente
+name: ANA final rescue r9
 
 on:
   push:
@@ -8,28 +8,24 @@ on:
 
 permissions:
   contents: write
-  actions: write
 
 jobs:
   patch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Instalar watchdog final robusto
+      - name: Aplicar rescate final r9
         shell: bash
         run: |
           set -euo pipefail
-          git pull --rebase origin main
           python3 - <<'PY'
           from pathlib import Path
           p=Path('elegia-breve/index.html')
           s=p.read_text(encoding='utf-8')
-
-          s=s.replace("if(remaining<=.55){finalizeBeforeEdgeEOF();return;}","if(remaining<=1.25){finalizeBeforeEdgeEOF();return;}")
-          s=s.replace("Math.max(0,(remaining-.42)*1000)","Math.max(0,(remaining-1.10)*1000)")
-          s=s.replace("duration-recording.currentTime<=.55", "duration-recording.currentTime<=1.25")
-
-          marker="""      recording.addEventListener('timeupdate',()=>{\n        if(body.dataset.anaFinalDone==='1')return;\n        const duration=recording.duration;\n        if(Number.isFinite(duration)&&duration>0&&duration-recording.currentTime<=1.25)finalizeBeforeEdgeEOF();\n      });"""
+          s=s.replace("if(remaining<=.55){finalizeBeforeEdgeEOF();return;}","if(remaining<=1.50){finalizeBeforeEdgeEOF();return;}")
+          s=s.replace("Math.max(0,(remaining-.42)*1000)","Math.max(0,(remaining-1.30)*1000)")
+          s=s.replace("duration-recording.currentTime<=.55","duration-recording.currentTime<=1.50")
+          marker="""      recording.addEventListener('timeupdate',()=>{\n        if(body.dataset.anaFinalDone==='1')return;\n        const duration=recording.duration;\n        if(Number.isFinite(duration)&&duration>0&&duration-recording.currentTime<=1.50)finalizeBeforeEdgeEOF();\n      });"""
           watchdog="""
       let anaLastMediaTime=0;
       let anaLastAdvanceAt=performance.now();
@@ -40,45 +36,36 @@ jobs:
       recording.addEventListener('play',resetAnaFinalWatch);
       recording.addEventListener('seeked',resetAnaFinalWatch);
       setInterval(()=>{
-        if(body.dataset.anaFinalDone==='1'||recording.paused||recording.seeking)return;
+        if(body.dataset.anaFinalDone==='1'||recording.seeking)return;
         const duration=recording.duration;
         const now=performance.now();
         const current=recording.currentTime||0;
-        if(current>anaLastMediaTime+.02){
-          anaLastMediaTime=current;
-          anaLastAdvanceAt=now;
-        }
+        if(current>anaLastMediaTime+.02){anaLastMediaTime=current;anaLastAdvanceAt=now;}
         if(!Number.isFinite(duration)||duration<=0)return;
         const remaining=duration-current;
-        if(remaining<=1.25 || (remaining<=4 && now-anaLastAdvanceAt>=700))finalizeBeforeEdgeEOF();
+        if(remaining<=1.50 || (remaining<=5 && now-anaLastAdvanceAt>=650) || recording.ended || current>=duration-.05)finalizeBeforeEdgeEOF();
       },100);
 """
           if 'anaLastAdvanceAt=performance.now()' not in s:
-              if marker not in s:
-                  raise SystemExit('No se encontró timeupdate final para insertar watchdog')
+              if marker not in s: raise SystemExit('No se encontró el punto de inserción r9')
               s=s.replace(marker,marker+watchdog,1)
-
           old="""        if(voiceDialog){voiceDialog.style.display='none';voiceDialog.setAttribute('aria-hidden','true');}"""
           new="""        if(voiceDialog){\n          try{if(voiceDialog.open)voiceDialog.close();}catch(_){}\n          voiceDialog.style.display='none';\n          voiceDialog.setAttribute('aria-hidden','true');\n        }\n        try{recording.pause();recording.removeAttribute('controls');}catch(_){}"""
           if old in s:s=s.replace(old,new,1)
-
-          s=s.replace('20261018-photo-question-final-1','20261018-photo-question-final-3')
-          s=s.replace('20261018-photo-question-final-2','20261018-photo-question-final-3')
+          for oldv in ['20261018-photo-question-final-1','20261018-photo-question-final-2','20261018-photo-question-final-3']:
+              s=s.replace(oldv,'20261018-ana-final-rescue-r9')
           p.write_text(s,encoding='utf-8')
           PY
-          grep -q 'anaLastAdvanceAt' elegia-breve/index.html
-          grep -q 'remaining<=1.25' elegia-breve/index.html
+          grep -q 'anaLastAdvanceAt=performance.now()' elegia-breve/index.html
+          grep -q 'remaining<=1.50' elegia-breve/index.html
           grep -q 'recording.removeAttribute' elegia-breve/index.html
-      - name: Guardar y publicar
+          grep -q '20261018-ana-final-rescue-r9' elegia-breve/index.html
+      - name: Guardar parche
         shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add elegia-breve/index.html
-          git commit -m 'ANA: watchdog final evita bloqueo de Edge'
+          git commit -m 'ANA: instala rescate final r9' || exit 0
           git push
-          sleep 3
-          gh workflow run pages.yml --ref main
