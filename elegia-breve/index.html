@@ -1153,12 +1153,27 @@ body.edge-final-safe.reading-ready.portrait-revealed #reading{transition:opacity
       const forcePortraitFinal=()=>{
         portraitRequested=true;
         portraitFinale.setAttribute('aria-hidden','false');
-        body.classList.add('portrait-revealed');
+        body.classList.add('portrait-revealed','edge-final-safe');
+        portraitFinale.style.opacity='1';
+        portraitFinale.style.visibility='visible';
+        portraitFinale.style.pointerEvents='auto';
+        const portraitImage=document.getElementById('anaPortrait');
+        if(portraitImage){portraitImage.style.opacity='1';portraitImage.style.visibility='visible';}
+        const portraitQuestion=document.getElementById('cenicientoLink');
+        if(portraitQuestion){
+          portraitQuestion.style.opacity='1';
+          portraitQuestion.style.visibility='visible';
+          portraitQuestion.style.pointerEvents='auto';
+          portraitQuestion.style.transition='none';
+        }
+        if(voiceDialog){voiceDialog.style.display='none';voiceDialog.setAttribute('aria-hidden','true');}
         if(anaNavigation){anaNavigation.hidden=true;body.classList.remove('ana-navigation-ready');}
         const nav=document.getElementById('journeyNav');
         if(nav)nav.hidden=false;
       };
       const finishVoicePass=()=>{
+        if(body.dataset.anaFinalDone==='1')return;
+        body.dataset.anaFinalDone='1';
         if(listeningStart!==null) listeningEnd=recording.currentTime;
         saveListenedRange();
         completedVoicePasses++;
@@ -1176,10 +1191,8 @@ body.edge-final-safe.reading-ready.portrait-revealed #reading{transition:opacity
         clearTimeout(finalCalorTimer);
         clearTimeout(finalPortraitTimer);
         finalCalorTimer=null;
-        finalPortraitTimer=setTimeout(()=>{
-          finalPortraitTimer=null;
-          forcePortraitFinal();
-        },1200);
+        finalPortraitTimer=null;
+        forcePortraitFinal();
 
         listenedRanges=[];
         listeningStart=null;
@@ -1190,7 +1203,8 @@ body.edge-final-safe.reading-ready.portrait-revealed #reading{transition:opacity
         finalHeat.classList.remove('is-shown','show-calor','is-burning');
         warmPhase=0;warmTakeover=0;root.style.setProperty('--warm','0');
 clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
-        portraitRequested=false;completedVoicePasses=0;
+        portraitRequested=false;completedVoicePasses=0;delete body.dataset.anaFinalDone;
+        if(voiceDialog){voiceDialog.style.display='';voiceDialog.removeAttribute('aria-hidden');}
         questionGrowthActive=false;questionGrowth=.22;questionNext=.22;
         for(const key of ['--question-current','--question-first','--question-next'])root.style.setProperty(key,'.22');
         body.classList.remove('portrait-revealed','edge-final-safe');
@@ -1371,6 +1385,17 @@ clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
         voiceAllowed=false;voicePlay.textContent='Volver a escuchar';
         voiceStatus.textContent='Fin de la grabación.';
       });
+      const ensureFinalAtMediaEnd=()=>{
+        if(body.dataset.anaFinalDone==='1')return;
+        const duration=recording.duration;
+        if(Number.isFinite(duration)&&duration>0&&recording.currentTime>=duration-.35){
+          finishVoicePass();
+          voiceAllowed=false;voicePlay.textContent='Volver a escuchar';
+          voiceStatus.textContent='Fin de la grabación.';
+        }
+      };
+      recording.addEventListener('timeupdate',ensureFinalAtMediaEnd);
+      recording.addEventListener('pause',ensureFinalAtMediaEnd);
       recording.addEventListener('error',()=>{
         cancelVoiceStart();
         voiceStatus.textContent='No se ha podido cargar el audio. Puedes volver a intentarlo.';
@@ -1727,7 +1752,7 @@ clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
   </script>
 <script data-oras-universe="v1" src="../narrative-universe.js?v=20261014-reading-counter-fix-2"></script>
 <script data-oras-mirror-nav="v2" src="/solo-la-tarjeta/ceniciento/el-espejo-nav.js?v=20261012-mirror-nav-2"></script>
-<script data-oras-reading-window="r2" src="/solo-la-tarjeta/oras-reading-window-r2.js?v=20261018-canonical-nav-final-1"></script>
+<script data-oras-reading-window="r2" src="/solo-la-tarjeta/oras-reading-window-r2.js?v=20261018-photo-question-final-1"></script>
 <script data-oras-master-index-global="1" src="/solo-la-tarjeta/oras-master-index-r1.js?v=20261018-r3-progress-1"></script>
 <script src="/solo-la-tarjeta/oras-suno-volume-r1.js?v=20261014-suno-volume-7"></script>
 </body>
