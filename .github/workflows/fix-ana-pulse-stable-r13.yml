@@ -1,0 +1,158 @@
+name: ANA pulso continuo estable r13
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar cierre y pulso r13
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path('oras-reading-window-r2.js')
+          s=p.read_text(encoding='utf-8')
+          s=re.sub(r"const VERSION='[^']+';", "const VERSION='20261019-ana-pulse-stable-r13';", s, count=1)
+
+          new_setup=r'''function setupElegia(){
+  const body=document.body;
+  const recording=document.getElementById('recording');
+  const ambient=document.getElementById('voiceMusic');
+  const portrait=document.getElementById('portraitFinale');
+  const image=document.getElementById('anaPortrait');
+  const question=document.getElementById('cenicientoLink');
+  const dialog=document.getElementById('voiceDialog');
+  const voicePlay=document.getElementById('voicePlay');
+  if(!recording)return;
+
+  /* Pulso canónico: una sola animación de opacidad, siempre activa y
+     completamente independiente del mundo pesado y del audio. */
+  const style=document.createElement('style');
+  style.id='oras-ana-safe-pulse-r13';
+  style.textContent=`
+    @keyframes orasSafePulseR13{
+      0%,100%{opacity:.18}
+      10%{opacity:.44}
+      18%{opacity:.21}
+      33%{opacity:.37}
+      44%{opacity:.19}
+    }
+    .oras-safe-pulse-r13{
+      position:fixed;inset:-8%;z-index:5;pointer-events:none;
+      border-radius:50%;
+      background:radial-gradient(78% 66% at 50% 54%,rgba(37,103,72,.28) 0%,rgba(54,116,82,.16) 44%,rgba(29,79,57,.04) 72%,transparent 88%);
+      animation:orasSafePulseR13 1.85s ease-in-out infinite;
+      will-change:opacity;
+    }
+    body.voice-open .world *,
+    body.voice-open .layer-warm,
+    body.voice-open .pulse-field,
+    body.voice-open .pulse-field::before,
+    body.voice-open .pulse-field::after,
+    body.voice-open .heat-final{
+      animation:none!important;
+      filter:none!important;
+      will-change:auto!important;
+    }
+    body.edge-final-safe .oras-safe-pulse-r13{display:none!important}
+    body.edge-final-safe .world *,body.edge-final-safe .heat-final{
+      animation:none!important;filter:none!important;will-change:auto!important
+    }
+  `;
+  document.head.appendChild(style);
+  let safePulse=document.querySelector('.oras-safe-pulse-r13');
+  if(!safePulse){safePulse=document.createElement('div');safePulse.className='oras-safe-pulse-r13';safePulse.setAttribute('aria-hidden','true');body.appendChild(safePulse);}
+
+  const SAFE_MARGIN=6.0;
+  const FALLBACK_DURATION=100;
+  let rescueDone=false;
+  let finalTimer=0;
+
+  const showFinal=()=>{
+    if(rescueDone)return;
+    rescueDone=true;
+    clearTimeout(finalTimer);finalTimer=0;
+    body.classList.add('edge-final-safe');
+    try{recording.pause();recording.removeAttribute('controls');}catch(_){}
+    try{ambient?.pause();}catch(_){}
+    if(dialog){dialog.style.display='none';dialog.setAttribute('aria-hidden','true');dialog.removeAttribute('open');}
+    body.classList.remove('voice-open','locked');
+    body.classList.add('portrait-revealed');
+    body.dataset.anaFinalDone='1';
+    if(portrait){portrait.setAttribute('aria-hidden','false');Object.assign(portrait.style,{opacity:'1',visibility:'visible',pointerEvents:'auto',zIndex:'120',transition:'none'});}
+    if(image)Object.assign(image.style,{opacity:'1',visibility:'visible',transition:'none'});
+    if(question)Object.assign(question.style,{opacity:'1',visibility:'visible',pointerEvents:'auto',transition:'none'});
+    completeAnaPart('elegia');
+  };
+
+  const armFinal=()=>{
+    clearTimeout(finalTimer);finalTimer=0;
+    if(rescueDone||recording.paused)return;
+    const current=Number.isFinite(recording.currentTime)?recording.currentTime:0;
+    const d=Number.isFinite(recording.duration)&&recording.duration>0?recording.duration:FALLBACK_DURATION;
+    const ms=Math.max(0,(d-current-SAFE_MARGIN)*1000);
+    if(ms===0){showFinal();return;}
+    finalTimer=setTimeout(showFinal,ms);
+  };
+
+  document.addEventListener('click',e=>{
+    const t=e.target?.closest?.('#voicePlay,#voiceLaunch');
+    if(!t)return;
+    e.preventDefault();e.stopImmediatePropagation();
+    body.classList.add('voice-open');
+    try{if(dialog&&!dialog.open)dialog.show();}catch(_){}
+    try{ambient?.pause();}catch(_){}
+    recording.muted=false;if(recording.volume===0)recording.volume=1;
+    if(t.id==='voicePlay'&&!recording.paused){recording.pause();clearTimeout(finalTimer);if(voicePlay)voicePlay.textContent='Continuar';return;}
+    recording.play().then(()=>{if(voicePlay)voicePlay.textContent='Pausar';const status=document.getElementById('voiceStatus');if(status)status.textContent='';armFinal();}).catch(()=>{});
+  },true);
+
+  document.addEventListener('play',e=>{
+    if(e.target!==recording)return;
+    e.stopImmediatePropagation();body.classList.add('voice-open');try{ambient?.pause();}catch(_){}armFinal();
+  },true);
+  document.addEventListener('pause',e=>{
+    if(e.target!==recording)return;
+    e.stopImmediatePropagation();clearTimeout(finalTimer);finalTimer=0;
+    if(!rescueDone&&Number.isFinite(recording.duration)&&recording.duration-recording.currentTime<=SAFE_MARGIN)showFinal();
+  },true);
+  document.addEventListener('ended',e=>{if(e.target===recording){e.stopImmediatePropagation();showFinal();}},true);
+  recording.addEventListener('seeked',()=>{if(!rescueDone){if(Number.isFinite(recording.duration)&&recording.duration-recording.currentTime<=SAFE_MARGIN)showFinal();else armFinal();}});
+
+  if('MutationObserver'in window){
+    const mark=()=>{if(body.classList.contains('portrait-revealed'))completeAnaPart('elegia');};
+    new MutationObserver(mark).observe(body,{attributes:true,attributeFilter:['class']});mark();
+  }
+}'''
+
+          s2,n=re.subn(r"function setupElegia\(\)\{.*?\n\}\n\nfunction setupTracking\(\)\{", new_setup+"\n\nfunction setupTracking(){", s, count=1, flags=re.S)
+          if n!=1: raise SystemExit('No se pudo sustituir setupElegia')
+          p.write_text(s2,encoding='utf-8')
+
+          hp=Path('elegia-breve/index.html')
+          h=hp.read_text(encoding='utf-8')
+          h=re.sub(r'/solo-la-tarjeta/oras-reading-window-r2\.js\?v=[^"\']+', '/solo-la-tarjeta/oras-reading-window-r2.js?v=20261019-ana-pulse-stable-r13', h)
+          hp.write_text(h,encoding='utf-8')
+          PY
+          node --check oras-reading-window-r2.js
+          grep -q '20261019-ana-pulse-stable-r13' oras-reading-window-r2.js
+          grep -q 'oras-safe-pulse-r13' oras-reading-window-r2.js
+          grep -q 'oras-reading-window-r2.js?v=20261019-ana-pulse-stable-r13' elegia-breve/index.html
+      - name: Guardar
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add oras-reading-window-r2.js elegia-breve/index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "ANA: pulso continuo seguro y cierre estable r13"
+          git push
