@@ -1150,21 +1150,27 @@ body.edge-final-safe.reading-ready.portrait-revealed #reading{transition:opacity
         if(listeningStart!==null) listeningEnd=recording.currentTime;
         saveListenedRange();
       });
+      const forcePortraitFinal=()=>{
+        portraitRequested=true;
+        portraitFinale.setAttribute('aria-hidden','false');
+        body.classList.add('portrait-revealed');
+        if(anaNavigation){anaNavigation.hidden=true;body.classList.remove('ana-navigation-ready');}
+        const nav=document.getElementById('journeyNav');
+        if(nav)nav.hidden=false;
+      };
       const finishVoicePass=()=>{
         if(listeningStart!==null) listeningEnd=recording.currentTime;
         saveListenedRange();
         completedVoicePasses++;
 
-        // Final seguro: no arrancar aquí las animaciones/filtros de pantalla completa.
-        // Edge estaba bloqueándose exactamente al dispararse el evento ended (1:40 / 1:40).
         body.classList.add('edge-final-safe');
         finalSequenceStarted=true;
         warmPhase=0;
-        warmTakeover=.72;
-        root.style.setProperty('--warm','.72');
-        root.style.setProperty('--green','.12');
-        root.style.setProperty('--deep','.08');
-        root.style.setProperty('--billiard','.16');
+        warmTakeover=.88;
+        root.style.setProperty('--warm','.88');
+        root.style.setProperty('--green','.06');
+        root.style.setProperty('--deep','.04');
+        root.style.setProperty('--billiard','.08');
         finalHeat.classList.add('is-shown','show-calor');
 
         clearTimeout(finalCalorTimer);
@@ -1172,8 +1178,8 @@ body.edge-final-safe.reading-ready.portrait-revealed #reading{transition:opacity
         finalCalorTimer=null;
         finalPortraitTimer=setTimeout(()=>{
           finalPortraitTimer=null;
-          if(cenicientoFrame.hidden && body.classList.contains('reading-ready')) revealPortrait();
-        },1800);
+          forcePortraitFinal();
+        },1200);
 
         listenedRanges=[];
         listeningStart=null;
@@ -1357,12 +1363,13 @@ clearTimeout(portraitRevealTimer);portraitRevealTimer=null;
       });
       recording.addEventListener('pause',()=>{
         if(voicePriming || voicePending || body.classList.contains('ceniciento-open')) return;
+        if(recording.ended || (Number.isFinite(recording.duration) && recording.duration>0 && recording.currentTime>=recording.duration-.2)) return;
         voiceAllowed=false;voicePlay.textContent='Activar voz';restoreAmbient();
       });
       recording.addEventListener('ended',()=>{
         finishVoicePass();
         voiceAllowed=false;voicePlay.textContent='Volver a escuchar';
-        voiceStatus.textContent='Fin de la grabación.';restoreAmbient();
+        voiceStatus.textContent='Fin de la grabación.';
       });
       recording.addEventListener('error',()=>{
         cancelVoiceStart();
