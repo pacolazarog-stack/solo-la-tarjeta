@@ -39,16 +39,18 @@ h1 em{font-weight:400;color:var(--rose)}
 .final-crescent::after{content:"";position:absolute;top:-8%;bottom:-8%;left:42%;right:-34%;border-radius:50%;background:#08101e}
 .world-final-moon svg{position:absolute;inset:0;width:100%;height:100%}
 .yin-body,.yin-outline{opacity:0;transition:opacity 4.75s ease}.yin-dots{opacity:0;transition:opacity 4.35s ease .4s}.yin-dots circle{transform-box:fill-box;transform-origin:center;transform:scale(.46);transition:transform 4.35s ease .4s}.is-home .final-crescent{opacity:0}.is-home .yin-body,.is-home .yin-outline,.is-home .yin-dots{opacity:1}.is-home .yin-dots circle{transform:scale(1)}
+.oras-nav{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:2147483645;display:grid;grid-template-columns:1fr 1fr;width:min(420px,calc(100vw - 28px));height:48px;border:1px solid rgba(255,255,255,.14);border-radius:14px;overflow:hidden;background:rgba(10,10,10,.88);box-shadow:0 8px 30px rgba(0,0,0,.28);backdrop-filter:blur(8px);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.oras-nav button{appearance:none;border:0;background:transparent;color:#f3eee6;height:48px;padding:0 16px;font:500 13px/1 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer;white-space:nowrap}.oras-nav button+button{border-left:1px solid rgba(255,255,255,.10)}.oras-nav button:hover{background:rgba(255,255,255,.06)}
 @keyframes cometCore{0%{left:50%;top:5%;transform:translate(-50%,-50%) scale(.72)}34%{left:62%;top:8.5%;transform:translate(-50%,-50%) scale(.94)}56%{left:72%;top:11.5%;transform:translate(-50%,-50%) scale(1)}78%{left:82%;top:14%;transform:translate(-50%,-50%) scale(.96)}100%{left:90%;top:16%;transform:translate(-50%,-50%) scale(.72)}}
 @keyframes cometTail{0%{left:50%;top:5%;opacity:0;transform:translate(-100%,-50%) rotate(12deg) scaleX(.12)}34%{left:62%;top:8.5%;opacity:.78;transform:translate(-100%,-50%) rotate(12deg) scaleX(.72)}56%{left:72%;top:11.5%;opacity:.96;transform:translate(-100%,-50%) rotate(12deg) scaleX(1)}78%{left:82%;top:14%;opacity:.9;transform:translate(-100%,-50%) rotate(12deg) scaleX(1.1)}100%{left:90%;top:16%;opacity:0;transform:translate(-100%,-50%) rotate(12deg) scaleX(.78)}}
-@media(max-width:760px){main{display:block;padding:22px 7vw 110px}.intro{position:static;padding-top:10px}.kicker{font-size:9px;letter-spacing:.18em}h1{font-size:clamp(40px,11vw,64px);margin:10px 0 12px}.poem{margin-top:28px;padding-top:0;font-size:clamp(18px,4.8vw,25px);line-height:1.8}.phrase{margin-bottom:40px}.ending{margin-top:48px}.world-final-moon{width:82px}.world-comet-tail{width:250px;height:2.5px}}
+@media(max-width:760px){main{display:block;padding:22px 7vw 110px}.intro{position:static;padding-top:10px}.kicker{font-size:9px;letter-spacing:.18em}h1{font-size:clamp(40px,11vw,64px);margin:10px 0 12px}.poem{margin-top:28px;padding-top:0;font-size:clamp(18px,4.8vw,25px);line-height:1.8}.phrase{margin-bottom:40px}.ending{margin-top:48px}.world-final-moon{width:82px}.world-comet-tail{width:250px;height:2.5px}.oras-nav{bottom:max(8px,env(safe-area-inset-bottom));height:44px;width:calc(100vw - 20px)}.oras-nav button{height:44px;font-size:12px}}
 @media(prefers-reduced-motion:reduce){.detail-background img,body:before,.phrase,.world-final-moon,.final-crescent,.yin-body,.yin-outline,.yin-dots,.yin-dots circle{transition:none!important}.world-comet{display:none}.detail-background img{filter:none}.world-final-moon{opacity:1;transform:translate(-50%,-50%)}.final-crescent{opacity:0}.yin-body,.yin-outline,.yin-dots{opacity:1}.yin-dots circle{transform:scale(1)}}
 </style>
 <script>try{localStorage.setItem('oras.master.volume.v1','100')}catch(_){}</script>
 </head>
 <body>
 <div class="detail-background" aria-hidden="true">
-  <img src="umbral.jpg?v=20261018-unified-1" alt="" decoding="async">
+  <img src="umbral.jpg?v=20261018-unified-2" alt="" decoding="async">
   <div class="celestial-scene" id="celestialScene">
     <div class="world-comet" id="worldComet"><span class="world-comet-tail"></span><span class="world-comet-core"></span></div>
     <div class="world-final-moon" id="homeMoon">
@@ -77,7 +79,8 @@ h1 em{font-weight:400;color:var(--rose)}
     <p class="phrase hidden-phrase ending" data-wait="7000">me basta con mirarte.</p>
   </article>
 </main>
-<audio id="orasStarMusic" src="../elegia-breve/ana-klaudya.m4a?v=20261018-unified-1" preload="auto" loop playsinline autoplay></audio>
+<nav class="oras-nav" aria-label="Navegación de lectura"><button id="prev" type="button">← Anterior</button><button id="next" type="button">Siguiente →</button></nav>
+<audio id="orasStarMusic" src="../elegia-breve/ana-klaudya.m4a?v=20261018-unified-2" preload="auto" loop playsinline autoplay></audio>
 <script>
 (()=>{
 'use strict';
@@ -91,11 +94,13 @@ function startPoem(){poem.hidden=false;reveal(0)}
 function tryPlay(){audio.volume=1;audio.muted=false;const p=audio.play();if(p&&p.catch)p.catch(()=>{})}
 tryPlay();
 addEventListener('pointerdown',tryPlay,{once:true,capture:true});addEventListener('keydown',tryPlay,{once:true,capture:true});
+document.getElementById('prev').addEventListener('click',()=>{location.href='/solo-la-tarjeta/?read=solo'});
+document.getElementById('next').addEventListener('click',()=>{location.href='/solo-la-tarjeta/elegia-breve/?v=20261018-after-star&afterPrologue=1'});
 if(reduced){scene.classList.add('is-awake','is-home');startPoem();return}
 setTimeout(()=>{comet.classList.add('is-active');scene.classList.add('is-awake','is-home');setTimeout(startPoem,10050)},3600);
 })();
 </script>
-<script src="/solo-la-tarjeta/oras-suno-volume-r1.js?v=20261018-star-unified-1"></script>
-<script src="/solo-la-tarjeta/oras-unified-nav-r1.js?v=20261018-star-unified-1"></script>
+<script src="/solo-la-tarjeta/oras-suno-volume-r1.js?v=20261018-star-unified-2"></script>
+<script src="/solo-la-tarjeta/estrella-clean-r7.js?v=20261017-clean-r7"></script>
 </body>
 </html>
