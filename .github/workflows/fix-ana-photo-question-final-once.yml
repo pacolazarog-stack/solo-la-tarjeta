@@ -1,0 +1,77 @@
+name: Corrige foto e interrogante final ANA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-ana-photo-question-final-once.yml'
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fijar final robusto de ANA
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase origin main
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('elegia-breve/index.html')
+          s=p.read_text(encoding='utf-8')
+
+          old="""      const forcePortraitFinal=()=>{\n        portraitRequested=true;\n        portraitFinale.setAttribute('aria-hidden','false');\n        body.classList.add('portrait-revealed');\n        if(anaNavigation){anaNavigation.hidden=true;body.classList.remove('ana-navigation-ready');}\n        const nav=document.getElementById('journeyNav');\n        if(nav)nav.hidden=false;\n      };"""
+          new="""      const forcePortraitFinal=()=>{\n        portraitRequested=true;\n        portraitFinale.setAttribute('aria-hidden','false');\n        body.classList.add('portrait-revealed','edge-final-safe');\n        portraitFinale.style.opacity='1';\n        portraitFinale.style.visibility='visible';\n        portraitFinale.style.pointerEvents='auto';\n        const portraitImage=document.getElementById('anaPortrait');\n        if(portraitImage){portraitImage.style.opacity='1';portraitImage.style.visibility='visible';}\n        const portraitQuestion=document.getElementById('cenicientoLink');\n        if(portraitQuestion){\n          portraitQuestion.style.opacity='1';\n          portraitQuestion.style.visibility='visible';\n          portraitQuestion.style.pointerEvents='auto';\n          portraitQuestion.style.transition='none';\n        }\n        if(voiceDialog){voiceDialog.style.display='none';voiceDialog.setAttribute('aria-hidden','true');}\n        if(anaNavigation){anaNavigation.hidden=true;body.classList.remove('ana-navigation-ready');}\n        const nav=document.getElementById('journeyNav');\n        if(nav)nav.hidden=false;\n      };"""
+          if old not in s:
+              raise SystemExit('No se encontró forcePortraitFinal esperado')
+          s=s.replace(old,new,1)
+
+          old2="""      const finishVoicePass=()=>{\n        if(listeningStart!==null) listeningEnd=recording.currentTime;\n        saveListenedRange();\n        completedVoicePasses++;\n\n        body.classList.add('edge-final-safe');"""
+          new2="""      const finishVoicePass=()=>{\n        if(body.dataset.anaFinalDone==='1')return;\n        body.dataset.anaFinalDone='1';\n        if(listeningStart!==null) listeningEnd=recording.currentTime;\n        saveListenedRange();\n        completedVoicePasses++;\n\n        body.classList.add('edge-final-safe');"""
+          if old2 not in s:
+              raise SystemExit('No se encontró finishVoicePass esperado')
+          s=s.replace(old2,new2,1)
+
+          old3="""        clearTimeout(finalCalorTimer);\n        clearTimeout(finalPortraitTimer);\n        finalCalorTimer=null;\n        finalPortraitTimer=setTimeout(()=>{\n          finalPortraitTimer=null;\n          forcePortraitFinal();\n        },1200);\n\n        listenedRanges=[];"""
+          new3="""        clearTimeout(finalCalorTimer);\n        clearTimeout(finalPortraitTimer);\n        finalCalorTimer=null;\n        finalPortraitTimer=null;\n        forcePortraitFinal();\n\n        listenedRanges=[];"""
+          if old3 not in s:
+              raise SystemExit('No se encontró temporizador final esperado')
+          s=s.replace(old3,new3,1)
+
+          marker="""      recording.addEventListener('ended',()=>{\n        finishVoicePass();\n        voiceAllowed=false;voicePlay.textContent='Volver a escuchar';\n        voiceStatus.textContent='Fin de la grabación.';\n      });"""
+          replacement=marker+"""\n      const ensureFinalAtMediaEnd=()=>{\n        if(body.dataset.anaFinalDone==='1')return;\n        const duration=recording.duration;\n        if(Number.isFinite(duration)&&duration>0&&recording.currentTime>=duration-.35){\n          finishVoicePass();\n          voiceAllowed=false;voicePlay.textContent='Volver a escuchar';\n          voiceStatus.textContent='Fin de la grabación.';\n        }\n      };\n      recording.addEventListener('timeupdate',ensureFinalAtMediaEnd);\n      recording.addEventListener('pause',ensureFinalAtMediaEnd);"""
+          if marker not in s:
+              raise SystemExit('No se encontró ended esperado')
+          s=s.replace(marker,replacement,1)
+
+          # Permitir una nueva finalización tras reiniciar la experiencia.
+          reset="""        portraitRequested=false;completedVoicePasses=0;"""
+          reset_new="""        portraitRequested=false;completedVoicePasses=0;delete body.dataset.anaFinalDone;\n        if(voiceDialog){voiceDialog.style.display='';voiceDialog.removeAttribute('aria-hidden');}"""
+          if reset in s:
+              s=s.replace(reset,reset_new,1)
+
+          # Bust inequívoco de la página/runtime final.
+          s=s.replace('oras-reading-window-r2.js?v=20261018-canonical-nav-final-1','oras-reading-window-r2.js?v=20261018-photo-question-final-1')
+          p.write_text(s,encoding='utf-8')
+          PY
+          grep -q "anaFinalDone" elegia-breve/index.html
+          grep -q "portraitQuestion.style.visibility='visible'" elegia-breve/index.html
+          grep -q '20261018-photo-question-final-1' elegia-breve/index.html
+      - name: Guardar y publicar
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add elegia-breve/index.html
+          git commit -m 'ANA: muestra siempre fotografía e interrogante al final'
+          git push
+          sleep 3
+          gh workflow run pages.yml --ref main
