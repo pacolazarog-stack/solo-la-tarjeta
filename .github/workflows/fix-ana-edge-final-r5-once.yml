@@ -1,0 +1,67 @@
+name: Fix ANA Edge final r5 once
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Aplicar final seguro para Edge
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path('elegia-breve/index.html')
+          s=p.read_text(encoding='utf-8')
+
+          css='''\n/* ANA final-safe r5: evita filtros/animaciones de pantalla completa al terminar la voz. */\nbody.edge-final-safe .pulse-field,\nbody.edge-final-safe .pulse-field::before,\nbody.edge-final-safe .pulse-field::after,\nbody.edge-final-safe .layer-warm,\nbody.edge-final-safe .heat-final.is-burning{\n  animation:none!important;\n  filter:none!important;\n  will-change:auto!important;\n}\nbody.edge-final-safe .layer-green,\nbody.edge-final-safe .layer-deep,\nbody.edge-final-safe .layer-billiard{transition:opacity .7s ease!important}\nbody.edge-final-safe .layer-warm{transition:opacity 1.6s ease!important}\nbody.edge-final-safe .portrait-finale{transition:opacity 2.4s ease,visibility 2.4s ease!important}\nbody.edge-final-safe .portrait-finale img{transition:opacity 3.2s ease-in-out .3s!important}\nbody.edge-final-safe.reading-ready.portrait-revealed #reading{transition:opacity 2.2s ease,visibility 2.2s ease!important}\n'''
+          marker='/* ANA final-safe r5:'
+          if marker not in s:
+              s=s.replace('</style>',css+'\n</style>',1)
+
+          new_finish='''      const finishVoicePass=()=>{\n        if(listeningStart!==null) listeningEnd=recording.currentTime;\n        saveListenedRange();\n        completedVoicePasses++;\n\n        // Final seguro: no arrancar aquí las animaciones/filtros de pantalla completa.\n        // Edge estaba bloqueándose exactamente al dispararse el evento ended (1:40 / 1:40).\n        body.classList.add('edge-final-safe');\n        finalSequenceStarted=true;\n        warmPhase=0;\n        warmTakeover=.72;\n        root.style.setProperty('--warm','.72');\n        root.style.setProperty('--green','.12');\n        root.style.setProperty('--deep','.08');\n        root.style.setProperty('--billiard','.16');\n        finalHeat.classList.add('is-shown','show-calor');\n\n        clearTimeout(finalCalorTimer);\n        clearTimeout(finalPortraitTimer);\n        finalCalorTimer=null;\n        finalPortraitTimer=setTimeout(()=>{\n          finalPortraitTimer=null;\n          if(cenicientoFrame.hidden && body.classList.contains('reading-ready')) revealPortrait();\n        },1800);\n\n        listenedRanges=[];\n        listeningStart=null;\n      };\n      const resetPortraitFinale='''
+
+          pattern=r"      const finishVoicePass=\(\)=>\{\n.*?\n      \};\n      const resetPortraitFinale="
+          s2,n=re.subn(pattern,new_finish,s,count=1,flags=re.S)
+          if n!=1:
+              raise SystemExit(f'No se encontró finishVoicePass exactamente una vez: {n}')
+          s=s2
+
+          old="        body.classList.remove('portrait-revealed');\n        portraitFinale.setAttribute('aria-hidden','true');"
+          new="        body.classList.remove('portrait-revealed','edge-final-safe');\n        portraitFinale.setAttribute('aria-hidden','true');"
+          if old in s:
+              s=s.replace(old,new,1)
+          elif "body.classList.remove('portrait-revealed','edge-final-safe')" not in s:
+              raise SystemExit('No se pudo insertar limpieza edge-final-safe')
+
+          p.write_text(s,encoding='utf-8')
+          PY
+
+          node -e "const fs=require('fs');const s=fs.readFileSync('elegia-breve/index.html','utf8');const m=s.match(/<script>([\\s\\S]*?)<\\/script>/g);if(!m)process.exit(1);"
+          git diff --check
+          git diff -- elegia-breve/index.html
+
+      - name: Commit
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "Sin cambios"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add elegia-breve/index.html
+          git commit -m "ANA: final seguro Edge r5"
+          git push
