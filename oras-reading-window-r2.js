@@ -6,12 +6,14 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261014-master-index-15';
-const VERSION='20261018-star-parent-continuity-2';
-const ANA_DOC=`${BASE}/elegia-breve/?v=20261018-ana-parent-continuity-2`;
+const VERSION='20261018-star-parent-continuity-3';
+const ANA_DOC=`${BASE}/elegia-breve/?v=20261018-ana-parent-continuity-3`;
 const CURRENT_PATH=location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');
 const params=new URLSearchParams(location.search);
 const STAR_PARENT=`${ANA_DOC}#estrella`;
 const STAR_MUSIC_STATE='oras.ana.star.music.v1';
+const VERSION_TOKEN=(params.get('v')||'').toLowerCase();
+const LEGACY_AFTER_STAR=CURRENT_PATH.endsWith('/elegia-breve')&&VERSION_TOKEN.includes('after-star');
 
 /* Siguiendo una tarjeta permanece dentro del documento padre de ANA. */
 
@@ -115,12 +117,18 @@ function completeAnaPart(key){
 }
 
 const style=document.createElement('style');
-style.id='oras-reading-window-stable-r10';
+style.id='oras-reading-window-stable-r11';
 style.textContent=`
 .ou-reading-checklist,.ou-reading-window-r2{display:none!important}
 body.mirror .ou-reading-window-r2{display:none!important}
-html[data-oras-star-transition="1"] #entryButton{display:none!important}
-html[data-oras-star-transition="1"] #orasUnifiedNav{display:grid!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+html[data-oras-star-transition="1"] body{background:#eef1e9!important;color:#201d19!important}
+html[data-oras-star-transition="1"] .world{display:block!important;visibility:visible!important;opacity:1!important}
+html[data-oras-star-transition="1"] .entry{display:grid!important;visibility:visible!important;opacity:1!important;pointer-events:none!important;background:rgba(238,241,233,.48)!important;z-index:2147482500!important}
+html[data-oras-star-transition="1"] .entry-title{display:block!important;visibility:visible!important;opacity:1!important;color:#201d19!important}
+html[data-oras-star-transition="1"] #entryButton,html[data-oras-star-transition="1"] .entry-actions{display:none!important}
+html[data-oras-star-transition="1"] #poemBackdrop,html[data-oras-star-transition="1"] #cenicientoFrame{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+html[data-oras-star-transition="1"] #orasUnifiedNav{display:grid!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;z-index:2147483646!important}
+html[data-oras-star-transition="1"] #soundToggle{display:grid!important;visibility:visible!important;opacity:1!important;z-index:2147483646!important}
 `;
 document.head.appendChild(style);
 document.querySelector('.ou-reading-window-r2')?.remove();
@@ -143,7 +151,7 @@ function ensureUnifiedNav(){
   if(window.__orasUnifiedNavR4||document.querySelector('script[data-oras-unified-nav-core]'))return;
   const script=document.createElement('script');
   script.dataset.orasUnifiedNavCore='1';
-  script.src=`${BASE}/oras-unified-nav-r1.js?v=20261018-unified-nav-parent-star-2`;
+  script.src=`${BASE}/oras-unified-nav-r1.js?v=20261018-unified-nav-parent-star-3`;
   script.defer=true;
   document.body.appendChild(script);
 }
@@ -157,44 +165,73 @@ function revealUnifiedNav(){
   reveal();setTimeout(reveal,80);setTimeout(reveal,300);setTimeout(reveal,900);
 }
 
-function beginStarToElegiaTransition(){
-  if(!CURRENT_PATH.endsWith('/elegia-breve'))return;
+function forceTransitionVisual(){
   const root=document.documentElement,body=document.body;
-  const frame=document.getElementById('cenicientoFrame');
-  const backdrop=document.getElementById('poemBackdrop');
-  const entry=document.getElementById('entry');
-  const music=document.getElementById('voiceMusic');
-
+  if(!body)return false;
   root.removeAttribute('data-oras-ana-route');
   root.classList.remove('poem-route-loading','ceniciento-open','publication-pending','oras-master-entry');
   root.setAttribute('data-oras-star-transition','1');
-  body?.classList.remove('ceniciento-open','sonrisa-open','eyes-open','prelude','voice-open','portrait-revealed','reading-ready');
-  body?.classList.add('locked','journey-started','sound-ready');
+  body.classList.remove('ceniciento-open','sonrisa-open','eyes-open','prelude','voice-open','portrait-revealed','reading-ready');
+  body.classList.add('locked','journey-started','sound-ready');
+  body.style.setProperty('background','#eef1e9','important');
 
-  if(backdrop){backdrop.hidden=true;backdrop.classList.remove('is-leaving');}
+  const backdrop=document.getElementById('poemBackdrop');
+  if(backdrop){backdrop.hidden=true;backdrop.classList.remove('is-leaving');backdrop.style.setProperty('display','none','important');}
+  const frame=document.getElementById('cenicientoFrame');
   if(frame){
     frame.hidden=true;frame.removeAttribute('aria-busy');frame.removeAttribute('src');
     frame.classList.remove('sonrisa-transition','sonrisa-visible','sonrisa-leaving','interlude-transition');
-    for(const prop of ['display','opacity','visibility','pointer-events','z-index','background'])frame.style.removeProperty(prop);
+    frame.style.setProperty('display','none','important');
+    frame.style.setProperty('visibility','hidden','important');
+    frame.style.setProperty('opacity','0','important');
   }
-  try{history.replaceState(null,'',location.pathname+location.search);}catch(_){ }
-
-  /* El mismo elemento de audio del padre continúa sonando: no se pausa, no se recrea, no se busca. */
+  const entry=document.getElementById('entry');
+  if(entry){
+    entry.hidden=false;entry.classList.remove('is-open');
+    entry.style.setProperty('display','grid','important');
+    entry.style.setProperty('visibility','visible','important');
+    entry.style.setProperty('opacity','1','important');
+    entry.style.setProperty('background','rgba(238,241,233,.48)','important');
+    entry.style.setProperty('z-index','2147482500','important');
+  }
+  const title=entry?.querySelector('.entry-title');
+  if(title){title.style.setProperty('display','block','important');title.style.setProperty('visibility','visible','important');title.style.setProperty('opacity','1','important');title.style.setProperty('color','#201d19','important');}
+  const entryButton=document.getElementById('entryButton');
+  if(entryButton){entryButton.hidden=true;entryButton.style.setProperty('display','none','important');}
+  const music=document.getElementById('voiceMusic');
   if(music){music.muted=false;if(music.paused)music.play().catch(()=>{});}
-
-  if(entry)entry.classList.remove('is-open');
   revealUnifiedNav();
-  completeAnaPart('estrella');
+  return true;
+}
 
+function finishTransitionToElegia(){
+  const root=document.documentElement,body=document.body,entry=document.getElementById('entry');
+  root.removeAttribute('data-oras-star-transition');
+  body?.style.removeProperty('background');
+  if(entry){
+    entry.classList.add('is-open');
+    for(const p of ['display','visibility','opacity','background','z-index'])entry.style.removeProperty(p);
+  }
+  entry?.querySelector('.entry-title')?.removeAttribute('style');
+  const entryButton=document.getElementById('entryButton');
+  if(entryButton){entryButton.hidden=false;entryButton.style.removeProperty('display');}
+  body?.classList.remove('locked');
+  const read=document.getElementById('anaRead');
+  if(read)read.click();
+  revealUnifiedNav();
+}
+
+function beginStarToElegiaTransition(){
+  if(!CURRENT_PATH.endsWith('/elegia-breve'))return;
+  if(window.__orasStarToElegiaActive)return;
+  window.__orasStarToElegiaActive=true;
+  forceTransitionVisual();
+  completeAnaPart('estrella');
   clearTimeout(window.__orasStarToElegiaTimer);
   window.__orasStarToElegiaTimer=setTimeout(()=>{
     window.__orasStarToElegiaTimer=null;
-    root.removeAttribute('data-oras-star-transition');
-    if(entry)entry.classList.add('is-open');
-    body?.classList.remove('locked');
-    const read=document.getElementById('anaRead');
-    if(read)read.click();
-    revealUnifiedNav();
+    window.__orasStarToElegiaActive=false;
+    finishTransitionToElegia();
   },5000);
 }
 
@@ -242,5 +279,10 @@ function setupTracking(){
 resumeAnaAfterPrologue();
 setupTracking();
 ensureUnifiedNav();
+if(LEGACY_AFTER_STAR){
+  const launch=()=>beginStarToElegiaTransition();
+  if(document.readyState==='loading')addEventListener('DOMContentLoaded',launch,{once:true});
+  else launch();
+}
 window.ORASReadingWindowR2={version:VERSION,completeAnaPart,openIndex};
 })();
