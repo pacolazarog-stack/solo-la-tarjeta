@@ -6,7 +6,7 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261014-master-index-15';
-const VERSION='20261018-ana-end-stability-2';
+const VERSION='20261018-ana-end-stability-4';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -29,6 +29,9 @@ style.textContent=`
 .ou-reading-window-r2{position:fixed;z-index:2147483000;left:max(62px,calc(env(safe-area-inset-left) + 62px));bottom:max(12px,env(safe-area-inset-bottom));font-family:Georgia,"Times New Roman",serif;color:#f7f1e8}
 .ou-reading-window-r2>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;min-height:31px;padding:6px 11px;border:1px solid rgba(255,255,255,.17);border-radius:999px;background:rgba(13,13,13,.72);color:#f7f1e8;box-shadow:0 5px 18px rgba(0,0,0,.14);font:500 12px/1.2 Georgia,"Times New Roman",serif}
 .ou-reading-window-r2>summary::-webkit-details-marker{display:none}.ou-reading-window-r2>summary::before{content:"";width:5px;height:5px;border-radius:50%;background:#e9cf91}.ou-reading-window-r2 .ou-rw-panel{display:none!important}body.mirror .ou-reading-window-r2{display:none!important}
+body.oras-safe-ending .layer-warm{animation:none!important;filter:none!important;will-change:opacity!important}
+body.oras-safe-ending .pulse-field{animation:orasSafePulse 1.85s ease-in-out infinite!important;filter:none!important;will-change:opacity!important}
+@keyframes orasSafePulse{0%,100%{opacity:.44}50%{opacity:.82}}
 @media(max-width:700px){.ou-reading-window-r2{left:max(57px,calc(env(safe-area-inset-left) + 57px));bottom:max(10px,env(safe-area-inset-bottom))}.ou-reading-window-r2>summary{font-size:11px;min-height:29px;padding:5px 9px}}
 `;
 document.head.appendChild(style);
@@ -65,11 +68,44 @@ function setupElegia(){
   prev?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();forcePiece('anaEstrella');},{capture:true});
   next?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();forcePiece('anaOjos');},{capture:true});
 
-  /* La secuencia visual final pertenece exclusivamente a elegia-breve/index.html.
-     Aquí sólo registramos la lectura terminada. Evitamos un segundo RAF a pantalla
-     completa y animaciones duplicadas, que en Edge podían bloquear la pestaña. */
-  recording?.addEventListener('ended',()=>completeAnaPart('elegia'));
-  if(recording?.ended)completeAnaPart('elegia');
+  /* Final seguro: interceptamos EN CAPTURA el evento ended antes del manejador
+     pesado de la página. La transición conserva el pulso expansivo, vira de
+     verde a cálido y muestra la fotografía sin filtros de pantalla completa. */
+  const safeEnd=()=>{
+    if(body.classList.contains('oras-safe-ending'))return;
+    body.classList.add('oras-safe-ending');
+    const root=document.documentElement;
+    const heat=document.getElementById('finalHeat');
+    const warm=document.querySelector('.layer-warm');
+    const portrait=document.getElementById('portraitFinale');
+    const img=document.getElementById('anaPortrait');
+    const nav=document.getElementById('anaNavigation');
+    heat?.classList.add('is-shown','show-calor','is-burning');
+    if(warm){
+      warm.style.animation='none';
+      warm.style.filter='none';
+      warm.style.opacity='0.06';
+      warm.style.transition='opacity 7.5s cubic-bezier(.18,.72,.2,1)';
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{warm.style.opacity='0.92';}));
+    }
+    setTimeout(()=>{
+      if(!portrait)return;
+      portrait.style.transition='opacity 5s ease,visibility 0s linear';
+      if(img){img.style.transition='opacity 7s ease';img.style.opacity='1';}
+      portrait.setAttribute('aria-hidden','false');
+      body.classList.add('portrait-revealed');
+      if(nav)nav.hidden=true;
+      root.style.setProperty('--question-current','.55');
+      root.style.setProperty('--question-first','.64');
+      root.style.setProperty('--question-next','.72');
+    },8200);
+  };
+  recording?.addEventListener('ended',e=>{
+    e.stopImmediatePropagation();
+    safeEnd();
+    completeAnaPart('elegia');
+  },true);
+  if(recording?.ended){safeEnd();completeAnaPart('elegia');}
 
   if('MutationObserver'in window){
     const markPortrait=()=>{if(body.classList.contains('portrait-revealed'))completeAnaPart('elegia');};
