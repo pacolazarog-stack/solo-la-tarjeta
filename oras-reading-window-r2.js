@@ -6,7 +6,7 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261018-r3-progress-1';
-const VERSION='20261018-canonical-nav-final-1';
+const VERSION='20261018-ana-final-rescue-r8';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -42,9 +42,6 @@ function completeAnaPart(key){
   try{window.dispatchEvent(new CustomEvent('oras:progress-changed',{detail:{part:key,anaParts:parts}}));}catch(_){}
 }
 
-/* El índice flotante heredado dejó de ser canónico. Si alguna versión anterior
-   lo dejó en el DOM, se elimina. La única navegación visible debe ser la barra
-   inferior Atrás | Índice ORAS | Adelante. */
 document.querySelectorAll('.ou-reading-window-r2').forEach(el=>el.remove());
 
 function openIndex(){
@@ -74,12 +71,67 @@ function observeEnd(selector,key,ratio=.55){
 function setupElegia(){
   const body=document.body;
   const recording=document.getElementById('recording');
+  const portrait=document.getElementById('portraitFinale');
+  const image=document.getElementById('anaPortrait');
+  const question=document.getElementById('cenicientoLink');
+  const dialog=document.getElementById('voiceDialog');
+  let rescueDone=false;
+  let lastMediaTime=0;
+  let lastAdvanceAt=performance.now();
 
-  /* No se interceptan COMENZAR, Atrás, Adelante ni el evento ended.
-     La propia página de ANA es la autoridad de navegación y de su secuencia
-     final. Este runtime sólo registra la lectura completada. */
-  recording?.addEventListener('ended',()=>completeAnaPart('elegia'));
-  if(recording?.ended)completeAnaPart('elegia');
+  const rescueFinal=()=>{
+    if(rescueDone)return;
+    rescueDone=true;
+    try{recording?.pause();}catch(_){}
+    try{if(dialog?.open)dialog.close();}catch(_){}
+    if(dialog){dialog.style.display='none';dialog.setAttribute('aria-hidden','true');}
+    body.classList.remove('voice-open','locked');
+    body.classList.add('portrait-revealed','edge-final-safe');
+    body.dataset.anaFinalDone='1';
+    if(portrait){
+      portrait.setAttribute('aria-hidden','false');
+      portrait.style.opacity='1';
+      portrait.style.visibility='visible';
+      portrait.style.pointerEvents='auto';
+      portrait.style.zIndex='120';
+    }
+    if(image){image.style.opacity='1';image.style.visibility='visible';}
+    if(question){
+      question.style.opacity='1';
+      question.style.visibility='visible';
+      question.style.pointerEvents='auto';
+      question.style.transition='none';
+    }
+    completeAnaPart('elegia');
+  };
+
+  recording?.addEventListener('ended',rescueFinal);
+  recording?.addEventListener('play',()=>{
+    lastMediaTime=recording.currentTime||0;
+    lastAdvanceAt=performance.now();
+  });
+  recording?.addEventListener('seeked',()=>{
+    lastMediaTime=recording.currentTime||0;
+    lastAdvanceAt=performance.now();
+  });
+
+  /* Rescate independiente de timeupdate/ended. Edge puede mostrar 1:40 / 1:40
+     y no completar el EOF; este reloj externo detecta ese atasco. */
+  setInterval(()=>{
+    if(rescueDone||!recording||recording.paused||recording.seeking)return;
+    const now=performance.now();
+    const current=recording.currentTime||0;
+    const duration=recording.duration;
+    if(current>lastMediaTime+.015){lastMediaTime=current;lastAdvanceAt=now;}
+    if(Number.isFinite(duration)&&duration>0){
+      const remaining=duration-current;
+      if(remaining<=.85 || (remaining<=3.5 && now-lastAdvanceAt>=650))rescueFinal();
+    }else if(current>=99 && now-lastAdvanceAt>=650){
+      rescueFinal();
+    }
+  },100);
+
+  if(recording?.ended)rescueFinal();
 
   if('MutationObserver'in window){
     const markPortrait=()=>{
