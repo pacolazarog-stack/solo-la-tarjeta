@@ -1,0 +1,44 @@
+name: Publica ANA Edge r10
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-ana-edge-r10.yml'
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fijar runtime r10 y retirar parches obsoletos
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase origin main
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('elegia-breve/index.html')
+          s=p.read_text(encoding='utf-8')
+          import re
+          s=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r2.js?v=20261018-ana-edge-voice-isolation-r10', s)
+          p.write_text(s,encoding='utf-8')
+          PY
+          rm -f .github/workflows/fix-ana-photo-question-final-once.yml .github/workflows/fix-ana-final-watchdog-r7.yml
+          grep -q 'ana-edge-voice-isolation-r10' elegia-breve/index.html
+      - name: Guardar y publicar
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add elegia-breve/index.html .github/workflows
+          git commit -m 'ANA: publica aislamiento de voz Edge r10'
+          git push
+          gh workflow run pages.yml --ref main
