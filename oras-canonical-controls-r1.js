@@ -1,132 +1,83 @@
 (()=>{
 'use strict';
-if(window.__orasCanonicalControlsR1)return;
-window.__orasCanonicalControlsR1=true;
-
+if(window.__orasCanonicalControlsR2)return;
+window.__orasCanonicalControlsR2=true;
 const BASE='/solo-la-tarjeta';
-const VERSION='20261018-canonical-controls-1';
-const cleanPath=()=>location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');
 
-/* Un solo mando visual: los hijos embebidos ceden el control al documento padre. */
-try{
-  if(window.parent!==window && window.parent.location.origin===location.origin){
-    window.parent.postMessage({channel:'oras-canonical-controls-v1',type:'child-context',path:cleanPath(),hash:location.hash},location.origin);
-    return;
-  }
-}catch(_){}
+/* En iframes hijos no se crea una segunda botonera. */
+try{if(window.parent!==window&&window.parent.location.origin===location.origin)return;}catch(_){}
 
 const style=document.createElement('style');
-style.id='oras-canonical-controls-style-r1';
 style.textContent=`
-#orasCanonicalNav{position:fixed;z-index:2147483644;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(520px,calc(100vw - 126px));height:48px;display:grid;grid-template-columns:1fr 1.18fr 1fr;align-items:stretch;border:1px solid rgba(255,255,255,.16);border-radius:11px;overflow:hidden;background:rgba(8,8,8,.82);box-shadow:0 8px 28px rgba(0,0,0,.24);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
-#orasCanonicalNav button{appearance:none;border:0;background:transparent;color:rgba(255,255,255,.91);min-width:0;padding:0 10px;font:600 12px/1 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer;touch-action:manipulation;white-space:nowrap}
+#orasCanonicalNav{position:fixed;z-index:2147483644;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(520px,calc(100vw - 126px));height:48px;display:grid;grid-template-columns:1fr 1.18fr 1fr;border:1px solid rgba(255,255,255,.16);border-radius:11px;overflow:hidden;background:rgba(8,8,8,.82);box-shadow:0 8px 28px rgba(0,0,0,.24);backdrop-filter:blur(12px);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+#orasCanonicalNav button{border:0;background:transparent;color:rgba(255,255,255,.93);font:600 12px/1 system-ui,-apple-system,"Segoe UI",sans-serif;cursor:pointer}
 #orasCanonicalNav button+button{border-left:1px solid rgba(255,255,255,.12)}
-#orasCanonicalNav button:hover,#orasCanonicalNav button:focus-visible{background:rgba(255,255,255,.07);color:#fff;outline:none}
-#orasCanonicalNav button:disabled{opacity:.30;cursor:default;background:transparent}
-.ou-reading-window-r2,.ou-solo-endnav,.journey-nav,.oras-mirror-nav{display:none!important;visibility:hidden!important;pointer-events:none!important}
-body.oras-canonical-controls-ready .oras-ceniciento-mirror-gate,body.oras-canonical-controls-ready .oras-solo-mirror-gate{opacity:0!important;visibility:hidden!important;pointer-events:none!important;position:fixed!important;left:-10000px!important;top:-10000px!important}
+#orasCanonicalNav button:disabled{opacity:.28;cursor:default}
+.journey-nav,.ou-solo-endnav,.oras-mirror-nav,.ou-reading-window-r2{display:none!important}
 #orasSunoVolume{z-index:2147483646!important}
-@media(max-width:700px){#orasCanonicalNav{bottom:max(10px,env(safe-area-inset-bottom));width:min(430px,calc(100vw - 112px));height:44px;border-radius:9px}#orasCanonicalNav button{font-size:11px;padding:0 6px}}
-@media(max-width:420px){#orasCanonicalNav{left:auto;right:max(8px,env(safe-area-inset-right));transform:none;width:calc(100vw - 68px);grid-template-columns:1fr 1.15fr 1fr}}
+@media(max-width:700px){#orasCanonicalNav{width:min(430px,calc(100vw - 112px));height:44px}}
 `;
 document.head.appendChild(style);
 
-document.body?.classList.add('oras-canonical-controls-ready');
-const nav=document.createElement('nav');
-nav.id='orasCanonicalNav';
-nav.setAttribute('aria-label','Navegación canónica ORAS');
-nav.innerHTML='<button type="button" data-oras-back aria-label="Atrás">← Atrás</button><button type="button" data-oras-index aria-label="Índice ORAS">Índice ORAS</button><button type="button" data-oras-forward aria-label="Adelante">Adelante →</button>';
-document.body.appendChild(nav);
-const back=nav.querySelector('[data-oras-back]');
-const index=nav.querySelector('[data-oras-index]');
-const forward=nav.querySelector('[data-oras-forward]');
-
-let override={back:null,forward:null};
-let childContext=null;
+let nav=document.getElementById('orasCanonicalNav');
+if(!nav){
+ nav=document.createElement('nav');nav.id='orasCanonicalNav';nav.setAttribute('aria-label','Navegación canónica ORAS');
+ nav.innerHTML='<button type="button" data-back>← Atrás</button><button type="button" data-index>Índice ORAS</button><button type="button" data-forward>Adelante →</button>';
+ document.body.appendChild(nav);
+}
+const back=nav.querySelector('[data-back]'),index=nav.querySelector('[data-index]'),forward=nav.querySelector('[data-forward]');
 
 function openIndex(){
-  if(window.ORASMasterIndex?.open){window.ORASMasterIndex.open();return;}
-  let script=document.querySelector('script[data-oras-master-index-global],script[data-oras-canonical-master-index]');
-  if(!script){
-    script=document.createElement('script');script.dataset.orasCanonicalMasterIndex='1';
-    script.src=`${BASE}/oras-master-index-r1.js?v=20261014-master-index-15`;
-    script.addEventListener('load',()=>window.ORASMasterIndex?.open?.(),{once:true});
-    document.head.appendChild(script);
-  }else script.addEventListener?.('load',()=>window.ORASMasterIndex?.open?.(),{once:true});
+ if(window.ORASMasterIndex?.open){window.ORASMasterIndex.open();return;}
+ let s=document.querySelector('script[data-oras-master-index-global]');
+ if(!s){s=document.createElement('script');s.dataset.orasMasterIndexGlobal='1';s.src=BASE+'/oras-master-index-r1.js?v=20261014-master-index-15';document.head.appendChild(s);}
+ s.addEventListener('load',()=>window.ORASMasterIndex?.open?.(),{once:true});
 }
 
-const routeMap={
-  '/solo-la-tarjeta':{back:null,forward:`${BASE}/estrella/`},
-  '/solo-la-tarjeta/estrella':{back:`${BASE}/`,forward:`${BASE}/elegia-breve/`},
-  '/solo-la-tarjeta/elegia-breve':{back:`${BASE}/estrella/`,forward:`${BASE}/ojos/`},
-  '/solo-la-tarjeta/ojos':{back:`${BASE}/elegia-breve/`,forward:`${BASE}/sonrisa/`},
-  '/solo-la-tarjeta/sonrisa':{back:`${BASE}/ojos/`,forward:`${BASE}/cabello/`},
-  '/solo-la-tarjeta/cabello':{back:`${BASE}/sonrisa/`,forward:`${BASE}/piel/`},
-  '/solo-la-tarjeta/piel':{back:`${BASE}/cabello/`,forward:`${BASE}/interludio/`},
-  '/solo-la-tarjeta/interludio':{back:`${BASE}/piel/`,forward:`${BASE}/epilogo/`},
-  '/solo-la-tarjeta/epilogo':{back:`${BASE}/interludio/`,forward:null},
-  '/solo-la-tarjeta/ceniciento':{back:`${BASE}/elegia-breve/`,forward:null},
-  '/solo-la-tarjeta/inventario-del-aire':{back:`${BASE}/`,forward:`${BASE}/museo-de-las-sombras/`},
-  '/solo-la-tarjeta/museo-de-las-sombras':{back:`${BASE}/inventario-del-aire/`,forward:`${BASE}/museo-de-las-sombras/atlas.html`},
-  '/solo-la-tarjeta/museo-de-las-sombras/atlas.html':{back:`${BASE}/museo-de-las-sombras/`,forward:null},
-  '/solo-la-tarjeta/ana-klaudya-el-espejo-el-inventario':{back:`${BASE}/`,forward:`${BASE}/inventario-del-aire/`}
-};
+const anaOrder=['estrella','elegia','ojos','sonrisa','cabello','piel','interludio','epilogo'];
+const anaIds={estrella:'anaEstrella',elegia:'anaRead',ojos:'anaOjos',sonrisa:'anaSonrisa',cabello:'anaCabello',piel:'anaPiel',interludio:'anaInterlude',epilogo:'anaEpilogue'};
+function anaPiece(){
+ const h=location.hash.slice(1);
+ if(anaOrder.includes(h))return h;
+ if(location.pathname.includes('/elegia-breve'))return 'elegia';
+ return null;
+}
+function clickAna(piece){const el=document.getElementById(anaIds[piece]);if(el){el.click();return true}return false;}
+function currentPath(){return location.pathname.replace(/\/index\.html$/i,'/').replace(/\/+$/,'');}
 
-function existingButton(direction){
-  const selectors=direction==='back'
-    ? ['#journeyPrevious','[data-oras-prev]','[data-oras-back]','.oras-mirror-nav button:first-child']
-    : ['#journeyNext','[data-oras-next]','[data-oras-forward]','.oras-mirror-nav button:last-child'];
-  for(const sel of selectors){
-    for(const el of document.querySelectorAll(sel)){
-      if(el===back||el===forward||el.closest?.('#orasCanonicalNav'))continue;
-      if(!el.disabled)return el;
-    }
-  }
-  return null;
-}
-function mirrorGateButton(){
-  const el=document.querySelector('.oras-ceniciento-mirror-gate .mirror-continue,.oras-solo-mirror-gate button');
-  if(!el||el.disabled)return null;
-  const gate=el.closest('.oras-ceniciento-mirror-gate,.oras-solo-mirror-gate');
-  if(gate && (gate.hidden||!gate.classList.contains('is-visible')))return null;
-  return el;
-}
-function currentRoute(){return routeMap[cleanPath()]||{back:null,forward:null};}
-function available(direction){
-  if(override[direction])return true;
-  if(existingButton(direction))return true;
-  if(direction==='forward'&&cleanPath().includes('/ceniciento')&&mirrorGateButton())return true;
-  if(document.body.classList.contains('mirror')&&existingButton(direction))return true;
-  return !!currentRoute()[direction];
+function go(dir){
+ const p=currentPath();
+ if(p==='/solo-la-tarjeta/elegia-breve'){
+   const cur=anaPiece(),i=anaOrder.indexOf(cur),j=dir==='back'?i-1:i+1;
+   if(j>=0&&j<anaOrder.length){clickAna(anaOrder[j]);return;}
+   if(dir==='back'&&i===0){location.assign(BASE+'/');return;}
+   return;
+ }
+ const map={
+  '/solo-la-tarjeta':{forward:BASE+'/elegia-breve/#estrella'},
+  '/solo-la-tarjeta/ceniciento':{back:BASE+'/elegia-breve/'},
+  '/solo-la-tarjeta/inventario-del-aire':{back:BASE+'/',forward:BASE+'/museo-de-las-sombras/'},
+  '/solo-la-tarjeta/museo-de-las-sombras':{back:BASE+'/inventario-del-aire/',forward:BASE+'/museo-de-las-sombras/atlas.html'},
+  '/solo-la-tarjeta/museo-de-las-sombras/atlas.html':{back:BASE+'/museo-de-las-sombras/'}
+ };
+ const href=map[p]?.[dir];if(href)location.assign(href);
 }
 function refresh(){
-  back.disabled=!available('back');
-  forward.disabled=!available('forward');
-  document.body?.classList.add('oras-canonical-controls-ready');
+ const p=currentPath();
+ if(p==='/solo-la-tarjeta/elegia-breve'){
+  const i=anaOrder.indexOf(anaPiece());back.disabled=false;forward.disabled=i<0||i===anaOrder.length-1;return;
+ }
+ const map={
+  '/solo-la-tarjeta':{back:false,forward:true},
+  '/solo-la-tarjeta/ceniciento':{back:true,forward:false},
+  '/solo-la-tarjeta/inventario-del-aire':{back:true,forward:true},
+  '/solo-la-tarjeta/museo-de-las-sombras':{back:true,forward:true},
+  '/solo-la-tarjeta/museo-de-las-sombras/atlas.html':{back:true,forward:false}
+ };
+ const s=map[p]||{back:true,forward:true};back.disabled=!s.back;forward.disabled=!s.forward;
 }
-function invoke(direction){
-  const custom=override[direction];if(custom){typeof custom==='function'?custom():location.assign(custom);return;}
-  const native=existingButton(direction);if(native){native.click();setTimeout(refresh,80);return;}
-  if(direction==='forward'&&cleanPath().includes('/ceniciento')){const gate=mirrorGateButton();if(gate){gate.click();setTimeout(refresh,100);return;}}
-  const href=currentRoute()[direction];if(href)location.assign(href);
-}
-
-back.addEventListener('click',()=>invoke('back'));
-forward.addEventListener('click',()=>invoke('forward'));
-index.addEventListener('click',openIndex);
-addEventListener('hashchange',()=>setTimeout(refresh,0));
-addEventListener('popstate',()=>setTimeout(refresh,0));
-addEventListener('pageshow',()=>setTimeout(refresh,80));
-addEventListener('message',e=>{if(e.origin!==location.origin||e.data?.channel!=='oras-canonical-controls-v1')return;childContext=e.data;refresh();});
-new MutationObserver(()=>refresh()).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','disabled','class']});
-
-window.ORASCanonicalControls={
-  version:VERSION,
-  refresh,
-  openIndex,
-  setAdjacent(next={}){override.back=next.back??null;override.forward=next.forward??null;refresh();},
-  clearAdjacent(){override={back:null,forward:null};refresh();},
-  get childContext(){return childContext;}
-};
-refresh();setTimeout(refresh,350);setTimeout(refresh,1200);
+back.onclick=()=>go('back');forward.onclick=()=>go('forward');index.onclick=openIndex;
+addEventListener('hashchange',refresh);addEventListener('pageshow',refresh);
+refresh();
+window.ORASCanonicalControls={refresh,openIndex};
 })();
