@@ -68,6 +68,48 @@ jobs:
           new_start="""      entryButton.addEventListener('click',()=>{\n        if(entryButton.disabled)return;\n        window.dispatchEvent(new CustomEvent('oras:reading-start'));\n        entryButton.disabled=true;\n        body.classList.add('journey-started','sound-ready');\n        entry.classList.add('is-open');\n        prologuePlayed=true;\n        prologueNameReady=false;\n        beginPrelude(false);\n        setJourney('elegia');\n      });"""
           if old_start in s:s=s.replace(old_start,new_start,1)
           elif "openPoem('estrella',true)" in s:raise SystemExit('ANA sigue conteniendo una apertura automática de estrella desde COMENZAR')
+
+          # Rescate final r9: no depender de ended/timeupdate en Edge.
+          s=s.replace("if(remaining<=.55){finalizeBeforeEdgeEOF();return;}","if(remaining<=1.50){finalizeBeforeEdgeEOF();return;}")
+          s=s.replace("Math.max(0,(remaining-.42)*1000)","Math.max(0,(remaining-1.30)*1000)")
+          s=s.replace("duration-recording.currentTime<=.55","duration-recording.currentTime<=1.50")
+          marker="""      recording.addEventListener('timeupdate',()=>{\n        if(body.dataset.anaFinalDone==='1')return;\n        const duration=recording.duration;\n        if(Number.isFinite(duration)&&duration>0&&duration-recording.currentTime<=1.50)finalizeBeforeEdgeEOF();\n      });"""
+          watchdog="""
+      let anaLastMediaTime=0;
+      let anaLastAdvanceAt=performance.now();
+      const resetAnaFinalWatch=()=>{
+        anaLastMediaTime=recording.currentTime||0;
+        anaLastAdvanceAt=performance.now();
+      };
+      recording.addEventListener('play',resetAnaFinalWatch);
+      recording.addEventListener('seeked',resetAnaFinalWatch);
+      setInterval(()=>{
+        if(body.dataset.anaFinalDone==='1'||recording.seeking)return;
+        const duration=recording.duration;
+        const now=performance.now();
+        const current=recording.currentTime||0;
+        if(current>anaLastMediaTime+.02){
+          anaLastMediaTime=current;
+          anaLastAdvanceAt=now;
+        }
+        if(!Number.isFinite(duration)||duration<=0)return;
+        const remaining=duration-current;
+        const nearEnd=remaining<=1.50;
+        const stalledAtEnd=remaining<=5 && now-anaLastAdvanceAt>=650;
+        const nativeEOF=recording.ended || current>=duration-.05;
+        if(nearEnd || stalledAtEnd || nativeEOF)finalizeBeforeEdgeEOF();
+      },100);
+"""
+          if 'anaLastAdvanceAt=performance.now()' not in s:
+              if marker not in s:raise SystemExit('No se encontró el punto de inserción del watchdog r9')
+              s=s.replace(marker,marker+watchdog,1)
+
+          old="""        if(voiceDialog){voiceDialog.style.display='none';voiceDialog.setAttribute('aria-hidden','true');}"""
+          new="""        if(voiceDialog){\n          try{if(voiceDialog.open)voiceDialog.close();}catch(_){}\n          voiceDialog.style.display='none';\n          voiceDialog.setAttribute('aria-hidden','true');\n        }\n        try{recording.pause();recording.removeAttribute('controls');}catch(_){}"""
+          if old in s:s=s.replace(old,new,1)
+          s=s.replace('20261018-photo-question-final-1','20261018-ana-final-rescue-r9')
+          s=s.replace('20261018-photo-question-final-2','20261018-ana-final-rescue-r9')
+          s=s.replace('20261018-photo-question-final-3','20261018-ana-final-rescue-r9')
           path.write_text(s,encoding='utf-8')
 
           targets=[Path('index.html'),Path('elegia-breve/index.html'),Path('ceniciento/index.html'),Path('estrella/index.html'),Path('ojos/index.html'),Path('sonrisa/index.html'),Path('cabello/index.html'),Path('piel/index.html'),Path('epilogo/index.html'),Path('interludio/index.html'),Path('inventario-del-aire/index.html')]
@@ -90,6 +132,10 @@ jobs:
           grep -q "full.addEventListener" estrella/index.html
           ! grep -q "openPoem('estrella',true)" elegia-breve/index.html
           grep -q 'oras-master-index-r1.js?v=20261018-r3-progress-1' elegia-breve/index.html
+          grep -q 'anaLastAdvanceAt=performance.now()' elegia-breve/index.html
+          grep -q 'remaining<=1.50' elegia-breve/index.html
+          grep -q 'recording.removeAttribute' elegia-breve/index.html
+          grep -q '20261018-ana-final-rescue-r9' elegia-breve/index.html
       - name: Guardar cambios
         shell: bash
         run: |
@@ -98,5 +144,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html elegia-breve/index.html ceniciento/index.html estrella/index.html ojos/index.html sonrisa/index.html cabello/index.html piel/index.html epilogo/index.html interludio/index.html inventario-del-aire/index.html 2>/dev/null || true
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "ORAS: fija navegación canónica r3 y estados de lectura"
+          git commit -m "ORAS: fija navegación canónica r3 y rescate final ANA r9"
           git push
