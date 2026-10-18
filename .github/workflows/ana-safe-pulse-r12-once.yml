@@ -1,0 +1,106 @@
+name: ANA safe pulse r12 once
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'deploy-ana-safe-pulse-r12.txt'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restaurar pulso visual seguro y actualizar ANA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          js=Path('oras-reading-window-r2.js')
+          s=js.read_text(encoding='utf-8')
+          s=s.replace("const VERSION='20261018-ana-edge-preempt-r11';","const VERSION='20261019-ana-safe-pulse-r12';")
+          s=s.replace("style.id='oras-edge-voice-safe-r11';","style.id='oras-edge-voice-safe-r12';")
+          old="""  style.textContent=`
+    body.voice-open .world,
+    body.voice-open .world *,
+    body.voice-open .pulse-field,
+    body.voice-open .pulse-field::before,
+    body.voice-open .pulse-field::after,
+    body.voice-open .layer-warm,
+    body.voice-open .heat-final,
+    body.voice-open #reading .line{
+      animation:none!important;
+      transition:none!important;
+      filter:none!important;
+      will-change:auto!important;
+    }
+    body.edge-final-safe .world,
+    body.edge-final-safe .world *,
+    body.edge-final-safe .heat-final{
+      animation:none!important;
+      transition:none!important;
+      filter:none!important;
+      will-change:auto!important;
+    }
+  `;"""
+          new="""  style.textContent=`
+    /* Durante la voz se conserva un pulso visual ligero: solo opacidad,
+       sin filtros ni transformaciones de pantalla completa. */
+    @keyframes orasSafePulseR12{
+      0%,100%{opacity:.36}
+      18%{opacity:.58}
+      34%{opacity:.43}
+      52%{opacity:.62}
+      72%{opacity:.40}
+    }
+    body.voice-open .pulse-field{
+      animation:orasSafePulseR12 1.85s ease-in-out infinite!important;
+      filter:none!important;
+      will-change:opacity!important;
+    }
+    body.voice-open .pulse-field::before,
+    body.voice-open .pulse-field::after{
+      animation:none!important;
+      filter:none!important;
+      transform:none!important;
+      will-change:auto!important;
+    }
+    body.voice-open .layer-warm,
+    body.voice-open .heat-final,
+    body.voice-open #reading .line{
+      animation:none!important;
+      filter:none!important;
+      will-change:auto!important;
+    }
+    body.edge-final-safe .world,
+    body.edge-final-safe .world *,
+    body.edge-final-safe .heat-final{
+      animation:none!important;
+      transition:none!important;
+      filter:none!important;
+      will-change:auto!important;
+    }
+  `;"""
+          if old not in s:
+              raise SystemExit('No se encontró el bloque r11 esperado')
+          s=s.replace(old,new,1)
+          js.write_text(s,encoding='utf-8')
+
+          html=Path('elegia-breve/index.html')
+          h=html.read_text(encoding='utf-8')
+          h=h.replace('oras-reading-window-r2.js?v=20261018-ana-edge-preempt-r11','oras-reading-window-r2.js?v=20261019-ana-safe-pulse-r12')
+          html.write_text(h,encoding='utf-8')
+          PY
+          node --check oras-reading-window-r2.js
+          grep -q 'orasSafePulseR12' oras-reading-window-r2.js
+          grep -q '20261019-ana-safe-pulse-r12' elegia-breve/index.html
+      - name: Guardar cambio
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add oras-reading-window-r2.js elegia-breve/index.html
+          git commit -m "ANA: recupera pulso visual seguro r12"
+          git push
