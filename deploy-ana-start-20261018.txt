@@ -1,2 +1,4 @@
 Despliegue de la corrección directa de COMENZAR en ANA KLAUDYA.
 Commit de publicación: 2026-10-18.
+
+Despliegue ORAS R3: navegación única, progreso por lectura y recorrido completado.
