@@ -6,7 +6,7 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261014-master-index-15';
-const VERSION='20261013-ana-portrait-prev-next-1';
+const VERSION='20261018-ana-pulse-to-red-2';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -44,7 +44,7 @@ function completeAnaPart(key){
 }
 
 const style=document.createElement('style');
-style.id='oras-reading-window-stable-r3';
+style.id='oras-reading-window-stable-r4';
 style.textContent=`
 .ou-reading-checklist{display:none!important}
 .ou-reading-window-r2{position:fixed;z-index:2147483000;left:max(62px,calc(env(safe-area-inset-left) + 62px));bottom:max(12px,env(safe-area-inset-bottom));font-family:Georgia,"Times New Roman",serif;color:#f7f1e8}
@@ -57,6 +57,10 @@ body.oras-ana-static-final .portrait-finale,body.oras-ana-static-final .portrait
 body.oras-ana-static-final .portrait-finale img{opacity:1!important}
 body.oras-ana-static-final #journeyNav,body.oras-ana-static-final #journeyNav button,body.oras-ana-static-final .portrait-question,body.oras-ana-static-final .ou-reading-window-r2,body.oras-ana-static-final #orasSunoVolume{pointer-events:auto!important}
 body.oras-ana-static-final #journeyNav{z-index:2147483600!important}
+body.oras-ana-warm-transition .pulse-field{animation:pulseField var(--pulse-duration) linear infinite!important;animation-play-state:running!important}
+body.oras-ana-warm-transition .pulse-field::before{animation:pulseA var(--pulse-duration) ease-in-out infinite!important;animation-play-state:running!important}
+body.oras-ana-warm-transition .pulse-field::after{animation:pulseB var(--pulse-duration) ease-in-out infinite!important;animation-play-state:running!important}
+body.oras-ana-warm-transition .layer-warm{animation:warmBreath var(--pulse-duration) linear infinite!important;animation-play-state:running!important;transition:opacity 14s cubic-bezier(.18,.72,.2,1)!important}
 @media(max-width:700px){.ou-reading-window-r2{left:max(57px,calc(env(safe-area-inset-left) + 57px));bottom:max(10px,env(safe-area-inset-bottom))}.ou-reading-window-r2>summary{font-size:11px;min-height:29px;padding:5px 9px}}
 `;
 document.head.appendChild(style);
@@ -118,13 +122,25 @@ function setupTracking(){
   }
   if(path.endsWith('/elegia-breve')){
     let portraitFailsafeTimer=0;
+    let warmStarted=false;
     const recording=document.getElementById('recording');
     const status=document.getElementById('voiceStatus');
+    const beginWarmTransition=()=>{
+      if(warmStarted)return;
+      warmStarted=true;
+      const b=document.body;
+      if(!b)return;
+      b.classList.add('oras-ana-warm-transition');
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        document.documentElement.style.setProperty('--warm','1');
+      }));
+    };
     const ensurePortraitAccess=()=>{
       const b=document.body;
       const finale=document.getElementById('portraitFinale');
       const question=document.getElementById('portraitQuestion');
       if(!b||!finale||!question)return;
+      beginWarmTransition();
       b.classList.add('portrait-revealed','portrait-choice-visible','oras-ana-static-final');
       finale.setAttribute('aria-hidden','false');
       question.hidden=false;
@@ -149,12 +165,13 @@ function setupTracking(){
     new MutationObserver(stabilize).observe(document.body,{attributes:true,attributeFilter:['class']});
     stabilize();
     if(recording){
-      recording.addEventListener('ended',()=>armPortraitFailsafe(17500));
-      if(recording.ended)armPortraitFailsafe(1200);
+      recording.addEventListener('ended',()=>{beginWarmTransition();armPortraitFailsafe(17500);});
+      if(recording.ended){beginWarmTransition();armPortraitFailsafe(1200);}
     }
     if(status){
       const watchStatus=()=>{
         if((status.textContent||'').toLowerCase().includes('fin de la grabación')){
+          beginWarmTransition();
           if(recording?.ended)armPortraitFailsafe(1200);
           else armPortraitFailsafe(17500);
         }
