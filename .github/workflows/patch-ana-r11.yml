@@ -1,0 +1,44 @@
+name: Patch ANA r11 once
+
+on:
+  push:
+    paths:
+      - '.github/workflows/patch-ana-r11.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Actualizar versión pública ANA
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('elegia-breve/index.html')
+          s=p.read_text()
+          old='oras-reading-window-r2.js?v=20261018-ana-edge-voice-isolation-r10'
+          new='oras-reading-window-r2.js?v=20261018-ana-edge-preempt-r11'
+          if old in s:
+              s=s.replace(old,new)
+              p.write_text(s)
+          elif new not in s:
+              raise SystemExit('No se encontró la referencia esperada r10/r11')
+          PY
+      - name: Commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add elegia-breve/index.html
+          git diff --cached --quiet || git commit -m 'ANA: carga cierre Edge r11'
+          git push
+      - name: Publicar Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main
