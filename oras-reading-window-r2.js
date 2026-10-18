@@ -117,6 +117,28 @@ function setupTracking(){
     }
   }
   if(path.endsWith('/elegia-breve')){
+    let portraitFailsafeTimer=0;
+    const recording=document.getElementById('recording');
+    const status=document.getElementById('voiceStatus');
+    const ensurePortraitAccess=()=>{
+      const b=document.body;
+      const finale=document.getElementById('portraitFinale');
+      const question=document.getElementById('portraitQuestion');
+      if(!b||!finale||!question)return;
+      b.classList.add('portrait-revealed','portrait-choice-visible','oras-ana-static-final');
+      finale.setAttribute('aria-hidden','false');
+      question.hidden=false;
+      question.removeAttribute('hidden');
+      for(const prop of ['display','visibility','opacity','pointer-events'])question.style.removeProperty(prop);
+      completeAnaPart('elegia');
+    };
+    const armPortraitFailsafe=(delay=17500)=>{
+      if(portraitFailsafeTimer)clearTimeout(portraitFailsafeTimer);
+      portraitFailsafeTimer=setTimeout(()=>{
+        portraitFailsafeTimer=0;
+        if(!document.body.classList.contains('portrait-revealed'))ensurePortraitAccess();
+      },delay);
+    };
     const stabilize=()=>{
       const b=document.body;if(!b)return;
       if(b.classList.contains('portrait-revealed')){
@@ -126,6 +148,20 @@ function setupTracking(){
     };
     new MutationObserver(stabilize).observe(document.body,{attributes:true,attributeFilter:['class']});
     stabilize();
+    if(recording){
+      recording.addEventListener('ended',()=>armPortraitFailsafe(17500));
+      if(recording.ended)armPortraitFailsafe(1200);
+    }
+    if(status){
+      const watchStatus=()=>{
+        if((status.textContent||'').toLowerCase().includes('fin de la grabación')){
+          if(recording?.ended)armPortraitFailsafe(1200);
+          else armPortraitFailsafe(17500);
+        }
+      };
+      new MutationObserver(watchStatus).observe(status,{childList:true,subtree:true,characterData:true});
+      watchStatus();
+    }
   }
   addEventListener('message',e=>{
     if(e.origin!==location.origin)return;
