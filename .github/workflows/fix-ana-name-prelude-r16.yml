@@ -1,0 +1,51 @@
+name: ANA nombre inicial r16
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-ana-name-prelude-r16.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restaurar nombre hablado al comenzar
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('elegia-breve/index.html')
+          s=p.read_text(encoding='utf-8')
+          old="""        prologuePlayed=true;
+        prologueNameReady=false;
+        beginPrelude(false);
+        setJourney('elegia');"""
+          new="""        prologuePlayed=true;
+        setJourney('elegia');
+        /* La pulsación en COMENZAR desbloquea primero el audio del nombre.
+           Después el preludio reproduce nombre.m4a y sincroniza ANA / KLAUDYA. */
+        primeNameAudio().then(nameReady=>{
+          prologueNameReady=nameReady;
+          beginPrelude(nameReady);
+        }).catch(()=>{
+          prologueNameReady=false;
+          beginPrelude(false);
+        });"""
+          if old not in s:
+              raise SystemExit('No se encontró el manejador canónico de COMENZAR')
+          s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+          grep -Fq 'primeNameAudio().then(nameReady=>' elegia-breve/index.html
+          grep -Fq 'beginPrelude(nameReady)' elegia-breve/index.html
+      - name: Commit
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add elegia-breve/index.html
+          git commit -m 'ANA: restaura la voz Ana Klaudya al comenzar'
+          git push
