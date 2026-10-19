@@ -2,11 +2,12 @@
 'use strict';
 if(window.__orasReadingWindowStable)return;
 window.__orasReadingWindowStable=true;
+window.__orasDisableLegacyVoiceMix=true;
 
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261018-r3-progress-1';
-const VERSION='20261019-ana-edge-mp3-pulse-r14';
+const VERSION='20261019-ana-edge-no-legacy-mix-r15';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -79,11 +80,11 @@ function setupElegia(){
   if(!recording)return;
 
   const style=document.createElement('style');
-  style.id='oras-ana-safe-pulse-r14';
+  style.id='oras-ana-safe-pulse-r15';
   style.textContent=`
-    @keyframes orasSafePulseR14{0%,100%{opacity:.38}50%{opacity:.76}}
+    @keyframes orasSafePulseR15{0%,100%{opacity:.40}50%{opacity:.72}}
     .pulse-field{
-      animation:orasSafePulseR14 1.85s ease-in-out infinite!important;
+      animation:orasSafePulseR15 1.85s ease-in-out infinite!important;
       filter:none!important;
       transform:none!important;
       will-change:opacity!important;
@@ -113,8 +114,8 @@ function setupElegia(){
 
   let finalDone=false;
   let finalTimer=0;
-
   const clearFinalTimer=()=>{if(finalTimer){clearTimeout(finalTimer);finalTimer=0;}};
+
   const showFinal=()=>{
     if(finalDone)return;
     finalDone=true;
@@ -142,11 +143,8 @@ function setupElegia(){
     clearFinalTimer();
     if(finalDone||recording.paused)return;
     const d=recording.duration,current=recording.currentTime||0;
-    if(Number.isFinite(d)&&d>current){
-      finalTimer=setTimeout(showFinal,Math.max(500,(d-current+0.35)*1000));
-    }else{
-      finalTimer=setTimeout(showFinal,105000);
-    }
+    if(Number.isFinite(d)&&d>current){finalTimer=setTimeout(showFinal,Math.max(500,(d-current+0.25)*1000));}
+    else finalTimer=setTimeout(showFinal,105000);
   };
 
   const startVoice=()=>{
@@ -166,11 +164,7 @@ function setupElegia(){
     const t=e.target?.closest?.('#voicePlay,#voiceLaunch');
     if(!t)return;
     e.preventDefault();e.stopImmediatePropagation();
-    if(t.id==='voicePlay'&&!recording.paused){
-      recording.pause();clearFinalTimer();
-      if(voicePlay)voicePlay.textContent='Continuar';
-      return;
-    }
+    if(t.id==='voicePlay'&&!recording.paused){recording.pause();clearFinalTimer();if(voicePlay)voicePlay.textContent='Continuar';return;}
     startVoice();
   },true);
 
@@ -181,6 +175,12 @@ function setupElegia(){
     try{ambient?.pause();}catch(_){}
     armFinal();
   },true);
+  document.addEventListener('playing',e=>{
+    if(e.target!==recording)return;
+    e.stopImmediatePropagation();
+    body.classList.add('voice-open');
+    armFinal();
+  },true);
   document.addEventListener('pause',e=>{
     if(e.target!==recording)return;
     e.stopImmediatePropagation();
@@ -188,11 +188,10 @@ function setupElegia(){
   },true);
   document.addEventListener('ended',e=>{
     if(e.target!==recording)return;
-    e.stopImmediatePropagation();
-    showFinal();
+    e.stopImmediatePropagation();showFinal();
   },true);
   recording.addEventListener('seeked',()=>{if(!recording.paused)armFinal();});
-  recording.addEventListener('loadedmetadata',()=>{if(!recording.paused)armFinal();},{once:false});
+  recording.addEventListener('loadedmetadata',()=>{if(!recording.paused)armFinal();});
 
   if('MutationObserver'in window){
     const mark=()=>{if(body.classList.contains('portrait-revealed'))completeAnaPart('elegia');};
