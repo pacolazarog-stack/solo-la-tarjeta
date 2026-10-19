@@ -7,7 +7,7 @@ window.__orasDisableLegacyVoiceMix=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261018-r3-progress-1';
-const VERSION='20261019-ana-edge-no-legacy-mix-r15';
+const VERSION='20261019-ana-edge-name-r16';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -72,6 +72,8 @@ function setupElegia(){
   const body=document.body;
   const recording=document.getElementById('recording');
   const ambient=document.getElementById('voiceMusic');
+  const nameAudio=document.getElementById('nameAudio');
+  const entryButton=document.getElementById('entryButton');
   const portrait=document.getElementById('portraitFinale');
   const image=document.getElementById('anaPortrait');
   const question=document.getElementById('cenicientoLink');
@@ -80,11 +82,11 @@ function setupElegia(){
   if(!recording)return;
 
   const style=document.createElement('style');
-  style.id='oras-ana-safe-pulse-r15';
+  style.id='oras-ana-safe-pulse-r16';
   style.textContent=`
-    @keyframes orasSafePulseR15{0%,100%{opacity:.40}50%{opacity:.72}}
+    @keyframes orasSafePulseR16{0%,100%{opacity:.40}50%{opacity:.72}}
     .pulse-field{
-      animation:orasSafePulseR15 1.85s ease-in-out infinite!important;
+      animation:orasSafePulseR16 1.85s ease-in-out infinite!important;
       filter:none!important;
       transform:none!important;
       will-change:opacity!important;
@@ -111,6 +113,33 @@ function setupElegia(){
     body.edge-final-safe .pulse-field{animation:none!important;opacity:.42!important}
   `;
   document.head.appendChild(style);
+
+  /* Recupera el gesto inicial canónico: COMENZAR desbloquea nombre.m4a y,
+     2,41 s después, se oye "Ana Klaudya" antes de cualquier uso de Voz.
+     No toca la mezcla de la narración larga. */
+  if(nameAudio&&entryButton){
+    let nameToken=0;
+    entryButton.addEventListener('click',()=>{
+      if(entryButton.disabled)return;
+      const token=++nameToken;
+      try{
+        nameAudio.pause();
+        nameAudio.currentTime=0;
+        nameAudio.muted=true;
+        Promise.resolve(nameAudio.play()).then(()=>{
+          if(token!==nameToken)return;
+          nameAudio.pause();
+          nameAudio.currentTime=0;
+          nameAudio.muted=false;
+          setTimeout(()=>{
+            if(token!==nameToken)return;
+            try{nameAudio.currentTime=0;}catch(_){}
+            nameAudio.play().catch(()=>{});
+          },2410);
+        }).catch(()=>{nameAudio.muted=false;});
+      }catch(_){nameAudio.muted=false;}
+    },true);
+  }
 
   let finalDone=false;
   let finalTimer=0;
