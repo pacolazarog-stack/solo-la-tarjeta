@@ -6,7 +6,7 @@ window.__orasReadingWindowStable=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261018-r3-progress-1';
-const VERSION='20261018-ana-edge-preempt-r11';
+const VERSION='20261019-ana-edge-mp3-pulse-r14';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -78,70 +78,57 @@ function setupElegia(){
   const voicePlay=document.getElementById('voicePlay');
   if(!recording)return;
 
-  const SAFE_MARGIN=4.6;
-  const FALLBACK_CUTOFF=95;
-
   const style=document.createElement('style');
-  style.id='oras-edge-voice-safe-r11';
+  style.id='oras-ana-safe-pulse-r14';
   style.textContent=`
-    body.voice-open .world,
-    body.voice-open .world *,
-    body.voice-open .pulse-field,
-    body.voice-open .pulse-field::before,
-    body.voice-open .pulse-field::after,
+    @keyframes orasSafePulseR14{0%,100%{opacity:.38}50%{opacity:.76}}
+    .pulse-field{
+      animation:orasSafePulseR14 1.85s ease-in-out infinite!important;
+      filter:none!important;
+      transform:none!important;
+      will-change:opacity!important;
+    }
+    .pulse-field::before,.pulse-field::after{
+      animation:none!important;
+      filter:none!important;
+      transform:none!important;
+      will-change:auto!important;
+    }
+    .layer-warm,.heat-final.is-burning{
+      animation:none!important;
+      filter:none!important;
+      will-change:auto!important;
+    }
+    body.voice-open .layer-green,
+    body.voice-open .layer-deep,
+    body.voice-open .layer-billiard,
     body.voice-open .layer-warm,
-    body.voice-open .heat-final,
     body.voice-open #reading .line{
-      animation:none!important;
-      transition:none!important;
       filter:none!important;
       will-change:auto!important;
     }
-    body.edge-final-safe .world,
-    body.edge-final-safe .world *,
-    body.edge-final-safe .heat-final{
-      animation:none!important;
-      transition:none!important;
-      filter:none!important;
-      will-change:auto!important;
-    }
+    body.edge-final-safe .pulse-field{animation:none!important;opacity:.42!important}
   `;
   document.head.appendChild(style);
 
-  let rescueDone=false;
-  let lastMediaTime=recording.currentTime||0;
-  let lastAdvanceAt=performance.now();
+  let finalDone=false;
   let finalTimer=0;
-  let watchdog=0;
 
-  const nearEnd=()=>{
-    const d=recording.duration;
-    if(!Number.isFinite(d)||d<=0)return recording.currentTime>=FALLBACK_CUTOFF;
-    return d-recording.currentTime<=SAFE_MARGIN;
-  };
-
+  const clearFinalTimer=()=>{if(finalTimer){clearTimeout(finalTimer);finalTimer=0;}};
   const showFinal=()=>{
-    if(rescueDone)return;
-    rescueDone=true;
-    clearTimeout(finalTimer);finalTimer=0;
-    if(watchdog){clearInterval(watchdog);watchdog=0;}
-
-    /* Importante: no se usa dialog.close(). El listener histórico de close
-       reactivaba mezcla/ambiente justo en el punto crítico de Edge. */
+    if(finalDone)return;
+    finalDone=true;
+    clearFinalTimer();
     if(dialog){
       dialog.style.display='none';
       dialog.setAttribute('aria-hidden','true');
       dialog.removeAttribute('open');
     }
-
-    body.classList.add('edge-final-safe');
+    body.classList.add('edge-final-safe','portrait-revealed');
+    body.classList.remove('voice-open','locked');
+    body.dataset.anaFinalDone='1';
     try{recording.pause();recording.removeAttribute('controls');}catch(_){}
     try{ambient?.pause();}catch(_){}
-
-    body.classList.remove('voice-open','locked');
-    body.classList.add('portrait-revealed');
-    body.dataset.anaFinalDone='1';
-
     if(portrait){
       portrait.setAttribute('aria-hidden','false');
       Object.assign(portrait.style,{opacity:'1',visibility:'visible',pointerEvents:'auto',zIndex:'120',transition:'none'});
@@ -152,41 +139,39 @@ function setupElegia(){
   };
 
   const armFinal=()=>{
-    clearTimeout(finalTimer);finalTimer=0;
-    if(rescueDone||recording.paused)return;
-    const d=recording.duration;
-    const current=recording.currentTime||0;
-    if(Number.isFinite(d)&&d>0){
-      const remaining=d-current;
-      if(remaining<=SAFE_MARGIN){showFinal();return;}
-      finalTimer=setTimeout(showFinal,Math.max(0,(remaining-SAFE_MARGIN)*1000));
+    clearFinalTimer();
+    if(finalDone||recording.paused)return;
+    const d=recording.duration,current=recording.currentTime||0;
+    if(Number.isFinite(d)&&d>current){
+      finalTimer=setTimeout(showFinal,Math.max(500,(d-current+0.35)*1000));
     }else{
-      const remaining=Math.max(0,FALLBACK_CUTOFF-current);
-      finalTimer=setTimeout(showFinal,remaining*1000);
+      finalTimer=setTimeout(showFinal,105000);
     }
   };
 
-  /* Intercepta únicamente el arranque/reanudación. La voz queda aislada de
-     la antigua mezcla dinámica y del cierre del dialog. */
-  document.addEventListener('click',e=>{
-    const t=e.target?.closest?.('#voicePlay,#voiceLaunch');
-    if(!t)return;
-    e.preventDefault();e.stopImmediatePropagation();
+  const startVoice=()=>{
     body.classList.add('voice-open');
     try{if(dialog&&!dialog.open)dialog.show();}catch(_){}
     try{ambient?.pause();}catch(_){}
     recording.muted=false;
     if(recording.volume===0)recording.volume=1;
-    if(t.id==='voicePlay'&&!recording.paused){
-      recording.pause();
-      if(voicePlay)voicePlay.textContent='Continuar';
-      return;
-    }
     recording.play().then(()=>{
       if(voicePlay)voicePlay.textContent='Pausar';
       const status=document.getElementById('voiceStatus');if(status)status.textContent='';
-      lastMediaTime=recording.currentTime||0;lastAdvanceAt=performance.now();armFinal();
+      armFinal();
     }).catch(()=>{});
+  };
+
+  document.addEventListener('click',e=>{
+    const t=e.target?.closest?.('#voicePlay,#voiceLaunch');
+    if(!t)return;
+    e.preventDefault();e.stopImmediatePropagation();
+    if(t.id==='voicePlay'&&!recording.paused){
+      recording.pause();clearFinalTimer();
+      if(voicePlay)voicePlay.textContent='Continuar';
+      return;
+    }
+    startVoice();
   },true);
 
   document.addEventListener('play',e=>{
@@ -194,33 +179,21 @@ function setupElegia(){
     e.stopImmediatePropagation();
     body.classList.add('voice-open');
     try{ambient?.pause();}catch(_){}
-    lastMediaTime=recording.currentTime||0;lastAdvanceAt=performance.now();armFinal();
+    armFinal();
   },true);
   document.addEventListener('pause',e=>{
     if(e.target!==recording)return;
     e.stopImmediatePropagation();
-    if(!rescueDone&&nearEnd())showFinal();
+    if(!finalDone)clearFinalTimer();
   },true);
   document.addEventListener('ended',e=>{
     if(e.target!==recording)return;
-    e.stopImmediatePropagation();showFinal();
+    e.stopImmediatePropagation();
+    showFinal();
   },true);
+  recording.addEventListener('seeked',()=>{if(!recording.paused)armFinal();});
+  recording.addEventListener('loadedmetadata',()=>{if(!recording.paused)armFinal();},{once:false});
 
-  recording.addEventListener('seeked',()=>{
-    lastMediaTime=recording.currentTime||0;lastAdvanceAt=performance.now();
-    if(nearEnd())showFinal();else armFinal();
-  });
-  recording.addEventListener('timeupdate',()=>{if(nearEnd())showFinal();});
-
-  watchdog=setInterval(()=>{
-    if(rescueDone||recording.seeking||recording.paused)return;
-    const now=performance.now(),current=recording.currentTime||0,d=recording.duration;
-    if(current>lastMediaTime+.02){lastMediaTime=current;lastAdvanceAt=now;}
-    if((Number.isFinite(d)&&d>0&&d-current<=SAFE_MARGIN) || current>=FALLBACK_CUTOFF){showFinal();return;}
-    if(Number.isFinite(d)&&d-current<=10&&now-lastAdvanceAt>=500)showFinal();
-  },200);
-
-  if(recording.ended||nearEnd())showFinal();
   if('MutationObserver'in window){
     const mark=()=>{if(body.classList.contains('portrait-revealed'))completeAnaPart('elegia');};
     new MutationObserver(mark).observe(body,{attributes:true,attributeFilter:['class']});mark();
