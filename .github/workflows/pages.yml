@@ -103,11 +103,32 @@ jobs:
               "cancelVoiceStart();recording.pause();body.classList.remove('voice-open');restoreAmbient();",
               "cancelVoiceStart();recording.pause();body.classList.remove('voice-open');if(!window.__orasDisableLegacyVoiceMix)restoreAmbient();"
           )
+
+          # Restaurar el preludio hablado: al pulsar COMENZAR se desbloquea nombre.m4a
+          # y, antes de mostrar la lectura/activar la voz larga, se oye "Ana Klaudya".
+          old="""        prologuePlayed=true;
+        prologueNameReady=false;
+        beginPrelude(false);
+        setJourney('elegia');"""
+          new="""        prologuePlayed=true;
+        setJourney('elegia');
+        primeNameAudio().then(nameReady=>{
+          prologueNameReady=nameReady;
+          beginPrelude(nameReady);
+        }).catch(()=>{
+          prologueNameReady=false;
+          beginPrelude(false);
+        });"""
+          if old not in s:
+              raise RuntimeError('No se encontró el arranque de ANA que debía restaurarse')
+          s=s.replace(old,new,1)
           p.write_text(s,encoding='utf-8')
           PY
           grep -Fq 'recitado-edge-r15.mp3?v=20261019-r15' elegia-breve/index.html
           grep -Fq 'oras-reading-window-r2.js?v=20261019-ana-edge-no-legacy-mix-r15' elegia-breve/index.html
           grep -Fq 'if(!window.__orasDisableLegacyVoiceMix)startMix()' elegia-breve/index.html
+          grep -Fq 'primeNameAudio().then(nameReady=>' elegia-breve/index.html
+          grep -Fq 'beginPrelude(nameReady)' elegia-breve/index.html
 
       - name: Empaquetar sitio
         uses: actions/upload-pages-artifact@v3
