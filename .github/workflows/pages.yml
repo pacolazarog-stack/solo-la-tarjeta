@@ -46,8 +46,8 @@ jobs:
           grep -Fq 'oras-toolbar' oras-master-index-r1.js
           grep -Fq "id:'canonica'" oras-master-index-r1.js
           grep -Fq 'el-espejo-soundtrack.js?v=20261014-espejo-soundtrack-3' ceniciento/index.html
-          grep -Fq "VERSION='20261019-ana-edge-no-legacy-mix-r15'" oras-reading-window-r2.js
-          echo 'PASS: núcleo ORAS y runtime ANA r15 disponibles.'
+          grep -Fq "VERSION='20261019-ana-edge-name-r16'" oras-reading-window-r2.js
+          echo 'PASS: núcleo ORAS y runtime ANA r16 disponibles.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
@@ -76,17 +76,15 @@ jobs:
         run: |
           set -euo pipefail
           command -v ffmpeg >/dev/null 2>&1 || { sudo apt-get update; sudo apt-get install -y ffmpeg; }
-          ffmpeg -hide_banner -loglevel error -y -i elegia-breve/recitado.m4a -vn -codec:a libmp3lame -q:a 2 elegia-breve/recitado-edge-r15.mp3
-          test -s elegia-breve/recitado-edge-r15.mp3
+          ffmpeg -hide_banner -loglevel error -y -i elegia-breve/recitado.m4a -vn -codec:a libmp3lame -q:a 2 elegia-breve/recitado-edge-r16.mp3
+          test -s elegia-breve/recitado-edge-r16.mp3
           python3 - <<'PY'
           from pathlib import Path
           import re
           p=Path('elegia-breve/index.html')
           s=p.read_text(encoding='utf-8')
-          s=s.replace('src="recitado.m4a"','src="recitado-edge-r15.mp3?v=20261019-r15"')
-          s=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r2.js?v=20261019-ana-edge-no-legacy-mix-r15', s)
-
-          # Desactivar definitivamente la mezcla AudioContext histórica durante la voz.
+          s=s.replace('src="recitado.m4a"','src="recitado-edge-r16.mp3?v=20261019-r16"')
+          s=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r2.js?v=20261019-ana-edge-name-r16', s)
           s=s.replace(
               "recording.addEventListener('playing',startMix);",
               "recording.addEventListener('playing',()=>{if(!window.__orasDisableLegacyVoiceMix)startMix();});"
@@ -103,32 +101,11 @@ jobs:
               "cancelVoiceStart();recording.pause();body.classList.remove('voice-open');restoreAmbient();",
               "cancelVoiceStart();recording.pause();body.classList.remove('voice-open');if(!window.__orasDisableLegacyVoiceMix)restoreAmbient();"
           )
-
-          # Restaurar el preludio hablado: al pulsar COMENZAR se desbloquea nombre.m4a
-          # y, antes de mostrar la lectura/activar la voz larga, se oye "Ana Klaudya".
-          old="""        prologuePlayed=true;
-        prologueNameReady=false;
-        beginPrelude(false);
-        setJourney('elegia');"""
-          new="""        prologuePlayed=true;
-        setJourney('elegia');
-        primeNameAudio().then(nameReady=>{
-          prologueNameReady=nameReady;
-          beginPrelude(nameReady);
-        }).catch(()=>{
-          prologueNameReady=false;
-          beginPrelude(false);
-        });"""
-          if old not in s:
-              raise RuntimeError('No se encontró el arranque de ANA que debía restaurarse')
-          s=s.replace(old,new,1)
           p.write_text(s,encoding='utf-8')
           PY
-          grep -Fq 'recitado-edge-r15.mp3?v=20261019-r15' elegia-breve/index.html
-          grep -Fq 'oras-reading-window-r2.js?v=20261019-ana-edge-no-legacy-mix-r15' elegia-breve/index.html
+          grep -Fq 'recitado-edge-r16.mp3?v=20261019-r16' elegia-breve/index.html
+          grep -Fq 'oras-reading-window-r2.js?v=20261019-ana-edge-name-r16' elegia-breve/index.html
           grep -Fq 'if(!window.__orasDisableLegacyVoiceMix)startMix()' elegia-breve/index.html
-          grep -Fq 'primeNameAudio().then(nameReady=>' elegia-breve/index.html
-          grep -Fq 'beginPrelude(nameReady)' elegia-breve/index.html
 
       - name: Empaquetar sitio
         uses: actions/upload-pages-artifact@v3
