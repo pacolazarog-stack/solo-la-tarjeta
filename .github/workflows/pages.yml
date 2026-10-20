@@ -34,7 +34,7 @@ jobs:
           set -euo pipefail
           node --check narrative-universe.js
           node --check oras-reading-window-r2.js
-          node --check ana-final-r18.js
+          node --check ana-final-r19.js
           node --check oras-master-index-r1.js
           node --check oras-screen-transition.js
           node --check ceniciento/el-espejo.js
@@ -48,7 +48,7 @@ jobs:
           grep -Fq "id:'canonica'" oras-master-index-r1.js
           grep -Fq 'el-espejo-soundtrack.js?v=20261014-espejo-soundtrack-3' ceniciento/index.html
           grep -Fq "VERSION='20261019-ana-final-photo-r17'" oras-reading-window-r2.js
-          echo 'PASS: núcleo ORAS, runtime ANA y cierre r18 disponibles.'
+          echo 'PASS: núcleo ORAS, runtime ANA y cierre r19 disponibles.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
@@ -83,15 +83,15 @@ jobs:
             -f lavfi -t 12 -i anullsrc=r=44100:cl=stereo \
             -filter_complex "[0:a]aformat=sample_rates=44100:channel_layouts=stereo[a0];[1:a]aformat=sample_rates=44100:channel_layouts=stereo[a1];[a0][a1]concat=n=2:v=0:a=1[out]" \
             -map "[out]" -codec:a libmp3lame -q:a 2 \
-            elegia-breve/recitado-edge-r18.mp3
-          test -s elegia-breve/recitado-edge-r18.mp3
+            elegia-breve/recitado-edge-r19.mp3
+          test -s elegia-breve/recitado-edge-r19.mp3
 
           python3 - <<'PY'
           from pathlib import Path
           import re
           p=Path('elegia-breve/index.html')
           s=p.read_text(encoding='utf-8')
-          s=re.sub(r'src="recitado(?:-edge-r\d+\.mp3\?v=[^"]+|\.m4a)"', 'src="recitado-edge-r18.mp3?v=20261019-r18"', s)
+          s=re.sub(r'src="recitado(?:-edge-r\d+\.mp3\?v=[^"]+|\.m4a)"', 'src="recitado-edge-r19.mp3?v=20261020-r19"', s)
           s=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r2.js?v=20261019-ana-final-photo-r17', s)
           s=s.replace(
               "recording.addEventListener('playing',startMix);",
@@ -109,13 +109,13 @@ jobs:
               "cancelVoiceStart();recording.pause();body.classList.remove('voice-open');restoreAmbient();",
               "cancelVoiceStart();recording.pause();body.classList.remove('voice-open');if(!window.__orasDisableLegacyVoiceMix)restoreAmbient();"
           )
-          overlay='<script src="/solo-la-tarjeta/ana-final-r18.js?v=20261019-ana-final-r18"></script>'
+          overlay='<script src="/solo-la-tarjeta/ana-final-r19.js?v=20261020-ana-final-r19"></script>'
           if overlay not in s:
               s=s.replace('</body>',overlay+'\n</body>')
           p.write_text(s,encoding='utf-8')
           PY
-          grep -Fq 'recitado-edge-r18.mp3?v=20261019-r18' elegia-breve/index.html
-          grep -Fq 'ana-final-r18.js?v=20261019-ana-final-r18' elegia-breve/index.html
+          grep -Fq 'recitado-edge-r19.mp3?v=20261020-r19' elegia-breve/index.html
+          grep -Fq 'ana-final-r19.js?v=20261020-ana-final-r19' elegia-breve/index.html
           grep -Fq 'if(!window.__orasDisableLegacyVoiceMix)startMix()' elegia-breve/index.html
 
       - name: Empaquetar sitio
