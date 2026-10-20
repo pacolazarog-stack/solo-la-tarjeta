@@ -34,7 +34,7 @@ jobs:
           set -euo pipefail
           node --check narrative-universe.js
           node --check oras-reading-window-r3.js
-          node --check ana-final-r21.js
+          node --check ana-final-r22.js
           node --check oras-master-index-r1.js
           node --check oras-screen-transition.js
           node --check ceniciento/el-espejo.js
@@ -47,8 +47,8 @@ jobs:
           grep -Fq 'oras-toolbar' oras-master-index-r1.js
           grep -Fq "id:'canonica'" oras-master-index-r1.js
           grep -Fq 'el-espejo-soundtrack.js?v=20261014-espejo-soundtrack-3' ceniciento/index.html
-          grep -Fq "VERSION='20261020-ana-voice-owner-r21'" oras-reading-window-r3.js
-          echo 'PASS: núcleo ORAS y runtime único ANA r21 disponibles.'
+          grep -Fq "VERSION='20261020-ana-voice-owner-r22'" oras-reading-window-r3.js
+          echo 'PASS: núcleo ORAS y runtime único ANA r22 disponibles.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
@@ -83,40 +83,25 @@ jobs:
             -f lavfi -t 12 -i anullsrc=r=44100:cl=stereo \
             -filter_complex "[0:a]aformat=sample_rates=44100:channel_layouts=stereo[a0];[1:a]aformat=sample_rates=44100:channel_layouts=stereo[a1];[a0][a1]concat=n=2:v=0:a=1[out]" \
             -map "[out]" -codec:a libmp3lame -q:a 2 \
-            elegia-breve/recitado-edge-r21.mp3
-          test -s elegia-breve/recitado-edge-r21.mp3
+            elegia-breve/recitado-edge-r22.mp3
+          test -s elegia-breve/recitado-edge-r22.mp3
 
           python3 - <<'PY'
           from pathlib import Path
           import re
           p=Path('elegia-breve/index.html')
           s=p.read_text(encoding='utf-8')
-          s=re.sub(r'src="recitado(?:-edge-r\d+\.mp3\?v=[^"]+|\.m4a)"', 'src="recitado-edge-r21.mp3?v=20261020-r21"', s)
-          s=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r3.js?v=20261020-ana-r21', s)
-          s=s.replace(
-              "recording.addEventListener('playing',startMix);",
-              "recording.addEventListener('playing',()=>{if(!window.__orasDisableLegacyVoiceMix)startMix();});"
-          )
-          s=s.replace(
-              "voicePlay.textContent='Pausar';voiceStatus.textContent='';startMix();",
-              "voicePlay.textContent='Pausar';voiceStatus.textContent='';if(!window.__orasDisableLegacyVoiceMix)startMix();"
-          )
-          s=s.replace(
-              "voiceAllowed=false;voicePlay.textContent='Activar voz';restoreAmbient();",
-              "voiceAllowed=false;voicePlay.textContent='Activar voz';if(!window.__orasDisableLegacyVoiceMix)restoreAmbient();"
-          )
-          s=s.replace(
-              "cancelVoiceStart();recording.pause();body.classList.remove('voice-open');restoreAmbient();",
-              "cancelVoiceStart();recording.pause();body.classList.remove('voice-open');if(!window.__orasDisableLegacyVoiceMix)restoreAmbient();"
-          )
-          overlay='<script src="/solo-la-tarjeta/ana-final-r21.js?v=20261020-ana-final-r21"></script>'
-          if overlay not in s:
-              s=s.replace('</body>',overlay+'\n</body>')
+          s=re.sub(r'src="recitado(?:-edge-r\d+\.mp3\?v=[^"]+|\.m4a)"', 'src="recitado-edge-r22.mp3?v=20261020-r22"', s)
+          s=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r3.js?v=20261020-ana-r22', s)
+          s=re.sub(r'<script src="/solo-la-tarjeta/ana-final-r\d+\.js\?v=[^"]+"></script>\s*', '', s)
+          overlay='<script src="/solo-la-tarjeta/ana-final-r22.js?v=20261020-ana-final-r22"></script>'
+          s=s.replace('</body>',overlay+'\n</body>')
           p.write_text(s,encoding='utf-8')
           PY
-          grep -Fq 'recitado-edge-r21.mp3?v=20261020-r21' elegia-breve/index.html
-          grep -Fq 'oras-reading-window-r3.js?v=20261020-ana-r21' elegia-breve/index.html
-          grep -Fq 'ana-final-r21.js?v=20261020-ana-final-r21' elegia-breve/index.html
+          grep -Fq 'recitado-edge-r22.mp3?v=20261020-r22' elegia-breve/index.html
+          grep -Fq 'oras-reading-window-r3.js?v=20261020-ana-r22' elegia-breve/index.html
+          grep -Fq 'ana-final-r22.js?v=20261020-ana-final-r22' elegia-breve/index.html
+          ! grep -Fq 'ana-final-r21.js' elegia-breve/index.html
 
       - name: Empaquetar sitio
         uses: actions/upload-pages-artifact@v3
