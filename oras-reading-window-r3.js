@@ -7,7 +7,7 @@ window.__orasDisableLegacyVoiceMix=true;
 const STORAGE='oras.universe.v2';
 const BASE='/solo-la-tarjeta';
 const MASTER_VERSION='20261018-r3-progress-1';
-const VERSION='20261020-ana-voice-owner-r21';
+const VERSION='20261020-ana-voice-owner-r22';
 const ANA_PARTS=Object.freeze([
   ['estrella','Siguiendo una tarjeta',`${BASE}/estrella/`],
   ['elegia','Elegía breve para Ana Klaudya',`${BASE}/elegia-breve/`],
@@ -29,8 +29,8 @@ function setupElegia(){
   const body=document.body;
   const nameAudio=document.getElementById('nameAudio');
   const entryButton=document.getElementById('entryButton');
-  /* Única responsabilidad especial de esta capa en ANA: recuperar el nombre hablado.
-     La voz larga y el final pertenecen exclusivamente a ana-final-r21.js. */
+  /* Única responsabilidad especial de esta capa en ANA: nombre hablado y progreso.
+     La voz larga y el final pertenecen exclusivamente a ana-final-r22.js. */
   if(nameAudio&&entryButton){
     let token=0;
     entryButton.addEventListener('click',()=>{
@@ -64,6 +64,6 @@ function setupTracking(){
   addEventListener('oras:ana-part-complete',e=>completeAnaPart(e.detail?.part));
 }
 setupTracking();
-window.ORASReadingWindowR2={version:VERSION,completeAnaPart,openIndex};
-window.ORASReadingWindowR3=window.ORASReadingWindowR2;
+window.ORASReadingWindowR3={version:VERSION,completeAnaPart,openIndex};
+window.ORASReadingWindowR2=window.ORASReadingWindowR3;
 })();
