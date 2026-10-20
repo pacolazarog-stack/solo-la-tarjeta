@@ -34,7 +34,7 @@ jobs:
           set -euo pipefail
           node --check narrative-universe.js
           node --check oras-reading-window-r3.js
-          node --check ana-final-r33.js
+          node --check ana-final-r34.js
           node --check oras-master-index-r1.js
           node --check oras-screen-transition.js
           node --check ceniciento/el-espejo.js
@@ -48,7 +48,7 @@ jobs:
           grep -Fq "id:'canonica'" oras-master-index-r1.js
           grep -Fq 'el-espejo-soundtrack.js?v=20261014-espejo-soundtrack-3' ceniciento/index.html
           grep -Fq "VERSION='20261020-ana-voice-owner-r22'" oras-reading-window-r3.js
-          echo 'PASS: núcleo ORAS y transición ANA r33 disponibles.'
+          echo 'PASS: núcleo ORAS y transición ANA r34 disponibles.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
@@ -83,33 +83,33 @@ jobs:
             -f lavfi -t 12 -i anullsrc=r=44100:cl=stereo \
             -filter_complex "[0:a]aformat=sample_rates=44100:channel_layouts=stereo[a0];[1:a]aformat=sample_rates=44100:channel_layouts=stereo[a1];[a0][a1]concat=n=2:v=0:a=1[out]" \
             -map "[out]" -codec:a libmp3lame -q:a 2 \
-            elegia-breve/recitado-edge-r33.mp3
-          test -s elegia-breve/recitado-edge-r33.mp3
+            elegia-breve/recitado-edge-r34.mp3
+          test -s elegia-breve/recitado-edge-r34.mp3
 
           ffmpeg -hide_banner -loglevel error -y \
             -i elegia-breve/ana-klaudya-fotografia.jpg \
             -vf scale=900:-2 -q:v 3 \
-            elegia-breve/ana-klaudya-fotografia-edge-r33.jpg
-          test -s elegia-breve/ana-klaudya-fotografia-edge-r33.jpg
+            elegia-breve/ana-klaudya-fotografia-edge-r34.jpg
+          test -s elegia-breve/ana-klaudya-fotografia-edge-r34.jpg
 
           python3 - <<'PY'
           from pathlib import Path
           import re
           p=Path('elegia-breve/index.html')
           s=p.read_text(encoding='utf-8')
-          s=re.sub(r'src="recitado(?:-edge-r\d+\.mp3\?v=[^"]+|\.m4a)"', 'src="recitado-edge-r33.mp3?v=20261020-r33"', s)
-          s=re.sub(r'src="ana-klaudya-fotografia(?:-edge-r\d+\.jpg\?v=[^"]+|\.jpg)"', 'src="ana-klaudya-fotografia-edge-r33.jpg?v=20261020-r33"', s)
-          s=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r3.js?v=20261020-ana-r33', s)
+          s=re.sub(r'src="recitado(?:-edge-r\d+\.mp3\?v=[^"]+|\.m4a)"', 'src="recitado-edge-r34.mp3?v=20261021-r34"', s)
+          s=re.sub(r'src="ana-klaudya-fotografia(?:-edge-r\d+\.jpg\?v=[^"]+|\.jpg)"', 'src="ana-klaudya-fotografia-edge-r34.jpg?v=20261021-r34"', s)
+          s=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r3.js?v=20261021-ana-r34', s)
           s=re.sub(r'<script src="/solo-la-tarjeta/ana-final-r\d+\.js\?v=[^"]+"></script>\s*', '', s)
-          overlay='<script src="/solo-la-tarjeta/ana-final-r33.js?v=20261020-ana-final-r33"></script>'
+          overlay='<script src="/solo-la-tarjeta/ana-final-r34.js?v=20261021-ana-final-r34"></script>'
           s=s.replace('</body>',overlay+'\n</body>')
           p.write_text(s,encoding='utf-8')
           PY
-          grep -Fq 'recitado-edge-r33.mp3?v=20261020-r33' elegia-breve/index.html
-          grep -Fq 'ana-klaudya-fotografia-edge-r33.jpg?v=20261020-r33' elegia-breve/index.html
-          grep -Fq 'oras-reading-window-r3.js?v=20261020-ana-r33' elegia-breve/index.html
-          grep -Fq 'ana-final-r33.js?v=20261020-ana-final-r33' elegia-breve/index.html
-          ! grep -Fq 'ana-final-r32.js' elegia-breve/index.html
+          grep -Fq 'recitado-edge-r34.mp3?v=20261021-r34' elegia-breve/index.html
+          grep -Fq 'ana-klaudya-fotografia-edge-r34.jpg?v=20261021-r34' elegia-breve/index.html
+          grep -Fq 'oras-reading-window-r3.js?v=20261021-ana-r34' elegia-breve/index.html
+          grep -Fq 'ana-final-r34.js?v=20261021-ana-final-r34' elegia-breve/index.html
+          ! grep -Fq 'ana-final-r33.js' elegia-breve/index.html
 
       - name: Empaquetar sitio
         uses: actions/upload-pages-artifact@v3
