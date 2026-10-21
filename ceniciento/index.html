@@ -113,8 +113,8 @@ loadText().then(check).catch(()=>{status.textContent='texto no disponible';check
     const nav=document.querySelector('.ou-ceniciento-endnav');
     if(!nav)return;
     const items=[...nav.querySelectorAll('a,button')].filter(el=>!el.hidden);
-    if(items[0]){items[0].textContent='Anterior';items[0].setAttribute('aria-label','Anterior');}
-    if(items[1]){items[1].textContent='Siguiente';items[1].setAttribute('aria-label','Siguiente');}
+    if(items[0]){if(items[0].textContent!=='Anterior')items[0].textContent='Anterior';if(items[0].getAttribute('aria-label')!=='Anterior')items[0].setAttribute('aria-label','Anterior');}
+    if(items[1]){if(items[1].textContent!=='Siguiente')items[1].textContent='Siguiente';if(items[1].getAttribute('aria-label')!=='Siguiente')items[1].setAttribute('aria-label','Siguiente');}
   };
   apply();
   new MutationObserver(apply).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','class']});
