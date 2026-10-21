@@ -24,12 +24,14 @@ EL ESPEJO conserva su lógica sonora y visual propia. Los recorridos ANA KLAUDYA
 
 ## Referencia vocal canónica · ANA KLAUDYA
 
-- **Referencia vocal canónica integrada y vigente:** `recitado.m4a`.
+- **Voz maestra canónica vigente:** `ElevenLabs_2026-10-05T12_44_46__s26_v4`.
+- **Archivo integrado/derivado en la obra:** `recitado.m4a`.
 - **Locución nominal complementaria:** `nombre.m4a`.
 - **Antecedente interpretativo inmediato:** `Mi grabación 3.m4a`.
 - **Versiones anteriores superadas:** `Mi grabación 2.m4a` y `Mi grabación 1.m4a`.
-- Toda nueva generación, sustitución o ajuste de voz de ANA KLAUDYA debe tomar `recitado.m4a` como referencia principal de **timbre, prosodia, naturalidad, continuidad de frase, ritmo y respiración**.
-- `Mi grabación 3.m4a` se conserva como antecedente interpretativo útil, pero **no sustituye a la versión integrada `recitado.m4a` como referencia canónica vigente**.
+- Toda nueva generación, sustitución o ajuste de voz de ANA KLAUDYA debe tomar `ElevenLabs_2026-10-05T12_44_46__s26_v4` como referencia principal de **timbre, prosodia, naturalidad, continuidad de frase, ritmo y respiración**.
+- `recitado.m4a` se considera la **versión integrada/derivada para reproducción en la obra**, pero no sustituye a `ElevenLabs_2026-10-05T12_44_46__s26_v4` como **fuente vocal maestra**.
+- `Mi grabación 3.m4a` se conserva como antecedente interpretativo útil, pero **no debe utilizarse como referencia maestra mientras exista la versión ElevenLabs canónica**.
 - `Mi grabación 1.m4a` y `Mi grabación 2.m4a` quedan únicamente como antecedentes históricos y **no deben utilizarse como modelo vocal**.
 
 ## Entrada visual de SOLO LA TARJETA
