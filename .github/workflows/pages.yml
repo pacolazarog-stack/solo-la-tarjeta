@@ -40,6 +40,7 @@ jobs:
           node --check oras-screen-transition.js
           node --check ceniciento/el-espejo.js
           node --check ceniciento/el-espejo-soundtrack.js
+          node --check ceniciento/el-espejo-nav.js
           test -s assets/oras-portada-final.jpg
           test -s assets/oras-el-espejo-centro-de-datos.m4a
           test "$(wc -c < assets/oras-el-espejo-centro-de-datos.m4a)" -gt 800000
@@ -47,11 +48,13 @@ jobs:
           grep -Fq 'Recorridos de lectura' oras-master-index-r1.js
           grep -Fq 'oras-toolbar' oras-master-index-r1.js
           grep -Fq "id:'canonica'" oras-master-index-r1.js
-          grep -Fq 'ceniciento-voz-completa.mp3?v=20261021-r50-voz-canonica' ceniciento/index.html
+          grep -Fq 'ceniciento-voz-completa.mp3?v=20261021-r51' ceniciento/index.html
+          grep -Fq 'frames-stable/' ceniciento/index.html
+          grep -Fq 'id="mirror"' ceniciento/index.html
+          grep -Fq 'EL ESPEJO →' ceniciento/index.html
           grep -Fq 'aria-label="Navegación ORAS"' ceniciento/index.html
-          grep -Fq 'Índice ORAS' ceniciento/index.html
-          ! grep -Fq 'top-controls' ceniciento/index.html
-          echo 'PASS: núcleo ORAS y Ceniciento R50 con voz canónica disponibles.'
+          ! grep -Fq "location.href='../?from=ceniciento-r50'" ceniciento/index.html
+          echo 'PASS: Ceniciento R51 con evolución visual y acceso condicional a EL ESPEJO.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
