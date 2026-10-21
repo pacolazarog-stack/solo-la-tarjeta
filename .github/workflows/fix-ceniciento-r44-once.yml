@@ -1,0 +1,58 @@
+name: Fix Ceniciento R44 once
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - 'ceniciento-entry-r44.js'
+      - '.github/workflows/fix-ceniciento-r44-once.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Aplicar R44
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path('ceniciento/index.html')
+          s=p.read_text(encoding='utf-8')
+          s=re.sub(r'<script src="/solo-la-tarjeta/ceniciento-entry-r\d+\.js\?v=[^"]+"></script>\s*', '', s)
+          s=s.replace('</body>','<script src="/solo-la-tarjeta/ceniciento-entry-r44.js?v=20261021-ceniciento-r44"></script>\n</body>')
+          p.write_text(s,encoding='utf-8')
+
+          w=Path('.github/workflows/pages.yml')
+          t=w.read_text(encoding='utf-8')
+          t=t.replace('ceniciento-entry-r41.js','ceniciento-entry-r44.js')
+          t=t.replace('ceniciento-r41','ceniciento-r44')
+          w.write_text(t,encoding='utf-8')
+          PY
+          node --check ceniciento-entry-r44.js
+          grep -Fq 'ceniciento-entry-r44.js?v=20261021-ceniciento-r44' ceniciento/index.html
+          grep -Fq 'ceniciento-entry-r44.js' .github/workflows/pages.yml
+
+      - name: Commit R44
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ceniciento/index.html .github/workflows/pages.yml
+          if git diff --cached --quiet; then
+            echo 'Sin cambios'
+            exit 0
+          fi
+          git commit -m 'Ceniciento R44: desbloquea elección de voz y lectura'
+          git push
