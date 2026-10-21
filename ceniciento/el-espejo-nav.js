@@ -125,7 +125,7 @@ if(isCenicientoPage){
 
   const trilogyReady=()=>{
     const state=readState();
-    return state.anaComplete===true&&state.soloComplete===true&&state.cenicientoComplete===true&&state.cenicientoUnlocked===true&&state.mirrorReadComplete!==true;
+    return state.anaComplete===true&&state.cenicientoComplete===true&&state.mirrorReadComplete!==true;
   };
   const suppressLegacyEndNav=()=>{
     document.querySelectorAll('.ou-ceniciento-endnav').forEach(node=>{
