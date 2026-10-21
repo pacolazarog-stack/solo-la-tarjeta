@@ -35,7 +35,7 @@ jobs:
           node --check narrative-universe.js
           node --check oras-reading-window-r3.js
           node --check ana-final-r37.js
-          node --check ana-final-r39.js
+          node --check ana-final-r40.js
           node --check ceniciento-entry-r38.js
           node --check oras-master-index-r1.js
           node --check oras-screen-transition.js
@@ -50,7 +50,7 @@ jobs:
           grep -Fq "id:'canonica'" oras-master-index-r1.js
           grep -Fq 'el-espejo-soundtrack.js?v=20261014-espejo-soundtrack-3' ceniciento/index.html
           grep -Fq "VERSION='20261020-ana-voice-owner-r22'" oras-reading-window-r3.js
-          echo 'PASS: núcleo ORAS, ANA r37 + interrogante R1 r39b y entrada Ceniciento r38 disponibles.'
+          echo 'PASS: núcleo ORAS, ANA r37 + interrogante R1 r40 y entrada Ceniciento r38 disponibles.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
@@ -104,7 +104,7 @@ jobs:
           s=re.sub(r'src="ana-klaudya-fotografia(?:-edge-r\d+\.jpg\?v=[^"]+|\.jpg)"', 'src="ana-klaudya-fotografia-edge-r37.jpg?v=20261021-r37"', s)
           s=re.sub(r'oras-reading-window-r2\.js\?v=[^"\']+', 'oras-reading-window-r3.js?v=20261021-ana-r37', s)
           s=re.sub(r'<script src="/solo-la-tarjeta/ana-final-r\d+\.js\?v=[^"]+"></script>\s*', '', s)
-          s=s.replace('</body>','<script src="/solo-la-tarjeta/ana-final-r37.js?v=20261021-ana-final-r37"></script>\n<script src="/solo-la-tarjeta/ana-final-r39.js?v=20261021-ana-question-r1b"></script>\n</body>')
+          s=s.replace('</body>','<script src="/solo-la-tarjeta/ana-final-r37.js?v=20261021-ana-final-r37"></script>\n<script src="/solo-la-tarjeta/ana-final-r40.js?v=20261021-ana-question-r1-r40"></script>\n</body>')
           p.write_text(s,encoding='utf-8')
 
           c=Path('ceniciento/index.html')
@@ -117,7 +117,7 @@ jobs:
           grep -Fq 'ana-klaudya-fotografia-edge-r37.jpg?v=20261021-r37' elegia-breve/index.html
           grep -Fq 'oras-reading-window-r3.js?v=20261021-ana-r37' elegia-breve/index.html
           grep -Fq 'ana-final-r37.js?v=20261021-ana-final-r37' elegia-breve/index.html
-          grep -Fq 'ana-final-r39.js?v=20261021-ana-question-r1b' elegia-breve/index.html
+          grep -Fq 'ana-final-r40.js?v=20261021-ana-question-r1-r40' elegia-breve/index.html
           grep -Fq 'ceniciento-entry-r38.js?v=20261021-ceniciento-r38' ceniciento/index.html
           ! grep -Fq 'ana-final-r36.js' elegia-breve/index.html
 
