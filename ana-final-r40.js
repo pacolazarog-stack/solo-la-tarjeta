@@ -54,7 +54,7 @@ style.textContent=`
   opacity:0!important;
   visibility:visible!important;
   pointer-events:none!important;
-  transition:opacity 5.8s ease!important;
+  transition:opacity 17.4s cubic-bezier(.16,.66,.25,1)!important;
   touch-action:manipulation!important;
 }
 #anaQuestionR1R40 .question-beat{
@@ -105,6 +105,6 @@ q.addEventListener('click',e=>{
   if(q.dataset.go==='1')return;
   q.dataset.go='1';
   q.style.pointerEvents='none';
-  window.location.assign('/solo-la-tarjeta/ceniciento/?from=ana-r40&v=20261021-r40');
+  window.location.assign('/solo-la-tarjeta/ceniciento/?from=ana-r41&v=20261021-r41');
 },{capture:true});
 })();
