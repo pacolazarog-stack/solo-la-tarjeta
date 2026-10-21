@@ -1,0 +1,3 @@
+Forzar publicación de CENICIENTO R49
+Commit de despliegue: 2026-10-21
+Fuente canónica: ceniciento/index.html @ R49
