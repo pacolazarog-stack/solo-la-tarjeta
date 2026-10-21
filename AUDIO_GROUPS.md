@@ -22,6 +22,13 @@ Al pasar del grupo A al grupo B, o del grupo B al grupo A, se aplica una **bajad
 
 EL ESPEJO conserva su lógica sonora y visual propia. Los recorridos ANA KLAUDYA → EL INVENTARIO DEL AIRE, CENICIENTO → EL INVENTARIO DEL AIRE y SOLO LA TARJETA → EL INVENTARIO DEL AIRE pasan por EL ESPEJO cuando así está establecido por el recorrido, y el sistema general de transiciones no debe imponerle una bajada de volumen adicional ni alterar sus singularidades.
 
+## Referencia vocal canónica · ANA KLAUDYA
+
+- **Referencia vigente:** `Mi grabación 2.m4a`.
+- **Versión anterior superada:** `Mi grabación 1.m4a`.
+- Toda nueva generación, sustitución o ajuste de voz de ANA KLAUDYA debe tomar `Mi grabación 2.m4a` como referencia de **timbre, prosodia, naturalidad y continuidad de frase**.
+- `Mi grabación 1.m4a` queda únicamente como antecedente y **no debe utilizarse como modelo vocal**.
+
 ## Entrada visual de SOLO LA TARJETA
 
 Cuando se entra desde el inicio de SOLO LA TARJETA, la página avanza automáticamente y con lentitud hasta situar el título exactamente en el centro de la pantalla. Durante ese avance el desplazamiento manual permanece bloqueado; al alcanzar el título se libera el scroll normal. Esta entrada es exclusivamente visual y no modifica la lógica sonora del grupo drone.
