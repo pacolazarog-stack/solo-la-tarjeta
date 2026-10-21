@@ -1,0 +1,43 @@
+name: Fix Ceniciento R45 observer once
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/fix-ceniciento-r45-observer-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Corregir bucle de MutationObserver
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('ceniciento/index.html')
+          s = p.read_text(encoding='utf-8')
+          old = """    if(items[0]){items[0].textContent='Anterior';items[0].setAttribute('aria-label','Anterior');}\n    if(items[1]){items[1].textContent='Siguiente';items[1].setAttribute('aria-label','Siguiente');}"""
+          new = """    if(items[0]){if(items[0].textContent!=='Anterior')items[0].textContent='Anterior';if(items[0].getAttribute('aria-label')!=='Anterior')items[0].setAttribute('aria-label','Anterior');}\n    if(items[1]){if(items[1].textContent!=='Siguiente')items[1].textContent='Siguiente';if(items[1].getAttribute('aria-label')!=='Siguiente')items[1].setAttribute('aria-label','Siguiente');}"""
+          if old not in s:
+              raise SystemExit('No se encontró el bloque esperado')
+          p.write_text(s.replace(old,new,1), encoding='utf-8')
+          PY
+      - name: Verificar corrección
+        run: |
+          grep -F "if(items[0].textContent!=='Anterior')" ceniciento/index.html
+          grep -F "if(items[1].textContent!=='Siguiente')" ceniciento/index.html
+      - name: Commit y push
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ceniciento/index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'CENICIENTO R45: elimina bucle infinito del navegador'
+          git push origin main
