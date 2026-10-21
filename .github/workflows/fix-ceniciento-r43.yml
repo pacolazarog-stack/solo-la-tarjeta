@@ -1,0 +1,72 @@
+name: Fix Ceniciento R43
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/fix-ceniciento-r43.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Aplicar carga perezosa estable
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('ceniciento/index.html')
+          s=p.read_text(encoding='utf-8')
+
+          old_check="function check(){read.disabled=!readyText;listen.disabled=!(readyText&&readyVoice&&readyFrames);if(!mode&&readyText)status.textContent=listen.disabled?'texto listo · cargando voz e imágenes':'listo'}"
+          new_check="function check(){read.disabled=!readyText;listen.disabled=!(readyText&&readyVoice);if(!mode&&readyText)status.textContent=listen.disabled?'texto listo · cargando voz':'listo'}"
+          if old_check in s:
+              s=s.replace(old_check,new_check)
+
+          old_frames="async function loadFrames(){const arr=await Promise.all(Array.from({length:AGE_FRAME_COUNT},async(_,i)=>{const u='frames-stable/'+String(i+1).padStart(2,'0')+'.webp?v=20261010-stable-sequence';const img=new Image();img.src=u;await img.decode();return img.src}));frames=arr;readyFrames=true;if(mode==='read')renderReadingProgress();else if(mode==='voice')setAge(clamp((voice.currentTime||0)/(voice.duration||EXPECTED)));else setAge(0);check()}"
+          new_frames="async function loadFrames(){if(readyFrames||window.__cenicientoFramesLoading)return;window.__cenicientoFramesLoading=true;const arr=[];try{for(let i=0;i<AGE_FRAME_COUNT;i++){const u='frames-stable/'+String(i+1).padStart(2,'0')+'.webp?v=20261010-stable-sequence';const img=new Image();img.decoding='async';img.src=u;try{await img.decode()}catch(_){ }arr.push(img.src);await new Promise(r=>setTimeout(r,40))}frames=arr;readyFrames=true;if(mode==='read')renderReadingProgress();else if(mode==='voice')setAge(clamp((voice.currentTime||0)/(voice.duration||EXPECTED)));check()}finally{window.__cenicientoFramesLoading=false}}"
+          if old_frames in s:
+              s=s.replace(old_frames,new_frames)
+
+          old_prepare="function prepare(next){startMusic();stop();mode=next;body.className=next;entry.classList.add('open');switchBtn.hidden=false;reset();scrollTo(0,0);startClarity();if(next==='voice'){pause.disabled=false;paused=false;pause.textContent='Pausa';status.textContent='narración completa';voice.currentTime=0;voice.play().then(loop).catch(()=>{paused=true;pause.disabled=true;status.textContent='No se pudo iniciar la voz.'})}else{status.textContent='lectura sin voz';requestAnimationFrame(renderReadingProgress)}}"
+          new_prepare="function prepare(next){startMusic();stop();mode=next;body.className=next;entry.classList.add('open');switchBtn.hidden=false;reset();scrollTo(0,0);startClarity();setTimeout(()=>loadFrames().catch(()=>{}),250);if(next==='voice'){pause.disabled=false;paused=false;pause.textContent='Pausa';status.textContent='narración completa';voice.currentTime=0;voice.play().then(loop).catch(()=>{paused=true;pause.disabled=true;status.textContent='No se pudo iniciar la voz.'})}else{status.textContent='lectura sin voz';requestAnimationFrame(renderReadingProgress)}}"
+          if old_prepare in s:
+              s=s.replace(old_prepare,new_prepare)
+
+          s=s.replace("voice.src=MASTER;voice.onloadedmetadata=", "voice.preload='metadata';voice.src=MASTER;voice.onloadedmetadata=")
+          s=s.replace("Promise.allSettled([loadText(),loadFrames()]).then(check);", "loadText().then(check).catch(()=>{status.textContent='texto no disponible';check()});")
+
+          required=[
+              "listen.disabled=!(readyText&&readyVoice)",
+              "window.__cenicientoFramesLoading",
+              "setTimeout(()=>loadFrames().catch(()=>{}),250)",
+              "loadText().then(check)"
+          ]
+          missing=[x for x in required if x not in s]
+          if missing:
+              raise RuntimeError('No se aplicaron todos los cambios R43: '+repr(missing))
+          p.write_text(s,encoding='utf-8')
+          PY
+          node --check ceniciento-entry-r41.js
+          git diff --check
+      - name: Commit R43
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ceniciento/index.html
+          if git diff --cached --quiet; then
+            echo "Sin cambios pendientes"
+            exit 0
+          fi
+          git commit -m "R43: carga perezosa de Ceniciento para Edge"
+          git push
