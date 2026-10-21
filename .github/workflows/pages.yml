@@ -36,7 +36,6 @@ jobs:
           node --check oras-reading-window-r3.js
           node --check ana-final-r37.js
           node --check ana-final-r40.js
-          node --check ceniciento-entry-r46.js
           node --check oras-master-index-r1.js
           node --check oras-screen-transition.js
           node --check ceniciento/el-espejo.js
@@ -48,9 +47,11 @@ jobs:
           grep -Fq 'Recorridos de lectura' oras-master-index-r1.js
           grep -Fq 'oras-toolbar' oras-master-index-r1.js
           grep -Fq "id:'canonica'" oras-master-index-r1.js
-          grep -Fq 'el-espejo-soundtrack.js?v=20261014-espejo-soundtrack-3' ceniciento/index.html
-          grep -Fq "VERSION='20261020-ana-voice-owner-r22'" oras-reading-window-r3.js
-          echo 'PASS: núcleo ORAS, interrogante ANA R42 y entrada Ceniciento R46 disponibles.'
+          grep -Fq 'CENICIENTO_completo.m4a?v=20261021-r49' ceniciento/index.html
+          grep -Fq 'aria-label="Navegación ORAS"' ceniciento/index.html
+          grep -Fq 'Índice ORAS' ceniciento/index.html
+          ! grep -Fq 'top-controls' ceniciento/index.html
+          echo 'PASS: núcleo ORAS y Ceniciento R49 canónico disponibles.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
@@ -106,19 +107,12 @@ jobs:
           s=re.sub(r'<script src="/solo-la-tarjeta/ana-final-r\d+\.js\?v=[^"]+"></script>\s*', '', s)
           s=s.replace('</body>','<script src="/solo-la-tarjeta/ana-final-r37.js?v=20261021-ana-final-r37"></script>\n<script src="/solo-la-tarjeta/ana-final-r40.js?v=20261021-ana-question-point-r42"></script>\n</body>')
           p.write_text(s,encoding='utf-8')
-
-          c=Path('ceniciento/index.html')
-          t=c.read_text(encoding='utf-8')
-          t=re.sub(r'<script src="/solo-la-tarjeta/ceniciento-entry-r\d+\.js\?v=[^"]+"></script>\s*', '', t)
-          t=t.replace('</body>','<script src="/solo-la-tarjeta/ceniciento-entry-r46.js?v=20261021-ceniciento-r46"></script>\n</body>')
-          c.write_text(t,encoding='utf-8')
           PY
           grep -Fq 'recitado-edge-r37.mp3?v=20261021-r37' elegia-breve/index.html
           grep -Fq 'ana-klaudya-fotografia-edge-r37.jpg?v=20261021-r37' elegia-breve/index.html
           grep -Fq 'oras-reading-window-r3.js?v=20261021-ana-r37' elegia-breve/index.html
           grep -Fq 'ana-final-r37.js?v=20261021-ana-final-r37' elegia-breve/index.html
           grep -Fq 'ana-final-r40.js?v=20261021-ana-question-point-r42' elegia-breve/index.html
-          grep -Fq 'ceniciento-entry-r46.js?v=20261021-ceniciento-r46' ceniciento/index.html
           ! grep -Fq 'ana-final-r36.js' elegia-breve/index.html
 
       - name: Empaquetar sitio
