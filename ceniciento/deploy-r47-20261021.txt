@@ -1,0 +1,5 @@
+CENICIENTO R47
+Publicación forzada desde main para activar GitHub Pages.
+Audio canónico: CENICIENTO_completo.m4a
+Controles VOZ/LEER activos e independientes.
+Botonera lineal canónica ORAS.
