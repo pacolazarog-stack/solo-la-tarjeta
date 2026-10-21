@@ -1,0 +1,48 @@
+name: Fix Ceniciento R47 once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-ceniciento-r47-once.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Aplicar R47
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('ceniciento/index.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace("const EXPECTED=864.156735,MASTER='ceniciento-voz-completa.mp3?v=20261010-audio-restored';", "const EXPECTED=864.156735,MASTER='CENICIENTO_completo.m4a?v=20261021-r47';")
+          s=s.replace('<button id="listen" disabled>Voz</button><button id="read" disabled>Leer</button>', '<button id="listen" type="button">Voz</button><button id="read" type="button">Leer</button>')
+          s=s.replace("function check(){read.disabled=!readyText;listen.disabled=!(readyText&&readyVoice);if(!mode&&readyText)status.textContent=listen.disabled?'texto listo · cargando voz':'listo'}", "function check(){read.disabled=false;listen.disabled=!readyVoice;if(!mode)status.textContent=readyVoice?'listo':(readyText?'texto listo · cargando voz':'cargando')}")
+          s=s.replace("back.onclick=()=>{voice.pause();if(inheritedMusic)sendMusic('close');else history.back()};", "back.onclick=()=>{voice.pause();if(inheritedMusic){sendMusic('close');return}location.href='../elegia-breve/?from=ceniciento-r47&v=20261021-r47';};")
+          marker='/* CENICIENTO R47 · botonera canónica */'
+          if marker not in s:
+              css='''\n/* CENICIENTO R47 · botonera canónica */\n.entry .mode{display:inline-flex;gap:0;justify-content:center;align-items:stretch;border:1px solid rgba(199,164,87,.48);border-radius:999px;overflow:hidden;background:rgba(10,9,8,.18);backdrop-filter:blur(8px)}\n.entry .mode button{min-width:94px;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding:.9em 1.45em!important;color:rgba(255,244,231,.88)!important}\n.entry .mode button+button{border-left:1px solid rgba(199,164,87,.32)!important}\n.entry .mode button:disabled{opacity:.38!important;cursor:wait}\n.controls{gap:0;border-bottom:1px solid rgba(255,255,255,.18)}\n.controls button{border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;border-left:1px solid rgba(255,255,255,.15)!important;padding:.86em 1.05em!important}\n.controls button:first-child{border-left:0!important}\n.controls button:hover,.entry .mode button:hover{background:rgba(255,255,255,.045)!important}\n'''
+              s=s.replace('</style>', css+'</style>', 1)
+          p.write_text(s,encoding='utf-8')
+          PY
+          grep -q "CENICIENTO_completo.m4a?v=20261021-r47" ceniciento/index.html
+          grep -q "CENICIENTO R47 · botonera canónica" ceniciento/index.html
+          ! grep -q "id=\"listen\" disabled" ceniciento/index.html
+          ! grep -q "id=\"read\" disabled" ceniciento/index.html
+      - name: Commit R47
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ceniciento/index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Ceniciento R47: restaura botones, audio y botonera canónica'
+          git push origin HEAD:main
