@@ -38,7 +38,8 @@ style.textContent=`
   position:absolute!important;
   left:30%!important;
   top:44%!important;
-  transform:translate(-50%,-50%)!important;
+  transform:translate(-50%,-50%) scale(.01)!important;
+  transform-origin:50% 50%!important;
   display:grid!important;
   place-items:center!important;
   width:72px!important;
@@ -54,7 +55,10 @@ style.textContent=`
   opacity:0!important;
   visibility:visible!important;
   pointer-events:none!important;
-  transition:opacity 17.4s cubic-bezier(.16,.66,.25,1)!important;
+  transition:
+    opacity 34.8s cubic-bezier(.22,.61,.36,1),
+    transform 34.8s cubic-bezier(.22,.61,.36,1)!important;
+  will-change:opacity,transform!important;
   touch-action:manipulation!important;
 }
 #anaQuestionR1R40 .question-beat{
@@ -80,6 +84,7 @@ style.textContent=`
 }
 #anaQuestionR1R40.is-born{
   opacity:1!important;
+  transform:translate(-50%,-50%) scale(1)!important;
   pointer-events:auto!important;
 }
 #anaQuestionR1R40:hover .question-beat{background:#fff9ec!important}
@@ -105,6 +110,6 @@ q.addEventListener('click',e=>{
   if(q.dataset.go==='1')return;
   q.dataset.go='1';
   q.style.pointerEvents='none';
-  window.location.assign('/solo-la-tarjeta/ceniciento/?from=ana-r41&v=20261021-r41');
+  window.location.assign('/solo-la-tarjeta/ceniciento/?from=ana-r42&v=20261021-r42');
 },{capture:true});
 })();
