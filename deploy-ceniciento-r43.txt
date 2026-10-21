@@ -1,0 +1,1 @@
+Publica la corrección R43 de Ceniciento: elimina la decodificación simultánea de las nueve imágenes al entrar, habilita VOZ/LEER sin esperar a frames y carga la secuencia visual de forma perezosa y secuencial tras elegir modo.
