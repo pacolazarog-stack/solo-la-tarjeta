@@ -35,7 +35,7 @@ jobs:
           node --check narrative-universe.js
           node --check oras-reading-window-r3.js
           node --check ana-final-r37.js
-          node --check ceniciento-entry-r37.js
+          node --check ceniciento-entry-r38.js
           node --check oras-master-index-r1.js
           node --check oras-screen-transition.js
           node --check ceniciento/el-espejo.js
@@ -49,7 +49,7 @@ jobs:
           grep -Fq "id:'canonica'" oras-master-index-r1.js
           grep -Fq 'el-espejo-soundtrack.js?v=20261014-espejo-soundtrack-3' ceniciento/index.html
           grep -Fq "VERSION='20261020-ana-voice-owner-r22'" oras-reading-window-r3.js
-          echo 'PASS: núcleo ORAS y transición ANA r37 disponibles.'
+          echo 'PASS: núcleo ORAS, ANA r37 y entrada Ceniciento r38 disponibles.'
 
       - name: Preparar voz de Ceniciento
         shell: bash
@@ -109,14 +109,14 @@ jobs:
           c=Path('ceniciento/index.html')
           t=c.read_text(encoding='utf-8')
           t=re.sub(r'<script src="/solo-la-tarjeta/ceniciento-entry-r\d+\.js\?v=[^"]+"></script>\s*', '', t)
-          t=t.replace('</body>','<script src="/solo-la-tarjeta/ceniciento-entry-r37.js?v=20261021-r37"></script>\n</body>')
+          t=t.replace('</body>','<script src="/solo-la-tarjeta/ceniciento-entry-r38.js?v=20261021-ceniciento-r38"></script>\n</body>')
           c.write_text(t,encoding='utf-8')
           PY
           grep -Fq 'recitado-edge-r37.mp3?v=20261021-r37' elegia-breve/index.html
           grep -Fq 'ana-klaudya-fotografia-edge-r37.jpg?v=20261021-r37' elegia-breve/index.html
           grep -Fq 'oras-reading-window-r3.js?v=20261021-ana-r37' elegia-breve/index.html
           grep -Fq 'ana-final-r37.js?v=20261021-ana-final-r37' elegia-breve/index.html
-          grep -Fq 'ceniciento-entry-r37.js?v=20261021-r37' ceniciento/index.html
+          grep -Fq 'ceniciento-entry-r38.js?v=20261021-ceniciento-r38' ceniciento/index.html
           ! grep -Fq 'ana-final-r36.js' elegia-breve/index.html
 
       - name: Empaquetar sitio
