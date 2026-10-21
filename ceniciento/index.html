@@ -36,6 +36,16 @@ body.voice{height:100svh;overflow:hidden}body.read{overflow-x:hidden}
  .mode{gap:.5rem}
  .card button{min-height:42px;padding:.75em 1.25em;font-size:.62rem}
 }
+
+/* CENICIENTO R47 · botonera canónica */
+.entry .mode{display:inline-flex;gap:0;justify-content:center;align-items:stretch;border:1px solid rgba(199,164,87,.48);border-radius:999px;overflow:hidden;background:rgba(10,9,8,.18);backdrop-filter:blur(8px)}
+.entry .mode button{min-width:94px;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding:.9em 1.45em!important;color:rgba(255,244,231,.88)!important}
+.entry .mode button+button{border-left:1px solid rgba(199,164,87,.32)!important}
+.entry .mode button:disabled{opacity:.38!important;cursor:wait}
+.controls{gap:0;border-bottom:1px solid rgba(255,255,255,.18)}
+.controls button{border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;border-left:1px solid rgba(255,255,255,.15)!important;padding:.86em 1.05em!important}
+.controls button:first-child{border-left:0!important}
+.controls button:hover,.entry .mode button:hover{background:rgba(255,255,255,.045)!important}
 </style>
 <link rel="stylesheet" href="../oras-ceniciento-nav-r1.css?v=20261012-ceniciento-linear-nav-1">
 </head>
@@ -48,7 +58,7 @@ body.voice{height:100svh;overflow:hidden}body.read{overflow-x:hidden}
 <div id="screen" class="screen blank" aria-live="polite"></div><div id="status" class="status">cargando</div><div class="progress"><i></i></div>
 <div id="reader" class="reader"><article><h1>CENICIENTO</h1><div id="readerText"></div><span class="reading-end" aria-hidden="true"></span></article></div>
 <main id="mirror" aria-label="EL ESPEJO" hidden></main>
-<div id="entry" class="entry"><div class="card"><h1>CENICIENTO</h1><div class="mode"><button id="listen" disabled>Voz</button><button id="read" disabled>Leer</button></div><p>voz: partitura emocional · lectura: texto íntegro</p></div></div>
+<div id="entry" class="entry"><div class="card"><h1>CENICIENTO</h1><div class="mode"><button id="listen" type="button">Voz</button><button id="read" type="button">Leer</button></div><p>voz: partitura emocional · lectura: texto íntegro</p></div></div>
 <audio id="music" preload="metadata" loop></audio><audio id="voice" preload="metadata" controlslist="nodownload"></audio>
 <script>
 (()=>{
@@ -57,14 +67,14 @@ const voice=$('voice'),music=$('music'),screen=$('screen'),status=$('status'),en
 const ageA=$('ageA'),ageB=$('ageB'),bgA=$('bgA'),bgB=$('bgB'),seek=$('seek'),time=$('time');
 const pause=$('pause'),restart=$('restart'),switchBtn=$('switch'),back=$('back');
 const musicLevel=$('musicLevel'),musicEnabled=$('musicEnabled'),musicValue=$('musicValue'),musicStart=$('musicStart');
-const EXPECTED=864.156735,MASTER='ceniciento-voz-completa.mp3?v=20261010-audio-restored';
+const EXPECTED=864.156735,MASTER='CENICIENTO_completo.m4a?v=20261021-r47';
 const inheritedMusic=window.parent!==window&&new URLSearchParams(location.search).get('music')==='parent';
 const sendMusic=type=>window.parent.postMessage({channel:'ceniciento-music-v1',type,level:Number(musicLevel.value)/100,enabled:musicEnabled.checked},location.origin);
 function updateMusic(){const level=Math.max(0,Math.min(.8,Number(musicLevel.value)/100));musicValue.textContent=Math.round(level*100)+' %';if(!inheritedMusic){music.volume=level;music.muted=!musicEnabled.checked}}
 function startMusic(){if(inheritedMusic){sendMusic('start');return}updateMusic();if(musicEnabled.checked&&music.paused)music.play().then(()=>musicStart.hidden=true).catch(()=>musicStart.hidden=false)}
 musicLevel.oninput=()=>{updateMusic();if(inheritedMusic)sendMusic('level')};musicEnabled.onchange=()=>{updateMusic();if(inheritedMusic)sendMusic('enabled');else startMusic()};musicStart.onclick=startMusic;
 if(inheritedMusic){addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent||e.data?.channel!=='ceniciento-music-v1'||e.data.type!=='state')return;musicLevel.value=String(Math.round(Math.max(0,Math.min(.8,Number(e.data.level)||0))*100));musicEnabled.checked=!!e.data.enabled;updateMusic();musicStart.hidden=!musicEnabled.checked||!!e.data.playing});sendMusic('ready')}else{music.src='../elegia-breve/ana-klaudya.m4a';updateMusic()}
-back.onclick=()=>{voice.pause();if(inheritedMusic)sendMusic('close');else history.back()};
+back.onclick=()=>{voice.pause();if(inheritedMusic){sendMusic('close');return}location.href='../elegia-breve/?from=ceniciento-r47&v=20261021-r47';};
 const CUES=[
 {t:0,text:''},{t:2.692,text:'Las siete y doce.',n:1},{t:10.914,text:'No estaban las pequeñas manchas.',n:2},{t:23.4,text:'La piel parecía más firme.',n:3},{t:34,text:''},{t:62.194,text:'No puede ser.',n:4},{t:76,text:''},{t:93.996,text:'Aquello era absurdo.\nY maravilloso.',n:5},{t:105,text:''},{t:116.91,text:'El tiempo había rectificado.',n:6},{t:124.032,text:'Eso formaba parte de la gracia.\nY del miedo.',n:7},{t:130,text:''},
 {t:136.416,text:'Hola, Paco.',n:8},{t:150,text:''},{t:163.061,text:'Treinta y tantos.',n:9},{t:166.043,text:'Era difícil calcular la edad de uno mismo.',n:10},{t:174.335,text:'A un tipo.',n:11},{t:176.796,text:'Mucho.',n:12},{t:184,text:''},{t:265.082,text:'El muchacho seguía allí.',n:13},{t:272.967,text:'Estoy comprobando una cosa.',n:14},{t:276.169,text:'Todavía sí.',n:15},{t:281,text:''},{t:315.807,text:'Brasil.',n:16},{t:324,text:''},{t:370.578,text:'Como si hubiera un botón.',n:17},{t:382.262,text:'Menos mal que no funcionaba.',n:18},{t:386.764,text:'Habría sido una pena.',n:19},{t:395.008,text:'Eso ha sido bonito.',n:20},{t:398.2,text:''},
@@ -73,7 +83,7 @@ const CUES=[
 let frames=[],mode=null,raf=0,readProgressRAF=0,paused=true,current=-1,clarity=0,clarityRAF=0,readyText=false,readyVoice=false,readyFrames=false;
 const AGE_FRAME_COUNT=9;
 const clamp=x=>Math.max(0,Math.min(1,x)),fmt=t=>{const n=Math.max(0,Math.floor(t||0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')};
-function check(){read.disabled=!readyText;listen.disabled=!(readyText&&readyVoice);if(!mode&&readyText)status.textContent=listen.disabled?'texto listo · cargando voz':'listo'}
+function check(){read.disabled=false;listen.disabled=!readyVoice;if(!mode)status.textContent=readyVoice?'listo':(readyText?'texto listo · cargando voz':'cargando')}
 async function loadFrames(){if(readyFrames||window.__cenicientoFramesLoading)return;window.__cenicientoFramesLoading=true;const arr=[];try{for(let i=0;i<AGE_FRAME_COUNT;i++){const u='frames-stable/'+String(i+1).padStart(2,'0')+'.webp?v=20261010-stable-sequence';const img=new Image();img.decoding='async';img.src=u;try{await img.decode()}catch(_){ }arr.push(img.src);await new Promise(r=>setTimeout(r,40))}frames=arr;readyFrames=true;if(mode==='read')renderReadingProgress();else if(mode==='voice')setAge(clamp((voice.currentTime||0)/(voice.duration||EXPECTED)));check()}finally{window.__cenicientoFramesLoading=false}}
 async function loadText(){const r=await fetch('texto.md?v=16',{cache:'no-store'});if(!r.ok)throw Error('texto');let raw=await r.text();raw=raw.replace(/^#\s*CENICIENTO\s*/i,'').trim();readerText.innerHTML='';raw.split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean).forEach(p=>{const el=document.createElement('p');el.textContent=p;readerText.appendChild(el)});readyText=true;check()}
 voice.preload='metadata';voice.src=MASTER;voice.onloadedmetadata=()=>{readyVoice=true;time.textContent='0:00 / '+fmt(voice.duration||EXPECTED);check()};voice.onerror=()=>{status.textContent='audio no disponible'};voice.load();
