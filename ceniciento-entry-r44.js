@@ -59,4 +59,5 @@ read.addEventListener('click',release,{capture:true,once:true});
 
 /* La portada no debe descargar el audio entero. */
 voice.preload='metadata';
+// R44 activation marker
 })();
