@@ -24,10 +24,11 @@ EL ESPEJO conserva su lógica sonora y visual propia. Los recorridos ANA KLAUDYA
 
 ## Referencia vocal canónica · ANA KLAUDYA
 
-- **Referencia vigente:** `Mi grabación 2.m4a`.
-- **Versión anterior superada:** `Mi grabación 1.m4a`.
-- Toda nueva generación, sustitución o ajuste de voz de ANA KLAUDYA debe tomar `Mi grabación 2.m4a` como referencia de **timbre, prosodia, naturalidad y continuidad de frase**.
-- `Mi grabación 1.m4a` queda únicamente como antecedente y **no debe utilizarse como modelo vocal**.
+- **Referencia vigente:** `Mi grabación 3.m4a`.
+- **Versión anterior superada:** `Mi grabación 2.m4a`.
+- **Versión inicial superada:** `Mi grabación 1.m4a`.
+- Toda nueva generación, sustitución o ajuste de voz de ANA KLAUDYA debe tomar `Mi grabación 3.m4a` como referencia de **timbre, prosodia, naturalidad y continuidad de frase**.
+- `Mi grabación 1.m4a` y `Mi grabación 2.m4a` quedan únicamente como antecedentes y **no deben utilizarse como modelo vocal**.
 
 ## Entrada visual de SOLO LA TARJETA
 
