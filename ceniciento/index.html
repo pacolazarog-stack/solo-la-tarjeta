@@ -45,14 +45,14 @@ body{font-family:Iowan Old Style,Palatino Linotype,Book Antiqua,Palatino,Georgia
 <div class="progress"><i></i></div>
 <button id="sound" class="sound" type="button" aria-label="Sonido">🔊</button>
 <nav class="canon-nav" aria-label="Navegación ORAS">
-  <a id="prev" href="../elegia-breve/?from=ceniciento-r49">← Atrás</a>
+  <a id="prev" href="../elegia-breve/?from=ceniciento-r50">← Atrás</a>
   <a id="index" href="../">Índice ORAS</a>
   <button id="next" type="button">Adelante →</button>
   <button id="switch" type="button" hidden>Cambiar modo</button>
   <button id="pause" type="button" hidden>Pausa</button>
   <button id="restart" type="button" hidden>Inicio</button>
 </nav>
-<audio id="voice" preload="metadata" src="CENICIENTO_completo.m4a?v=20261021-r49"></audio>
+<audio id="voice" preload="metadata" src="ceniciento-voz-completa.mp3?v=20261021-r50-voz-canonica"></audio>
 <script>
 (()=>{
 'use strict';
@@ -65,7 +65,7 @@ const fmt=t=>{const n=Math.max(0,Math.floor(t||0));return Math.floor(n/60)+':'+S
 function cueFor(t){let out='';for(const c of cues){if(c[0]<=t)out=c[1];else break}return out}
 function setContext(next){sw.hidden=next===null;pause.hidden=next!=='voice';restart.hidden=next!=='voice'}
 function renderVoice(){if(mode!=='voice')return;const d=Number.isFinite(voice.duration)?voice.duration:EXPECTED,t=voice.currentTime||0,p=Math.max(0,Math.min(1,t/d));document.documentElement.style.setProperty('--prog',p.toFixed(5));seek.value=String(Math.round(p*1000));time.textContent=fmt(t)+' / '+fmt(d);const txt=cueFor(t);screen.textContent=txt;screen.classList.toggle('show',!!txt)}
-async function ensureText(){if(readerText.childElementCount)return;status.textContent='cargando texto';try{const r=await fetch('texto.md?v=20261021-r49',{cache:'no-store'});if(!r.ok)throw new Error('texto');let raw=(await r.text()).replace(/^#\s*CENICIENTO\s*/i,'').trim();readerText.innerHTML='';for(const block of raw.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean)){const p=document.createElement('p');p.textContent=block;readerText.appendChild(p)}status.textContent='lectura'}catch(e){readerText.innerHTML='<p>No se ha podido cargar el texto.</p>';status.textContent='texto no disponible'}}
+async function ensureText(){if(readerText.childElementCount)return;status.textContent='cargando texto';try{const r=await fetch('texto.md?v=20261021-r50',{cache:'no-store'});if(!r.ok)throw new Error('texto');let raw=(await r.text()).replace(/^#\s*CENICIENTO\s*/i,'').trim();readerText.innerHTML='';for(const block of raw.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean)){const p=document.createElement('p');p.textContent=block;readerText.appendChild(p)}status.textContent='lectura'}catch(e){readerText.innerHTML='<p>No se ha podido cargar el texto.</p>';status.textContent='texto no disponible'}}
 function enterVoice(){mode='voice';setContext('voice');body.className='active voice';entry.classList.add('open');reader.classList.remove('open');screen.classList.remove('show');status.textContent='narración completa';voice.currentTime=0;voice.muted=muted;voice.play().then(()=>{pause.textContent='Pausa'}).catch(()=>{status.textContent='Pulsa VOZ para iniciar';entry.classList.remove('open');mode=null;setContext(null);body.className=''})}
 async function enterRead(){mode='read';setContext('read');body.className='active read';entry.classList.add('open');voice.pause();screen.classList.remove('show');await ensureText();reader.classList.add('open');reader.scrollTop=0}
 function resetToChoice(){voice.pause();mode=null;setContext(null);body.className='';reader.classList.remove('open');entry.classList.remove('open');status.textContent='listo';document.documentElement.style.setProperty('--prog','0')}
@@ -76,7 +76,7 @@ sw.addEventListener('click',resetToChoice);
 seek.addEventListener('input',()=>{const d=Number.isFinite(voice.duration)?voice.duration:EXPECTED;voice.currentTime=d*Number(seek.value)/1000;renderVoice()});
 voice.addEventListener('timeupdate',renderVoice);voice.addEventListener('seeked',renderVoice);voice.addEventListener('loadedmetadata',()=>{time.textContent='0:00 / '+fmt(voice.duration||EXPECTED)});voice.addEventListener('ended',()=>{pause.textContent='Repetir';status.textContent='fin';renderVoice()});
 sound.addEventListener('click',()=>{muted=!muted;voice.muted=muted;sound.textContent=muted?'🔇':'🔊'});
-next.addEventListener('click',()=>{voice.pause();location.href='../?from=ceniciento-r49'});
+next.addEventListener('click',()=>{voice.pause();location.href='../?from=ceniciento-r50'});
 setContext(null);
 })();
 </script>
